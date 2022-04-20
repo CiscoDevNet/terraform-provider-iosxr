@@ -1,0 +1,1 @@
+terraform import iosxr_vrf_route_target_ip_address_format.example "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/Cisco-IOS-XR-um-router-bgp-cfg:route-target/Cisco-IOS-XR-um-router-bgp-cfg:ip-addresse-rts/Cisco-IOS-XR-um-router-bgp-cfg:ip-address-rt[ip-address=1.1.1.1][index=1][stitching=true]"

@@ -1,0 +1,27 @@
+---
+name: Router OSPF Area Interface
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]
+doc_category: OSPF
+attributes:
+  - yang_name: process-name
+    example: OSPF1
+  - yang_name: area-id
+    example: 0
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: network/broadcast
+    example: false
+  - yang_name: network/non-broadcast
+    example: false
+  - yang_name: network/point-to-point
+    example: true
+  - yang_name: network/point-to-multipoint
+    example: false
+  - yang_name: cost
+    example: 20
+  - yang_name: priority
+    example: 100
+  - yang_name: passive/enable
+    example: false
+  - yang_name: passive/disable
+    example: true

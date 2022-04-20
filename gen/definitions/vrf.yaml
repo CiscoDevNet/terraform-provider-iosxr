@@ -1,0 +1,47 @@
+---
+name: VRF
+path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
+ds_description: This data source can read the VRF configuration.
+res_description: This resource can manage the VRF configuration.
+doc_category: VRF
+attributes:
+  - yang_name: vrf-name
+    example: VRF1
+  - yang_name: description
+    example: My VRF Description
+  - yang_name: vpn/id
+    example: '1000:1000'
+  - yang_name: address-family/ipv4/unicast
+    example: true
+  - yang_name: address-family/ipv4/multicast
+    example: true
+  - yang_name: address-family/ipv4/flowspec
+    example: true
+  - yang_name: address-family/ipv6/unicast
+    example: true
+  - yang_name: address-family/ipv6/multicast
+    example: true
+  - yang_name: address-family/ipv6/flowspec
+    example: true
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/as-number
+    optional: true
+    example: 65001
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/index
+    optional: true
+    example: 1
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/as-number
+    optional: true
+    example: 65001
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/index
+    optional: true
+    example: 1
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/ipv4-address
+    optional: true
+    example: 1.2.3.4
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/index
+    optional: true
+    example: 1
+    exclude_test: true

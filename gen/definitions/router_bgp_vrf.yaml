@@ -1,0 +1,21 @@
+---
+name: Router BGP VRF
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: vrf-name
+    example: VRF1
+  - yang_name: default-information/originate
+    example: true
+  - yang_name: default-metric
+    example: 125
+  - yang_name: timers/bgp/keepalive-interval
+    example: 5
+  - yang_name: timers/bgp/holdtime
+    example: 20
+  - yang_name: bfd/minimum-interval
+    example: 10
+  - yang_name: bfd/multiplier
+    example: 4

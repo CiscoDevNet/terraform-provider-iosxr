@@ -1,0 +1,27 @@
+---
+name: Interface
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
+no_delete: true
+doc_category: Interface
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: sub-interface-type/l2transport
+    tf_name: l2transport
+    example: false
+  - yang_name: sub-interface-type/point-to-point
+    tf_name: point_to_point
+    example: false
+  - yang_name: sub-interface-type/multipoint
+    tf_name: multipoint
+    example: false
+  - yang_name: shutdown
+    example: true
+  - yang_name: mtu
+    example: 9000
+  - yang_name: bandwidth
+    example: 100000
+  - yang_name: description
+    example: My Interface Description
+  - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
+    example: VRF1

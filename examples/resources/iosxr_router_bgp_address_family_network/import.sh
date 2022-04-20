@@ -1,0 +1,1 @@
+terraform import iosxr_router_bgp_address_family_network.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv4-unicast]/networks/network[address=10.1.0.0][masklength=16]"

@@ -1,0 +1,9 @@
+---
+name: Router ISIS NET
+path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/nets/net[net-id=%s]
+doc_category: ISIS
+attributes:
+  - yang_name: process-id
+    example: P1
+  - yang_name: net-id
+    example: 49.0001.2222.2222.2222.00

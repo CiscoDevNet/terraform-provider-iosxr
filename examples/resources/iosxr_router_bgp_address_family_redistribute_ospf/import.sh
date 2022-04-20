@@ -1,0 +1,1 @@
+terraform import iosxr_router_bgp_address_family_redistribute_ospf.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv4-unicast]/redistribute/ospf[router-tag=OSPF1]"

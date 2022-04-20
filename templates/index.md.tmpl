@@ -1,0 +1,25 @@
+
+---
+layout: ""
+page_title: "Provider: IOSXR"
+description: |-
+  The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
+---
+
+# IOSXR Provider
+
+The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
+
+It currently only supports unsecured (no TLS) gRPC connections with user/password authentication. The required device configuration can be found below.
+
+```
+grpc
+ port 57400
+ no-tls
+```
+
+## Example Usage
+
+{{tffile "examples/provider/provider.tf"}}
+
+{{ .SchemaMarkdown | trimspace }}

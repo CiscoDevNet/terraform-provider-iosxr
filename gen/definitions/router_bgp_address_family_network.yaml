@@ -1,0 +1,13 @@
+---
+name: Router BGP Address Family Network
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]/networks/network[address=%s][masklength=%v]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: af-name
+    example: ipv4-unicast
+  - yang_name: address
+    example: 10.1.0.0
+  - yang_name: masklength
+    example: 16

@@ -1,0 +1,19 @@
+---
+name: Router OSPF Redistribute OSPF
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/redistribute/ospf[instance-name=%s]
+doc_category: OSPF
+attributes:
+  - yang_name: process-name
+    example: OSPF1
+  - yang_name: instance-name
+    example: OSPF2
+  - yang_name: match/internal
+    example: true
+  - yang_name: match/external
+    example: false
+  - yang_name: match/nssa-external
+    example: false
+  - yang_name: tag
+    example: 4
+  - yang_name: metric-type
+    example: 1

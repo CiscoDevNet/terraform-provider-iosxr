@@ -1,0 +1,31 @@
+---
+name: Router BGP Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: af-name
+    example: ipv4-unicast
+  - yang_name: maximum-paths/ebgp/multipath
+    example: 10
+    optional: true
+  - yang_name: maximum-paths/eibgp/multipath
+    example: 10
+    optional: true
+    exclude_test: true
+  - yang_name: maximum-paths/ibgp/multipath
+    optional: true
+    example: 10
+  - yang_name: label/mode/per-ce
+    example: false
+  - yang_name: label/mode/per-vrf
+    example: false
+  - yang_name: redistribute/connected
+    example: true
+  - yang_name: redistribute/connected/metric
+    example: 10
+  - yang_name: redistribute/static
+    example: true
+  - yang_name: redistribute/static/metric
+    example: 10

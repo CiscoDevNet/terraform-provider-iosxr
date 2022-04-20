@@ -1,0 +1,13 @@
+---
+name: Router ISIS Interface Address Family
+path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]
+doc_category: ISIS
+attributes:
+  - yang_name: process-id
+    example: P1
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: af-name
+    example: ipv4
+  - yang_name: saf-name
+    example: unicast

@@ -1,0 +1,19 @@
+---
+name: Interface IPv6
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]/ipv6
+doc_category: Interface
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
+    tf_name: link_local_address
+    example: 'fe80::1'
+  - yang_name: Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
+    tf_name: link_local_zone
+    default_value: '0'
+    example: '0'
+  - yang_name: Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
+    tf_name: autoconfig
+    example: false
+  - yang_name: Cisco-IOS-XR-um-if-ip-address-cfg:enable
+    example: true

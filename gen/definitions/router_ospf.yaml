@@ -1,0 +1,49 @@
+---
+name: Router OSPF
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]
+doc_category: OSPF
+attributes:
+  - yang_name: process-name
+    example: OSPF1
+  - yang_name: mpls/ldp/sync
+    example: false
+  - yang_name: hello-interval
+    example: 10
+  - yang_name: dead-interval
+    example: 40
+  - yang_name: priority
+    example: 10
+  - yang_name: mtu-ignore/enable
+    example: true
+  - yang_name: mtu-ignore/disable
+    example: false
+  - yang_name: passive/enable
+    example: false
+  - yang_name: passive/disable
+    example: true
+  - yang_name: router-id
+    example: 10.11.12.13
+  - yang_name: redistribute/connected
+    example: true
+  - yang_name: redistribute/connected/tag
+    example: 1
+  - yang_name: redistribute/connected/metric-type
+    example: 1
+  - yang_name: redistribute/static
+    example: true
+  - yang_name: redistribute/static/tag
+    example: 2
+  - yang_name: redistribute/static/metric-type
+    example: 1
+  - yang_name: bfd/fast-detect
+    example: true
+  - yang_name: bfd/minimum-interval
+    example: 300
+  - yang_name: bfd/multiplier
+    example: 3
+  - yang_name: default-information/originate
+    example: true
+  - yang_name: default-information/originate/always
+    example: true
+  - yang_name: default-information/originate/metric-type
+    example: 1

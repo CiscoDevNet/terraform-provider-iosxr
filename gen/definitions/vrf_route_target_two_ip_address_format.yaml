@@ -1,0 +1,60 @@
+---
+name: VRF Route Target IP Address Format
+path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]/address-family/%s/%s/Cisco-IOS-XR-um-router-bgp-cfg:%s/Cisco-IOS-XR-um-router-bgp-cfg:route-target/Cisco-IOS-XR-um-router-bgp-cfg:ip-addresse-rts/Cisco-IOS-XR-um-router-bgp-cfg:ip-address-rt[ip-address=%s][index=%v][stitching=%v]
+no_augment_config: true
+ds_description: This data source can read a VRF Route Target (IP Address Format) configuration.
+res_description: This resource can manage a VRF Route Target (IP Address Format) configuration.
+doc_category: VRF
+attributes:
+  - yang_name: vrf-name
+    tf_name: vrf_name
+    description: VRF name
+    type: String
+    id: true
+    example: VRF1
+  - yang_name: address-family
+    tf_name: address_family
+    description: Address family
+    type: String
+    reference: true
+    enum_values:
+      - ipv4
+      - ipv6
+    example: ipv4
+  - yang_name: sub-address-family
+    tf_name: sub_address_family
+    description: Sub-Address family
+    type: String
+    reference: true
+    enum_values:
+      - unicast
+      - multicast
+      - flowspec
+    example: unicast
+  - yang_name: direction
+    tf_name: direction
+    description: Direction
+    type: String
+    reference: true
+    enum_values:
+      - import
+      - export
+    example: import
+  - yang_name: ip-address
+    tf_name: ip_address
+    description: IP Address
+    type: String
+    id: true
+    example: 1.1.1.1
+  - yang_name: index
+    tf_name: index
+    description: ASN2:index (hex or decimal format)
+    type: Int64
+    id: true
+    example: 1
+  - yang_name: stitching
+    tf_name: stitching
+    description: These are stitching RTs
+    type: Bool
+    id: true
+    example: true

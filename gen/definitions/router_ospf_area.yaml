@@ -1,0 +1,9 @@
+---
+name: Router OSPF Area
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]
+doc_category: OSPF
+attributes:
+  - yang_name: process-name
+    example: OSPF1
+  - yang_name: area-id
+    example: 0

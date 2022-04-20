@@ -73,5 +73,6 @@ jobs:
           IOSXR_USERNAME: ${{ secrets.IOSXR_USERNAME }}
           IOSXR_PASSWORD: ${{ secrets.IOSXR_PASSWORD }}
           IOSXR_URL: ${{ secrets.IOSXR_HOST }}
+          ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH: 'go1.18'
         run: go test ./... -v -cover -timeout 45m -run Gnmi
         timeout-minutes: 45

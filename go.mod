@@ -11,7 +11,7 @@ require (
 	github.com/karimra/gnmic v0.24.4
 	github.com/openconfig/gnmi v0.0.0-20220131173555-39aa74195f0d
 	github.com/openconfig/goyang v1.0.0
-	github.com/tidwall/gjson v1.14.0
+	github.com/tidwall/gjson v1.14.1
 	github.com/tidwall/sjson v1.2.4
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )

@@ -44,6 +44,15 @@ func (t resourceGnmiType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 					tfsdk.RequiresReplace(),
 				},
 			},
+			"delete": {
+				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.BooleanDefaultModifier(true),
+				},
+			},
 			"attributes": {
 				Type:                types.MapType{ElemType: types.StringType},
 				MarkdownDescription: "Map of key-value pairs which represents the attributes and its values.",
@@ -181,10 +190,12 @@ func (r resourceGnmi) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
 
-	_, diags = r.provider.client.Set(ctx, state.Device.Value, state.Path.Value, "", client.Delete)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
+	if state.Delete.Value {
+		_, diags = r.provider.client.Set(ctx, state.Device.Value, state.Path.Value, "", client.Delete)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))

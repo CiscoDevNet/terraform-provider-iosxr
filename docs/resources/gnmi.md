@@ -31,6 +31,7 @@ resource "iosxr_gnmi" "example" {
 ### Optional
 
 - `attributes` (Map of String) Map of key-value pairs which represents the attributes and its values.
+- `delete` (Boolean) Delete object during destroy operation. Default value is `true`.
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

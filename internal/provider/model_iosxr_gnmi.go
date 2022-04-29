@@ -11,6 +11,14 @@ type Gnmi struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`
 	Path       types.String `tfsdk:"path"`
+	Delete     types.Bool   `tfsdk:"delete"`
+	Attributes types.Map    `tfsdk:"attributes"`
+}
+
+type GnmiDataSource struct {
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	Path       types.String `tfsdk:"path"`
 	Attributes types.Map    `tfsdk:"attributes"`
 }
 

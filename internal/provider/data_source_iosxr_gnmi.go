@@ -57,7 +57,7 @@ type dataSourceGnmi struct {
 }
 
 func (d dataSourceGnmi) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state Gnmi
+	var config, state GnmiDataSource
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

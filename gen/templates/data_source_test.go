@@ -35,6 +35,9 @@ const testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
 resource "iosxr_gnmi" "PreReq{{$index}}" {
   path = "{{.Path}}"
+  {{- if .NoDelete}}
+  delete = false
+  {{- end}}
   attributes = {
     {{- range  .Attributes}}
       {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}

@@ -15,17 +15,17 @@ import (
 )
 
 type Interface struct {
-	Device                       types.String `tfsdk:"device"`
-	Id                           types.String `tfsdk:"id"`
-	InterfaceName                types.String `tfsdk:"interface_name"`
-	SubInterfaceTypeL2transport  types.Bool   `tfsdk:"l2transport"`
-	SubInterfaceTypePointToPoint types.Bool   `tfsdk:"point_to_point"`
-	SubInterfaceTypeMultipoint   types.Bool   `tfsdk:"multipoint"`
-	Shutdown                     types.Bool   `tfsdk:"shutdown"`
-	Mtu                          types.Int64  `tfsdk:"mtu"`
-	Bandwidth                    types.Int64  `tfsdk:"bandwidth"`
-	Description                  types.String `tfsdk:"description"`
-	Vrf                          types.String `tfsdk:"vrf"`
+	Device        types.String `tfsdk:"device"`
+	Id            types.String `tfsdk:"id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	L2transport   types.Bool   `tfsdk:"l2transport"`
+	PointToPoint  types.Bool   `tfsdk:"point_to_point"`
+	Multipoint    types.Bool   `tfsdk:"multipoint"`
+	Shutdown      types.Bool   `tfsdk:"shutdown"`
+	Mtu           types.Int64  `tfsdk:"mtu"`
+	Bandwidth     types.Int64  `tfsdk:"bandwidth"`
+	Description   types.String `tfsdk:"description"`
+	Vrf           types.String `tfsdk:"vrf"`
 }
 
 func (data Interface) getPath() string {
@@ -35,18 +35,18 @@ func (data Interface) getPath() string {
 func (data Interface) toBody() string {
 	body := "{}"
 
-	if !data.SubInterfaceTypeL2transport.Null && !data.SubInterfaceTypeL2transport.Unknown {
-		if data.SubInterfaceTypeL2transport.Value {
+	if !data.L2transport.Null && !data.L2transport.Unknown {
+		if data.L2transport.Value {
 			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
 		}
 	}
-	if !data.SubInterfaceTypePointToPoint.Null && !data.SubInterfaceTypePointToPoint.Unknown {
-		if data.SubInterfaceTypePointToPoint.Value {
+	if !data.PointToPoint.Null && !data.PointToPoint.Unknown {
+		if data.PointToPoint.Value {
 			body, _ = sjson.Set(body, "sub-interface-type.point-to-point", map[string]string{})
 		}
 	}
-	if !data.SubInterfaceTypeMultipoint.Null && !data.SubInterfaceTypeMultipoint.Unknown {
-		if data.SubInterfaceTypeMultipoint.Value {
+	if !data.Multipoint.Null && !data.Multipoint.Unknown {
+		if data.Multipoint.Value {
 			body, _ = sjson.Set(body, "sub-interface-type.multipoint", map[string]string{})
 		}
 	}
@@ -73,13 +73,13 @@ func (data Interface) toBody() string {
 
 func (data *Interface) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
-		data.SubInterfaceTypeL2transport.Value = true
+		data.L2transport.Value = true
 	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
-		data.SubInterfaceTypePointToPoint.Value = true
+		data.PointToPoint.Value = true
 	}
 	if value := gjson.GetBytes(res, "sub-interface-type.multipoint"); value.Exists() {
-		data.SubInterfaceTypeMultipoint.Value = true
+		data.Multipoint.Value = true
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown.Value = true

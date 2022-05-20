@@ -15,26 +15,26 @@ import (
 )
 
 type RouterBGPNeighbor struct {
-	Device                          types.String `tfsdk:"device"`
-	Id                              types.String `tfsdk:"id"`
-	AsNumber                        types.String `tfsdk:"as_number"`
-	NeighborAddress                 types.String `tfsdk:"neighbor_address"`
-	RemoteAs                        types.String `tfsdk:"remote_as"`
-	Description                     types.String `tfsdk:"description"`
-	IgnoreConnectedCheck            types.Bool   `tfsdk:"ignore_connected_check"`
-	EbgpMultihopMaximumHopCount     types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
-	BfdMinimumInterval              types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                   types.Int64  `tfsdk:"bfd_multiplier"`
-	LocalAsAsNumber                 types.String `tfsdk:"local_as"`
-	LocalAsNoPrepend                types.Bool   `tfsdk:"local_as_no_prepend"`
-	LocalAsNoPrependReplaceAs       types.Bool   `tfsdk:"local_as_replace_as"`
-	LocalAsNoPrependReplaceAsDualAs types.Bool   `tfsdk:"local_as_dual_as"`
-	PasswordEncrypted               types.String `tfsdk:"password"`
-	Shutdown                        types.Bool   `tfsdk:"shutdown"`
-	TimersKeepaliveInterval         types.Int64  `tfsdk:"timers_keepalive_interval"`
-	TimersHoldtime                  types.String `tfsdk:"timers_holdtime"`
-	UpdateSource                    types.String `tfsdk:"update_source"`
-	TtlSecurity                     types.Bool   `tfsdk:"ttl_security"`
+	Device                      types.String `tfsdk:"device"`
+	Id                          types.String `tfsdk:"id"`
+	AsNumber                    types.String `tfsdk:"as_number"`
+	NeighborAddress             types.String `tfsdk:"neighbor_address"`
+	RemoteAs                    types.String `tfsdk:"remote_as"`
+	Description                 types.String `tfsdk:"description"`
+	IgnoreConnectedCheck        types.Bool   `tfsdk:"ignore_connected_check"`
+	EbgpMultihopMaximumHopCount types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
+	BfdMinimumInterval          types.Int64  `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier               types.Int64  `tfsdk:"bfd_multiplier"`
+	LocalAs                     types.String `tfsdk:"local_as"`
+	LocalAsNoPrepend            types.Bool   `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs            types.Bool   `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs               types.Bool   `tfsdk:"local_as_dual_as"`
+	Password                    types.String `tfsdk:"password"`
+	Shutdown                    types.Bool   `tfsdk:"shutdown"`
+	TimersKeepaliveInterval     types.Int64  `tfsdk:"timers_keepalive_interval"`
+	TimersHoldtime              types.String `tfsdk:"timers_holdtime"`
+	UpdateSource                types.String `tfsdk:"update_source"`
+	TtlSecurity                 types.Bool   `tfsdk:"ttl_security"`
 }
 
 func (data RouterBGPNeighbor) getPath() string {
@@ -64,26 +64,26 @@ func (data RouterBGPNeighbor) toBody() string {
 	if !data.BfdMultiplier.Null && !data.BfdMultiplier.Unknown {
 		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.Value, 10))
 	}
-	if !data.LocalAsAsNumber.Null && !data.LocalAsAsNumber.Unknown {
-		body, _ = sjson.Set(body, "local-as.as-number", data.LocalAsAsNumber.Value)
+	if !data.LocalAs.Null && !data.LocalAs.Unknown {
+		body, _ = sjson.Set(body, "local-as.as-number", data.LocalAs.Value)
 	}
 	if !data.LocalAsNoPrepend.Null && !data.LocalAsNoPrepend.Unknown {
 		if data.LocalAsNoPrepend.Value {
 			body, _ = sjson.Set(body, "local-as.no-prepend", map[string]string{})
 		}
 	}
-	if !data.LocalAsNoPrependReplaceAs.Null && !data.LocalAsNoPrependReplaceAs.Unknown {
-		if data.LocalAsNoPrependReplaceAs.Value {
+	if !data.LocalAsReplaceAs.Null && !data.LocalAsReplaceAs.Unknown {
+		if data.LocalAsReplaceAs.Value {
 			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as", map[string]string{})
 		}
 	}
-	if !data.LocalAsNoPrependReplaceAsDualAs.Null && !data.LocalAsNoPrependReplaceAsDualAs.Unknown {
-		if data.LocalAsNoPrependReplaceAsDualAs.Value {
+	if !data.LocalAsDualAs.Null && !data.LocalAsDualAs.Unknown {
+		if data.LocalAsDualAs.Value {
 			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as.dual-as", map[string]string{})
 		}
 	}
-	if !data.PasswordEncrypted.Null && !data.PasswordEncrypted.Unknown {
-		body, _ = sjson.Set(body, "password.encrypted", data.PasswordEncrypted.Value)
+	if !data.Password.Null && !data.Password.Unknown {
+		body, _ = sjson.Set(body, "password.encrypted", data.Password.Value)
 	}
 	if !data.Shutdown.Null && !data.Shutdown.Unknown {
 		if data.Shutdown.Value {
@@ -128,19 +128,19 @@ func (data *RouterBGPNeighbor) fromBody(res []byte) {
 		data.BfdMultiplier.Value = value.Int()
 	}
 	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
-		data.LocalAsAsNumber.Value = value.String()
+		data.LocalAs.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend.Value = true
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
-		data.LocalAsNoPrependReplaceAs.Value = true
+		data.LocalAsReplaceAs.Value = true
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
-		data.LocalAsNoPrependReplaceAsDualAs.Value = true
+		data.LocalAsDualAs.Value = true
 	}
 	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
-		data.PasswordEncrypted.Value = value.String()
+		data.Password.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown.Value = true

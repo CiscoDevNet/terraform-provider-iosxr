@@ -21,10 +21,13 @@ import (
 )
 
 const (
-	definitionsPath  = "./gen/definitions/"
-	modelsPath       = "./gen/models/"
-	providerTemplate = "./gen/templates/provider.go"
-	providerLocation = "./internal/provider/provider.go"
+	definitionsPath   = "./gen/definitions/"
+	modelsPath        = "./gen/models/"
+	providerTemplate  = "./gen/templates/provider.go"
+	providerLocation  = "./internal/provider/provider.go"
+	changelogTemplate = "./gen/templates/changelog.md.tmpl"
+	changelogLocation = "./templates/guides/changelog.md.tmpl"
+	changelogOriginal = "./CHANGELOG.md"
 )
 
 type t struct {
@@ -79,6 +82,7 @@ var templates = []t{
 type YamlConfig struct {
 	Name              string                `yaml:"name"`
 	Path              string                `yaml:"path"`
+	AugmentPath       string                `yaml:"augment_path"`
 	NoDelete          bool                  `yaml:"no_delete"`
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	NoAugmentConfig   bool                  `yaml:"no_augment_config"`
@@ -90,30 +94,37 @@ type YamlConfig struct {
 }
 
 type YamlConfigAttribute struct {
-	YangName        string   `yaml:"yang_name"`
-	TfName          string   `yaml:"tf_name"`
-	Type            string   `yaml:"type"`
-	Id              bool     `yaml:"id"`
-	Reference       bool     `yaml:"reference"`
-	Mandatory       bool     `yaml:"mandatory"`
-	Optional        bool     `yaml:"optional"`
-	WriteOnly       bool     `yaml:"write_only"`
-	ExcludeTest     bool     `yaml:"exclude_test"`
-	Description     string   `yaml:"description"`
-	Example         string   `yaml:"example"`
-	EnumValues      []string `yaml:"enum_values"`
-	MinInt          int64    `yaml:"min_int"`
-	MaxInt          int64    `yaml:"max_int"`
-	StringPatterns  []string `yaml:"string_patterns"`
-	StringMinLength int64    `yaml:"string_min_length"`
-	StringMaxLength int64    `yaml:"string_max_length"`
-	DefaultValue    string   `yaml:"default_value"`
+	YangName  string `yaml:"yang_name"`
+	YangScope string `yaml:"yang_scope"`
+	TfName    string `yaml:"tf_name"`
+	XPath     string `yaml:"xpath"`
+	Type      string `yaml:"type"`
+	// "empty", "presence" or "boolean"
+	TypeYangBool    string                `yaml:"type_yang_bool"`
+	Id              bool                  `yaml:"id"`
+	Reference       bool                  `yaml:"reference"`
+	Mandatory       bool                  `yaml:"mandatory"`
+	Optional        bool                  `yaml:"optional"`
+	WriteOnly       bool                  `yaml:"write_only"`
+	ExcludeTest     bool                  `yaml:"exclude_test"`
+	Description     string                `yaml:"description"`
+	Example         string                `yaml:"example"`
+	EnumValues      []string              `yaml:"enum_values"`
+	MinInt          int64                 `yaml:"min_int"`
+	MaxInt          int64                 `yaml:"max_int"`
+	StringPatterns  []string              `yaml:"string_patterns"`
+	StringMinLength int64                 `yaml:"string_min_length"`
+	StringMaxLength int64                 `yaml:"string_max_length"`
+	DefaultValue    string                `yaml:"default_value"`
+	RequiresReplace bool                  `yaml:"requires_replace"`
+	Attributes      []YamlConfigAttribute `yaml:"attributes"`
 }
 
 type YamlTest struct {
 	Path         string              `yaml:"path"`
 	NoDelete     bool                `yaml:"no_delete"`
 	Attributes   []YamlTestAttribute `yaml:"attributes"`
+	Lists        []YamlTestList      `yaml:"lists"`
 	Dependencies []string            `yaml:"dependencies"`
 }
 
@@ -121,6 +132,16 @@ type YamlTestAttribute struct {
 	Name      string `yaml:"name"`
 	Value     string `yaml:"value"`
 	Reference string `yaml:"reference"`
+}
+
+type YamlTestList struct {
+	Name  string             `yaml:"name"`
+	Key   string             `yaml:"key"`
+	Items []YamlTestListItem `yaml:"items"`
+}
+
+type YamlTestListItem struct {
+	Attributes []YamlTestAttribute `yaml:"attributes"`
 }
 
 // Templating helper function to get short YAMG name without prefix (xxx:abc -> abc)
@@ -131,26 +152,27 @@ func ToYangShortName(s string) string {
 	return s
 }
 
-// Templating helper function to convert YANG name to GO name
+// Templating helper function to convert TF name to GO name
 func ToGoName(s string) string {
-	s = ToYangShortName(s)
 	var g []string
 
-	p := strings.Split(s, "-")
+	p := strings.Split(s, "_")
 
 	for _, value := range p {
+		if strings.Contains(value, ":") {
+			value = strings.Split(value, ":")[1]
+		}
 		g = append(g, strings.Title(value))
 	}
 	s = strings.Join(g, "")
-	s = strings.ReplaceAll(s, "/", "")
-	if s == "Id" {
-		s = "YangId"
-	}
 	return s
 }
 
 // Templating helper function to convert YANG name to GO name
-func ToJsonPath(yangPath string) string {
+func ToJsonPath(yangPath, xPath string) string {
+	if xPath != "" {
+		return strings.ReplaceAll(xPath, "/", ".")
+	}
 	return strings.ReplaceAll(yangPath, "/", ".")
 }
 
@@ -238,6 +260,9 @@ func resolvePath(e *yang.Entry, path string) *yang.Entry {
 			if strings.Contains(pathElement, ":") {
 				pathElement = pathElement[strings.Index(pathElement, ":")+1:]
 			}
+			if _, ok := e.Dir[pathElement]; !ok {
+				panic(fmt.Sprintf("Failed to resolve YANG path: %s, element: %s", path, pathElement))
+			}
 			e = e.Dir[pathElement]
 		}
 	}
@@ -254,12 +279,16 @@ func addKeys(e *yang.Entry, config *YamlConfig) {
 				var keyAttr *YamlConfigAttribute
 				// check if key attribute already in config
 				for i := range config.Attributes {
+					if config.Attributes[i].YangScope != "" && config.Attributes[i].YangScope != e.Name {
+						continue
+					}
 					if config.Attributes[i].YangName == key {
 						keyAttr = &config.Attributes[i]
+						break
 					}
 				}
 				if keyAttr == nil {
-					panic(fmt.Sprintf("Cannot find id/reference attribute in config: %s", key))
+					continue
 				}
 				if first {
 					keyAttr.Id = true
@@ -282,10 +311,11 @@ func addKeys(e *yang.Entry, config *YamlConfig) {
 
 func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	leaf := resolvePath(e, attr.YangName)
-	// fmt.Printf("%s, Kind: %+v, Type: %+v\n\n", leaf.Name, leaf.Kind, leaf.Type)
+	//fmt.Printf("%s, Entry: %+v\n\n", attr.YangName, e)
+	//fmt.Printf("%s, Kind: %+v, Type: %+v\n\n", leaf.Name, leaf.Kind, leaf.Type)
 	if leaf.Kind.String() == "Leaf" {
 		// TODO parse union type
-		if contains([]string{"string", "union"}, leaf.Type.Kind.String()) {
+		if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			if leaf.Type.Length != nil {
 				attr.StringMinLength = int64(leaf.Type.Length[0].Min.Value)
@@ -305,7 +335,12 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 				}
 				attr.MaxInt = int64(max)
 			}
-		} else if contains([]string{"boolean"}, leaf.Type.Kind.String()) {
+		} else if contains([]string{"boolean", "empty"}, leaf.Type.Kind.String()) {
+			if leaf.Type.Kind.String() == "boolean" {
+				attr.TypeYangBool = "boolean"
+			} else if leaf.Type.Kind.String() == "empty" {
+				attr.TypeYangBool = "empty"
+			}
 			attr.Type = "Bool"
 		} else if contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
@@ -313,6 +348,7 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		}
 	}
 	if _, ok := leaf.Extra["presence"]; ok {
+		attr.TypeYangBool = "presence"
 		attr.Type = "Bool"
 	}
 	if attr.TfName == "" {
@@ -329,15 +365,21 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 }
 
 func augmentConfig(config *YamlConfig, modelPaths []string) {
+	path := ""
+	if config.AugmentPath != "" {
+		path = config.AugmentPath
+	} else {
+		path = config.Path
+	}
 
-	module := strings.Split(config.Path, ":")[0]
+	module := strings.Split(path, ":")[0]
 	e, errors := yang.GetModule(module, modelPaths...)
 	if len(errors) > 0 {
 		fmt.Printf("YANG parser error(s): %+v\n\n", errors)
 		return
 	}
 
-	p := config.Path[len(module)+1:]
+	p := path[len(module)+1:]
 	e = resolvePath(e, p)
 
 	addKeys(e, config)
@@ -347,6 +389,12 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 			continue
 		}
 		parseAttribute(e, &config.Attributes[ia])
+		if config.Attributes[ia].Type == "List" {
+			el := resolvePath(e, config.Attributes[ia].YangName)
+			for iaa := range config.Attributes[ia].Attributes {
+				parseAttribute(el, &config.Attributes[ia].Attributes[iaa])
+			}
+		}
 	}
 
 	if config.DsDescription == "" {
@@ -448,4 +496,10 @@ func main() {
 
 	// render provider.go
 	renderTemplate(providerTemplate, providerLocation, configs)
+
+	changelog, err := ioutil.ReadFile(changelogOriginal)
+	if err != nil {
+		log.Fatalf("Error reading changelog: %v", err)
+	}
+	renderTemplate(changelogTemplate, changelogLocation, string(changelog))
 }

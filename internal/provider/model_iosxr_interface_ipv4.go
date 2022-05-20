@@ -13,12 +13,12 @@ import (
 )
 
 type InterfaceIPv4 struct {
-	Device                  types.String `tfsdk:"device"`
-	Id                      types.String `tfsdk:"id"`
-	InterfaceName           types.String `tfsdk:"interface_name"`
-	AddressesAddressAddress types.String `tfsdk:"address"`
-	AddressesAddressNetmask types.String `tfsdk:"netmask"`
-	AddressesUnnumbered     types.String `tfsdk:"unnumbered"`
+	Device        types.String `tfsdk:"device"`
+	Id            types.String `tfsdk:"id"`
+	InterfaceName types.String `tfsdk:"interface_name"`
+	Address       types.String `tfsdk:"address"`
+	Netmask       types.String `tfsdk:"netmask"`
+	Unnumbered    types.String `tfsdk:"unnumbered"`
 }
 
 func (data InterfaceIPv4) getPath() string {
@@ -28,14 +28,14 @@ func (data InterfaceIPv4) getPath() string {
 func (data InterfaceIPv4) toBody() string {
 	body := "{}"
 
-	if !data.AddressesAddressAddress.Null && !data.AddressesAddressAddress.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address", data.AddressesAddressAddress.Value)
+	if !data.Address.Null && !data.Address.Unknown {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address", data.Address.Value)
 	}
-	if !data.AddressesAddressNetmask.Null && !data.AddressesAddressNetmask.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask", data.AddressesAddressNetmask.Value)
+	if !data.Netmask.Null && !data.Netmask.Unknown {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask", data.Netmask.Value)
 	}
-	if !data.AddressesUnnumbered.Null && !data.AddressesUnnumbered.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.AddressesUnnumbered.Value)
+	if !data.Unnumbered.Null && !data.Unnumbered.Unknown {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.Value)
 	}
 
 	return body
@@ -43,13 +43,13 @@ func (data InterfaceIPv4) toBody() string {
 
 func (data *InterfaceIPv4) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
-		data.AddressesAddressAddress.Value = value.String()
+		data.Address.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() {
-		data.AddressesAddressNetmask.Value = value.String()
+		data.Netmask.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
-		data.AddressesUnnumbered.Value = value.String()
+		data.Unnumbered.Value = value.String()
 	}
 }
 

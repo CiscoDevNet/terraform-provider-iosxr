@@ -22,7 +22,7 @@ type RouterISISInterface struct {
 	CircuitType           types.String `tfsdk:"circuit_type"`
 	HelloPaddingDisable   types.Bool   `tfsdk:"hello_padding_disable"`
 	HelloPaddingSometimes types.Bool   `tfsdk:"hello_padding_sometimes"`
-	PriorityPriorityValue types.Int64  `tfsdk:"priority"`
+	Priority              types.Int64  `tfsdk:"priority"`
 	PointToPoint          types.Bool   `tfsdk:"point_to_point"`
 	Passive               types.Bool   `tfsdk:"passive"`
 	Suppressed            types.Bool   `tfsdk:"suppressed"`
@@ -49,8 +49,8 @@ func (data RouterISISInterface) toBody() string {
 			body, _ = sjson.Set(body, "hello-padding.sometimes", map[string]string{})
 		}
 	}
-	if !data.PriorityPriorityValue.Null && !data.PriorityPriorityValue.Unknown {
-		body, _ = sjson.Set(body, "priority.priority-value", strconv.FormatInt(data.PriorityPriorityValue.Value, 10))
+	if !data.Priority.Null && !data.Priority.Unknown {
+		body, _ = sjson.Set(body, "priority.priority-value", strconv.FormatInt(data.Priority.Value, 10))
 	}
 	if !data.PointToPoint.Null && !data.PointToPoint.Unknown {
 		if data.PointToPoint.Value {
@@ -87,7 +87,7 @@ func (data *RouterISISInterface) fromBody(res []byte) {
 		data.HelloPaddingSometimes.Value = true
 	}
 	if value := gjson.GetBytes(res, "priority.priority-value"); value.Exists() {
-		data.PriorityPriorityValue.Value = value.Int()
+		data.Priority.Value = value.Int()
 	}
 	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
 		data.PointToPoint.Value = true

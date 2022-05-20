@@ -27,13 +27,13 @@ type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
 {{- range .Attributes}}
-	{{toGoName .YangName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 }
 
 func (data {{camelCase .Name}}) getPath() string {
 {{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or (eq .Id true) (eq .Reference true)}}, data.{{toGoName .YangName}}.Value{{end}}{{end}})
+	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or (eq .Id true) (eq .Reference true)}}, data.{{toGoName .TfName}}.Value{{end}}{{end}})
 {{- else}}
 	return "{{.Path}}"
 {{- end}}
@@ -43,15 +43,15 @@ func (data {{camelCase .Name}}) toBody() string {
 	body := "{}"
 	{{ range $index, $item := .Attributes -}}
 	{{ if and (ne .Reference true) (ne .Id true)}}
-	if !data.{{toGoName .YangName}}.Null && !data.{{toGoName .YangName}}.Unknown {
+	if !data.{{toGoName .TfName}}.Null && !data.{{toGoName .TfName}}.Unknown {
 		{{- if eq .Type "Int64"}}
-		body, _ = sjson.Set(body, "{{toJsonPath .YangName}}", strconv.FormatInt(data.{{toGoName .YangName}}.Value, 10))
+		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.Value, 10))
 		{{- else if eq .Type "Bool"}}
-		if data.{{toGoName .YangName}}.Value {
-			body, _ = sjson.Set(body, "{{toJsonPath .YangName}}", map[string]string{})
+		if data.{{toGoName .TfName}}.Value {
+			body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", map[string]string{})
 		}
 		{{- else if eq .Type "String"}}
-		body, _ = sjson.Set(body, "{{toJsonPath .YangName}}", data.{{toGoName .YangName}}.Value)
+		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", data.{{toGoName .TfName}}.Value)
 		{{- end}}
 	}
 	{{- end}}
@@ -63,13 +63,13 @@ func (data {{camelCase .Name}}) toBody() string {
 func (data *{{camelCase .Name}}) fromBody(res []byte) {
 	{{- range .Attributes}}
 	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
-	if value := gjson.GetBytes(res, "{{toJsonPath .YangName}}"); value.Exists() {
+	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
 		{{- if eq .Type "Int64"}}
-		data.{{toGoName .YangName}}.Value = value.Int()
+		data.{{toGoName .TfName}}.Value = value.Int()
 		{{- else if eq .Type "Bool"}}
-		data.{{toGoName .YangName}}.Value = true
+		data.{{toGoName .TfName}}.Value = true
 		{{- else if eq .Type "String"}}
-		data.{{toGoName .YangName}}.Value = value.String()
+		data.{{toGoName .TfName}}.Value = value.String()
 		{{- end}}
 	}
 	{{- end}}
@@ -80,7 +80,7 @@ func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
 	data.Device = plan.Device
 	{{- range .Attributes}}
 	{{- if or (eq .Reference true) (eq .Id true) (eq .WriteOnly true)}}
-	data.{{toGoName .YangName}}.Value = plan.{{toGoName .YangName}}.Value
+	data.{{toGoName .TfName}}.Value = plan.{{toGoName .TfName}}.Value
 	{{- end}}
 	{{- end}}
 }

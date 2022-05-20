@@ -13,13 +13,13 @@ import (
 )
 
 type InterfaceIPv6 struct {
-	Device                           types.String `tfsdk:"device"`
-	Id                               types.String `tfsdk:"id"`
-	InterfaceName                    types.String `tfsdk:"interface_name"`
-	AddressesLinkLocalAddressAddress types.String `tfsdk:"link_local_address"`
-	AddressesLinkLocalAddressZone    types.String `tfsdk:"link_local_zone"`
-	AddressesAutoconfig              types.Bool   `tfsdk:"autoconfig"`
-	Enable                           types.Bool   `tfsdk:"enable"`
+	Device           types.String `tfsdk:"device"`
+	Id               types.String `tfsdk:"id"`
+	InterfaceName    types.String `tfsdk:"interface_name"`
+	LinkLocalAddress types.String `tfsdk:"link_local_address"`
+	LinkLocalZone    types.String `tfsdk:"link_local_zone"`
+	Autoconfig       types.Bool   `tfsdk:"autoconfig"`
+	Enable           types.Bool   `tfsdk:"enable"`
 }
 
 func (data InterfaceIPv6) getPath() string {
@@ -29,14 +29,14 @@ func (data InterfaceIPv6) getPath() string {
 func (data InterfaceIPv6) toBody() string {
 	body := "{}"
 
-	if !data.AddressesLinkLocalAddressAddress.Null && !data.AddressesLinkLocalAddressAddress.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address", data.AddressesLinkLocalAddressAddress.Value)
+	if !data.LinkLocalAddress.Null && !data.LinkLocalAddress.Unknown {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address", data.LinkLocalAddress.Value)
 	}
-	if !data.AddressesLinkLocalAddressZone.Null && !data.AddressesLinkLocalAddressZone.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone", data.AddressesLinkLocalAddressZone.Value)
+	if !data.LinkLocalZone.Null && !data.LinkLocalZone.Unknown {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone", data.LinkLocalZone.Value)
 	}
-	if !data.AddressesAutoconfig.Null && !data.AddressesAutoconfig.Unknown {
-		if data.AddressesAutoconfig.Value {
+	if !data.Autoconfig.Null && !data.Autoconfig.Unknown {
+		if data.Autoconfig.Value {
 			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig", map[string]string{})
 		}
 	}
@@ -51,13 +51,13 @@ func (data InterfaceIPv6) toBody() string {
 
 func (data *InterfaceIPv6) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
-		data.AddressesLinkLocalAddressAddress.Value = value.String()
+		data.LinkLocalAddress.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
-		data.AddressesLinkLocalAddressZone.Value = value.String()
+		data.LinkLocalZone.Value = value.String()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
-		data.AddressesAutoconfig.Value = true
+		data.Autoconfig.Value = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Enable.Value = true

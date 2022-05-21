@@ -21,7 +21,16 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 					{{- $name := .Name }}
 					{{- range  .Attributes}}
 					{{- if and (ne .Reference true) (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					{{- if eq .Type "List"}}
+					{{- $list := .TfName }}
+					{{- range  .Attributes}}
+					{{- if and (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					resource.TestCheckResourceAttr("iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- else}}
 					resource.TestCheckResourceAttr("iosxr_{{snakeCase $name}}.test", "{{.TfName}}", "{{.Example}}"),
+					{{- end}}
 					{{- end}}
 					{{- end}}
 				),
@@ -48,6 +57,27 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
       {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
     {{- end}}
   }
+  {{- if .Lists}}
+  lists = [
+  {{- range .Lists}}
+    {
+      name = "{{.Name}}"
+	  key = "{{.Key}}"
+      items = [
+        {{- range .Items}}
+          {
+            attributes = {
+			{{- range .Attributes}}
+				{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+			{{- end}}
+            }
+          },
+        {{- end}}
+      ] 
+    },
+  {{- end}}
+  ]
+  {{- end}}
   {{- if .Dependencies}}
   depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
   {{- end}}
@@ -61,7 +91,17 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	resource "iosxr_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
 	{{- if or (eq .Reference true) (eq .Id true) (eq .Mandatory true)}}
+	{{- if eq .Type "List"}}
+		{{.TfName}} = [{
+		{{- range  .Attributes}}
+		{{- if ne .ExcludeTest true}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		}]
+	{{- else}}
+		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}
@@ -76,7 +116,17 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	resource "iosxr_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
 	{{- if ne .ExcludeTest true}}
+	{{- if eq .Type "List"}}
+		{{.TfName}} = [{
+		{{- range  .Attributes}}
+		{{- if ne .ExcludeTest true}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+		}]
+	{{- else}}
+		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
 	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}

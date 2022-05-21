@@ -35,12 +35,45 @@ func (data L2VPN) toBody() string {
 func (data *L2VPN) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
+	} else {
+		data.Description.Null = true
 	}
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId.Value = value.String()
+	} else {
+		data.RouterId.Null = true
 	}
 }
 
 func (data *L2VPN) fromPlan(plan L2VPN) {
 	data.Device = plan.Device
+}
+
+func (data *L2VPN) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.Description.Unknown {
+		data.Description.Unknown = false
+		data.Description.Null = true
+	}
+	if data.RouterId.Unknown {
+		data.RouterId.Unknown = false
+		data.RouterId.Null = true
+	}
+}
+
+func (data *L2VPN) getDeletedListItems(state L2VPN) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *L2VPN) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

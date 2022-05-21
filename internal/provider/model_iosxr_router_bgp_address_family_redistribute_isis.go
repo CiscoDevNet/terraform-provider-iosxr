@@ -80,27 +80,43 @@ func (data RouterBGPAddressFamilyRedistributeISIS) toBody() string {
 func (data *RouterBGPAddressFamilyRedistributeISIS) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "level.one"); value.Exists() {
 		data.LevelOne.Value = true
+	} else {
+		data.LevelOne.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.one.two"); value.Exists() {
 		data.LevelOneTwo.Value = true
+	} else {
+		data.LevelOneTwo.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.one.two.one-inter-area"); value.Exists() {
 		data.LevelOneTwoOneInterArea.Value = true
+	} else {
+		data.LevelOneTwoOneInterArea.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.one.one-inter-area"); value.Exists() {
 		data.LevelOneOneInterArea.Value = true
+	} else {
+		data.LevelOneOneInterArea.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.two"); value.Exists() {
 		data.LevelTwo.Value = true
+	} else {
+		data.LevelTwo.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.two.one-inter-area"); value.Exists() {
 		data.LevelTwoOneInterArea.Value = true
+	} else {
+		data.LevelTwoOneInterArea.Value = false
 	}
 	if value := gjson.GetBytes(res, "level.one-inter-area"); value.Exists() {
 		data.LevelOneInterArea.Value = true
+	} else {
+		data.LevelOneInterArea.Value = false
 	}
 	if value := gjson.GetBytes(res, "metric"); value.Exists() {
 		data.Metric.Value = value.Int()
+	} else {
+		data.Metric.Null = true
 	}
 }
 
@@ -109,4 +125,69 @@ func (data *RouterBGPAddressFamilyRedistributeISIS) fromPlan(plan RouterBGPAddre
 	data.AsNumber.Value = plan.AsNumber.Value
 	data.AfName.Value = plan.AfName.Value
 	data.InstanceName.Value = plan.InstanceName.Value
+}
+
+func (data *RouterBGPAddressFamilyRedistributeISIS) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.InstanceName.Unknown {
+		data.InstanceName.Unknown = false
+		data.InstanceName.Null = true
+	}
+	if data.LevelOne.Unknown {
+		data.LevelOne.Unknown = false
+		data.LevelOne.Null = true
+	}
+	if data.LevelOneTwo.Unknown {
+		data.LevelOneTwo.Unknown = false
+		data.LevelOneTwo.Null = true
+	}
+	if data.LevelOneTwoOneInterArea.Unknown {
+		data.LevelOneTwoOneInterArea.Unknown = false
+		data.LevelOneTwoOneInterArea.Null = true
+	}
+	if data.LevelOneOneInterArea.Unknown {
+		data.LevelOneOneInterArea.Unknown = false
+		data.LevelOneOneInterArea.Null = true
+	}
+	if data.LevelTwo.Unknown {
+		data.LevelTwo.Unknown = false
+		data.LevelTwo.Null = true
+	}
+	if data.LevelTwoOneInterArea.Unknown {
+		data.LevelTwoOneInterArea.Unknown = false
+		data.LevelTwoOneInterArea.Null = true
+	}
+	if data.LevelOneInterArea.Unknown {
+		data.LevelOneInterArea.Unknown = false
+		data.LevelOneInterArea.Null = true
+	}
+	if data.Metric.Unknown {
+		data.Metric.Unknown = false
+		data.Metric.Null = true
+	}
+}
+
+func (data *RouterBGPAddressFamilyRedistributeISIS) getDeletedListItems(state RouterBGPAddressFamilyRedistributeISIS) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPAddressFamilyRedistributeISIS) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

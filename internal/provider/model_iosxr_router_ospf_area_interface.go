@@ -78,27 +78,43 @@ func (data RouterOSPFAreaInterface) toBody() string {
 func (data *RouterOSPFAreaInterface) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast.Value = true
+	} else {
+		data.NetworkBroadcast.Value = false
 	}
 	if value := gjson.GetBytes(res, "network.non-broadcast"); value.Exists() {
 		data.NetworkNonBroadcast.Value = true
+	} else {
+		data.NetworkNonBroadcast.Value = false
 	}
 	if value := gjson.GetBytes(res, "network.point-to-point"); value.Exists() {
 		data.NetworkPointToPoint.Value = true
+	} else {
+		data.NetworkPointToPoint.Value = false
 	}
 	if value := gjson.GetBytes(res, "network.point-to-multipoint"); value.Exists() {
 		data.NetworkPointToMultipoint.Value = true
+	} else {
+		data.NetworkPointToMultipoint.Value = false
 	}
 	if value := gjson.GetBytes(res, "cost"); value.Exists() {
 		data.Cost.Value = value.Int()
+	} else {
+		data.Cost.Null = true
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() {
 		data.Priority.Value = value.Int()
+	} else {
+		data.Priority.Null = true
 	}
 	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
 		data.PassiveEnable.Value = true
+	} else {
+		data.PassiveEnable.Value = false
 	}
 	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
 		data.PassiveDisable.Value = true
+	} else {
+		data.PassiveDisable.Value = false
 	}
 }
 
@@ -107,4 +123,69 @@ func (data *RouterOSPFAreaInterface) fromPlan(plan RouterOSPFAreaInterface) {
 	data.ProcessName.Value = plan.ProcessName.Value
 	data.AreaId.Value = plan.AreaId.Value
 	data.InterfaceName.Value = plan.InterfaceName.Value
+}
+
+func (data *RouterOSPFAreaInterface) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.AreaId.Unknown {
+		data.AreaId.Unknown = false
+		data.AreaId.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.NetworkBroadcast.Unknown {
+		data.NetworkBroadcast.Unknown = false
+		data.NetworkBroadcast.Null = true
+	}
+	if data.NetworkNonBroadcast.Unknown {
+		data.NetworkNonBroadcast.Unknown = false
+		data.NetworkNonBroadcast.Null = true
+	}
+	if data.NetworkPointToPoint.Unknown {
+		data.NetworkPointToPoint.Unknown = false
+		data.NetworkPointToPoint.Null = true
+	}
+	if data.NetworkPointToMultipoint.Unknown {
+		data.NetworkPointToMultipoint.Unknown = false
+		data.NetworkPointToMultipoint.Null = true
+	}
+	if data.Cost.Unknown {
+		data.Cost.Unknown = false
+		data.Cost.Null = true
+	}
+	if data.Priority.Unknown {
+		data.Priority.Unknown = false
+		data.Priority.Null = true
+	}
+	if data.PassiveEnable.Unknown {
+		data.PassiveEnable.Unknown = false
+		data.PassiveEnable.Null = true
+	}
+	if data.PassiveDisable.Unknown {
+		data.PassiveDisable.Unknown = false
+		data.PassiveDisable.Null = true
+	}
+}
+
+func (data *RouterOSPFAreaInterface) getDeletedListItems(state RouterOSPFAreaInterface) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPFAreaInterface) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

@@ -75,24 +75,38 @@ func (data RouterBGPVRFAddressFamilyRedistributeOSPF) toBody() string {
 func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
 		data.MatchInternal.Value = true
+	} else {
+		data.MatchInternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.internal.external"); value.Exists() {
 		data.MatchInternalExternal.Value = true
+	} else {
+		data.MatchInternalExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.internal.nssa-external"); value.Exists() {
 		data.MatchInternalNssaExternal.Value = true
+	} else {
+		data.MatchInternalNssaExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.external"); value.Exists() {
 		data.MatchExternal.Value = true
+	} else {
+		data.MatchExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.external.nssa-external"); value.Exists() {
 		data.MatchExternalNssaExternal.Value = true
+	} else {
+		data.MatchExternalNssaExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.nssa-external"); value.Exists() {
 		data.MatchNssaExternal.Value = true
+	} else {
+		data.MatchNssaExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "metric"); value.Exists() {
 		data.Metric.Value = value.Int()
+	} else {
+		data.Metric.Null = true
 	}
 }
 
@@ -102,4 +116,69 @@ func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) fromPlan(plan RouterBGPVR
 	data.VrfName.Value = plan.VrfName.Value
 	data.AfName.Value = plan.AfName.Value
 	data.RouterTag.Value = plan.RouterTag.Value
+}
+
+func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.RouterTag.Unknown {
+		data.RouterTag.Unknown = false
+		data.RouterTag.Null = true
+	}
+	if data.MatchInternal.Unknown {
+		data.MatchInternal.Unknown = false
+		data.MatchInternal.Null = true
+	}
+	if data.MatchInternalExternal.Unknown {
+		data.MatchInternalExternal.Unknown = false
+		data.MatchInternalExternal.Null = true
+	}
+	if data.MatchInternalNssaExternal.Unknown {
+		data.MatchInternalNssaExternal.Unknown = false
+		data.MatchInternalNssaExternal.Null = true
+	}
+	if data.MatchExternal.Unknown {
+		data.MatchExternal.Unknown = false
+		data.MatchExternal.Null = true
+	}
+	if data.MatchExternalNssaExternal.Unknown {
+		data.MatchExternalNssaExternal.Unknown = false
+		data.MatchExternalNssaExternal.Null = true
+	}
+	if data.MatchNssaExternal.Unknown {
+		data.MatchNssaExternal.Unknown = false
+		data.MatchNssaExternal.Null = true
+	}
+	if data.Metric.Unknown {
+		data.Metric.Unknown = false
+		data.Metric.Null = true
+	}
+}
+
+func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) getDeletedListItems(state RouterBGPVRFAddressFamilyRedistributeOSPF) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

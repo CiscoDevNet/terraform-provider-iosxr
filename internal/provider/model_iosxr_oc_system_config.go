@@ -43,18 +43,63 @@ func (data OCSystemConfig) toBody() string {
 func (data *OCSystemConfig) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
 		data.Hostname.Value = value.String()
+	} else {
+		data.Hostname.Null = true
 	}
 	if value := gjson.GetBytes(res, "domain-name"); value.Exists() {
 		data.DomainName.Value = value.String()
+	} else {
+		data.DomainName.Null = true
 	}
 	if value := gjson.GetBytes(res, "login-banner"); value.Exists() {
 		data.LoginBanner.Value = value.String()
+	} else {
+		data.LoginBanner.Null = true
 	}
 	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() {
 		data.MotdBanner.Value = value.String()
+	} else {
+		data.MotdBanner.Null = true
 	}
 }
 
 func (data *OCSystemConfig) fromPlan(plan OCSystemConfig) {
 	data.Device = plan.Device
+}
+
+func (data *OCSystemConfig) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.Hostname.Unknown {
+		data.Hostname.Unknown = false
+		data.Hostname.Null = true
+	}
+	if data.DomainName.Unknown {
+		data.DomainName.Unknown = false
+		data.DomainName.Null = true
+	}
+	if data.LoginBanner.Unknown {
+		data.LoginBanner.Unknown = false
+		data.LoginBanner.Null = true
+	}
+	if data.MotdBanner.Unknown {
+		data.MotdBanner.Unknown = false
+		data.MotdBanner.Null = true
+	}
+}
+
+func (data *OCSystemConfig) getDeletedListItems(state OCSystemConfig) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *OCSystemConfig) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

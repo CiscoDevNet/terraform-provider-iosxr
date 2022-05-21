@@ -52,12 +52,18 @@ func (data RouterBGPVRFAddressFamilyAggregateAddress) toBody() string {
 func (data *RouterBGPVRFAddressFamilyAggregateAddress) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "as-set"); value.Exists() {
 		data.AsSet.Value = true
+	} else {
+		data.AsSet.Value = false
 	}
 	if value := gjson.GetBytes(res, "as-confed-set"); value.Exists() {
 		data.AsConfedSet.Value = true
+	} else {
+		data.AsConfedSet.Value = false
 	}
 	if value := gjson.GetBytes(res, "summary-only"); value.Exists() {
 		data.SummaryOnly.Value = true
+	} else {
+		data.SummaryOnly.Value = false
 	}
 }
 
@@ -68,4 +74,57 @@ func (data *RouterBGPVRFAddressFamilyAggregateAddress) fromPlan(plan RouterBGPVR
 	data.AfName.Value = plan.AfName.Value
 	data.Address.Value = plan.Address.Value
 	data.Masklength.Value = plan.Masklength.Value
+}
+
+func (data *RouterBGPVRFAddressFamilyAggregateAddress) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.Address.Unknown {
+		data.Address.Unknown = false
+		data.Address.Null = true
+	}
+	if data.Masklength.Unknown {
+		data.Masklength.Unknown = false
+		data.Masklength.Null = true
+	}
+	if data.AsSet.Unknown {
+		data.AsSet.Unknown = false
+		data.AsSet.Null = true
+	}
+	if data.AsConfedSet.Unknown {
+		data.AsConfedSet.Unknown = false
+		data.AsConfedSet.Null = true
+	}
+	if data.SummaryOnly.Unknown {
+		data.SummaryOnly.Unknown = false
+		data.SummaryOnly.Null = true
+	}
+}
+
+func (data *RouterBGPVRFAddressFamilyAggregateAddress) getDeletedListItems(state RouterBGPVRFAddressFamilyAggregateAddress) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPVRFAddressFamilyAggregateAddress) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

@@ -34,10 +34,41 @@ func (data RouterISIS) toBody() string {
 func (data *RouterISIS) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType.Value = value.String()
+	} else {
+		data.IsType.Null = true
 	}
 }
 
 func (data *RouterISIS) fromPlan(plan RouterISIS) {
 	data.Device = plan.Device
 	data.ProcessId.Value = plan.ProcessId.Value
+}
+
+func (data *RouterISIS) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessId.Unknown {
+		data.ProcessId.Unknown = false
+		data.ProcessId.Null = true
+	}
+	if data.IsType.Unknown {
+		data.IsType.Unknown = false
+		data.IsType.Null = true
+	}
+}
+
+func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterISIS) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

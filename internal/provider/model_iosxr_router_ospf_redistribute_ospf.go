@@ -59,18 +59,28 @@ func (data RouterOSPFRedistributeOSPF) toBody() string {
 func (data *RouterOSPFRedistributeOSPF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
 		data.MatchInternal.Value = true
+	} else {
+		data.MatchInternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.external"); value.Exists() {
 		data.MatchExternal.Value = true
+	} else {
+		data.MatchExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "match.nssa-external"); value.Exists() {
 		data.MatchNssaExternal.Value = true
+	} else {
+		data.MatchNssaExternal.Value = false
 	}
 	if value := gjson.GetBytes(res, "tag"); value.Exists() {
 		data.Tag.Value = value.Int()
+	} else {
+		data.Tag.Null = true
 	}
 	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
 		data.MetricType.Value = value.String()
+	} else {
+		data.MetricType.Null = true
 	}
 }
 
@@ -78,4 +88,53 @@ func (data *RouterOSPFRedistributeOSPF) fromPlan(plan RouterOSPFRedistributeOSPF
 	data.Device = plan.Device
 	data.ProcessName.Value = plan.ProcessName.Value
 	data.InstanceName.Value = plan.InstanceName.Value
+}
+
+func (data *RouterOSPFRedistributeOSPF) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.InstanceName.Unknown {
+		data.InstanceName.Unknown = false
+		data.InstanceName.Null = true
+	}
+	if data.MatchInternal.Unknown {
+		data.MatchInternal.Unknown = false
+		data.MatchInternal.Null = true
+	}
+	if data.MatchExternal.Unknown {
+		data.MatchExternal.Unknown = false
+		data.MatchExternal.Null = true
+	}
+	if data.MatchNssaExternal.Unknown {
+		data.MatchNssaExternal.Unknown = false
+		data.MatchNssaExternal.Null = true
+	}
+	if data.Tag.Unknown {
+		data.Tag.Unknown = false
+		data.Tag.Null = true
+	}
+	if data.MetricType.Unknown {
+		data.MetricType.Unknown = false
+		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFRedistributeOSPF) getDeletedListItems(state RouterOSPFRedistributeOSPF) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPFRedistributeOSPF) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

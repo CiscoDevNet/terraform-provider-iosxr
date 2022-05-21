@@ -38,3 +38,44 @@ func (data *RouterBGPVRFAddressFamilyNetwork) fromPlan(plan RouterBGPVRFAddressF
 	data.Address.Value = plan.Address.Value
 	data.Masklength.Value = plan.Masklength.Value
 }
+
+func (data *RouterBGPVRFAddressFamilyNetwork) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.Address.Unknown {
+		data.Address.Unknown = false
+		data.Address.Null = true
+	}
+	if data.Masklength.Unknown {
+		data.Masklength.Unknown = false
+		data.Masklength.Null = true
+	}
+}
+
+func (data *RouterBGPVRFAddressFamilyNetwork) getDeletedListItems(state RouterBGPVRFAddressFamilyNetwork) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPVRFAddressFamilyNetwork) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

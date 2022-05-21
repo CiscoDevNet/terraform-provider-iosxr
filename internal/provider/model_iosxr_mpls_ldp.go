@@ -31,9 +31,36 @@ func (data MPLSLDP) toBody() string {
 func (data *MPLSLDP) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId.Value = value.String()
+	} else {
+		data.RouterId.Null = true
 	}
 }
 
 func (data *MPLSLDP) fromPlan(plan MPLSLDP) {
 	data.Device = plan.Device
+}
+
+func (data *MPLSLDP) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.RouterId.Unknown {
+		data.RouterId.Unknown = false
+		data.RouterId.Null = true
+	}
+}
+
+func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *MPLSLDP) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

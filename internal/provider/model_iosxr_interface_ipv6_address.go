@@ -41,9 +41,13 @@ func (data InterfaceIPv6Address) toBody() string {
 func (data *InterfaceIPv6Address) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "prefix-length"); value.Exists() {
 		data.PrefixLength.Value = value.Int()
+	} else {
+		data.PrefixLength.Null = true
 	}
 	if value := gjson.GetBytes(res, "zone"); value.Exists() {
 		data.Zone.Value = value.String()
+	} else {
+		data.Zone.Null = true
 	}
 }
 
@@ -51,4 +55,41 @@ func (data *InterfaceIPv6Address) fromPlan(plan InterfaceIPv6Address) {
 	data.Device = plan.Device
 	data.InterfaceName.Value = plan.InterfaceName.Value
 	data.Address.Value = plan.Address.Value
+}
+
+func (data *InterfaceIPv6Address) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.Address.Unknown {
+		data.Address.Unknown = false
+		data.Address.Null = true
+	}
+	if data.PrefixLength.Unknown {
+		data.PrefixLength.Unknown = false
+		data.PrefixLength.Null = true
+	}
+	if data.Zone.Unknown {
+		data.Zone.Unknown = false
+		data.Zone.Null = true
+	}
+}
+
+func (data *InterfaceIPv6Address) getDeletedListItems(state InterfaceIPv6Address) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *InterfaceIPv6Address) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

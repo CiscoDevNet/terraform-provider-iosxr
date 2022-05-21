@@ -32,3 +32,32 @@ func (data *RouterISISNET) fromPlan(plan RouterISISNET) {
 	data.ProcessId.Value = plan.ProcessId.Value
 	data.NetId.Value = plan.NetId.Value
 }
+
+func (data *RouterISISNET) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessId.Unknown {
+		data.ProcessId.Unknown = false
+		data.ProcessId.Null = true
+	}
+	if data.NetId.Unknown {
+		data.NetId.Unknown = false
+		data.NetId.Null = true
+	}
+}
+
+func (data *RouterISISNET) getDeletedListItems(state RouterISISNET) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterISISNET) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

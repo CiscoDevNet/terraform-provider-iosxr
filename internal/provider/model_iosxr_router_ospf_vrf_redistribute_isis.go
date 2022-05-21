@@ -60,18 +60,28 @@ func (data RouterOSPFVRFRedistributeISIS) toBody() string {
 func (data *RouterOSPFVRFRedistributeISIS) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "level-1"); value.Exists() {
 		data.Level1.Value = true
+	} else {
+		data.Level1.Value = false
 	}
 	if value := gjson.GetBytes(res, "level-2"); value.Exists() {
 		data.Level2.Value = true
+	} else {
+		data.Level2.Value = false
 	}
 	if value := gjson.GetBytes(res, "level-1-2"); value.Exists() {
 		data.Level12.Value = true
+	} else {
+		data.Level12.Value = false
 	}
 	if value := gjson.GetBytes(res, "tag"); value.Exists() {
 		data.Tag.Value = value.Int()
+	} else {
+		data.Tag.Null = true
 	}
 	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
 		data.MetricType.Value = value.String()
+	} else {
+		data.MetricType.Null = true
 	}
 }
 
@@ -80,4 +90,57 @@ func (data *RouterOSPFVRFRedistributeISIS) fromPlan(plan RouterOSPFVRFRedistribu
 	data.ProcessName.Value = plan.ProcessName.Value
 	data.VrfName.Value = plan.VrfName.Value
 	data.InstanceName.Value = plan.InstanceName.Value
+}
+
+func (data *RouterOSPFVRFRedistributeISIS) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.InstanceName.Unknown {
+		data.InstanceName.Unknown = false
+		data.InstanceName.Null = true
+	}
+	if data.Level1.Unknown {
+		data.Level1.Unknown = false
+		data.Level1.Null = true
+	}
+	if data.Level2.Unknown {
+		data.Level2.Unknown = false
+		data.Level2.Null = true
+	}
+	if data.Level12.Unknown {
+		data.Level12.Unknown = false
+		data.Level12.Null = true
+	}
+	if data.Tag.Unknown {
+		data.Tag.Unknown = false
+		data.Tag.Null = true
+	}
+	if data.MetricType.Unknown {
+		data.MetricType.Unknown = false
+		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFVRFRedistributeISIS) getDeletedListItems(state RouterOSPFVRFRedistributeISIS) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPFVRFRedistributeISIS) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

@@ -30,3 +30,28 @@ func (data *MPLSLDPAddressFamily) fromPlan(plan MPLSLDPAddressFamily) {
 	data.Device = plan.Device
 	data.AfName.Value = plan.AfName.Value
 }
+
+func (data *MPLSLDPAddressFamily) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+}
+
+func (data *MPLSLDPAddressFamily) getDeletedListItems(state MPLSLDPAddressFamily) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *MPLSLDPAddressFamily) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

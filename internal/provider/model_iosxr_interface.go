@@ -72,31 +72,104 @@ func (data Interface) toBody() string {
 func (data *Interface) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
 		data.L2transport.Value = true
+	} else {
+		data.L2transport.Value = false
 	}
 	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
 		data.PointToPoint.Value = true
+	} else {
+		data.PointToPoint.Value = false
 	}
 	if value := gjson.GetBytes(res, "sub-interface-type.multipoint"); value.Exists() {
 		data.Multipoint.Value = true
+	} else {
+		data.Multipoint.Value = false
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown.Value = true
+	} else {
+		data.Shutdown.Value = false
 	}
 	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
 		data.Mtu.Value = value.Int()
+	} else {
+		data.Mtu.Null = true
 	}
 	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
 		data.Bandwidth.Value = value.Int()
+	} else {
+		data.Bandwidth.Null = true
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
+	} else {
+		data.Description.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() {
 		data.Vrf.Value = value.String()
+	} else {
+		data.Vrf.Null = true
 	}
 }
 
 func (data *Interface) fromPlan(plan Interface) {
 	data.Device = plan.Device
 	data.InterfaceName.Value = plan.InterfaceName.Value
+}
+
+func (data *Interface) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.L2transport.Unknown {
+		data.L2transport.Unknown = false
+		data.L2transport.Null = true
+	}
+	if data.PointToPoint.Unknown {
+		data.PointToPoint.Unknown = false
+		data.PointToPoint.Null = true
+	}
+	if data.Multipoint.Unknown {
+		data.Multipoint.Unknown = false
+		data.Multipoint.Null = true
+	}
+	if data.Shutdown.Unknown {
+		data.Shutdown.Unknown = false
+		data.Shutdown.Null = true
+	}
+	if data.Mtu.Unknown {
+		data.Mtu.Unknown = false
+		data.Mtu.Null = true
+	}
+	if data.Bandwidth.Unknown {
+		data.Bandwidth.Unknown = false
+		data.Bandwidth.Null = true
+	}
+	if data.Description.Unknown {
+		data.Description.Unknown = false
+		data.Description.Null = true
+	}
+	if data.Vrf.Unknown {
+		data.Vrf.Unknown = false
+		data.Vrf.Null = true
+	}
+}
+
+func (data *Interface) getDeletedListItems(state Interface) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *Interface) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

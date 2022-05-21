@@ -110,51 +110,83 @@ func (data RouterBGPVRFNeighbor) toBody() string {
 func (data *RouterBGPVRFNeighbor) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs.Value = value.String()
+	} else {
+		data.RemoteAs.Null = true
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
+	} else {
+		data.Description.Null = true
 	}
 	if value := gjson.GetBytes(res, "ignore-connected-check"); value.Exists() {
 		data.IgnoreConnectedCheck.Value = true
+	} else {
+		data.IgnoreConnectedCheck.Value = false
 	}
 	if value := gjson.GetBytes(res, "ebgp-multihop.maximum-hop-count"); value.Exists() {
 		data.EbgpMultihopMaximumHopCount.Value = value.Int()
+	} else {
+		data.EbgpMultihopMaximumHopCount.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval.Value = value.Int()
+	} else {
+		data.BfdMinimumInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier.Value = value.Int()
+	} else {
+		data.BfdMultiplier.Null = true
 	}
 	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
 		data.LocalAs.Value = value.String()
+	} else {
+		data.LocalAs.Null = true
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend.Value = true
+	} else {
+		data.LocalAsNoPrepend.Value = false
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
 		data.LocalAsReplaceAs.Value = true
+	} else {
+		data.LocalAsReplaceAs.Value = false
 	}
 	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
 		data.LocalAsDualAs.Value = true
+	} else {
+		data.LocalAsDualAs.Value = false
 	}
 	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
 		data.Password.Value = value.String()
+	} else {
+		data.Password.Null = true
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown.Value = true
+	} else {
+		data.Shutdown.Value = false
 	}
 	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
 		data.TimersKeepaliveInterval.Value = value.Int()
+	} else {
+		data.TimersKeepaliveInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
 		data.TimersHoldtime.Value = value.String()
+	} else {
+		data.TimersHoldtime.Null = true
 	}
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource.Value = value.String()
+	} else {
+		data.UpdateSource.Null = true
 	}
 	if value := gjson.GetBytes(res, "ttl-security"); value.Exists() {
 		data.TtlSecurity.Value = true
+	} else {
+		data.TtlSecurity.Value = false
 	}
 }
 
@@ -163,4 +195,101 @@ func (data *RouterBGPVRFNeighbor) fromPlan(plan RouterBGPVRFNeighbor) {
 	data.AsNumber.Value = plan.AsNumber.Value
 	data.VrfName.Value = plan.VrfName.Value
 	data.NeighborAddress.Value = plan.NeighborAddress.Value
+}
+
+func (data *RouterBGPVRFNeighbor) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.NeighborAddress.Unknown {
+		data.NeighborAddress.Unknown = false
+		data.NeighborAddress.Null = true
+	}
+	if data.RemoteAs.Unknown {
+		data.RemoteAs.Unknown = false
+		data.RemoteAs.Null = true
+	}
+	if data.Description.Unknown {
+		data.Description.Unknown = false
+		data.Description.Null = true
+	}
+	if data.IgnoreConnectedCheck.Unknown {
+		data.IgnoreConnectedCheck.Unknown = false
+		data.IgnoreConnectedCheck.Null = true
+	}
+	if data.EbgpMultihopMaximumHopCount.Unknown {
+		data.EbgpMultihopMaximumHopCount.Unknown = false
+		data.EbgpMultihopMaximumHopCount.Null = true
+	}
+	if data.BfdMinimumInterval.Unknown {
+		data.BfdMinimumInterval.Unknown = false
+		data.BfdMinimumInterval.Null = true
+	}
+	if data.BfdMultiplier.Unknown {
+		data.BfdMultiplier.Unknown = false
+		data.BfdMultiplier.Null = true
+	}
+	if data.LocalAs.Unknown {
+		data.LocalAs.Unknown = false
+		data.LocalAs.Null = true
+	}
+	if data.LocalAsNoPrepend.Unknown {
+		data.LocalAsNoPrepend.Unknown = false
+		data.LocalAsNoPrepend.Null = true
+	}
+	if data.LocalAsReplaceAs.Unknown {
+		data.LocalAsReplaceAs.Unknown = false
+		data.LocalAsReplaceAs.Null = true
+	}
+	if data.LocalAsDualAs.Unknown {
+		data.LocalAsDualAs.Unknown = false
+		data.LocalAsDualAs.Null = true
+	}
+	if data.Password.Unknown {
+		data.Password.Unknown = false
+		data.Password.Null = true
+	}
+	if data.Shutdown.Unknown {
+		data.Shutdown.Unknown = false
+		data.Shutdown.Null = true
+	}
+	if data.TimersKeepaliveInterval.Unknown {
+		data.TimersKeepaliveInterval.Unknown = false
+		data.TimersKeepaliveInterval.Null = true
+	}
+	if data.TimersHoldtime.Unknown {
+		data.TimersHoldtime.Unknown = false
+		data.TimersHoldtime.Null = true
+	}
+	if data.UpdateSource.Unknown {
+		data.UpdateSource.Unknown = false
+		data.UpdateSource.Null = true
+	}
+	if data.TtlSecurity.Unknown {
+		data.TtlSecurity.Unknown = false
+		data.TtlSecurity.Null = true
+	}
+}
+
+func (data *RouterBGPVRFNeighbor) getDeletedListItems(state RouterBGPVRFNeighbor) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPVRFNeighbor) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

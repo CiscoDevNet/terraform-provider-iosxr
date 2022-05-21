@@ -32,3 +32,32 @@ func (data *RouterOSPFArea) fromPlan(plan RouterOSPFArea) {
 	data.ProcessName.Value = plan.ProcessName.Value
 	data.AreaId.Value = plan.AreaId.Value
 }
+
+func (data *RouterOSPFArea) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.AreaId.Unknown {
+		data.AreaId.Unknown = false
+		data.AreaId.Null = true
+	}
+}
+
+func (data *RouterOSPFArea) getDeletedListItems(state RouterOSPFArea) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPFArea) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

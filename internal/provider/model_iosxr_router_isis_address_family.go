@@ -70,24 +70,38 @@ func (data RouterISISAddressFamily) toBody() string {
 func (data *RouterISISAddressFamily) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
 		data.MplsLdpAutoConfig.Value = true
+	} else {
+		data.MplsLdpAutoConfig.Value = false
 	}
 	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow.Value = true
+	} else {
+		data.MetricStyleNarrow.Value = false
 	}
 	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
 		data.MetricStyleWide.Value = true
+	} else {
+		data.MetricStyleWide.Value = false
 	}
 	if value := gjson.GetBytes(res, "metric-style.transition"); value.Exists() {
 		data.MetricStyleTransition.Value = true
+	} else {
+		data.MetricStyleTransition.Value = false
 	}
 	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
 		data.RouterIdInterfaceName.Value = value.String()
+	} else {
+		data.RouterIdInterfaceName.Null = true
 	}
 	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
 		data.RouterIdIpAddress.Value = value.String()
+	} else {
+		data.RouterIdIpAddress.Null = true
 	}
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate.Value = true
+	} else {
+		data.DefaultInformationOriginate.Value = false
 	}
 }
 
@@ -96,4 +110,65 @@ func (data *RouterISISAddressFamily) fromPlan(plan RouterISISAddressFamily) {
 	data.ProcessId.Value = plan.ProcessId.Value
 	data.AfName.Value = plan.AfName.Value
 	data.SafName.Value = plan.SafName.Value
+}
+
+func (data *RouterISISAddressFamily) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessId.Unknown {
+		data.ProcessId.Unknown = false
+		data.ProcessId.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.SafName.Unknown {
+		data.SafName.Unknown = false
+		data.SafName.Null = true
+	}
+	if data.MplsLdpAutoConfig.Unknown {
+		data.MplsLdpAutoConfig.Unknown = false
+		data.MplsLdpAutoConfig.Null = true
+	}
+	if data.MetricStyleNarrow.Unknown {
+		data.MetricStyleNarrow.Unknown = false
+		data.MetricStyleNarrow.Null = true
+	}
+	if data.MetricStyleWide.Unknown {
+		data.MetricStyleWide.Unknown = false
+		data.MetricStyleWide.Null = true
+	}
+	if data.MetricStyleTransition.Unknown {
+		data.MetricStyleTransition.Unknown = false
+		data.MetricStyleTransition.Null = true
+	}
+	if data.RouterIdInterfaceName.Unknown {
+		data.RouterIdInterfaceName.Unknown = false
+		data.RouterIdInterfaceName.Null = true
+	}
+	if data.RouterIdIpAddress.Unknown {
+		data.RouterIdIpAddress.Unknown = false
+		data.RouterIdIpAddress.Null = true
+	}
+	if data.DefaultInformationOriginate.Unknown {
+		data.DefaultInformationOriginate.Unknown = false
+		data.DefaultInformationOriginate.Null = true
+	}
+}
+
+func (data *RouterISISAddressFamily) getDeletedListItems(state RouterISISAddressFamily) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterISISAddressFamily) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

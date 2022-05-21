@@ -42,3 +42,52 @@ func (data *VRFRouteTargetTwoByteASFormat) fromPlan(plan VRFRouteTargetTwoByteAS
 	data.Index.Value = plan.Index.Value
 	data.Stitching.Value = plan.Stitching.Value
 }
+
+func (data *VRFRouteTargetTwoByteASFormat) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.AddressFamily.Unknown {
+		data.AddressFamily.Unknown = false
+		data.AddressFamily.Null = true
+	}
+	if data.SubAddressFamily.Unknown {
+		data.SubAddressFamily.Unknown = false
+		data.SubAddressFamily.Null = true
+	}
+	if data.Direction.Unknown {
+		data.Direction.Unknown = false
+		data.Direction.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.Index.Unknown {
+		data.Index.Unknown = false
+		data.Index.Null = true
+	}
+	if data.Stitching.Unknown {
+		data.Stitching.Unknown = false
+		data.Stitching.Null = true
+	}
+}
+
+func (data *VRFRouteTargetTwoByteASFormat) getDeletedListItems(state VRFRouteTargetTwoByteASFormat) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *VRFRouteTargetTwoByteASFormat) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

@@ -59,21 +59,33 @@ func (data RouterBGPVRF) toBody() string {
 func (data *RouterBGPVRF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate.Value = true
+	} else {
+		data.DefaultInformationOriginate.Value = false
 	}
 	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
 		data.DefaultMetric.Value = value.Int()
+	} else {
+		data.DefaultMetric.Null = true
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval.Value = value.Int()
+	} else {
+		data.TimersBgpKeepaliveInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
 		data.TimersBgpHoldtime.Value = value.String()
+	} else {
+		data.TimersBgpHoldtime.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval.Value = value.Int()
+	} else {
+		data.BfdMinimumInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier.Value = value.Int()
+	} else {
+		data.BfdMultiplier.Null = true
 	}
 }
 
@@ -81,4 +93,57 @@ func (data *RouterBGPVRF) fromPlan(plan RouterBGPVRF) {
 	data.Device = plan.Device
 	data.AsNumber.Value = plan.AsNumber.Value
 	data.VrfName.Value = plan.VrfName.Value
+}
+
+func (data *RouterBGPVRF) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.DefaultInformationOriginate.Unknown {
+		data.DefaultInformationOriginate.Unknown = false
+		data.DefaultInformationOriginate.Null = true
+	}
+	if data.DefaultMetric.Unknown {
+		data.DefaultMetric.Unknown = false
+		data.DefaultMetric.Null = true
+	}
+	if data.TimersBgpKeepaliveInterval.Unknown {
+		data.TimersBgpKeepaliveInterval.Unknown = false
+		data.TimersBgpKeepaliveInterval.Null = true
+	}
+	if data.TimersBgpHoldtime.Unknown {
+		data.TimersBgpHoldtime.Unknown = false
+		data.TimersBgpHoldtime.Null = true
+	}
+	if data.BfdMinimumInterval.Unknown {
+		data.BfdMinimumInterval.Unknown = false
+		data.BfdMinimumInterval.Null = true
+	}
+	if data.BfdMultiplier.Unknown {
+		data.BfdMultiplier.Unknown = false
+		data.BfdMultiplier.Null = true
+	}
+}
+
+func (data *RouterBGPVRF) getDeletedListItems(state RouterBGPVRF) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPVRF) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

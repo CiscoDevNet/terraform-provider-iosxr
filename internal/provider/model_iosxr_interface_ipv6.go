@@ -50,19 +50,68 @@ func (data InterfaceIPv6) toBody() string {
 func (data *InterfaceIPv6) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
 		data.LinkLocalAddress.Value = value.String()
+	} else {
+		data.LinkLocalAddress.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
 		data.LinkLocalZone.Value = value.String()
+	} else {
+		data.LinkLocalZone.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
 		data.Autoconfig.Value = true
+	} else {
+		data.Autoconfig.Value = false
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
 		data.Enable.Value = true
+	} else {
+		data.Enable.Value = false
 	}
 }
 
 func (data *InterfaceIPv6) fromPlan(plan InterfaceIPv6) {
 	data.Device = plan.Device
 	data.InterfaceName.Value = plan.InterfaceName.Value
+}
+
+func (data *InterfaceIPv6) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.LinkLocalAddress.Unknown {
+		data.LinkLocalAddress.Unknown = false
+		data.LinkLocalAddress.Null = true
+	}
+	if data.LinkLocalZone.Unknown {
+		data.LinkLocalZone.Unknown = false
+		data.LinkLocalZone.Null = true
+	}
+	if data.Autoconfig.Unknown {
+		data.Autoconfig.Unknown = false
+		data.Autoconfig.Null = true
+	}
+	if data.Enable.Unknown {
+		data.Enable.Unknown = false
+		data.Enable.Null = true
+	}
+}
+
+func (data *InterfaceIPv6) getDeletedListItems(state InterfaceIPv6) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *InterfaceIPv6) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

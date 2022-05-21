@@ -30,3 +30,28 @@ func (data *MPLSLDPInterface) fromPlan(plan MPLSLDPInterface) {
 	data.Device = plan.Device
 	data.InterfaceName.Value = plan.InterfaceName.Value
 }
+
+func (data *MPLSLDPInterface) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+}
+
+func (data *MPLSLDPInterface) getDeletedListItems(state MPLSLDPInterface) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *MPLSLDPInterface) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

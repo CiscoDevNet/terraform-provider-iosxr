@@ -100,49 +100,158 @@ func (data VRF) toBody() string {
 func (data *VRF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
+	} else {
+		data.Description.Null = true
 	}
 	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
 		data.VpnId.Value = value.String()
+	} else {
+		data.VpnId.Null = true
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
 		data.AddressFamilyIpv4Unicast.Value = true
+	} else {
+		data.AddressFamilyIpv4Unicast.Value = false
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
 		data.AddressFamilyIpv4Multicast.Value = true
+	} else {
+		data.AddressFamilyIpv4Multicast.Value = false
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
 		data.AddressFamilyIpv4Flowspec.Value = true
+	} else {
+		data.AddressFamilyIpv4Flowspec.Value = false
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.unicast"); value.Exists() {
 		data.AddressFamilyIpv6Unicast.Value = true
+	} else {
+		data.AddressFamilyIpv6Unicast.Value = false
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
 		data.AddressFamilyIpv6Multicast.Value = true
+	} else {
+		data.AddressFamilyIpv6Multicast.Value = false
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
 		data.AddressFamilyIpv6Flowspec.Value = true
+	} else {
+		data.AddressFamilyIpv6Flowspec.Value = false
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number"); value.Exists() {
 		data.RdTwoByteAsAsNumber.Value = value.String()
+	} else {
+		data.RdTwoByteAsAsNumber.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
 		data.RdTwoByteAsIndex.Value = value.Int()
+	} else {
+		data.RdTwoByteAsIndex.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
 		data.RdFourByteAsAsNumber.Value = value.String()
+	} else {
+		data.RdFourByteAsAsNumber.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
 		data.RdFourByteAsIndex.Value = value.Int()
+	} else {
+		data.RdFourByteAsIndex.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
 		data.RdIpAddressIpv4Address.Value = value.String()
+	} else {
+		data.RdIpAddressIpv4Address.Null = true
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
 		data.RdIpAddressIndex.Value = value.Int()
+	} else {
+		data.RdIpAddressIndex.Null = true
 	}
 }
 
 func (data *VRF) fromPlan(plan VRF) {
 	data.Device = plan.Device
 	data.VrfName.Value = plan.VrfName.Value
+}
+
+func (data *VRF) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.Description.Unknown {
+		data.Description.Unknown = false
+		data.Description.Null = true
+	}
+	if data.VpnId.Unknown {
+		data.VpnId.Unknown = false
+		data.VpnId.Null = true
+	}
+	if data.AddressFamilyIpv4Unicast.Unknown {
+		data.AddressFamilyIpv4Unicast.Unknown = false
+		data.AddressFamilyIpv4Unicast.Null = true
+	}
+	if data.AddressFamilyIpv4Multicast.Unknown {
+		data.AddressFamilyIpv4Multicast.Unknown = false
+		data.AddressFamilyIpv4Multicast.Null = true
+	}
+	if data.AddressFamilyIpv4Flowspec.Unknown {
+		data.AddressFamilyIpv4Flowspec.Unknown = false
+		data.AddressFamilyIpv4Flowspec.Null = true
+	}
+	if data.AddressFamilyIpv6Unicast.Unknown {
+		data.AddressFamilyIpv6Unicast.Unknown = false
+		data.AddressFamilyIpv6Unicast.Null = true
+	}
+	if data.AddressFamilyIpv6Multicast.Unknown {
+		data.AddressFamilyIpv6Multicast.Unknown = false
+		data.AddressFamilyIpv6Multicast.Null = true
+	}
+	if data.AddressFamilyIpv6Flowspec.Unknown {
+		data.AddressFamilyIpv6Flowspec.Unknown = false
+		data.AddressFamilyIpv6Flowspec.Null = true
+	}
+	if data.RdTwoByteAsAsNumber.Unknown {
+		data.RdTwoByteAsAsNumber.Unknown = false
+		data.RdTwoByteAsAsNumber.Null = true
+	}
+	if data.RdTwoByteAsIndex.Unknown {
+		data.RdTwoByteAsIndex.Unknown = false
+		data.RdTwoByteAsIndex.Null = true
+	}
+	if data.RdFourByteAsAsNumber.Unknown {
+		data.RdFourByteAsAsNumber.Unknown = false
+		data.RdFourByteAsAsNumber.Null = true
+	}
+	if data.RdFourByteAsIndex.Unknown {
+		data.RdFourByteAsIndex.Unknown = false
+		data.RdFourByteAsIndex.Null = true
+	}
+	if data.RdIpAddressIpv4Address.Unknown {
+		data.RdIpAddressIpv4Address.Unknown = false
+		data.RdIpAddressIpv4Address.Null = true
+	}
+	if data.RdIpAddressIndex.Unknown {
+		data.RdIpAddressIndex.Unknown = false
+		data.RdIpAddressIndex.Null = true
+	}
+}
+
+func (data *VRF) getDeletedListItems(state VRF) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *VRF) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

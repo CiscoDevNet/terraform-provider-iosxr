@@ -42,9 +42,13 @@ func (data RouterOSPFVRFRedistributeBGP) toBody() string {
 func (data *RouterOSPFVRFRedistributeBGP) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "tag"); value.Exists() {
 		data.Tag.Value = value.Int()
+	} else {
+		data.Tag.Null = true
 	}
 	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
 		data.MetricType.Value = value.String()
+	} else {
+		data.MetricType.Null = true
 	}
 }
 
@@ -53,4 +57,45 @@ func (data *RouterOSPFVRFRedistributeBGP) fromPlan(plan RouterOSPFVRFRedistribut
 	data.ProcessName.Value = plan.ProcessName.Value
 	data.VrfName.Value = plan.VrfName.Value
 	data.AsNumber.Value = plan.AsNumber.Value
+}
+
+func (data *RouterOSPFVRFRedistributeBGP) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.VrfName.Unknown {
+		data.VrfName.Unknown = false
+		data.VrfName.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.Tag.Unknown {
+		data.Tag.Unknown = false
+		data.Tag.Null = true
+	}
+	if data.MetricType.Unknown {
+		data.MetricType.Unknown = false
+		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFVRFRedistributeBGP) getDeletedListItems(state RouterOSPFVRFRedistributeBGP) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPFVRFRedistributeBGP) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

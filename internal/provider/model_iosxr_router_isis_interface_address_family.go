@@ -36,3 +36,40 @@ func (data *RouterISISInterfaceAddressFamily) fromPlan(plan RouterISISInterfaceA
 	data.AfName.Value = plan.AfName.Value
 	data.SafName.Value = plan.SafName.Value
 }
+
+func (data *RouterISISInterfaceAddressFamily) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessId.Unknown {
+		data.ProcessId.Unknown = false
+		data.ProcessId.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.SafName.Unknown {
+		data.SafName.Unknown = false
+		data.SafName.Null = true
+	}
+}
+
+func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(state RouterISISInterfaceAddressFamily) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

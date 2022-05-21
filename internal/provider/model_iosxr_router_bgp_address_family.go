@@ -77,30 +77,48 @@ func (data RouterBGPAddressFamily) toBody() string {
 func (data *RouterBGPAddressFamily) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
 		data.MaximumPathsEbgpMultipath.Value = value.Int()
+	} else {
+		data.MaximumPathsEbgpMultipath.Null = true
 	}
 	if value := gjson.GetBytes(res, "maximum-paths.eibgp.multipath"); value.Exists() {
 		data.MaximumPathsEibgpMultipath.Value = value.Int()
+	} else {
+		data.MaximumPathsEibgpMultipath.Null = true
 	}
 	if value := gjson.GetBytes(res, "maximum-paths.ibgp.multipath"); value.Exists() {
 		data.MaximumPathsIbgpMultipath.Value = value.Int()
+	} else {
+		data.MaximumPathsIbgpMultipath.Null = true
 	}
 	if value := gjson.GetBytes(res, "label.mode.per-ce"); value.Exists() {
 		data.LabelModePerCe.Value = true
+	} else {
+		data.LabelModePerCe.Value = false
 	}
 	if value := gjson.GetBytes(res, "label.mode.per-vrf"); value.Exists() {
 		data.LabelModePerVrf.Value = true
+	} else {
+		data.LabelModePerVrf.Value = false
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
 		data.RedistributeConnected.Value = true
+	} else {
+		data.RedistributeConnected.Value = false
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
 		data.RedistributeConnectedMetric.Value = value.Int()
+	} else {
+		data.RedistributeConnectedMetric.Null = true
 	}
 	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
 		data.RedistributeStatic.Value = true
+	} else {
+		data.RedistributeStatic.Value = false
 	}
 	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
 		data.RedistributeStaticMetric.Value = value.Int()
+	} else {
+		data.RedistributeStaticMetric.Null = true
 	}
 }
 
@@ -108,4 +126,69 @@ func (data *RouterBGPAddressFamily) fromPlan(plan RouterBGPAddressFamily) {
 	data.Device = plan.Device
 	data.AsNumber.Value = plan.AsNumber.Value
 	data.AfName.Value = plan.AfName.Value
+}
+
+func (data *RouterBGPAddressFamily) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.AsNumber.Unknown {
+		data.AsNumber.Unknown = false
+		data.AsNumber.Null = true
+	}
+	if data.AfName.Unknown {
+		data.AfName.Unknown = false
+		data.AfName.Null = true
+	}
+	if data.MaximumPathsEbgpMultipath.Unknown {
+		data.MaximumPathsEbgpMultipath.Unknown = false
+		data.MaximumPathsEbgpMultipath.Null = true
+	}
+	if data.MaximumPathsEibgpMultipath.Unknown {
+		data.MaximumPathsEibgpMultipath.Unknown = false
+		data.MaximumPathsEibgpMultipath.Null = true
+	}
+	if data.MaximumPathsIbgpMultipath.Unknown {
+		data.MaximumPathsIbgpMultipath.Unknown = false
+		data.MaximumPathsIbgpMultipath.Null = true
+	}
+	if data.LabelModePerCe.Unknown {
+		data.LabelModePerCe.Unknown = false
+		data.LabelModePerCe.Null = true
+	}
+	if data.LabelModePerVrf.Unknown {
+		data.LabelModePerVrf.Unknown = false
+		data.LabelModePerVrf.Null = true
+	}
+	if data.RedistributeConnected.Unknown {
+		data.RedistributeConnected.Unknown = false
+		data.RedistributeConnected.Null = true
+	}
+	if data.RedistributeConnectedMetric.Unknown {
+		data.RedistributeConnectedMetric.Unknown = false
+		data.RedistributeConnectedMetric.Null = true
+	}
+	if data.RedistributeStatic.Unknown {
+		data.RedistributeStatic.Unknown = false
+		data.RedistributeStatic.Null = true
+	}
+	if data.RedistributeStaticMetric.Unknown {
+		data.RedistributeStaticMetric.Unknown = false
+		data.RedistributeStaticMetric.Null = true
+	}
+}
+
+func (data *RouterBGPAddressFamily) getDeletedListItems(state RouterBGPAddressFamily) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterBGPAddressFamily) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

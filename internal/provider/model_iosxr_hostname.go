@@ -31,9 +31,36 @@ func (data Hostname) toBody() string {
 func (data *Hostname) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
 		data.SystemNetworkName.Value = value.String()
+	} else {
+		data.SystemNetworkName.Null = true
 	}
 }
 
 func (data *Hostname) fromPlan(plan Hostname) {
 	data.Device = plan.Device
+}
+
+func (data *Hostname) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.SystemNetworkName.Unknown {
+		data.SystemNetworkName.Unknown = false
+		data.SystemNetworkName.Null = true
+	}
+}
+
+func (data *Hostname) getDeletedListItems(state Hostname) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *Hostname) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

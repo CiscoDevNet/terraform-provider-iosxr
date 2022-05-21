@@ -136,70 +136,221 @@ func (data RouterOSPF) toBody() string {
 func (data *RouterOSPF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync.Value = true
+	} else {
+		data.MplsLdpSync.Value = false
 	}
 	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
 		data.HelloInterval.Value = value.Int()
+	} else {
+		data.HelloInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
 		data.DeadInterval.Value = value.Int()
+	} else {
+		data.DeadInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() {
 		data.Priority.Value = value.Int()
+	} else {
+		data.Priority.Null = true
 	}
 	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
 		data.MtuIgnoreEnable.Value = true
+	} else {
+		data.MtuIgnoreEnable.Value = false
 	}
 	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
 		data.MtuIgnoreDisable.Value = true
+	} else {
+		data.MtuIgnoreDisable.Value = false
 	}
 	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
 		data.PassiveEnable.Value = true
+	} else {
+		data.PassiveEnable.Value = false
 	}
 	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
 		data.PassiveDisable.Value = true
+	} else {
+		data.PassiveDisable.Value = false
 	}
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId.Value = value.String()
+	} else {
+		data.RouterId.Null = true
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
 		data.RedistributeConnected.Value = true
+	} else {
+		data.RedistributeConnected.Value = false
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
 		data.RedistributeConnectedTag.Value = value.Int()
+	} else {
+		data.RedistributeConnectedTag.Null = true
 	}
 	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
 		data.RedistributeConnectedMetricType.Value = value.String()
+	} else {
+		data.RedistributeConnectedMetricType.Null = true
 	}
 	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
 		data.RedistributeStatic.Value = true
+	} else {
+		data.RedistributeStatic.Value = false
 	}
 	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
 		data.RedistributeStaticTag.Value = value.Int()
+	} else {
+		data.RedistributeStaticTag.Null = true
 	}
 	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
 		data.RedistributeStaticMetricType.Value = value.String()
+	} else {
+		data.RedistributeStaticMetricType.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect.Value = true
+	} else {
+		data.BfdFastDetect.Value = false
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval.Value = value.Int()
+	} else {
+		data.BfdMinimumInterval.Null = true
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier.Value = value.Int()
+	} else {
+		data.BfdMultiplier.Null = true
 	}
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate.Value = true
+	} else {
+		data.DefaultInformationOriginate.Value = false
 	}
 	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
 		data.DefaultInformationOriginateAlways.Value = true
+	} else {
+		data.DefaultInformationOriginateAlways.Value = false
 	}
 	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
 		data.DefaultInformationOriginateMetricType.Value = value.Int()
+	} else {
+		data.DefaultInformationOriginateMetricType.Null = true
 	}
 }
 
 func (data *RouterOSPF) fromPlan(plan RouterOSPF) {
 	data.Device = plan.Device
 	data.ProcessName.Value = plan.ProcessName.Value
+}
+
+func (data *RouterOSPF) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessName.Unknown {
+		data.ProcessName.Unknown = false
+		data.ProcessName.Null = true
+	}
+	if data.MplsLdpSync.Unknown {
+		data.MplsLdpSync.Unknown = false
+		data.MplsLdpSync.Null = true
+	}
+	if data.HelloInterval.Unknown {
+		data.HelloInterval.Unknown = false
+		data.HelloInterval.Null = true
+	}
+	if data.DeadInterval.Unknown {
+		data.DeadInterval.Unknown = false
+		data.DeadInterval.Null = true
+	}
+	if data.Priority.Unknown {
+		data.Priority.Unknown = false
+		data.Priority.Null = true
+	}
+	if data.MtuIgnoreEnable.Unknown {
+		data.MtuIgnoreEnable.Unknown = false
+		data.MtuIgnoreEnable.Null = true
+	}
+	if data.MtuIgnoreDisable.Unknown {
+		data.MtuIgnoreDisable.Unknown = false
+		data.MtuIgnoreDisable.Null = true
+	}
+	if data.PassiveEnable.Unknown {
+		data.PassiveEnable.Unknown = false
+		data.PassiveEnable.Null = true
+	}
+	if data.PassiveDisable.Unknown {
+		data.PassiveDisable.Unknown = false
+		data.PassiveDisable.Null = true
+	}
+	if data.RouterId.Unknown {
+		data.RouterId.Unknown = false
+		data.RouterId.Null = true
+	}
+	if data.RedistributeConnected.Unknown {
+		data.RedistributeConnected.Unknown = false
+		data.RedistributeConnected.Null = true
+	}
+	if data.RedistributeConnectedTag.Unknown {
+		data.RedistributeConnectedTag.Unknown = false
+		data.RedistributeConnectedTag.Null = true
+	}
+	if data.RedistributeConnectedMetricType.Unknown {
+		data.RedistributeConnectedMetricType.Unknown = false
+		data.RedistributeConnectedMetricType.Null = true
+	}
+	if data.RedistributeStatic.Unknown {
+		data.RedistributeStatic.Unknown = false
+		data.RedistributeStatic.Null = true
+	}
+	if data.RedistributeStaticTag.Unknown {
+		data.RedistributeStaticTag.Unknown = false
+		data.RedistributeStaticTag.Null = true
+	}
+	if data.RedistributeStaticMetricType.Unknown {
+		data.RedistributeStaticMetricType.Unknown = false
+		data.RedistributeStaticMetricType.Null = true
+	}
+	if data.BfdFastDetect.Unknown {
+		data.BfdFastDetect.Unknown = false
+		data.BfdFastDetect.Null = true
+	}
+	if data.BfdMinimumInterval.Unknown {
+		data.BfdMinimumInterval.Unknown = false
+		data.BfdMinimumInterval.Null = true
+	}
+	if data.BfdMultiplier.Unknown {
+		data.BfdMultiplier.Unknown = false
+		data.BfdMultiplier.Null = true
+	}
+	if data.DefaultInformationOriginate.Unknown {
+		data.DefaultInformationOriginate.Unknown = false
+		data.DefaultInformationOriginate.Null = true
+	}
+	if data.DefaultInformationOriginateAlways.Unknown {
+		data.DefaultInformationOriginateAlways.Unknown = false
+		data.DefaultInformationOriginateAlways.Null = true
+	}
+	if data.DefaultInformationOriginateMetricType.Unknown {
+		data.DefaultInformationOriginateMetricType.Unknown = false
+		data.DefaultInformationOriginateMetricType.Null = true
+	}
+}
+
+func (data *RouterOSPF) getDeletedListItems(state RouterOSPF) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterOSPF) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

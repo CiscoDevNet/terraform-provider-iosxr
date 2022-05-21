@@ -77,27 +77,43 @@ func (data RouterISISInterface) toBody() string {
 func (data *RouterISISInterface) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType.Value = value.String()
+	} else {
+		data.CircuitType.Null = true
 	}
 	if value := gjson.GetBytes(res, "hello-padding.disable"); value.Exists() {
 		data.HelloPaddingDisable.Value = true
+	} else {
+		data.HelloPaddingDisable.Value = false
 	}
 	if value := gjson.GetBytes(res, "hello-padding.sometimes"); value.Exists() {
 		data.HelloPaddingSometimes.Value = true
+	} else {
+		data.HelloPaddingSometimes.Value = false
 	}
 	if value := gjson.GetBytes(res, "priority.priority-value"); value.Exists() {
 		data.Priority.Value = value.Int()
+	} else {
+		data.Priority.Null = true
 	}
 	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
 		data.PointToPoint.Value = true
+	} else {
+		data.PointToPoint.Value = false
 	}
 	if value := gjson.GetBytes(res, "passive"); value.Exists() {
 		data.Passive.Value = true
+	} else {
+		data.Passive.Value = false
 	}
 	if value := gjson.GetBytes(res, "suppressed"); value.Exists() {
 		data.Suppressed.Value = true
+	} else {
+		data.Suppressed.Value = false
 	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown.Value = true
+	} else {
+		data.Shutdown.Value = false
 	}
 }
 
@@ -105,4 +121,65 @@ func (data *RouterISISInterface) fromPlan(plan RouterISISInterface) {
 	data.Device = plan.Device
 	data.ProcessId.Value = plan.ProcessId.Value
 	data.InterfaceName.Value = plan.InterfaceName.Value
+}
+
+func (data *RouterISISInterface) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.ProcessId.Unknown {
+		data.ProcessId.Unknown = false
+		data.ProcessId.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+	if data.CircuitType.Unknown {
+		data.CircuitType.Unknown = false
+		data.CircuitType.Null = true
+	}
+	if data.HelloPaddingDisable.Unknown {
+		data.HelloPaddingDisable.Unknown = false
+		data.HelloPaddingDisable.Null = true
+	}
+	if data.HelloPaddingSometimes.Unknown {
+		data.HelloPaddingSometimes.Unknown = false
+		data.HelloPaddingSometimes.Null = true
+	}
+	if data.Priority.Unknown {
+		data.Priority.Unknown = false
+		data.Priority.Null = true
+	}
+	if data.PointToPoint.Unknown {
+		data.PointToPoint.Unknown = false
+		data.PointToPoint.Null = true
+	}
+	if data.Passive.Unknown {
+		data.Passive.Unknown = false
+		data.Passive.Null = true
+	}
+	if data.Suppressed.Unknown {
+		data.Suppressed.Unknown = false
+		data.Suppressed.Null = true
+	}
+	if data.Shutdown.Unknown {
+		data.Shutdown.Unknown = false
+		data.Shutdown.Null = true
+	}
+}
+
+func (data *RouterISISInterface) getDeletedListItems(state RouterISISInterface) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *RouterISISInterface) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
 }

@@ -34,3 +34,36 @@ func (data *L2VPNXconnectGroupP2PInterface) fromPlan(plan L2VPNXconnectGroupP2PI
 	data.P2pXconnectName.Value = plan.P2pXconnectName.Value
 	data.InterfaceName.Value = plan.InterfaceName.Value
 }
+
+func (data *L2VPNXconnectGroupP2PInterface) setUnknownValues() {
+	if data.Device.Unknown {
+		data.Device.Unknown = false
+		data.Device.Null = true
+	}
+	if data.Id.Unknown {
+		data.Id.Unknown = false
+		data.Id.Null = true
+	}
+	if data.GroupName.Unknown {
+		data.GroupName.Unknown = false
+		data.GroupName.Null = true
+	}
+	if data.P2pXconnectName.Unknown {
+		data.P2pXconnectName.Unknown = false
+		data.P2pXconnectName.Null = true
+	}
+	if data.InterfaceName.Unknown {
+		data.InterfaceName.Unknown = false
+		data.InterfaceName.Null = true
+	}
+}
+
+func (data *L2VPNXconnectGroupP2PInterface) getDeletedListItems(state L2VPNXconnectGroupP2PInterface) []string {
+	deletedListItems := make([]string, 0)
+	return deletedListItems
+}
+
+func (data *L2VPNXconnectGroupP2PInterface) getEmptyLeafsDelete() []string {
+	emptyLeafsDelete := make([]string, 0)
+	return emptyLeafsDelete
+}

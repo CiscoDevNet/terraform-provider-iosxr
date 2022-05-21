@@ -25,11 +25,9 @@ func (data RouterISIS) getPath() string {
 
 func (data RouterISIS) toBody() string {
 	body := "{}"
-
 	if !data.IsType.Null && !data.IsType.Unknown {
 		body, _ = sjson.Set(body, "is-type", data.IsType.Value)
 	}
-
 	return body
 }
 

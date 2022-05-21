@@ -28,7 +28,6 @@ func (data InterfaceIPv6) getPath() string {
 
 func (data InterfaceIPv6) toBody() string {
 	body := "{}"
-
 	if !data.LinkLocalAddress.Null && !data.LinkLocalAddress.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address", data.LinkLocalAddress.Value)
 	}
@@ -45,7 +44,6 @@ func (data InterfaceIPv6) toBody() string {
 			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:enable", map[string]string{})
 		}
 	}
-
 	return body
 }
 

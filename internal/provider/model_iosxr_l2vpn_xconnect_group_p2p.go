@@ -26,11 +26,9 @@ func (data L2VPNXconnectGroupP2P) getPath() string {
 
 func (data L2VPNXconnectGroupP2P) toBody() string {
 	body := "{}"
-
 	if !data.Description.Null && !data.Description.Unknown {
 		body, _ = sjson.Set(body, "description", data.Description.Value)
 	}
-
 	return body
 }
 

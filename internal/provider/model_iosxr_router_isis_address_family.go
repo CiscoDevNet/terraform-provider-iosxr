@@ -33,7 +33,6 @@ func (data RouterISISAddressFamily) getPath() string {
 
 func (data RouterISISAddressFamily) toBody() string {
 	body := "{}"
-
 	if !data.MplsLdpAutoConfig.Null && !data.MplsLdpAutoConfig.Unknown {
 		if data.MplsLdpAutoConfig.Value {
 			body, _ = sjson.Set(body, "mpls.ldp.auto-config", map[string]string{})
@@ -65,7 +64,6 @@ func (data RouterISISAddressFamily) toBody() string {
 			body, _ = sjson.Set(body, "default-information.originate", map[string]string{})
 		}
 	}
-
 	return body
 }
 

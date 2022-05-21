@@ -23,7 +23,6 @@ func (data RouterBGPAddressFamilyNetwork) getPath() string {
 
 func (data RouterBGPAddressFamilyNetwork) toBody() string {
 	body := "{}"
-
 	return body
 }
 

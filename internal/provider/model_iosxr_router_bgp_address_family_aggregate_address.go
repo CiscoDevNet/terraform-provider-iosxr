@@ -30,7 +30,6 @@ func (data RouterBGPAddressFamilyAggregateAddress) getPath() string {
 
 func (data RouterBGPAddressFamilyAggregateAddress) toBody() string {
 	body := "{}"
-
 	if !data.AsSet.Null && !data.AsSet.Unknown {
 		if data.AsSet.Value {
 			body, _ = sjson.Set(body, "as-set", map[string]string{})
@@ -46,7 +45,6 @@ func (data RouterBGPAddressFamilyAggregateAddress) toBody() string {
 			body, _ = sjson.Set(body, "summary-only", map[string]string{})
 		}
 	}
-
 	return body
 }
 

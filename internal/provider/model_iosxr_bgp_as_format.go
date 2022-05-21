@@ -23,7 +23,6 @@ func (data BGPASFormat) getPath() string {
 
 func (data BGPASFormat) toBody() string {
 	body := "{}"
-
 	if !data.Asdot.Null && !data.Asdot.Unknown {
 		if data.Asdot.Value {
 			body, _ = sjson.Set(body, "asdot", map[string]string{})
@@ -34,7 +33,6 @@ func (data BGPASFormat) toBody() string {
 			body, _ = sjson.Set(body, "asplain", map[string]string{})
 		}
 	}
-
 	return body
 }
 

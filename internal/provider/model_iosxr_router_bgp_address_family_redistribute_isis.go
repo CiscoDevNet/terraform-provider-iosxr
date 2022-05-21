@@ -36,7 +36,6 @@ func (data RouterBGPAddressFamilyRedistributeISIS) getPath() string {
 
 func (data RouterBGPAddressFamilyRedistributeISIS) toBody() string {
 	body := "{}"
-
 	if !data.LevelOne.Null && !data.LevelOne.Unknown {
 		if data.LevelOne.Value {
 			body, _ = sjson.Set(body, "level.one", map[string]string{})
@@ -75,7 +74,6 @@ func (data RouterBGPAddressFamilyRedistributeISIS) toBody() string {
 	if !data.Metric.Null && !data.Metric.Unknown {
 		body, _ = sjson.Set(body, "metric", strconv.FormatInt(data.Metric.Value, 10))
 	}
-
 	return body
 }
 

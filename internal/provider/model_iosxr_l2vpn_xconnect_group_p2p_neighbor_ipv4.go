@@ -28,11 +28,9 @@ func (data L2VPNXconnectGroupP2PNeighborIPv4) getPath() string {
 
 func (data L2VPNXconnectGroupP2PNeighborIPv4) toBody() string {
 	body := "{}"
-
 	if !data.PwClass.Null && !data.PwClass.Unknown {
 		body, _ = sjson.Set(body, "pw-class", data.PwClass.Value)
 	}
-
 	return body
 }
 

@@ -29,14 +29,12 @@ func (data InterfaceIPv6Address) getPath() string {
 
 func (data InterfaceIPv6Address) toBody() string {
 	body := "{}"
-
 	if !data.PrefixLength.Null && !data.PrefixLength.Unknown {
 		body, _ = sjson.Set(body, "prefix-length", strconv.FormatInt(data.PrefixLength.Value, 10))
 	}
 	if !data.Zone.Null && !data.Zone.Unknown {
 		body, _ = sjson.Set(body, "zone", data.Zone.Value)
 	}
-
 	return body
 }
 

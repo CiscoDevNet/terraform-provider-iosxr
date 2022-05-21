@@ -21,7 +21,6 @@ func (data RouterISISNET) getPath() string {
 
 func (data RouterISISNET) toBody() string {
 	body := "{}"
-
 	return body
 }
 

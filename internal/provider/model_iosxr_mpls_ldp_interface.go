@@ -20,7 +20,6 @@ func (data MPLSLDPInterface) getPath() string {
 
 func (data MPLSLDPInterface) toBody() string {
 	body := "{}"
-
 	return body
 }
 

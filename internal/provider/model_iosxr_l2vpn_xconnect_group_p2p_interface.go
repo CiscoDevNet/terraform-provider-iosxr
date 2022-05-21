@@ -22,7 +22,6 @@ func (data L2VPNXconnectGroupP2PInterface) getPath() string {
 
 func (data L2VPNXconnectGroupP2PInterface) toBody() string {
 	body := "{}"
-
 	return body
 }
 

@@ -37,7 +37,6 @@ func (data RouterBGPVRFAddressFamily) getPath() string {
 
 func (data RouterBGPVRFAddressFamily) toBody() string {
 	body := "{}"
-
 	if !data.MaximumPathsEbgpMultipath.Null && !data.MaximumPathsEbgpMultipath.Unknown {
 		body, _ = sjson.Set(body, "maximum-paths.ebgp.multipath", strconv.FormatInt(data.MaximumPathsEbgpMultipath.Value, 10))
 	}
@@ -73,7 +72,6 @@ func (data RouterBGPVRFAddressFamily) toBody() string {
 	if !data.RedistributeStaticMetric.Null && !data.RedistributeStaticMetric.Unknown {
 		body, _ = sjson.Set(body, "redistribute.static.metric", strconv.FormatInt(data.RedistributeStaticMetric.Value, 10))
 	}
-
 	return body
 }
 

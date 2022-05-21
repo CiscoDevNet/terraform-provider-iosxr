@@ -24,7 +24,6 @@ func (data RouterBGPVRFAddressFamilyNetwork) getPath() string {
 
 func (data RouterBGPVRFAddressFamilyNetwork) toBody() string {
 	body := "{}"
-
 	return body
 }
 

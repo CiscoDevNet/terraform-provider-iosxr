@@ -27,7 +27,6 @@ func (data InterfaceIPv4) getPath() string {
 
 func (data InterfaceIPv4) toBody() string {
 	body := "{}"
-
 	if !data.Address.Null && !data.Address.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address", data.Address.Value)
 	}
@@ -37,7 +36,6 @@ func (data InterfaceIPv4) toBody() string {
 	if !data.Unnumbered.Null && !data.Unnumbered.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.Value)
 	}
-
 	return body
 }
 

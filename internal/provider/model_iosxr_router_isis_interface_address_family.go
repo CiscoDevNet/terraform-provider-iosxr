@@ -23,7 +23,6 @@ func (data RouterISISInterfaceAddressFamily) getPath() string {
 
 func (data RouterISISInterfaceAddressFamily) toBody() string {
 	body := "{}"
-
 	return body
 }
 

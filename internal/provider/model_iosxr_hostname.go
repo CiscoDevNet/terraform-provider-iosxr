@@ -22,11 +22,9 @@ func (data Hostname) getPath() string {
 
 func (data Hostname) toBody() string {
 	body := "{}"
-
 	if !data.SystemNetworkName.Null && !data.SystemNetworkName.Unknown {
 		body, _ = sjson.Set(body, "system-network-name", data.SystemNetworkName.Value)
 	}
-
 	return body
 }
 

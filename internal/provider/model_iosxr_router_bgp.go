@@ -32,7 +32,6 @@ func (data RouterBGP) getPath() string {
 
 func (data RouterBGP) toBody() string {
 	body := "{}"
-
 	if !data.DefaultInformationOriginate.Null && !data.DefaultInformationOriginate.Unknown {
 		if data.DefaultInformationOriginate.Value {
 			body, _ = sjson.Set(body, "default-information.originate", map[string]string{})
@@ -53,7 +52,6 @@ func (data RouterBGP) toBody() string {
 	if !data.BfdMultiplier.Null && !data.BfdMultiplier.Unknown {
 		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.Value, 10))
 	}
-
 	return body
 }
 

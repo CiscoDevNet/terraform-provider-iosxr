@@ -30,14 +30,12 @@ func (data RouterOSPFVRFRedistributeBGP) getPath() string {
 
 func (data RouterOSPFVRFRedistributeBGP) toBody() string {
 	body := "{}"
-
 	if !data.Tag.Null && !data.Tag.Unknown {
 		body, _ = sjson.Set(body, "tag", strconv.FormatInt(data.Tag.Value, 10))
 	}
 	if !data.MetricType.Null && !data.MetricType.Unknown {
 		body, _ = sjson.Set(body, "metric-type", data.MetricType.Value)
 	}
-
 	return body
 }
 

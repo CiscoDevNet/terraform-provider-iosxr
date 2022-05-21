@@ -23,14 +23,12 @@ func (data L2VPN) getPath() string {
 
 func (data L2VPN) toBody() string {
 	body := "{}"
-
 	if !data.Description.Null && !data.Description.Unknown {
 		body, _ = sjson.Set(body, "description", data.Description.Value)
 	}
 	if !data.RouterId.Null && !data.RouterId.Unknown {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.Value)
 	}
-
 	return body
 }
 

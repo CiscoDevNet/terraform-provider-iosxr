@@ -36,7 +36,6 @@ func (data RouterOSPFAreaInterface) getPath() string {
 
 func (data RouterOSPFAreaInterface) toBody() string {
 	body := "{}"
-
 	if !data.NetworkBroadcast.Null && !data.NetworkBroadcast.Unknown {
 		if data.NetworkBroadcast.Value {
 			body, _ = sjson.Set(body, "network.broadcast", map[string]string{})
@@ -73,7 +72,6 @@ func (data RouterOSPFAreaInterface) toBody() string {
 			body, _ = sjson.Set(body, "passive.disable", map[string]string{})
 		}
 	}
-
 	return body
 }
 

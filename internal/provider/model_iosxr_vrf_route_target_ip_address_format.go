@@ -26,7 +26,6 @@ func (data VRFRouteTargetIPAddressFormat) getPath() string {
 
 func (data VRFRouteTargetIPAddressFormat) toBody() string {
 	body := "{}"
-
 	return body
 }
 

@@ -23,13 +23,28 @@ import (
 	{{- end}}
 )
 
+{{- $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
 {{- range .Attributes}}
+{{- if eq .Type "List"}}
+	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+{{- else}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- end}}
+}
+
+{{- range .Attributes}}
+{{- if eq .Type "List"}}
+type {{$name}}{{toGoName .TfName}} struct {
+{{- range .Attributes}}
 	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
 {{- end}}
 }
+{{- end}}
+{{- end}}
 
 func (data {{camelCase .Name}}) getPath() string {
 {{- if hasId .Attributes}}
@@ -41,22 +56,48 @@ func (data {{camelCase .Name}}) getPath() string {
 
 func (data {{camelCase .Name}}) toBody() string {
 	body := "{}"
-	{{ range $index, $item := .Attributes -}}
-	{{ if and (ne .Reference true) (ne .Id true)}}
+	{{- range .Attributes}}
+	{{- if and (ne .Reference true) (ne .Id true) (ne .Type "List")}}
 	if !data.{{toGoName .TfName}}.Null && !data.{{toGoName .TfName}}.Unknown {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.Value, 10))
-		{{- else if eq .Type "Bool"}}
+		{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 		if data.{{toGoName .TfName}}.Value {
 			body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", map[string]string{})
 		}
+		{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
+		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", data.{{toGoName .TfName}}.Value)
 		{{- else if eq .Type "String"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", data.{{toGoName .TfName}}.Value)
 		{{- end}}
 	}
 	{{- end}}
 	{{- end}}
-
+	{{- range .Attributes}}
+	{{- if eq .Type "List"}}
+	{{- $list := toJsonPath .YangName .XPath }}
+	if len(data.{{toGoName .TfName}}) > 0 {
+		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", []interface{}{})
+		for index, item := range data.{{toGoName .TfName}} {
+			{{- range .Attributes}}
+			if !item.{{toGoName .TfName}}.Null && !item.{{toGoName .TfName}}.Unknown {
+				{{- if eq .Type "Int64"}}
+				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", strconv.FormatInt(item.{{toGoName .TfName}}.Value, 10))
+				{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
+				if item.{{toGoName .TfName}}.Value {
+					body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", map[string]string{})
+				}
+				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
+				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", (data.{{toGoName .TfName}}.Value)
+				{{- else if eq .Type "String"}}
+				body, _ = sjson.Set(body, "{{$list}}"+"."+strconv.Itoa(index)+"."+"{{toJsonPath .YangName .XPath}}", item.{{toGoName .TfName}}.Value)
+				{{- end}}
+			}
+			{{- end}}
+		}
+	}
+	{{- end}}
+	{{- end}}
 	return body
 }
 

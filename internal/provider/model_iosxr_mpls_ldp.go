@@ -22,11 +22,9 @@ func (data MPLSLDP) getPath() string {
 
 func (data MPLSLDP) toBody() string {
 	body := "{}"
-
 	if !data.RouterId.Null && !data.RouterId.Unknown {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.Value)
 	}
-
 	return body
 }
 

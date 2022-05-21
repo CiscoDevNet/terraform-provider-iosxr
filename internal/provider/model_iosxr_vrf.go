@@ -40,7 +40,6 @@ func (data VRF) getPath() string {
 
 func (data VRF) toBody() string {
 	body := "{}"
-
 	if !data.Description.Null && !data.Description.Unknown {
 		body, _ = sjson.Set(body, "description", data.Description.Value)
 	}
@@ -95,7 +94,6 @@ func (data VRF) toBody() string {
 	if !data.RdIpAddressIndex.Null && !data.RdIpAddressIndex.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index", strconv.FormatInt(data.RdIpAddressIndex.Value, 10))
 	}
-
 	return body
 }
 

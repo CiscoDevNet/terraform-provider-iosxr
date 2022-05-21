@@ -21,7 +21,6 @@ func (data RouterOSPFArea) getPath() string {
 
 func (data RouterOSPFArea) toBody() string {
 	body := "{}"
-
 	return body
 }
 

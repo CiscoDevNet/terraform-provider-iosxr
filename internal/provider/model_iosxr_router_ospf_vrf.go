@@ -48,7 +48,6 @@ func (data RouterOSPFVRF) getPath() string {
 
 func (data RouterOSPFVRF) toBody() string {
 	body := "{}"
-
 	if !data.MplsLdpSync.Null && !data.MplsLdpSync.Unknown {
 		if data.MplsLdpSync.Value {
 			body, _ = sjson.Set(body, "mpls.ldp.sync", map[string]string{})
@@ -132,7 +131,6 @@ func (data RouterOSPFVRF) toBody() string {
 	if !data.DefaultInformationOriginateMetricType.Null && !data.DefaultInformationOriginateMetricType.Unknown {
 		body, _ = sjson.Set(body, "default-information.originate.metric-type", strconv.FormatInt(data.DefaultInformationOriginateMetricType.Value, 10))
 	}
-
 	return body
 }
 

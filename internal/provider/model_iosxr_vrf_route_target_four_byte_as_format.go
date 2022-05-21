@@ -26,7 +26,6 @@ func (data VRFRouteTargetFourByteASFormat) getPath() string {
 
 func (data VRFRouteTargetFourByteASFormat) toBody() string {
 	body := "{}"
-
 	return body
 }
 

@@ -20,7 +20,6 @@ func (data MPLSLDPAddressFamily) getPath() string {
 
 func (data MPLSLDPAddressFamily) toBody() string {
 	body := "{}"
-
 	return body
 }
 

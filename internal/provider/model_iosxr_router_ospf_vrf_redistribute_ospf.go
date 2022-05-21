@@ -33,7 +33,6 @@ func (data RouterOSPFVRFRedistributeOSPF) getPath() string {
 
 func (data RouterOSPFVRFRedistributeOSPF) toBody() string {
 	body := "{}"
-
 	if !data.MatchInternal.Null && !data.MatchInternal.Unknown {
 		if data.MatchInternal.Value {
 			body, _ = sjson.Set(body, "match.internal", map[string]string{})
@@ -55,7 +54,6 @@ func (data RouterOSPFVRFRedistributeOSPF) toBody() string {
 	if !data.MetricType.Null && !data.MetricType.Unknown {
 		body, _ = sjson.Set(body, "metric-type", data.MetricType.Value)
 	}
-
 	return body
 }
 

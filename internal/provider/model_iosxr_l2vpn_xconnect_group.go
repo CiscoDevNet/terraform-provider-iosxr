@@ -20,7 +20,6 @@ func (data L2VPNXconnectGroup) getPath() string {
 
 func (data L2VPNXconnectGroup) toBody() string {
 	body := "{}"
-
 	return body
 }
 

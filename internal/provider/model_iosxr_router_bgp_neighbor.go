@@ -43,7 +43,6 @@ func (data RouterBGPNeighbor) getPath() string {
 
 func (data RouterBGPNeighbor) toBody() string {
 	body := "{}"
-
 	if !data.RemoteAs.Null && !data.RemoteAs.Unknown {
 		body, _ = sjson.Set(body, "remote-as", data.RemoteAs.Value)
 	}
@@ -104,7 +103,6 @@ func (data RouterBGPNeighbor) toBody() string {
 			body, _ = sjson.Set(body, "ttl-security", map[string]string{})
 		}
 	}
-
 	return body
 }
 

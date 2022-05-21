@@ -34,7 +34,6 @@ func (data Interface) getPath() string {
 
 func (data Interface) toBody() string {
 	body := "{}"
-
 	if !data.L2transport.Null && !data.L2transport.Unknown {
 		if data.L2transport.Value {
 			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
@@ -67,7 +66,6 @@ func (data Interface) toBody() string {
 	if !data.Vrf.Null && !data.Vrf.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-vrf-cfg:vrf", data.Vrf.Value)
 	}
-
 	return body
 }
 

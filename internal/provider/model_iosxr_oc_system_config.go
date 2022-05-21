@@ -25,7 +25,6 @@ func (data OCSystemConfig) getPath() string {
 
 func (data OCSystemConfig) toBody() string {
 	body := "{}"
-
 	if !data.Hostname.Null && !data.Hostname.Unknown {
 		body, _ = sjson.Set(body, "hostname", data.Hostname.Value)
 	}
@@ -38,7 +37,6 @@ func (data OCSystemConfig) toBody() string {
 	if !data.MotdBanner.Null && !data.MotdBanner.Unknown {
 		body, _ = sjson.Set(body, "motd-banner", data.MotdBanner.Value)
 	}
-
 	return body
 }
 

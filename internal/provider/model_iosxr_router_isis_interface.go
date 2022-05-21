@@ -35,7 +35,6 @@ func (data RouterISISInterface) getPath() string {
 
 func (data RouterISISInterface) toBody() string {
 	body := "{}"
-
 	if !data.CircuitType.Null && !data.CircuitType.Unknown {
 		body, _ = sjson.Set(body, "circuit-type", data.CircuitType.Value)
 	}
@@ -72,7 +71,6 @@ func (data RouterISISInterface) toBody() string {
 			body, _ = sjson.Set(body, "shutdown", map[string]string{})
 		}
 	}
-
 	return body
 }
 

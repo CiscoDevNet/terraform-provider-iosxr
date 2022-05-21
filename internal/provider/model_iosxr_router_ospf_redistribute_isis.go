@@ -32,7 +32,6 @@ func (data RouterOSPFRedistributeISIS) getPath() string {
 
 func (data RouterOSPFRedistributeISIS) toBody() string {
 	body := "{}"
-
 	if !data.Level1.Null && !data.Level1.Unknown {
 		if data.Level1.Value {
 			body, _ = sjson.Set(body, "level-1", map[string]string{})
@@ -54,7 +53,6 @@ func (data RouterOSPFRedistributeISIS) toBody() string {
 	if !data.MetricType.Null && !data.MetricType.Unknown {
 		body, _ = sjson.Set(body, "metric-type", data.MetricType.Value)
 	}
-
 	return body
 }
 

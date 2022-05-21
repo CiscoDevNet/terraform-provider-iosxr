@@ -36,7 +36,6 @@ func (data RouterBGPVRFAddressFamilyRedistributeOSPF) getPath() string {
 
 func (data RouterBGPVRFAddressFamilyRedistributeOSPF) toBody() string {
 	body := "{}"
-
 	if !data.MatchInternal.Null && !data.MatchInternal.Unknown {
 		if data.MatchInternal.Value {
 			body, _ = sjson.Set(body, "match.internal", map[string]string{})
@@ -70,7 +69,6 @@ func (data RouterBGPVRFAddressFamilyRedistributeOSPF) toBody() string {
 	if !data.Metric.Null && !data.Metric.Unknown {
 		body, _ = sjson.Set(body, "metric", strconv.FormatInt(data.Metric.Value, 10))
 	}
-
 	return body
 }
 

@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 }
 
 const testAccDataSourceIosxrInterfaceConfig = `
+
 resource "iosxr_interface" "test" {
   interface_name = "GigabitEthernet0/0/0/1"
   l2transport = false

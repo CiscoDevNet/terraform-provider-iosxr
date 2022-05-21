@@ -62,6 +62,7 @@ resource "iosxr_gnmi" "PreReq3" {
 `
 
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig = `
+
 resource "iosxr_router_bgp_vrf_address_family" "test" {
   as_number = "65001"
   vrf_name = "VRF1"

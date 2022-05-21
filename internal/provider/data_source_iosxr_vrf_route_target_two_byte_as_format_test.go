@@ -22,6 +22,7 @@ func TestAccDataSourceIosxrVRFRouteTargetTwoByteASFormat(t *testing.T) {
 }
 
 const testAccDataSourceIosxrVRFRouteTargetTwoByteASFormatConfig = `
+
 resource "iosxr_vrf_route_target_two_byte_as_format" "test" {
   vrf_name = "VRF1"
   address_family = "ipv4"

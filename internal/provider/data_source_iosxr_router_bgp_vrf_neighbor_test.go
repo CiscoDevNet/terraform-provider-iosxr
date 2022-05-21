@@ -39,6 +39,7 @@ func TestAccDataSourceIosxrRouterBGPVRFNeighbor(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterBGPVRFNeighborConfig = `
+
 resource "iosxr_router_bgp_vrf_neighbor" "test" {
   as_number = "65001"
   vrf_name = "VRF1"

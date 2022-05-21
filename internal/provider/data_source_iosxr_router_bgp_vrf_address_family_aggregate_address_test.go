@@ -64,6 +64,7 @@ resource "iosxr_gnmi" "PreReq4" {
 `
 
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyAggregateAddressConfig = `
+
 resource "iosxr_router_bgp_vrf_address_family_aggregate_address" "test" {
   as_number = "65001"
   vrf_name = "VRF1"

@@ -24,6 +24,7 @@ func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
 }
 
 const testAccDataSourceIosxrMPLSLDPConfig = `
+
 resource "iosxr_mpls_ldp" "test" {
   router_id = "1.2.3.4"
 }

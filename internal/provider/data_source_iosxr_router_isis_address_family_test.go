@@ -29,6 +29,7 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterISISAddressFamilyConfig = `
+
 resource "iosxr_router_isis_address_family" "test" {
   process_id = "P1"
   af_name = "ipv4"

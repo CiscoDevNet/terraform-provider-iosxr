@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig = `
+
 resource "iosxr_router_ospf_area_interface" "test" {
   process_name = "OSPF1"
   area_id = "0"

@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterBGPAddressFamilyConfig = `
+
 resource "iosxr_router_bgp_address_family" "test" {
   as_number = "65001"
   af_name = "ipv4-unicast"

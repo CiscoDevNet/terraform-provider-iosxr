@@ -22,6 +22,7 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig = `
+
 resource "iosxr_router_isis_interface_address_family" "test" {
   process_id = "P1"
   interface_name = "GigabitEthernet0/0/0/1"

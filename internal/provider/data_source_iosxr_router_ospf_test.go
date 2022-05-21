@@ -44,6 +44,7 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterOSPFConfig = `
+
 resource "iosxr_router_ospf" "test" {
   process_name = "OSPF1"
   mpls_ldp_sync = false

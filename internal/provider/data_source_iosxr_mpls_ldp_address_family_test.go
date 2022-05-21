@@ -22,6 +22,7 @@ func TestAccDataSourceIosxrMPLSLDPAddressFamily(t *testing.T) {
 }
 
 const testAccDataSourceIosxrMPLSLDPAddressFamilyConfig = `
+
 resource "iosxr_mpls_ldp_address_family" "test" {
   af_name = "ipv4"
 }

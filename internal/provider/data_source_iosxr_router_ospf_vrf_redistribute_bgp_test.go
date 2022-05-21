@@ -25,6 +25,7 @@ func TestAccDataSourceIosxrRouterOSPFVRFRedistributeBGP(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterOSPFVRFRedistributeBGPConfig = `
+
 resource "iosxr_router_ospf_vrf_redistribute_bgp" "test" {
   process_name = "OSPF1"
   vrf_name = "VRF1"

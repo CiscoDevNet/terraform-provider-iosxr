@@ -24,6 +24,7 @@ func TestAccDataSourceIosxrOCSystemConfig(t *testing.T) {
 }
 
 const testAccDataSourceIosxrOCSystemConfigConfig = `
+
 resource "iosxr_oc_system_config" "test" {
   hostname = "ROUTER-1"
 }

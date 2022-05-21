@@ -33,6 +33,7 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 }
 
 const testAccDataSourceIosxrVRFConfig = `
+
 resource "iosxr_vrf" "test" {
   vrf_name = "VRF1"
   description = "My VRF Description"

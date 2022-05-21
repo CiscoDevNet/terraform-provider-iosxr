@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrRouterBGPAddressFamilyRedistributeISIS(t *testing.T) 
 }
 
 const testAccDataSourceIosxrRouterBGPAddressFamilyRedistributeISISConfig = `
+
 resource "iosxr_router_bgp_address_family_redistribute_isis" "test" {
   as_number = "65001"
   af_name = "ipv4-unicast"

@@ -29,6 +29,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterBGPVRFConfig = `
+
 resource "iosxr_router_bgp_vrf" "test" {
   as_number = "65001"
   vrf_name = "VRF1"

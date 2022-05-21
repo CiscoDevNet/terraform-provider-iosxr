@@ -24,6 +24,7 @@ func TestAccDataSourceIosxrL2VPNXconnectGroupP2PNeighborIPv4(t *testing.T) {
 }
 
 const testAccDataSourceIosxrL2VPNXconnectGroupP2PNeighborIPv4Config = `
+
 resource "iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv4" "test" {
   group_name = "P2P"
   p2p_xconnect_name = "XC"

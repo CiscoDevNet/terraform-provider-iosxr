@@ -28,6 +28,7 @@ func TestAccDataSourceIosxrRouterOSPFRedistributeOSPF(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterOSPFRedistributeOSPFConfig = `
+
 resource "iosxr_router_ospf_redistribute_ospf" "test" {
   process_name = "OSPF1"
   instance_name = "OSPF2"

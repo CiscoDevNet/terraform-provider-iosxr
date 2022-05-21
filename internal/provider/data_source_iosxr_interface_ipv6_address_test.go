@@ -25,6 +25,7 @@ func TestAccDataSourceIosxrInterfaceIPv6Address(t *testing.T) {
 }
 
 const testAccDataSourceIosxrInterfaceIPv6AddressConfig = `
+
 resource "iosxr_interface_ipv6_address" "test" {
   interface_name = "GigabitEthernet0/0/0/1"
   address = "2001::1"

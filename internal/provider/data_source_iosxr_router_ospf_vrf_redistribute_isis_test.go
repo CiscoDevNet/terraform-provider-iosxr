@@ -28,6 +28,7 @@ func TestAccDataSourceIosxrRouterOSPFVRFRedistributeISIS(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterOSPFVRFRedistributeISISConfig = `
+
 resource "iosxr_router_ospf_vrf_redistribute_isis" "test" {
   process_name = "OSPF1"
   vrf_name = "VRF1"

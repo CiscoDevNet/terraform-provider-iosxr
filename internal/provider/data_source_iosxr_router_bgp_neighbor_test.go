@@ -39,6 +39,7 @@ func TestAccDataSourceIosxrRouterBGPNeighbor(t *testing.T) {
 }
 
 const testAccDataSourceIosxrRouterBGPNeighborConfig = `
+
 resource "iosxr_router_bgp_neighbor" "test" {
   as_number = "65001"
   neighbor_address = "10.1.1.2"

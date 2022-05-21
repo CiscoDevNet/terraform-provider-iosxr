@@ -25,6 +25,7 @@ func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 }
 
 const testAccDataSourceIosxrBGPASFormatConfig = `
+
 resource "iosxr_bgp_as_format" "test" {
   asdot = false
   asplain = true

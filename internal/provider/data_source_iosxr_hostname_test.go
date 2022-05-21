@@ -24,6 +24,7 @@ func TestAccDataSourceIosxrHostname(t *testing.T) {
 }
 
 const testAccDataSourceIosxrHostnameConfig = `
+
 resource "iosxr_hostname" "test" {
   system_network_name = "ROUTER-1"
 }

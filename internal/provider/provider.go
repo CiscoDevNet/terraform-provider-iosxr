@@ -155,11 +155,11 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	if config.Host.Null {
 		host = os.Getenv("IOSXR_HOST")
-	} else {
-		host = config.Host.Value
 		if host == "" && len(config.Devices) > 0 {
 			host = config.Devices[0].Host.Value
 		}
+	} else {
+		host = config.Host.Value
 	}
 
 	if host == "" {

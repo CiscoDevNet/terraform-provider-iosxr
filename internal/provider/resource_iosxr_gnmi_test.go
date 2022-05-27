@@ -19,7 +19,7 @@ func TestAccIosxrGnmi(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccIosxrGnmiConfig_interface("TF-ROUTER-1"),
+				Config: testAccIosxrGnmiConfig_hostname("TF-ROUTER-1"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "openconfig-system:/system/config"),
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.hostname", "TF-ROUTER-1"),
@@ -31,9 +31,18 @@ func TestAccIosxrGnmi(t *testing.T) {
 				ImportStateId: "openconfig-system:/system/config",
 			},
 			{
-				Config: testAccIosxrGnmiConfig_interface("TF-ROUTER-1"),
+				Config: testAccIosxrGnmiConfig_hostname("ROUTER-1"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.hostname", "TF-ROUTER-1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.hostname", "ROUTER-1"),
+				),
+			},
+			{
+				Config: testAccIosxrGnmiConfig_list(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.ip-address", "1.1.1.1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.index", "1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.stitching", "true"),
 				),
 			},
 		},
@@ -48,13 +57,34 @@ func testAccIosxrGnmiConfig_empty() string {
 	`
 }
 
-func testAccIosxrGnmiConfig_interface(name string) string {
+func testAccIosxrGnmiConfig_hostname(name string) string {
 	return fmt.Sprintf(`
 	resource "iosxr_gnmi" "test" {
 		path = "openconfig-system:/system/config"
 		attributes = {
-			hostname = "%s"
+			"hostname" = "%s"
 		}
 	}
 	`, name)
+}
+
+func testAccIosxrGnmiConfig_list() string {
+	return `
+	resource "iosxr_gnmi" "test" {
+		path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+		lists = [
+			{
+				name = "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt"
+				key = "ip-address,index,stitching"
+				items = [
+					{
+						ip-address = "1.1.1.1"
+						index      = "1"
+						stitching  = "true"
+					}
+				]
+			}
+		]
+	}
+	`
 }

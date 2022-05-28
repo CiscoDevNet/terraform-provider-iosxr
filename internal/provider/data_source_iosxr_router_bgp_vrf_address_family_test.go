@@ -24,6 +24,21 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_metric", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_static", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_static_metric", "10"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.address", "10.0.0.0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.masklength", "8"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.as_set", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.as_confed_set", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.summary_only", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "networks.0.address", "10.1.0.0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "networks.0.masklength", "16"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.router_tag", "OSPF1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_internal", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_internal_external", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_internal_nssa_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_external_nssa_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.match_nssa_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_address_family.test", "redistribute_ospf.0.metric", "100"),
 				),
 			},
 		},
@@ -75,6 +90,27 @@ resource "iosxr_router_bgp_vrf_address_family" "test" {
 	redistribute_connected_metric = 10
 	redistribute_static = true
 	redistribute_static_metric = 10
+	aggregate_addresses = [{
+		address = "10.0.0.0"
+		masklength = 8
+		as_set = false
+		as_confed_set = false
+		summary_only = false
+	}]
+	networks = [{
+		address = "10.1.0.0"
+		masklength = 16
+	}]
+	redistribute_ospf = [{
+		router_tag = "OSPF1"
+		match_internal = true
+		match_internal_external = true
+		match_internal_nssa_external = false
+		match_external = false
+		match_external_nssa_external = false
+		match_nssa_external = false
+		metric = 100
+	}]
 	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
 }
 

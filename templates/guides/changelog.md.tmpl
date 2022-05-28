@@ -53,6 +53,10 @@ description: |-
 - BREAKING CHANGE: remove iosxr_router_bgp_address_family_redistribute_isis resource and data source
 - BREAKING CHANGE: remove iosxr_router_bgp_address_family_redistribute_ospf resource and data source
 - Add aggregate_address, network and redistribute attributes to iosxr_router_bgp_address_family resource and data source
+- BREAKING CHANGE: remove iosxr_router_bgp_vrf_address_family_aggregate_address resource and data source
+- BREAKING CHANGE: remove iosxr_router_bgp_vrf_address_family_network resource and data source
+- BREAKING CHANGE: remove iosxr_router_bgp_vrf_address_family_redistribute_ospf resource and data source
+- Add aggregate_address, network and redistribute attributes to iosxr_router_bgp_vrf_address_family resource and data source
 
 ## 0.1.0
 

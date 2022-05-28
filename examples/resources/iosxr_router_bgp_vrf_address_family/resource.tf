@@ -10,4 +10,31 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   redistribute_connected_metric = 10
   redistribute_static           = true
   redistribute_static_metric    = 10
+  aggregate_addresses = [
+    {
+      address       = "10.0.0.0"
+      masklength    = 8
+      as_set        = false
+      as_confed_set = false
+      summary_only  = false
+    }
+  ]
+  networks = [
+    {
+      address    = "10.1.0.0"
+      masklength = 16
+    }
+  ]
+  redistribute_ospf = [
+    {
+      router_tag                   = "OSPF1"
+      match_internal               = true
+      match_internal_external      = true
+      match_internal_nssa_external = false
+      match_external               = false
+      match_external_nssa_external = false
+      match_nssa_external          = false
+      metric                       = 100
+    }
+  ]
 }

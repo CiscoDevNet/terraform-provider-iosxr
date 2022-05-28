@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.1.1 (unreleased)
+## 0.1.1
 
 - Add delete attribute to iosxr_gnmi resource
 - Allow provider config without host attribute in case devices attribute is being used

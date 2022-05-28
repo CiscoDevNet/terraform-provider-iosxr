@@ -33,7 +33,7 @@ func (t dataSourceInterfaceIPv6AddressType) GetSchema(ctx context.Context) (tfsd
 			"interface_name": {
 				MarkdownDescription: "Interface configuration subcommands",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"address": {
 				MarkdownDescription: "IPv6 name or address",
@@ -67,7 +67,7 @@ type dataSourceInterfaceIPv6Address struct {
 }
 
 func (d dataSourceInterfaceIPv6Address) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state InterfaceIPv6Address
+	var config InterfaceIPv6Address
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -84,11 +84,11 @@ func (d dataSourceInterfaceIPv6Address) Read(ctx context.Context, req tfsdk.Read
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

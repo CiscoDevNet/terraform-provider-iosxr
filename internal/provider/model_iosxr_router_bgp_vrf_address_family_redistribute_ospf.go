@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGPVRFAddressFamilyRedistributeOSPF struct {
@@ -72,7 +69,7 @@ func (data RouterBGPVRFAddressFamilyRedistributeOSPF) toBody() string {
 	return body
 }
 
-func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) fromBody(res []byte) {
+func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
 		data.MatchInternal.Value = true
 	} else {
@@ -107,6 +104,55 @@ func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) fromBody(res []byte) {
 		data.Metric.Value = value.Int()
 	} else {
 		data.Metric.Null = true
+	}
+}
+
+func (data *RouterBGPVRFAddressFamilyRedistributeOSPF) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
+		data.MatchInternal.Value = true
+		data.MatchInternal.Null = false
+	} else {
+		data.MatchInternal.Value = false
+		data.MatchInternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.internal.external"); value.Exists() {
+		data.MatchInternalExternal.Value = true
+		data.MatchInternalExternal.Null = false
+	} else {
+		data.MatchInternalExternal.Value = false
+		data.MatchInternalExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.internal.nssa-external"); value.Exists() {
+		data.MatchInternalNssaExternal.Value = true
+		data.MatchInternalNssaExternal.Null = false
+	} else {
+		data.MatchInternalNssaExternal.Value = false
+		data.MatchInternalNssaExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.external"); value.Exists() {
+		data.MatchExternal.Value = true
+		data.MatchExternal.Null = false
+	} else {
+		data.MatchExternal.Value = false
+		data.MatchExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.external.nssa-external"); value.Exists() {
+		data.MatchExternalNssaExternal.Value = true
+		data.MatchExternalNssaExternal.Null = false
+	} else {
+		data.MatchExternalNssaExternal.Value = false
+		data.MatchExternalNssaExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.nssa-external"); value.Exists() {
+		data.MatchNssaExternal.Value = true
+		data.MatchNssaExternal.Null = false
+	} else {
+		data.MatchNssaExternal.Value = false
+		data.MatchNssaExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
+		data.Metric.Value = value.Int()
+		data.Metric.Null = false
 	}
 }
 

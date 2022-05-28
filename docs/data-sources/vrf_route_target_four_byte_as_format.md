@@ -29,9 +29,12 @@ data "iosxr_vrf_route_target_four_byte_as_format" "example" {
 
 ### Required
 
+- `address_family` (String) Address family
 - `as_number` (Number) Four Byte AS Number
+- `direction` (String) Direction
 - `index` (Number) ASN2:index (hex or decimal format)
 - `stitching` (Boolean) These are stitching RTs
+- `sub_address_family` (String) Sub-Address family
 - `vrf_name` (String) VRF name
 
 ### Optional
@@ -40,9 +43,6 @@ data "iosxr_vrf_route_target_four_byte_as_format" "example" {
 
 ### Read-Only
 
-- `address_family` (String) Address family
-- `direction` (String) Direction
 - `id` (String) The path of the retrieved object.
-- `sub_address_family` (String) Sub-Address family
 
 

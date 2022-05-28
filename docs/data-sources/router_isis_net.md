@@ -25,6 +25,7 @@ data "iosxr_router_isis_net" "example" {
 ### Required
 
 - `net_id` (String) A Network Entity Title (NET) for this process
+- `process_id` (String) Process ID
 
 ### Optional
 
@@ -33,6 +34,5 @@ data "iosxr_router_isis_net" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `process_id` (String) Process ID
 
 

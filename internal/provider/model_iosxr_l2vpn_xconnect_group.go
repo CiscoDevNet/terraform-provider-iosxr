@@ -23,6 +23,9 @@ func (data L2VPNXconnectGroup) toBody() string {
 	return body
 }
 
+func (data *L2VPNXconnectGroup) updateFromBody(res []byte) {
+}
+
 func (data *L2VPNXconnectGroup) fromBody(res []byte) {
 }
 

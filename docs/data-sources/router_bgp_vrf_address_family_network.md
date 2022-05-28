@@ -28,7 +28,10 @@ data "iosxr_router_bgp_vrf_address_family_network" "example" {
 ### Required
 
 - `address` (String) IPv6 network and mask or masklength
+- `af_name` (String) Enter Address Family command mode
+- `as_number` (String) bgp as-number
 - `masklength` (Number) Network in prefix/length format (prefix part)
+- `vrf_name` (String) Specify a vrf name
 
 ### Optional
 
@@ -36,9 +39,6 @@ data "iosxr_router_bgp_vrf_address_family_network" "example" {
 
 ### Read-Only
 
-- `af_name` (String) Enter Address Family command mode
-- `as_number` (String) bgp as-number
 - `id` (String) The path of the retrieved object.
-- `vrf_name` (String) Specify a vrf name
 
 

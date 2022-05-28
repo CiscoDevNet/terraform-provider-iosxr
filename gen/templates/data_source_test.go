@@ -43,39 +43,37 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 const testAccDataSourceIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
 resource "iosxr_gnmi" "PreReq{{$index}}" {
-  path = "{{.Path}}"
-  {{- if .NoDelete}}
-  delete = false
-  {{- end}}
-  attributes = {
-    {{- range  .Attributes}}
-      {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
-    {{- end}}
-  }
-  {{- if .Lists}}
-  lists = [
-  {{- range .Lists}}
-    {
-      name = "{{.Name}}"
-      key = "{{.Key}}"
-      items = [
-        {{- range .Items}}
-          {
-            attributes = {
-            {{- range .Attributes}}
-              {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
-            {{- end}}
-            }
-          },
-        {{- end}}
-      ] 
-    },
-  {{- end}}
-  ]
-  {{- end}}
-  {{- if .Dependencies}}
-  depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
-  {{- end}}
+	path = "{{.Path}}"
+	{{- if .NoDelete}}
+	delete = false
+	{{- end}}
+	attributes = {
+		{{- range  .Attributes}}
+		{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+		{{- end}}
+	}
+	{{- if .Lists}}
+	lists = [
+	{{- range .Lists}}
+		{
+			name = "{{.Name}}"
+			key = "{{.Key}}"
+			items = [
+				{{- range .Items}}
+				{
+					{{- range .Attributes}}
+					{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+					{{- end}}
+				},
+				{{- end}}
+			]
+		},
+	{{- end}}
+	]
+	{{- end}}
+	{{- if .Dependencies}}
+	depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
+	{{- end}}
 }
 {{ end}}
 `
@@ -84,32 +82,32 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 const testAccDataSourceIosxr{{camelCase .Name}}Config = `
 
 resource "iosxr_{{snakeCase $name}}" "test" {
-{{- range  .Attributes}}
-{{- if ne .ExcludeTest true}}
-{{- if eq .Type "List"}}
-  {{.TfName}} = [{
-    {{- range  .Attributes}}
-    {{- if ne .ExcludeTest true}}
-    {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-    {{- end}}
-    {{- end}}
-  }]
-{{- else}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-{{- end}}
-{{- end}}
-{{- end}}
-{{- if .TestPrerequisites}}
-  depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]
-{{- end}}
+	{{- range  .Attributes}}
+	{{- if ne .ExcludeTest true}}
+	{{- if eq .Type "List"}}
+	{{.TfName}} = [{
+		{{- range  .Attributes}}
+		{{- if ne .ExcludeTest true}}
+		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+		{{- end}}
+		{{- end}}
+	}]
+	{{- else}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+	{{- end}}
+	{{- if .TestPrerequisites}}
+	depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]
+	{{- end}}
 }
 
 data "iosxr_{{snakeCase .Name}}" "test" {
-{{- range  .Attributes}}
-{{- if or (eq .Id true) (eq .Reference true)}}
-  {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-{{- end}}
-{{- end}}
-  depends_on = [iosxr_{{snakeCase $name}}.test]
+	{{- range  .Attributes}}
+	{{- if or (eq .Id true) (eq .Reference true)}}
+	{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+	{{- end}}
+	{{- end}}
+	depends_on = [iosxr_{{snakeCase $name}}.test]
 }
 `

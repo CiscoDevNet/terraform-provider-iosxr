@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGPAddressFamily struct {
@@ -74,7 +71,7 @@ func (data RouterBGPAddressFamily) toBody() string {
 	return body
 }
 
-func (data *RouterBGPAddressFamily) fromBody(res []byte) {
+func (data *RouterBGPAddressFamily) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
 		data.MaximumPathsEbgpMultipath.Value = value.Int()
 	} else {
@@ -119,6 +116,57 @@ func (data *RouterBGPAddressFamily) fromBody(res []byte) {
 		data.RedistributeStaticMetric.Value = value.Int()
 	} else {
 		data.RedistributeStaticMetric.Null = true
+	}
+}
+
+func (data *RouterBGPAddressFamily) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
+		data.MaximumPathsEbgpMultipath.Value = value.Int()
+		data.MaximumPathsEbgpMultipath.Null = false
+	}
+	if value := gjson.GetBytes(res, "maximum-paths.eibgp.multipath"); value.Exists() {
+		data.MaximumPathsEibgpMultipath.Value = value.Int()
+		data.MaximumPathsEibgpMultipath.Null = false
+	}
+	if value := gjson.GetBytes(res, "maximum-paths.ibgp.multipath"); value.Exists() {
+		data.MaximumPathsIbgpMultipath.Value = value.Int()
+		data.MaximumPathsIbgpMultipath.Null = false
+	}
+	if value := gjson.GetBytes(res, "label.mode.per-ce"); value.Exists() {
+		data.LabelModePerCe.Value = true
+		data.LabelModePerCe.Null = false
+	} else {
+		data.LabelModePerCe.Value = false
+		data.LabelModePerCe.Null = false
+	}
+	if value := gjson.GetBytes(res, "label.mode.per-vrf"); value.Exists() {
+		data.LabelModePerVrf.Value = true
+		data.LabelModePerVrf.Null = false
+	} else {
+		data.LabelModePerVrf.Value = false
+		data.LabelModePerVrf.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected.Value = true
+		data.RedistributeConnected.Null = false
+	} else {
+		data.RedistributeConnected.Value = false
+		data.RedistributeConnected.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
+		data.RedistributeConnectedMetric.Value = value.Int()
+		data.RedistributeConnectedMetric.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic.Value = true
+		data.RedistributeStatic.Null = false
+	} else {
+		data.RedistributeStatic.Value = false
+		data.RedistributeStatic.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
+		data.RedistributeStaticMetric.Value = value.Int()
+		data.RedistributeStaticMetric.Null = false
 	}
 }
 

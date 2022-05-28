@@ -34,11 +34,24 @@ func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk
 			{{- range  .Attributes}}
 			"{{.TfName}}": {
 				MarkdownDescription: "{{.Description}}",
+				{{- if ne .Type "List"}}
 				Type:                types.{{.Type}}Type,
-				{{- if eq .Id true}}
+				{{- end}}
+				{{- if or (eq .Id true) (eq .Reference true)}}
 				Required:            true,
 				{{- else}}
 				Computed:            true,
+				{{- end}}
+				{{- if eq .Type "List"}}
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					{{- range  .Attributes}}
+					"{{.TfName}}": {
+						MarkdownDescription: "{{.Description}}",
+						Type:                types.{{.Type}}Type,
+						Computed:            true,
+					},
+					{{- end}}
+				}, tfsdk.ListNestedAttributesOptions{}),
 				{{- end}}
 			},
 			{{- end}}
@@ -59,7 +72,7 @@ type dataSource{{camelCase .Name}} struct {
 }
 
 func (d dataSource{{camelCase .Name}}) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state {{camelCase .Name}}
+	var config {{camelCase .Name}}
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -76,11 +89,11 @@ func (d dataSource{{camelCase .Name}}) Read(ctx context.Context, req tfsdk.ReadD
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

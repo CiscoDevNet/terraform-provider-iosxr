@@ -31,19 +31,19 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 const testAccDataSourceIosxrRouterBGPVRFConfig = `
 
 resource "iosxr_router_bgp_vrf" "test" {
-  as_number = "65001"
-  vrf_name = "VRF1"
-  default_information_originate = true
-  default_metric = 125
-  timers_bgp_keepalive_interval = 5
-  timers_bgp_holdtime = "20"
-  bfd_minimum_interval = 10
-  bfd_multiplier = 4
+	as_number = "65001"
+	vrf_name = "VRF1"
+	default_information_originate = true
+	default_metric = 125
+	timers_bgp_keepalive_interval = 5
+	timers_bgp_holdtime = "20"
+	bfd_minimum_interval = 10
+	bfd_multiplier = 4
 }
 
 data "iosxr_router_bgp_vrf" "test" {
-  as_number = "65001"
-  vrf_name = "VRF1"
-  depends_on = [iosxr_router_bgp_vrf.test]
+	as_number = "65001"
+	vrf_name = "VRF1"
+	depends_on = [iosxr_router_bgp_vrf.test]
 }
 `

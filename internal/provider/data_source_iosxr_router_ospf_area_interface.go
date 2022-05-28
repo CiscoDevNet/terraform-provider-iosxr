@@ -33,12 +33,12 @@ func (t dataSourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (t
 			"process_name": {
 				MarkdownDescription: "Name for this OSPF process",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"area_id": {
 				MarkdownDescription: "Enter the OSPF area configuration submode",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"interface_name": {
 				MarkdownDescription: "Enable routing on an interface ",
@@ -102,7 +102,7 @@ type dataSourceRouterOSPFAreaInterface struct {
 }
 
 func (d dataSourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state RouterOSPFAreaInterface
+	var config RouterOSPFAreaInterface
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -119,11 +119,11 @@ func (d dataSourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.R
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

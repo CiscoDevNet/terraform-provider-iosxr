@@ -27,6 +27,9 @@ func (data RouterBGPVRFAddressFamilyNetwork) toBody() string {
 	return body
 }
 
+func (data *RouterBGPVRFAddressFamilyNetwork) updateFromBody(res []byte) {
+}
+
 func (data *RouterBGPVRFAddressFamilyNetwork) fromBody(res []byte) {
 }
 

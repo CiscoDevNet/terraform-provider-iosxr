@@ -25,6 +25,7 @@ data "iosxr_interface_ipv6_address" "example" {
 ### Required
 
 - `address` (String) IPv6 name or address
+- `interface_name` (String) Interface configuration subcommands
 
 ### Optional
 
@@ -33,7 +34,6 @@ data "iosxr_interface_ipv6_address" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `interface_name` (String) Interface configuration subcommands
 - `prefix_length` (Number) Prefix length in bits
 - `zone` (String) IPv6 address zone
 

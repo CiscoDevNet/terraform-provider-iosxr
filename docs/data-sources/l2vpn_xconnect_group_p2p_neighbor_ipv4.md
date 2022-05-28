@@ -27,6 +27,8 @@ data "iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv4" "example" {
 ### Required
 
 - `address` (String) IPv4
+- `group_name` (String) Specify the group the cross connects belong to
+- `p2p_xconnect_name` (String) Configure point to point cross connect commands
 - `pw_id` (Number) Specify the pseudowire id
 
 ### Optional
@@ -35,9 +37,7 @@ data "iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv4" "example" {
 
 ### Read-Only
 
-- `group_name` (String) Specify the group the cross connects belong to
 - `id` (String) The path of the retrieved object.
-- `p2p_xconnect_name` (String) Configure point to point cross connect commands
 - `pw_class` (String) PW class template name to use for this XC
 
 

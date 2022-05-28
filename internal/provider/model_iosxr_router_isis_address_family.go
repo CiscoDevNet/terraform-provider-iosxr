@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterISISAddressFamily struct {
@@ -67,7 +65,7 @@ func (data RouterISISAddressFamily) toBody() string {
 	return body
 }
 
-func (data *RouterISISAddressFamily) fromBody(res []byte) {
+func (data *RouterISISAddressFamily) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
 		data.MplsLdpAutoConfig.Value = true
 	} else {
@@ -102,6 +100,52 @@ func (data *RouterISISAddressFamily) fromBody(res []byte) {
 		data.DefaultInformationOriginate.Value = true
 	} else {
 		data.DefaultInformationOriginate.Value = false
+	}
+}
+
+func (data *RouterISISAddressFamily) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
+		data.MplsLdpAutoConfig.Value = true
+		data.MplsLdpAutoConfig.Null = false
+	} else {
+		data.MplsLdpAutoConfig.Value = false
+		data.MplsLdpAutoConfig.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
+		data.MetricStyleNarrow.Value = true
+		data.MetricStyleNarrow.Null = false
+	} else {
+		data.MetricStyleNarrow.Value = false
+		data.MetricStyleNarrow.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
+		data.MetricStyleWide.Value = true
+		data.MetricStyleWide.Null = false
+	} else {
+		data.MetricStyleWide.Value = false
+		data.MetricStyleWide.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-style.transition"); value.Exists() {
+		data.MetricStyleTransition.Value = true
+		data.MetricStyleTransition.Null = false
+	} else {
+		data.MetricStyleTransition.Value = false
+		data.MetricStyleTransition.Null = false
+	}
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
+		data.RouterIdInterfaceName.Value = value.String()
+		data.RouterIdInterfaceName.Null = false
+	}
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
+		data.RouterIdIpAddress.Value = value.String()
+		data.RouterIdIpAddress.Null = false
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate.Value = true
+		data.DefaultInformationOriginate.Null = false
+	} else {
+		data.DefaultInformationOriginate.Value = false
+		data.DefaultInformationOriginate.Null = false
 	}
 }
 

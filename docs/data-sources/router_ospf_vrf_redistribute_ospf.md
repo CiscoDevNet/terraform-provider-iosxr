@@ -26,6 +26,8 @@ data "iosxr_router_ospf_vrf_redistribute_ospf" "example" {
 ### Required
 
 - `instance_name` (String) Open Shortest Path First (OSPF)
+- `process_name` (String) Name for this OSPF process
+- `vrf_name` (String) Name for this OSPF vrf
 
 ### Optional
 
@@ -38,8 +40,6 @@ data "iosxr_router_ospf_vrf_redistribute_ospf" "example" {
 - `match_internal` (Boolean) Redistribute OSPF internal routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
-- `process_name` (String) Name for this OSPF process
 - `tag` (Number) Set tag for routes redistributed into OSPF
-- `vrf_name` (String) Name for this OSPF vrf
 
 

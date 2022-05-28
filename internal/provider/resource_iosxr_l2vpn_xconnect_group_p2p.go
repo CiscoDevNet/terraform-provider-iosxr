@@ -81,7 +81,7 @@ type resourceL2VPNXconnectGroupP2P struct {
 }
 
 func (r resourceL2VPNXconnectGroupP2P) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
-	var plan, state L2VPNXconnectGroupP2P
+	var plan L2VPNXconnectGroupP2P
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -101,20 +101,24 @@ func (r resourceL2VPNXconnectGroupP2P) Create(ctx context.Context, req tfsdk.Cre
 		return
 	}
 
-	// Read object
-	getResp, diags := r.provider.client.Get(ctx, plan.Device.Value, plan.getPath())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
+	emptyLeafsDelete := plan.getEmptyLeafsDelete()
+	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+
+	for _, i := range emptyLeafsDelete {
+		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(plan)
-	state.Id.Value = plan.getPath()
+	plan.setUnknownValues()
+
+	plan.Id = types.String{Value: plan.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
@@ -136,7 +140,7 @@ func (r resourceL2VPNXconnectGroupP2P) Read(ctx context.Context, req tfsdk.ReadR
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
 
@@ -154,6 +158,13 @@ func (r resourceL2VPNXconnectGroupP2P) Update(ctx context.Context, req tfsdk.Upd
 		return
 	}
 
+	// Read state
+	diags = req.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
 
 	// Update object
@@ -165,20 +176,33 @@ func (r resourceL2VPNXconnectGroupP2P) Update(ctx context.Context, req tfsdk.Upd
 		return
 	}
 
-	// Read object
-	getResp, diags := r.provider.client.Get(ctx, plan.Device.Value, plan.getPath())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
+	plan.setUnknownValues()
+
+	deletedListItems := plan.getDeletedListItems(state)
+	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
+
+	for _, i := range deletedListItems {
+		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(plan)
-	state.Id.Value = plan.Id.Value
+	emptyLeafsDelete := plan.getEmptyLeafsDelete()
+	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+
+	for _, i := range emptyLeafsDelete {
+		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 

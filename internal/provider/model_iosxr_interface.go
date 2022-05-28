@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type Interface struct {
@@ -69,7 +66,7 @@ func (data Interface) toBody() string {
 	return body
 }
 
-func (data *Interface) fromBody(res []byte) {
+func (data *Interface) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
 		data.L2transport.Value = true
 	} else {
@@ -109,6 +106,53 @@ func (data *Interface) fromBody(res []byte) {
 		data.Vrf.Value = value.String()
 	} else {
 		data.Vrf.Null = true
+	}
+}
+
+func (data *Interface) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
+		data.L2transport.Value = true
+		data.L2transport.Null = false
+	} else {
+		data.L2transport.Value = false
+		data.L2transport.Null = false
+	}
+	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
+		data.PointToPoint.Value = true
+		data.PointToPoint.Null = false
+	} else {
+		data.PointToPoint.Value = false
+		data.PointToPoint.Null = false
+	}
+	if value := gjson.GetBytes(res, "sub-interface-type.multipoint"); value.Exists() {
+		data.Multipoint.Value = true
+		data.Multipoint.Null = false
+	} else {
+		data.Multipoint.Value = false
+		data.Multipoint.Null = false
+	}
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown.Value = true
+		data.Shutdown.Null = false
+	} else {
+		data.Shutdown.Value = false
+		data.Shutdown.Null = false
+	}
+	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
+		data.Mtu.Value = value.Int()
+		data.Mtu.Null = false
+	}
+	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
+		data.Bandwidth.Value = value.Int()
+		data.Bandwidth.Null = false
+	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description.Value = value.String()
+		data.Description.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() {
+		data.Vrf.Value = value.String()
+		data.Vrf.Null = false
 	}
 }
 

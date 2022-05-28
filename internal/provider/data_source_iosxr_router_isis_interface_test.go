@@ -33,21 +33,21 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 const testAccDataSourceIosxrRouterISISInterfaceConfig = `
 
 resource "iosxr_router_isis_interface" "test" {
-  process_id = "P1"
-  interface_name = "GigabitEthernet0/0/0/1"
-  circuit_type = "level-1"
-  hello_padding_disable = true
-  hello_padding_sometimes = false
-  priority = 10
-  point_to_point = false
-  passive = false
-  suppressed = false
-  shutdown = false
+	process_id = "P1"
+	interface_name = "GigabitEthernet0/0/0/1"
+	circuit_type = "level-1"
+	hello_padding_disable = true
+	hello_padding_sometimes = false
+	priority = 10
+	point_to_point = false
+	passive = false
+	suppressed = false
+	shutdown = false
 }
 
 data "iosxr_router_isis_interface" "test" {
-  process_id = "P1"
-  interface_name = "GigabitEthernet0/0/0/1"
-  depends_on = [iosxr_router_isis_interface.test]
+	process_id = "P1"
+	interface_name = "GigabitEthernet0/0/0/1"
+	depends_on = [iosxr_router_isis_interface.test]
 }
 `

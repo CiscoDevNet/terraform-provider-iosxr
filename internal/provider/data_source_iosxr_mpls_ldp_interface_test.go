@@ -24,11 +24,11 @@ func TestAccDataSourceIosxrMPLSLDPInterface(t *testing.T) {
 const testAccDataSourceIosxrMPLSLDPInterfaceConfig = `
 
 resource "iosxr_mpls_ldp_interface" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
+	interface_name = "GigabitEthernet0/0/0/1"
 }
 
 data "iosxr_mpls_ldp_interface" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
-  depends_on = [iosxr_mpls_ldp_interface.test]
+	interface_name = "GigabitEthernet0/0/0/1"
+	depends_on = [iosxr_mpls_ldp_interface.test]
 }
 `

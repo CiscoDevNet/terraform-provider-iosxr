@@ -25,6 +25,8 @@ data "iosxr_router_bgp_address_family_redistribute_isis" "example" {
 
 ### Required
 
+- `af_name` (String) Enter Address Family command mode
+- `as_number` (String) bgp as-number
 - `instance_name` (String) ISO IS-IS
 
 ### Optional
@@ -33,8 +35,6 @@ data "iosxr_router_bgp_address_family_redistribute_isis" "example" {
 
 ### Read-Only
 
-- `af_name` (String) Enter Address Family command mode
-- `as_number` (String) bgp as-number
 - `id` (String) The path of the retrieved object.
 - `level_one` (Boolean) Redistribute ISIS level 1 routes
 - `level_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes

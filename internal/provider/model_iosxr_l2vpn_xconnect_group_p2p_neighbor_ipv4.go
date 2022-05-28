@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type L2VPNXconnectGroupP2PNeighborIPv4 struct {
@@ -34,11 +32,18 @@ func (data L2VPNXconnectGroupP2PNeighborIPv4) toBody() string {
 	return body
 }
 
-func (data *L2VPNXconnectGroupP2PNeighborIPv4) fromBody(res []byte) {
+func (data *L2VPNXconnectGroupP2PNeighborIPv4) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "pw-class"); value.Exists() {
 		data.PwClass.Value = value.String()
 	} else {
 		data.PwClass.Null = true
+	}
+}
+
+func (data *L2VPNXconnectGroupP2PNeighborIPv4) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "pw-class"); value.Exists() {
+		data.PwClass.Value = value.String()
+		data.PwClass.Null = false
 	}
 }
 

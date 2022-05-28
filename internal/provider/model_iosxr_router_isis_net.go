@@ -24,6 +24,9 @@ func (data RouterISISNET) toBody() string {
 	return body
 }
 
+func (data *RouterISISNET) updateFromBody(res []byte) {
+}
+
 func (data *RouterISISNET) fromBody(res []byte) {
 }
 

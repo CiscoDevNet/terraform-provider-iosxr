@@ -25,6 +25,7 @@ data "iosxr_router_isis_interface" "example" {
 ### Required
 
 - `interface_name` (String) Enter the IS-IS interface configuration submode
+- `process_id` (String) Process ID
 
 ### Optional
 
@@ -39,7 +40,6 @@ data "iosxr_router_isis_interface" "example" {
 - `passive` (Boolean) Do not establish adjacencies over this interface
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
-- `process_id` (String) Process ID
 - `shutdown` (Boolean) Shutdown IS-IS on this interface
 - `suppressed` (Boolean) Do not advertise connected prefixes of this interface
 

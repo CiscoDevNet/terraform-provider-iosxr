@@ -28,18 +28,18 @@ func TestAccDataSourceIosxrL2VPNXconnectGroupP2PNeighborIPv6(t *testing.T) {
 const testAccDataSourceIosxrL2VPNXconnectGroupP2PNeighborIPv6Config = `
 
 resource "iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6" "test" {
-  group_name = "P2P"
-  p2p_xconnect_name = "XC"
-  address = "2001::2"
-  pw_id = 2
-  pw_class = "PW_CLASS_1"
+	group_name = "P2P"
+	p2p_xconnect_name = "XC"
+	address = "2001::2"
+	pw_id = 2
+	pw_class = "PW_CLASS_1"
 }
 
 data "iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6" "test" {
-  group_name = "P2P"
-  p2p_xconnect_name = "XC"
-  address = "2001::2"
-  pw_id = 2
-  depends_on = [iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6.test]
+	group_name = "P2P"
+	p2p_xconnect_name = "XC"
+	address = "2001::2"
+	pw_id = 2
+	depends_on = [iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6.test]
 }
 `

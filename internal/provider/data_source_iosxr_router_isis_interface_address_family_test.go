@@ -24,17 +24,17 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 const testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig = `
 
 resource "iosxr_router_isis_interface_address_family" "test" {
-  process_id = "P1"
-  interface_name = "GigabitEthernet0/0/0/1"
-  af_name = "ipv4"
-  saf_name = "unicast"
+	process_id = "P1"
+	interface_name = "GigabitEthernet0/0/0/1"
+	af_name = "ipv4"
+	saf_name = "unicast"
 }
 
 data "iosxr_router_isis_interface_address_family" "test" {
-  process_id = "P1"
-  interface_name = "GigabitEthernet0/0/0/1"
-  af_name = "ipv4"
-  saf_name = "unicast"
-  depends_on = [iosxr_router_isis_interface_address_family.test]
+	process_id = "P1"
+	interface_name = "GigabitEthernet0/0/0/1"
+	af_name = "ipv4"
+	saf_name = "unicast"
+	depends_on = [iosxr_router_isis_interface_address_family.test]
 }
 `

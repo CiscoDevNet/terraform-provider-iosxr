@@ -33,12 +33,12 @@ func (t dataSourceRouterOSPFVRFRedistributeISISType) GetSchema(ctx context.Conte
 			"process_name": {
 				MarkdownDescription: "Name for this OSPF process",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"vrf_name": {
 				MarkdownDescription: "Name for this OSPF vrf",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"instance_name": {
 				MarkdownDescription: "ISO IS-IS",
@@ -87,7 +87,7 @@ type dataSourceRouterOSPFVRFRedistributeISIS struct {
 }
 
 func (d dataSourceRouterOSPFVRFRedistributeISIS) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state RouterOSPFVRFRedistributeISIS
+	var config RouterOSPFVRFRedistributeISIS
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -104,11 +104,11 @@ func (d dataSourceRouterOSPFVRFRedistributeISIS) Read(ctx context.Context, req t
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

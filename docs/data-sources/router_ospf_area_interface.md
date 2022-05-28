@@ -25,7 +25,9 @@ data "iosxr_router_ospf_area_interface" "example" {
 
 ### Required
 
+- `area_id` (String) Enter the OSPF area configuration submode
 - `interface_name` (String) Enable routing on an interface
+- `process_name` (String) Name for this OSPF process
 
 ### Optional
 
@@ -33,7 +35,6 @@ data "iosxr_router_ospf_area_interface" "example" {
 
 ### Read-Only
 
-- `area_id` (String) Enter the OSPF area configuration submode
 - `cost` (Number) Interface cost
 - `id` (String) The path of the retrieved object.
 - `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
@@ -43,6 +44,5 @@ data "iosxr_router_ospf_area_interface" "example" {
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
-- `process_name` (String) Name for this OSPF process
 
 

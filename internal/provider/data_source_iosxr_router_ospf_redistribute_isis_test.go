@@ -30,18 +30,18 @@ func TestAccDataSourceIosxrRouterOSPFRedistributeISIS(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFRedistributeISISConfig = `
 
 resource "iosxr_router_ospf_redistribute_isis" "test" {
-  process_name = "OSPF1"
-  instance_name = "P1"
-  level_1 = true
-  level_2 = false
-  level_1_2 = false
-  tag = 3
-  metric_type = "1"
+	process_name = "OSPF1"
+	instance_name = "P1"
+	level_1 = true
+	level_2 = false
+	level_1_2 = false
+	tag = 3
+	metric_type = "1"
 }
 
 data "iosxr_router_ospf_redistribute_isis" "test" {
-  process_name = "OSPF1"
-  instance_name = "P1"
-  depends_on = [iosxr_router_ospf_redistribute_isis.test]
+	process_name = "OSPF1"
+	instance_name = "P1"
+	depends_on = [iosxr_router_ospf_redistribute_isis.test]
 }
 `

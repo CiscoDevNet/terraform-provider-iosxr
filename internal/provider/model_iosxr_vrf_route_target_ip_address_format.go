@@ -29,6 +29,9 @@ func (data VRFRouteTargetIPAddressFormat) toBody() string {
 	return body
 }
 
+func (data *VRFRouteTargetIPAddressFormat) updateFromBody(res []byte) {
+}
+
 func (data *VRFRouteTargetIPAddressFormat) fromBody(res []byte) {
 }
 

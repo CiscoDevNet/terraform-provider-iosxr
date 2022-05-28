@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGP struct {
@@ -55,7 +52,7 @@ func (data RouterBGP) toBody() string {
 	return body
 }
 
-func (data *RouterBGP) fromBody(res []byte) {
+func (data *RouterBGP) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate.Value = true
 	} else {
@@ -85,6 +82,36 @@ func (data *RouterBGP) fromBody(res []byte) {
 		data.BfdMultiplier.Value = value.Int()
 	} else {
 		data.BfdMultiplier.Null = true
+	}
+}
+
+func (data *RouterBGP) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate.Value = true
+		data.DefaultInformationOriginate.Null = false
+	} else {
+		data.DefaultInformationOriginate.Value = false
+		data.DefaultInformationOriginate.Null = false
+	}
+	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
+		data.DefaultMetric.Value = value.Int()
+		data.DefaultMetric.Null = false
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
+		data.TimersBgpKeepaliveInterval.Value = value.Int()
+		data.TimersBgpKeepaliveInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
+		data.TimersBgpHoldtime.Value = value.String()
+		data.TimersBgpHoldtime.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval.Value = value.Int()
+		data.BfdMinimumInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier.Value = value.Int()
+		data.BfdMultiplier.Null = false
 	}
 }
 

@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGPNeighbor struct {
@@ -106,7 +103,7 @@ func (data RouterBGPNeighbor) toBody() string {
 	return body
 }
 
-func (data *RouterBGPNeighbor) fromBody(res []byte) {
+func (data *RouterBGPNeighbor) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs.Value = value.String()
 	} else {
@@ -186,6 +183,91 @@ func (data *RouterBGPNeighbor) fromBody(res []byte) {
 		data.TtlSecurity.Value = true
 	} else {
 		data.TtlSecurity.Value = false
+	}
+}
+
+func (data *RouterBGPNeighbor) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
+		data.RemoteAs.Value = value.String()
+		data.RemoteAs.Null = false
+	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description.Value = value.String()
+		data.Description.Null = false
+	}
+	if value := gjson.GetBytes(res, "ignore-connected-check"); value.Exists() {
+		data.IgnoreConnectedCheck.Value = true
+		data.IgnoreConnectedCheck.Null = false
+	} else {
+		data.IgnoreConnectedCheck.Value = false
+		data.IgnoreConnectedCheck.Null = false
+	}
+	if value := gjson.GetBytes(res, "ebgp-multihop.maximum-hop-count"); value.Exists() {
+		data.EbgpMultihopMaximumHopCount.Value = value.Int()
+		data.EbgpMultihopMaximumHopCount.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval.Value = value.Int()
+		data.BfdMinimumInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier.Value = value.Int()
+		data.BfdMultiplier.Null = false
+	}
+	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
+		data.LocalAs.Value = value.String()
+		data.LocalAs.Null = false
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend.Value = true
+		data.LocalAsNoPrepend.Null = false
+	} else {
+		data.LocalAsNoPrepend.Value = false
+		data.LocalAsNoPrepend.Null = false
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
+		data.LocalAsReplaceAs.Value = true
+		data.LocalAsReplaceAs.Null = false
+	} else {
+		data.LocalAsReplaceAs.Value = false
+		data.LocalAsReplaceAs.Null = false
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
+		data.LocalAsDualAs.Value = true
+		data.LocalAsDualAs.Null = false
+	} else {
+		data.LocalAsDualAs.Value = false
+		data.LocalAsDualAs.Null = false
+	}
+	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
+		data.Password.Value = value.String()
+		data.Password.Null = false
+	}
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown.Value = true
+		data.Shutdown.Null = false
+	} else {
+		data.Shutdown.Value = false
+		data.Shutdown.Null = false
+	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval.Value = value.Int()
+		data.TimersKeepaliveInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
+		data.TimersHoldtime.Value = value.String()
+		data.TimersHoldtime.Null = false
+	}
+	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
+		data.UpdateSource.Value = value.String()
+		data.UpdateSource.Null = false
+	}
+	if value := gjson.GetBytes(res, "ttl-security"); value.Exists() {
+		data.TtlSecurity.Value = true
+		data.TtlSecurity.Null = false
+	} else {
+		data.TtlSecurity.Value = false
+		data.TtlSecurity.Null = false
 	}
 }
 

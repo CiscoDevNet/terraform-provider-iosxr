@@ -25,6 +25,7 @@ data "iosxr_router_ospf_redistribute_bgp" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
+- `process_name` (String) Name for this OSPF process
 
 ### Optional
 
@@ -34,7 +35,6 @@ data "iosxr_router_ospf_redistribute_bgp" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
-- `process_name` (String) Name for this OSPF process
 - `tag` (Number) Set tag for routes redistributed into OSPF
 
 

@@ -67,7 +67,7 @@ type dataSourceOCSystemConfig struct {
 }
 
 func (d dataSourceOCSystemConfig) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state OCSystemConfig
+	var config OCSystemConfig
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -84,11 +84,11 @@ func (d dataSourceOCSystemConfig) Read(ctx context.Context, req tfsdk.ReadDataSo
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

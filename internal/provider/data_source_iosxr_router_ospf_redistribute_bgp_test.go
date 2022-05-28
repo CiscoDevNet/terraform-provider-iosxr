@@ -27,15 +27,15 @@ func TestAccDataSourceIosxrRouterOSPFRedistributeBGP(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFRedistributeBGPConfig = `
 
 resource "iosxr_router_ospf_redistribute_bgp" "test" {
-  process_name = "OSPF1"
-  as_number = "65001"
-  tag = 3
-  metric_type = "1"
+	process_name = "OSPF1"
+	as_number = "65001"
+	tag = 3
+	metric_type = "1"
 }
 
 data "iosxr_router_ospf_redistribute_bgp" "test" {
-  process_name = "OSPF1"
-  as_number = "65001"
-  depends_on = [iosxr_router_ospf_redistribute_bgp.test]
+	process_name = "OSPF1"
+	as_number = "65001"
+	depends_on = [iosxr_router_ospf_redistribute_bgp.test]
 }
 `

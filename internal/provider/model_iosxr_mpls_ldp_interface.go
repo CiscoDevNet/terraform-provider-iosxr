@@ -23,6 +23,9 @@ func (data MPLSLDPInterface) toBody() string {
 	return body
 }
 
+func (data *MPLSLDPInterface) updateFromBody(res []byte) {
+}
+
 func (data *MPLSLDPInterface) fromBody(res []byte) {
 }
 

@@ -32,31 +32,31 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-  attributes = {
-  }
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-  path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
-  attributes = {
-      as-number = "1"
-      index = "1"
-  }
-  depends_on = [iosxr_gnmi.PreReq0, ]
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
+	attributes = {
+		as-number = "1"
+		index = "1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-  attributes = {
-  }
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+	}
 }
 
 resource "iosxr_gnmi" "PreReq3" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
-  attributes = {
-  }
-  depends_on = [iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	attributes = {
+	}
+	depends_on = [iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 }
 
 `
@@ -64,24 +64,24 @@ resource "iosxr_gnmi" "PreReq3" {
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_vrf_address_family" "test" {
-  as_number = "65001"
-  vrf_name = "VRF1"
-  af_name = "ipv4-unicast"
-  maximum_paths_ebgp_multipath = 10
-  maximum_paths_ibgp_multipath = 10
-  label_mode_per_ce = false
-  label_mode_per_vrf = false
-  redistribute_connected = true
-  redistribute_connected_metric = 10
-  redistribute_static = true
-  redistribute_static_metric = 10
-  depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
+	as_number = "65001"
+	vrf_name = "VRF1"
+	af_name = "ipv4-unicast"
+	maximum_paths_ebgp_multipath = 10
+	maximum_paths_ibgp_multipath = 10
+	label_mode_per_ce = false
+	label_mode_per_vrf = false
+	redistribute_connected = true
+	redistribute_connected_metric = 10
+	redistribute_static = true
+	redistribute_static_metric = 10
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
 }
 
 data "iosxr_router_bgp_vrf_address_family" "test" {
-  as_number = "65001"
-  vrf_name = "VRF1"
-  af_name = "ipv4-unicast"
-  depends_on = [iosxr_router_bgp_vrf_address_family.test]
+	as_number = "65001"
+	vrf_name = "VRF1"
+	af_name = "ipv4-unicast"
+	depends_on = [iosxr_router_bgp_vrf_address_family.test]
 }
 `

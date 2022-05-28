@@ -26,6 +26,9 @@ func (data RouterISISInterfaceAddressFamily) toBody() string {
 	return body
 }
 
+func (data *RouterISISInterfaceAddressFamily) updateFromBody(res []byte) {
+}
+
 func (data *RouterISISInterfaceAddressFamily) fromBody(res []byte) {
 }
 

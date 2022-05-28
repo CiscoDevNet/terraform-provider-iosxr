@@ -27,11 +27,11 @@ func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 const testAccDataSourceIosxrBGPASFormatConfig = `
 
 resource "iosxr_bgp_as_format" "test" {
-  asdot = false
-  asplain = true
+	asdot = false
+	asplain = true
 }
 
 data "iosxr_bgp_as_format" "test" {
-  depends_on = [iosxr_bgp_as_format.test]
+	depends_on = [iosxr_bgp_as_format.test]
 }
 `

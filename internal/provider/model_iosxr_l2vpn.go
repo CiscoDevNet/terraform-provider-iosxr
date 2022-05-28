@@ -4,10 +4,8 @@ package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type L2VPN struct {
@@ -32,7 +30,7 @@ func (data L2VPN) toBody() string {
 	return body
 }
 
-func (data *L2VPN) fromBody(res []byte) {
+func (data *L2VPN) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
 	} else {
@@ -42,6 +40,17 @@ func (data *L2VPN) fromBody(res []byte) {
 		data.RouterId.Value = value.String()
 	} else {
 		data.RouterId.Null = true
+	}
+}
+
+func (data *L2VPN) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description.Value = value.String()
+		data.Description.Null = false
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId.Value = value.String()
+		data.RouterId.Null = false
 	}
 }
 

@@ -29,6 +29,9 @@ func (data VRFRouteTargetFourByteASFormat) toBody() string {
 	return body
 }
 
+func (data *VRFRouteTargetFourByteASFormat) updateFromBody(res []byte) {
+}
+
 func (data *VRFRouteTargetFourByteASFormat) fromBody(res []byte) {
 }
 

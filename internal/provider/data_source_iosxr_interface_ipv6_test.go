@@ -29,15 +29,15 @@ func TestAccDataSourceIosxrInterfaceIPv6(t *testing.T) {
 const testAccDataSourceIosxrInterfaceIPv6Config = `
 
 resource "iosxr_interface_ipv6" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
-  link_local_address = "fe80::1"
-  link_local_zone = "0"
-  autoconfig = false
-  enable = true
+	interface_name = "GigabitEthernet0/0/0/1"
+	link_local_address = "fe80::1"
+	link_local_zone = "0"
+	autoconfig = false
+	enable = true
 }
 
 data "iosxr_interface_ipv6" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
-  depends_on = [iosxr_interface_ipv6.test]
+	interface_name = "GigabitEthernet0/0/0/1"
+	depends_on = [iosxr_interface_ipv6.test]
 }
 `

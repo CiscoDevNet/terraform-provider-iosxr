@@ -26,12 +26,12 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 const testAccDataSourceIosxrRouterISISConfig = `
 
 resource "iosxr_router_isis" "test" {
-  process_id = "P1"
-  is_type = "level-1"
+	process_id = "P1"
+	is_type = "level-1"
 }
 
 data "iosxr_router_isis" "test" {
-  process_id = "P1"
-  depends_on = [iosxr_router_isis.test]
+	process_id = "P1"
+	depends_on = [iosxr_router_isis.test]
 }
 `

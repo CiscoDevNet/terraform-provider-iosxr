@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterISISInterface struct {
@@ -74,7 +71,7 @@ func (data RouterISISInterface) toBody() string {
 	return body
 }
 
-func (data *RouterISISInterface) fromBody(res []byte) {
+func (data *RouterISISInterface) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType.Value = value.String()
 	} else {
@@ -114,6 +111,59 @@ func (data *RouterISISInterface) fromBody(res []byte) {
 		data.Shutdown.Value = true
 	} else {
 		data.Shutdown.Value = false
+	}
+}
+
+func (data *RouterISISInterface) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
+		data.CircuitType.Value = value.String()
+		data.CircuitType.Null = false
+	}
+	if value := gjson.GetBytes(res, "hello-padding.disable"); value.Exists() {
+		data.HelloPaddingDisable.Value = true
+		data.HelloPaddingDisable.Null = false
+	} else {
+		data.HelloPaddingDisable.Value = false
+		data.HelloPaddingDisable.Null = false
+	}
+	if value := gjson.GetBytes(res, "hello-padding.sometimes"); value.Exists() {
+		data.HelloPaddingSometimes.Value = true
+		data.HelloPaddingSometimes.Null = false
+	} else {
+		data.HelloPaddingSometimes.Value = false
+		data.HelloPaddingSometimes.Null = false
+	}
+	if value := gjson.GetBytes(res, "priority.priority-value"); value.Exists() {
+		data.Priority.Value = value.Int()
+		data.Priority.Null = false
+	}
+	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
+		data.PointToPoint.Value = true
+		data.PointToPoint.Null = false
+	} else {
+		data.PointToPoint.Value = false
+		data.PointToPoint.Null = false
+	}
+	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		data.Passive.Value = true
+		data.Passive.Null = false
+	} else {
+		data.Passive.Value = false
+		data.Passive.Null = false
+	}
+	if value := gjson.GetBytes(res, "suppressed"); value.Exists() {
+		data.Suppressed.Value = true
+		data.Suppressed.Null = false
+	} else {
+		data.Suppressed.Value = false
+		data.Suppressed.Null = false
+	}
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown.Value = true
+		data.Shutdown.Null = false
+	} else {
+		data.Shutdown.Value = false
+		data.Shutdown.Null = false
 	}
 }
 

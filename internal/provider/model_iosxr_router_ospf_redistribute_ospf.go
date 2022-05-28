@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterOSPFRedistributeOSPF struct {
@@ -56,7 +53,7 @@ func (data RouterOSPFRedistributeOSPF) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFRedistributeOSPF) fromBody(res []byte) {
+func (data *RouterOSPFRedistributeOSPF) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
 		data.MatchInternal.Value = true
 	} else {
@@ -81,6 +78,38 @@ func (data *RouterOSPFRedistributeOSPF) fromBody(res []byte) {
 		data.MetricType.Value = value.String()
 	} else {
 		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFRedistributeOSPF) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "match.internal"); value.Exists() {
+		data.MatchInternal.Value = true
+		data.MatchInternal.Null = false
+	} else {
+		data.MatchInternal.Value = false
+		data.MatchInternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.external"); value.Exists() {
+		data.MatchExternal.Value = true
+		data.MatchExternal.Null = false
+	} else {
+		data.MatchExternal.Value = false
+		data.MatchExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "match.nssa-external"); value.Exists() {
+		data.MatchNssaExternal.Value = true
+		data.MatchNssaExternal.Null = false
+	} else {
+		data.MatchNssaExternal.Value = false
+		data.MatchNssaExternal.Null = false
+	}
+	if value := gjson.GetBytes(res, "tag"); value.Exists() {
+		data.Tag.Value = value.Int()
+		data.Tag.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
+		data.MetricType.Value = value.String()
+		data.MetricType.Null = false
 	}
 }
 

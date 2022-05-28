@@ -26,10 +26,10 @@ func TestAccDataSourceIosxrOCSystemConfig(t *testing.T) {
 const testAccDataSourceIosxrOCSystemConfigConfig = `
 
 resource "iosxr_oc_system_config" "test" {
-  hostname = "ROUTER-1"
+	hostname = "ROUTER-1"
 }
 
 data "iosxr_oc_system_config" "test" {
-  depends_on = [iosxr_oc_system_config.test]
+	depends_on = [iosxr_oc_system_config.test]
 }
 `

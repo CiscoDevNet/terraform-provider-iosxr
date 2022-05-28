@@ -66,11 +66,9 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
       items = [
         {{- range .Items}}
           {
-            attributes = {
 			{{- range .Attributes}}
-				{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+			{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
 			{{- end}}
-            }
           },
         {{- end}}
       ] 
@@ -93,11 +91,11 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- if or (eq .Reference true) (eq .Id true) (eq .Mandatory true)}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
-		{{- range  .Attributes}}
-		{{- if ne .ExcludeTest true}}
-		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-		{{- end}}
-		{{- end}}
+			{{- range  .Attributes}}
+			{{- if ne .ExcludeTest true}}
+			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+			{{- end}}
+			{{- end}}
 		}]
 	{{- else}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
@@ -118,11 +116,11 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	{{- if ne .ExcludeTest true}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
-		{{- range  .Attributes}}
-		{{- if ne .ExcludeTest true}}
-		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
-		{{- end}}
-		{{- end}}
+			{{- range  .Attributes}}
+			{{- if ne .ExcludeTest true}}
+			{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
+			{{- end}}
+			{{- end}}
 		}]
 	{{- else}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}

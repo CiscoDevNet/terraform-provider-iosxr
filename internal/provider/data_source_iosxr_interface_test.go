@@ -33,19 +33,19 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 const testAccDataSourceIosxrInterfaceConfig = `
 
 resource "iosxr_interface" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
-  l2transport = false
-  point_to_point = false
-  multipoint = false
-  shutdown = true
-  mtu = 9000
-  bandwidth = 100000
-  description = "My Interface Description"
-  vrf = "VRF1"
+	interface_name = "GigabitEthernet0/0/0/1"
+	l2transport = false
+	point_to_point = false
+	multipoint = false
+	shutdown = true
+	mtu = 9000
+	bandwidth = 100000
+	description = "My Interface Description"
+	vrf = "VRF1"
 }
 
 data "iosxr_interface" "test" {
-  interface_name = "GigabitEthernet0/0/0/1"
-  depends_on = [iosxr_interface.test]
+	interface_name = "GigabitEthernet0/0/0/1"
+	depends_on = [iosxr_interface.test]
 }
 `

@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGPVRFAddressFamilyAggregateAddress struct {
@@ -49,7 +47,7 @@ func (data RouterBGPVRFAddressFamilyAggregateAddress) toBody() string {
 	return body
 }
 
-func (data *RouterBGPVRFAddressFamilyAggregateAddress) fromBody(res []byte) {
+func (data *RouterBGPVRFAddressFamilyAggregateAddress) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "as-set"); value.Exists() {
 		data.AsSet.Value = true
 	} else {
@@ -64,6 +62,30 @@ func (data *RouterBGPVRFAddressFamilyAggregateAddress) fromBody(res []byte) {
 		data.SummaryOnly.Value = true
 	} else {
 		data.SummaryOnly.Value = false
+	}
+}
+
+func (data *RouterBGPVRFAddressFamilyAggregateAddress) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "as-set"); value.Exists() {
+		data.AsSet.Value = true
+		data.AsSet.Null = false
+	} else {
+		data.AsSet.Value = false
+		data.AsSet.Null = false
+	}
+	if value := gjson.GetBytes(res, "as-confed-set"); value.Exists() {
+		data.AsConfedSet.Value = true
+		data.AsConfedSet.Null = false
+	} else {
+		data.AsConfedSet.Value = false
+		data.AsConfedSet.Null = false
+	}
+	if value := gjson.GetBytes(res, "summary-only"); value.Exists() {
+		data.SummaryOnly.Value = true
+		data.SummaryOnly.Null = false
+	} else {
+		data.SummaryOnly.Value = false
+		data.SummaryOnly.Null = false
 	}
 }
 

@@ -24,6 +24,7 @@ data "iosxr_router_ospf_vrf" "example" {
 
 ### Required
 
+- `process_name` (String) Name for this OSPF process
 - `vrf_name` (String) Name for this OSPF vrf
 
 ### Optional
@@ -47,7 +48,6 @@ data "iosxr_router_ospf_vrf" "example" {
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
-- `process_name` (String) Name for this OSPF process
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric_type` (String) OSPF exterior metric type for redistributed routes
 - `redistribute_connected_tag` (Number) Set tag for routes redistributed into OSPF

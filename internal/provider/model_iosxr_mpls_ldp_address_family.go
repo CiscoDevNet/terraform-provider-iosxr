@@ -23,6 +23,9 @@ func (data MPLSLDPAddressFamily) toBody() string {
 	return body
 }
 
+func (data *MPLSLDPAddressFamily) updateFromBody(res []byte) {
+}
+
 func (data *MPLSLDPAddressFamily) fromBody(res []byte) {
 }
 

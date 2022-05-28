@@ -26,6 +26,8 @@ data "iosxr_router_ospf_vrf_area" "example" {
 ### Required
 
 - `area_id` (String) Enter the OSPF area configuration submode
+- `process_name` (String) Name for this OSPF process
+- `vrf_name` (String) Name for this OSPF vrf
 
 ### Optional
 
@@ -34,7 +36,5 @@ data "iosxr_router_ospf_vrf_area" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `process_name` (String) Name for this OSPF process
-- `vrf_name` (String) Name for this OSPF vrf
 
 

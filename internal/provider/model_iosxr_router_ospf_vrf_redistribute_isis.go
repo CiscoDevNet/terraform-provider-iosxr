@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterOSPFVRFRedistributeISIS struct {
@@ -57,7 +54,7 @@ func (data RouterOSPFVRFRedistributeISIS) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFVRFRedistributeISIS) fromBody(res []byte) {
+func (data *RouterOSPFVRFRedistributeISIS) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "level-1"); value.Exists() {
 		data.Level1.Value = true
 	} else {
@@ -82,6 +79,38 @@ func (data *RouterOSPFVRFRedistributeISIS) fromBody(res []byte) {
 		data.MetricType.Value = value.String()
 	} else {
 		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFVRFRedistributeISIS) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "level-1"); value.Exists() {
+		data.Level1.Value = true
+		data.Level1.Null = false
+	} else {
+		data.Level1.Value = false
+		data.Level1.Null = false
+	}
+	if value := gjson.GetBytes(res, "level-2"); value.Exists() {
+		data.Level2.Value = true
+		data.Level2.Null = false
+	} else {
+		data.Level2.Value = false
+		data.Level2.Null = false
+	}
+	if value := gjson.GetBytes(res, "level-1-2"); value.Exists() {
+		data.Level12.Value = true
+		data.Level12.Null = false
+	} else {
+		data.Level12.Value = false
+		data.Level12.Null = false
+	}
+	if value := gjson.GetBytes(res, "tag"); value.Exists() {
+		data.Tag.Value = value.Int()
+		data.Tag.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
+		data.MetricType.Value = value.String()
+		data.MetricType.Null = false
 	}
 }
 

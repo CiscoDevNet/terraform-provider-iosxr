@@ -24,17 +24,17 @@ func TestAccDataSourceIosxrRouterBGPAddressFamilyNetwork(t *testing.T) {
 const testAccDataSourceIosxrRouterBGPAddressFamilyNetworkConfig = `
 
 resource "iosxr_router_bgp_address_family_network" "test" {
-  as_number = "65001"
-  af_name = "ipv4-unicast"
-  address = "10.1.0.0"
-  masklength = 16
+	as_number = "65001"
+	af_name = "ipv4-unicast"
+	address = "10.1.0.0"
+	masklength = 16
 }
 
 data "iosxr_router_bgp_address_family_network" "test" {
-  as_number = "65001"
-  af_name = "ipv4-unicast"
-  address = "10.1.0.0"
-  masklength = 16
-  depends_on = [iosxr_router_bgp_address_family_network.test]
+	as_number = "65001"
+	af_name = "ipv4-unicast"
+	address = "10.1.0.0"
+	masklength = 16
+	depends_on = [iosxr_router_bgp_address_family_network.test]
 }
 `

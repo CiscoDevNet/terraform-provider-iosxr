@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterOSPFAreaInterface struct {
@@ -75,7 +72,7 @@ func (data RouterOSPFAreaInterface) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFAreaInterface) fromBody(res []byte) {
+func (data *RouterOSPFAreaInterface) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast.Value = true
 	} else {
@@ -115,6 +112,59 @@ func (data *RouterOSPFAreaInterface) fromBody(res []byte) {
 		data.PassiveDisable.Value = true
 	} else {
 		data.PassiveDisable.Value = false
+	}
+}
+
+func (data *RouterOSPFAreaInterface) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
+		data.NetworkBroadcast.Value = true
+		data.NetworkBroadcast.Null = false
+	} else {
+		data.NetworkBroadcast.Value = false
+		data.NetworkBroadcast.Null = false
+	}
+	if value := gjson.GetBytes(res, "network.non-broadcast"); value.Exists() {
+		data.NetworkNonBroadcast.Value = true
+		data.NetworkNonBroadcast.Null = false
+	} else {
+		data.NetworkNonBroadcast.Value = false
+		data.NetworkNonBroadcast.Null = false
+	}
+	if value := gjson.GetBytes(res, "network.point-to-point"); value.Exists() {
+		data.NetworkPointToPoint.Value = true
+		data.NetworkPointToPoint.Null = false
+	} else {
+		data.NetworkPointToPoint.Value = false
+		data.NetworkPointToPoint.Null = false
+	}
+	if value := gjson.GetBytes(res, "network.point-to-multipoint"); value.Exists() {
+		data.NetworkPointToMultipoint.Value = true
+		data.NetworkPointToMultipoint.Null = false
+	} else {
+		data.NetworkPointToMultipoint.Value = false
+		data.NetworkPointToMultipoint.Null = false
+	}
+	if value := gjson.GetBytes(res, "cost"); value.Exists() {
+		data.Cost.Value = value.Int()
+		data.Cost.Null = false
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority.Value = value.Int()
+		data.Priority.Null = false
+	}
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable.Value = true
+		data.PassiveEnable.Null = false
+	} else {
+		data.PassiveEnable.Value = false
+		data.PassiveEnable.Null = false
+	}
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable.Value = true
+		data.PassiveDisable.Null = false
+	} else {
+		data.PassiveDisable.Value = false
+		data.PassiveDisable.Null = false
 	}
 }
 

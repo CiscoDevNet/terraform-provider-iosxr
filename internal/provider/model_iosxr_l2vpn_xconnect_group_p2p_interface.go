@@ -25,6 +25,9 @@ func (data L2VPNXconnectGroupP2PInterface) toBody() string {
 	return body
 }
 
+func (data *L2VPNXconnectGroupP2PInterface) updateFromBody(res []byte) {
+}
+
 func (data *L2VPNXconnectGroupP2PInterface) fromBody(res []byte) {
 }
 

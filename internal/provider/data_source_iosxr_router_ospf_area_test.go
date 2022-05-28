@@ -24,13 +24,13 @@ func TestAccDataSourceIosxrRouterOSPFArea(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFAreaConfig = `
 
 resource "iosxr_router_ospf_area" "test" {
-  process_name = "OSPF1"
-  area_id = "0"
+	process_name = "OSPF1"
+	area_id = "0"
 }
 
 data "iosxr_router_ospf_area" "test" {
-  process_name = "OSPF1"
-  area_id = "0"
-  depends_on = [iosxr_router_ospf_area.test]
+	process_name = "OSPF1"
+	area_id = "0"
+	depends_on = [iosxr_router_ospf_area.test]
 }
 `

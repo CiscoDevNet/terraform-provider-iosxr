@@ -24,6 +24,7 @@ data "iosxr_router_bgp_vrf" "example" {
 
 ### Required
 
+- `as_number` (String) bgp as-number
 - `vrf_name` (String) Specify a vrf name
 
 ### Optional
@@ -32,7 +33,6 @@ data "iosxr_router_bgp_vrf" "example" {
 
 ### Read-Only
 
-- `as_number` (String) bgp as-number
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `default_information_originate` (Boolean) Distribute a default route

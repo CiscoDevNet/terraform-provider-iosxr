@@ -30,18 +30,18 @@ func TestAccDataSourceIosxrRouterOSPFRedistributeOSPF(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFRedistributeOSPFConfig = `
 
 resource "iosxr_router_ospf_redistribute_ospf" "test" {
-  process_name = "OSPF1"
-  instance_name = "OSPF2"
-  match_internal = true
-  match_external = false
-  match_nssa_external = false
-  tag = 4
-  metric_type = "1"
+	process_name = "OSPF1"
+	instance_name = "OSPF2"
+	match_internal = true
+	match_external = false
+	match_nssa_external = false
+	tag = 4
+	metric_type = "1"
 }
 
 data "iosxr_router_ospf_redistribute_ospf" "test" {
-  process_name = "OSPF1"
-  instance_name = "OSPF2"
-  depends_on = [iosxr_router_ospf_redistribute_ospf.test]
+	process_name = "OSPF1"
+	instance_name = "OSPF2"
+	depends_on = [iosxr_router_ospf_redistribute_ospf.test]
 }
 `

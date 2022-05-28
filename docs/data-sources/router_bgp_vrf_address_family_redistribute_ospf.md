@@ -26,7 +26,10 @@ data "iosxr_router_bgp_vrf_address_family_redistribute_ospf" "example" {
 
 ### Required
 
+- `af_name` (String) Enter Address Family command mode
+- `as_number` (String) bgp as-number
 - `router_tag` (String) Open Shortest Path First (OSPF)
+- `vrf_name` (String) Specify a vrf name
 
 ### Optional
 
@@ -34,8 +37,6 @@ data "iosxr_router_bgp_vrf_address_family_redistribute_ospf" "example" {
 
 ### Read-Only
 
-- `af_name` (String) Enter Address Family command mode
-- `as_number` (String) bgp as-number
 - `id` (String) The path of the retrieved object.
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_external_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
@@ -44,6 +45,5 @@ data "iosxr_router_bgp_vrf_address_family_redistribute_ospf" "example" {
 - `match_internal_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
-- `vrf_name` (String) Specify a vrf name
 
 

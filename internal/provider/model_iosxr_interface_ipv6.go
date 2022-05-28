@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type InterfaceIPv6 struct {
@@ -47,7 +45,7 @@ func (data InterfaceIPv6) toBody() string {
 	return body
 }
 
-func (data *InterfaceIPv6) fromBody(res []byte) {
+func (data *InterfaceIPv6) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
 		data.LinkLocalAddress.Value = value.String()
 	} else {
@@ -67,6 +65,31 @@ func (data *InterfaceIPv6) fromBody(res []byte) {
 		data.Enable.Value = true
 	} else {
 		data.Enable.Value = false
+	}
+}
+
+func (data *InterfaceIPv6) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
+		data.LinkLocalAddress.Value = value.String()
+		data.LinkLocalAddress.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
+		data.LinkLocalZone.Value = value.String()
+		data.LinkLocalZone.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
+		data.Autoconfig.Value = true
+		data.Autoconfig.Null = false
+	} else {
+		data.Autoconfig.Value = false
+		data.Autoconfig.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		data.Enable.Value = true
+		data.Enable.Null = false
+	} else {
+		data.Enable.Value = false
+		data.Enable.Null = false
 	}
 }
 

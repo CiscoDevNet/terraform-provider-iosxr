@@ -33,12 +33,12 @@ func (t dataSourceRouterBGPAddressFamilyRedistributeOSPFType) GetSchema(ctx cont
 			"as_number": {
 				MarkdownDescription: "bgp as-number",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"af_name": {
 				MarkdownDescription: "Enter Address Family command mode",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"router_tag": {
 				MarkdownDescription: "Open Shortest Path First (OSPF)",
@@ -97,7 +97,7 @@ type dataSourceRouterBGPAddressFamilyRedistributeOSPF struct {
 }
 
 func (d dataSourceRouterBGPAddressFamilyRedistributeOSPF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state RouterBGPAddressFamilyRedistributeOSPF
+	var config RouterBGPAddressFamilyRedistributeOSPF
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -114,11 +114,11 @@ func (d dataSourceRouterBGPAddressFamilyRedistributeOSPF) Read(ctx context.Conte
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

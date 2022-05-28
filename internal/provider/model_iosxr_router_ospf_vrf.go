@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterOSPFVRF struct {
@@ -134,7 +131,7 @@ func (data RouterOSPFVRF) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFVRF) fromBody(res []byte) {
+func (data *RouterOSPFVRF) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync.Value = true
 	} else {
@@ -239,6 +236,123 @@ func (data *RouterOSPFVRF) fromBody(res []byte) {
 		data.DefaultInformationOriginateMetricType.Value = value.Int()
 	} else {
 		data.DefaultInformationOriginateMetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFVRF) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync.Value = true
+		data.MplsLdpSync.Null = false
+	} else {
+		data.MplsLdpSync.Value = false
+		data.MplsLdpSync.Null = false
+	}
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+		data.HelloInterval.Value = value.Int()
+		data.HelloInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
+		data.DeadInterval.Value = value.Int()
+		data.DeadInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority.Value = value.Int()
+		data.Priority.Null = false
+	}
+	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
+		data.MtuIgnoreEnable.Value = true
+		data.MtuIgnoreEnable.Null = false
+	} else {
+		data.MtuIgnoreEnable.Value = false
+		data.MtuIgnoreEnable.Null = false
+	}
+	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
+		data.MtuIgnoreDisable.Value = true
+		data.MtuIgnoreDisable.Null = false
+	} else {
+		data.MtuIgnoreDisable.Value = false
+		data.MtuIgnoreDisable.Null = false
+	}
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable.Value = true
+		data.PassiveEnable.Null = false
+	} else {
+		data.PassiveEnable.Value = false
+		data.PassiveEnable.Null = false
+	}
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable.Value = true
+		data.PassiveDisable.Null = false
+	} else {
+		data.PassiveDisable.Value = false
+		data.PassiveDisable.Null = false
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId.Value = value.String()
+		data.RouterId.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected.Value = true
+		data.RedistributeConnected.Null = false
+	} else {
+		data.RedistributeConnected.Value = false
+		data.RedistributeConnected.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
+		data.RedistributeConnectedTag.Value = value.Int()
+		data.RedistributeConnectedTag.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType.Value = value.String()
+		data.RedistributeConnectedMetricType.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic.Value = true
+		data.RedistributeStatic.Null = false
+	} else {
+		data.RedistributeStatic.Value = false
+		data.RedistributeStatic.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
+		data.RedistributeStaticTag.Value = value.Int()
+		data.RedistributeStaticTag.Null = false
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType.Value = value.String()
+		data.RedistributeStaticMetricType.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect.Value = true
+		data.BfdFastDetect.Null = false
+	} else {
+		data.BfdFastDetect.Value = false
+		data.BfdFastDetect.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval.Value = value.Int()
+		data.BfdMinimumInterval.Null = false
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier.Value = value.Int()
+		data.BfdMultiplier.Null = false
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate.Value = true
+		data.DefaultInformationOriginate.Null = false
+	} else {
+		data.DefaultInformationOriginate.Value = false
+		data.DefaultInformationOriginate.Null = false
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
+		data.DefaultInformationOriginateAlways.Value = true
+		data.DefaultInformationOriginateAlways.Null = false
+	} else {
+		data.DefaultInformationOriginateAlways.Value = false
+		data.DefaultInformationOriginateAlways.Null = false
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
+		data.DefaultInformationOriginateMetricType.Value = value.Int()
+		data.DefaultInformationOriginateMetricType.Null = false
 	}
 }
 

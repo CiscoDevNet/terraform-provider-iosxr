@@ -28,20 +28,20 @@ func TestAccDataSourceIosxrRouterBGPAddressFamilyAggregateAddress(t *testing.T) 
 const testAccDataSourceIosxrRouterBGPAddressFamilyAggregateAddressConfig = `
 
 resource "iosxr_router_bgp_address_family_aggregate_address" "test" {
-  as_number = "65001"
-  af_name = "ipv4-unicast"
-  address = "10.0.0.0"
-  masklength = 8
-  as_set = false
-  as_confed_set = false
-  summary_only = false
+	as_number = "65001"
+	af_name = "ipv4-unicast"
+	address = "10.0.0.0"
+	masklength = 8
+	as_set = false
+	as_confed_set = false
+	summary_only = false
 }
 
 data "iosxr_router_bgp_address_family_aggregate_address" "test" {
-  as_number = "65001"
-  af_name = "ipv4-unicast"
-  address = "10.0.0.0"
-  masklength = 8
-  depends_on = [iosxr_router_bgp_address_family_aggregate_address.test]
+	as_number = "65001"
+	af_name = "ipv4-unicast"
+	address = "10.0.0.0"
+	masklength = 8
+	depends_on = [iosxr_router_bgp_address_family_aggregate_address.test]
 }
 `

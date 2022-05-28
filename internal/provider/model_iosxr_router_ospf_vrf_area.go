@@ -25,6 +25,9 @@ func (data RouterOSPFVRFArea) toBody() string {
 	return body
 }
 
+func (data *RouterOSPFVRFArea) updateFromBody(res []byte) {
+}
+
 func (data *RouterOSPFVRFArea) fromBody(res []byte) {
 }
 

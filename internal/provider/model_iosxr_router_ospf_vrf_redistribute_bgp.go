@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterOSPFVRFRedistributeBGP struct {
@@ -39,7 +36,7 @@ func (data RouterOSPFVRFRedistributeBGP) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFVRFRedistributeBGP) fromBody(res []byte) {
+func (data *RouterOSPFVRFRedistributeBGP) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "tag"); value.Exists() {
 		data.Tag.Value = value.Int()
 	} else {
@@ -49,6 +46,17 @@ func (data *RouterOSPFVRFRedistributeBGP) fromBody(res []byte) {
 		data.MetricType.Value = value.String()
 	} else {
 		data.MetricType.Null = true
+	}
+}
+
+func (data *RouterOSPFVRFRedistributeBGP) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "tag"); value.Exists() {
+		data.Tag.Value = value.Int()
+		data.Tag.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric-type"); value.Exists() {
+		data.MetricType.Value = value.String()
+		data.MetricType.Null = false
 	}
 }
 

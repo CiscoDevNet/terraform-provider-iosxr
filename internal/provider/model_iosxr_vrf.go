@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type VRF struct {
@@ -97,7 +94,7 @@ func (data VRF) toBody() string {
 	return body
 }
 
-func (data *VRF) fromBody(res []byte) {
+func (data *VRF) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
 	} else {
@@ -167,6 +164,83 @@ func (data *VRF) fromBody(res []byte) {
 		data.RdIpAddressIndex.Value = value.Int()
 	} else {
 		data.RdIpAddressIndex.Null = true
+	}
+}
+
+func (data *VRF) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description.Value = value.String()
+		data.Description.Null = false
+	}
+	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
+		data.VpnId.Value = value.String()
+		data.VpnId.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
+		data.AddressFamilyIpv4Unicast.Value = true
+		data.AddressFamilyIpv4Unicast.Null = false
+	} else {
+		data.AddressFamilyIpv4Unicast.Value = false
+		data.AddressFamilyIpv4Unicast.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
+		data.AddressFamilyIpv4Multicast.Value = true
+		data.AddressFamilyIpv4Multicast.Null = false
+	} else {
+		data.AddressFamilyIpv4Multicast.Value = false
+		data.AddressFamilyIpv4Multicast.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
+		data.AddressFamilyIpv4Flowspec.Value = true
+		data.AddressFamilyIpv4Flowspec.Null = false
+	} else {
+		data.AddressFamilyIpv4Flowspec.Value = false
+		data.AddressFamilyIpv4Flowspec.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast"); value.Exists() {
+		data.AddressFamilyIpv6Unicast.Value = true
+		data.AddressFamilyIpv6Unicast.Null = false
+	} else {
+		data.AddressFamilyIpv6Unicast.Value = false
+		data.AddressFamilyIpv6Unicast.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
+		data.AddressFamilyIpv6Multicast.Value = true
+		data.AddressFamilyIpv6Multicast.Null = false
+	} else {
+		data.AddressFamilyIpv6Multicast.Value = false
+		data.AddressFamilyIpv6Multicast.Null = false
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
+		data.AddressFamilyIpv6Flowspec.Value = true
+		data.AddressFamilyIpv6Flowspec.Null = false
+	} else {
+		data.AddressFamilyIpv6Flowspec.Value = false
+		data.AddressFamilyIpv6Flowspec.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number"); value.Exists() {
+		data.RdTwoByteAsAsNumber.Value = value.String()
+		data.RdTwoByteAsAsNumber.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
+		data.RdTwoByteAsIndex.Value = value.Int()
+		data.RdTwoByteAsIndex.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
+		data.RdFourByteAsAsNumber.Value = value.String()
+		data.RdFourByteAsAsNumber.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
+		data.RdFourByteAsIndex.Value = value.Int()
+		data.RdFourByteAsIndex.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
+		data.RdIpAddressIpv4Address.Value = value.String()
+		data.RdIpAddressIpv4Address.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
+		data.RdIpAddressIndex.Value = value.Int()
+		data.RdIpAddressIndex.Null = false
 	}
 }
 

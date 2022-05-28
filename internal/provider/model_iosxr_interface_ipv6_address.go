@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type InterfaceIPv6Address struct {
@@ -38,7 +35,7 @@ func (data InterfaceIPv6Address) toBody() string {
 	return body
 }
 
-func (data *InterfaceIPv6Address) fromBody(res []byte) {
+func (data *InterfaceIPv6Address) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "prefix-length"); value.Exists() {
 		data.PrefixLength.Value = value.Int()
 	} else {
@@ -48,6 +45,17 @@ func (data *InterfaceIPv6Address) fromBody(res []byte) {
 		data.Zone.Value = value.String()
 	} else {
 		data.Zone.Null = true
+	}
+}
+
+func (data *InterfaceIPv6Address) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "prefix-length"); value.Exists() {
+		data.PrefixLength.Value = value.Int()
+		data.PrefixLength.Null = false
+	}
+	if value := gjson.GetBytes(res, "zone"); value.Exists() {
+		data.Zone.Value = value.String()
+		data.Zone.Null = false
 	}
 }
 

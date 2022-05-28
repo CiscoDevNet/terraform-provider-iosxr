@@ -26,10 +26,10 @@ func TestAccDataSourceIosxrHostname(t *testing.T) {
 const testAccDataSourceIosxrHostnameConfig = `
 
 resource "iosxr_hostname" "test" {
-  system_network_name = "ROUTER-1"
+	system_network_name = "ROUTER-1"
 }
 
 data "iosxr_hostname" "test" {
-  depends_on = [iosxr_hostname.test]
+	depends_on = [iosxr_hostname.test]
 }
 `

@@ -4,10 +4,8 @@ package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type MPLSLDP struct {
@@ -28,11 +26,18 @@ func (data MPLSLDP) toBody() string {
 	return body
 }
 
-func (data *MPLSLDP) fromBody(res []byte) {
+func (data *MPLSLDP) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId.Value = value.String()
 	} else {
 		data.RouterId.Null = true
+	}
+}
+
+func (data *MPLSLDP) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId.Value = value.String()
+		data.RouterId.Null = false
 	}
 }
 

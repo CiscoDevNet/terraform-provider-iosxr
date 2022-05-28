@@ -33,7 +33,7 @@ func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfs
 			"group_name": {
 				MarkdownDescription: "Specify the group the cross connects belong to",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"p2p_xconnect_name": {
 				MarkdownDescription: "Configure point to point cross connect commands",
@@ -62,7 +62,7 @@ type dataSourceL2VPNXconnectGroupP2P struct {
 }
 
 func (d dataSourceL2VPNXconnectGroupP2P) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state L2VPNXconnectGroupP2P
+	var config L2VPNXconnectGroupP2P
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -79,11 +79,11 @@ func (d dataSourceL2VPNXconnectGroupP2P) Read(ctx context.Context, req tfsdk.Rea
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

@@ -33,12 +33,12 @@ func (t dataSourceRouterISISInterfaceAddressFamilyType) GetSchema(ctx context.Co
 			"process_id": {
 				MarkdownDescription: "Process ID",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"interface_name": {
 				MarkdownDescription: "Enter the IS-IS interface configuration submode",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"af_name": {
 				MarkdownDescription: "Address family name",
@@ -67,7 +67,7 @@ type dataSourceRouterISISInterfaceAddressFamily struct {
 }
 
 func (d dataSourceRouterISISInterfaceAddressFamily) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state RouterISISInterfaceAddressFamily
+	var config RouterISISInterfaceAddressFamily
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -84,11 +84,11 @@ func (d dataSourceRouterISISInterfaceAddressFamily) Read(ctx context.Context, re
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

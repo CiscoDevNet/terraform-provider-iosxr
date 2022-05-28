@@ -4,10 +4,8 @@ package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type Hostname struct {
@@ -28,11 +26,18 @@ func (data Hostname) toBody() string {
 	return body
 }
 
-func (data *Hostname) fromBody(res []byte) {
+func (data *Hostname) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
 		data.SystemNetworkName.Value = value.String()
 	} else {
 		data.SystemNetworkName.Null = true
+	}
+}
+
+func (data *Hostname) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
+		data.SystemNetworkName.Value = value.String()
+		data.SystemNetworkName.Null = false
 	}
 }
 

@@ -24,11 +24,11 @@ func TestAccDataSourceIosxrMPLSLDPAddressFamily(t *testing.T) {
 const testAccDataSourceIosxrMPLSLDPAddressFamilyConfig = `
 
 resource "iosxr_mpls_ldp_address_family" "test" {
-  af_name = "ipv4"
+	af_name = "ipv4"
 }
 
 data "iosxr_mpls_ldp_address_family" "test" {
-  af_name = "ipv4"
-  depends_on = [iosxr_mpls_ldp_address_family.test]
+	af_name = "ipv4"
+	depends_on = [iosxr_mpls_ldp_address_family.test]
 }
 `

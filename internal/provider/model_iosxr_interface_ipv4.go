@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type InterfaceIPv4 struct {
@@ -39,7 +37,7 @@ func (data InterfaceIPv4) toBody() string {
 	return body
 }
 
-func (data *InterfaceIPv4) fromBody(res []byte) {
+func (data *InterfaceIPv4) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
 		data.Address.Value = value.String()
 	} else {
@@ -54,6 +52,21 @@ func (data *InterfaceIPv4) fromBody(res []byte) {
 		data.Unnumbered.Value = value.String()
 	} else {
 		data.Unnumbered.Null = true
+	}
+}
+
+func (data *InterfaceIPv4) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
+		data.Address.Value = value.String()
+		data.Address.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() {
+		data.Netmask.Value = value.String()
+		data.Netmask.Null = false
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+		data.Unnumbered.Value = value.String()
+		data.Unnumbered.Null = false
 	}
 }
 

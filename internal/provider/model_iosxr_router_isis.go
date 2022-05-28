@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterISIS struct {
@@ -31,11 +29,18 @@ func (data RouterISIS) toBody() string {
 	return body
 }
 
-func (data *RouterISIS) fromBody(res []byte) {
+func (data *RouterISIS) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType.Value = value.String()
 	} else {
 		data.IsType.Null = true
+	}
+}
+
+func (data *RouterISIS) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
+		data.IsType.Value = value.String()
+		data.IsType.Null = false
 	}
 }
 

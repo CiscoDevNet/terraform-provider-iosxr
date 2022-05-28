@@ -26,6 +26,7 @@ data "iosxr_router_isis_address_family" "example" {
 ### Required
 
 - `af_name` (String) Address family name
+- `process_id` (String) Process ID
 - `saf_name` (String) Sub address family name
 
 ### Optional
@@ -40,7 +41,6 @@ data "iosxr_router_isis_address_family" "example" {
 - `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
 - `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
 - `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
-- `process_id` (String) Process ID
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
 

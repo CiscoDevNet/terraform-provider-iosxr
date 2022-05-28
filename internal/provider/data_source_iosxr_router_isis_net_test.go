@@ -24,13 +24,13 @@ func TestAccDataSourceIosxrRouterISISNET(t *testing.T) {
 const testAccDataSourceIosxrRouterISISNETConfig = `
 
 resource "iosxr_router_isis_net" "test" {
-  process_id = "P1"
-  net_id = "49.0001.2222.2222.2222.00"
+	process_id = "P1"
+	net_id = "49.0001.2222.2222.2222.00"
 }
 
 data "iosxr_router_isis_net" "test" {
-  process_id = "P1"
-  net_id = "49.0001.2222.2222.2222.00"
-  depends_on = [iosxr_router_isis_net.test]
+	process_id = "P1"
+	net_id = "49.0001.2222.2222.2222.00"
+	depends_on = [iosxr_router_isis_net.test]
 }
 `

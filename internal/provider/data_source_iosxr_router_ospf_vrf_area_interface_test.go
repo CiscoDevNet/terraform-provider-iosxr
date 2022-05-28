@@ -33,25 +33,25 @@ func TestAccDataSourceIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig = `
 
 resource "iosxr_router_ospf_vrf_area_interface" "test" {
-  process_name = "OSPF1"
-  vrf_name = "VRF1"
-  area_id = "0"
-  interface_name = "GigabitEthernet0/0/0/1"
-  network_broadcast = false
-  network_non_broadcast = false
-  network_point_to_point = true
-  network_point_to_multipoint = false
-  cost = 20
-  priority = 100
-  passive_enable = false
-  passive_disable = true
+	process_name = "OSPF1"
+	vrf_name = "VRF1"
+	area_id = "0"
+	interface_name = "GigabitEthernet0/0/0/1"
+	network_broadcast = false
+	network_non_broadcast = false
+	network_point_to_point = true
+	network_point_to_multipoint = false
+	cost = 20
+	priority = 100
+	passive_enable = false
+	passive_disable = true
 }
 
 data "iosxr_router_ospf_vrf_area_interface" "test" {
-  process_name = "OSPF1"
-  vrf_name = "VRF1"
-  area_id = "0"
-  interface_name = "GigabitEthernet0/0/0/1"
-  depends_on = [iosxr_router_ospf_vrf_area_interface.test]
+	process_name = "OSPF1"
+	vrf_name = "VRF1"
+	area_id = "0"
+	interface_name = "GigabitEthernet0/0/0/1"
+	depends_on = [iosxr_router_ospf_vrf_area_interface.test]
 }
 `

@@ -24,6 +24,7 @@ data "iosxr_router_bgp_neighbor" "example" {
 
 ### Required
 
+- `as_number` (String) bgp as-number
 - `neighbor_address` (String) Neighbor address
 
 ### Optional
@@ -32,7 +33,6 @@ data "iosxr_router_bgp_neighbor" "example" {
 
 ### Read-Only
 
-- `as_number` (String) bgp as-number
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `description` (String) Neighbor specific description

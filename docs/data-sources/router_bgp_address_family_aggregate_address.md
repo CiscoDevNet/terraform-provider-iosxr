@@ -27,6 +27,8 @@ data "iosxr_router_bgp_address_family_aggregate_address" "example" {
 ### Required
 
 - `address` (String) IPv6 Aggregate address and mask or masklength
+- `af_name` (String) Enter Address Family command mode
+- `as_number` (String) bgp as-number
 - `masklength` (Number) Network in prefix/length format (prefix part)
 
 ### Optional
@@ -35,9 +37,7 @@ data "iosxr_router_bgp_address_family_aggregate_address" "example" {
 
 ### Read-Only
 
-- `af_name` (String) Enter Address Family command mode
 - `as_confed_set` (Boolean) Generate AS confed set path information
-- `as_number` (String) bgp as-number
 - `as_set` (Boolean) Generate AS set path information
 - `id` (String) The path of the retrieved object.
 - `summary_only` (Boolean) Filter more specific routes from updates

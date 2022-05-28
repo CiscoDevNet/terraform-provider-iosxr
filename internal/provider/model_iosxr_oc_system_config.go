@@ -4,10 +4,8 @@ package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type OCSystemConfig struct {
@@ -40,7 +38,7 @@ func (data OCSystemConfig) toBody() string {
 	return body
 }
 
-func (data *OCSystemConfig) fromBody(res []byte) {
+func (data *OCSystemConfig) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
 		data.Hostname.Value = value.String()
 	} else {
@@ -60,6 +58,25 @@ func (data *OCSystemConfig) fromBody(res []byte) {
 		data.MotdBanner.Value = value.String()
 	} else {
 		data.MotdBanner.Null = true
+	}
+}
+
+func (data *OCSystemConfig) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
+		data.Hostname.Value = value.String()
+		data.Hostname.Null = false
+	}
+	if value := gjson.GetBytes(res, "domain-name"); value.Exists() {
+		data.DomainName.Value = value.String()
+		data.DomainName.Null = false
+	}
+	if value := gjson.GetBytes(res, "login-banner"); value.Exists() {
+		data.LoginBanner.Value = value.String()
+		data.LoginBanner.Null = false
+	}
+	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() {
+		data.MotdBanner.Value = value.String()
+		data.MotdBanner.Null = false
 	}
 }
 

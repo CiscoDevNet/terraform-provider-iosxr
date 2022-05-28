@@ -24,11 +24,11 @@ func TestAccDataSourceIosxrL2VPNXconnectGroup(t *testing.T) {
 const testAccDataSourceIosxrL2VPNXconnectGroupConfig = `
 
 resource "iosxr_l2vpn_xconnect_group" "test" {
-  group_name = "P2P"
+	group_name = "P2P"
 }
 
 data "iosxr_l2vpn_xconnect_group" "test" {
-  group_name = "P2P"
-  depends_on = [iosxr_l2vpn_xconnect_group.test]
+	group_name = "P2P"
+	depends_on = [iosxr_l2vpn_xconnect_group.test]
 }
 `

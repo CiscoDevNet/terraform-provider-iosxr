@@ -26,10 +26,10 @@ func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
 const testAccDataSourceIosxrMPLSLDPConfig = `
 
 resource "iosxr_mpls_ldp" "test" {
-  router_id = "1.2.3.4"
+	router_id = "1.2.3.4"
 }
 
 data "iosxr_mpls_ldp" "test" {
-  depends_on = [iosxr_mpls_ldp.test]
+	depends_on = [iosxr_mpls_ldp.test]
 }
 `

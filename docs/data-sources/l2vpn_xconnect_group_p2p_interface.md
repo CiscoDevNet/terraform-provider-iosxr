@@ -25,7 +25,9 @@ data "iosxr_l2vpn_xconnect_group_p2p_interface" "example" {
 
 ### Required
 
+- `group_name` (String) Specify the group the cross connects belong to
 - `interface_name` (String) Specify (sub-)interface name to cross connect
+- `p2p_xconnect_name` (String) Configure point to point cross connect commands
 
 ### Optional
 
@@ -33,8 +35,6 @@ data "iosxr_l2vpn_xconnect_group_p2p_interface" "example" {
 
 ### Read-Only
 
-- `group_name` (String) Specify the group the cross connects belong to
 - `id` (String) The path of the retrieved object.
-- `p2p_xconnect_name` (String) Configure point to point cross connect commands
 
 

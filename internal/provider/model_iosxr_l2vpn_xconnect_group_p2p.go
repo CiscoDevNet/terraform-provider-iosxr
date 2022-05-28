@@ -6,10 +6,8 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type L2VPNXconnectGroupP2P struct {
@@ -32,11 +30,18 @@ func (data L2VPNXconnectGroupP2P) toBody() string {
 	return body
 }
 
-func (data *L2VPNXconnectGroupP2P) fromBody(res []byte) {
+func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
 	} else {
 		data.Description.Null = true
+	}
+}
+
+func (data *L2VPNXconnectGroupP2P) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description.Value = value.String()
+		data.Description.Null = false
 	}
 }
 

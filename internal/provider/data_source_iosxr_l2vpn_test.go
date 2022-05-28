@@ -27,11 +27,11 @@ func TestAccDataSourceIosxrL2VPN(t *testing.T) {
 const testAccDataSourceIosxrL2VPNConfig = `
 
 resource "iosxr_l2vpn" "test" {
-  description = "My L2VPN Description"
-  router_id = "1.2.3.4"
+	description = "My L2VPN Description"
+	router_id = "1.2.3.4"
 }
 
 data "iosxr_l2vpn" "test" {
-  depends_on = [iosxr_l2vpn.test]
+	depends_on = [iosxr_l2vpn.test]
 }
 `

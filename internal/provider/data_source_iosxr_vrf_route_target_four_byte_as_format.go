@@ -38,17 +38,17 @@ func (t dataSourceVRFRouteTargetFourByteASFormatType) GetSchema(ctx context.Cont
 			"address_family": {
 				MarkdownDescription: "Address family",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"sub_address_family": {
 				MarkdownDescription: "Sub-Address family",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"direction": {
 				MarkdownDescription: "Direction",
 				Type:                types.StringType,
-				Computed:            true,
+				Required:            true,
 			},
 			"as_number": {
 				MarkdownDescription: "Four Byte AS Number",
@@ -82,7 +82,7 @@ type dataSourceVRFRouteTargetFourByteASFormat struct {
 }
 
 func (d dataSourceVRFRouteTargetFourByteASFormat) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
-	var config, state VRFRouteTargetFourByteASFormat
+	var config VRFRouteTargetFourByteASFormat
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)
@@ -99,11 +99,11 @@ func (d dataSourceVRFRouteTargetFourByteASFormat) Read(ctx context.Context, req 
 		return
 	}
 
-	state.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	state.fromPlan(config)
+	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.Id = types.String{Value: config.getPath()}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 
-	diags = resp.State.Set(ctx, &state)
+	diags = resp.State.Set(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 }

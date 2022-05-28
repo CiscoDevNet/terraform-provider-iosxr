@@ -4,14 +4,11 @@ package provider
 
 import (
 	"fmt"
-
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type RouterBGPAddressFamilyRedistributeISIS struct {
@@ -77,7 +74,7 @@ func (data RouterBGPAddressFamilyRedistributeISIS) toBody() string {
 	return body
 }
 
-func (data *RouterBGPAddressFamilyRedistributeISIS) fromBody(res []byte) {
+func (data *RouterBGPAddressFamilyRedistributeISIS) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "level.one"); value.Exists() {
 		data.LevelOne.Value = true
 	} else {
@@ -117,6 +114,62 @@ func (data *RouterBGPAddressFamilyRedistributeISIS) fromBody(res []byte) {
 		data.Metric.Value = value.Int()
 	} else {
 		data.Metric.Null = true
+	}
+}
+
+func (data *RouterBGPAddressFamilyRedistributeISIS) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "level.one"); value.Exists() {
+		data.LevelOne.Value = true
+		data.LevelOne.Null = false
+	} else {
+		data.LevelOne.Value = false
+		data.LevelOne.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.one.two"); value.Exists() {
+		data.LevelOneTwo.Value = true
+		data.LevelOneTwo.Null = false
+	} else {
+		data.LevelOneTwo.Value = false
+		data.LevelOneTwo.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.one.two.one-inter-area"); value.Exists() {
+		data.LevelOneTwoOneInterArea.Value = true
+		data.LevelOneTwoOneInterArea.Null = false
+	} else {
+		data.LevelOneTwoOneInterArea.Value = false
+		data.LevelOneTwoOneInterArea.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.one.one-inter-area"); value.Exists() {
+		data.LevelOneOneInterArea.Value = true
+		data.LevelOneOneInterArea.Null = false
+	} else {
+		data.LevelOneOneInterArea.Value = false
+		data.LevelOneOneInterArea.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.two"); value.Exists() {
+		data.LevelTwo.Value = true
+		data.LevelTwo.Null = false
+	} else {
+		data.LevelTwo.Value = false
+		data.LevelTwo.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.two.one-inter-area"); value.Exists() {
+		data.LevelTwoOneInterArea.Value = true
+		data.LevelTwoOneInterArea.Null = false
+	} else {
+		data.LevelTwoOneInterArea.Value = false
+		data.LevelTwoOneInterArea.Null = false
+	}
+	if value := gjson.GetBytes(res, "level.one-inter-area"); value.Exists() {
+		data.LevelOneInterArea.Value = true
+		data.LevelOneInterArea.Null = false
+	} else {
+		data.LevelOneInterArea.Value = false
+		data.LevelOneInterArea.Null = false
+	}
+	if value := gjson.GetBytes(res, "metric"); value.Exists() {
+		data.Metric.Value = value.Int()
+		data.Metric.Null = false
 	}
 }
 

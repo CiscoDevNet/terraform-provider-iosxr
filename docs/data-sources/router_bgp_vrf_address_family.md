@@ -26,6 +26,8 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 ### Required
 
 - `af_name` (String) Enter Address Family command mode
+- `as_number` (String) bgp as-number
+- `vrf_name` (String) Specify a vrf name
 
 ### Optional
 
@@ -33,7 +35,6 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 
 ### Read-Only
 
-- `as_number` (String) bgp as-number
 - `id` (String) The path of the retrieved object.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
@@ -44,6 +45,5 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
-- `vrf_name` (String) Specify a vrf name
 
 

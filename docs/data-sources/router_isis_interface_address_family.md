@@ -27,6 +27,8 @@ data "iosxr_router_isis_interface_address_family" "example" {
 ### Required
 
 - `af_name` (String) Address family name
+- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `process_id` (String) Process ID
 - `saf_name` (String) Sub address family name
 
 ### Optional
@@ -36,7 +38,5 @@ data "iosxr_router_isis_interface_address_family" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `interface_name` (String) Enter the IS-IS interface configuration submode
-- `process_id` (String) Process ID
 
 

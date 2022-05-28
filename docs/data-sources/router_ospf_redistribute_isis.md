@@ -25,6 +25,7 @@ data "iosxr_router_ospf_redistribute_isis" "example" {
 ### Required
 
 - `instance_name` (String) ISO IS-IS
+- `process_name` (String) Name for this OSPF process
 
 ### Optional
 
@@ -37,7 +38,6 @@ data "iosxr_router_ospf_redistribute_isis" "example" {
 - `level_1_2` (Boolean) IS-IS level-1 and level-2 routes
 - `level_2` (Boolean) IS-IS level-2 routes only
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
-- `process_name` (String) Name for this OSPF process
 - `tag` (Number) Set tag for routes redistributed into OSPF
 
 

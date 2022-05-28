@@ -4,10 +4,8 @@ package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
-
-	"github.com/tidwall/sjson"
-
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 type BGPASFormat struct {
@@ -36,7 +34,7 @@ func (data BGPASFormat) toBody() string {
 	return body
 }
 
-func (data *BGPASFormat) fromBody(res []byte) {
+func (data *BGPASFormat) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
 		data.Asdot.Value = true
 	} else {
@@ -46,6 +44,23 @@ func (data *BGPASFormat) fromBody(res []byte) {
 		data.Asplain.Value = true
 	} else {
 		data.Asplain.Value = false
+	}
+}
+
+func (data *BGPASFormat) fromBody(res []byte) {
+	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
+		data.Asdot.Value = true
+		data.Asdot.Null = false
+	} else {
+		data.Asdot.Value = false
+		data.Asdot.Null = false
+	}
+	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
+		data.Asplain.Value = true
+		data.Asplain.Null = false
+	} else {
+		data.Asplain.Value = false
+		data.Asplain.Null = false
 	}
 }
 

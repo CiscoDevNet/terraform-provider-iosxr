@@ -70,6 +70,97 @@ func (t dataSourceRouterBGPVRFType) GetSchema(ctx context.Context) (tfsdk.Schema
 				Type:                types.Int64Type,
 				Computed:            true,
 			},
+			"neighbors": {
+				MarkdownDescription: "Neighbor address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"neighbor_address": {
+						MarkdownDescription: "Neighbor address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"remote_as": {
+						MarkdownDescription: "bgp as-number",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"description": {
+						MarkdownDescription: "Neighbor specific description",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"ignore_connected_check": {
+						MarkdownDescription: "Bypass the directly connected nexthop check for single-hop eBGP peering",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"ebgp_multihop_maximum_hop_count": {
+						MarkdownDescription: "maximum hop count",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"bfd_minimum_interval": {
+						MarkdownDescription: "Hello interval",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"bfd_multiplier": {
+						MarkdownDescription: "Detect multiplier",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"local_as": {
+						MarkdownDescription: "bgp as-number",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"local_as_no_prepend": {
+						MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"local_as_replace_as": {
+						MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"local_as_dual_as": {
+						MarkdownDescription: "Dual-AS mode",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"password": {
+						MarkdownDescription: "Specifies an ENCRYPTED password will follow",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"shutdown": {
+						MarkdownDescription: "Administratively shut down this neighbor",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"timers_keepalive_interval": {
+						MarkdownDescription: "BGP timers",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"timers_holdtime": {
+						MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"update_source": {
+						MarkdownDescription: "Source of routing updates",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"ttl_security": {
+						MarkdownDescription: "Enable EBGP TTL security",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

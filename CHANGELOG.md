@@ -37,6 +37,8 @@
 - Add area and redistribute attributes to iosxr_router_ospf_vrf resource and data source
 - BREAKING CHANGE: remove iosxr_router_bgp_neighbor resource and data source
 - Add neighbor attributes to iosxr_router_bgp resource and data source
+- BREAKING CHANGE: remove iosxr_router_bgp_vrf_neighbor resource and data source
+- Add neighbor attributes to iosxr_router_bgp_vrf resource and data source
 
 ## 0.1.0
 

@@ -22,4 +22,36 @@ resource "iosxr_router_ospf_vrf" "example" {
   default_information_originate             = true
   default_information_originate_always      = true
   default_information_originate_metric_type = 1
+  areas = [
+    {
+      area_id = "0"
+    }
+  ]
+  redistribute_bgp = [
+    {
+      as_number   = "65001"
+      tag         = 3
+      metric_type = "1"
+    }
+  ]
+  redistribute_isis = [
+    {
+      instance_name = "P1"
+      level_1       = true
+      level_2       = false
+      level_1_2     = false
+      tag           = 3
+      metric_type   = "1"
+    }
+  ]
+  redistribute_ospf = [
+    {
+      instance_name       = "OSPF2"
+      match_internal      = true
+      match_external      = false
+      match_nssa_external = false
+      tag                 = 4
+      metric_type         = "1"
+    }
+  ]
 }

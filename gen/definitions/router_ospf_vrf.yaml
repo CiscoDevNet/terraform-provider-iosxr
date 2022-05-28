@@ -49,3 +49,55 @@ attributes:
     example: true
   - yang_name: default-information/originate/metric-type
     example: 1
+  - yang_name: areas/area
+    tf_name: areas
+    type: List
+    attributes:
+      - yang_name: area-id
+        id: true
+        example: 0
+  - yang_name: redistribute/bgp/as
+    tf_name: redistribute_bgp
+    type: List
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 65001
+      - yang_name: tag
+        example: 3
+      - yang_name: metric-type
+        example: 1
+  - yang_name: redistribute/isis
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: instance-name
+        id: true
+        example: P1
+      - yang_name: level-1
+        example: true
+      - yang_name: level-2
+        example: false
+      - yang_name: level-1-2
+        example: false
+      - yang_name: tag
+        example: 3
+      - yang_name: metric-type
+        example: 1
+  - yang_name: redistribute/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: instance-name
+        id: true
+        example: OSPF2
+      - yang_name: match/internal
+        example: true
+      - yang_name: match/external
+        example: false
+      - yang_name: match/nssa-external
+        example: false
+      - yang_name: tag
+        example: 4
+      - yang_name: metric-type
+        example: 1

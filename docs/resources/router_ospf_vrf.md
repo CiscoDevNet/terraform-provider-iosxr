@@ -37,6 +37,38 @@ resource "iosxr_router_ospf_vrf" "example" {
   default_information_originate             = true
   default_information_originate_always      = true
   default_information_originate_metric_type = 1
+  areas = [
+    {
+      area_id = "0"
+    }
+  ]
+  redistribute_bgp = [
+    {
+      as_number   = "65001"
+      tag         = 3
+      metric_type = "1"
+    }
+  ]
+  redistribute_isis = [
+    {
+      instance_name = "P1"
+      level_1       = true
+      level_2       = false
+      level_1_2     = false
+      tag           = 3
+      metric_type   = "1"
+    }
+  ]
+  redistribute_ospf = [
+    {
+      instance_name       = "OSPF2"
+      match_internal      = true
+      match_external      = false
+      match_nssa_external = false
+      tag                 = 4
+      metric_type         = "1"
+    }
+  ]
 }
 ```
 
@@ -50,6 +82,7 @@ resource "iosxr_router_ospf_vrf" "example" {
 
 ### Optional
 
+- `areas` (Attributes List) Enter the OSPF area configuration submode (see [below for nested schema](#nestedatt--areas))
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_minimum_interval` (Number) Minimum interval
   - Range: `3`-`30000`
@@ -71,11 +104,14 @@ resource "iosxr_router_ospf_vrf" "example" {
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
   - Range: `0`-`255`
+- `redistribute_bgp` (Attributes List) bgp as-number (see [below for nested schema](#nestedatt--redistribute_bgp))
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric_type` (String) OSPF exterior metric type for redistributed routes
   - Choices: `1`, `2`
 - `redistribute_connected_tag` (Number) Set tag for routes redistributed into OSPF
   - Range: `0`-`4294967295`
+- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric_type` (String) OSPF exterior metric type for redistributed routes
   - Choices: `1`, `2`
@@ -86,6 +122,55 @@ resource "iosxr_router_ospf_vrf" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--areas"></a>
+### Nested Schema for `areas`
+
+Optional:
+
+- `area_id` (String) Enter the OSPF area configuration submode
+
+
+<a id="nestedatt--redistribute_bgp"></a>
+### Nested Schema for `redistribute_bgp`
+
+Optional:
+
+- `as_number` (String) bgp as-number
+- `metric_type` (String) OSPF exterior metric type for redistributed routes
+  - Choices: `1`, `2`
+- `tag` (Number) Set tag for routes redistributed into OSPF
+  - Range: `0`-`4294967295`
+
+
+<a id="nestedatt--redistribute_isis"></a>
+### Nested Schema for `redistribute_isis`
+
+Optional:
+
+- `instance_name` (String) ISO IS-IS
+- `level_1` (Boolean) IS-IS level-1 routes only
+- `level_1_2` (Boolean) IS-IS level-1 and level-2 routes
+- `level_2` (Boolean) IS-IS level-2 routes only
+- `metric_type` (String) OSPF exterior metric type for redistributed routes
+  - Choices: `1`, `2`
+- `tag` (Number) Set tag for routes redistributed into OSPF
+  - Range: `0`-`4294967295`
+
+
+<a id="nestedatt--redistribute_ospf"></a>
+### Nested Schema for `redistribute_ospf`
+
+Optional:
+
+- `instance_name` (String) Open Shortest Path First (OSPF)
+- `match_external` (Boolean) Redistribute OSPF external routes
+- `match_internal` (Boolean) Redistribute OSPF internal routes
+- `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `metric_type` (String) OSPF exterior metric type for redistributed routes
+  - Choices: `1`, `2`
+- `tag` (Number) Set tag for routes redistributed into OSPF
+  - Range: `0`-`4294967295`
 
 ## Import
 

@@ -217,6 +217,144 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 					helpers.IntegerRangeValidator(1, 2),
 				},
 			},
+			"areas": {
+				MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"area_id": {
+						MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_bgp": {
+				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"metric_type": {
+						MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringEnumValidator("1", "2"),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_isis": {
+				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_1": {
+						MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-1 routes only").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_2": {
+						MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-2 routes only").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_1_2": {
+						MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-1 and level-2 routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"metric_type": {
+						MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringEnumValidator("1", "2"),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_ospf": {
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_internal": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_nssa_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"metric_type": {
+						MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringEnumValidator("1", "2"),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

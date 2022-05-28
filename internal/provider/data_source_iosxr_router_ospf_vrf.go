@@ -145,6 +145,110 @@ func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 				Type:                types.Int64Type,
 				Computed:            true,
 			},
+			"areas": {
+				MarkdownDescription: "Enter the OSPF area configuration submode",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"area_id": {
+						MarkdownDescription: "Enter the OSPF area configuration submode",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_bgp": {
+				MarkdownDescription: "bgp as-number",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "bgp as-number",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: "Set tag for routes redistributed into OSPF",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"metric_type": {
+						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_isis": {
+				MarkdownDescription: "ISO IS-IS",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: "ISO IS-IS",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"level_1": {
+						MarkdownDescription: "IS-IS level-1 routes only",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_2": {
+						MarkdownDescription: "IS-IS level-2 routes only",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_1_2": {
+						MarkdownDescription: "IS-IS level-1 and level-2 routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: "Set tag for routes redistributed into OSPF",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"metric_type": {
+						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_ospf": {
+				MarkdownDescription: "Open Shortest Path First (OSPF)",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: "Open Shortest Path First (OSPF)",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"match_internal": {
+						MarkdownDescription: "Redistribute OSPF internal routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_external": {
+						MarkdownDescription: "Redistribute OSPF external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_nssa_external": {
+						MarkdownDescription: "Redistribute OSPF NSSA external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"tag": {
+						MarkdownDescription: "Set tag for routes redistributed into OSPF",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"metric_type": {
+						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

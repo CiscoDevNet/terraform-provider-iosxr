@@ -30,6 +30,11 @@
 - BREAKING CHANGE: remove iosxr_router_ospf_redistribute_isis resource and data source
 - BREAKING CHANGE: remove iosxr_router_ospf_redistribute_ospf resource and data source
 - Add area and redistribute attributes to iosxr_router_ospf resource and data source
+- BREAKING CHANGE: remove iosxr_router_ospf_vrf_area resource and data source
+- BREAKING CHANGE: remove iosxr_router_ospf_vrf_redistribute_bgp resource and data source
+- BREAKING CHANGE: remove iosxr_router_ospf_vrf_redistribute_isis resource and data source
+- BREAKING CHANGE: remove iosxr_router_ospf_vrf_redistribute_ospf resource and data source
+- Add area and redistribute attributes to iosxr_router_ospf_vrf resource and data source
 
 ## 0.1.0
 

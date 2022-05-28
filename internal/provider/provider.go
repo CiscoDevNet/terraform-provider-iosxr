@@ -213,12 +213,8 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"iosxr_router_ospf":                                     resourceRouterOSPFType{},
 		"iosxr_router_ospf_area_interface":                      resourceRouterOSPFAreaInterfaceType{},
 		"iosxr_router_ospf_vrf":                                 resourceRouterOSPFVRFType{},
-		"iosxr_router_ospf_vrf_area":                            resourceRouterOSPFVRFAreaType{},
 		"iosxr_router_ospf_vrf_area_interface":                  resourceRouterOSPFVRFAreaInterfaceType{},
-		"iosxr_router_ospf_vrf_redistribute_bgp":                resourceRouterOSPFVRFRedistributeBGPType{},
-		"iosxr_router_ospf_vrf_redistribute_isis":               resourceRouterOSPFVRFRedistributeISISType{},
-		"iosxr_router_ospf_vrf_redistribute_ospf":               resourceRouterOSPFVRFRedistributeOSPFType{},
-		"iosxr_vrf": resourceVRFType{},
+		"iosxr_vrf":                                             resourceVRFType{},
 	}, nil
 }
 
@@ -250,12 +246,8 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"iosxr_router_ospf":                                     dataSourceRouterOSPFType{},
 		"iosxr_router_ospf_area_interface":                      dataSourceRouterOSPFAreaInterfaceType{},
 		"iosxr_router_ospf_vrf":                                 dataSourceRouterOSPFVRFType{},
-		"iosxr_router_ospf_vrf_area":                            dataSourceRouterOSPFVRFAreaType{},
 		"iosxr_router_ospf_vrf_area_interface":                  dataSourceRouterOSPFVRFAreaInterfaceType{},
-		"iosxr_router_ospf_vrf_redistribute_bgp":                dataSourceRouterOSPFVRFRedistributeBGPType{},
-		"iosxr_router_ospf_vrf_redistribute_isis":               dataSourceRouterOSPFVRFRedistributeISISType{},
-		"iosxr_router_ospf_vrf_redistribute_ospf":               dataSourceRouterOSPFVRFRedistributeOSPFType{},
-		"iosxr_vrf": dataSourceVRFType{},
+		"iosxr_vrf":                                             dataSourceVRFType{},
 	}, nil
 }
 

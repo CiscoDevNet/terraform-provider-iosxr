@@ -235,9 +235,6 @@ func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceT
 		"iosxr_router_ospf_vrf_redistribute_isis":               resourceRouterOSPFVRFRedistributeISISType{},
 		"iosxr_router_ospf_vrf_redistribute_ospf":               resourceRouterOSPFVRFRedistributeOSPFType{},
 		"iosxr_vrf": resourceVRFType{},
-		"iosxr_vrf_route_target_four_byte_as_format": resourceVRFRouteTargetFourByteASFormatType{},
-		"iosxr_vrf_route_target_two_byte_as_format":  resourceVRFRouteTargetTwoByteASFormatType{},
-		"iosxr_vrf_route_target_ip_address_format":   resourceVRFRouteTargetIPAddressFormatType{},
 	}, nil
 }
 
@@ -291,9 +288,6 @@ func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSou
 		"iosxr_router_ospf_vrf_redistribute_isis":               dataSourceRouterOSPFVRFRedistributeISISType{},
 		"iosxr_router_ospf_vrf_redistribute_ospf":               dataSourceRouterOSPFVRFRedistributeOSPFType{},
 		"iosxr_vrf": dataSourceVRFType{},
-		"iosxr_vrf_route_target_four_byte_as_format": dataSourceVRFRouteTargetFourByteASFormatType{},
-		"iosxr_vrf_route_target_two_byte_as_format":  dataSourceVRFRouteTargetTwoByteASFormatType{},
-		"iosxr_vrf_route_target_ip_address_format":   dataSourceVRFRouteTargetIPAddressFormatType{},
 	}, nil
 }
 

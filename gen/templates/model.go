@@ -290,7 +290,6 @@ func (data *{{camelCase .Name}}) getDeletedListItems(state {{camelCase .Name}}) 
 	deletedListItems := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if eq .Type "List"}}
-	keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
 	{{- $goKey := ""}}
 	{{- range .Attributes}}
 	{{- if eq .Id true}}
@@ -299,6 +298,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(state {{camelCase .Name}}) 
 	{{- end}}
 	for i := range state.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
+		keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
 		stateKeyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{toGoName .TfName}}.Value, 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{toGoName .TfName}}.Value), {{else}}state.{{$list}}[i].{{toGoName .TfName}}.Value, {{end}}{{end}}{{end}} }
 		
 		emptyKeys := true

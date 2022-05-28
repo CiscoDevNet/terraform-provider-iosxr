@@ -146,6 +146,366 @@ func (t resourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diag
 					helpers.IntegerRangeValidator(0, 65535),
 				},
 			},
+			"address_family_ipv4_unicast_import_route_target_two_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 65535),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(65536, 4294967295),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_import_route_target_ip_address_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 65535),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(65536, 4294967295),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_ip_address_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 65535),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(65536, 4294967295),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_ip_address_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 65535),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(65536, 4294967295),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_ip_address_format": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+						},
+					},
+					"index": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"stitching": {
+						MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

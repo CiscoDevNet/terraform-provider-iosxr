@@ -1,8 +1,6 @@
 ---
 name: VRF
 path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
-ds_description: This data source can read the VRF configuration.
-res_description: This resource can manage the VRF configuration.
 doc_category: VRF
 attributes:
   - yang_name: vrf-name
@@ -25,7 +23,7 @@ attributes:
     example: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/as-number
     optional: true
-    example: 65001
+    example: 1
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/index
     optional: true
     example: 1
@@ -45,3 +43,169 @@ attributes:
     optional: true
     example: 1
     exclude_test: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt
+    tf_name: address_family_ipv4_unicast_import_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: address_family_ipv4_unicast_import_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 100000
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt
+    tf_name: address_family_ipv4_unicast_import_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt
+    tf_name: address_family_ipv4_unicast_export_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: address_family_ipv4_unicast_export_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 100000
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt
+    tf_name: address_family_ipv4_unicast_export_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt
+    tf_name: address_family_ipv6_unicast_import_route_target_two_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: address_family_ipv6_unicast_import_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 100000
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt
+    tf_name: address_family_ipv6_unicast_import_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt
+    tf_name: address_family_ipv6_unicast_export_route_target_two_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: address_family_ipv6_unicast_export_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: as-number
+        id: true
+        example: 100000
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt
+    tf_name: address_family_ipv6_unicast_export_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: true

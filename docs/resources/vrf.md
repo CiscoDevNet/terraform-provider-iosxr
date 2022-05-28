@@ -23,8 +23,22 @@ resource "iosxr_vrf" "example" {
   address_family_ipv6_unicast   = true
   address_family_ipv6_multicast = true
   address_family_ipv6_flowspec  = true
-  rd_two_byte_as_as_number      = "65001"
+  rd_two_byte_as_as_number      = "1"
   rd_two_byte_as_index          = 1
+  address_family_ipv4_unicast_import_route_target_two_byte_as_format = [
+    {
+      as_number = 1
+      index     = 1
+      stitching = true
+    }
+  ]
+  address_family_ipv4_unicast_export_route_target_two_byte_as_format = [
+    {
+      as_number = 1
+      index     = 1
+      stitching = true
+    }
+  ]
 }
 ```
 
@@ -40,9 +54,21 @@ resource "iosxr_vrf" "example" {
 - `address_family_ipv4_flowspec` (Boolean) Flowspec sub address family
 - `address_family_ipv4_multicast` (Boolean) Multicast topology
 - `address_family_ipv4_unicast` (Boolean) Unicast sub address family
+- `address_family_ipv4_unicast_export_route_target_four_byte_as_format` (Attributes List) Four Byte AS number Route Target (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_export_route_target_four_byte_as_format))
+- `address_family_ipv4_unicast_export_route_target_ip_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_export_route_target_ip_address_format))
+- `address_family_ipv4_unicast_export_route_target_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_export_route_target_two_byte_as_format))
+- `address_family_ipv4_unicast_import_route_target_four_byte_as_format` (Attributes List) Four Byte AS number Route Target (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_import_route_target_four_byte_as_format))
+- `address_family_ipv4_unicast_import_route_target_ip_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_import_route_target_ip_address_format))
+- `address_family_ipv4_unicast_import_route_target_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--address_family_ipv4_unicast_import_route_target_two_byte_as_format))
 - `address_family_ipv6_flowspec` (Boolean) Flowspec sub address family
 - `address_family_ipv6_multicast` (Boolean) Multicast topology
 - `address_family_ipv6_unicast` (Boolean) Unicast sub address family
+- `address_family_ipv6_unicast_export_route_target_four_byte_as_format` (Attributes List) Four Byte AS number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_export_route_target_four_byte_as_format))
+- `address_family_ipv6_unicast_export_route_target_ip_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_export_route_target_ip_address_format))
+- `address_family_ipv6_unicast_export_route_target_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_export_route_target_two_byte_as_format))
+- `address_family_ipv6_unicast_import_route_target_four_byte_as_format` (Attributes List) Four Byte AS number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_four_byte_as_format))
+- `address_family_ipv6_unicast_import_route_target_ip_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_ip_address_format))
+- `address_family_ipv6_unicast_import_route_target_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_two_byte_as_format))
 - `description` (String) A description for the VRF
 - `device` (String) A device name from the provider configuration.
 - `rd_four_byte_as_as_number` (String) 4-byte AS number
@@ -59,6 +85,145 @@ resource "iosxr_vrf" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--address_family_ipv4_unicast_export_route_target_four_byte_as_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_export_route_target_four_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Four Byte AS number
+  - Range: `65536`-`4294967295`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv4_unicast_export_route_target_ip_address_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_export_route_target_ip_address_format`
+
+Optional:
+
+- `index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `ip_address` (String) IP address
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv4_unicast_export_route_target_two_byte_as_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_export_route_target_two_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Two Byte AS Number
+  - Range: `1`-`65535`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv4_unicast_import_route_target_four_byte_as_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_import_route_target_four_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Four Byte AS number
+  - Range: `65536`-`4294967295`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv4_unicast_import_route_target_ip_address_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_import_route_target_ip_address_format`
+
+Optional:
+
+- `index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `ip_address` (String) IP address
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv4_unicast_import_route_target_two_byte_as_format"></a>
+### Nested Schema for `address_family_ipv4_unicast_import_route_target_two_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Two Byte AS Number
+  - Range: `1`-`65535`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_export_route_target_four_byte_as_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_export_route_target_four_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Four Byte AS number
+  - Range: `65536`-`4294967295`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_export_route_target_ip_address_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_export_route_target_ip_address_format`
+
+Optional:
+
+- `index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `ip_address` (String) IP address
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_export_route_target_two_byte_as_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_export_route_target_two_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Two Byte AS Number
+  - Range: `1`-`65535`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_import_route_target_four_byte_as_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_import_route_target_four_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Four Byte AS number
+  - Range: `65536`-`4294967295`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_import_route_target_ip_address_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_import_route_target_ip_address_format`
+
+Optional:
+
+- `index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `ip_address` (String) IP address
+- `stitching` (Boolean) These are stitching RTs
+
+
+<a id="nestedatt--address_family_ipv6_unicast_import_route_target_two_byte_as_format"></a>
+### Nested Schema for `address_family_ipv6_unicast_import_route_target_two_byte_as_format`
+
+Optional:
+
+- `as_number` (Number) Two Byte AS Number
+  - Range: `1`-`65535`
+- `index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `stitching` (Boolean) These are stitching RTs
 
 ## Import
 

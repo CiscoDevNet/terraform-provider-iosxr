@@ -1,11 +1,11 @@
 resource "iosxr_{{snakeCase .Name}}" "example" {
 {{- range  .Attributes}}
-{{- if ne .ExcludeTest true}}
+{{- if and (ne .ExcludeTest true) (ne .ExcludeExample true)}}
 {{- if eq .Type "List"}}
   {{.TfName}} = [
     {
       {{- range  .Attributes}}
-      {{- if ne .ExcludeTest true}}
+      {{- if and (ne .ExcludeTest true) (ne .ExcludeExample true)}}
       {{.TfName}} = {{if eq .Type "String"}}"{{end}}{{.Example}}{{if eq .Type "String"}}"{{end}}
       {{- end}}
       {{- end}}

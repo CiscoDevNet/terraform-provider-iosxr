@@ -105,6 +105,258 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 				Type:                types.Int64Type,
 				Computed:            true,
 			},
+			"address_family_ipv4_unicast_import_route_target_two_byte_as_format": {
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Two Byte AS Number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": {
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Four Byte AS number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_import_route_target_ip_address_format": {
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: "IP address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": {
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Two Byte AS Number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": {
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Four Byte AS number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv4_unicast_export_route_target_ip_address_format": {
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: "IP address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": {
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Two Byte AS Number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": {
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Four Byte AS number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_import_route_target_ip_address_format": {
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: "IP address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": {
+				MarkdownDescription: "Two Byte AS Number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Two Byte AS Number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": {
+				MarkdownDescription: "Four Byte AS number Route Target",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"as_number": {
+						MarkdownDescription: "Four Byte AS number",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "ASN2:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_family_ipv6_unicast_export_route_target_ip_address_format": {
+				MarkdownDescription: "IP address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"ip_address": {
+						MarkdownDescription: "IP address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"index": {
+						MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"stitching": {
+						MarkdownDescription: "These are stitching RTs",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

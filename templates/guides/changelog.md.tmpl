@@ -17,6 +17,10 @@ description: |-
 - BREAKING CHANGE: remove iosxr_vrf_route_target_four_byte_as_format resource and data source
 - BREAKING CHANGE: remove iosxr_vrf_route_target_ip_address_format resource and data source
 - Add route target attributes to iosxr_vrf resource and data source
+- BREAKING CHANGE: remove iosxr_interface_ipv4 resource and data source
+- BREAKING CHANGE: remove iosxr_interface_ipv6 resource and data source
+- BREAKING CHANGE: remove iosxr_interface_ipv6_address resource and data source
+- Add ipv4 and ipv6 attributes to iosxr_interface resource and data source
 
 ## 0.1.0
 

@@ -4,6 +4,7 @@ package provider
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -12,17 +13,30 @@ import (
 )
 
 type Interface struct {
-	Device        types.String `tfsdk:"device"`
-	Id            types.String `tfsdk:"id"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	L2transport   types.Bool   `tfsdk:"l2transport"`
-	PointToPoint  types.Bool   `tfsdk:"point_to_point"`
-	Multipoint    types.Bool   `tfsdk:"multipoint"`
-	Shutdown      types.Bool   `tfsdk:"shutdown"`
-	Mtu           types.Int64  `tfsdk:"mtu"`
-	Bandwidth     types.Int64  `tfsdk:"bandwidth"`
-	Description   types.String `tfsdk:"description"`
-	Vrf           types.String `tfsdk:"vrf"`
+	Device               types.String             `tfsdk:"device"`
+	Id                   types.String             `tfsdk:"id"`
+	InterfaceName        types.String             `tfsdk:"interface_name"`
+	L2transport          types.Bool               `tfsdk:"l2transport"`
+	PointToPoint         types.Bool               `tfsdk:"point_to_point"`
+	Multipoint           types.Bool               `tfsdk:"multipoint"`
+	Shutdown             types.Bool               `tfsdk:"shutdown"`
+	Mtu                  types.Int64              `tfsdk:"mtu"`
+	Bandwidth            types.Int64              `tfsdk:"bandwidth"`
+	Description          types.String             `tfsdk:"description"`
+	Vrf                  types.String             `tfsdk:"vrf"`
+	Ipv4Address          types.String             `tfsdk:"ipv4_address"`
+	Ipv4Netmask          types.String             `tfsdk:"ipv4_netmask"`
+	Unnumbered           types.String             `tfsdk:"unnumbered"`
+	Ipv6LinkLocalAddress types.String             `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone    types.String             `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig       types.Bool               `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable           types.Bool               `tfsdk:"ipv6_enable"`
+	Ipv6Addresses        []InterfaceIpv6Addresses `tfsdk:"ipv6_addresses"`
+}
+type InterfaceIpv6Addresses struct {
+	Address      types.String `tfsdk:"address"`
+	PrefixLength types.Int64  `tfsdk:"prefix_length"`
+	Zone         types.String `tfsdk:"zone"`
 }
 
 func (data Interface) getPath() string {
@@ -62,6 +76,45 @@ func (data Interface) toBody() string {
 	}
 	if !data.Vrf.Null && !data.Vrf.Unknown {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-vrf-cfg:vrf", data.Vrf.Value)
+	}
+	if !data.Ipv4Address.Null && !data.Ipv4Address.Unknown {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address", data.Ipv4Address.Value)
+	}
+	if !data.Ipv4Netmask.Null && !data.Ipv4Netmask.Unknown {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask", data.Ipv4Netmask.Value)
+	}
+	if !data.Unnumbered.Null && !data.Unnumbered.Unknown {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.Value)
+	}
+	if !data.Ipv6LinkLocalAddress.Null && !data.Ipv6LinkLocalAddress.Unknown {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address", data.Ipv6LinkLocalAddress.Value)
+	}
+	if !data.Ipv6LinkLocalZone.Null && !data.Ipv6LinkLocalZone.Unknown {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone", data.Ipv6LinkLocalZone.Value)
+	}
+	if !data.Ipv6Autoconfig.Null && !data.Ipv6Autoconfig.Unknown {
+		if data.Ipv6Autoconfig.Value {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig", map[string]string{})
+		}
+	}
+	if !data.Ipv6Enable.Null && !data.Ipv6Enable.Unknown {
+		if data.Ipv6Enable.Value {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable", map[string]string{})
+		}
+	}
+	if len(data.Ipv6Addresses) > 0 {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address", []interface{}{})
+		for index, item := range data.Ipv6Addresses {
+			if !item.Address.Null && !item.Address.Unknown {
+				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"+"."+strconv.Itoa(index)+"."+"address", item.Address.Value)
+			}
+			if !item.PrefixLength.Null && !item.PrefixLength.Unknown {
+				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"+"."+strconv.Itoa(index)+"."+"prefix-length", strconv.FormatInt(item.PrefixLength.Value, 10))
+			}
+			if !item.Zone.Null && !item.Zone.Unknown {
+				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"+"."+strconv.Itoa(index)+"."+"zone", item.Zone.Value)
+			}
+		}
 	}
 	return body
 }
@@ -106,6 +159,80 @@ func (data *Interface) updateFromBody(res []byte) {
 		data.Vrf.Value = value.String()
 	} else {
 		data.Vrf.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
+		data.Ipv4Address.Value = value.String()
+	} else {
+		data.Ipv4Address.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() {
+		data.Ipv4Netmask.Value = value.String()
+	} else {
+		data.Ipv4Netmask.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+		data.Unnumbered.Value = value.String()
+	} else {
+		data.Unnumbered.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
+		data.Ipv6LinkLocalAddress.Value = value.String()
+	} else {
+		data.Ipv6LinkLocalAddress.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
+		data.Ipv6LinkLocalZone.Value = value.String()
+	} else {
+		data.Ipv6LinkLocalZone.Null = true
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
+		data.Ipv6Autoconfig.Value = true
+	} else {
+		data.Ipv6Autoconfig.Value = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		data.Ipv6Enable.Value = true
+	} else {
+		data.Ipv6Enable.Value = false
+	}
+	for i := range data.Ipv6Addresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Ipv6Addresses[i].Address.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() {
+			data.Ipv6Addresses[i].Address.Value = value.String()
+		} else {
+			data.Ipv6Addresses[i].Address.Null = true
+		}
+		if value := r.Get("prefix-length"); value.Exists() {
+			data.Ipv6Addresses[i].PrefixLength.Value = value.Int()
+		} else {
+			data.Ipv6Addresses[i].PrefixLength.Null = true
+		}
+		if value := r.Get("zone"); value.Exists() {
+			data.Ipv6Addresses[i].Zone.Value = value.String()
+		} else {
+			data.Ipv6Addresses[i].Zone.Null = true
+		}
 	}
 }
 
@@ -153,6 +280,60 @@ func (data *Interface) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() {
 		data.Vrf.Value = value.String()
 		data.Vrf.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
+		data.Ipv4Address.Value = value.String()
+		data.Ipv4Address.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() {
+		data.Ipv4Netmask.Value = value.String()
+		data.Ipv4Netmask.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+		data.Unnumbered.Value = value.String()
+		data.Unnumbered.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
+		data.Ipv6LinkLocalAddress.Value = value.String()
+		data.Ipv6LinkLocalAddress.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
+		data.Ipv6LinkLocalZone.Value = value.String()
+		data.Ipv6LinkLocalZone.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
+		data.Ipv6Autoconfig.Value = true
+		data.Ipv6Autoconfig.Null = false
+	} else {
+		data.Ipv6Autoconfig.Value = false
+		data.Ipv6Autoconfig.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
+		data.Ipv6Enable.Value = true
+		data.Ipv6Enable.Null = false
+	} else {
+		data.Ipv6Enable.Value = false
+		data.Ipv6Enable.Null = false
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"); value.Exists() {
+		data.Ipv6Addresses = make([]InterfaceIpv6Addresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceIpv6Addresses{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address.Value = cValue.String()
+				item.Address.Null = false
+			}
+			if cValue := v.Get("prefix-length"); cValue.Exists() {
+				item.PrefixLength.Value = cValue.Int()
+				item.PrefixLength.Null = false
+			}
+			if cValue := v.Get("zone"); cValue.Exists() {
+				item.Zone.Value = cValue.String()
+				item.Zone.Null = false
+			}
+			data.Ipv6Addresses = append(data.Ipv6Addresses, item)
+			return true
+		})
 	}
 }
 
@@ -206,14 +387,87 @@ func (data *Interface) setUnknownValues() {
 		data.Vrf.Unknown = false
 		data.Vrf.Null = true
 	}
+	if data.Ipv4Address.Unknown {
+		data.Ipv4Address.Unknown = false
+		data.Ipv4Address.Null = true
+	}
+	if data.Ipv4Netmask.Unknown {
+		data.Ipv4Netmask.Unknown = false
+		data.Ipv4Netmask.Null = true
+	}
+	if data.Unnumbered.Unknown {
+		data.Unnumbered.Unknown = false
+		data.Unnumbered.Null = true
+	}
+	if data.Ipv6LinkLocalAddress.Unknown {
+		data.Ipv6LinkLocalAddress.Unknown = false
+		data.Ipv6LinkLocalAddress.Null = true
+	}
+	if data.Ipv6LinkLocalZone.Unknown {
+		data.Ipv6LinkLocalZone.Unknown = false
+		data.Ipv6LinkLocalZone.Null = true
+	}
+	if data.Ipv6Autoconfig.Unknown {
+		data.Ipv6Autoconfig.Unknown = false
+		data.Ipv6Autoconfig.Null = true
+	}
+	if data.Ipv6Enable.Unknown {
+		data.Ipv6Enable.Unknown = false
+		data.Ipv6Enable.Null = true
+	}
+	for i := range data.Ipv6Addresses {
+		if data.Ipv6Addresses[i].Address.Unknown {
+			data.Ipv6Addresses[i].Address.Unknown = false
+			data.Ipv6Addresses[i].Address.Null = true
+		}
+		if data.Ipv6Addresses[i].PrefixLength.Unknown {
+			data.Ipv6Addresses[i].PrefixLength.Unknown = false
+			data.Ipv6Addresses[i].PrefixLength.Null = true
+		}
+		if data.Ipv6Addresses[i].Zone.Unknown {
+			data.Ipv6Addresses[i].Zone.Unknown = false
+			data.Ipv6Addresses[i].Zone.Null = true
+		}
+	}
 }
 
 func (data *Interface) getDeletedListItems(state Interface) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.Ipv6Addresses {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.Ipv6Addresses[i].Address.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6Addresses[i].Address.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6Addresses {
+			found = true
+			if state.Ipv6Addresses[i].Address.Value != data.Ipv6Addresses[j].Address.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *Interface) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

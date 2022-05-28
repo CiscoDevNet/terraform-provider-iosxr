@@ -104,6 +104,89 @@ func (t resourceInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 					helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
 				},
 			},
+			"ipv4_address": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+				},
+			},
+			"ipv4_netmask": {
+				MarkdownDescription: helpers.NewAttributeDescription("IP subnet mask").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+				},
+			},
+			"unnumbered": {
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IP processing without an explicit address").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				Validators: []tfsdk.AttributeValidator{
+					helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
+				},
+			},
+			"ipv6_link_local_address": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+			},
+			"ipv6_link_local_zone": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
+				Type:                types.StringType,
+				Optional:            true,
+				Computed:            true,
+				PlanModifiers: tfsdk.AttributePlanModifiers{
+					helpers.StringDefaultModifier("0"),
+				},
+			},
+			"ipv6_autoconfig": {
+				MarkdownDescription: helpers.NewAttributeDescription("Enable slaac on Mgmt interface").String,
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+			},
+			"ipv6_enable": {
+				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 on interface").String,
+				Type:                types.BoolType,
+				Optional:            true,
+				Computed:            true,
+			},
+			"ipv6_addresses": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv6 name or address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"prefix_length": {
+						MarkdownDescription: helpers.NewAttributeDescription("Prefix length in bits").AddIntegerRangeDescription(0, 128).String,
+						Type:                types.Int64Type,
+						Required:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 128),
+						},
+					},
+					"zone": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						PlanModifiers: tfsdk.AttributePlanModifiers{
+							helpers.StringDefaultModifier("0"),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

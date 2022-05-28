@@ -1,1 +1,0 @@
-terraform import iosxr_interface_ipv6_address.example "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/Cisco-IOS-XR-um-if-ip-address-cfg:ipv6-address[address=2001::1]"

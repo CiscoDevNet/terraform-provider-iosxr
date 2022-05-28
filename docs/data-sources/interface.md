@@ -34,11 +34,28 @@ data "iosxr_interface" "example" {
 - `bandwidth` (Number) Set the bandwidth of an interface
 - `description` (String) Set description for this interface
 - `id` (String) The path of the retrieved object.
+- `ipv4_address` (String) IP address
+- `ipv4_netmask` (String) IP subnet mask
+- `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
+- `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface
+- `ipv6_enable` (Boolean) Enable IPv6 on interface
+- `ipv6_link_local_address` (String) IPv6 address
+- `ipv6_link_local_zone` (String) IPv6 address zone
 - `l2transport` (Boolean) l2transport sub-interface
 - `mtu` (Number) Set the MTU on an interface
 - `multipoint` (Boolean) multipoint sub-interface
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `shutdown` (Boolean) shutdown the given interface
+- `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
+
+<a id="nestedatt--ipv6_addresses"></a>
+### Nested Schema for `ipv6_addresses`
+
+Read-Only:
+
+- `address` (String) IPv6 name or address
+- `prefix_length` (Number) Prefix length in bits
+- `zone` (String) IPv6 address zone
 
 

@@ -75,6 +75,62 @@ func (t dataSourceInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"ipv4_address": {
+				MarkdownDescription: "IP address",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"ipv4_netmask": {
+				MarkdownDescription: "IP subnet mask",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"unnumbered": {
+				MarkdownDescription: "Enable IP processing without an explicit address",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"ipv6_link_local_address": {
+				MarkdownDescription: "IPv6 address",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"ipv6_link_local_zone": {
+				MarkdownDescription: "IPv6 address zone",
+				Type:                types.StringType,
+				Computed:            true,
+			},
+			"ipv6_autoconfig": {
+				MarkdownDescription: "Enable slaac on Mgmt interface",
+				Type:                types.BoolType,
+				Computed:            true,
+			},
+			"ipv6_enable": {
+				MarkdownDescription: "Enable IPv6 on interface",
+				Type:                types.BoolType,
+				Computed:            true,
+			},
+			"ipv6_addresses": {
+				MarkdownDescription: "IPv6 address",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: "IPv6 name or address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"prefix_length": {
+						MarkdownDescription: "Prefix length in bits",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"zone": {
+						MarkdownDescription: "IPv6 address zone",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

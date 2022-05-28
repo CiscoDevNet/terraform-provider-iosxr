@@ -25,3 +25,40 @@ attributes:
     example: My Interface Description
   - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
     example: VRF1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
+    tf_name: ipv4_address
+    optional: true
+    example: '1.1.1.1'
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
+    tf_name: ipv4_netmask
+    optional: true
+    example: '255.255.255.0'
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
+    tf_name: unnumbered
+    exclude_test: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
+    tf_name: ipv6_link_local_address
+    optional: true
+    example: 'fe80::1'
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
+    tf_name: ipv6_link_local_zone
+    default_value: '0'
+    example: '0'
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
+    tf_name: ipv6_autoconfig
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
+    tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address
+    tf_name: ipv6_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: '2001::1'
+      - yang_name: prefix-length
+        example: 64
+      - yang_name: zone
+        default_value: '0'
+        example: '0'

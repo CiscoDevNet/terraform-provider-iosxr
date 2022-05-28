@@ -25,6 +25,15 @@ func TestAccIosxrInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_interface.test", "bandwidth", "100000"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "description", "My Interface Description"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "vrf", "VRF1"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_address", "1.1.1.1"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_netmask", "255.255.255.0"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_address", "fe80::1"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_zone", "0"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_autoconfig", "false"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_enable", "true"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.address", "2001::1"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.zone", "0"),
 				),
 			},
 			{
@@ -56,6 +65,17 @@ func testAccIosxrInterfaceConfig_all() string {
 		bandwidth = 100000
 		description = "My Interface Description"
 		vrf = "VRF1"
+		ipv4_address = "1.1.1.1"
+		ipv4_netmask = "255.255.255.0"
+		ipv6_link_local_address = "fe80::1"
+		ipv6_link_local_zone = "0"
+		ipv6_autoconfig = false
+		ipv6_enable = true
+		ipv6_addresses = [{
+			address = "2001::1"
+			prefix_length = 64
+			zone = "0"
+		}]
 	}
 	`
 }

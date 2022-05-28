@@ -37,6 +37,22 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate_always", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate_metric_type", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "areas.0.area_id", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_bgp.0.as_number", "65001"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_bgp.0.tag", "3"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_bgp.0.metric_type", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.instance_name", "P1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.level_1", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.level_2", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.level_1_2", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.tag", "3"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_isis.0.metric_type", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.instance_name", "OSPF2"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.match_internal", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.match_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.match_nssa_external", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.tag", "4"),
+					resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_ospf.0.metric_type", "1"),
 				),
 			},
 		},
@@ -68,6 +84,30 @@ resource "iosxr_router_ospf" "test" {
 	default_information_originate = true
 	default_information_originate_always = true
 	default_information_originate_metric_type = 1
+	areas = [{
+		area_id = "0"
+	}]
+	redistribute_bgp = [{
+		as_number = "65001"
+		tag = 3
+		metric_type = "1"
+	}]
+	redistribute_isis = [{
+		instance_name = "P1"
+		level_1 = true
+		level_2 = false
+		level_1_2 = false
+		tag = 3
+		metric_type = "1"
+	}]
+	redistribute_ospf = [{
+		instance_name = "OSPF2"
+		match_internal = true
+		match_external = false
+		match_nssa_external = false
+		tag = 4
+		metric_type = "1"
+	}]
 }
 
 data "iosxr_router_ospf" "test" {

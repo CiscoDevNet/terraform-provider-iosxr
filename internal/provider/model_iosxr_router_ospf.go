@@ -4,6 +4,7 @@ package provider
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -12,30 +13,58 @@ import (
 )
 
 type RouterOSPF struct {
-	Device                                types.String `tfsdk:"device"`
-	Id                                    types.String `tfsdk:"id"`
-	ProcessName                           types.String `tfsdk:"process_name"`
-	MplsLdpSync                           types.Bool   `tfsdk:"mpls_ldp_sync"`
-	HelloInterval                         types.Int64  `tfsdk:"hello_interval"`
-	DeadInterval                          types.Int64  `tfsdk:"dead_interval"`
-	Priority                              types.Int64  `tfsdk:"priority"`
-	MtuIgnoreEnable                       types.Bool   `tfsdk:"mtu_ignore_enable"`
-	MtuIgnoreDisable                      types.Bool   `tfsdk:"mtu_ignore_disable"`
-	PassiveEnable                         types.Bool   `tfsdk:"passive_enable"`
-	PassiveDisable                        types.Bool   `tfsdk:"passive_disable"`
-	RouterId                              types.String `tfsdk:"router_id"`
-	RedistributeConnected                 types.Bool   `tfsdk:"redistribute_connected"`
-	RedistributeConnectedTag              types.Int64  `tfsdk:"redistribute_connected_tag"`
-	RedistributeConnectedMetricType       types.String `tfsdk:"redistribute_connected_metric_type"`
-	RedistributeStatic                    types.Bool   `tfsdk:"redistribute_static"`
-	RedistributeStaticTag                 types.Int64  `tfsdk:"redistribute_static_tag"`
-	RedistributeStaticMetricType          types.String `tfsdk:"redistribute_static_metric_type"`
-	BfdFastDetect                         types.Bool   `tfsdk:"bfd_fast_detect"`
-	BfdMinimumInterval                    types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                         types.Int64  `tfsdk:"bfd_multiplier"`
-	DefaultInformationOriginate           types.Bool   `tfsdk:"default_information_originate"`
-	DefaultInformationOriginateAlways     types.Bool   `tfsdk:"default_information_originate_always"`
-	DefaultInformationOriginateMetricType types.Int64  `tfsdk:"default_information_originate_metric_type"`
+	Device                                types.String                 `tfsdk:"device"`
+	Id                                    types.String                 `tfsdk:"id"`
+	ProcessName                           types.String                 `tfsdk:"process_name"`
+	MplsLdpSync                           types.Bool                   `tfsdk:"mpls_ldp_sync"`
+	HelloInterval                         types.Int64                  `tfsdk:"hello_interval"`
+	DeadInterval                          types.Int64                  `tfsdk:"dead_interval"`
+	Priority                              types.Int64                  `tfsdk:"priority"`
+	MtuIgnoreEnable                       types.Bool                   `tfsdk:"mtu_ignore_enable"`
+	MtuIgnoreDisable                      types.Bool                   `tfsdk:"mtu_ignore_disable"`
+	PassiveEnable                         types.Bool                   `tfsdk:"passive_enable"`
+	PassiveDisable                        types.Bool                   `tfsdk:"passive_disable"`
+	RouterId                              types.String                 `tfsdk:"router_id"`
+	RedistributeConnected                 types.Bool                   `tfsdk:"redistribute_connected"`
+	RedistributeConnectedTag              types.Int64                  `tfsdk:"redistribute_connected_tag"`
+	RedistributeConnectedMetricType       types.String                 `tfsdk:"redistribute_connected_metric_type"`
+	RedistributeStatic                    types.Bool                   `tfsdk:"redistribute_static"`
+	RedistributeStaticTag                 types.Int64                  `tfsdk:"redistribute_static_tag"`
+	RedistributeStaticMetricType          types.String                 `tfsdk:"redistribute_static_metric_type"`
+	BfdFastDetect                         types.Bool                   `tfsdk:"bfd_fast_detect"`
+	BfdMinimumInterval                    types.Int64                  `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                         types.Int64                  `tfsdk:"bfd_multiplier"`
+	DefaultInformationOriginate           types.Bool                   `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateAlways     types.Bool                   `tfsdk:"default_information_originate_always"`
+	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
+	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
+	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
+	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
+	RedistributeOspf                      []RouterOSPFRedistributeOspf `tfsdk:"redistribute_ospf"`
+}
+type RouterOSPFAreas struct {
+	AreaId types.String `tfsdk:"area_id"`
+}
+type RouterOSPFRedistributeBgp struct {
+	AsNumber   types.String `tfsdk:"as_number"`
+	Tag        types.Int64  `tfsdk:"tag"`
+	MetricType types.String `tfsdk:"metric_type"`
+}
+type RouterOSPFRedistributeIsis struct {
+	InstanceName types.String `tfsdk:"instance_name"`
+	Level1       types.Bool   `tfsdk:"level_1"`
+	Level2       types.Bool   `tfsdk:"level_2"`
+	Level12      types.Bool   `tfsdk:"level_1_2"`
+	Tag          types.Int64  `tfsdk:"tag"`
+	MetricType   types.String `tfsdk:"metric_type"`
+}
+type RouterOSPFRedistributeOspf struct {
+	InstanceName      types.String `tfsdk:"instance_name"`
+	MatchInternal     types.Bool   `tfsdk:"match_internal"`
+	MatchExternal     types.Bool   `tfsdk:"match_external"`
+	MatchNssaExternal types.Bool   `tfsdk:"match_nssa_external"`
+	Tag               types.Int64  `tfsdk:"tag"`
+	MetricType        types.String `tfsdk:"metric_type"`
 }
 
 func (data RouterOSPF) getPath() string {
@@ -126,6 +155,86 @@ func (data RouterOSPF) toBody() string {
 	}
 	if !data.DefaultInformationOriginateMetricType.Null && !data.DefaultInformationOriginateMetricType.Unknown {
 		body, _ = sjson.Set(body, "default-information.originate.metric-type", strconv.FormatInt(data.DefaultInformationOriginateMetricType.Value, 10))
+	}
+	if len(data.Areas) > 0 {
+		body, _ = sjson.Set(body, "areas.area", []interface{}{})
+		for index, item := range data.Areas {
+			if !item.AreaId.Null && !item.AreaId.Unknown {
+				body, _ = sjson.Set(body, "areas.area"+"."+strconv.Itoa(index)+"."+"area-id", item.AreaId.Value)
+			}
+		}
+	}
+	if len(data.RedistributeBgp) > 0 {
+		body, _ = sjson.Set(body, "redistribute.bgp.as", []interface{}{})
+		for index, item := range data.RedistributeBgp {
+			if !item.AsNumber.Null && !item.AsNumber.Unknown {
+				body, _ = sjson.Set(body, "redistribute.bgp.as"+"."+strconv.Itoa(index)+"."+"as-number", item.AsNumber.Value)
+			}
+			if !item.Tag.Null && !item.Tag.Unknown {
+				body, _ = sjson.Set(body, "redistribute.bgp.as"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.Value, 10))
+			}
+			if !item.MetricType.Null && !item.MetricType.Unknown {
+				body, _ = sjson.Set(body, "redistribute.bgp.as"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.Value)
+			}
+		}
+	}
+	if len(data.RedistributeIsis) > 0 {
+		body, _ = sjson.Set(body, "redistribute.isis", []interface{}{})
+		for index, item := range data.RedistributeIsis {
+			if !item.InstanceName.Null && !item.InstanceName.Unknown {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"instance-name", item.InstanceName.Value)
+			}
+			if !item.Level1.Null && !item.Level1.Unknown {
+				if item.Level1.Value {
+					body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"level-1", map[string]string{})
+				}
+			}
+			if !item.Level2.Null && !item.Level2.Unknown {
+				if item.Level2.Value {
+					body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"level-2", map[string]string{})
+				}
+			}
+			if !item.Level12.Null && !item.Level12.Unknown {
+				if item.Level12.Value {
+					body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"level-1-2", map[string]string{})
+				}
+			}
+			if !item.Tag.Null && !item.Tag.Unknown {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.Value, 10))
+			}
+			if !item.MetricType.Null && !item.MetricType.Unknown {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.Value)
+			}
+		}
+	}
+	if len(data.RedistributeOspf) > 0 {
+		body, _ = sjson.Set(body, "redistribute.ospf", []interface{}{})
+		for index, item := range data.RedistributeOspf {
+			if !item.InstanceName.Null && !item.InstanceName.Unknown {
+				body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"instance-name", item.InstanceName.Value)
+			}
+			if !item.MatchInternal.Null && !item.MatchInternal.Unknown {
+				if item.MatchInternal.Value {
+					body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"match.internal", map[string]string{})
+				}
+			}
+			if !item.MatchExternal.Null && !item.MatchExternal.Unknown {
+				if item.MatchExternal.Value {
+					body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"match.external", map[string]string{})
+				}
+			}
+			if !item.MatchNssaExternal.Null && !item.MatchNssaExternal.Unknown {
+				if item.MatchNssaExternal.Value {
+					body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"match.nssa-external", map[string]string{})
+				}
+			}
+			if !item.Tag.Null && !item.Tag.Unknown {
+				body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.Value, 10))
+			}
+			if !item.MetricType.Null && !item.MetricType.Unknown {
+				body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"metric-type", item.MetricType.Value)
+			}
+		}
 	}
 	return body
 }
@@ -235,6 +344,182 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 		data.DefaultInformationOriginateMetricType.Value = value.Int()
 	} else {
 		data.DefaultInformationOriginateMetricType.Null = true
+	}
+	for i := range data.Areas {
+		keys := [...]string{"area-id"}
+		keyValues := [...]string{data.Areas[i].AreaId.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "areas.area").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("area-id"); value.Exists() {
+			data.Areas[i].AreaId.Value = value.String()
+		} else {
+			data.Areas[i].AreaId.Null = true
+		}
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.bgp.as").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("as-number"); value.Exists() {
+			data.RedistributeBgp[i].AsNumber.Value = value.String()
+		} else {
+			data.RedistributeBgp[i].AsNumber.Null = true
+		}
+		if value := r.Get("tag"); value.Exists() {
+			data.RedistributeBgp[i].Tag.Value = value.Int()
+		} else {
+			data.RedistributeBgp[i].Tag.Null = true
+		}
+		if value := r.Get("metric-type"); value.Exists() {
+			data.RedistributeBgp[i].MetricType.Value = value.String()
+		} else {
+			data.RedistributeBgp[i].MetricType.Null = true
+		}
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.isis").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("instance-name"); value.Exists() {
+			data.RedistributeIsis[i].InstanceName.Value = value.String()
+		} else {
+			data.RedistributeIsis[i].InstanceName.Null = true
+		}
+		if value := r.Get("level-1"); value.Exists() {
+			data.RedistributeIsis[i].Level1.Value = true
+		} else {
+			data.RedistributeIsis[i].Level1.Value = false
+		}
+		if value := r.Get("level-2"); value.Exists() {
+			data.RedistributeIsis[i].Level2.Value = true
+		} else {
+			data.RedistributeIsis[i].Level2.Value = false
+		}
+		if value := r.Get("level-1-2"); value.Exists() {
+			data.RedistributeIsis[i].Level12.Value = true
+		} else {
+			data.RedistributeIsis[i].Level12.Value = false
+		}
+		if value := r.Get("tag"); value.Exists() {
+			data.RedistributeIsis[i].Tag.Value = value.Int()
+		} else {
+			data.RedistributeIsis[i].Tag.Null = true
+		}
+		if value := r.Get("metric-type"); value.Exists() {
+			data.RedistributeIsis[i].MetricType.Value = value.String()
+		} else {
+			data.RedistributeIsis[i].MetricType.Null = true
+		}
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.ospf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("instance-name"); value.Exists() {
+			data.RedistributeOspf[i].InstanceName.Value = value.String()
+		} else {
+			data.RedistributeOspf[i].InstanceName.Null = true
+		}
+		if value := r.Get("match.internal"); value.Exists() {
+			data.RedistributeOspf[i].MatchInternal.Value = true
+		} else {
+			data.RedistributeOspf[i].MatchInternal.Value = false
+		}
+		if value := r.Get("match.external"); value.Exists() {
+			data.RedistributeOspf[i].MatchExternal.Value = true
+		} else {
+			data.RedistributeOspf[i].MatchExternal.Value = false
+		}
+		if value := r.Get("match.nssa-external"); value.Exists() {
+			data.RedistributeOspf[i].MatchNssaExternal.Value = true
+		} else {
+			data.RedistributeOspf[i].MatchNssaExternal.Value = false
+		}
+		if value := r.Get("tag"); value.Exists() {
+			data.RedistributeOspf[i].Tag.Value = value.Int()
+		} else {
+			data.RedistributeOspf[i].Tag.Null = true
+		}
+		if value := r.Get("metric-type"); value.Exists() {
+			data.RedistributeOspf[i].MetricType.Value = value.String()
+		} else {
+			data.RedistributeOspf[i].MetricType.Null = true
+		}
 	}
 }
 
@@ -353,6 +638,102 @@ func (data *RouterOSPF) fromBody(res []byte) {
 		data.DefaultInformationOriginateMetricType.Value = value.Int()
 		data.DefaultInformationOriginateMetricType.Null = false
 	}
+	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
+		data.Areas = make([]RouterOSPFAreas, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFAreas{}
+			if cValue := v.Get("area-id"); cValue.Exists() {
+				item.AreaId.Value = cValue.String()
+				item.AreaId.Null = false
+			}
+			data.Areas = append(data.Areas, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() {
+		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeBgp{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber.Value = cValue.String()
+				item.AsNumber.Null = false
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag.Value = cValue.Int()
+				item.Tag.Null = false
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType.Value = cValue.String()
+				item.MetricType.Null = false
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeIsis{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName.Value = cValue.String()
+				item.InstanceName.Null = false
+			}
+			if cValue := v.Get("level-1"); cValue.Exists() {
+				item.Level1.Value = true
+				item.Level1.Null = false
+			}
+			if cValue := v.Get("level-2"); cValue.Exists() {
+				item.Level2.Value = true
+				item.Level2.Null = false
+			}
+			if cValue := v.Get("level-1-2"); cValue.Exists() {
+				item.Level12.Value = true
+				item.Level12.Null = false
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag.Value = cValue.Int()
+				item.Tag.Null = false
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType.Value = cValue.String()
+				item.MetricType.Null = false
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeOspf{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName.Value = cValue.String()
+				item.InstanceName.Null = false
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal.Value = true
+				item.MatchInternal.Null = false
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal.Value = true
+				item.MatchExternal.Null = false
+			}
+			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
+				item.MatchNssaExternal.Value = true
+				item.MatchNssaExternal.Null = false
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag.Value = cValue.Int()
+				item.Tag.Null = false
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType.Value = cValue.String()
+				item.MetricType.Null = false
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
 }
 
 func (data *RouterOSPF) fromPlan(plan RouterOSPF) {
@@ -457,14 +838,207 @@ func (data *RouterOSPF) setUnknownValues() {
 		data.DefaultInformationOriginateMetricType.Unknown = false
 		data.DefaultInformationOriginateMetricType.Null = true
 	}
+	for i := range data.Areas {
+		if data.Areas[i].AreaId.Unknown {
+			data.Areas[i].AreaId.Unknown = false
+			data.Areas[i].AreaId.Null = true
+		}
+	}
+	for i := range data.RedistributeBgp {
+		if data.RedistributeBgp[i].AsNumber.Unknown {
+			data.RedistributeBgp[i].AsNumber.Unknown = false
+			data.RedistributeBgp[i].AsNumber.Null = true
+		}
+		if data.RedistributeBgp[i].Tag.Unknown {
+			data.RedistributeBgp[i].Tag.Unknown = false
+			data.RedistributeBgp[i].Tag.Null = true
+		}
+		if data.RedistributeBgp[i].MetricType.Unknown {
+			data.RedistributeBgp[i].MetricType.Unknown = false
+			data.RedistributeBgp[i].MetricType.Null = true
+		}
+	}
+	for i := range data.RedistributeIsis {
+		if data.RedistributeIsis[i].InstanceName.Unknown {
+			data.RedistributeIsis[i].InstanceName.Unknown = false
+			data.RedistributeIsis[i].InstanceName.Null = true
+		}
+		if data.RedistributeIsis[i].Level1.Unknown {
+			data.RedistributeIsis[i].Level1.Unknown = false
+			data.RedistributeIsis[i].Level1.Null = true
+		}
+		if data.RedistributeIsis[i].Level2.Unknown {
+			data.RedistributeIsis[i].Level2.Unknown = false
+			data.RedistributeIsis[i].Level2.Null = true
+		}
+		if data.RedistributeIsis[i].Level12.Unknown {
+			data.RedistributeIsis[i].Level12.Unknown = false
+			data.RedistributeIsis[i].Level12.Null = true
+		}
+		if data.RedistributeIsis[i].Tag.Unknown {
+			data.RedistributeIsis[i].Tag.Unknown = false
+			data.RedistributeIsis[i].Tag.Null = true
+		}
+		if data.RedistributeIsis[i].MetricType.Unknown {
+			data.RedistributeIsis[i].MetricType.Unknown = false
+			data.RedistributeIsis[i].MetricType.Null = true
+		}
+	}
+	for i := range data.RedistributeOspf {
+		if data.RedistributeOspf[i].InstanceName.Unknown {
+			data.RedistributeOspf[i].InstanceName.Unknown = false
+			data.RedistributeOspf[i].InstanceName.Null = true
+		}
+		if data.RedistributeOspf[i].MatchInternal.Unknown {
+			data.RedistributeOspf[i].MatchInternal.Unknown = false
+			data.RedistributeOspf[i].MatchInternal.Null = true
+		}
+		if data.RedistributeOspf[i].MatchExternal.Unknown {
+			data.RedistributeOspf[i].MatchExternal.Unknown = false
+			data.RedistributeOspf[i].MatchExternal.Null = true
+		}
+		if data.RedistributeOspf[i].MatchNssaExternal.Unknown {
+			data.RedistributeOspf[i].MatchNssaExternal.Unknown = false
+			data.RedistributeOspf[i].MatchNssaExternal.Null = true
+		}
+		if data.RedistributeOspf[i].Tag.Unknown {
+			data.RedistributeOspf[i].Tag.Unknown = false
+			data.RedistributeOspf[i].Tag.Null = true
+		}
+		if data.RedistributeOspf[i].MetricType.Unknown {
+			data.RedistributeOspf[i].MetricType.Unknown = false
+			data.RedistributeOspf[i].MetricType.Null = true
+		}
+	}
 }
 
 func (data *RouterOSPF) getDeletedListItems(state RouterOSPF) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.Areas {
+		keys := [...]string{"area-id"}
+		stateKeyValues := [...]string{state.Areas[i].AreaId.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Areas[i].AreaId.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Areas {
+			found = true
+			if state.Areas[i].AreaId.Value != data.Areas[j].AreaId.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/areas/area%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		stateKeyValues := [...]string{state.RedistributeBgp[i].AsNumber.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeBgp[i].AsNumber.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeBgp {
+			found = true
+			if state.RedistributeBgp[i].AsNumber.Value != data.RedistributeBgp[j].AsNumber.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/bgp/as%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceName.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceName.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeIsis {
+			found = true
+			if state.RedistributeIsis[i].InstanceName.Value != data.RedistributeIsis[j].InstanceName.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		stateKeyValues := [...]string{state.RedistributeOspf[i].InstanceName.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeOspf[i].InstanceName.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeOspf {
+			found = true
+			if state.RedistributeOspf[i].InstanceName.Value != data.RedistributeOspf[j].InstanceName.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *RouterOSPF) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

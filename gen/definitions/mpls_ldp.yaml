@@ -5,3 +5,17 @@ doc_category: MPLS
 attributes:
   - yang_name: router-id
     example: 1.2.3.4
+  - yang_name: address-families/address-family
+    tf_name: address_families
+    type: List
+    attributes:
+      - yang_name: af-name
+        id: true
+        example: ipv4
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1

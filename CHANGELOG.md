@@ -12,6 +12,9 @@
 - BREAKING CHANGE: remove iosxr_interface_ipv6 resource and data source
 - BREAKING CHANGE: remove iosxr_interface_ipv6_address resource and data source
 - Add ipv4 and ipv6 attributes to iosxr_interface resource and data source
+- BREAKING CHANGE: remove iosxr_mpls_ldp_address_family resource and data source
+- BREAKING CHANGE: remove iosxr_mpls_ldp_interface resource and data source
+- Add address_family and interface attributes to iosxr_mpls_ldp resource and data source
 
 ## 0.1.0
 

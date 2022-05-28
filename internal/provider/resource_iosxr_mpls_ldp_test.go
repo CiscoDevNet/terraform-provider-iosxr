@@ -17,6 +17,8 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 				Config: testAccIosxrMPLSLDPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "router_id", "1.2.3.4"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
 				),
 			},
 			{
@@ -39,6 +41,12 @@ func testAccIosxrMPLSLDPConfig_all() string {
 	return `
 	resource "iosxr_mpls_ldp" "test" {
 		router_id = "1.2.3.4"
+		address_families = [{
+			af_name = "ipv4"
+		}]
+		interfaces = [{
+			interface_name = "GigabitEthernet0/0/0/1"
+		}]
 	}
 	`
 }

@@ -45,6 +45,36 @@ func (t resourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 					helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
 				},
 			},
+			"address_families": {
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"af_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4", "ipv6").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringEnumValidator("ipv4", "ipv6"),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"interfaces": {
+				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"interface_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

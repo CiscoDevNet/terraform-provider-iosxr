@@ -1,7 +1,0 @@
----
-name: MPLS LDP Interface
-path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/interfaces/interface[interface-name=%s]
-doc_category: MPLS
-attributes:
-  - yang_name: interface-name
-    example: GigabitEthernet0/0/0/1

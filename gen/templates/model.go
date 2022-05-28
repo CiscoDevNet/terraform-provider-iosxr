@@ -4,10 +4,11 @@
 package provider
 
 import (
-	{{- if hasId .Attributes }}
+	{{- $fmt := false }}{{ range .Attributes}}{{ if or (eq .Id true) (eq .Reference true) (eq .Type "List") (and (eq .Type "Bool") (eq .TypeYangBool "empty")) }}{{ $fmt = true }}{{ end}}{{ end}}
+	{{- if $fmt }}
 	"fmt"
 	{{- end}}
-	{{- $strconv := false }}{{ range .Attributes}}{{ if and (eq .Type "Int64") (ne .Id true) (ne .Reference true)}}{{ $strconv = true }}{{ end}}{{ end}}
+	{{- $strconv := false }}{{ range .Attributes}}{{ if or (and (eq .Type "Int64") (ne .Id true) (ne .Reference true)) (eq .Type "List")}}{{ $strconv = true }}{{ end}}{{ end}}
 	{{- if $strconv }}
 	"strconv"
 	{{- end}}

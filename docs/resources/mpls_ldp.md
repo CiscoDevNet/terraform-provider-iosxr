@@ -15,6 +15,16 @@ This resource can manage the MPLS LDP configuration.
 ```terraform
 resource "iosxr_mpls_ldp" "example" {
   router_id = "1.2.3.4"
+  address_families = [
+    {
+      af_name = "ipv4"
+    }
+  ]
+  interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/1"
+    }
+  ]
 }
 ```
 
@@ -23,12 +33,30 @@ resource "iosxr_mpls_ldp" "example" {
 
 ### Optional
 
+- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
 - `router_id` (String) Configure router Id
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Optional:
+
+- `af_name` (String) Configure Address Family and its parameters
+  - Choices: `ipv4`, `ipv6`
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Optional:
+
+- `interface_name` (String) Enable LDP on an interface and enter interface submode
 
 ## Import
 

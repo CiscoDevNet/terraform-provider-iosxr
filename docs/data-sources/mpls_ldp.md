@@ -26,7 +26,24 @@ data "iosxr_mpls_ldp" "example" {
 
 ### Read-Only
 
+- `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
 - `router_id` (String) Configure router Id
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Read-Only:
+
+- `af_name` (String) Configure Address Family and its parameters
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Enable LDP on an interface and enter interface submode
 
 

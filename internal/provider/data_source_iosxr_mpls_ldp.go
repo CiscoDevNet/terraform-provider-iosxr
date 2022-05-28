@@ -35,6 +35,28 @@ func (t dataSourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"address_families": {
+				MarkdownDescription: "Configure Address Family and its parameters",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"af_name": {
+						MarkdownDescription: "Configure Address Family and its parameters",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"interfaces": {
+				MarkdownDescription: "Enable LDP on an interface and enter interface submode",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"interface_name": {
+						MarkdownDescription: "Enable LDP on an interface and enter interface submode",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

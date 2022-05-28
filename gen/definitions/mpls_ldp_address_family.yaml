@@ -1,7 +1,0 @@
----
-name: MPLS LDP Address Family
-path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/address-families/address-family[af-name=%s]
-doc_category: MPLS
-attributes:
-  - yang_name: af-name
-    example: ipv4

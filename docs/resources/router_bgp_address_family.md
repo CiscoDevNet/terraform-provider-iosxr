@@ -24,6 +24,46 @@ resource "iosxr_router_bgp_address_family" "example" {
   redistribute_connected_metric = 10
   redistribute_static           = true
   redistribute_static_metric    = 10
+  aggregate_addresses = [
+    {
+      address       = "10.0.0.0"
+      masklength    = 8
+      as_set        = false
+      as_confed_set = false
+      summary_only  = false
+    }
+  ]
+  networks = [
+    {
+      address    = "10.1.0.0"
+      masklength = 16
+    }
+  ]
+  redistribute_isis = [
+    {
+      instance_name                = "P1"
+      level_one                    = true
+      level_one_two                = true
+      level_one_two_one_inter_area = false
+      level_one_one_inter_area     = false
+      level_two                    = false
+      level_two_one_inter_area     = false
+      level_one_inter_area         = false
+      metric                       = 100
+    }
+  ]
+  redistribute_ospf = [
+    {
+      router_tag                   = "OSPF1"
+      match_internal               = true
+      match_internal_external      = true
+      match_internal_nssa_external = false
+      match_external               = false
+      match_external_nssa_external = false
+      match_nssa_external          = false
+      metric                       = 100
+    }
+  ]
 }
 ```
 
@@ -38,6 +78,7 @@ resource "iosxr_router_bgp_address_family" "example" {
 
 ### Optional
 
+- `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
 - `device` (String) A device name from the provider configuration.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
@@ -47,9 +88,12 @@ resource "iosxr_router_bgp_address_family" "example" {
   - Range: `2`-`1024`
 - `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
   - Range: `2`-`1024`
+- `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
+- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF or OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
@@ -57,6 +101,61 @@ resource "iosxr_router_bgp_address_family" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--aggregate_addresses"></a>
+### Nested Schema for `aggregate_addresses`
+
+Optional:
+
+- `address` (String) IPv6 Aggregate address and mask or masklength
+- `as_confed_set` (Boolean) Generate AS confed set path information
+- `as_set` (Boolean) Generate AS set path information
+- `masklength` (Number) Network in prefix/length format (prefix part)
+  - Range: `0`-`128`
+- `summary_only` (Boolean) Filter more specific routes from updates
+
+
+<a id="nestedatt--networks"></a>
+### Nested Schema for `networks`
+
+Optional:
+
+- `address` (String) IPv6 network and mask or masklength
+- `masklength` (Number) Network in prefix/length format (prefix part)
+  - Range: `0`-`128`
+
+
+<a id="nestedatt--redistribute_isis"></a>
+### Nested Schema for `redistribute_isis`
+
+Optional:
+
+- `instance_name` (String) ISO IS-IS
+- `level_one` (Boolean) Redistribute ISIS level 1 routes
+- `level_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `level_one_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `level_one_two` (Boolean) Redistribute ISIS level 2 ISIS routes
+- `level_one_two_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `level_two` (Boolean) Redistribute ISIS level 2 ISIS routes
+- `level_two_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `metric` (Number) Metric for redistributed routes
+  - Range: `0`-`4294967295`
+
+
+<a id="nestedatt--redistribute_ospf"></a>
+### Nested Schema for `redistribute_ospf`
+
+Optional:
+
+- `match_external` (Boolean) Redistribute OSPF external routes
+- `match_external_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_internal` (Boolean) Redistribute OSPF internal routes
+- `match_internal_external` (Boolean) Redistribute OSPF external routes
+- `match_internal_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `metric` (Number) Metric for redistributed routes
+  - Range: `0`-`4294967295`
+- `router_tag` (String) Open Shortest Path First (OSPF)
 
 ## Import
 

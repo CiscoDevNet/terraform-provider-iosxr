@@ -85,6 +85,150 @@ func (t dataSourceRouterBGPAddressFamilyType) GetSchema(ctx context.Context) (tf
 				Type:                types.Int64Type,
 				Computed:            true,
 			},
+			"aggregate_addresses": {
+				MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"masklength": {
+						MarkdownDescription: "Network in prefix/length format (prefix part)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"as_set": {
+						MarkdownDescription: "Generate AS set path information",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"as_confed_set": {
+						MarkdownDescription: "Generate AS confed set path information",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"summary_only": {
+						MarkdownDescription: "Filter more specific routes from updates",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"networks": {
+				MarkdownDescription: "IPv6 network and mask or masklength",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: "IPv6 network and mask or masklength",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"masklength": {
+						MarkdownDescription: "Network in prefix/length format (prefix part)",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_isis": {
+				MarkdownDescription: "ISO IS-IS",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: "ISO IS-IS",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"level_one": {
+						MarkdownDescription: "Redistribute ISIS level 1 routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_one_two": {
+						MarkdownDescription: "Redistribute ISIS level 2 ISIS routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_one_two_one_inter_area": {
+						MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_one_one_inter_area": {
+						MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_two": {
+						MarkdownDescription: "Redistribute ISIS level 2 ISIS routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_two_one_inter_area": {
+						MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"level_one_inter_area": {
+						MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"metric": {
+						MarkdownDescription: "Metric for redistributed routes",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_ospf": {
+				MarkdownDescription: "Open Shortest Path First (OSPF or OSPFv3)",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"router_tag": {
+						MarkdownDescription: "Open Shortest Path First (OSPF)",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"match_internal": {
+						MarkdownDescription: "Redistribute OSPF internal routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_internal_external": {
+						MarkdownDescription: "Redistribute OSPF external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_internal_nssa_external": {
+						MarkdownDescription: "Redistribute OSPF NSSA external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_external": {
+						MarkdownDescription: "Redistribute OSPF external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_external_nssa_external": {
+						MarkdownDescription: "Redistribute OSPF NSSA external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"match_nssa_external": {
+						MarkdownDescription: "Redistribute OSPF NSSA external routes",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"metric": {
+						MarkdownDescription: "Metric for redistributed routes",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

@@ -29,3 +29,73 @@ attributes:
     example: true
   - yang_name: redistribute/static/metric
     example: 10
+  - yang_name: aggregate-addresses/aggregate-address
+    tf_name: aggregate_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.0.0.0
+      - yang_name: masklength
+        id: true
+        example: 8
+      - yang_name: as-set
+        example: false
+      - yang_name: as-confed-set
+        example: false
+      - yang_name: summary-only
+        example: false
+  - yang_name: networks/network
+    tf_name: networks
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.0.0
+      - yang_name: masklength
+        id: true
+        example: 16
+  - yang_name: redistribute/isis
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: instance-name
+        id: true
+        example: P1
+      - yang_name: level/one
+        example: true
+      - yang_name: level/one/two
+        example: true
+      - yang_name: level/one/two/one-inter-area
+        example: false
+      - yang_name: level/one/one-inter-area
+        example: false
+      - yang_name: level/two
+        example: false
+      - yang_name: level/two/one-inter-area
+        example: false
+      - yang_name: level/one-inter-area
+        example: false
+      - yang_name: metric
+        example: 100
+  - yang_name: redistribute/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: router-tag
+        id: true
+        example: OSPF1
+      - yang_name: match/internal
+        example: true
+      - yang_name: match/internal/external
+        example: true
+      - yang_name: match/internal/nssa-external
+        example: false
+      - yang_name: match/external
+        example: false
+      - yang_name: match/external/nssa-external
+        example: false
+      - yang_name: match/nssa-external
+        example: false
+      - yang_name: metric
+        example: 100

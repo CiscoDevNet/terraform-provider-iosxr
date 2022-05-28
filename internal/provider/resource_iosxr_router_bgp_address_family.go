@@ -124,6 +124,192 @@ func (t resourceRouterBGPAddressFamilyType) GetSchema(ctx context.Context) (tfsd
 					helpers.IntegerRangeValidator(0, 4294967295),
 				},
 			},
+			"aggregate_addresses": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"masklength": {
+						MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 128),
+						},
+					},
+					"as_set": {
+						MarkdownDescription: helpers.NewAttributeDescription("Generate AS set path information").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"as_confed_set": {
+						MarkdownDescription: helpers.NewAttributeDescription("Generate AS confed set path information").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"summary_only": {
+						MarkdownDescription: helpers.NewAttributeDescription("Filter more specific routes from updates").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"networks": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"masklength": {
+						MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 128),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_isis": {
+				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"instance_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(1, 1024, `[\w\-\.:,_@#%$\+=\|;]+`),
+						},
+					},
+					"level_one": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_one_two": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_one_two_one_inter_area": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_one_one_inter_area": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_two": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_two_one_inter_area": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"level_one_inter_area": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"metric": {
+						MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"redistribute_ospf": {
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF or OSPFv3)").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"router_tag": {
+						MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(1, 1024, `[\w\-\.:,_@#%$\+=\|;]+`),
+						},
+					},
+					"match_internal": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_internal_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_internal_nssa_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_external_nssa_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"match_nssa_external": {
+						MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"metric": {
+						MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 4294967295),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

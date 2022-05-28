@@ -21,6 +21,27 @@ resource "iosxr_router_bgp" "example" {
   timers_bgp_holdtime           = "20"
   bfd_minimum_interval          = 10
   bfd_multiplier                = 4
+  neighbors = [
+    {
+      neighbor_address                = "10.1.1.2"
+      remote_as                       = "65002"
+      description                     = "My Neighbor Description"
+      ignore_connected_check          = true
+      ebgp_multihop_maximum_hop_count = 10
+      bfd_minimum_interval            = 10
+      bfd_multiplier                  = 4
+      local_as                        = "65003"
+      local_as_no_prepend             = true
+      local_as_replace_as             = true
+      local_as_dual_as                = true
+      password                        = "12341C2713181F13253920"
+      shutdown                        = false
+      timers_keepalive_interval       = 5
+      timers_holdtime                 = "20"
+      update_source                   = "GigabitEthernet0/0/0/1"
+      ttl_security                    = false
+    }
+  ]
 }
 ```
 
@@ -44,10 +65,38 @@ resource "iosxr_router_bgp" "example" {
 - `default_metric` (Number) default redistributed metric
   - Range: `1`-`4294967295`
 - `device` (String) A device name from the provider configuration.
+- `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--neighbors"></a>
+### Nested Schema for `neighbors`
+
+Optional:
+
+- `bfd_minimum_interval` (Number) Hello interval
+  - Range: `3`-`30000`
+- `bfd_multiplier` (Number) Detect multiplier
+  - Range: `2`-`16`
+- `description` (String) Neighbor specific description
+- `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
+  - Range: `1`-`255`
+- `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
+- `local_as` (String) bgp as-number
+- `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
+- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `neighbor_address` (String) Neighbor address
+- `password` (String) Specifies an ENCRYPTED password will follow
+- `remote_as` (String) bgp as-number
+- `shutdown` (Boolean) Administratively shut down this neighbor
+- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_interval` (Number) BGP timers
+  - Range: `0`-`65535`
+- `ttl_security` (Boolean) Enable EBGP TTL security
+- `update_source` (String) Source of routing updates
 
 ## Import
 

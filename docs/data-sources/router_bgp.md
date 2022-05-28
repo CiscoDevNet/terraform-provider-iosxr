@@ -36,7 +36,31 @@ data "iosxr_router_bgp" "example" {
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
 - `id` (String) The path of the retrieved object.
+- `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
+
+<a id="nestedatt--neighbors"></a>
+### Nested Schema for `neighbors`
+
+Read-Only:
+
+- `bfd_minimum_interval` (Number) Hello interval
+- `bfd_multiplier` (Number) Detect multiplier
+- `description` (String) Neighbor specific description
+- `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
+- `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
+- `local_as` (String) bgp as-number
+- `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
+- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `neighbor_address` (String) Neighbor address
+- `password` (String) Specifies an ENCRYPTED password will follow
+- `remote_as` (String) bgp as-number
+- `shutdown` (Boolean) Administratively shut down this neighbor
+- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_interval` (Number) BGP timers
+- `ttl_security` (Boolean) Enable EBGP TTL security
+- `update_source` (String) Source of routing updates
 
 

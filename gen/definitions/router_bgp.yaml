@@ -17,3 +17,46 @@ attributes:
     example: 10
   - yang_name: bfd/multiplier
     example: 4
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 10.1.1.2
+      - yang_name: remote-as
+        example: 65002
+      - yang_name: description
+        example: My Neighbor Description
+      - yang_name: ignore-connected-check
+        example: true
+      - yang_name: ebgp-multihop/maximum-hop-count
+        example: 10
+      - yang_name: bfd/minimum-interval
+        example: 10
+      - yang_name: bfd/multiplier
+        example: 4
+      - yang_name: local-as/as-number
+        tf_name: local_as
+        example: 65003
+      - yang_name: local-as/no-prepend
+        example: true
+      - yang_name: local-as/no-prepend/replace-as
+        tf_name: local_as_replace_as
+        example: true
+      - yang_name: local-as/no-prepend/replace-as/dual-as
+        tf_name: local_as_dual_as
+        example: true
+      - yang_name: password/encrypted
+        tf_name: password
+        example: 12341C2713181F13253920
+      - yang_name: shutdown
+        example: false
+      - yang_name: timers/keepalive-interval
+        example: 5
+      - yang_name: timers/holdtime
+        example: 20
+      - yang_name: update-source
+        example: GigabitEthernet0/0/0/1
+      - yang_name: ttl-security
+        example: false

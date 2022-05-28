@@ -90,6 +90,129 @@ func (t resourceRouterBGPType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 					helpers.IntegerRangeValidator(2, 16),
 				},
 			},
+			"neighbors": {
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"neighbor_address": {
+						MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"remote_as": {
+						MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"description": {
+						MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"ignore_connected_check": {
+						MarkdownDescription: helpers.NewAttributeDescription("Bypass the directly connected nexthop check for single-hop eBGP peering").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"ebgp_multihop_maximum_hop_count": {
+						MarkdownDescription: helpers.NewAttributeDescription("maximum hop count").AddIntegerRangeDescription(1, 255).String,
+						Type:                types.Int64Type,
+						Required:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 255),
+						},
+					},
+					"bfd_minimum_interval": {
+						MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(3, 30000),
+						},
+					},
+					"bfd_multiplier": {
+						MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 16).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(2, 16),
+						},
+					},
+					"local_as": {
+						MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"local_as_no_prepend": {
+						MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"local_as_replace_as": {
+						MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"local_as_dual_as": {
+						MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"password": {
+						MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(!.+)|([^!].+)`),
+						},
+					},
+					"shutdown": {
+						MarkdownDescription: helpers.NewAttributeDescription("Administratively shut down this neighbor").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+					"timers_keepalive_interval": {
+						MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
+						Type:                types.Int64Type,
+						Required:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(0, 65535),
+						},
+					},
+					"timers_holdtime": {
+						MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
+						Type:                types.StringType,
+						Required:            true,
+					},
+					"update_source": {
+						MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
+						},
+					},
+					"ttl_security": {
+						MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
+						Type:                types.BoolType,
+						Optional:            true,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

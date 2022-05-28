@@ -9,3 +9,35 @@ attributes:
     example: XC
   - yang_name: description
     example: My P2P Description
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/2
+  - yang_name: neighbor/ipv4s/ipv4
+    tf_name: ipv4_neighbors
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2.3.4.5
+      - yang_name: pw-id
+        id: true
+        example: 1
+      - yang_name: pw-class
+        example: PW_CLASS_1
+  - yang_name: neighbor/ipv6s/ipv6
+    tf_name: ipv6_neighbors
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001::2
+      - yang_name: pw-id
+        id: true
+        example: 2
+      - yang_name: pw-class
+        example: PW_CLASS_1

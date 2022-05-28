@@ -45,6 +45,59 @@ func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfs
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"interfaces": {
+				MarkdownDescription: "Specify (sub-)interface name to cross connect",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"interface_name": {
+						MarkdownDescription: "Specify (sub-)interface name to cross connect",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"ipv4_neighbors": {
+				MarkdownDescription: "IPv4",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: "IPv4",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"pw_id": {
+						MarkdownDescription: "Specify the pseudowire id",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"pw_class": {
+						MarkdownDescription: "PW class template name to use for this XC",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"ipv6_neighbors": {
+				MarkdownDescription: "IPv6",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: "IPv6",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"pw_id": {
+						MarkdownDescription: "Specify the pseudowire id",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"pw_class": {
+						MarkdownDescription: "PW class template name to use for this XC",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

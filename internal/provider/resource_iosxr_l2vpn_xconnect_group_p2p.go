@@ -64,6 +64,87 @@ func (t resourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfsdk
 				Optional:            true,
 				Computed:            true,
 			},
+			"interfaces": {
+				MarkdownDescription: helpers.NewAttributeDescription("Specify (sub-)interface name to cross connect").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"interface_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("Specify (sub-)interface name to cross connect").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"ipv4_neighbors": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
+						},
+					},
+					"pw_id": {
+						MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 4294967295),
+						},
+					},
+					"pw_class": {
+						MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for this XC").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"ipv6_neighbors": {
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"address": {
+						MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(0, 0, `((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`, `(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`, `[0-9a-fA-F:\.]*`),
+						},
+					},
+					"pw_id": {
+						MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
+						Type:                types.Int64Type,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.IntegerRangeValidator(1, 4294967295),
+						},
+					},
+					"pw_class": {
+						MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for this XC").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

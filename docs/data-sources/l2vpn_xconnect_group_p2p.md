@@ -35,5 +35,35 @@ data "iosxr_l2vpn_xconnect_group_p2p" "example" {
 
 - `description` (String) Description for cross connect
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
+- `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
+- `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `interface_name` (String) Specify (sub-)interface name to cross connect
+
+
+<a id="nestedatt--ipv4_neighbors"></a>
+### Nested Schema for `ipv4_neighbors`
+
+Read-Only:
+
+- `address` (String) IPv4
+- `pw_class` (String) PW class template name to use for this XC
+- `pw_id` (Number) Specify the pseudowire id
+
+
+<a id="nestedatt--ipv6_neighbors"></a>
+### Nested Schema for `ipv6_neighbors`
+
+Read-Only:
+
+- `address` (String) IPv6
+- `pw_class` (String) PW class template name to use for this XC
+- `pw_id` (Number) Specify the pseudowire id
 
 

@@ -4,6 +4,8 @@ package provider
 
 import (
 	"fmt"
+	"reflect"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -11,11 +13,27 @@ import (
 )
 
 type L2VPNXconnectGroupP2P struct {
-	Device          types.String `tfsdk:"device"`
-	Id              types.String `tfsdk:"id"`
-	GroupName       types.String `tfsdk:"group_name"`
-	P2pXconnectName types.String `tfsdk:"p2p_xconnect_name"`
-	Description     types.String `tfsdk:"description"`
+	Device          types.String                         `tfsdk:"device"`
+	Id              types.String                         `tfsdk:"id"`
+	GroupName       types.String                         `tfsdk:"group_name"`
+	P2pXconnectName types.String                         `tfsdk:"p2p_xconnect_name"`
+	Description     types.String                         `tfsdk:"description"`
+	Interfaces      []L2VPNXconnectGroupP2PInterfaces    `tfsdk:"interfaces"`
+	Ipv4Neighbors   []L2VPNXconnectGroupP2PIpv4Neighbors `tfsdk:"ipv4_neighbors"`
+	Ipv6Neighbors   []L2VPNXconnectGroupP2PIpv6Neighbors `tfsdk:"ipv6_neighbors"`
+}
+type L2VPNXconnectGroupP2PInterfaces struct {
+	InterfaceName types.String `tfsdk:"interface_name"`
+}
+type L2VPNXconnectGroupP2PIpv4Neighbors struct {
+	Address types.String `tfsdk:"address"`
+	PwId    types.Int64  `tfsdk:"pw_id"`
+	PwClass types.String `tfsdk:"pw_class"`
+}
+type L2VPNXconnectGroupP2PIpv6Neighbors struct {
+	Address types.String `tfsdk:"address"`
+	PwId    types.Int64  `tfsdk:"pw_id"`
+	PwClass types.String `tfsdk:"pw_class"`
 }
 
 func (data L2VPNXconnectGroupP2P) getPath() string {
@@ -27,6 +45,42 @@ func (data L2VPNXconnectGroupP2P) toBody() string {
 	if !data.Description.Null && !data.Description.Unknown {
 		body, _ = sjson.Set(body, "description", data.Description.Value)
 	}
+	if len(data.Interfaces) > 0 {
+		body, _ = sjson.Set(body, "interfaces.interface", []interface{}{})
+		for index, item := range data.Interfaces {
+			if !item.InterfaceName.Null && !item.InterfaceName.Unknown {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.Value)
+			}
+		}
+	}
+	if len(data.Ipv4Neighbors) > 0 {
+		body, _ = sjson.Set(body, "neighbor.ipv4s.ipv4", []interface{}{})
+		for index, item := range data.Ipv4Neighbors {
+			if !item.Address.Null && !item.Address.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"address", item.Address.Value)
+			}
+			if !item.PwId.Null && !item.PwId.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"pw-id", strconv.FormatInt(item.PwId.Value, 10))
+			}
+			if !item.PwClass.Null && !item.PwClass.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.Value)
+			}
+		}
+	}
+	if len(data.Ipv6Neighbors) > 0 {
+		body, _ = sjson.Set(body, "neighbor.ipv6s.ipv6", []interface{}{})
+		for index, item := range data.Ipv6Neighbors {
+			if !item.Address.Null && !item.Address.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv6s.ipv6"+"."+strconv.Itoa(index)+"."+"address", item.Address.Value)
+			}
+			if !item.PwId.Null && !item.PwId.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv6s.ipv6"+"."+strconv.Itoa(index)+"."+"pw-id", strconv.FormatInt(item.PwId.Value, 10))
+			}
+			if !item.PwClass.Null && !item.PwClass.Unknown {
+				body, _ = sjson.Set(body, "neighbor.ipv6s.ipv6"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.Value)
+			}
+		}
+	}
 	return body
 }
 
@@ -36,12 +90,171 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 	} else {
 		data.Description.Null = true
 	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "interfaces.interface").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("interface-name"); value.Exists() {
+			data.Interfaces[i].InterfaceName.Value = value.String()
+		} else {
+			data.Interfaces[i].InterfaceName.Null = true
+		}
+	}
+	for i := range data.Ipv4Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv4Neighbors[i].Address.Value, strconv.FormatInt(data.Ipv4Neighbors[i].PwId.Value, 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "neighbor.ipv4s.ipv4").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() {
+			data.Ipv4Neighbors[i].Address.Value = value.String()
+		} else {
+			data.Ipv4Neighbors[i].Address.Null = true
+		}
+		if value := r.Get("pw-id"); value.Exists() {
+			data.Ipv4Neighbors[i].PwId.Value = value.Int()
+		} else {
+			data.Ipv4Neighbors[i].PwId.Null = true
+		}
+		if value := r.Get("pw-class"); value.Exists() {
+			data.Ipv4Neighbors[i].PwClass.Value = value.String()
+		} else {
+			data.Ipv4Neighbors[i].PwClass.Null = true
+		}
+	}
+	for i := range data.Ipv6Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv6Neighbors[i].Address.Value, strconv.FormatInt(data.Ipv6Neighbors[i].PwId.Value, 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "neighbor.ipv6s.ipv6").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() {
+			data.Ipv6Neighbors[i].Address.Value = value.String()
+		} else {
+			data.Ipv6Neighbors[i].Address.Null = true
+		}
+		if value := r.Get("pw-id"); value.Exists() {
+			data.Ipv6Neighbors[i].PwId.Value = value.Int()
+		} else {
+			data.Ipv6Neighbors[i].PwId.Null = true
+		}
+		if value := r.Get("pw-class"); value.Exists() {
+			data.Ipv6Neighbors[i].PwClass.Value = value.String()
+		} else {
+			data.Ipv6Neighbors[i].PwClass.Null = true
+		}
+	}
 }
 
 func (data *L2VPNXconnectGroupP2P) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description.Value = value.String()
 		data.Description.Null = false
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName.Value = cValue.String()
+				item.InterfaceName.Null = false
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.ipv4s.ipv4"); value.Exists() {
+		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address.Value = cValue.String()
+				item.Address.Null = false
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId.Value = cValue.Int()
+				item.PwId.Null = false
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass.Value = cValue.String()
+				item.PwClass.Null = false
+			}
+			data.Ipv4Neighbors = append(data.Ipv4Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.ipv6s.ipv6"); value.Exists() {
+		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address.Value = cValue.String()
+				item.Address.Null = false
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId.Value = cValue.Int()
+				item.PwId.Null = false
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass.Value = cValue.String()
+				item.PwClass.Null = false
+			}
+			data.Ipv6Neighbors = append(data.Ipv6Neighbors, item)
+			return true
+		})
 	}
 }
 
@@ -72,14 +285,151 @@ func (data *L2VPNXconnectGroupP2P) setUnknownValues() {
 		data.Description.Unknown = false
 		data.Description.Null = true
 	}
+	for i := range data.Interfaces {
+		if data.Interfaces[i].InterfaceName.Unknown {
+			data.Interfaces[i].InterfaceName.Unknown = false
+			data.Interfaces[i].InterfaceName.Null = true
+		}
+	}
+	for i := range data.Ipv4Neighbors {
+		if data.Ipv4Neighbors[i].Address.Unknown {
+			data.Ipv4Neighbors[i].Address.Unknown = false
+			data.Ipv4Neighbors[i].Address.Null = true
+		}
+		if data.Ipv4Neighbors[i].PwId.Unknown {
+			data.Ipv4Neighbors[i].PwId.Unknown = false
+			data.Ipv4Neighbors[i].PwId.Null = true
+		}
+		if data.Ipv4Neighbors[i].PwClass.Unknown {
+			data.Ipv4Neighbors[i].PwClass.Unknown = false
+			data.Ipv4Neighbors[i].PwClass.Null = true
+		}
+	}
+	for i := range data.Ipv6Neighbors {
+		if data.Ipv6Neighbors[i].Address.Unknown {
+			data.Ipv6Neighbors[i].Address.Unknown = false
+			data.Ipv6Neighbors[i].Address.Null = true
+		}
+		if data.Ipv6Neighbors[i].PwId.Unknown {
+			data.Ipv6Neighbors[i].PwId.Unknown = false
+			data.Ipv6Neighbors[i].PwId.Null = true
+		}
+		if data.Ipv6Neighbors[i].PwClass.Unknown {
+			data.Ipv6Neighbors[i].PwClass.Unknown = false
+			data.Ipv6Neighbors[i].PwClass.Null = true
+		}
+	}
 }
 
 func (data *L2VPNXconnectGroupP2P) getDeletedListItems(state L2VPNXconnectGroupP2P) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.Interfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.Value != data.Interfaces[j].InterfaceName.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv4Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Ipv4Neighbors[i].Address.Value, strconv.FormatInt(state.Ipv4Neighbors[i].PwId.Value, 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv4Neighbors[i].Address.Value).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv4Neighbors[i].PwId.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv4Neighbors {
+			found = true
+			if state.Ipv4Neighbors[i].Address.Value != data.Ipv4Neighbors[j].Address.Value {
+				found = false
+			}
+			if state.Ipv4Neighbors[i].PwId.Value != data.Ipv4Neighbors[j].PwId.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Ipv6Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		stateKeyValues := [...]string{state.Ipv6Neighbors[i].Address.Value, strconv.FormatInt(state.Ipv6Neighbors[i].PwId.Value, 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Ipv6Neighbors[i].Address.Value).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Ipv6Neighbors[i].PwId.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Ipv6Neighbors {
+			found = true
+			if state.Ipv6Neighbors[i].Address.Value != data.Ipv6Neighbors[j].Address.Value {
+				found = false
+			}
+			if state.Ipv6Neighbors[i].PwId.Value != data.Ipv6Neighbors[j].PwId.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

@@ -17,6 +17,10 @@
 - Add address_family and interface attributes to iosxr_mpls_ldp resource and data source
 - BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group resource and data source
 - Add xconnect_group attributes to iosxr_l2vpn resource and data source
+- BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group_p2p_interface resource and data source
+- BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv4 resource and data source
+- BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6 resource and data source
+- Add interface and neighbor attributes to iosxr_l2vpn_xconnect_group_p2p resource and data source
 
 ## 0.1.0
 

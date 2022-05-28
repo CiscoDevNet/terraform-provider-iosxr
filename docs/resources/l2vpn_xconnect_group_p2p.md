@@ -17,6 +17,18 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
   group_name        = "P2P"
   p2p_xconnect_name = "XC"
   description       = "My P2P Description"
+  interfaces = [
+    {
+      interface_name = "GigabitEthernet0/0/0/2"
+    }
+  ]
+  ipv4_neighbors = [
+    {
+      address  = "2.3.4.5"
+      pw_id    = 1
+      pw_class = "PW_CLASS_1"
+    }
+  ]
 }
 ```
 
@@ -32,10 +44,42 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 
 - `description` (String) Description for cross connect
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
+- `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
+- `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Optional:
+
+- `interface_name` (String) Specify (sub-)interface name to cross connect
+
+
+<a id="nestedatt--ipv4_neighbors"></a>
+### Nested Schema for `ipv4_neighbors`
+
+Optional:
+
+- `address` (String) IPv4
+- `pw_class` (String) PW class template name to use for this XC
+- `pw_id` (Number) Specify the pseudowire id
+  - Range: `1`-`4294967295`
+
+
+<a id="nestedatt--ipv6_neighbors"></a>
+### Nested Schema for `ipv6_neighbors`
+
+Optional:
+
+- `address` (String) IPv6
+- `pw_class` (String) PW class template name to use for this XC
+- `pw_id` (Number) Specify the pseudowire id
+  - Range: `1`-`4294967295`
 
 ## Import
 

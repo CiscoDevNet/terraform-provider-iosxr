@@ -40,6 +40,119 @@ func (t dataSourceRouterISISType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"nets": {
+				MarkdownDescription: "A Network Entity Title (NET) for this process",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"net_id": {
+						MarkdownDescription: "A Network Entity Title (NET) for this process",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"address_families": {
+				MarkdownDescription: "IS-IS address family",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"af_name": {
+						MarkdownDescription: "Address family name",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"saf_name": {
+						MarkdownDescription: "Sub address family name",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"mpls_ldp_auto_config": {
+						MarkdownDescription: "Enable LDP IGP interface auto-configuration",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"metric_style_narrow": {
+						MarkdownDescription: "Use old style of TLVs with narrow metric",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"metric_style_wide": {
+						MarkdownDescription: "Use new style of TLVs to carry wider metric",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"metric_style_transition": {
+						MarkdownDescription: "Send and accept both styles of TLVs during transition",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"router_id_interface_name": {
+						MarkdownDescription: "Router ID Interface",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"router_id_ip_address": {
+						MarkdownDescription: "Router ID address",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"default_information_originate": {
+						MarkdownDescription: "Distribute a default route",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
+			"interfaces": {
+				MarkdownDescription: "Enter the IS-IS interface configuration submode",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"interface_name": {
+						MarkdownDescription: "Enter the IS-IS interface configuration submode",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"circuit_type": {
+						MarkdownDescription: "Configure circuit type for interface",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+					"hello_padding_disable": {
+						MarkdownDescription: "Disable hello-padding",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"hello_padding_sometimes": {
+						MarkdownDescription: "Enable hello-padding during adjacency formation only",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"priority": {
+						MarkdownDescription: "Set priority for Designated Router election",
+						Type:                types.Int64Type,
+						Computed:            true,
+					},
+					"point_to_point": {
+						MarkdownDescription: "Treat active LAN interface as point-to-point",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"passive": {
+						MarkdownDescription: "Do not establish adjacencies over this interface",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"suppressed": {
+						MarkdownDescription: "Do not advertise connected prefixes of this interface",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+					"shutdown": {
+						MarkdownDescription: "Shutdown IS-IS on this interface",
+						Type:                types.BoolType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

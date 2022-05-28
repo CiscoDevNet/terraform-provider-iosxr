@@ -16,6 +16,36 @@ This resource can manage the Router ISIS configuration.
 resource "iosxr_router_isis" "example" {
   process_id = "P1"
   is_type    = "level-1"
+  nets = [
+    {
+      net_id = "49.0001.2222.2222.2222.00"
+    }
+  ]
+  address_families = [
+    {
+      af_name                       = "ipv4"
+      saf_name                      = "unicast"
+      mpls_ldp_auto_config          = false
+      metric_style_narrow           = false
+      metric_style_wide             = true
+      metric_style_transition       = false
+      router_id_ip_address          = "1.2.3.4"
+      default_information_originate = true
+    }
+  ]
+  interfaces = [
+    {
+      interface_name          = "GigabitEthernet0/0/0/1"
+      circuit_type            = "level-1"
+      hello_padding_disable   = true
+      hello_padding_sometimes = false
+      priority                = 10
+      point_to_point          = false
+      passive                 = false
+      suppressed              = false
+      shutdown                = false
+    }
+  ]
 }
 ```
 
@@ -28,13 +58,59 @@ resource "iosxr_router_isis" "example" {
 
 ### Optional
 
+- `address_families` (Attributes List) IS-IS address family (see [below for nested schema](#nestedatt--address_families))
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
   - Choices: `level-1`, `level-1-2`, `level-2-only`
+- `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Optional:
+
+- `af_name` (String) Address family name
+  - Choices: `ipv4`, `ipv6`
+- `default_information_originate` (Boolean) Distribute a default route
+- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
+- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
+- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
+- `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
+- `router_id_interface_name` (String) Router ID Interface
+- `router_id_ip_address` (String) Router ID address
+- `saf_name` (String) Sub address family name
+  - Choices: `multicast`, `unicast`
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Optional:
+
+- `circuit_type` (String) Configure circuit type for interface
+  - Choices: `level-1`, `level-1-2`, `level-2-only`
+- `hello_padding_disable` (Boolean) Disable hello-padding
+- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
+- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `passive` (Boolean) Do not establish adjacencies over this interface
+- `point_to_point` (Boolean) Treat active LAN interface as point-to-point
+- `priority` (Number) Set priority for Designated Router election
+  - Range: `0`-`127`
+- `shutdown` (Boolean) Shutdown IS-IS on this interface
+- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+
+
+<a id="nestedatt--nets"></a>
+### Nested Schema for `nets`
+
+Optional:
+
+- `net_id` (String) A Network Entity Title (NET) for this process
 
 ## Import
 

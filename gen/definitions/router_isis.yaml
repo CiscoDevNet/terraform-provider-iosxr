@@ -7,3 +7,59 @@ attributes:
     example: P1
   - yang_name: is-type
     example: level-1
+  - yang_name: nets/net
+    tf_name: nets
+    type: List
+    attributes:
+      - yang_name: net-id
+        id: true
+        example: 49.0001.2222.2222.2222.00
+  - yang_name: address-families/address-family
+    tf_name: address_families
+    type: List
+    attributes:
+      - yang_name: af-name
+        id: true
+        example: ipv4
+      - yang_name: saf-name
+        id: true
+        example: unicast
+      - yang_name: mpls/ldp/auto-config
+        example: false
+      - yang_name: metric-style/narrow
+        example: false
+      - yang_name: metric-style/wide
+        example: true
+      - yang_name: metric-style/transition
+        example: false
+      - yang_name: router-id/interface-name
+        example: GigabitEthernet0/0/0/1
+        exclude_test: true
+      - yang_name: router-id/ip-address
+        example: 1.2.3.4
+      - yang_name: default-information/originate
+        example: true
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: circuit-type
+        example: level-1
+      - yang_name: hello-padding/disable
+        example: true
+      - yang_name: hello-padding/sometimes
+        example: false
+      - yang_name: priority/priority-value
+        tf_name: priority
+        example: 10
+      - yang_name: point-to-point
+        example: false
+      - yang_name: passive
+        example: false
+      - yang_name: suppressed
+        example: false
+      - yang_name: shutdown
+        example: false

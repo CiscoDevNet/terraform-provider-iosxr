@@ -30,6 +30,10 @@ description: |-
 - BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv4 resource and data source
 - BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group_p2p_neighbor_ipv6 resource and data source
 - Add interface and neighbor attributes to iosxr_l2vpn_xconnect_group_p2p resource and data source
+- BREAKING CHANGE: remove iosxr_router_isis_address_family resource and data source
+- BREAKING CHANGE: remove iosxr_router_isis_interface resource and data source
+- BREAKING CHANGE: remove iosxr_router_isis_net resource and data source
+- Add address_family, interface and net attributes to iosxr_router_isis resource and data source
 
 ## 0.1.0
 

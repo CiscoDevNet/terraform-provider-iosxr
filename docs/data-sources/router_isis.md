@@ -31,7 +31,49 @@ data "iosxr_router_isis" "example" {
 
 ### Read-Only
 
+- `address_families` (Attributes List) IS-IS address family (see [below for nested schema](#nestedatt--address_families))
 - `id` (String) The path of the retrieved object.
+- `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
+- `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
+
+<a id="nestedatt--address_families"></a>
+### Nested Schema for `address_families`
+
+Read-Only:
+
+- `af_name` (String) Address family name
+- `default_information_originate` (Boolean) Distribute a default route
+- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
+- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
+- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
+- `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
+- `router_id_interface_name` (String) Router ID Interface
+- `router_id_ip_address` (String) Router ID address
+- `saf_name` (String) Sub address family name
+
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Read-Only:
+
+- `circuit_type` (String) Configure circuit type for interface
+- `hello_padding_disable` (Boolean) Disable hello-padding
+- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
+- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `passive` (Boolean) Do not establish adjacencies over this interface
+- `point_to_point` (Boolean) Treat active LAN interface as point-to-point
+- `priority` (Number) Set priority for Designated Router election
+- `shutdown` (Boolean) Shutdown IS-IS on this interface
+- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+
+
+<a id="nestedatt--nets"></a>
+### Nested Schema for `nets`
+
+Read-Only:
+
+- `net_id` (String) A Network Entity Title (NET) for this process
 
 

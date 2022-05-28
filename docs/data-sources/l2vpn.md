@@ -29,5 +29,13 @@ data "iosxr_l2vpn" "example" {
 - `description` (String) Multi segment psedowire global description
 - `id` (String) The path of the retrieved object.
 - `router_id` (String) Global L2VPN Router ID
+- `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
+
+<a id="nestedatt--xconnect_groups"></a>
+### Nested Schema for `xconnect_groups`
+
+Read-Only:
+
+- `group_name` (String) Specify the group the cross connects belong to
 
 

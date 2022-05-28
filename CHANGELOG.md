@@ -15,6 +15,8 @@
 - BREAKING CHANGE: remove iosxr_mpls_ldp_address_family resource and data source
 - BREAKING CHANGE: remove iosxr_mpls_ldp_interface resource and data source
 - Add address_family and interface attributes to iosxr_mpls_ldp resource and data source
+- BREAKING CHANGE: remove iosxr_l2vpn_xconnect_group resource and data source
+- Add xconnect_group attributes to iosxr_l2vpn resource and data source
 
 ## 0.1.0
 

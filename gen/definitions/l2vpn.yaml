@@ -7,3 +7,10 @@ attributes:
     example: My L2VPN Description
   - yang_name: router-id
     example: 1.2.3.4
+  - yang_name: xconnect/groups/group
+    tf_name: xconnect_groups
+    type: List
+    attributes:
+      - yang_name: group-name
+        id: true
+        example: P2P

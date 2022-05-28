@@ -16,6 +16,11 @@ This resource can manage the L2VPN configuration.
 resource "iosxr_l2vpn" "example" {
   description = "My L2VPN Description"
   router_id   = "1.2.3.4"
+  xconnect_groups = [
+    {
+      group_name = "P2P"
+    }
+  ]
 }
 ```
 
@@ -27,10 +32,18 @@ resource "iosxr_l2vpn" "example" {
 - `description` (String) Multi segment psedowire global description
 - `device` (String) A device name from the provider configuration.
 - `router_id` (String) Global L2VPN Router ID
+- `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--xconnect_groups"></a>
+### Nested Schema for `xconnect_groups`
+
+Optional:
+
+- `group_name` (String) Specify the group the cross connects belong to
 
 ## Import
 

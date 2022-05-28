@@ -51,6 +51,21 @@ func (t resourceL2VPNType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 					helpers.StringPatternValidator(0, 0, `(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`, `[0-9\.]*`),
 				},
 			},
+			"xconnect_groups": {
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
+				Optional:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"group_name": {
+						MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
+						Type:                types.StringType,
+						Optional:            true,
+						Computed:            true,
+						Validators: []tfsdk.AttributeValidator{
+							helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
+						},
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

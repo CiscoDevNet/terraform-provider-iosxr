@@ -18,6 +18,7 @@ func TestAccIosxrL2VPN(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "description", "My L2VPN Description"),
 					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "router_id", "1.2.3.4"),
+					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"),
 				),
 			},
 			{
@@ -41,6 +42,9 @@ func testAccIosxrL2VPNConfig_all() string {
 	resource "iosxr_l2vpn" "test" {
 		description = "My L2VPN Description"
 		router_id = "1.2.3.4"
+		xconnect_groups = [{
+			group_name = "P2P"
+		}]
 	}
 	`
 }

@@ -40,6 +40,17 @@ func (t dataSourceL2VPNType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				Type:                types.StringType,
 				Computed:            true,
 			},
+			"xconnect_groups": {
+				MarkdownDescription: "Specify the group the cross connects belong to",
+				Computed:            true,
+				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
+					"group_name": {
+						MarkdownDescription: "Specify the group the cross connects belong to",
+						Type:                types.StringType,
+						Computed:            true,
+					},
+				}, tfsdk.ListNestedAttributesOptions{}),
+			},
 		},
 	}, nil
 }

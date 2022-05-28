@@ -3,16 +3,24 @@
 package provider
 
 import (
+	"fmt"
+	"reflect"
+	"strconv"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
 type L2VPN struct {
-	Device      types.String `tfsdk:"device"`
-	Id          types.String `tfsdk:"id"`
-	Description types.String `tfsdk:"description"`
-	RouterId    types.String `tfsdk:"router_id"`
+	Device         types.String          `tfsdk:"device"`
+	Id             types.String          `tfsdk:"id"`
+	Description    types.String          `tfsdk:"description"`
+	RouterId       types.String          `tfsdk:"router_id"`
+	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
+}
+type L2VPNXconnectGroups struct {
+	GroupName types.String `tfsdk:"group_name"`
 }
 
 func (data L2VPN) getPath() string {
@@ -26,6 +34,14 @@ func (data L2VPN) toBody() string {
 	}
 	if !data.RouterId.Null && !data.RouterId.Unknown {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.Value)
+	}
+	if len(data.XconnectGroups) > 0 {
+		body, _ = sjson.Set(body, "xconnect.groups.group", []interface{}{})
+		for index, item := range data.XconnectGroups {
+			if !item.GroupName.Null && !item.GroupName.Unknown {
+				body, _ = sjson.Set(body, "xconnect.groups.group"+"."+strconv.Itoa(index)+"."+"group-name", item.GroupName.Value)
+			}
+		}
 	}
 	return body
 }
@@ -41,6 +57,35 @@ func (data *L2VPN) updateFromBody(res []byte) {
 	} else {
 		data.RouterId.Null = true
 	}
+	for i := range data.XconnectGroups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.XconnectGroups[i].GroupName.Value}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "xconnect.groups.group").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("group-name"); value.Exists() {
+			data.XconnectGroups[i].GroupName.Value = value.String()
+		} else {
+			data.XconnectGroups[i].GroupName.Null = true
+		}
+	}
 }
 
 func (data *L2VPN) fromBody(res []byte) {
@@ -51,6 +96,18 @@ func (data *L2VPN) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId.Value = value.String()
 		data.RouterId.Null = false
+	}
+	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
+		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroups{}
+			if cValue := v.Get("group-name"); cValue.Exists() {
+				item.GroupName.Value = cValue.String()
+				item.GroupName.Null = false
+			}
+			data.XconnectGroups = append(data.XconnectGroups, item)
+			return true
+		})
 	}
 }
 
@@ -75,14 +132,51 @@ func (data *L2VPN) setUnknownValues() {
 		data.RouterId.Unknown = false
 		data.RouterId.Null = true
 	}
+	for i := range data.XconnectGroups {
+		if data.XconnectGroups[i].GroupName.Unknown {
+			data.XconnectGroups[i].GroupName.Unknown = false
+			data.XconnectGroups[i].GroupName.Null = true
+		}
+	}
 }
 
 func (data *L2VPN) getDeletedListItems(state L2VPN) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.XconnectGroups {
+		keys := [...]string{"group-name"}
+		stateKeyValues := [...]string{state.XconnectGroups[i].GroupName.Value}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.XconnectGroups[i].GroupName.Value).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.XconnectGroups {
+			found = true
+			if state.XconnectGroups[i].GroupName.Value != data.XconnectGroups[j].GroupName.Value {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *L2VPN) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

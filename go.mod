@@ -8,7 +8,7 @@ require (
 	github.com/hashicorp/terraform-plugin-go v0.9.1
 	github.com/hashicorp/terraform-plugin-log v0.4.1
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.17.0
-	github.com/karimra/gnmic v0.25.1
+	github.com/karimra/gnmic v0.26.0
 	github.com/openconfig/gnmi v0.0.0-20220503232738-6eb133c65a13
 	github.com/openconfig/goyang v1.0.0
 	github.com/tidwall/gjson v1.14.1
@@ -18,9 +18,9 @@ require (
 
 require (
 	cloud.google.com/go v0.100.2 // indirect
-	cloud.google.com/go/compute v1.3.0 // indirect
+	cloud.google.com/go/compute v1.6.1 // indirect
 	cloud.google.com/go/iam v0.3.0 // indirect
-	cloud.google.com/go/storage v1.18.2 // indirect
+	cloud.google.com/go/storage v1.22.1 // indirect
 	github.com/AlekSi/pointer v1.2.0 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.1.1 // indirect
@@ -33,7 +33,7 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/armon/go-radix v1.0.0 // indirect
-	github.com/aws/aws-sdk-go v1.40.49 // indirect
+	github.com/aws/aws-sdk-go v1.44.20 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.9.1 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.8.2 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.4.2 // indirect
@@ -59,7 +59,8 @@ require (
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/google/wire v0.5.0 // indirect
-	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
+	github.com/googleapis/gax-go/v2 v2.3.0 // indirect
+	github.com/googleapis/go-type-adapters v1.0.0 // indirect
 	github.com/gosimple/slug v1.10.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hairyhenderson/gomplate/v3 v3.10.0 // indirect
@@ -74,7 +75,7 @@ require (
 	github.com/hashicorp/go-msgpack v1.1.5 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-plugin v1.4.4 // indirect
-	github.com/hashicorp/go-retryablehttp v0.7.0 // indirect
+	github.com/hashicorp/go-retryablehttp v0.7.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.2 // indirect
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
@@ -103,6 +104,7 @@ require (
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/miekg/dns v1.1.49 // indirect
 	github.com/mitchellh/cli v1.1.4 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -110,7 +112,7 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/oklog/run v1.0.0 // indirect
+	github.com/oklog/run v1.1.0 // indirect
 	github.com/openconfig/grpctunnel v0.0.0-20220524190229-125331eabdde // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
@@ -138,19 +140,20 @@ require (
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20211027215541-db492cf91b37 // indirect
 	gocloud.dev v0.24.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
+	golang.org/x/net v0.0.0-20220520000938-2e3eb7b945c2 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/time v0.0.0-20211116232009-f0f3c7e86c11 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
-	google.golang.org/api v0.70.0 // indirect
+	golang.org/x/time v0.0.0-20220224211638-0e9765cccd65 // indirect
+	golang.org/x/tools v0.1.10 // indirect
+	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
+	google.golang.org/api v0.80.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220222213610-43724f9ea8cf // indirect
+	google.golang.org/genproto v0.0.0-20220524023933-508584e28198 // indirect
 	google.golang.org/grpc v1.47.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	inet.af/netaddr v0.0.0-20210903134321-85fa6c94624e // indirect
-	k8s.io/client-go v0.22.5 // indirect
+	k8s.io/client-go v0.24.0 // indirect
 )

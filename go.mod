@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/terraform-plugin-docs v0.10.1
 	github.com/hashicorp/terraform-plugin-framework v0.8.0
 	github.com/hashicorp/terraform-plugin-go v0.9.1
-	github.com/hashicorp/terraform-plugin-log v0.4.1
+	github.com/hashicorp/terraform-plugin-log v0.7.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.17.0
 	github.com/karimra/gnmic v0.26.0
 	github.com/openconfig/gnmi v0.0.0-20220503232738-6eb133c65a13

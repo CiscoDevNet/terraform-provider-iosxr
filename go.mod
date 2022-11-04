@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.23.0
 	github.com/karimra/gnmic v0.26.0
 	github.com/openconfig/gnmi v0.0.0-20220503232738-6eb133c65a13
-	github.com/openconfig/goyang v1.0.0
+	github.com/openconfig/goyang v1.1.0
 	github.com/tidwall/gjson v1.14.3
 	github.com/tidwall/sjson v1.2.5
 	gopkg.in/yaml.v3 v3.0.1

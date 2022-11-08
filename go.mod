@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/terraform-plugin-framework v0.8.0
 	github.com/hashicorp/terraform-plugin-go v0.14.0
 	github.com/hashicorp/terraform-plugin-log v0.7.0
-	github.com/hashicorp/terraform-plugin-sdk/v2 v2.23.0
+	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.0
 	github.com/karimra/gnmic v0.26.0
 	github.com/openconfig/gnmi v0.0.0-20220503232738-6eb133c65a13
 	github.com/openconfig/goyang v1.1.0
@@ -83,7 +83,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hc-install v0.4.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/hashicorp/hcl/v2 v2.14.0 // indirect
+	github.com/hashicorp/hcl/v2 v2.14.1 // indirect
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/serf v0.9.6 // indirect
 	github.com/hashicorp/terraform-exec v0.17.3 // indirect

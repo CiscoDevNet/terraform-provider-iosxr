@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceBGPASFormatType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &BGPASFormatDataSource{}
+	_ datasource.DataSourceWithConfigure = &BGPASFormatDataSource{}
+)
 
-func (t dataSourceBGPASFormatType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewBGPASFormatDataSource() datasource.DataSource {
+	return &BGPASFormatDataSource{}
+}
+
+type BGPASFormatDataSource struct {
+	client *client.Client
+}
+
+func (d *BGPASFormatDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_as_format"
+}
+
+func (d *BGPASFormatDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the BGP AS Format configuration.",
@@ -44,19 +62,15 @@ func (t dataSourceBGPASFormatType) GetSchema(ctx context.Context) (tfsdk.Schema,
 	}, nil
 }
 
-func (t dataSourceBGPASFormatType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *BGPASFormatDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceBGPASFormat{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceBGPASFormat struct {
-	provider provider
-}
-
-func (d dataSourceBGPASFormat) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *BGPASFormatDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config BGPASFormat
 
 	// Read config
@@ -68,14 +82,14 @@ func (d dataSourceBGPASFormat) Read(ctx context.Context, req tfsdk.ReadDataSourc
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

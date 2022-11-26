@@ -63,11 +63,14 @@ resource "iosxr_gnmi" "vrf" {
 <a id="nestedatt--lists"></a>
 ### Nested Schema for `lists`
 
+Required:
+
+- `key` (String) YANG list key attribute(s). In case of multiple keys, those should be separated by a comma (`,`).
+- `name` (String) YANG list name.
+
 Optional:
 
 - `items` (List of Map of String) List of maps of key-value pairs which represents the attributes and its values.
-- `key` (String) YANG list key attribute(s). In case of multiple keys, those should be separated by a comma (`,`).
-- `name` (String) YANG list name.
 
 ## Import
 

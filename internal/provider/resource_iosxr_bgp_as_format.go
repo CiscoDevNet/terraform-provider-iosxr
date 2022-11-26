@@ -7,17 +7,30 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-type resourceBGPASFormatType struct{}
+var _ resource.Resource = (*BGPASFormatResource)(nil)
 
-func (t resourceBGPASFormatType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewBGPASFormatResource() resource.Resource {
+	return &BGPASFormatResource{}
+}
+
+type BGPASFormatResource struct {
+	client *client.Client
+}
+
+func (r *BGPASFormatResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bgp_as_format"
+}
+
+func (r *BGPASFormatResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This resource can manage the BGP AS Format configuration.",
@@ -33,7 +46,7 @@ func (t resourceBGPASFormatType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"asdot": {
@@ -52,19 +65,15 @@ func (t resourceBGPASFormatType) GetSchema(ctx context.Context) (tfsdk.Schema, d
 	}, nil
 }
 
-func (t resourceBGPASFormatType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *BGPASFormatResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceBGPASFormat{
-		provider: provider,
-	}, diags
+	r.client = req.ProviderData.(*client.Client)
 }
 
-type resourceBGPASFormat struct {
-	provider provider
-}
-
-func (r resourceBGPASFormat) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *BGPASFormatResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan BGPASFormat
 
 	// Read plan
@@ -79,7 +88,7 @@ func (r resourceBGPASFormat) Create(ctx context.Context, req tfsdk.CreateResourc
 	// Create object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -89,7 +98,7 @@ func (r resourceBGPASFormat) Create(ctx context.Context, req tfsdk.CreateResourc
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -98,7 +107,7 @@ func (r resourceBGPASFormat) Create(ctx context.Context, req tfsdk.CreateResourc
 
 	plan.setUnknownValues()
 
-	plan.Id = types.String{Value: plan.getPath()}
+	plan.Id = types.StringValue(plan.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
 
@@ -106,7 +115,7 @@ func (r resourceBGPASFormat) Create(ctx context.Context, req tfsdk.CreateResourc
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPASFormat) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *BGPASFormatResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state BGPASFormat
 
 	// Read state
@@ -116,9 +125,9 @@ func (r resourceBGPASFormat) Read(ctx context.Context, req tfsdk.ReadResourceReq
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.provider.client.Get(ctx, state.Device.Value, state.Id.Value)
+	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -126,13 +135,13 @@ func (r resourceBGPASFormat) Read(ctx context.Context, req tfsdk.ReadResourceReq
 
 	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPASFormat) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *BGPASFormatResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state BGPASFormat
 
 	// Read plan
@@ -149,12 +158,12 @@ func (r resourceBGPASFormat) Update(ctx context.Context, req tfsdk.UpdateResourc
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -166,7 +175,7 @@ func (r resourceBGPASFormat) Update(ctx context.Context, req tfsdk.UpdateResourc
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -177,20 +186,20 @@ func (r resourceBGPASFormat) Update(ctx context.Context, req tfsdk.UpdateResourc
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceBGPASFormat) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *BGPASFormatResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state BGPASFormat
 
 	// Read state
@@ -200,19 +209,19 @@ func (r resourceBGPASFormat) Delete(ctx context.Context, req tfsdk.DeleteResourc
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	_, diags = r.provider.client.Set(ctx, state.Device.Value, state.getPath(), "", client.Delete)
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), state.getPath(), "", client.Delete)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceBGPASFormat) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *BGPASFormatResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

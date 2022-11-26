@@ -23,60 +23,56 @@ func (data OCSystemConfig) getPath() string {
 
 func (data OCSystemConfig) toBody() string {
 	body := "{}"
-	if !data.Hostname.Null && !data.Hostname.Unknown {
-		body, _ = sjson.Set(body, "hostname", data.Hostname.Value)
+	if !data.Hostname.IsNull() && !data.Hostname.IsUnknown() {
+		body, _ = sjson.Set(body, "hostname", data.Hostname.ValueString())
 	}
-	if !data.DomainName.Null && !data.DomainName.Unknown {
-		body, _ = sjson.Set(body, "domain-name", data.DomainName.Value)
+	if !data.DomainName.IsNull() && !data.DomainName.IsUnknown() {
+		body, _ = sjson.Set(body, "domain-name", data.DomainName.ValueString())
 	}
-	if !data.LoginBanner.Null && !data.LoginBanner.Unknown {
-		body, _ = sjson.Set(body, "login-banner", data.LoginBanner.Value)
+	if !data.LoginBanner.IsNull() && !data.LoginBanner.IsUnknown() {
+		body, _ = sjson.Set(body, "login-banner", data.LoginBanner.ValueString())
 	}
-	if !data.MotdBanner.Null && !data.MotdBanner.Unknown {
-		body, _ = sjson.Set(body, "motd-banner", data.MotdBanner.Value)
+	if !data.MotdBanner.IsNull() && !data.MotdBanner.IsUnknown() {
+		body, _ = sjson.Set(body, "motd-banner", data.MotdBanner.ValueString())
 	}
 	return body
 }
 
 func (data *OCSystemConfig) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
-		data.Hostname.Value = value.String()
+		data.Hostname = types.StringValue(value.String())
 	} else {
-		data.Hostname.Null = true
+		data.Hostname = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "domain-name"); value.Exists() {
-		data.DomainName.Value = value.String()
+		data.DomainName = types.StringValue(value.String())
 	} else {
-		data.DomainName.Null = true
+		data.DomainName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "login-banner"); value.Exists() {
-		data.LoginBanner.Value = value.String()
+		data.LoginBanner = types.StringValue(value.String())
 	} else {
-		data.LoginBanner.Null = true
+		data.LoginBanner = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() {
-		data.MotdBanner.Value = value.String()
+		data.MotdBanner = types.StringValue(value.String())
 	} else {
-		data.MotdBanner.Null = true
+		data.MotdBanner = types.StringNull()
 	}
 }
 
 func (data *OCSystemConfig) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
-		data.Hostname.Value = value.String()
-		data.Hostname.Null = false
+		data.Hostname = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "domain-name"); value.Exists() {
-		data.DomainName.Value = value.String()
-		data.DomainName.Null = false
+		data.DomainName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "login-banner"); value.Exists() {
-		data.LoginBanner.Value = value.String()
-		data.LoginBanner.Null = false
+		data.LoginBanner = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() {
-		data.MotdBanner.Value = value.String()
-		data.MotdBanner.Null = false
+		data.MotdBanner = types.StringValue(value.String())
 	}
 }
 
@@ -85,29 +81,23 @@ func (data *OCSystemConfig) fromPlan(plan OCSystemConfig) {
 }
 
 func (data *OCSystemConfig) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.Hostname.Unknown {
-		data.Hostname.Unknown = false
-		data.Hostname.Null = true
+	if data.Hostname.IsUnknown() {
+		data.Hostname = types.StringNull()
 	}
-	if data.DomainName.Unknown {
-		data.DomainName.Unknown = false
-		data.DomainName.Null = true
+	if data.DomainName.IsUnknown() {
+		data.DomainName = types.StringNull()
 	}
-	if data.LoginBanner.Unknown {
-		data.LoginBanner.Unknown = false
-		data.LoginBanner.Null = true
+	if data.LoginBanner.IsUnknown() {
+		data.LoginBanner = types.StringNull()
 	}
-	if data.MotdBanner.Unknown {
-		data.MotdBanner.Unknown = false
-		data.MotdBanner.Null = true
+	if data.MotdBanner.IsUnknown() {
+		data.MotdBanner = types.StringNull()
 	}
 }
 

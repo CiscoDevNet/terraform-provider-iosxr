@@ -7,15 +7,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSource{{camelCase .Name}}Type struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &{{camelCase .Name}}DataSource{}
+	_ datasource.DataSourceWithConfigure = &{{camelCase .Name}}DataSource{}
+)
 
-func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func New{{camelCase .Name}}DataSource() datasource.DataSource {
+	return &{{camelCase .Name}}DataSource{}
+}
+
+type {{camelCase .Name}}DataSource struct{
+	client *client.Client
+}
+
+func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_{{snakeCase .Name}}"
+}
+
+func (d *{{camelCase .Name}}DataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "{{.DsDescription}}",
@@ -51,7 +69,7 @@ func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk
 						Computed:            true,
 					},
 					{{- end}}
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 				{{- end}}
 			},
 			{{- end}}
@@ -59,19 +77,15 @@ func (t dataSource{{camelCase .Name}}Type) GetSchema(ctx context.Context) (tfsdk
 	}, nil
 }
 
-func (t dataSource{{camelCase .Name}}Type) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSource{{camelCase .Name}}{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSource{{camelCase .Name}} struct {
-	provider provider
-}
-
-func (d dataSource{{camelCase .Name}}) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config {{camelCase .Name}}
 
 	// Read config
@@ -83,14 +97,14 @@ func (d dataSource{{camelCase .Name}}) Read(ctx context.Context, req tfsdk.ReadD
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

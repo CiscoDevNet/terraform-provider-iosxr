@@ -18,7 +18,7 @@ type RouterISISInterfaceAddressFamily struct {
 }
 
 func (data RouterISISInterfaceAddressFamily) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.Value, data.InterfaceName.Value, data.AfName.Value, data.SafName.Value)
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
 func (data RouterISISInterfaceAddressFamily) toBody() string {
@@ -34,36 +34,30 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(res []byte) {
 
 func (data *RouterISISInterfaceAddressFamily) fromPlan(plan RouterISISInterfaceAddressFamily) {
 	data.Device = plan.Device
-	data.ProcessId.Value = plan.ProcessId.Value
-	data.InterfaceName.Value = plan.InterfaceName.Value
-	data.AfName.Value = plan.AfName.Value
-	data.SafName.Value = plan.SafName.Value
+	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
+	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
+	data.AfName = types.StringValue(plan.AfName.ValueString())
+	data.SafName = types.StringValue(plan.SafName.ValueString())
 }
 
 func (data *RouterISISInterfaceAddressFamily) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.ProcessId.Unknown {
-		data.ProcessId.Unknown = false
-		data.ProcessId.Null = true
+	if data.ProcessId.IsUnknown() {
+		data.ProcessId = types.StringNull()
 	}
-	if data.InterfaceName.Unknown {
-		data.InterfaceName.Unknown = false
-		data.InterfaceName.Null = true
+	if data.InterfaceName.IsUnknown() {
+		data.InterfaceName = types.StringNull()
 	}
-	if data.AfName.Unknown {
-		data.AfName.Unknown = false
-		data.AfName.Null = true
+	if data.AfName.IsUnknown() {
+		data.AfName = types.StringNull()
 	}
-	if data.SafName.Unknown {
-		data.SafName.Unknown = false
-		data.SafName.Null = true
+	if data.SafName.IsUnknown() {
+		data.SafName = types.StringNull()
 	}
 }
 

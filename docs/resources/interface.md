@@ -76,11 +76,14 @@ resource "iosxr_interface" "example" {
 <a id="nestedatt--ipv6_addresses"></a>
 ### Nested Schema for `ipv6_addresses`
 
+Required:
+
+- `prefix_length` (Number) Prefix length in bits
+  - Range: `0`-`128`
+
 Optional:
 
 - `address` (String) IPv6 name or address
-- `prefix_length` (Number) Prefix length in bits
-  - Range: `0`-`128`
 - `zone` (String) IPv6 address zone
   - Default value: `0`
 

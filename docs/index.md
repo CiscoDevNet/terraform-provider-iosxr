@@ -41,7 +41,7 @@ provider "iosxr" {
 <a id="nestedatt--devices"></a>
 ### Nested Schema for `devices`
 
-Optional:
+Required:
 
 - `host` (String) IP of the Cisco IOS-XR device.
 - `name` (String) Device name.

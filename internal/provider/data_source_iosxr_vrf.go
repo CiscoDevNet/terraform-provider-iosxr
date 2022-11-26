@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceVRFType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &VRFDataSource{}
+	_ datasource.DataSourceWithConfigure = &VRFDataSource{}
+)
 
-func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewVRFDataSource() datasource.DataSource {
+	return &VRFDataSource{}
+}
+
+type VRFDataSource struct {
+	client *client.Client
+}
+
+func (d *VRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_vrf"
+}
+
+func (d *VRFDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the VRF configuration.",
@@ -124,7 +142,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": {
 				MarkdownDescription: "Four Byte AS number Route Target",
@@ -145,7 +163,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv4_unicast_import_route_target_ip_address_format": {
 				MarkdownDescription: "IP address",
@@ -166,7 +184,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": {
 				MarkdownDescription: "Two Byte AS Number Route Target",
@@ -187,7 +205,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": {
 				MarkdownDescription: "Four Byte AS number Route Target",
@@ -208,7 +226,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv4_unicast_export_route_target_ip_address_format": {
 				MarkdownDescription: "IP address",
@@ -229,7 +247,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": {
 				MarkdownDescription: "Two Byte AS Number Route Target",
@@ -250,7 +268,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": {
 				MarkdownDescription: "Four Byte AS number Route Target",
@@ -271,7 +289,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_import_route_target_ip_address_format": {
 				MarkdownDescription: "IP address",
@@ -292,7 +310,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": {
 				MarkdownDescription: "Two Byte AS Number Route Target",
@@ -313,7 +331,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": {
 				MarkdownDescription: "Four Byte AS number Route Target",
@@ -334,7 +352,7 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_family_ipv6_unicast_export_route_target_ip_address_format": {
 				MarkdownDescription: "IP address",
@@ -355,25 +373,21 @@ func (t dataSourceVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Di
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t dataSourceVRFType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *VRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceVRF{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceVRF struct {
-	provider provider
-}
-
-func (d dataSourceVRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config VRF
 
 	// Read config
@@ -385,14 +399,14 @@ func (d dataSourceVRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

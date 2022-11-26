@@ -7,17 +7,30 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-type resourceRouterOSPFVRFType struct{}
+var _ resource.Resource = (*RouterOSPFVRFResource)(nil)
 
-func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterOSPFVRFResource() resource.Resource {
+	return &RouterOSPFVRFResource{}
+}
+
+type RouterOSPFVRFResource struct {
+	client *client.Client
+}
+
+func (r *RouterOSPFVRFResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_ospf_vrf"
+}
+
+func (r *RouterOSPFVRFResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This resource can manage the Router OSPF VRF configuration.",
@@ -33,7 +46,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"process_name": {
@@ -44,7 +57,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 					helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"vrf_name": {
@@ -55,7 +68,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 					helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"mpls_ldp_sync": {
@@ -227,7 +240,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 						Optional:            true,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_bgp": {
 				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
@@ -257,7 +270,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 							helpers.StringEnumValidator("1", "2"),
 						},
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_isis": {
 				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
@@ -305,7 +318,7 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 							helpers.StringEnumValidator("1", "2"),
 						},
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_ospf": {
 				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
@@ -353,25 +366,21 @@ func (t resourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema,
 							helpers.StringEnumValidator("1", "2"),
 						},
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t resourceRouterOSPFVRFType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *RouterOSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceRouterOSPFVRF{
-		provider: provider,
-	}, diags
+	r.client = req.ProviderData.(*client.Client)
 }
 
-type resourceRouterOSPFVRF struct {
-	provider provider
-}
-
-func (r resourceRouterOSPFVRF) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *RouterOSPFVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterOSPFVRF
 
 	// Read plan
@@ -386,7 +395,7 @@ func (r resourceRouterOSPFVRF) Create(ctx context.Context, req tfsdk.CreateResou
 	// Create object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -396,7 +405,7 @@ func (r resourceRouterOSPFVRF) Create(ctx context.Context, req tfsdk.CreateResou
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -405,7 +414,7 @@ func (r resourceRouterOSPFVRF) Create(ctx context.Context, req tfsdk.CreateResou
 
 	plan.setUnknownValues()
 
-	plan.Id = types.String{Value: plan.getPath()}
+	plan.Id = types.StringValue(plan.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
 
@@ -413,7 +422,7 @@ func (r resourceRouterOSPFVRF) Create(ctx context.Context, req tfsdk.CreateResou
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFVRF) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *RouterOSPFVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterOSPFVRF
 
 	// Read state
@@ -423,9 +432,9 @@ func (r resourceRouterOSPFVRF) Read(ctx context.Context, req tfsdk.ReadResourceR
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.provider.client.Get(ctx, state.Device.Value, state.Id.Value)
+	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -433,13 +442,13 @@ func (r resourceRouterOSPFVRF) Read(ctx context.Context, req tfsdk.ReadResourceR
 
 	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFVRF) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *RouterOSPFVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterOSPFVRF
 
 	// Read plan
@@ -456,12 +465,12 @@ func (r resourceRouterOSPFVRF) Update(ctx context.Context, req tfsdk.UpdateResou
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -473,7 +482,7 @@ func (r resourceRouterOSPFVRF) Update(ctx context.Context, req tfsdk.UpdateResou
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -484,20 +493,20 @@ func (r resourceRouterOSPFVRF) Update(ctx context.Context, req tfsdk.UpdateResou
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFVRF) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *RouterOSPFVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterOSPFVRF
 
 	// Read state
@@ -507,19 +516,19 @@ func (r resourceRouterOSPFVRF) Delete(ctx context.Context, req tfsdk.DeleteResou
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	_, diags = r.provider.client.Set(ctx, state.Device.Value, state.getPath(), "", client.Delete)
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), state.getPath(), "", client.Delete)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceRouterOSPFVRF) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *RouterOSPFVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

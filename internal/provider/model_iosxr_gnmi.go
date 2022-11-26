@@ -25,7 +25,7 @@ type GnmiList struct {
 	Items []types.Map  `tfsdk:"items"`
 }
 
-type GnmiDataSource struct {
+type GnmiData struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`
 	Path       types.String `tfsdk:"path"`
@@ -33,7 +33,7 @@ type GnmiDataSource struct {
 }
 
 func (data Gnmi) getPath() string {
-	return data.Path.Value
+	return data.Path.ValueString()
 }
 
 func (data Gnmi) toBody(ctx context.Context) string {
@@ -48,7 +48,7 @@ func (data Gnmi) toBody(ctx context.Context) string {
 	}
 
 	for i := range data.Lists {
-		listName := strings.ReplaceAll(data.Lists[i].Name.Value, "/", ".")
+		listName := strings.ReplaceAll(data.Lists[i].Name.ValueString(), "/", ".")
 		body, _ = sjson.Set(body, listName, []interface{}{})
 		for ii := range data.Lists[i].Items {
 			var listAttributes map[string]string
@@ -66,25 +66,25 @@ func (data Gnmi) toBody(ctx context.Context) string {
 }
 
 func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
-	for attr := range data.Attributes.Elems {
+	for attr := range data.Attributes.Elements() {
 		attrPath := strings.ReplaceAll(attr, "/", ".")
 		value := gjson.GetBytes(res, attrPath)
 		if !value.Exists() ||
 			(value.IsObject() && len(value.Map()) == 0) ||
 			value.Raw == "[null]" {
 
-			data.Attributes.Elems[attr] = types.String{Value: ""}
+			data.Attributes.Elements()[attr] = types.StringValue("")
 		} else {
-			data.Attributes.Elems[attr] = types.String{Value: value.String()}
+			data.Attributes.Elements()[attr] = types.StringValue(value.String())
 		}
 	}
 
 	for i := range data.Lists {
-		keys := strings.Split(data.Lists[i].Key.Value, ",")
+		keys := strings.Split(data.Lists[i].Key.ValueString(), ",")
 		for ii := range data.Lists[i].Items {
 			var keyValues []string
 			for _, key := range keys {
-				v, _ := data.Lists[i].Items[ii].Elems[key].ToTerraformValue(ctx)
+				v, _ := data.Lists[i].Items[ii].Elements()[key].ToTerraformValue(ctx)
 				var keyValue string
 				v.As(&keyValue)
 				keyValues = append(keyValues, keyValue)
@@ -92,7 +92,7 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 
 			// find item by key(s)
 			var r gjson.Result
-			namePath := strings.ReplaceAll(data.Lists[i].Name.Value, "/", ".")
+			namePath := strings.ReplaceAll(data.Lists[i].Name.ValueString(), "/", ".")
 			gjson.GetBytes(res, namePath).ForEach(
 				func(_, v gjson.Result) bool {
 					found := false
@@ -112,16 +112,16 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 				},
 			)
 
-			for attr := range data.Lists[i].Items[ii].Elems {
+			for attr := range data.Lists[i].Items[ii].Elements() {
 				attrPath := strings.ReplaceAll(attr, "/", ".")
 				value := r.Get(attrPath)
 				if !value.Exists() ||
 					(value.IsObject() && len(value.Map()) == 0) ||
 					value.Raw == "[null]" {
 
-					data.Lists[i].Items[ii].Elems[attr] = types.String{Value: ""}
+					data.Lists[i].Items[ii].Elements()[attr] = types.StringValue("")
 				} else {
-					data.Lists[i].Items[ii].Elems[attr] = types.String{Value: value.String()}
+					data.Lists[i].Items[ii].Elements()[attr] = types.StringValue(value.String())
 				}
 			}
 		}
@@ -131,11 +131,11 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string {
 	deletedListItems := make([]string, 0)
 	for l := range state.Lists {
-		name := state.Lists[l].Name.Value
-		keys := strings.Split(state.Lists[l].Key.Value, ",")
+		name := state.Lists[l].Name.ValueString()
+		keys := strings.Split(state.Lists[l].Key.ValueString(), ",")
 		var dataList GnmiList
 		for _, dl := range data.Lists {
-			if dl.Name.Value == name {
+			if dl.Name.ValueString() == name {
 				dataList = dl
 			}
 		}

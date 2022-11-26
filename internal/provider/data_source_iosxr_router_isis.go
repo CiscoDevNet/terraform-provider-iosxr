@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceRouterISISType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &RouterISISDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterISISDataSource{}
+)
 
-func (t dataSourceRouterISISType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterISISDataSource() datasource.DataSource {
+	return &RouterISISDataSource{}
+}
+
+type RouterISISDataSource struct {
+	client *client.Client
+}
+
+func (d *RouterISISDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_isis"
+}
+
+func (d *RouterISISDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router ISIS configuration.",
@@ -49,7 +67,7 @@ func (t dataSourceRouterISISType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"address_families": {
 				MarkdownDescription: "IS-IS address family",
@@ -100,7 +118,7 @@ func (t dataSourceRouterISISType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"interfaces": {
 				MarkdownDescription: "Enter the IS-IS interface configuration submode",
@@ -151,25 +169,21 @@ func (t dataSourceRouterISISType) GetSchema(ctx context.Context) (tfsdk.Schema, 
 						Type:                types.BoolType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t dataSourceRouterISISType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *RouterISISDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceRouterISIS{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceRouterISIS struct {
-	provider provider
-}
-
-func (d dataSourceRouterISIS) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *RouterISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config RouterISIS
 
 	// Read config
@@ -181,14 +195,15 @@ func (d dataSourceRouterISIS) Read(ctx context.Context, req tfsdk.ReadDataSource
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	tflog.Debug(ctx, fmt.Sprintf("DSDEBUG: %v", config))
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

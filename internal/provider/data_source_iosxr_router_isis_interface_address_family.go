@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceRouterISISInterfaceAddressFamilyType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &RouterISISInterfaceAddressFamilyDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterISISInterfaceAddressFamilyDataSource{}
+)
 
-func (t dataSourceRouterISISInterfaceAddressFamilyType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterISISInterfaceAddressFamilyDataSource() datasource.DataSource {
+	return &RouterISISInterfaceAddressFamilyDataSource{}
+}
+
+type RouterISISInterfaceAddressFamilyDataSource struct {
+	client *client.Client
+}
+
+func (d *RouterISISInterfaceAddressFamilyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_isis_interface_address_family"
+}
+
+func (d *RouterISISInterfaceAddressFamilyDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router ISIS Interface Address Family configuration.",
@@ -54,19 +72,15 @@ func (t dataSourceRouterISISInterfaceAddressFamilyType) GetSchema(ctx context.Co
 	}, nil
 }
 
-func (t dataSourceRouterISISInterfaceAddressFamilyType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *RouterISISInterfaceAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceRouterISISInterfaceAddressFamily{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceRouterISISInterfaceAddressFamily struct {
-	provider provider
-}
-
-func (d dataSourceRouterISISInterfaceAddressFamily) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *RouterISISInterfaceAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config RouterISISInterfaceAddressFamily
 
 	// Read config
@@ -78,14 +92,14 @@ func (d dataSourceRouterISISInterfaceAddressFamily) Read(ctx context.Context, re
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

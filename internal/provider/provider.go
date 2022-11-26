@@ -4,30 +4,24 @@ package provider
 
 import (
 	"context"
-	"fmt"
 	"os"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
+func New() provider.Provider {
+	return &iosxrProvider{}
+}
+
 // provider satisfies the tfsdk.Provider interface and usually is included
 // with all Resource and DataSource implementations.
-type provider struct {
-	client *client.Client
-
-	// configured is set to true at the end of the Configure method.
-	// This can be used in Resource and DataSource implementations to verify
-	// that the provider was previously configured.
-	configured bool
-
-	// version is set to the provider version on release, "dev" when the
-	// provider is built and ran locally, and "test" when running acceptance
-	// testing.
-	version string
-}
+type iosxrProvider struct{}
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {
@@ -42,7 +36,7 @@ type providerDataDevice struct {
 	Host types.String `tfsdk:"host"`
 }
 
-func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (p *iosxrProvider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		Attributes: map[string]tfsdk.Attribute{
 			"username": {
@@ -75,13 +69,18 @@ func (p *provider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostic
 						Type:                types.StringType,
 						Required:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderRequest, resp *tfsdk.ConfigureProviderResponse) {
+// Metadata returns the provider type name.
+func (p *iosxrProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
+	resp.TypeName = "iosxr"
+}
+
+func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	// Retrieve provider data from configuration
 	var config providerData
 	diags := req.Config.Get(ctx, &config)
@@ -92,7 +91,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	// User must provide a username to the provider
 	var username string
-	if config.Username.Unknown {
+	if config.Username.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -101,10 +100,10 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		return
 	}
 
-	if config.Username.Null {
+	if config.Username.IsNull() {
 		username = os.Getenv("IOSXR_USERNAME")
 	} else {
-		username = config.Username.Value
+		username = config.Username.ValueString()
 	}
 
 	if username == "" {
@@ -118,7 +117,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	// User must provide a password to the provider
 	var password string
-	if config.Password.Unknown {
+	if config.Password.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -127,10 +126,10 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		return
 	}
 
-	if config.Password.Null {
+	if config.Password.IsNull() {
 		password = os.Getenv("IOSXR_PASSWORD")
 	} else {
-		password = config.Password.Value
+		password = config.Password.ValueString()
 	}
 
 	if password == "" {
@@ -144,7 +143,7 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 
 	// User must provide a username to the provider
 	var host string
-	if config.Host.Unknown {
+	if config.Host.IsUnknown() {
 		// Cannot connect to client with an unknown value
 		resp.Diagnostics.AddWarning(
 			"Unable to create client",
@@ -153,13 +152,13 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 		return
 	}
 
-	if config.Host.Null {
+	if config.Host.IsNull() {
 		host = os.Getenv("IOSXR_HOST")
 		if host == "" && len(config.Devices) > 0 {
-			host = config.Devices[0].Host.Value
+			host = config.Devices[0].Host.ValueString()
 		}
 	} else {
-		host = config.Host.Value
+		host = config.Host.ValueString()
 	}
 
 	if host == "" {
@@ -177,95 +176,58 @@ func (p *provider) Configure(ctx context.Context, req tfsdk.ConfigureProviderReq
 	resp.Diagnostics.Append(diags...)
 
 	for _, device := range config.Devices {
-		diags = client.AddTarget(ctx, device.Name.Value, device.Host.Value, username, password)
+		diags = client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password)
 		resp.Diagnostics.Append(diags...)
 	}
 
-	p.client = &client
-	p.configured = true
+	resp.DataSourceData = &client
+	resp.ResourceData = &client
 }
 
-func (p *provider) GetResources(ctx context.Context) (map[string]tfsdk.ResourceType, diag.Diagnostics) {
-	return map[string]tfsdk.ResourceType{
-		"iosxr_gnmi":                                 resourceGnmiType{},
-		"iosxr_bgp_as_format":                        resourceBGPASFormatType{},
-		"iosxr_hostname":                             resourceHostnameType{},
-		"iosxr_interface":                            resourceInterfaceType{},
-		"iosxr_l2vpn":                                resourceL2VPNType{},
-		"iosxr_l2vpn_xconnect_group_p2p":             resourceL2VPNXconnectGroupP2PType{},
-		"iosxr_mpls_ldp":                             resourceMPLSLDPType{},
-		"iosxr_oc_system_config":                     resourceOCSystemConfigType{},
-		"iosxr_router_bgp":                           resourceRouterBGPType{},
-		"iosxr_router_bgp_address_family":            resourceRouterBGPAddressFamilyType{},
-		"iosxr_router_bgp_vrf":                       resourceRouterBGPVRFType{},
-		"iosxr_router_bgp_vrf_address_family":        resourceRouterBGPVRFAddressFamilyType{},
-		"iosxr_router_isis":                          resourceRouterISISType{},
-		"iosxr_router_isis_interface_address_family": resourceRouterISISInterfaceAddressFamilyType{},
-		"iosxr_router_ospf":                          resourceRouterOSPFType{},
-		"iosxr_router_ospf_area_interface":           resourceRouterOSPFAreaInterfaceType{},
-		"iosxr_router_ospf_vrf":                      resourceRouterOSPFVRFType{},
-		"iosxr_router_ospf_vrf_area_interface":       resourceRouterOSPFVRFAreaInterfaceType{},
-		"iosxr_vrf":                                  resourceVRFType{},
-	}, nil
-}
-
-func (p *provider) GetDataSources(ctx context.Context) (map[string]tfsdk.DataSourceType, diag.Diagnostics) {
-	return map[string]tfsdk.DataSourceType{
-		"iosxr_gnmi":                                 dataSourceGnmiType{},
-		"iosxr_bgp_as_format":                        dataSourceBGPASFormatType{},
-		"iosxr_hostname":                             dataSourceHostnameType{},
-		"iosxr_interface":                            dataSourceInterfaceType{},
-		"iosxr_l2vpn":                                dataSourceL2VPNType{},
-		"iosxr_l2vpn_xconnect_group_p2p":             dataSourceL2VPNXconnectGroupP2PType{},
-		"iosxr_mpls_ldp":                             dataSourceMPLSLDPType{},
-		"iosxr_oc_system_config":                     dataSourceOCSystemConfigType{},
-		"iosxr_router_bgp":                           dataSourceRouterBGPType{},
-		"iosxr_router_bgp_address_family":            dataSourceRouterBGPAddressFamilyType{},
-		"iosxr_router_bgp_vrf":                       dataSourceRouterBGPVRFType{},
-		"iosxr_router_bgp_vrf_address_family":        dataSourceRouterBGPVRFAddressFamilyType{},
-		"iosxr_router_isis":                          dataSourceRouterISISType{},
-		"iosxr_router_isis_interface_address_family": dataSourceRouterISISInterfaceAddressFamilyType{},
-		"iosxr_router_ospf":                          dataSourceRouterOSPFType{},
-		"iosxr_router_ospf_area_interface":           dataSourceRouterOSPFAreaInterfaceType{},
-		"iosxr_router_ospf_vrf":                      dataSourceRouterOSPFVRFType{},
-		"iosxr_router_ospf_vrf_area_interface":       dataSourceRouterOSPFVRFAreaInterfaceType{},
-		"iosxr_vrf":                                  dataSourceVRFType{},
-	}, nil
-}
-
-func New(version string) func() tfsdk.Provider {
-	return func() tfsdk.Provider {
-		return &provider{
-			version: version,
-		}
+func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
+	return []func() resource.Resource{
+		NewGnmiResource,
+		NewBGPASFormatResource,
+		NewHostnameResource,
+		NewInterfaceResource,
+		NewL2VPNResource,
+		NewL2VPNXconnectGroupP2PResource,
+		NewMPLSLDPResource,
+		NewOCSystemConfigResource,
+		NewRouterBGPResource,
+		NewRouterBGPAddressFamilyResource,
+		NewRouterBGPVRFResource,
+		NewRouterBGPVRFAddressFamilyResource,
+		NewRouterISISResource,
+		NewRouterISISInterfaceAddressFamilyResource,
+		NewRouterOSPFResource,
+		NewRouterOSPFAreaInterfaceResource,
+		NewRouterOSPFVRFResource,
+		NewRouterOSPFVRFAreaInterfaceResource,
+		NewVRFResource,
 	}
 }
 
-// convertProviderType is a helper function for NewResource and NewDataSource
-// implementations to associate the concrete provider type. Alternatively,
-// this helper can be skipped and the provider type can be directly type
-// asserted (e.g. provider: in.(*provider)), however using this can prevent
-// potential panics.
-func convertProviderType(in tfsdk.Provider) (provider, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
-	p, ok := in.(*provider)
-
-	if !ok {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			fmt.Sprintf("While creating the data source or resource, an unexpected provider type (%T) was received. This is always a bug in the provider code and should be reported to the provider developers.", p),
-		)
-		return provider{}, diags
+func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+	return []func() datasource.DataSource{
+		NewGnmiDataSource,
+		NewBGPASFormatDataSource,
+		NewHostnameDataSource,
+		NewInterfaceDataSource,
+		NewL2VPNDataSource,
+		NewL2VPNXconnectGroupP2PDataSource,
+		NewMPLSLDPDataSource,
+		NewOCSystemConfigDataSource,
+		NewRouterBGPDataSource,
+		NewRouterBGPAddressFamilyDataSource,
+		NewRouterBGPVRFDataSource,
+		NewRouterBGPVRFAddressFamilyDataSource,
+		NewRouterISISDataSource,
+		NewRouterISISInterfaceAddressFamilyDataSource,
+		NewRouterOSPFDataSource,
+		NewRouterOSPFAreaInterfaceDataSource,
+		NewRouterOSPFVRFDataSource,
+		NewRouterOSPFVRFAreaInterfaceDataSource,
+		NewVRFDataSource,
 	}
-
-	if p == nil {
-		diags.AddError(
-			"Unexpected Provider Instance Type",
-			"While creating the data source or resource, an unexpected empty provider instance was received. This is always a bug in the provider code and should be reported to the provider developers.",
-		)
-		return provider{}, diags
-	}
-
-	return *p, diags
 }

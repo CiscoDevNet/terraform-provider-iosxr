@@ -202,7 +202,6 @@ func (d *RouterISISDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	tflog.Debug(ctx, fmt.Sprintf("DSDEBUG: %v", config))
 	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))

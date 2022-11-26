@@ -291,22 +291,18 @@ func (data *RouterBGP) fromBody(res []byte) {
 	}
 	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
-		data.DefaultMetric = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
-		data.TimersBgpKeepaliveInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
 		data.TimersBgpHoldtime = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
-		data.BfdMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
-		data.BfdMultiplier = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
@@ -323,6 +319,8 @@ func (data *RouterBGP) fromBody(res []byte) {
 			}
 			if cValue := v.Get("ignore-connected-check"); cValue.Exists() {
 				item.IgnoreConnectedCheck = types.BoolValue(true)
+			} else {
+				item.IgnoreConnectedCheck = types.BoolValue(false)
 			}
 			if cValue := v.Get("ebgp-multihop.maximum-hop-count"); cValue.Exists() {
 				item.EbgpMultihopMaximumHopCount = types.Int64Value(cValue.Int())
@@ -338,18 +336,26 @@ func (data *RouterBGP) fromBody(res []byte) {
 			}
 			if cValue := v.Get("local-as.no-prepend"); cValue.Exists() {
 				item.LocalAsNoPrepend = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrepend = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-as.no-prepend.replace-as"); cValue.Exists() {
 				item.LocalAsReplaceAs = types.BoolValue(true)
+			} else {
+				item.LocalAsReplaceAs = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-as.no-prepend.replace-as.dual-as"); cValue.Exists() {
 				item.LocalAsDualAs = types.BoolValue(true)
+			} else {
+				item.LocalAsDualAs = types.BoolValue(false)
 			}
 			if cValue := v.Get("password.encrypted"); cValue.Exists() {
 				item.Password = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
 			}
 			if cValue := v.Get("timers.keepalive-interval"); cValue.Exists() {
 				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
@@ -362,6 +368,8 @@ func (data *RouterBGP) fromBody(res []byte) {
 			}
 			if cValue := v.Get("ttl-security"); cValue.Exists() {
 				item.TtlSecurity = types.BoolValue(true)
+			} else {
+				item.TtlSecurity = types.BoolValue(false)
 			}
 			data.Neighbors = append(data.Neighbors, item)
 			return true

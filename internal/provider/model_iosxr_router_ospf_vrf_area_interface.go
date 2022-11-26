@@ -139,11 +139,9 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(res []byte) {
 	}
 	if value := gjson.GetBytes(res, "cost"); value.Exists() {
 		data.Cost = types.Int64Value(value.Int())
-		data.Cost = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "priority"); value.Exists() {
 		data.Priority = types.Int64Value(value.Int())
-		data.Priority = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
 		data.PassiveEnable = types.BoolValue(true)

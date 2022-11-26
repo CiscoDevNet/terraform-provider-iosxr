@@ -14,21 +14,25 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-var _ datasource.DataSource = (*GnmiDataSource)(nil)
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &GnmiDataSource{}
+	_ datasource.DataSourceWithConfigure = &GnmiDataSource{}
+)
 
 func NewGnmiDataSource() datasource.DataSource {
-	return GnmiDataSource{}
+	return &GnmiDataSource{}
 }
 
 type GnmiDataSource struct {
 	client *client.Client
 }
 
-func (d GnmiDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *GnmiDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_gnmi"
 }
 
-func (d GnmiDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func (d *GnmiDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can retrieve one or more attributes via gNMI.",
@@ -66,7 +70,7 @@ func (d *GnmiDataSource) Configure(_ context.Context, req datasource.ConfigureRe
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config, state GnmiData
 
 	// Read config

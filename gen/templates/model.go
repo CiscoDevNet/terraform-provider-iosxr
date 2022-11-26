@@ -199,7 +199,6 @@ func (data *{{camelCase .Name}}) fromBody(res []byte) {
 	{{- if eq .Type "Int64"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
-		data.{{toGoName .TfName}} = types.Int64Null()
 	}
 	{{- else if eq .Type "Bool"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
@@ -222,17 +221,25 @@ func (data *{{camelCase .Name}}) fromBody(res []byte) {
 			item := {{$name}}{{toGoName .TfName}}{}
 			{{- range .Attributes}}
 			{{- if ne .WriteOnly true}}
+			{{- if eq .Type "Int64"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
-				{{- if eq .Type "Int64"}}
 				item.{{toGoName .TfName}} = types.Int64Value(cValue.Int())
-				{{- else if and (eq .Type "Bool") (eq .TypeYangBool "boolean")}}
-				item.{{toGoName .TfName}} = types.BoolValue(cValue.Bool())
-				{{- else if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
-				item.{{toGoName .TfName}} = types.BoolValue(true)
-				{{- else if eq .Type "String"}}
-				item.{{toGoName .TfName}} = types.StringValue(cValue.String())
-				{{- end}}
 			}
+			{{- else if eq .Type "Bool"}}
+			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
+				{{- if eq .TypeYangBool "boolean"}}
+				item.{{toGoName .TfName}} = types.BoolValue(cValue.Bool())
+				{{- else}}
+				item.{{toGoName .TfName}} = types.BoolValue(true)
+				{{- end}}
+			} else {
+				item.{{toGoName .TfName}} = types.BoolValue(false)
+			}
+			{{- else if eq .Type "String"}}
+			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
+				item.{{toGoName .TfName}} = types.StringValue(cValue.String())
+			}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 			data.{{toGoName .TfName}} = append(data.{{toGoName .TfName}}, item)

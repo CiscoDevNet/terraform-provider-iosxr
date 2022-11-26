@@ -126,7 +126,9 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 		if resp.Diagnostics.HasError() {
 			return
 		}
-	} else {
+	}
+
+	if plan.Attributes.IsUnknown() {
 		plan.Attributes = types.MapNull(plan.Attributes.ElementType(ctx))
 	}
 
@@ -236,7 +238,6 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *GnmiResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	//tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", req.ID))

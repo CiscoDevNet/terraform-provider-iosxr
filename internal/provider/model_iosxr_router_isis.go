@@ -355,15 +355,23 @@ func (data *RouterISIS) fromBody(res []byte) {
 			}
 			if cValue := v.Get("mpls.ldp.auto-config"); cValue.Exists() {
 				item.MplsLdpAutoConfig = types.BoolValue(true)
+			} else {
+				item.MplsLdpAutoConfig = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.narrow"); cValue.Exists() {
 				item.MetricStyleNarrow = types.BoolValue(true)
+			} else {
+				item.MetricStyleNarrow = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.wide"); cValue.Exists() {
 				item.MetricStyleWide = types.BoolValue(true)
+			} else {
+				item.MetricStyleWide = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.transition"); cValue.Exists() {
 				item.MetricStyleTransition = types.BoolValue(true)
+			} else {
+				item.MetricStyleTransition = types.BoolValue(false)
 			}
 			if cValue := v.Get("router-id.interface-name"); cValue.Exists() {
 				item.RouterIdInterfaceName = types.StringValue(cValue.String())
@@ -373,6 +381,8 @@ func (data *RouterISIS) fromBody(res []byte) {
 			}
 			if cValue := v.Get("default-information.originate"); cValue.Exists() {
 				item.DefaultInformationOriginate = types.BoolValue(true)
+			} else {
+				item.DefaultInformationOriginate = types.BoolValue(false)
 			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
@@ -390,24 +400,36 @@ func (data *RouterISIS) fromBody(res []byte) {
 			}
 			if cValue := v.Get("hello-padding.disable"); cValue.Exists() {
 				item.HelloPaddingDisable = types.BoolValue(true)
+			} else {
+				item.HelloPaddingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("hello-padding.sometimes"); cValue.Exists() {
 				item.HelloPaddingSometimes = types.BoolValue(true)
+			} else {
+				item.HelloPaddingSometimes = types.BoolValue(false)
 			}
 			if cValue := v.Get("priority.priority-value"); cValue.Exists() {
 				item.Priority = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("point-to-point"); cValue.Exists() {
 				item.PointToPoint = types.BoolValue(true)
+			} else {
+				item.PointToPoint = types.BoolValue(false)
 			}
 			if cValue := v.Get("passive"); cValue.Exists() {
 				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
 			}
 			if cValue := v.Get("suppressed"); cValue.Exists() {
 				item.Suppressed = types.BoolValue(true)
+			} else {
+				item.Suppressed = types.BoolValue(false)
 			}
 			if cValue := v.Get("shutdown"); cValue.Exists() {
 				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true

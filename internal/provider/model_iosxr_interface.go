@@ -259,11 +259,9 @@ func (data *Interface) fromBody(res []byte) {
 	}
 	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
 		data.Mtu = types.Int64Value(value.Int())
-		data.Mtu = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
 		data.Bandwidth = types.Int64Value(value.Int())
-		data.Bandwidth = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

@@ -918,21 +918,18 @@ func (data *VRF) fromBody(res []byte) {
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
 		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
-		data.RdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
 		data.RdFourByteAsAsNumber = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
 		data.RdFourByteAsIndex = types.Int64Value(value.Int())
-		data.RdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
 		data.RdIpAddressIpv4Address = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
 		data.RdIpAddressIndex = types.Int64Value(value.Int())
-		data.RdIpAddressIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, 0)
@@ -946,6 +943,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -963,6 +962,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat, item)
 			return true
@@ -980,6 +981,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat, item)
 			return true
@@ -997,6 +1000,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1014,6 +1019,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1031,6 +1038,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat, item)
 			return true
@@ -1048,6 +1057,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1065,6 +1076,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1082,6 +1095,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat, item)
 			return true
@@ -1099,6 +1114,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1116,6 +1133,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1133,6 +1152,8 @@ func (data *VRF) fromBody(res []byte) {
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
 				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat, item)
 			return true

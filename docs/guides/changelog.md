@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.1.2 (unreleased)
+
+- Update dependencies and go version
+
 ## 0.1.1
 
 - Add delete attribute to iosxr_gnmi resource

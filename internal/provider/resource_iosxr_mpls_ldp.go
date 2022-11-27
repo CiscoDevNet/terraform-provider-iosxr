@@ -7,17 +7,30 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-type resourceMPLSLDPType struct{}
+var _ resource.Resource = (*MPLSLDPResource)(nil)
 
-func (t resourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewMPLSLDPResource() resource.Resource {
+	return &MPLSLDPResource{}
+}
+
+type MPLSLDPResource struct {
+	client *client.Client
+}
+
+func (r *MPLSLDPResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_mpls_ldp"
+}
+
+func (r *MPLSLDPResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This resource can manage the MPLS LDP configuration.",
@@ -33,7 +46,7 @@ func (t resourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"router_id": {
@@ -58,7 +71,7 @@ func (t resourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 							helpers.StringEnumValidator("ipv4", "ipv6"),
 						},
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"interfaces": {
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
@@ -73,25 +86,21 @@ func (t resourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.
 							helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
 						},
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t resourceMPLSLDPType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *MPLSLDPResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceMPLSLDP{
-		provider: provider,
-	}, diags
+	r.client = req.ProviderData.(*client.Client)
 }
 
-type resourceMPLSLDP struct {
-	provider provider
-}
-
-func (r resourceMPLSLDP) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan MPLSLDP
 
 	// Read plan
@@ -106,7 +115,7 @@ func (r resourceMPLSLDP) Create(ctx context.Context, req tfsdk.CreateResourceReq
 	// Create object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -116,7 +125,7 @@ func (r resourceMPLSLDP) Create(ctx context.Context, req tfsdk.CreateResourceReq
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -125,7 +134,7 @@ func (r resourceMPLSLDP) Create(ctx context.Context, req tfsdk.CreateResourceReq
 
 	plan.setUnknownValues()
 
-	plan.Id = types.String{Value: plan.getPath()}
+	plan.Id = types.StringValue(plan.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
 
@@ -133,7 +142,7 @@ func (r resourceMPLSLDP) Create(ctx context.Context, req tfsdk.CreateResourceReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceMPLSLDP) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *MPLSLDPResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state MPLSLDP
 
 	// Read state
@@ -143,9 +152,9 @@ func (r resourceMPLSLDP) Read(ctx context.Context, req tfsdk.ReadResourceRequest
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.provider.client.Get(ctx, state.Device.Value, state.Id.Value)
+	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -153,13 +162,13 @@ func (r resourceMPLSLDP) Read(ctx context.Context, req tfsdk.ReadResourceRequest
 
 	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceMPLSLDP) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state MPLSLDP
 
 	// Read plan
@@ -176,12 +185,12 @@ func (r resourceMPLSLDP) Update(ctx context.Context, req tfsdk.UpdateResourceReq
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -193,7 +202,7 @@ func (r resourceMPLSLDP) Update(ctx context.Context, req tfsdk.UpdateResourceReq
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -204,20 +213,20 @@ func (r resourceMPLSLDP) Update(ctx context.Context, req tfsdk.UpdateResourceReq
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceMPLSLDP) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state MPLSLDP
 
 	// Read state
@@ -227,19 +236,19 @@ func (r resourceMPLSLDP) Delete(ctx context.Context, req tfsdk.DeleteResourceReq
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	_, diags = r.provider.client.Set(ctx, state.Device.Value, state.getPath(), "", client.Delete)
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), state.getPath(), "", client.Delete)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceMPLSLDP) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *MPLSLDPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

@@ -7,17 +7,30 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-type resourceRouterOSPFAreaInterfaceType struct{}
+var _ resource.Resource = (*RouterOSPFAreaInterfaceResource)(nil)
 
-func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterOSPFAreaInterfaceResource() resource.Resource {
+	return &RouterOSPFAreaInterfaceResource{}
+}
+
+type RouterOSPFAreaInterfaceResource struct {
+	client *client.Client
+}
+
+func (r *RouterOSPFAreaInterfaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_ospf_area_interface"
+}
+
+func (r *RouterOSPFAreaInterfaceResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This resource can manage the Router OSPF Area Interface configuration.",
@@ -33,7 +46,7 @@ func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfs
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"process_name": {
@@ -44,7 +57,7 @@ func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfs
 					helpers.StringPatternValidator(1, 32, `[\w\-\.:,_@#%$\+=\|;]+`),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"area_id": {
@@ -52,7 +65,7 @@ func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfs
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"interface_name": {
@@ -63,7 +76,7 @@ func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfs
 					helpers.StringPatternValidator(0, 0, `[a-zA-Z0-9.:_/-]+`),
 				},
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"network_broadcast": {
@@ -124,19 +137,15 @@ func (t resourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfs
 	}, nil
 }
 
-func (t resourceRouterOSPFAreaInterfaceType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *RouterOSPFAreaInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceRouterOSPFAreaInterface{
-		provider: provider,
-	}, diags
+	r.client = req.ProviderData.(*client.Client)
 }
 
-type resourceRouterOSPFAreaInterface struct {
-	provider provider
-}
-
-func (r resourceRouterOSPFAreaInterface) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *RouterOSPFAreaInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterOSPFAreaInterface
 
 	// Read plan
@@ -151,7 +160,7 @@ func (r resourceRouterOSPFAreaInterface) Create(ctx context.Context, req tfsdk.C
 	// Create object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -161,7 +170,7 @@ func (r resourceRouterOSPFAreaInterface) Create(ctx context.Context, req tfsdk.C
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -170,7 +179,7 @@ func (r resourceRouterOSPFAreaInterface) Create(ctx context.Context, req tfsdk.C
 
 	plan.setUnknownValues()
 
-	plan.Id = types.String{Value: plan.getPath()}
+	plan.Id = types.StringValue(plan.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
 
@@ -178,7 +187,7 @@ func (r resourceRouterOSPFAreaInterface) Create(ctx context.Context, req tfsdk.C
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *RouterOSPFAreaInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterOSPFAreaInterface
 
 	// Read state
@@ -188,9 +197,9 @@ func (r resourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.Rea
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.provider.client.Get(ctx, state.Device.Value, state.Id.Value)
+	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -198,13 +207,13 @@ func (r resourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.Rea
 
 	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFAreaInterface) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *RouterOSPFAreaInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterOSPFAreaInterface
 
 	// Read plan
@@ -221,12 +230,12 @@ func (r resourceRouterOSPFAreaInterface) Update(ctx context.Context, req tfsdk.U
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
 	body := plan.toBody()
 
-	_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.getPath(), body, client.Update)
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -238,7 +247,7 @@ func (r resourceRouterOSPFAreaInterface) Update(ctx context.Context, req tfsdk.U
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -249,20 +258,20 @@ func (r resourceRouterOSPFAreaInterface) Update(ctx context.Context, req tfsdk.U
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, i, "", client.Delete)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceRouterOSPFAreaInterface) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *RouterOSPFAreaInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterOSPFAreaInterface
 
 	// Read state
@@ -272,19 +281,19 @@ func (r resourceRouterOSPFAreaInterface) Delete(ctx context.Context, req tfsdk.D
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	_, diags = r.provider.client.Set(ctx, state.Device.Value, state.getPath(), "", client.Delete)
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), state.getPath(), "", client.Delete)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceRouterOSPFAreaInterface) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *RouterOSPFAreaInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

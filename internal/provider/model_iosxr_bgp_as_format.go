@@ -21,13 +21,13 @@ func (data BGPASFormat) getPath() string {
 
 func (data BGPASFormat) toBody() string {
 	body := "{}"
-	if !data.Asdot.Null && !data.Asdot.Unknown {
-		if data.Asdot.Value {
+	if !data.Asdot.IsNull() && !data.Asdot.IsUnknown() {
+		if data.Asdot.ValueBool() {
 			body, _ = sjson.Set(body, "asdot", map[string]string{})
 		}
 	}
-	if !data.Asplain.Null && !data.Asplain.Unknown {
-		if data.Asplain.Value {
+	if !data.Asplain.IsNull() && !data.Asplain.IsUnknown() {
+		if data.Asplain.ValueBool() {
 			body, _ = sjson.Set(body, "asplain", map[string]string{})
 		}
 	}
@@ -36,31 +36,27 @@ func (data BGPASFormat) toBody() string {
 
 func (data *BGPASFormat) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
-		data.Asdot.Value = true
+		data.Asdot = types.BoolValue(true)
 	} else {
-		data.Asdot.Value = false
+		data.Asdot = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
-		data.Asplain.Value = true
+		data.Asplain = types.BoolValue(true)
 	} else {
-		data.Asplain.Value = false
+		data.Asplain = types.BoolValue(false)
 	}
 }
 
 func (data *BGPASFormat) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
-		data.Asdot.Value = true
-		data.Asdot.Null = false
+		data.Asdot = types.BoolValue(true)
 	} else {
-		data.Asdot.Value = false
-		data.Asdot.Null = false
+		data.Asdot = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
-		data.Asplain.Value = true
-		data.Asplain.Null = false
+		data.Asplain = types.BoolValue(true)
 	} else {
-		data.Asplain.Value = false
-		data.Asplain.Null = false
+		data.Asplain = types.BoolValue(false)
 	}
 }
 
@@ -69,21 +65,17 @@ func (data *BGPASFormat) fromPlan(plan BGPASFormat) {
 }
 
 func (data *BGPASFormat) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.Asdot.Unknown {
-		data.Asdot.Unknown = false
-		data.Asdot.Null = true
+	if data.Asdot.IsUnknown() {
+		data.Asdot = types.BoolNull()
 	}
-	if data.Asplain.Unknown {
-		data.Asplain.Unknown = false
-		data.Asplain.Null = true
+	if data.Asplain.IsUnknown() {
+		data.Asplain = types.BoolNull()
 	}
 }
 

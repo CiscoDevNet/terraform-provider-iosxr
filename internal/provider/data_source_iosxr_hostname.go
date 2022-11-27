@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceHostnameType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &HostnameDataSource{}
+	_ datasource.DataSourceWithConfigure = &HostnameDataSource{}
+)
 
-func (t dataSourceHostnameType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewHostnameDataSource() datasource.DataSource {
+	return &HostnameDataSource{}
+}
+
+type HostnameDataSource struct {
+	client *client.Client
+}
+
+func (d *HostnameDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_hostname"
+}
+
+func (d *HostnameDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Hostname configuration.",
@@ -39,19 +57,15 @@ func (t dataSourceHostnameType) GetSchema(ctx context.Context) (tfsdk.Schema, di
 	}, nil
 }
 
-func (t dataSourceHostnameType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *HostnameDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceHostname{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceHostname struct {
-	provider provider
-}
-
-func (d dataSourceHostname) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *HostnameDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config Hostname
 
 	// Read config
@@ -63,14 +77,14 @@ func (d dataSourceHostname) Read(ctx context.Context, req tfsdk.ReadDataSourceRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

@@ -5,9 +5,10 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
@@ -15,7 +16,21 @@ import (
 
 type resourceGnmiType struct{}
 
-func (t resourceGnmiType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+var _ resource.Resource = (*GnmiResource)(nil)
+
+func NewGnmiResource() resource.Resource {
+	return &GnmiResource{}
+}
+
+type GnmiResource struct {
+	client *client.Client
+}
+
+func (r *GnmiResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_gnmi"
+}
+
+func (r *GnmiResource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Manages IOS-XR objects via gNMI calls. This resource can only manage a single object. It is able to read the state and therefore reconcile configuration drift.",
@@ -31,7 +46,7 @@ func (t resourceGnmiType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Type:                types.StringType,
 				Computed:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.UseStateForUnknown(),
+					resource.UseStateForUnknown(),
 				},
 			},
 			"path": {
@@ -39,7 +54,7 @@ func (t resourceGnmiType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 				Type:                types.StringType,
 				Required:            true,
 				PlanModifiers: tfsdk.AttributePlanModifiers{
-					tfsdk.RequiresReplace(),
+					resource.RequiresReplace(),
 				},
 			},
 			"delete": {
@@ -77,25 +92,21 @@ func (t resourceGnmiType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Dia
 						Optional:            true,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t resourceGnmiType) NewResource(ctx context.Context, in tfsdk.Provider) (tfsdk.Resource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (r *GnmiResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return resourceGnmi{
-		provider: provider,
-	}, diags
+	r.client = req.ProviderData.(*client.Client)
 }
 
-type resourceGnmi struct {
-	provider provider
-}
-
-func (r resourceGnmi) Create(ctx context.Context, req tfsdk.CreateResourceRequest, resp *tfsdk.CreateResourceResponse) {
+func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan Gnmi
 
 	// Read plan
@@ -107,26 +118,29 @@ func (r resourceGnmi) Create(ctx context.Context, req tfsdk.CreateResourceReques
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
-	if !plan.Attributes.Unknown || len(plan.Lists) > 0 {
+	if !plan.Attributes.IsUnknown() || len(plan.Lists) > 0 {
 		body := plan.toBody(ctx)
 
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.Path.Value, body, client.Update)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.Path.ValueString(), body, client.Update)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	plan.Id = plan.Path
-	plan.Attributes.Unknown = false
+	if plan.Attributes.IsUnknown() {
+		plan.Attributes = types.MapNull(plan.Attributes.ElementType(ctx))
+	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.Value))
+	plan.Id = plan.Path
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceGnmi) Read(ctx context.Context, req tfsdk.ReadResourceRequest, resp *tfsdk.ReadResourceResponse) {
+func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state Gnmi
 
 	// Read state
@@ -136,9 +150,9 @@ func (r resourceGnmi) Read(ctx context.Context, req tfsdk.ReadResourceRequest, r
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.provider.client.Get(ctx, state.Device.Value, state.Path.Value)
+	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
@@ -146,13 +160,13 @@ func (r resourceGnmi) Read(ctx context.Context, req tfsdk.ReadResourceRequest, r
 
 	state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceGnmi) Update(ctx context.Context, req tfsdk.UpdateResourceRequest, resp *tfsdk.UpdateResourceResponse) {
+func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state Gnmi
 
 	// Read plan
@@ -169,12 +183,12 @@ func (r resourceGnmi) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
-	if !plan.Attributes.Unknown {
+	if !plan.Attributes.IsUnknown() {
 		body := plan.toBody(ctx)
 
-		_, diags = r.provider.client.Set(ctx, plan.Device.Value, plan.Path.Value, body, client.Update)
+		_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.Path.ValueString(), body, client.Update)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -185,20 +199,20 @@ func (r resourceGnmi) Update(ctx context.Context, req tfsdk.UpdateResourceReques
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags := r.provider.client.Set(ctx, state.Device.Value, i, "", client.Delete)
+		_, diags := r.client.Set(ctx, state.Device.ValueString(), i, "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r resourceGnmi) Delete(ctx context.Context, req tfsdk.DeleteResourceRequest, resp *tfsdk.DeleteResourceResponse) {
+func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state Gnmi
 
 	// Read state
@@ -208,28 +222,28 @@ func (r resourceGnmi) Delete(ctx context.Context, req tfsdk.DeleteResourceReques
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	if state.Delete.Value {
-		_, diags = r.provider.client.Set(ctx, state.Device.Value, state.Path.Value, "", client.Delete)
+	if state.Delete.ValueBool() {
+		_, diags = r.client.Set(ctx, state.Device.ValueString(), state.Path.ValueString(), "", client.Delete)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.Value))
+	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)
 }
 
-func (r resourceGnmi) ImportState(ctx context.Context, req tfsdk.ImportResourceStateRequest, resp *tfsdk.ImportResourceStateResponse) {
-	tfsdk.ResourceImportStatePassthroughID(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req, resp)
+func (r *GnmiResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", req.ID))
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("path"), req.ID)...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, tftypes.NewAttributePath().WithAttributeName("id"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path"), req.ID)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", req.ID))
 }

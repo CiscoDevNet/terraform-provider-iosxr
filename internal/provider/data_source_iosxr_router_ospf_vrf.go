@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceRouterOSPFVRFType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &RouterOSPFVRFDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterOSPFVRFDataSource{}
+)
 
-func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterOSPFVRFDataSource() datasource.DataSource {
+	return &RouterOSPFVRFDataSource{}
+}
+
+type RouterOSPFVRFDataSource struct {
+	client *client.Client
+}
+
+func (d *RouterOSPFVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_ospf_vrf"
+}
+
+func (d *RouterOSPFVRFDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router OSPF VRF configuration.",
@@ -154,7 +172,7 @@ func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_bgp": {
 				MarkdownDescription: "bgp as-number",
@@ -175,7 +193,7 @@ func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_isis": {
 				MarkdownDescription: "ISO IS-IS",
@@ -211,7 +229,7 @@ func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"redistribute_ospf": {
 				MarkdownDescription: "Open Shortest Path First (OSPF)",
@@ -247,25 +265,21 @@ func (t dataSourceRouterOSPFVRFType) GetSchema(ctx context.Context) (tfsdk.Schem
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t dataSourceRouterOSPFVRFType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *RouterOSPFVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceRouterOSPFVRF{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceRouterOSPFVRF struct {
-	provider provider
-}
-
-func (d dataSourceRouterOSPFVRF) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *RouterOSPFVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config RouterOSPFVRF
 
 	// Read config
@@ -277,14 +291,14 @@ func (d dataSourceRouterOSPFVRF) Read(ctx context.Context, req tfsdk.ReadDataSou
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

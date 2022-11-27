@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceMPLSLDPType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &MPLSLDPDataSource{}
+	_ datasource.DataSourceWithConfigure = &MPLSLDPDataSource{}
+)
 
-func (t dataSourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewMPLSLDPDataSource() datasource.DataSource {
+	return &MPLSLDPDataSource{}
+}
+
+type MPLSLDPDataSource struct {
+	client *client.Client
+}
+
+func (d *MPLSLDPDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_mpls_ldp"
+}
+
+func (d *MPLSLDPDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the MPLS LDP configuration.",
@@ -44,7 +62,7 @@ func (t dataSourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"interfaces": {
 				MarkdownDescription: "Enable LDP on an interface and enter interface submode",
@@ -55,25 +73,21 @@ func (t dataSourceMPLSLDPType) GetSchema(ctx context.Context) (tfsdk.Schema, dia
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t dataSourceMPLSLDPType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *MPLSLDPDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceMPLSLDP{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceMPLSLDP struct {
-	provider provider
-}
-
-func (d dataSourceMPLSLDP) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *MPLSLDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config MPLSLDP
 
 	// Read config
@@ -85,14 +99,14 @@ func (d dataSourceMPLSLDP) Read(ctx context.Context, req tfsdk.ReadDataSourceReq
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

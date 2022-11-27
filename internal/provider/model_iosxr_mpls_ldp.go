@@ -32,22 +32,22 @@ func (data MPLSLDP) getPath() string {
 
 func (data MPLSLDP) toBody() string {
 	body := "{}"
-	if !data.RouterId.Null && !data.RouterId.Unknown {
-		body, _ = sjson.Set(body, "router-id", data.RouterId.Value)
+	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
+		body, _ = sjson.Set(body, "router-id", data.RouterId.ValueString())
 	}
 	if len(data.AddressFamilies) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
 		for index, item := range data.AddressFamilies {
-			if !item.AfName.Null && !item.AfName.Unknown {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.Value)
+			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
 		}
 	}
 	if len(data.Interfaces) > 0 {
 		body, _ = sjson.Set(body, "interfaces.interface", []interface{}{})
 		for index, item := range data.Interfaces {
-			if !item.InterfaceName.Null && !item.InterfaceName.Unknown {
-				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.Value)
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
 			}
 		}
 	}
@@ -56,13 +56,13 @@ func (data MPLSLDP) toBody() string {
 
 func (data *MPLSLDP) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
-		data.RouterId.Value = value.String()
+		data.RouterId = types.StringValue(value.String())
 	} else {
-		data.RouterId.Null = true
+		data.RouterId = types.StringNull()
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.Value}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-families.address-family").ForEach(
@@ -84,14 +84,14 @@ func (data *MPLSLDP) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("af-name"); value.Exists() {
-			data.AddressFamilies[i].AfName.Value = value.String()
+			data.AddressFamilies[i].AfName = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].AfName.Null = true
+			data.AddressFamilies[i].AfName = types.StringNull()
 		}
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.Value}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "interfaces.interface").ForEach(
@@ -113,25 +113,23 @@ func (data *MPLSLDP) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("interface-name"); value.Exists() {
-			data.Interfaces[i].InterfaceName.Value = value.String()
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
-			data.Interfaces[i].InterfaceName.Null = true
+			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 	}
 }
 
 func (data *MPLSLDP) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
-		data.RouterId.Value = value.String()
-		data.RouterId.Null = false
+		data.RouterId = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]MPLSLDPAddressFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPAddressFamilies{}
 			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.AfName.Value = cValue.String()
-				item.AfName.Null = false
+				item.AfName = types.StringValue(cValue.String())
 			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
@@ -142,8 +140,7 @@ func (data *MPLSLDP) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := MPLSLDPInterfaces{}
 			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName.Value = cValue.String()
-				item.InterfaceName.Null = false
+				item.InterfaceName = types.StringValue(cValue.String())
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
@@ -156,28 +153,23 @@ func (data *MPLSLDP) fromPlan(plan MPLSLDP) {
 }
 
 func (data *MPLSLDP) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.RouterId.Unknown {
-		data.RouterId.Unknown = false
-		data.RouterId.Null = true
+	if data.RouterId.IsUnknown() {
+		data.RouterId = types.StringNull()
 	}
 	for i := range data.AddressFamilies {
-		if data.AddressFamilies[i].AfName.Unknown {
-			data.AddressFamilies[i].AfName.Unknown = false
-			data.AddressFamilies[i].AfName.Null = true
+		if data.AddressFamilies[i].AfName.IsUnknown() {
+			data.AddressFamilies[i].AfName = types.StringNull()
 		}
 	}
 	for i := range data.Interfaces {
-		if data.Interfaces[i].InterfaceName.Unknown {
-			data.Interfaces[i].InterfaceName.Unknown = false
-			data.Interfaces[i].InterfaceName.Null = true
+		if data.Interfaces[i].InterfaceName.IsUnknown() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 	}
 }
@@ -186,10 +178,10 @@ func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.Value}
+		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilies[i].AfName.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -199,7 +191,7 @@ func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
 		found := false
 		for j := range data.AddressFamilies {
 			found = true
-			if state.AddressFamilies[i].AfName.Value != data.AddressFamilies[j].AfName.Value {
+			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
 				found = false
 			}
 			if found {
@@ -216,10 +208,10 @@ func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.Value}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.Value).IsZero() {
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -229,7 +221,7 @@ func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
 		found := false
 		for j := range data.Interfaces {
 			found = true
-			if state.Interfaces[i].InterfaceName.Value != data.Interfaces[j].InterfaceName.Value {
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
 			if found {

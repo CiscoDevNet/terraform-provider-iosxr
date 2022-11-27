@@ -48,59 +48,59 @@ type RouterISISInterfaces struct {
 }
 
 func (data RouterISIS) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.Value)
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
 
 func (data RouterISIS) toBody() string {
 	body := "{}"
-	if !data.IsType.Null && !data.IsType.Unknown {
-		body, _ = sjson.Set(body, "is-type", data.IsType.Value)
+	if !data.IsType.IsNull() && !data.IsType.IsUnknown() {
+		body, _ = sjson.Set(body, "is-type", data.IsType.ValueString())
 	}
 	if len(data.Nets) > 0 {
 		body, _ = sjson.Set(body, "nets.net", []interface{}{})
 		for index, item := range data.Nets {
-			if !item.NetId.Null && !item.NetId.Unknown {
-				body, _ = sjson.Set(body, "nets.net"+"."+strconv.Itoa(index)+"."+"net-id", item.NetId.Value)
+			if !item.NetId.IsNull() && !item.NetId.IsUnknown() {
+				body, _ = sjson.Set(body, "nets.net"+"."+strconv.Itoa(index)+"."+"net-id", item.NetId.ValueString())
 			}
 		}
 	}
 	if len(data.AddressFamilies) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
 		for index, item := range data.AddressFamilies {
-			if !item.AfName.Null && !item.AfName.Unknown {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.Value)
+			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
 			}
-			if !item.SafName.Null && !item.SafName.Unknown {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"saf-name", item.SafName.Value)
+			if !item.SafName.IsNull() && !item.SafName.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"saf-name", item.SafName.ValueString())
 			}
-			if !item.MplsLdpAutoConfig.Null && !item.MplsLdpAutoConfig.Unknown {
-				if item.MplsLdpAutoConfig.Value {
+			if !item.MplsLdpAutoConfig.IsNull() && !item.MplsLdpAutoConfig.IsUnknown() {
+				if item.MplsLdpAutoConfig.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"mpls.ldp.auto-config", map[string]string{})
 				}
 			}
-			if !item.MetricStyleNarrow.Null && !item.MetricStyleNarrow.Unknown {
-				if item.MetricStyleNarrow.Value {
+			if !item.MetricStyleNarrow.IsNull() && !item.MetricStyleNarrow.IsUnknown() {
+				if item.MetricStyleNarrow.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.narrow", map[string]string{})
 				}
 			}
-			if !item.MetricStyleWide.Null && !item.MetricStyleWide.Unknown {
-				if item.MetricStyleWide.Value {
+			if !item.MetricStyleWide.IsNull() && !item.MetricStyleWide.IsUnknown() {
+				if item.MetricStyleWide.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.wide", map[string]string{})
 				}
 			}
-			if !item.MetricStyleTransition.Null && !item.MetricStyleTransition.Unknown {
-				if item.MetricStyleTransition.Value {
+			if !item.MetricStyleTransition.IsNull() && !item.MetricStyleTransition.IsUnknown() {
+				if item.MetricStyleTransition.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.transition", map[string]string{})
 				}
 			}
-			if !item.RouterIdInterfaceName.Null && !item.RouterIdInterfaceName.Unknown {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.interface-name", item.RouterIdInterfaceName.Value)
+			if !item.RouterIdInterfaceName.IsNull() && !item.RouterIdInterfaceName.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.interface-name", item.RouterIdInterfaceName.ValueString())
 			}
-			if !item.RouterIdIpAddress.Null && !item.RouterIdIpAddress.Unknown {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.ip-address", item.RouterIdIpAddress.Value)
+			if !item.RouterIdIpAddress.IsNull() && !item.RouterIdIpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.ip-address", item.RouterIdIpAddress.ValueString())
 			}
-			if !item.DefaultInformationOriginate.Null && !item.DefaultInformationOriginate.Unknown {
-				if item.DefaultInformationOriginate.Value {
+			if !item.DefaultInformationOriginate.IsNull() && !item.DefaultInformationOriginate.IsUnknown() {
+				if item.DefaultInformationOriginate.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"default-information.originate", map[string]string{})
 				}
 			}
@@ -109,42 +109,42 @@ func (data RouterISIS) toBody() string {
 	if len(data.Interfaces) > 0 {
 		body, _ = sjson.Set(body, "interfaces.interface", []interface{}{})
 		for index, item := range data.Interfaces {
-			if !item.InterfaceName.Null && !item.InterfaceName.Unknown {
-				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.Value)
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
 			}
-			if !item.CircuitType.Null && !item.CircuitType.Unknown {
-				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"circuit-type", item.CircuitType.Value)
+			if !item.CircuitType.IsNull() && !item.CircuitType.IsUnknown() {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"circuit-type", item.CircuitType.ValueString())
 			}
-			if !item.HelloPaddingDisable.Null && !item.HelloPaddingDisable.Unknown {
-				if item.HelloPaddingDisable.Value {
+			if !item.HelloPaddingDisable.IsNull() && !item.HelloPaddingDisable.IsUnknown() {
+				if item.HelloPaddingDisable.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"hello-padding.disable", map[string]string{})
 				}
 			}
-			if !item.HelloPaddingSometimes.Null && !item.HelloPaddingSometimes.Unknown {
-				if item.HelloPaddingSometimes.Value {
+			if !item.HelloPaddingSometimes.IsNull() && !item.HelloPaddingSometimes.IsUnknown() {
+				if item.HelloPaddingSometimes.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"hello-padding.sometimes", map[string]string{})
 				}
 			}
-			if !item.Priority.Null && !item.Priority.Unknown {
-				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"priority.priority-value", strconv.FormatInt(item.Priority.Value, 10))
+			if !item.Priority.IsNull() && !item.Priority.IsUnknown() {
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"priority.priority-value", strconv.FormatInt(item.Priority.ValueInt64(), 10))
 			}
-			if !item.PointToPoint.Null && !item.PointToPoint.Unknown {
-				if item.PointToPoint.Value {
+			if !item.PointToPoint.IsNull() && !item.PointToPoint.IsUnknown() {
+				if item.PointToPoint.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"point-to-point", map[string]string{})
 				}
 			}
-			if !item.Passive.Null && !item.Passive.Unknown {
-				if item.Passive.Value {
+			if !item.Passive.IsNull() && !item.Passive.IsUnknown() {
+				if item.Passive.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"passive", map[string]string{})
 				}
 			}
-			if !item.Suppressed.Null && !item.Suppressed.Unknown {
-				if item.Suppressed.Value {
+			if !item.Suppressed.IsNull() && !item.Suppressed.IsUnknown() {
+				if item.Suppressed.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"suppressed", map[string]string{})
 				}
 			}
-			if !item.Shutdown.Null && !item.Shutdown.Unknown {
-				if item.Shutdown.Value {
+			if !item.Shutdown.IsNull() && !item.Shutdown.IsUnknown() {
+				if item.Shutdown.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"shutdown", map[string]string{})
 				}
 			}
@@ -155,13 +155,13 @@ func (data RouterISIS) toBody() string {
 
 func (data *RouterISIS) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
-		data.IsType.Value = value.String()
+		data.IsType = types.StringValue(value.String())
 	} else {
-		data.IsType.Null = true
+		data.IsType = types.StringNull()
 	}
 	for i := range data.Nets {
 		keys := [...]string{"net-id"}
-		keyValues := [...]string{data.Nets[i].NetId.Value}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "nets.net").ForEach(
@@ -183,14 +183,14 @@ func (data *RouterISIS) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("net-id"); value.Exists() {
-			data.Nets[i].NetId.Value = value.String()
+			data.Nets[i].NetId = types.StringValue(value.String())
 		} else {
-			data.Nets[i].NetId.Null = true
+			data.Nets[i].NetId = types.StringNull()
 		}
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name", "saf-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.Value, data.AddressFamilies[i].SafName.Value}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString(), data.AddressFamilies[i].SafName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-families.address-family").ForEach(
@@ -212,54 +212,54 @@ func (data *RouterISIS) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("af-name"); value.Exists() {
-			data.AddressFamilies[i].AfName.Value = value.String()
+			data.AddressFamilies[i].AfName = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].AfName.Null = true
+			data.AddressFamilies[i].AfName = types.StringNull()
 		}
 		if value := r.Get("saf-name"); value.Exists() {
-			data.AddressFamilies[i].SafName.Value = value.String()
+			data.AddressFamilies[i].SafName = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].SafName.Null = true
+			data.AddressFamilies[i].SafName = types.StringNull()
 		}
 		if value := r.Get("mpls.ldp.auto-config"); value.Exists() {
-			data.AddressFamilies[i].MplsLdpAutoConfig.Value = true
+			data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolValue(true)
 		} else {
-			data.AddressFamilies[i].MplsLdpAutoConfig.Value = false
+			data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolValue(false)
 		}
 		if value := r.Get("metric-style.narrow"); value.Exists() {
-			data.AddressFamilies[i].MetricStyleNarrow.Value = true
+			data.AddressFamilies[i].MetricStyleNarrow = types.BoolValue(true)
 		} else {
-			data.AddressFamilies[i].MetricStyleNarrow.Value = false
+			data.AddressFamilies[i].MetricStyleNarrow = types.BoolValue(false)
 		}
 		if value := r.Get("metric-style.wide"); value.Exists() {
-			data.AddressFamilies[i].MetricStyleWide.Value = true
+			data.AddressFamilies[i].MetricStyleWide = types.BoolValue(true)
 		} else {
-			data.AddressFamilies[i].MetricStyleWide.Value = false
+			data.AddressFamilies[i].MetricStyleWide = types.BoolValue(false)
 		}
 		if value := r.Get("metric-style.transition"); value.Exists() {
-			data.AddressFamilies[i].MetricStyleTransition.Value = true
+			data.AddressFamilies[i].MetricStyleTransition = types.BoolValue(true)
 		} else {
-			data.AddressFamilies[i].MetricStyleTransition.Value = false
+			data.AddressFamilies[i].MetricStyleTransition = types.BoolValue(false)
 		}
 		if value := r.Get("router-id.interface-name"); value.Exists() {
-			data.AddressFamilies[i].RouterIdInterfaceName.Value = value.String()
+			data.AddressFamilies[i].RouterIdInterfaceName = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].RouterIdInterfaceName.Null = true
+			data.AddressFamilies[i].RouterIdInterfaceName = types.StringNull()
 		}
 		if value := r.Get("router-id.ip-address"); value.Exists() {
-			data.AddressFamilies[i].RouterIdIpAddress.Value = value.String()
+			data.AddressFamilies[i].RouterIdIpAddress = types.StringValue(value.String())
 		} else {
-			data.AddressFamilies[i].RouterIdIpAddress.Null = true
+			data.AddressFamilies[i].RouterIdIpAddress = types.StringNull()
 		}
 		if value := r.Get("default-information.originate"); value.Exists() {
-			data.AddressFamilies[i].DefaultInformationOriginate.Value = true
+			data.AddressFamilies[i].DefaultInformationOriginate = types.BoolValue(true)
 		} else {
-			data.AddressFamilies[i].DefaultInformationOriginate.Value = false
+			data.AddressFamilies[i].DefaultInformationOriginate = types.BoolValue(false)
 		}
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.Value}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "interfaces.interface").ForEach(
@@ -281,65 +281,63 @@ func (data *RouterISIS) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("interface-name"); value.Exists() {
-			data.Interfaces[i].InterfaceName.Value = value.String()
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
-			data.Interfaces[i].InterfaceName.Null = true
+			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 		if value := r.Get("circuit-type"); value.Exists() {
-			data.Interfaces[i].CircuitType.Value = value.String()
+			data.Interfaces[i].CircuitType = types.StringValue(value.String())
 		} else {
-			data.Interfaces[i].CircuitType.Null = true
+			data.Interfaces[i].CircuitType = types.StringNull()
 		}
 		if value := r.Get("hello-padding.disable"); value.Exists() {
-			data.Interfaces[i].HelloPaddingDisable.Value = true
+			data.Interfaces[i].HelloPaddingDisable = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].HelloPaddingDisable.Value = false
+			data.Interfaces[i].HelloPaddingDisable = types.BoolValue(false)
 		}
 		if value := r.Get("hello-padding.sometimes"); value.Exists() {
-			data.Interfaces[i].HelloPaddingSometimes.Value = true
+			data.Interfaces[i].HelloPaddingSometimes = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].HelloPaddingSometimes.Value = false
+			data.Interfaces[i].HelloPaddingSometimes = types.BoolValue(false)
 		}
 		if value := r.Get("priority.priority-value"); value.Exists() {
-			data.Interfaces[i].Priority.Value = value.Int()
+			data.Interfaces[i].Priority = types.Int64Value(value.Int())
 		} else {
-			data.Interfaces[i].Priority.Null = true
+			data.Interfaces[i].Priority = types.Int64Null()
 		}
 		if value := r.Get("point-to-point"); value.Exists() {
-			data.Interfaces[i].PointToPoint.Value = true
+			data.Interfaces[i].PointToPoint = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].PointToPoint.Value = false
+			data.Interfaces[i].PointToPoint = types.BoolValue(false)
 		}
 		if value := r.Get("passive"); value.Exists() {
-			data.Interfaces[i].Passive.Value = true
+			data.Interfaces[i].Passive = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].Passive.Value = false
+			data.Interfaces[i].Passive = types.BoolValue(false)
 		}
 		if value := r.Get("suppressed"); value.Exists() {
-			data.Interfaces[i].Suppressed.Value = true
+			data.Interfaces[i].Suppressed = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].Suppressed.Value = false
+			data.Interfaces[i].Suppressed = types.BoolValue(false)
 		}
 		if value := r.Get("shutdown"); value.Exists() {
-			data.Interfaces[i].Shutdown.Value = true
+			data.Interfaces[i].Shutdown = types.BoolValue(true)
 		} else {
-			data.Interfaces[i].Shutdown.Value = false
+			data.Interfaces[i].Shutdown = types.BoolValue(false)
 		}
 	}
 }
 
 func (data *RouterISIS) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
-		data.IsType.Value = value.String()
-		data.IsType.Null = false
+		data.IsType = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
 		data.Nets = make([]RouterISISNets, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISNets{}
 			if cValue := v.Get("net-id"); cValue.Exists() {
-				item.NetId.Value = cValue.String()
-				item.NetId.Null = false
+				item.NetId = types.StringValue(cValue.String())
 			}
 			data.Nets = append(data.Nets, item)
 			return true
@@ -350,40 +348,41 @@ func (data *RouterISIS) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilies{}
 			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.AfName.Value = cValue.String()
-				item.AfName.Null = false
+				item.AfName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("saf-name"); cValue.Exists() {
-				item.SafName.Value = cValue.String()
-				item.SafName.Null = false
+				item.SafName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("mpls.ldp.auto-config"); cValue.Exists() {
-				item.MplsLdpAutoConfig.Value = true
-				item.MplsLdpAutoConfig.Null = false
+				item.MplsLdpAutoConfig = types.BoolValue(true)
+			} else {
+				item.MplsLdpAutoConfig = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.narrow"); cValue.Exists() {
-				item.MetricStyleNarrow.Value = true
-				item.MetricStyleNarrow.Null = false
+				item.MetricStyleNarrow = types.BoolValue(true)
+			} else {
+				item.MetricStyleNarrow = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.wide"); cValue.Exists() {
-				item.MetricStyleWide.Value = true
-				item.MetricStyleWide.Null = false
+				item.MetricStyleWide = types.BoolValue(true)
+			} else {
+				item.MetricStyleWide = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric-style.transition"); cValue.Exists() {
-				item.MetricStyleTransition.Value = true
-				item.MetricStyleTransition.Null = false
+				item.MetricStyleTransition = types.BoolValue(true)
+			} else {
+				item.MetricStyleTransition = types.BoolValue(false)
 			}
 			if cValue := v.Get("router-id.interface-name"); cValue.Exists() {
-				item.RouterIdInterfaceName.Value = cValue.String()
-				item.RouterIdInterfaceName.Null = false
+				item.RouterIdInterfaceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("router-id.ip-address"); cValue.Exists() {
-				item.RouterIdIpAddress.Value = cValue.String()
-				item.RouterIdIpAddress.Null = false
+				item.RouterIdIpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("default-information.originate"); cValue.Exists() {
-				item.DefaultInformationOriginate.Value = true
-				item.DefaultInformationOriginate.Null = false
+				item.DefaultInformationOriginate = types.BoolValue(true)
+			} else {
+				item.DefaultInformationOriginate = types.BoolValue(false)
 			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
@@ -394,40 +393,43 @@ func (data *RouterISIS) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISInterfaces{}
 			if cValue := v.Get("interface-name"); cValue.Exists() {
-				item.InterfaceName.Value = cValue.String()
-				item.InterfaceName.Null = false
+				item.InterfaceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("circuit-type"); cValue.Exists() {
-				item.CircuitType.Value = cValue.String()
-				item.CircuitType.Null = false
+				item.CircuitType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("hello-padding.disable"); cValue.Exists() {
-				item.HelloPaddingDisable.Value = true
-				item.HelloPaddingDisable.Null = false
+				item.HelloPaddingDisable = types.BoolValue(true)
+			} else {
+				item.HelloPaddingDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("hello-padding.sometimes"); cValue.Exists() {
-				item.HelloPaddingSometimes.Value = true
-				item.HelloPaddingSometimes.Null = false
+				item.HelloPaddingSometimes = types.BoolValue(true)
+			} else {
+				item.HelloPaddingSometimes = types.BoolValue(false)
 			}
 			if cValue := v.Get("priority.priority-value"); cValue.Exists() {
-				item.Priority.Value = cValue.Int()
-				item.Priority.Null = false
+				item.Priority = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("point-to-point"); cValue.Exists() {
-				item.PointToPoint.Value = true
-				item.PointToPoint.Null = false
+				item.PointToPoint = types.BoolValue(true)
+			} else {
+				item.PointToPoint = types.BoolValue(false)
 			}
 			if cValue := v.Get("passive"); cValue.Exists() {
-				item.Passive.Value = true
-				item.Passive.Null = false
+				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
 			}
 			if cValue := v.Get("suppressed"); cValue.Exists() {
-				item.Suppressed.Value = true
-				item.Suppressed.Null = false
+				item.Suppressed = types.BoolValue(true)
+			} else {
+				item.Suppressed = types.BoolValue(false)
 			}
 			if cValue := v.Get("shutdown"); cValue.Exists() {
-				item.Shutdown.Value = true
-				item.Shutdown.Null = false
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
 			}
 			data.Interfaces = append(data.Interfaces, item)
 			return true
@@ -437,106 +439,83 @@ func (data *RouterISIS) fromBody(res []byte) {
 
 func (data *RouterISIS) fromPlan(plan RouterISIS) {
 	data.Device = plan.Device
-	data.ProcessId.Value = plan.ProcessId.Value
+	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
 }
 
 func (data *RouterISIS) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.ProcessId.Unknown {
-		data.ProcessId.Unknown = false
-		data.ProcessId.Null = true
+	if data.ProcessId.IsUnknown() {
+		data.ProcessId = types.StringNull()
 	}
-	if data.IsType.Unknown {
-		data.IsType.Unknown = false
-		data.IsType.Null = true
+	if data.IsType.IsUnknown() {
+		data.IsType = types.StringNull()
 	}
 	for i := range data.Nets {
-		if data.Nets[i].NetId.Unknown {
-			data.Nets[i].NetId.Unknown = false
-			data.Nets[i].NetId.Null = true
+		if data.Nets[i].NetId.IsUnknown() {
+			data.Nets[i].NetId = types.StringNull()
 		}
 	}
 	for i := range data.AddressFamilies {
-		if data.AddressFamilies[i].AfName.Unknown {
-			data.AddressFamilies[i].AfName.Unknown = false
-			data.AddressFamilies[i].AfName.Null = true
+		if data.AddressFamilies[i].AfName.IsUnknown() {
+			data.AddressFamilies[i].AfName = types.StringNull()
 		}
-		if data.AddressFamilies[i].SafName.Unknown {
-			data.AddressFamilies[i].SafName.Unknown = false
-			data.AddressFamilies[i].SafName.Null = true
+		if data.AddressFamilies[i].SafName.IsUnknown() {
+			data.AddressFamilies[i].SafName = types.StringNull()
 		}
-		if data.AddressFamilies[i].MplsLdpAutoConfig.Unknown {
-			data.AddressFamilies[i].MplsLdpAutoConfig.Unknown = false
-			data.AddressFamilies[i].MplsLdpAutoConfig.Null = true
+		if data.AddressFamilies[i].MplsLdpAutoConfig.IsUnknown() {
+			data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolNull()
 		}
-		if data.AddressFamilies[i].MetricStyleNarrow.Unknown {
-			data.AddressFamilies[i].MetricStyleNarrow.Unknown = false
-			data.AddressFamilies[i].MetricStyleNarrow.Null = true
+		if data.AddressFamilies[i].MetricStyleNarrow.IsUnknown() {
+			data.AddressFamilies[i].MetricStyleNarrow = types.BoolNull()
 		}
-		if data.AddressFamilies[i].MetricStyleWide.Unknown {
-			data.AddressFamilies[i].MetricStyleWide.Unknown = false
-			data.AddressFamilies[i].MetricStyleWide.Null = true
+		if data.AddressFamilies[i].MetricStyleWide.IsUnknown() {
+			data.AddressFamilies[i].MetricStyleWide = types.BoolNull()
 		}
-		if data.AddressFamilies[i].MetricStyleTransition.Unknown {
-			data.AddressFamilies[i].MetricStyleTransition.Unknown = false
-			data.AddressFamilies[i].MetricStyleTransition.Null = true
+		if data.AddressFamilies[i].MetricStyleTransition.IsUnknown() {
+			data.AddressFamilies[i].MetricStyleTransition = types.BoolNull()
 		}
-		if data.AddressFamilies[i].RouterIdInterfaceName.Unknown {
-			data.AddressFamilies[i].RouterIdInterfaceName.Unknown = false
-			data.AddressFamilies[i].RouterIdInterfaceName.Null = true
+		if data.AddressFamilies[i].RouterIdInterfaceName.IsUnknown() {
+			data.AddressFamilies[i].RouterIdInterfaceName = types.StringNull()
 		}
-		if data.AddressFamilies[i].RouterIdIpAddress.Unknown {
-			data.AddressFamilies[i].RouterIdIpAddress.Unknown = false
-			data.AddressFamilies[i].RouterIdIpAddress.Null = true
+		if data.AddressFamilies[i].RouterIdIpAddress.IsUnknown() {
+			data.AddressFamilies[i].RouterIdIpAddress = types.StringNull()
 		}
-		if data.AddressFamilies[i].DefaultInformationOriginate.Unknown {
-			data.AddressFamilies[i].DefaultInformationOriginate.Unknown = false
-			data.AddressFamilies[i].DefaultInformationOriginate.Null = true
+		if data.AddressFamilies[i].DefaultInformationOriginate.IsUnknown() {
+			data.AddressFamilies[i].DefaultInformationOriginate = types.BoolNull()
 		}
 	}
 	for i := range data.Interfaces {
-		if data.Interfaces[i].InterfaceName.Unknown {
-			data.Interfaces[i].InterfaceName.Unknown = false
-			data.Interfaces[i].InterfaceName.Null = true
+		if data.Interfaces[i].InterfaceName.IsUnknown() {
+			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if data.Interfaces[i].CircuitType.Unknown {
-			data.Interfaces[i].CircuitType.Unknown = false
-			data.Interfaces[i].CircuitType.Null = true
+		if data.Interfaces[i].CircuitType.IsUnknown() {
+			data.Interfaces[i].CircuitType = types.StringNull()
 		}
-		if data.Interfaces[i].HelloPaddingDisable.Unknown {
-			data.Interfaces[i].HelloPaddingDisable.Unknown = false
-			data.Interfaces[i].HelloPaddingDisable.Null = true
+		if data.Interfaces[i].HelloPaddingDisable.IsUnknown() {
+			data.Interfaces[i].HelloPaddingDisable = types.BoolNull()
 		}
-		if data.Interfaces[i].HelloPaddingSometimes.Unknown {
-			data.Interfaces[i].HelloPaddingSometimes.Unknown = false
-			data.Interfaces[i].HelloPaddingSometimes.Null = true
+		if data.Interfaces[i].HelloPaddingSometimes.IsUnknown() {
+			data.Interfaces[i].HelloPaddingSometimes = types.BoolNull()
 		}
-		if data.Interfaces[i].Priority.Unknown {
-			data.Interfaces[i].Priority.Unknown = false
-			data.Interfaces[i].Priority.Null = true
+		if data.Interfaces[i].Priority.IsUnknown() {
+			data.Interfaces[i].Priority = types.Int64Null()
 		}
-		if data.Interfaces[i].PointToPoint.Unknown {
-			data.Interfaces[i].PointToPoint.Unknown = false
-			data.Interfaces[i].PointToPoint.Null = true
+		if data.Interfaces[i].PointToPoint.IsUnknown() {
+			data.Interfaces[i].PointToPoint = types.BoolNull()
 		}
-		if data.Interfaces[i].Passive.Unknown {
-			data.Interfaces[i].Passive.Unknown = false
-			data.Interfaces[i].Passive.Null = true
+		if data.Interfaces[i].Passive.IsUnknown() {
+			data.Interfaces[i].Passive = types.BoolNull()
 		}
-		if data.Interfaces[i].Suppressed.Unknown {
-			data.Interfaces[i].Suppressed.Unknown = false
-			data.Interfaces[i].Suppressed.Null = true
+		if data.Interfaces[i].Suppressed.IsUnknown() {
+			data.Interfaces[i].Suppressed = types.BoolNull()
 		}
-		if data.Interfaces[i].Shutdown.Unknown {
-			data.Interfaces[i].Shutdown.Unknown = false
-			data.Interfaces[i].Shutdown.Null = true
+		if data.Interfaces[i].Shutdown.IsUnknown() {
+			data.Interfaces[i].Shutdown = types.BoolNull()
 		}
 	}
 }
@@ -545,10 +524,10 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Nets {
 		keys := [...]string{"net-id"}
-		stateKeyValues := [...]string{state.Nets[i].NetId.Value}
+		stateKeyValues := [...]string{state.Nets[i].NetId.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Nets[i].NetId.Value).IsZero() {
+		if !reflect.ValueOf(state.Nets[i].NetId.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -558,7 +537,7 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 		found := false
 		for j := range data.Nets {
 			found = true
-			if state.Nets[i].NetId.Value != data.Nets[j].NetId.Value {
+			if state.Nets[i].NetId.ValueString() != data.Nets[j].NetId.ValueString() {
 				found = false
 			}
 			if found {
@@ -575,13 +554,13 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name", "saf-name"}
-		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.Value, state.AddressFamilies[i].SafName.Value}
+		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString(), state.AddressFamilies[i].SafName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilies[i].AfName.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilies[i].SafName.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilies[i].SafName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -591,10 +570,10 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 		found := false
 		for j := range data.AddressFamilies {
 			found = true
-			if state.AddressFamilies[i].AfName.Value != data.AddressFamilies[j].AfName.Value {
+			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
 				found = false
 			}
-			if state.AddressFamilies[i].SafName.Value != data.AddressFamilies[j].SafName.Value {
+			if state.AddressFamilies[i].SafName.ValueString() != data.AddressFamilies[j].SafName.ValueString() {
 				found = false
 			}
 			if found {
@@ -611,10 +590,10 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.Value}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.Value).IsZero() {
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -624,7 +603,7 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 		found := false
 		for j := range data.Interfaces {
 			found = true
-			if state.Interfaces[i].InterfaceName.Value != data.Interfaces[j].InterfaceName.Value {
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
 				found = false
 			}
 			if found {

@@ -105,230 +105,230 @@ type VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat struct {
 }
 
 func (data VRF) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.Value)
+	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
 func (data VRF) toBody() string {
 	body := "{}"
-	if !data.Description.Null && !data.Description.Unknown {
-		body, _ = sjson.Set(body, "description", data.Description.Value)
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
-	if !data.VpnId.Null && !data.VpnId.Unknown {
-		body, _ = sjson.Set(body, "vpn.id", data.VpnId.Value)
+	if !data.VpnId.IsNull() && !data.VpnId.IsUnknown() {
+		body, _ = sjson.Set(body, "vpn.id", data.VpnId.ValueString())
 	}
-	if !data.AddressFamilyIpv4Unicast.Null && !data.AddressFamilyIpv4Unicast.Unknown {
-		if data.AddressFamilyIpv4Unicast.Value {
+	if !data.AddressFamilyIpv4Unicast.IsNull() && !data.AddressFamilyIpv4Unicast.IsUnknown() {
+		if data.AddressFamilyIpv4Unicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv4.unicast", map[string]string{})
 		}
 	}
-	if !data.AddressFamilyIpv4Multicast.Null && !data.AddressFamilyIpv4Multicast.Unknown {
-		if data.AddressFamilyIpv4Multicast.Value {
+	if !data.AddressFamilyIpv4Multicast.IsNull() && !data.AddressFamilyIpv4Multicast.IsUnknown() {
+		if data.AddressFamilyIpv4Multicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv4.multicast", map[string]string{})
 		}
 	}
-	if !data.AddressFamilyIpv4Flowspec.Null && !data.AddressFamilyIpv4Flowspec.Unknown {
-		if data.AddressFamilyIpv4Flowspec.Value {
+	if !data.AddressFamilyIpv4Flowspec.IsNull() && !data.AddressFamilyIpv4Flowspec.IsUnknown() {
+		if data.AddressFamilyIpv4Flowspec.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv4.flowspec", map[string]string{})
 		}
 	}
-	if !data.AddressFamilyIpv6Unicast.Null && !data.AddressFamilyIpv6Unicast.Unknown {
-		if data.AddressFamilyIpv6Unicast.Value {
+	if !data.AddressFamilyIpv6Unicast.IsNull() && !data.AddressFamilyIpv6Unicast.IsUnknown() {
+		if data.AddressFamilyIpv6Unicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv6.unicast", map[string]string{})
 		}
 	}
-	if !data.AddressFamilyIpv6Multicast.Null && !data.AddressFamilyIpv6Multicast.Unknown {
-		if data.AddressFamilyIpv6Multicast.Value {
+	if !data.AddressFamilyIpv6Multicast.IsNull() && !data.AddressFamilyIpv6Multicast.IsUnknown() {
+		if data.AddressFamilyIpv6Multicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv6.multicast", map[string]string{})
 		}
 	}
-	if !data.AddressFamilyIpv6Flowspec.Null && !data.AddressFamilyIpv6Flowspec.Unknown {
-		if data.AddressFamilyIpv6Flowspec.Value {
+	if !data.AddressFamilyIpv6Flowspec.IsNull() && !data.AddressFamilyIpv6Flowspec.IsUnknown() {
+		if data.AddressFamilyIpv6Flowspec.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv6.flowspec", map[string]string{})
 		}
 	}
-	if !data.RdTwoByteAsAsNumber.Null && !data.RdTwoByteAsAsNumber.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number", data.RdTwoByteAsAsNumber.Value)
+	if !data.RdTwoByteAsAsNumber.IsNull() && !data.RdTwoByteAsAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number", data.RdTwoByteAsAsNumber.ValueString())
 	}
-	if !data.RdTwoByteAsIndex.Null && !data.RdTwoByteAsIndex.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index", strconv.FormatInt(data.RdTwoByteAsIndex.Value, 10))
+	if !data.RdTwoByteAsIndex.IsNull() && !data.RdTwoByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index", strconv.FormatInt(data.RdTwoByteAsIndex.ValueInt64(), 10))
 	}
-	if !data.RdFourByteAsAsNumber.Null && !data.RdFourByteAsAsNumber.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number", data.RdFourByteAsAsNumber.Value)
+	if !data.RdFourByteAsAsNumber.IsNull() && !data.RdFourByteAsAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number", data.RdFourByteAsAsNumber.ValueString())
 	}
-	if !data.RdFourByteAsIndex.Null && !data.RdFourByteAsIndex.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index", strconv.FormatInt(data.RdFourByteAsIndex.Value, 10))
+	if !data.RdFourByteAsIndex.IsNull() && !data.RdFourByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index", strconv.FormatInt(data.RdFourByteAsIndex.ValueInt64(), 10))
 	}
-	if !data.RdIpAddressIpv4Address.Null && !data.RdIpAddressIpv4Address.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address", data.RdIpAddressIpv4Address.Value)
+	if !data.RdIpAddressIpv4Address.IsNull() && !data.RdIpAddressIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address", data.RdIpAddressIpv4Address.ValueString())
 	}
-	if !data.RdIpAddressIndex.Null && !data.RdIpAddressIndex.Unknown {
-		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index", strconv.FormatInt(data.RdIpAddressIndex.Value, 10))
+	if !data.RdIpAddressIndex.IsNull() && !data.RdIpAddressIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index", strconv.FormatInt(data.RdIpAddressIndex.ValueInt64(), 10))
 	}
 	if len(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
-			if !item.IpAddress.Null && !item.IpAddress.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.Value)
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
-			if !item.IpAddress.Null && !item.IpAddress.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.Value)
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
-			if !item.IpAddress.Null && !item.IpAddress.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.Value)
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
-			if !item.AsNumber.Null && !item.AsNumber.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.Value, 10))
+			if !item.AsNumber.IsNull() && !item.AsNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"as-number", strconv.FormatInt(item.AsNumber.ValueInt64(), 10))
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
 	if len(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat) > 0 {
 		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt", []interface{}{})
 		for index, item := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
-			if !item.IpAddress.Null && !item.IpAddress.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.Value)
+			if !item.IpAddress.IsNull() && !item.IpAddress.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"ip-address", item.IpAddress.ValueString())
 			}
-			if !item.Index.Null && !item.Index.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.Value, 10))
+			if !item.Index.IsNull() && !item.Index.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"index", strconv.FormatInt(item.Index.ValueInt64(), 10))
 			}
-			if !item.Stitching.Null && !item.Stitching.Unknown {
-				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.Value)
+			if !item.Stitching.IsNull() && !item.Stitching.IsUnknown() {
+				body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"+"."+strconv.Itoa(index)+"."+"stitching", item.Stitching.ValueBool())
 			}
 		}
 	}
@@ -337,78 +337,78 @@ func (data VRF) toBody() string {
 
 func (data *VRF) updateFromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
-		data.Description.Value = value.String()
+		data.Description = types.StringValue(value.String())
 	} else {
-		data.Description.Null = true
+		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
-		data.VpnId.Value = value.String()
+		data.VpnId = types.StringValue(value.String())
 	} else {
-		data.VpnId.Null = true
+		data.VpnId = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
-		data.AddressFamilyIpv4Unicast.Value = true
+		data.AddressFamilyIpv4Unicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Unicast.Value = false
+		data.AddressFamilyIpv4Unicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
-		data.AddressFamilyIpv4Multicast.Value = true
+		data.AddressFamilyIpv4Multicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Multicast.Value = false
+		data.AddressFamilyIpv4Multicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
-		data.AddressFamilyIpv4Flowspec.Value = true
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Flowspec.Value = false
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.unicast"); value.Exists() {
-		data.AddressFamilyIpv6Unicast.Value = true
+		data.AddressFamilyIpv6Unicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Unicast.Value = false
+		data.AddressFamilyIpv6Unicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
-		data.AddressFamilyIpv6Multicast.Value = true
+		data.AddressFamilyIpv6Multicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Multicast.Value = false
+		data.AddressFamilyIpv6Multicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
-		data.AddressFamilyIpv6Flowspec.Value = true
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Flowspec.Value = false
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number"); value.Exists() {
-		data.RdTwoByteAsAsNumber.Value = value.String()
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
 	} else {
-		data.RdTwoByteAsAsNumber.Null = true
+		data.RdTwoByteAsAsNumber = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
-		data.RdTwoByteAsIndex.Value = value.Int()
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
 	} else {
-		data.RdTwoByteAsIndex.Null = true
+		data.RdTwoByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
-		data.RdFourByteAsAsNumber.Value = value.String()
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
 	} else {
-		data.RdFourByteAsAsNumber.Null = true
+		data.RdFourByteAsAsNumber = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
-		data.RdFourByteAsIndex.Value = value.Int()
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
 	} else {
-		data.RdFourByteAsIndex.Null = true
+		data.RdFourByteAsIndex = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
-		data.RdIpAddressIpv4Address.Value = value.String()
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
 	} else {
-		data.RdIpAddressIpv4Address.Null = true
+		data.RdIpAddressIpv4Address = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
-		data.RdIpAddressIndex.Value = value.Int()
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
 	} else {
-		data.RdIpAddressIndex.Null = true
+		data.RdIpAddressIndex = types.Int64Null()
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -430,24 +430,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -469,24 +469,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		keyValues := [...]string{data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt").ForEach(
@@ -508,24 +508,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("ip-address"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value = value.String()
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringValue(value.String())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -547,24 +547,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -586,24 +586,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		keyValues := [...]string{data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt").ForEach(
@@ -625,24 +625,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("ip-address"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value = value.String()
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringValue(value.String())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Null = true
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -664,24 +664,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -703,24 +703,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		keyValues := [...]string{data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt").ForEach(
@@ -742,24 +742,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("ip-address"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value = value.String()
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringValue(value.String())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt").ForEach(
@@ -781,24 +781,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt").ForEach(
@@ -820,24 +820,24 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value = value.Int()
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		keyValues := [...]string{data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt").ForEach(
@@ -859,113 +859,92 @@ func (data *VRF) updateFromBody(res []byte) {
 			},
 		)
 		if value := r.Get("ip-address"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value = value.String()
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringValue(value.String())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
 		if value := r.Get("index"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Value = value.Int()
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Value(value.Int())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Null = true
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
 		if value := r.Get("stitching"); value.Exists() {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value = value.Bool()
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(value.Bool())
 		} else {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value = false
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolValue(false)
 		}
 	}
 }
 
 func (data *VRF) fromBody(res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
-		data.Description.Value = value.String()
-		data.Description.Null = false
+		data.Description = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
-		data.VpnId.Value = value.String()
-		data.VpnId.Null = false
+		data.VpnId = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
-		data.AddressFamilyIpv4Unicast.Value = true
-		data.AddressFamilyIpv4Unicast.Null = false
+		data.AddressFamilyIpv4Unicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Unicast.Value = false
-		data.AddressFamilyIpv4Unicast.Null = false
+		data.AddressFamilyIpv4Unicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
-		data.AddressFamilyIpv4Multicast.Value = true
-		data.AddressFamilyIpv4Multicast.Null = false
+		data.AddressFamilyIpv4Multicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Multicast.Value = false
-		data.AddressFamilyIpv4Multicast.Null = false
+		data.AddressFamilyIpv4Multicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
-		data.AddressFamilyIpv4Flowspec.Value = true
-		data.AddressFamilyIpv4Flowspec.Null = false
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv4Flowspec.Value = false
-		data.AddressFamilyIpv4Flowspec.Null = false
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.unicast"); value.Exists() {
-		data.AddressFamilyIpv6Unicast.Value = true
-		data.AddressFamilyIpv6Unicast.Null = false
+		data.AddressFamilyIpv6Unicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Unicast.Value = false
-		data.AddressFamilyIpv6Unicast.Null = false
+		data.AddressFamilyIpv6Unicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
-		data.AddressFamilyIpv6Multicast.Value = true
-		data.AddressFamilyIpv6Multicast.Null = false
+		data.AddressFamilyIpv6Multicast = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Multicast.Value = false
-		data.AddressFamilyIpv6Multicast.Null = false
+		data.AddressFamilyIpv6Multicast = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
-		data.AddressFamilyIpv6Flowspec.Value = true
-		data.AddressFamilyIpv6Flowspec.Null = false
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(true)
 	} else {
-		data.AddressFamilyIpv6Flowspec.Value = false
-		data.AddressFamilyIpv6Flowspec.Null = false
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number"); value.Exists() {
-		data.RdTwoByteAsAsNumber.Value = value.String()
-		data.RdTwoByteAsAsNumber.Null = false
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
-		data.RdTwoByteAsIndex.Value = value.Int()
-		data.RdTwoByteAsIndex.Null = false
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
-		data.RdFourByteAsAsNumber.Value = value.String()
-		data.RdFourByteAsAsNumber.Null = false
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
-		data.RdFourByteAsIndex.Value = value.Int()
-		data.RdFourByteAsIndex.Null = false
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
-		data.RdIpAddressIpv4Address.Value = value.String()
-		data.RdIpAddressIpv4Address.Null = false
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
-		data.RdIpAddressIndex.Value = value.Int()
-		data.RdIpAddressIndex.Null = false
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
 		data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -976,16 +955,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat, item)
 			return true
@@ -996,16 +974,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat{}
 			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress.Value = cValue.String()
-				item.IpAddress.Null = false
+				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat, item)
 			return true
@@ -1016,16 +993,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1036,16 +1012,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1056,16 +1031,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat{}
 			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress.Value = cValue.String()
-				item.IpAddress.Null = false
+				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat, item)
 			return true
@@ -1076,16 +1050,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1096,16 +1069,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1116,16 +1088,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat{}
 			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress.Value = cValue.String()
-				item.IpAddress.Null = false
+				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat, item)
 			return true
@@ -1136,16 +1107,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat, item)
 			return true
@@ -1156,16 +1126,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber.Value = cValue.Int()
-				item.AsNumber.Null = false
+				item.AsNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat, item)
 			return true
@@ -1176,16 +1145,15 @@ func (data *VRF) fromBody(res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat{}
 			if cValue := v.Get("ip-address"); cValue.Exists() {
-				item.IpAddress.Value = cValue.String()
-				item.IpAddress.Null = false
+				item.IpAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("index"); cValue.Exists() {
-				item.Index.Value = cValue.Int()
-				item.Index.Null = false
+				item.Index = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("stitching"); cValue.Exists() {
-				item.Stitching.Value = cValue.Bool()
-				item.Stitching.Null = false
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
 			}
 			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat, item)
 			return true
@@ -1195,244 +1163,191 @@ func (data *VRF) fromBody(res []byte) {
 
 func (data *VRF) fromPlan(plan VRF) {
 	data.Device = plan.Device
-	data.VrfName.Value = plan.VrfName.Value
+	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
 func (data *VRF) setUnknownValues() {
-	if data.Device.Unknown {
-		data.Device.Unknown = false
-		data.Device.Null = true
+	if data.Device.IsUnknown() {
+		data.Device = types.StringNull()
 	}
-	if data.Id.Unknown {
-		data.Id.Unknown = false
-		data.Id.Null = true
+	if data.Id.IsUnknown() {
+		data.Id = types.StringNull()
 	}
-	if data.VrfName.Unknown {
-		data.VrfName.Unknown = false
-		data.VrfName.Null = true
+	if data.VrfName.IsUnknown() {
+		data.VrfName = types.StringNull()
 	}
-	if data.Description.Unknown {
-		data.Description.Unknown = false
-		data.Description.Null = true
+	if data.Description.IsUnknown() {
+		data.Description = types.StringNull()
 	}
-	if data.VpnId.Unknown {
-		data.VpnId.Unknown = false
-		data.VpnId.Null = true
+	if data.VpnId.IsUnknown() {
+		data.VpnId = types.StringNull()
 	}
-	if data.AddressFamilyIpv4Unicast.Unknown {
-		data.AddressFamilyIpv4Unicast.Unknown = false
-		data.AddressFamilyIpv4Unicast.Null = true
+	if data.AddressFamilyIpv4Unicast.IsUnknown() {
+		data.AddressFamilyIpv4Unicast = types.BoolNull()
 	}
-	if data.AddressFamilyIpv4Multicast.Unknown {
-		data.AddressFamilyIpv4Multicast.Unknown = false
-		data.AddressFamilyIpv4Multicast.Null = true
+	if data.AddressFamilyIpv4Multicast.IsUnknown() {
+		data.AddressFamilyIpv4Multicast = types.BoolNull()
 	}
-	if data.AddressFamilyIpv4Flowspec.Unknown {
-		data.AddressFamilyIpv4Flowspec.Unknown = false
-		data.AddressFamilyIpv4Flowspec.Null = true
+	if data.AddressFamilyIpv4Flowspec.IsUnknown() {
+		data.AddressFamilyIpv4Flowspec = types.BoolNull()
 	}
-	if data.AddressFamilyIpv6Unicast.Unknown {
-		data.AddressFamilyIpv6Unicast.Unknown = false
-		data.AddressFamilyIpv6Unicast.Null = true
+	if data.AddressFamilyIpv6Unicast.IsUnknown() {
+		data.AddressFamilyIpv6Unicast = types.BoolNull()
 	}
-	if data.AddressFamilyIpv6Multicast.Unknown {
-		data.AddressFamilyIpv6Multicast.Unknown = false
-		data.AddressFamilyIpv6Multicast.Null = true
+	if data.AddressFamilyIpv6Multicast.IsUnknown() {
+		data.AddressFamilyIpv6Multicast = types.BoolNull()
 	}
-	if data.AddressFamilyIpv6Flowspec.Unknown {
-		data.AddressFamilyIpv6Flowspec.Unknown = false
-		data.AddressFamilyIpv6Flowspec.Null = true
+	if data.AddressFamilyIpv6Flowspec.IsUnknown() {
+		data.AddressFamilyIpv6Flowspec = types.BoolNull()
 	}
-	if data.RdTwoByteAsAsNumber.Unknown {
-		data.RdTwoByteAsAsNumber.Unknown = false
-		data.RdTwoByteAsAsNumber.Null = true
+	if data.RdTwoByteAsAsNumber.IsUnknown() {
+		data.RdTwoByteAsAsNumber = types.StringNull()
 	}
-	if data.RdTwoByteAsIndex.Unknown {
-		data.RdTwoByteAsIndex.Unknown = false
-		data.RdTwoByteAsIndex.Null = true
+	if data.RdTwoByteAsIndex.IsUnknown() {
+		data.RdTwoByteAsIndex = types.Int64Null()
 	}
-	if data.RdFourByteAsAsNumber.Unknown {
-		data.RdFourByteAsAsNumber.Unknown = false
-		data.RdFourByteAsAsNumber.Null = true
+	if data.RdFourByteAsAsNumber.IsUnknown() {
+		data.RdFourByteAsAsNumber = types.StringNull()
 	}
-	if data.RdFourByteAsIndex.Unknown {
-		data.RdFourByteAsIndex.Unknown = false
-		data.RdFourByteAsIndex.Null = true
+	if data.RdFourByteAsIndex.IsUnknown() {
+		data.RdFourByteAsIndex = types.Int64Null()
 	}
-	if data.RdIpAddressIpv4Address.Unknown {
-		data.RdIpAddressIpv4Address.Unknown = false
-		data.RdIpAddressIpv4Address.Null = true
+	if data.RdIpAddressIpv4Address.IsUnknown() {
+		data.RdIpAddressIpv4Address = types.StringNull()
 	}
-	if data.RdIpAddressIndex.Unknown {
-		data.RdIpAddressIndex.Unknown = false
-		data.RdIpAddressIndex.Null = true
+	if data.RdIpAddressIndex.IsUnknown() {
+		data.RdIpAddressIndex = types.Int64Null()
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
-		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
-		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
-		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
-		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
-		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
-		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
-		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
-		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
-		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
-		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
-		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching = types.BoolNull()
 		}
 	}
 	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
-		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress = types.StringNull()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index = types.Int64Null()
 		}
-		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Unknown {
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Unknown = false
-			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Null = true
+		if data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.IsUnknown() {
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching = types.BoolNull()
 		}
 	}
 }
@@ -1441,16 +1356,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1460,13 +1375,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1483,16 +1398,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1502,13 +1417,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.Value != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1525,16 +1440,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		stateKeyValues := [...]string{state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1544,13 +1459,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].IpAddress.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString() != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].IpAddress.ValueString() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.Value != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1567,16 +1482,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1586,13 +1501,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1609,16 +1524,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1628,13 +1543,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.Value != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1651,16 +1566,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		stateKeyValues := [...]string{state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1670,13 +1585,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
 			found = true
-			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].IpAddress.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString() != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].IpAddress.ValueString() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.Value != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].Index.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64() != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1693,16 +1608,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1712,13 +1627,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.Value != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1735,16 +1650,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1754,13 +1669,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.Value != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1777,16 +1692,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		stateKeyValues := [...]string{state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1796,13 +1711,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.Value != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].IpAddress.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString() != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].IpAddress.ValueString() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.Value != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1819,16 +1734,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1838,13 +1753,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.Value != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1861,16 +1776,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value, 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1880,13 +1795,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.Value != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].AsNumber.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64() != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].AsNumber.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.Value != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {
@@ -1903,16 +1818,16 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	}
 	for i := range state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
 		keys := [...]string{"ip-address", "index", "stitching"}
-		stateKeyValues := [...]string{state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value, strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Value, 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value)}
+		stateKeyValues := [...]string{state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1922,13 +1837,13 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 		found := false
 		for j := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
 			found = true
-			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.Value != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].IpAddress.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString() != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].IpAddress.ValueString() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.Value != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].Index.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64() != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].Index.ValueInt64() {
 				found = false
 			}
-			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.Value != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].Stitching.Value {
+			if state.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool() != data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[j].Stitching.ValueBool() {
 				found = false
 			}
 			if found {

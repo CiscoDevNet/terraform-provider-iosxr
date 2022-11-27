@@ -38,7 +38,7 @@ func (v stringPatternValidator) Validate(ctx context.Context, req tfsdk.Validate
 		}
 	}
 
-	if str.Unknown || str.Null {
+	if str.IsUnknown() || str.IsNull() {
 		return
 	}
 
@@ -47,10 +47,10 @@ func (v stringPatternValidator) Validate(ctx context.Context, req tfsdk.Validate
 		maxLength = math.MaxInt
 	}
 
-	if len(str.Value) >= v.minLength && len(str.Value) <= maxLength {
+	if len(str.ValueString()) >= v.minLength && len(str.ValueString()) <= maxLength {
 		match := true
 		for _, regex := range v.regexes {
-			if ok, _ := regexp.MatchString(regex, str.Value); !ok {
+			if ok, _ := regexp.MatchString(regex, str.ValueString()); !ok {
 				match = false
 			}
 		}

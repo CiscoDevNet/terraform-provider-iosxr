@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceL2VPNXconnectGroupP2PType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &L2VPNXconnectGroupP2PDataSource{}
+	_ datasource.DataSourceWithConfigure = &L2VPNXconnectGroupP2PDataSource{}
+)
 
-func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewL2VPNXconnectGroupP2PDataSource() datasource.DataSource {
+	return &L2VPNXconnectGroupP2PDataSource{}
+}
+
+type L2VPNXconnectGroupP2PDataSource struct {
+	client *client.Client
+}
+
+func (d *L2VPNXconnectGroupP2PDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_l2vpn_xconnect_group_p2p"
+}
+
+func (d *L2VPNXconnectGroupP2PDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the L2VPN Xconnect Group P2P configuration.",
@@ -54,7 +72,7 @@ func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfs
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"ipv4_neighbors": {
 				MarkdownDescription: "IPv4",
@@ -75,7 +93,7 @@ func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfs
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 			"ipv6_neighbors": {
 				MarkdownDescription: "IPv6",
@@ -96,25 +114,21 @@ func (t dataSourceL2VPNXconnectGroupP2PType) GetSchema(ctx context.Context) (tfs
 						Type:                types.StringType,
 						Computed:            true,
 					},
-				}, tfsdk.ListNestedAttributesOptions{}),
+				}),
 			},
 		},
 	}, nil
 }
 
-func (t dataSourceL2VPNXconnectGroupP2PType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *L2VPNXconnectGroupP2PDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceL2VPNXconnectGroupP2P{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceL2VPNXconnectGroupP2P struct {
-	provider provider
-}
-
-func (d dataSourceL2VPNXconnectGroupP2P) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *L2VPNXconnectGroupP2PDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config L2VPNXconnectGroupP2P
 
 	// Read config
@@ -126,14 +140,14 @@ func (d dataSourceL2VPNXconnectGroupP2P) Read(ctx context.Context, req tfsdk.Rea
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

@@ -6,15 +6,33 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
-type dataSourceRouterOSPFAreaInterfaceType struct{}
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ datasource.DataSource              = &RouterOSPFAreaInterfaceDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterOSPFAreaInterfaceDataSource{}
+)
 
-func (t dataSourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
+func NewRouterOSPFAreaInterfaceDataSource() datasource.DataSource {
+	return &RouterOSPFAreaInterfaceDataSource{}
+}
+
+type RouterOSPFAreaInterfaceDataSource struct {
+	client *client.Client
+}
+
+func (d *RouterOSPFAreaInterfaceDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_ospf_area_interface"
+}
+
+func (d *RouterOSPFAreaInterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
 	return tfsdk.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router OSPF Area Interface configuration.",
@@ -89,19 +107,15 @@ func (t dataSourceRouterOSPFAreaInterfaceType) GetSchema(ctx context.Context) (t
 	}, nil
 }
 
-func (t dataSourceRouterOSPFAreaInterfaceType) NewDataSource(ctx context.Context, in tfsdk.Provider) (tfsdk.DataSource, diag.Diagnostics) {
-	provider, diags := convertProviderType(in)
+func (d *RouterOSPFAreaInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
 
-	return dataSourceRouterOSPFAreaInterface{
-		provider: provider,
-	}, diags
+	d.client = req.ProviderData.(*client.Client)
 }
 
-type dataSourceRouterOSPFAreaInterface struct {
-	provider provider
-}
-
-func (d dataSourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.ReadDataSourceRequest, resp *tfsdk.ReadDataSourceResponse) {
+func (d *RouterOSPFAreaInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var config RouterOSPFAreaInterface
 
 	// Read config
@@ -113,14 +127,14 @@ func (d dataSourceRouterOSPFAreaInterface) Read(ctx context.Context, req tfsdk.R
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.provider.client.Get(ctx, config.Device.Value, config.getPath())
+	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	config.Id = types.String{Value: config.getPath()}
+	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))
 

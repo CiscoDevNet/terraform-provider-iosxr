@@ -27,21 +27,12 @@ import (
 // Update documentation categories.
 //go:generate go run gen/doc_category.go
 
-var (
-	// these will be set by the goreleaser configuration
-	// to appropriate values for the compiled binary
-	version string = "dev"
-
-	// goreleaser can also pass the specific commit if you want
-	// commit  string = ""
-)
-
 func main() {
 	opts := providerserver.ServeOpts{
 		Address: "registry.terraform.io/netascode/iosxr",
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New(version), opts)
+	err := providerserver.Serve(context.Background(), provider.New, opts)
 
 	if err != nil {
 		log.Fatal(err.Error())

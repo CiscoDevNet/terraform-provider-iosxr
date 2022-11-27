@@ -74,6 +74,14 @@ resource "iosxr_router_bgp" "example" {
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
 
+Required:
+
+- `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
+  - Range: `1`-`255`
+- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_interval` (Number) BGP timers
+  - Range: `0`-`65535`
+
 Optional:
 
 - `bfd_minimum_interval` (Number) Hello interval
@@ -81,8 +89,6 @@ Optional:
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
 - `description` (String) Neighbor specific description
-- `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
-  - Range: `1`-`255`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
 - `local_as` (String) bgp as-number
 - `local_as_dual_as` (Boolean) Dual-AS mode
@@ -92,9 +98,6 @@ Optional:
 - `password` (String) Specifies an ENCRYPTED password will follow
 - `remote_as` (String) bgp as-number
 - `shutdown` (Boolean) Administratively shut down this neighbor
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
-  - Range: `0`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 

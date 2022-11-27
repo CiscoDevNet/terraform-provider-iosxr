@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.1.2 (unreleased)
+## 0.1.2
 
 - Update dependencies and go version
 

@@ -344,7 +344,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
-	if !data.{{toGoName .TfName}}.Value {
+	if !data.{{toGoName .TfName}}.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{.YangName}}", data.getPath()))
 	}
 	{{- end}}
@@ -356,14 +356,14 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
 	keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
-		keyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.Value, 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.Value), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value, {{end}}{{end}}{{end}} }
+		keyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 		keyString := ""
 		for ki := range keys {
 			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		{{- range .Attributes}}
 		{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
-		if !data.{{$list}}[i].{{toGoName .TfName}}.Value {
+		if !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}", data.getPath(), keyString))
 		}
 		{{- end}}

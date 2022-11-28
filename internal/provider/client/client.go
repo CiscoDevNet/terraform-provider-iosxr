@@ -11,9 +11,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/karimra/gnmic/api"
-	"github.com/karimra/gnmic/target"
 	"github.com/openconfig/gnmi/proto/gnmi"
+	"github.com/openconfig/gnmic/api"
+	"github.com/openconfig/gnmic/target"
 )
 
 const (

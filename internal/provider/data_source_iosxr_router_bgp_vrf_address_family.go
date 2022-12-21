@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,177 +31,154 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Metadata(_ context.Context, req da
 	resp.TypeName = req.ProviderTypeName + "_router_bgp_vrf_address_family"
 }
 
-func (d *RouterBGPVRFAddressFamilyDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router BGP VRF Address Family configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"as_number": {
+			"as_number": schema.StringAttribute{
 				MarkdownDescription: "bgp as-number",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "Specify a vrf name",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"af_name": {
+			"af_name": schema.StringAttribute{
 				MarkdownDescription: "Enter Address Family command mode",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"maximum_paths_ebgp_multipath": {
+			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: "eBGP-multipath",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"maximum_paths_eibgp_multipath": {
+			"maximum_paths_eibgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: "eiBGP-multipath",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"maximum_paths_ibgp_multipath": {
+			"maximum_paths_ibgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: "iBGP-multipath",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"label_mode_per_ce": {
+			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: "Set per CE label mode",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"label_mode_per_vrf": {
+			"label_mode_per_vrf": schema.BoolAttribute{
 				MarkdownDescription: "Set per VRF label mode",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redistribute_connected": {
+			"redistribute_connected": schema.BoolAttribute{
 				MarkdownDescription: "Connected routes",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redistribute_connected_metric": {
+			"redistribute_connected_metric": schema.Int64Attribute{
 				MarkdownDescription: "Metric for redistributed routes",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"redistribute_static": {
+			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: "Static routes",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redistribute_static_metric": {
+			"redistribute_static_metric": schema.Int64Attribute{
 				MarkdownDescription: "Metric for redistributed routes",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"aggregate_addresses": {
+			"aggregate_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"address": {
-						MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
+							Computed:            true,
+						},
+						"masklength": schema.Int64Attribute{
+							MarkdownDescription: "Network in prefix/length format (prefix part)",
+							Computed:            true,
+						},
+						"as_set": schema.BoolAttribute{
+							MarkdownDescription: "Generate AS set path information",
+							Computed:            true,
+						},
+						"as_confed_set": schema.BoolAttribute{
+							MarkdownDescription: "Generate AS confed set path information",
+							Computed:            true,
+						},
+						"summary_only": schema.BoolAttribute{
+							MarkdownDescription: "Filter more specific routes from updates",
+							Computed:            true,
+						},
 					},
-					"masklength": {
-						MarkdownDescription: "Network in prefix/length format (prefix part)",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"as_set": {
-						MarkdownDescription: "Generate AS set path information",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"as_confed_set": {
-						MarkdownDescription: "Generate AS confed set path information",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"summary_only": {
-						MarkdownDescription: "Filter more specific routes from updates",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"networks": {
+			"networks": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv6 network and mask or masklength",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"address": {
-						MarkdownDescription: "IPv6 network and mask or masklength",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 network and mask or masklength",
+							Computed:            true,
+						},
+						"masklength": schema.Int64Attribute{
+							MarkdownDescription: "Network in prefix/length format (prefix part)",
+							Computed:            true,
+						},
 					},
-					"masklength": {
-						MarkdownDescription: "Network in prefix/length format (prefix part)",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"redistribute_ospf": {
+			"redistribute_ospf": schema.ListNestedAttribute{
 				MarkdownDescription: "Open Shortest Path First (OSPF/OSPFv3)",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"router_tag": {
-						MarkdownDescription: "Open Shortest Path First (OSPF)",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"router_tag": schema.StringAttribute{
+							MarkdownDescription: "Open Shortest Path First (OSPF)",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal routes",
+							Computed:            true,
+						},
+						"match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external routes",
+							Computed:            true,
+						},
+						"match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
 					},
-					"match_internal": {
-						MarkdownDescription: "Redistribute OSPF internal routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_internal_external": {
-						MarkdownDescription: "Redistribute OSPF external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_internal_nssa_external": {
-						MarkdownDescription: "Redistribute OSPF NSSA external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_external": {
-						MarkdownDescription: "Redistribute OSPF external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_external_nssa_external": {
-						MarkdownDescription: "Redistribute OSPF NSSA external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_nssa_external": {
-						MarkdownDescription: "Redistribute OSPF NSSA external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"metric": {
-						MarkdownDescription: "Metric for redistributed routes",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterBGPVRFAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

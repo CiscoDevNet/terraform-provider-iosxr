@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,147 +31,130 @@ func (d *RouterISISDataSource) Metadata(_ context.Context, req datasource.Metada
 	resp.TypeName = req.ProviderTypeName + "_router_isis"
 }
 
-func (d *RouterISISDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router ISIS configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"process_id": {
+			"process_id": schema.StringAttribute{
 				MarkdownDescription: "Process ID",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"is_type": {
+			"is_type": schema.StringAttribute{
 				MarkdownDescription: "Area type (level)",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"nets": {
+			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: "A Network Entity Title (NET) for this process",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"net_id": {
-						MarkdownDescription: "A Network Entity Title (NET) for this process",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"net_id": schema.StringAttribute{
+							MarkdownDescription: "A Network Entity Title (NET) for this process",
+							Computed:            true,
+						},
 					},
-				}),
+				},
 			},
-			"address_families": {
+			"address_families": schema.ListNestedAttribute{
 				MarkdownDescription: "IS-IS address family",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"af_name": {
-						MarkdownDescription: "Address family name",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"af_name": schema.StringAttribute{
+							MarkdownDescription: "Address family name",
+							Computed:            true,
+						},
+						"saf_name": schema.StringAttribute{
+							MarkdownDescription: "Sub address family name",
+							Computed:            true,
+						},
+						"mpls_ldp_auto_config": schema.BoolAttribute{
+							MarkdownDescription: "Enable LDP IGP interface auto-configuration",
+							Computed:            true,
+						},
+						"metric_style_narrow": schema.BoolAttribute{
+							MarkdownDescription: "Use old style of TLVs with narrow metric",
+							Computed:            true,
+						},
+						"metric_style_wide": schema.BoolAttribute{
+							MarkdownDescription: "Use new style of TLVs to carry wider metric",
+							Computed:            true,
+						},
+						"metric_style_transition": schema.BoolAttribute{
+							MarkdownDescription: "Send and accept both styles of TLVs during transition",
+							Computed:            true,
+						},
+						"router_id_interface_name": schema.StringAttribute{
+							MarkdownDescription: "Router ID Interface",
+							Computed:            true,
+						},
+						"router_id_ip_address": schema.StringAttribute{
+							MarkdownDescription: "Router ID address",
+							Computed:            true,
+						},
+						"default_information_originate": schema.BoolAttribute{
+							MarkdownDescription: "Distribute a default route",
+							Computed:            true,
+						},
 					},
-					"saf_name": {
-						MarkdownDescription: "Sub address family name",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"mpls_ldp_auto_config": {
-						MarkdownDescription: "Enable LDP IGP interface auto-configuration",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"metric_style_narrow": {
-						MarkdownDescription: "Use old style of TLVs with narrow metric",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"metric_style_wide": {
-						MarkdownDescription: "Use new style of TLVs to carry wider metric",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"metric_style_transition": {
-						MarkdownDescription: "Send and accept both styles of TLVs during transition",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"router_id_interface_name": {
-						MarkdownDescription: "Router ID Interface",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"router_id_ip_address": {
-						MarkdownDescription: "Router ID address",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"default_information_originate": {
-						MarkdownDescription: "Distribute a default route",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"interfaces": {
+			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter the IS-IS interface configuration submode",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"interface_name": {
-						MarkdownDescription: "Enter the IS-IS interface configuration submode",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Enter the IS-IS interface configuration submode",
+							Computed:            true,
+						},
+						"circuit_type": schema.StringAttribute{
+							MarkdownDescription: "Configure circuit type for interface",
+							Computed:            true,
+						},
+						"hello_padding_disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable hello-padding",
+							Computed:            true,
+						},
+						"hello_padding_sometimes": schema.BoolAttribute{
+							MarkdownDescription: "Enable hello-padding during adjacency formation only",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Set priority for Designated Router election",
+							Computed:            true,
+						},
+						"point_to_point": schema.BoolAttribute{
+							MarkdownDescription: "Treat active LAN interface as point-to-point",
+							Computed:            true,
+						},
+						"passive": schema.BoolAttribute{
+							MarkdownDescription: "Do not establish adjacencies over this interface",
+							Computed:            true,
+						},
+						"suppressed": schema.BoolAttribute{
+							MarkdownDescription: "Do not advertise connected prefixes of this interface",
+							Computed:            true,
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Shutdown IS-IS on this interface",
+							Computed:            true,
+						},
 					},
-					"circuit_type": {
-						MarkdownDescription: "Configure circuit type for interface",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"hello_padding_disable": {
-						MarkdownDescription: "Disable hello-padding",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"hello_padding_sometimes": {
-						MarkdownDescription: "Enable hello-padding during adjacency formation only",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"priority": {
-						MarkdownDescription: "Set priority for Designated Router election",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"point_to_point": {
-						MarkdownDescription: "Treat active LAN interface as point-to-point",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"passive": {
-						MarkdownDescription: "Do not establish adjacencies over this interface",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"suppressed": {
-						MarkdownDescription: "Do not advertise connected prefixes of this interface",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"shutdown": {
-						MarkdownDescription: "Shutdown IS-IS on this interface",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterISISDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

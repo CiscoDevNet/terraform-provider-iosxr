@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,92 +31,86 @@ func (d *L2VPNXconnectGroupP2PDataSource) Metadata(_ context.Context, req dataso
 	resp.TypeName = req.ProviderTypeName + "_l2vpn_xconnect_group_p2p"
 }
 
-func (d *L2VPNXconnectGroupP2PDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *L2VPNXconnectGroupP2PDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the L2VPN Xconnect Group P2P configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"group_name": {
+			"group_name": schema.StringAttribute{
 				MarkdownDescription: "Specify the group the cross connects belong to",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"p2p_xconnect_name": {
+			"p2p_xconnect_name": schema.StringAttribute{
 				MarkdownDescription: "Configure point to point cross connect commands",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"description": {
+			"description": schema.StringAttribute{
 				MarkdownDescription: "Description for cross connect",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"interfaces": {
+			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify (sub-)interface name to cross connect",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"interface_name": {
-						MarkdownDescription: "Specify (sub-)interface name to cross connect",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Specify (sub-)interface name to cross connect",
+							Computed:            true,
+						},
 					},
-				}),
+				},
 			},
-			"ipv4_neighbors": {
+			"ipv4_neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv4",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"address": {
-						MarkdownDescription: "IPv4",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv4",
+							Computed:            true,
+						},
+						"pw_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify the pseudowire id",
+							Computed:            true,
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: "PW class template name to use for this XC",
+							Computed:            true,
+						},
 					},
-					"pw_id": {
-						MarkdownDescription: "Specify the pseudowire id",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"pw_class": {
-						MarkdownDescription: "PW class template name to use for this XC",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"ipv6_neighbors": {
+			"ipv6_neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv6",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"address": {
-						MarkdownDescription: "IPv6",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6",
+							Computed:            true,
+						},
+						"pw_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify the pseudowire id",
+							Computed:            true,
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: "PW class template name to use for this XC",
+							Computed:            true,
+						},
 					},
-					"pw_id": {
-						MarkdownDescription: "Specify the pseudowire id",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"pw_class": {
-						MarkdownDescription: "PW class template name to use for this XC",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *L2VPNXconnectGroupP2PDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

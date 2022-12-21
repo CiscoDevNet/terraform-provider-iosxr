@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,84 +31,70 @@ func (d *RouterOSPFVRFAreaInterfaceDataSource) Metadata(_ context.Context, req d
 	resp.TypeName = req.ProviderTypeName + "_router_ospf_vrf_area_interface"
 }
 
-func (d *RouterOSPFVRFAreaInterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterOSPFVRFAreaInterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router OSPF VRF Area Interface configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"process_name": {
+			"process_name": schema.StringAttribute{
 				MarkdownDescription: "Name for this OSPF process",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "Name for this OSPF vrf",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"area_id": {
+			"area_id": schema.StringAttribute{
 				MarkdownDescription: "Enter the OSPF area configuration submode",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"interface_name": {
+			"interface_name": schema.StringAttribute{
 				MarkdownDescription: "Enable routing on an interface ",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"network_broadcast": {
+			"network_broadcast": schema.BoolAttribute{
 				MarkdownDescription: "Specify OSPF broadcast multi-access network",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"network_non_broadcast": {
+			"network_non_broadcast": schema.BoolAttribute{
 				MarkdownDescription: "Specify OSPF NBMA network",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"network_point_to_point": {
+			"network_point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "Specify OSPF point-to-point network",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"network_point_to_multipoint": {
+			"network_point_to_multipoint": schema.BoolAttribute{
 				MarkdownDescription: "Specify OSPF point-to-multipoint network",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"cost": {
+			"cost": schema.Int64Attribute{
 				MarkdownDescription: "Interface cost",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"priority": {
+			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Router priority",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"passive_enable": {
+			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable passive",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"passive_disable": {
+			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable passive",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterOSPFVRFAreaInterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

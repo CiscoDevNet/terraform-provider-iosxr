@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,150 +31,126 @@ func (d *RouterBGPDataSource) Metadata(_ context.Context, req datasource.Metadat
 	resp.TypeName = req.ProviderTypeName + "_router_bgp"
 }
 
-func (d *RouterBGPDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router BGP configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"as_number": {
+			"as_number": schema.StringAttribute{
 				MarkdownDescription: "bgp as-number",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"default_information_originate": {
+			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: "Distribute a default route",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"default_metric": {
+			"default_metric": schema.Int64Attribute{
 				MarkdownDescription: "default redistributed metric",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_interval": {
+			"timers_bgp_keepalive_interval": schema.Int64Attribute{
 				MarkdownDescription: "BGP timers",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"timers_bgp_holdtime": {
+			"timers_bgp_holdtime": schema.StringAttribute{
 				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"bfd_minimum_interval": {
+			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: "Hello interval",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"bfd_multiplier": {
+			"bfd_multiplier": schema.Int64Attribute{
 				MarkdownDescription: "Detect multiplier",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"neighbors": {
+			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "Neighbor address",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"neighbor_address": {
-						MarkdownDescription: "Neighbor address",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"neighbor_address": schema.StringAttribute{
+							MarkdownDescription: "Neighbor address",
+							Computed:            true,
+						},
+						"remote_as": schema.StringAttribute{
+							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Neighbor specific description",
+							Computed:            true,
+						},
+						"ignore_connected_check": schema.BoolAttribute{
+							MarkdownDescription: "Bypass the directly connected nexthop check for single-hop eBGP peering",
+							Computed:            true,
+						},
+						"ebgp_multihop_maximum_hop_count": schema.Int64Attribute{
+							MarkdownDescription: "maximum hop count",
+							Computed:            true,
+						},
+						"bfd_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval",
+							Computed:            true,
+						},
+						"bfd_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Detect multiplier",
+							Computed:            true,
+						},
+						"local_as": schema.StringAttribute{
+							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+						"local_as_no_prepend": schema.BoolAttribute{
+							MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
+							Computed:            true,
+						},
+						"local_as_replace_as": schema.BoolAttribute{
+							MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
+							Computed:            true,
+						},
+						"local_as_dual_as": schema.BoolAttribute{
+							MarkdownDescription: "Dual-AS mode",
+							Computed:            true,
+						},
+						"password": schema.StringAttribute{
+							MarkdownDescription: "Specifies an ENCRYPTED password will follow",
+							Computed:            true,
+						},
+						"shutdown": schema.BoolAttribute{
+							MarkdownDescription: "Administratively shut down this neighbor",
+							Computed:            true,
+						},
+						"timers_keepalive_interval": schema.Int64Attribute{
+							MarkdownDescription: "BGP timers",
+							Computed:            true,
+						},
+						"timers_holdtime": schema.StringAttribute{
+							MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+							Computed:            true,
+						},
+						"update_source": schema.StringAttribute{
+							MarkdownDescription: "Source of routing updates",
+							Computed:            true,
+						},
+						"ttl_security": schema.BoolAttribute{
+							MarkdownDescription: "Enable EBGP TTL security",
+							Computed:            true,
+						},
 					},
-					"remote_as": {
-						MarkdownDescription: "bgp as-number",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"description": {
-						MarkdownDescription: "Neighbor specific description",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"ignore_connected_check": {
-						MarkdownDescription: "Bypass the directly connected nexthop check for single-hop eBGP peering",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"ebgp_multihop_maximum_hop_count": {
-						MarkdownDescription: "maximum hop count",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"bfd_minimum_interval": {
-						MarkdownDescription: "Hello interval",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"bfd_multiplier": {
-						MarkdownDescription: "Detect multiplier",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"local_as": {
-						MarkdownDescription: "bgp as-number",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"local_as_no_prepend": {
-						MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"local_as_replace_as": {
-						MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"local_as_dual_as": {
-						MarkdownDescription: "Dual-AS mode",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"password": {
-						MarkdownDescription: "Specifies an ENCRYPTED password will follow",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"shutdown": {
-						MarkdownDescription: "Administratively shut down this neighbor",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"timers_keepalive_interval": {
-						MarkdownDescription: "BGP timers",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"timers_holdtime": {
-						MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"update_source": {
-						MarkdownDescription: "Source of routing updates",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-					"ttl_security": {
-						MarkdownDescription: "Enable EBGP TTL security",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterBGPDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

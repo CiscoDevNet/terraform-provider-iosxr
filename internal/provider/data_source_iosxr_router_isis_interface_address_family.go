@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,44 +31,38 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Metadata(_ context.Context,
 	resp.TypeName = req.ProviderTypeName + "_router_isis_interface_address_family"
 }
 
-func (d *RouterISISInterfaceAddressFamilyDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router ISIS Interface Address Family configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"process_id": {
+			"process_id": schema.StringAttribute{
 				MarkdownDescription: "Process ID",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"interface_name": {
+			"interface_name": schema.StringAttribute{
 				MarkdownDescription: "Enter the IS-IS interface configuration submode",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"af_name": {
+			"af_name": schema.StringAttribute{
 				MarkdownDescription: "Address family name",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"saf_name": {
+			"saf_name": schema.StringAttribute{
 				MarkdownDescription: "Sub address family name",
-				Type:                types.StringType,
 				Required:            true,
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterISISInterfaceAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,125 +31,106 @@ func (d *InterfaceDataSource) Metadata(_ context.Context, req datasource.Metadat
 	resp.TypeName = req.ProviderTypeName + "_interface"
 }
 
-func (d *InterfaceDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Interface configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"interface_name": {
+			"interface_name": schema.StringAttribute{
 				MarkdownDescription: "Interface configuration subcommands",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"l2transport": {
+			"l2transport": schema.BoolAttribute{
 				MarkdownDescription: "l2transport sub-interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"point_to_point": {
+			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "point-to-point sub-interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"multipoint": {
+			"multipoint": schema.BoolAttribute{
 				MarkdownDescription: "multipoint sub-interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"shutdown": {
+			"shutdown": schema.BoolAttribute{
 				MarkdownDescription: "shutdown the given interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"mtu": {
+			"mtu": schema.Int64Attribute{
 				MarkdownDescription: "Set the MTU on an interface",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"bandwidth": {
+			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: "Set the bandwidth of an interface",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"description": {
+			"description": schema.StringAttribute{
 				MarkdownDescription: "Set description for this interface",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"vrf": {
+			"vrf": schema.StringAttribute{
 				MarkdownDescription: "Set VRF in which the interface operates",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ipv4_address": {
+			"ipv4_address": schema.StringAttribute{
 				MarkdownDescription: "IP address",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ipv4_netmask": {
+			"ipv4_netmask": schema.StringAttribute{
 				MarkdownDescription: "IP subnet mask",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"unnumbered": {
+			"unnumbered": schema.StringAttribute{
 				MarkdownDescription: "Enable IP processing without an explicit address",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ipv6_link_local_address": {
+			"ipv6_link_local_address": schema.StringAttribute{
 				MarkdownDescription: "IPv6 address",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ipv6_link_local_zone": {
+			"ipv6_link_local_zone": schema.StringAttribute{
 				MarkdownDescription: "IPv6 address zone",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"ipv6_autoconfig": {
+			"ipv6_autoconfig": schema.BoolAttribute{
 				MarkdownDescription: "Enable slaac on Mgmt interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"ipv6_enable": {
+			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable IPv6 on interface",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"ipv6_addresses": {
+			"ipv6_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv6 address",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"address": {
-						MarkdownDescription: "IPv6 name or address",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 name or address",
+							Computed:            true,
+						},
+						"prefix_length": schema.Int64Attribute{
+							MarkdownDescription: "Prefix length in bits",
+							Computed:            true,
+						},
+						"zone": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address zone",
+							Computed:            true,
+						},
 					},
-					"prefix_length": {
-						MarkdownDescription: "Prefix length in bits",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"zone": {
-						MarkdownDescription: "IPv6 address zone",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *InterfaceDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

@@ -7,8 +7,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
+	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
@@ -32,243 +31,210 @@ func (d *RouterOSPFVRFDataSource) Metadata(_ context.Context, req datasource.Met
 	resp.TypeName = req.ProviderTypeName + "_router_ospf_vrf"
 }
 
-func (d *RouterOSPFVRFDataSource) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
+func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "This data source can read the Router OSPF VRF configuration.",
 
-		Attributes: map[string]tfsdk.Attribute{
-			"device": {
+		Attributes: map[string]schema.Attribute{
+			"device": schema.StringAttribute{
 				MarkdownDescription: "A device name from the provider configuration.",
-				Type:                types.StringType,
 				Optional:            true,
 			},
-			"id": {
+			"id": schema.StringAttribute{
 				MarkdownDescription: "The path of the retrieved object.",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"process_name": {
+			"process_name": schema.StringAttribute{
 				MarkdownDescription: "Name for this OSPF process",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"vrf_name": {
+			"vrf_name": schema.StringAttribute{
 				MarkdownDescription: "Name for this OSPF vrf",
-				Type:                types.StringType,
 				Required:            true,
 			},
-			"mpls_ldp_sync": {
+			"mpls_ldp_sync": schema.BoolAttribute{
 				MarkdownDescription: "Enable LDP IGP synchronization",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"hello_interval": {
+			"hello_interval": schema.Int64Attribute{
 				MarkdownDescription: "Time between HELLO packets",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"dead_interval": {
+			"dead_interval": schema.Int64Attribute{
 				MarkdownDescription: "Seconds",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"priority": {
+			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Router priority",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"mtu_ignore_enable": {
+			"mtu_ignore_enable": schema.BoolAttribute{
 				MarkdownDescription: "Ignores the MTU in DBD packets",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"mtu_ignore_disable": {
+			"mtu_ignore_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable ignoring the MTU in DBD packets",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"passive_enable": {
+			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable passive",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"passive_disable": {
+			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable passive",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"router_id": {
+			"router_id": schema.StringAttribute{
 				MarkdownDescription: "configure this node",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"redistribute_connected": {
+			"redistribute_connected": schema.BoolAttribute{
 				MarkdownDescription: "Connected routes",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redistribute_connected_tag": {
+			"redistribute_connected_tag": schema.Int64Attribute{
 				MarkdownDescription: "Set tag for routes redistributed into OSPF",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"redistribute_connected_metric_type": {
+			"redistribute_connected_metric_type": schema.StringAttribute{
 				MarkdownDescription: "OSPF exterior metric type for redistributed routes",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"redistribute_static": {
+			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: "Static routes",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"redistribute_static_tag": {
+			"redistribute_static_tag": schema.Int64Attribute{
 				MarkdownDescription: "Set tag for routes redistributed into OSPF",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"redistribute_static_metric_type": {
+			"redistribute_static_metric_type": schema.StringAttribute{
 				MarkdownDescription: "OSPF exterior metric type for redistributed routes",
-				Type:                types.StringType,
 				Computed:            true,
 			},
-			"bfd_fast_detect": {
+			"bfd_fast_detect": schema.BoolAttribute{
 				MarkdownDescription: "Enable Fast detection",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"bfd_minimum_interval": {
+			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: "Minimum interval",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"bfd_multiplier": {
+			"bfd_multiplier": schema.Int64Attribute{
 				MarkdownDescription: "Detect multiplier",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"default_information_originate": {
+			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: "Distribute a default route",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"default_information_originate_always": {
+			"default_information_originate_always": schema.BoolAttribute{
 				MarkdownDescription: "Always advertise default route",
-				Type:                types.BoolType,
 				Computed:            true,
 			},
-			"default_information_originate_metric_type": {
+			"default_information_originate_metric_type": schema.Int64Attribute{
 				MarkdownDescription: "OSPF metric type for default routes",
-				Type:                types.Int64Type,
 				Computed:            true,
 			},
-			"areas": {
+			"areas": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter the OSPF area configuration submode",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"area_id": {
-						MarkdownDescription: "Enter the OSPF area configuration submode",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"area_id": schema.StringAttribute{
+							MarkdownDescription: "Enter the OSPF area configuration submode",
+							Computed:            true,
+						},
 					},
-				}),
+				},
 			},
-			"redistribute_bgp": {
+			"redistribute_bgp": schema.ListNestedAttribute{
 				MarkdownDescription: "bgp as-number",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"as_number": {
-						MarkdownDescription: "bgp as-number",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"as_number": schema.StringAttribute{
+							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set tag for routes redistributed into OSPF",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+							Computed:            true,
+						},
 					},
-					"tag": {
-						MarkdownDescription: "Set tag for routes redistributed into OSPF",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"metric_type": {
-						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"redistribute_isis": {
+			"redistribute_isis": schema.ListNestedAttribute{
 				MarkdownDescription: "ISO IS-IS",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"instance_name": {
-						MarkdownDescription: "ISO IS-IS",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "ISO IS-IS",
+							Computed:            true,
+						},
+						"level_1": schema.BoolAttribute{
+							MarkdownDescription: "IS-IS level-1 routes only",
+							Computed:            true,
+						},
+						"level_2": schema.BoolAttribute{
+							MarkdownDescription: "IS-IS level-2 routes only",
+							Computed:            true,
+						},
+						"level_1_2": schema.BoolAttribute{
+							MarkdownDescription: "IS-IS level-1 and level-2 routes",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set tag for routes redistributed into OSPF",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+							Computed:            true,
+						},
 					},
-					"level_1": {
-						MarkdownDescription: "IS-IS level-1 routes only",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"level_2": {
-						MarkdownDescription: "IS-IS level-2 routes only",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"level_1_2": {
-						MarkdownDescription: "IS-IS level-1 and level-2 routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"tag": {
-						MarkdownDescription: "Set tag for routes redistributed into OSPF",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"metric_type": {
-						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
-			"redistribute_ospf": {
+			"redistribute_ospf": schema.ListNestedAttribute{
 				MarkdownDescription: "Open Shortest Path First (OSPF)",
 				Computed:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"instance_name": {
-						MarkdownDescription: "Open Shortest Path First (OSPF)",
-						Type:                types.StringType,
-						Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "Open Shortest Path First (OSPF)",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external routes",
+							Computed:            true,
+						},
+						"match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external routes",
+							Computed:            true,
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: "Set tag for routes redistributed into OSPF",
+							Computed:            true,
+						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "OSPF exterior metric type for redistributed routes",
+							Computed:            true,
+						},
 					},
-					"match_internal": {
-						MarkdownDescription: "Redistribute OSPF internal routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_external": {
-						MarkdownDescription: "Redistribute OSPF external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"match_nssa_external": {
-						MarkdownDescription: "Redistribute OSPF NSSA external routes",
-						Type:                types.BoolType,
-						Computed:            true,
-					},
-					"tag": {
-						MarkdownDescription: "Set tag for routes redistributed into OSPF",
-						Type:                types.Int64Type,
-						Computed:            true,
-					},
-					"metric_type": {
-						MarkdownDescription: "OSPF exterior metric type for redistributed routes",
-						Type:                types.StringType,
-						Computed:            true,
-					},
-				}),
+				},
 			},
 		},
-	}, nil
+	}
 }
 
 func (d *RouterOSPFVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {

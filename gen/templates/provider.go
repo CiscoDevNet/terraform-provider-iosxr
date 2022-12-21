@@ -9,10 +9,10 @@ import (
 	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
-	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
@@ -38,48 +38,45 @@ type providerDataDevice struct {
 	Host types.String `tfsdk:"host"`
 }
 
-func (p *iosxrProvider) GetSchema(ctx context.Context) (tfsdk.Schema, diag.Diagnostics) {
-	return tfsdk.Schema{
-		Attributes: map[string]tfsdk.Attribute{
-			"username": {
-				MarkdownDescription: "Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.",
-				Type:                types.StringType,
-				Optional:            true,
-			},
-			"password": {
-				MarkdownDescription: "Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.",
-				Type:                types.StringType,
-				Optional:            true,
-				Sensitive:           true,
-			},
-			"host": {
-				MarkdownDescription: "IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.",
-				Type:                types.StringType,
-				Optional:            true,
-			},
-			"devices": {
-				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
-				Optional:            true,
-				Attributes: tfsdk.ListNestedAttributes(map[string]tfsdk.Attribute{
-					"name": {
-						MarkdownDescription: "Device name.",
-						Type:                types.StringType,
-						Required:            true,
-					},
-					"host": {
-						MarkdownDescription: "IP of the Cisco IOS-XR device.",
-						Type:                types.StringType,
-						Required:            true,
-					},
-				}),
-			},
-		},
-	}, nil
-}
-
 // Metadata returns the provider type name.
 func (p *iosxrProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "iosxr"
+}
+
+func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"username": schema.StringAttribute{
+				MarkdownDescription: "Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.",
+				Optional:            true,
+			},
+			"password": schema.StringAttribute{
+				MarkdownDescription: "Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.",
+				Optional:            true,
+				Sensitive:           true,
+			},
+			"host": schema.StringAttribute{
+				MarkdownDescription: "IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.",
+				Optional:            true,
+			},
+			"devices": schema.ListNestedAttribute{
+				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Device name.",
+							Required:            true,
+						},
+						"host": schema.StringAttribute{
+							MarkdownDescription: "IP of the Cisco IOS-XR device.",
+							Required:            true,
+						},
+					},
+				},
+			},
+		},
+	}
 }
 
 func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {

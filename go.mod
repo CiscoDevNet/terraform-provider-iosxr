@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/terraform-plugin-go v0.14.3
 	github.com/hashicorp/terraform-plugin-log v0.8.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.25.0
-	github.com/openconfig/gnmi v0.0.0-20220617175856-41246b1b3507
+	github.com/openconfig/gnmi v0.9.1
 	github.com/openconfig/gnmic v0.29.0
 	github.com/openconfig/goyang v1.2.0
 	github.com/tidwall/gjson v1.14.4

@@ -51,12 +51,10 @@ func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaReq
 			"asdot": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("AS Dot format").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"asplain": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("AS Plain format").String,
 				Optional:            true,
-				Computed:            true,
 			},
 		},
 	}
@@ -101,8 +99,6 @@ func (r *BGPASFormatResource) Create(ctx context.Context, req resource.CreateReq
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -165,8 +161,6 @@ func (r *BGPASFormatResource) Update(ctx context.Context, req resource.UpdateReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

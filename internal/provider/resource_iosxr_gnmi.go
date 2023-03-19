@@ -58,7 +58,6 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"delete": schema.BoolAttribute{
 				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
 				Optional:            true,
-				Computed:            true,
 				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(true),
 				},
@@ -66,7 +65,6 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"attributes": schema.MapAttribute{
 				MarkdownDescription: "Map of key-value pairs which represents the attributes and its values.",
 				Optional:            true,
-				Computed:            true,
 				ElementType:         types.StringType,
 			},
 			"lists": schema.ListNestedAttribute{
@@ -85,7 +83,6 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						"items": schema.ListAttribute{
 							MarkdownDescription: "List of maps of key-value pairs which represents the attributes and its values.",
 							Optional:            true,
-							Computed:            true,
 							ElementType:         types.MapType{ElemType: types.StringType},
 						},
 					},
@@ -115,7 +112,7 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
-	if !plan.Attributes.IsUnknown() || len(plan.Lists) > 0 {
+	if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
 		body := plan.toBody(ctx)
 
 		_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.Path.ValueString(), body, client.Update)
@@ -123,10 +120,6 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 		if resp.Diagnostics.HasError() {
 			return
 		}
-	}
-
-	if plan.Attributes.IsUnknown() {
-		plan.Attributes = types.MapNull(plan.Attributes.ElementType(ctx))
 	}
 
 	plan.Id = plan.Path

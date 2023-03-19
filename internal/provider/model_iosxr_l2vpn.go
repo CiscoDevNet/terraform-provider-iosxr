@@ -47,12 +47,12 @@ func (data L2VPN) toBody() string {
 }
 
 func (data *L2VPN) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else {
 		data.RouterId = types.StringNull()
@@ -80,7 +80,7 @@ func (data *L2VPN) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("group-name"); value.Exists() {
+		if value := r.Get("group-name"); value.Exists() && !data.XconnectGroups[i].GroupName.IsNull() {
 			data.XconnectGroups[i].GroupName = types.StringValue(value.String())
 		} else {
 			data.XconnectGroups[i].GroupName = types.StringNull()
@@ -110,26 +110,6 @@ func (data *L2VPN) fromBody(res []byte) {
 
 func (data *L2VPN) fromPlan(plan L2VPN) {
 	data.Device = plan.Device
-}
-
-func (data *L2VPN) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.Description.IsUnknown() {
-		data.Description = types.StringNull()
-	}
-	if data.RouterId.IsUnknown() {
-		data.RouterId = types.StringNull()
-	}
-	for i := range data.XconnectGroups {
-		if data.XconnectGroups[i].GroupName.IsUnknown() {
-			data.XconnectGroups[i].GroupName = types.StringNull()
-		}
-	}
 }
 
 func (data *L2VPN) getDeletedListItems(state L2VPN) []string {

@@ -73,6 +73,9 @@ func (data RouterOSPF) getPath() string {
 
 func (data RouterOSPF) toBody() string {
 	body := "{}"
+	if !data.ProcessName.IsNull() && !data.ProcessName.IsUnknown() {
+		body, _ = sjson.Set(body, "process-name", data.ProcessName.ValueString())
+	}
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.IsUnknown() {
 		if data.MplsLdpSync.ValueBool() {
 			body, _ = sjson.Set(body, "mpls.ldp.sync", map[string]string{})
@@ -240,107 +243,147 @@ func (data RouterOSPF) toBody() string {
 }
 
 func (data *RouterOSPF) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
-		data.MplsLdpSync = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
+		if value.Exists() {
+			data.MplsLdpSync = types.BoolValue(true)
+		} else {
+			data.MplsLdpSync = types.BoolValue(false)
+		}
 	} else {
-		data.MplsLdpSync = types.BoolValue(false)
+		data.MplsLdpSync = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() && !data.HelloInterval.IsNull() {
 		data.HelloInterval = types.Int64Value(value.Int())
 	} else {
 		data.HelloInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() && !data.DeadInterval.IsNull() {
 		data.DeadInterval = types.Int64Value(value.Int())
 	} else {
 		data.DeadInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else {
 		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
-		data.MtuIgnoreEnable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "mtu-ignore.enable"); !data.MtuIgnoreEnable.IsNull() {
+		if value.Exists() {
+			data.MtuIgnoreEnable = types.BoolValue(true)
+		} else {
+			data.MtuIgnoreEnable = types.BoolValue(false)
+		}
 	} else {
-		data.MtuIgnoreEnable = types.BoolValue(false)
+		data.MtuIgnoreEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
-		data.MtuIgnoreDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "mtu-ignore.disable"); !data.MtuIgnoreDisable.IsNull() {
+		if value.Exists() {
+			data.MtuIgnoreDisable = types.BoolValue(true)
+		} else {
+			data.MtuIgnoreDisable = types.BoolValue(false)
+		}
 	} else {
-		data.MtuIgnoreDisable = types.BoolValue(false)
+		data.MtuIgnoreDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
-		data.PassiveEnable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "passive.enable"); !data.PassiveEnable.IsNull() {
+		if value.Exists() {
+			data.PassiveEnable = types.BoolValue(true)
+		} else {
+			data.PassiveEnable = types.BoolValue(false)
+		}
 	} else {
-		data.PassiveEnable = types.BoolValue(false)
+		data.PassiveEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
-		data.PassiveDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "passive.disable"); !data.PassiveDisable.IsNull() {
+		if value.Exists() {
+			data.PassiveDisable = types.BoolValue(true)
+		} else {
+			data.PassiveDisable = types.BoolValue(false)
+		}
 	} else {
-		data.PassiveDisable = types.BoolValue(false)
+		data.PassiveDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else {
 		data.RouterId = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
-		data.RedistributeConnected = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "redistribute.connected"); !data.RedistributeConnected.IsNull() {
+		if value.Exists() {
+			data.RedistributeConnected = types.BoolValue(true)
+		} else {
+			data.RedistributeConnected = types.BoolValue(false)
+		}
 	} else {
-		data.RedistributeConnected = types.BoolValue(false)
+		data.RedistributeConnected = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() && !data.RedistributeConnectedTag.IsNull() {
 		data.RedistributeConnectedTag = types.Int64Value(value.Int())
 	} else {
 		data.RedistributeConnectedTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() && !data.RedistributeConnectedMetricType.IsNull() {
 		data.RedistributeConnectedMetricType = types.StringValue(value.String())
 	} else {
 		data.RedistributeConnectedMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
-		data.RedistributeStatic = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "redistribute.static"); !data.RedistributeStatic.IsNull() {
+		if value.Exists() {
+			data.RedistributeStatic = types.BoolValue(true)
+		} else {
+			data.RedistributeStatic = types.BoolValue(false)
+		}
 	} else {
-		data.RedistributeStatic = types.BoolValue(false)
+		data.RedistributeStatic = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() && !data.RedistributeStaticTag.IsNull() {
 		data.RedistributeStaticTag = types.Int64Value(value.Int())
 	} else {
 		data.RedistributeStaticTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() && !data.RedistributeStaticMetricType.IsNull() {
 		data.RedistributeStaticMetricType = types.StringValue(value.String())
 	} else {
 		data.RedistributeStaticMetricType = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
-		data.BfdFastDetect = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetect = types.BoolValue(true)
+		} else {
+			data.BfdFastDetect = types.BoolValue(false)
+		}
 	} else {
-		data.BfdFastDetect = types.BoolValue(false)
+		data.BfdFastDetect = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else {
 		data.BfdMultiplier = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
-		data.DefaultInformationOriginate = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
+		if value.Exists() {
+			data.DefaultInformationOriginate = types.BoolValue(true)
+		} else {
+			data.DefaultInformationOriginate = types.BoolValue(false)
+		}
 	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
+		data.DefaultInformationOriginate = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
-		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "default-information.originate.always"); !data.DefaultInformationOriginateAlways.IsNull() {
+		if value.Exists() {
+			data.DefaultInformationOriginateAlways = types.BoolValue(true)
+		} else {
+			data.DefaultInformationOriginateAlways = types.BoolValue(false)
+		}
 	} else {
-		data.DefaultInformationOriginateAlways = types.BoolValue(false)
+		data.DefaultInformationOriginateAlways = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() && !data.DefaultInformationOriginateMetricType.IsNull() {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
 	} else {
 		data.DefaultInformationOriginateMetricType = types.Int64Null()
@@ -368,7 +411,7 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("area-id"); value.Exists() {
+		if value := r.Get("area-id"); value.Exists() && !data.Areas[i].AreaId.IsNull() {
 			data.Areas[i].AreaId = types.StringValue(value.String())
 		} else {
 			data.Areas[i].AreaId = types.StringNull()
@@ -397,17 +440,17 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("as-number"); value.Exists() {
+		if value := r.Get("as-number"); value.Exists() && !data.RedistributeBgp[i].AsNumber.IsNull() {
 			data.RedistributeBgp[i].AsNumber = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].AsNumber = types.StringNull()
 		}
-		if value := r.Get("tag"); value.Exists() {
+		if value := r.Get("tag"); value.Exists() && !data.RedistributeBgp[i].Tag.IsNull() {
 			data.RedistributeBgp[i].Tag = types.Int64Value(value.Int())
 		} else {
 			data.RedistributeBgp[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("metric-type"); value.Exists() {
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeBgp[i].MetricType.IsNull() {
 			data.RedistributeBgp[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].MetricType = types.StringNull()
@@ -436,32 +479,44 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("instance-name"); value.Exists() {
+		if value := r.Get("instance-name"); value.Exists() && !data.RedistributeIsis[i].InstanceName.IsNull() {
 			data.RedistributeIsis[i].InstanceName = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].InstanceName = types.StringNull()
 		}
-		if value := r.Get("level-1"); value.Exists() {
-			data.RedistributeIsis[i].Level1 = types.BoolValue(true)
+		if value := r.Get("level-1"); !data.RedistributeIsis[i].Level1.IsNull() {
+			if value.Exists() {
+				data.RedistributeIsis[i].Level1 = types.BoolValue(true)
+			} else {
+				data.RedistributeIsis[i].Level1 = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeIsis[i].Level1 = types.BoolValue(false)
+			data.RedistributeIsis[i].Level1 = types.BoolNull()
 		}
-		if value := r.Get("level-2"); value.Exists() {
-			data.RedistributeIsis[i].Level2 = types.BoolValue(true)
+		if value := r.Get("level-2"); !data.RedistributeIsis[i].Level2.IsNull() {
+			if value.Exists() {
+				data.RedistributeIsis[i].Level2 = types.BoolValue(true)
+			} else {
+				data.RedistributeIsis[i].Level2 = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeIsis[i].Level2 = types.BoolValue(false)
+			data.RedistributeIsis[i].Level2 = types.BoolNull()
 		}
-		if value := r.Get("level-1-2"); value.Exists() {
-			data.RedistributeIsis[i].Level12 = types.BoolValue(true)
+		if value := r.Get("level-1-2"); !data.RedistributeIsis[i].Level12.IsNull() {
+			if value.Exists() {
+				data.RedistributeIsis[i].Level12 = types.BoolValue(true)
+			} else {
+				data.RedistributeIsis[i].Level12 = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeIsis[i].Level12 = types.BoolValue(false)
+			data.RedistributeIsis[i].Level12 = types.BoolNull()
 		}
-		if value := r.Get("tag"); value.Exists() {
+		if value := r.Get("tag"); value.Exists() && !data.RedistributeIsis[i].Tag.IsNull() {
 			data.RedistributeIsis[i].Tag = types.Int64Value(value.Int())
 		} else {
 			data.RedistributeIsis[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("metric-type"); value.Exists() {
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsis[i].MetricType.IsNull() {
 			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeIsis[i].MetricType = types.StringNull()
@@ -490,32 +545,44 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("instance-name"); value.Exists() {
+		if value := r.Get("instance-name"); value.Exists() && !data.RedistributeOspf[i].InstanceName.IsNull() {
 			data.RedistributeOspf[i].InstanceName = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].InstanceName = types.StringNull()
 		}
-		if value := r.Get("match.internal"); value.Exists() {
-			data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
+		if value := r.Get("match.internal"); !data.RedistributeOspf[i].MatchInternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeOspf[i].MatchInternal = types.BoolValue(false)
+			data.RedistributeOspf[i].MatchInternal = types.BoolNull()
 		}
-		if value := r.Get("match.external"); value.Exists() {
-			data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
+		if value := r.Get("match.external"); !data.RedistributeOspf[i].MatchExternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeOspf[i].MatchExternal = types.BoolValue(false)
+			data.RedistributeOspf[i].MatchExternal = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external"); value.Exists() {
-			data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
+		if value := r.Get("match.nssa-external"); !data.RedistributeOspf[i].MatchNssaExternal.IsNull() {
+			if value.Exists() {
+				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(true)
+			} else {
+				data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(false)
+			}
 		} else {
-			data.RedistributeOspf[i].MatchNssaExternal = types.BoolValue(false)
+			data.RedistributeOspf[i].MatchNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("tag"); value.Exists() {
+		if value := r.Get("tag"); value.Exists() && !data.RedistributeOspf[i].Tag.IsNull() {
 			data.RedistributeOspf[i].Tag = types.Int64Value(value.Int())
 		} else {
 			data.RedistributeOspf[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("metric-type"); value.Exists() {
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeOspf[i].MetricType.IsNull() {
 			data.RedistributeOspf[i].MetricType = types.StringValue(value.String())
 		} else {
 			data.RedistributeOspf[i].MetricType = types.StringNull()
@@ -704,137 +771,6 @@ func (data *RouterOSPF) fromBody(res []byte) {
 func (data *RouterOSPF) fromPlan(plan RouterOSPF) {
 	data.Device = plan.Device
 	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
-}
-
-func (data *RouterOSPF) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.ProcessName.IsUnknown() {
-		data.ProcessName = types.StringNull()
-	}
-	if data.MplsLdpSync.IsUnknown() {
-		data.MplsLdpSync = types.BoolNull()
-	}
-	if data.HelloInterval.IsUnknown() {
-		data.HelloInterval = types.Int64Null()
-	}
-	if data.DeadInterval.IsUnknown() {
-		data.DeadInterval = types.Int64Null()
-	}
-	if data.Priority.IsUnknown() {
-		data.Priority = types.Int64Null()
-	}
-	if data.MtuIgnoreEnable.IsUnknown() {
-		data.MtuIgnoreEnable = types.BoolNull()
-	}
-	if data.MtuIgnoreDisable.IsUnknown() {
-		data.MtuIgnoreDisable = types.BoolNull()
-	}
-	if data.PassiveEnable.IsUnknown() {
-		data.PassiveEnable = types.BoolNull()
-	}
-	if data.PassiveDisable.IsUnknown() {
-		data.PassiveDisable = types.BoolNull()
-	}
-	if data.RouterId.IsUnknown() {
-		data.RouterId = types.StringNull()
-	}
-	if data.RedistributeConnected.IsUnknown() {
-		data.RedistributeConnected = types.BoolNull()
-	}
-	if data.RedistributeConnectedTag.IsUnknown() {
-		data.RedistributeConnectedTag = types.Int64Null()
-	}
-	if data.RedistributeConnectedMetricType.IsUnknown() {
-		data.RedistributeConnectedMetricType = types.StringNull()
-	}
-	if data.RedistributeStatic.IsUnknown() {
-		data.RedistributeStatic = types.BoolNull()
-	}
-	if data.RedistributeStaticTag.IsUnknown() {
-		data.RedistributeStaticTag = types.Int64Null()
-	}
-	if data.RedistributeStaticMetricType.IsUnknown() {
-		data.RedistributeStaticMetricType = types.StringNull()
-	}
-	if data.BfdFastDetect.IsUnknown() {
-		data.BfdFastDetect = types.BoolNull()
-	}
-	if data.BfdMinimumInterval.IsUnknown() {
-		data.BfdMinimumInterval = types.Int64Null()
-	}
-	if data.BfdMultiplier.IsUnknown() {
-		data.BfdMultiplier = types.Int64Null()
-	}
-	if data.DefaultInformationOriginate.IsUnknown() {
-		data.DefaultInformationOriginate = types.BoolNull()
-	}
-	if data.DefaultInformationOriginateAlways.IsUnknown() {
-		data.DefaultInformationOriginateAlways = types.BoolNull()
-	}
-	if data.DefaultInformationOriginateMetricType.IsUnknown() {
-		data.DefaultInformationOriginateMetricType = types.Int64Null()
-	}
-	for i := range data.Areas {
-		if data.Areas[i].AreaId.IsUnknown() {
-			data.Areas[i].AreaId = types.StringNull()
-		}
-	}
-	for i := range data.RedistributeBgp {
-		if data.RedistributeBgp[i].AsNumber.IsUnknown() {
-			data.RedistributeBgp[i].AsNumber = types.StringNull()
-		}
-		if data.RedistributeBgp[i].Tag.IsUnknown() {
-			data.RedistributeBgp[i].Tag = types.Int64Null()
-		}
-		if data.RedistributeBgp[i].MetricType.IsUnknown() {
-			data.RedistributeBgp[i].MetricType = types.StringNull()
-		}
-	}
-	for i := range data.RedistributeIsis {
-		if data.RedistributeIsis[i].InstanceName.IsUnknown() {
-			data.RedistributeIsis[i].InstanceName = types.StringNull()
-		}
-		if data.RedistributeIsis[i].Level1.IsUnknown() {
-			data.RedistributeIsis[i].Level1 = types.BoolNull()
-		}
-		if data.RedistributeIsis[i].Level2.IsUnknown() {
-			data.RedistributeIsis[i].Level2 = types.BoolNull()
-		}
-		if data.RedistributeIsis[i].Level12.IsUnknown() {
-			data.RedistributeIsis[i].Level12 = types.BoolNull()
-		}
-		if data.RedistributeIsis[i].Tag.IsUnknown() {
-			data.RedistributeIsis[i].Tag = types.Int64Null()
-		}
-		if data.RedistributeIsis[i].MetricType.IsUnknown() {
-			data.RedistributeIsis[i].MetricType = types.StringNull()
-		}
-	}
-	for i := range data.RedistributeOspf {
-		if data.RedistributeOspf[i].InstanceName.IsUnknown() {
-			data.RedistributeOspf[i].InstanceName = types.StringNull()
-		}
-		if data.RedistributeOspf[i].MatchInternal.IsUnknown() {
-			data.RedistributeOspf[i].MatchInternal = types.BoolNull()
-		}
-		if data.RedistributeOspf[i].MatchExternal.IsUnknown() {
-			data.RedistributeOspf[i].MatchExternal = types.BoolNull()
-		}
-		if data.RedistributeOspf[i].MatchNssaExternal.IsUnknown() {
-			data.RedistributeOspf[i].MatchNssaExternal = types.BoolNull()
-		}
-		if data.RedistributeOspf[i].Tag.IsUnknown() {
-			data.RedistributeOspf[i].Tag = types.Int64Null()
-		}
-		if data.RedistributeOspf[i].MetricType.IsUnknown() {
-			data.RedistributeOspf[i].MetricType = types.StringNull()
-		}
-	}
 }
 
 func (data *RouterOSPF) getDeletedListItems(state RouterOSPF) []string {

@@ -54,7 +54,6 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure router Id").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -68,7 +67,6 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 						"af_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4", "ipv6").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("ipv4", "ipv6"),
 							},
@@ -84,7 +82,6 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable LDP on an interface and enter interface submode").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -135,8 +132,6 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -199,8 +194,6 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

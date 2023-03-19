@@ -135,8 +135,6 @@ func (r *RouterISISInterfaceAddressFamilyResource) Create(ctx context.Context, r
 		}
 	}
 
-	plan.setUnknownValues()
-
 	plan.Id = types.StringValue(plan.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getPath()))
@@ -198,8 +196,6 @@ func (r *RouterISISInterfaceAddressFamilyResource) Update(ctx context.Context, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

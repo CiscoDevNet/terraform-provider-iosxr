@@ -62,12 +62,10 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"default_metric": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("default redistributed metric").AddIntegerRangeDescription(1, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
 				},
@@ -86,7 +84,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 30000),
 				},
@@ -94,7 +91,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 			"bfd_multiplier": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 16).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 16),
 				},
@@ -107,17 +103,14 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"neighbor_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -125,7 +118,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"ignore_connected_check": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Bypass the directly connected nexthop check for single-hop eBGP peering").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"ebgp_multihop_maximum_hop_count": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("maximum hop count").AddIntegerRangeDescription(1, 255).String,
@@ -137,7 +129,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"bfd_minimum_interval": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(3, 30000),
 							},
@@ -145,7 +136,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"bfd_multiplier": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 16).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(2, 16),
 							},
@@ -153,27 +143,22 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"local_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"local_as_no_prepend": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"local_as_replace_as": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"local_as_dual_as": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
@@ -181,7 +166,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"shutdown": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Administratively shut down this neighbor").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"timers_keepalive_interval": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
@@ -197,7 +181,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"update_source": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -205,7 +188,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
 							Optional:            true,
-							Computed:            true,
 						},
 					},
 				},
@@ -253,8 +235,6 @@ func (r *RouterBGPResource) Create(ctx context.Context, req resource.CreateReque
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -317,8 +297,6 @@ func (r *RouterBGPResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

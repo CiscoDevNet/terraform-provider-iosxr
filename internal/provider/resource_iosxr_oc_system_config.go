@@ -54,7 +54,6 @@ func (r *OCSystemConfigResource) Schema(ctx context.Context, req resource.Schema
 			"hostname": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The hostname of the device -- should be a single domain label, without the domain.").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 253),
 					stringvalidator.RegexMatches(regexp.MustCompile(`(((([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.)*([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.?)|\.)`), ""),
@@ -63,7 +62,6 @@ func (r *OCSystemConfigResource) Schema(ctx context.Context, req resource.Schema
 			"domain_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies the domain name used to form fully qualified name for unqualified hostnames.").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 253),
 					stringvalidator.RegexMatches(regexp.MustCompile(`(((([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.)*([a-zA-Z0-9_]([a-zA-Z0-9\-_]){0,61})?[a-zA-Z0-9]\.?)|\.)`), ""),
@@ -72,12 +70,10 @@ func (r *OCSystemConfigResource) Schema(ctx context.Context, req resource.Schema
 			"login_banner": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The console login message displayed before the login prompt, i.e., before a user logs into the system.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"motd_banner": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The console message displayed after a user logs into the system.  They system may append additional standard information such as the current system date and time, uptime, last login timestamp, etc.").String,
 				Optional:            true,
-				Computed:            true,
 			},
 		},
 	}
@@ -122,8 +118,6 @@ func (r *OCSystemConfigResource) Create(ctx context.Context, req resource.Create
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -186,8 +180,6 @@ func (r *OCSystemConfigResource) Update(ctx context.Context, req resource.Update
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

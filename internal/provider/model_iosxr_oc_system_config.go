@@ -39,22 +39,22 @@ func (data OCSystemConfig) toBody() string {
 }
 
 func (data *OCSystemConfig) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
+	if value := gjson.GetBytes(res, "hostname"); value.Exists() && !data.Hostname.IsNull() {
 		data.Hostname = types.StringValue(value.String())
 	} else {
 		data.Hostname = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "domain-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "domain-name"); value.Exists() && !data.DomainName.IsNull() {
 		data.DomainName = types.StringValue(value.String())
 	} else {
 		data.DomainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "login-banner"); value.Exists() {
+	if value := gjson.GetBytes(res, "login-banner"); value.Exists() && !data.LoginBanner.IsNull() {
 		data.LoginBanner = types.StringValue(value.String())
 	} else {
 		data.LoginBanner = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() {
+	if value := gjson.GetBytes(res, "motd-banner"); value.Exists() && !data.MotdBanner.IsNull() {
 		data.MotdBanner = types.StringValue(value.String())
 	} else {
 		data.MotdBanner = types.StringNull()
@@ -78,27 +78,6 @@ func (data *OCSystemConfig) fromBody(res []byte) {
 
 func (data *OCSystemConfig) fromPlan(plan OCSystemConfig) {
 	data.Device = plan.Device
-}
-
-func (data *OCSystemConfig) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.Hostname.IsUnknown() {
-		data.Hostname = types.StringNull()
-	}
-	if data.DomainName.IsUnknown() {
-		data.DomainName = types.StringNull()
-	}
-	if data.LoginBanner.IsUnknown() {
-		data.LoginBanner = types.StringNull()
-	}
-	if data.MotdBanner.IsUnknown() {
-		data.MotdBanner = types.StringNull()
-	}
 }
 
 func (data *OCSystemConfig) getDeletedListItems(state OCSystemConfig) []string {

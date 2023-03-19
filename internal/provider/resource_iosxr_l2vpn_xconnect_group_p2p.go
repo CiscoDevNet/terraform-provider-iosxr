@@ -77,7 +77,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Description for cross connect").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 64),
 				},
@@ -90,7 +89,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify (sub-)interface name to cross connect").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -106,7 +104,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -115,7 +112,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"pw_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},
@@ -123,7 +119,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"pw_class": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for this XC").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -140,7 +135,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
@@ -150,7 +144,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"pw_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},
@@ -158,7 +151,6 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						"pw_class": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use for this XC").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -210,8 +202,6 @@ func (r *L2VPNXconnectGroupP2PResource) Create(ctx context.Context, req resource
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -274,8 +264,6 @@ func (r *L2VPNXconnectGroupP2PResource) Update(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

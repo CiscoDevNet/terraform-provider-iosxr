@@ -77,12 +77,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"mpls_ldp_sync": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP synchronization").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"hello_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time between HELLO packets").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
@@ -90,7 +88,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"dead_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Seconds").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
@@ -98,7 +95,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router priority").AddIntegerRangeDescription(0, 255).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
@@ -106,27 +102,22 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"mtu_ignore_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ignores the MTU in DBD packets").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"mtu_ignore_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable ignoring the MTU in DBD packets").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable passive").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -135,12 +126,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"redistribute_connected": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Connected routes").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redistribute_connected_tag": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
@@ -148,7 +137,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"redistribute_connected_metric_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("1", "2"),
 				},
@@ -156,12 +144,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redistribute_static_tag": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
@@ -169,7 +155,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"redistribute_static_metric_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("1", "2"),
 				},
@@ -177,12 +162,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"bfd_fast_detect": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval").AddIntegerRangeDescription(3, 30000).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 30000),
 				},
@@ -190,7 +173,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"bfd_multiplier": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 50),
 				},
@@ -198,17 +180,14 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"default_information_originate_always": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Always advertise default route").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"default_information_originate_metric_type": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("OSPF metric type for default routes").AddIntegerRangeDescription(1, 2).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 2),
 				},
@@ -221,7 +200,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"area_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
 							Optional:            true,
-							Computed:            true,
 						},
 					},
 				},
@@ -234,12 +212,10 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"as_number": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
@@ -247,7 +223,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"metric_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("1", "2"),
 							},
@@ -263,7 +238,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -271,22 +245,18 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"level_1": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-1 routes only").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"level_2": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-2 routes only").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"level_1_2": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS level-1 and level-2 routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
@@ -294,7 +264,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"metric_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("1", "2"),
 							},
@@ -310,7 +279,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -318,22 +286,18 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"match_internal": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_nssa_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
@@ -341,7 +305,6 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 						"metric_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("OSPF exterior metric type for redistributed routes").AddStringEnumDescription("1", "2").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("1", "2"),
 							},
@@ -392,8 +355,6 @@ func (r *RouterOSPFVRFResource) Create(ctx context.Context, req resource.CreateR
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -456,8 +417,6 @@ func (r *RouterOSPFVRFResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

@@ -83,7 +83,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("eBGP-multipath").AddIntegerRangeDescription(2, 128).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 128),
 				},
@@ -91,7 +90,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 			"maximum_paths_eibgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("eiBGP-multipath").AddIntegerRangeDescription(2, 128).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 128),
 				},
@@ -99,7 +97,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 			"maximum_paths_ibgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("iBGP-multipath").AddIntegerRangeDescription(2, 128).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 128),
 				},
@@ -107,22 +104,18 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"label_mode_per_vrf": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redistribute_connected": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Connected routes").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redistribute_connected_metric": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
@@ -130,12 +123,10 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"redistribute_static_metric": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
@@ -148,12 +139,10 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"masklength": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 128),
 							},
@@ -161,17 +150,14 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 						"as_set": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Generate AS set path information").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"as_confed_set": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Generate AS confed set path information").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"summary_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Filter more specific routes from updates").String,
 							Optional:            true,
-							Computed:            true,
 						},
 					},
 				},
@@ -184,12 +170,10 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"masklength": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 128),
 							},
@@ -205,7 +189,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 						"router_tag": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -214,37 +197,30 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 						"match_internal": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_internal_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_internal_nssa_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_external_nssa_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"match_nssa_external": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"metric": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
@@ -295,8 +271,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Create(ctx context.Context, req reso
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -359,8 +333,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Update(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

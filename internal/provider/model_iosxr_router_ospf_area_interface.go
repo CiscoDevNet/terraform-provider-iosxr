@@ -33,6 +33,9 @@ func (data RouterOSPFAreaInterface) getPath() string {
 
 func (data RouterOSPFAreaInterface) toBody() string {
 	body := "{}"
+	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
+		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
+	}
 	if !data.NetworkBroadcast.IsNull() && !data.NetworkBroadcast.IsUnknown() {
 		if data.NetworkBroadcast.ValueBool() {
 			body, _ = sjson.Set(body, "network.broadcast", map[string]string{})
@@ -73,45 +76,69 @@ func (data RouterOSPFAreaInterface) toBody() string {
 }
 
 func (data *RouterOSPFAreaInterface) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
-		data.NetworkBroadcast = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "network.broadcast"); !data.NetworkBroadcast.IsNull() {
+		if value.Exists() {
+			data.NetworkBroadcast = types.BoolValue(true)
+		} else {
+			data.NetworkBroadcast = types.BoolValue(false)
+		}
 	} else {
-		data.NetworkBroadcast = types.BoolValue(false)
+		data.NetworkBroadcast = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "network.non-broadcast"); value.Exists() {
-		data.NetworkNonBroadcast = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "network.non-broadcast"); !data.NetworkNonBroadcast.IsNull() {
+		if value.Exists() {
+			data.NetworkNonBroadcast = types.BoolValue(true)
+		} else {
+			data.NetworkNonBroadcast = types.BoolValue(false)
+		}
 	} else {
-		data.NetworkNonBroadcast = types.BoolValue(false)
+		data.NetworkNonBroadcast = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "network.point-to-point"); value.Exists() {
-		data.NetworkPointToPoint = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "network.point-to-point"); !data.NetworkPointToPoint.IsNull() {
+		if value.Exists() {
+			data.NetworkPointToPoint = types.BoolValue(true)
+		} else {
+			data.NetworkPointToPoint = types.BoolValue(false)
+		}
 	} else {
-		data.NetworkPointToPoint = types.BoolValue(false)
+		data.NetworkPointToPoint = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "network.point-to-multipoint"); value.Exists() {
-		data.NetworkPointToMultipoint = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "network.point-to-multipoint"); !data.NetworkPointToMultipoint.IsNull() {
+		if value.Exists() {
+			data.NetworkPointToMultipoint = types.BoolValue(true)
+		} else {
+			data.NetworkPointToMultipoint = types.BoolValue(false)
+		}
 	} else {
-		data.NetworkPointToMultipoint = types.BoolValue(false)
+		data.NetworkPointToMultipoint = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "cost"); value.Exists() {
+	if value := gjson.GetBytes(res, "cost"); value.Exists() && !data.Cost.IsNull() {
 		data.Cost = types.Int64Value(value.Int())
 	} else {
 		data.Cost = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+	if value := gjson.GetBytes(res, "priority"); value.Exists() && !data.Priority.IsNull() {
 		data.Priority = types.Int64Value(value.Int())
 	} else {
 		data.Priority = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
-		data.PassiveEnable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "passive.enable"); !data.PassiveEnable.IsNull() {
+		if value.Exists() {
+			data.PassiveEnable = types.BoolValue(true)
+		} else {
+			data.PassiveEnable = types.BoolValue(false)
+		}
 	} else {
-		data.PassiveEnable = types.BoolValue(false)
+		data.PassiveEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
-		data.PassiveDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "passive.disable"); !data.PassiveDisable.IsNull() {
+		if value.Exists() {
+			data.PassiveDisable = types.BoolValue(true)
+		} else {
+			data.PassiveDisable = types.BoolValue(false)
+		}
 	} else {
-		data.PassiveDisable = types.BoolValue(false)
+		data.PassiveDisable = types.BoolNull()
 	}
 }
 
@@ -159,48 +186,6 @@ func (data *RouterOSPFAreaInterface) fromPlan(plan RouterOSPFAreaInterface) {
 	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
 	data.AreaId = types.StringValue(plan.AreaId.ValueString())
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
-func (data *RouterOSPFAreaInterface) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.ProcessName.IsUnknown() {
-		data.ProcessName = types.StringNull()
-	}
-	if data.AreaId.IsUnknown() {
-		data.AreaId = types.StringNull()
-	}
-	if data.InterfaceName.IsUnknown() {
-		data.InterfaceName = types.StringNull()
-	}
-	if data.NetworkBroadcast.IsUnknown() {
-		data.NetworkBroadcast = types.BoolNull()
-	}
-	if data.NetworkNonBroadcast.IsUnknown() {
-		data.NetworkNonBroadcast = types.BoolNull()
-	}
-	if data.NetworkPointToPoint.IsUnknown() {
-		data.NetworkPointToPoint = types.BoolNull()
-	}
-	if data.NetworkPointToMultipoint.IsUnknown() {
-		data.NetworkPointToMultipoint = types.BoolNull()
-	}
-	if data.Cost.IsUnknown() {
-		data.Cost = types.Int64Null()
-	}
-	if data.Priority.IsUnknown() {
-		data.Priority = types.Int64Null()
-	}
-	if data.PassiveEnable.IsUnknown() {
-		data.PassiveEnable = types.BoolNull()
-	}
-	if data.PassiveDisable.IsUnknown() {
-		data.PassiveDisable = types.BoolNull()
-	}
 }
 
 func (data *RouterOSPFAreaInterface) getDeletedListItems(state RouterOSPFAreaInterface) []string {

@@ -35,15 +35,23 @@ func (data BGPASFormat) toBody() string {
 }
 
 func (data *BGPASFormat) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
-		data.Asdot = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "asdot"); !data.Asdot.IsNull() {
+		if value.Exists() {
+			data.Asdot = types.BoolValue(true)
+		} else {
+			data.Asdot = types.BoolValue(false)
+		}
 	} else {
-		data.Asdot = types.BoolValue(false)
+		data.Asdot = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
-		data.Asplain = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "asplain"); !data.Asplain.IsNull() {
+		if value.Exists() {
+			data.Asplain = types.BoolValue(true)
+		} else {
+			data.Asplain = types.BoolValue(false)
+		}
 	} else {
-		data.Asplain = types.BoolValue(false)
+		data.Asplain = types.BoolNull()
 	}
 }
 
@@ -62,21 +70,6 @@ func (data *BGPASFormat) fromBody(res []byte) {
 
 func (data *BGPASFormat) fromPlan(plan BGPASFormat) {
 	data.Device = plan.Device
-}
-
-func (data *BGPASFormat) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.Asdot.IsUnknown() {
-		data.Asdot = types.BoolNull()
-	}
-	if data.Asplain.IsUnknown() {
-		data.Asplain = types.BoolNull()
-	}
 }
 
 func (data *BGPASFormat) getDeletedListItems(state BGPASFormat) []string {

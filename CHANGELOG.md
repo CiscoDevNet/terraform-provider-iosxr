@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- Add support for IOS-XR 7.8.1+
+
 ## 0.1.2
 
 - Update dependencies and go version

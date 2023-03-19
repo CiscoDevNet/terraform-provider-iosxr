@@ -50,6 +50,9 @@ func (data RouterBGP) getPath() string {
 
 func (data RouterBGP) toBody() string {
 	body := "{}"
+	if !data.AsNumber.IsNull() && !data.AsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "as-number", data.AsNumber.ValueString())
+	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
 		if data.DefaultInformationOriginate.ValueBool() {
 			body, _ = sjson.Set(body, "default-information.originate", map[string]string{})
@@ -142,32 +145,36 @@ func (data RouterBGP) toBody() string {
 }
 
 func (data *RouterBGP) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
-		data.DefaultInformationOriginate = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
+		if value.Exists() {
+			data.DefaultInformationOriginate = types.BoolValue(true)
+		} else {
+			data.DefaultInformationOriginate = types.BoolValue(false)
+		}
 	} else {
-		data.DefaultInformationOriginate = types.BoolValue(false)
+		data.DefaultInformationOriginate = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
+	if value := gjson.GetBytes(res, "default-metric"); value.Exists() && !data.DefaultMetric.IsNull() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	} else {
 		data.DefaultMetric = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() && !data.TimersBgpKeepaliveInterval.IsNull() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	} else {
 		data.TimersBgpKeepaliveInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
+	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() && !data.TimersBgpHoldtime.IsNull() {
 		data.TimersBgpHoldtime = types.StringValue(value.String())
 	} else {
 		data.TimersBgpHoldtime = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	} else {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	} else {
 		data.BfdMultiplier = types.Int64Null()
@@ -195,90 +202,114 @@ func (data *RouterBGP) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("neighbor-address"); value.Exists() {
+		if value := r.Get("neighbor-address"); value.Exists() && !data.Neighbors[i].NeighborAddress.IsNull() {
 			data.Neighbors[i].NeighborAddress = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].NeighborAddress = types.StringNull()
 		}
-		if value := r.Get("remote-as"); value.Exists() {
+		if value := r.Get("remote-as"); value.Exists() && !data.Neighbors[i].RemoteAs.IsNull() {
 			data.Neighbors[i].RemoteAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].RemoteAs = types.StringNull()
 		}
-		if value := r.Get("description"); value.Exists() {
+		if value := r.Get("description"); value.Exists() && !data.Neighbors[i].Description.IsNull() {
 			data.Neighbors[i].Description = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].Description = types.StringNull()
 		}
-		if value := r.Get("ignore-connected-check"); value.Exists() {
-			data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(true)
+		if value := r.Get("ignore-connected-check"); !data.Neighbors[i].IgnoreConnectedCheck.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(false)
+			data.Neighbors[i].IgnoreConnectedCheck = types.BoolNull()
 		}
-		if value := r.Get("ebgp-multihop.maximum-hop-count"); value.Exists() {
+		if value := r.Get("ebgp-multihop.maximum-hop-count"); value.Exists() && !data.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() {
 			data.Neighbors[i].EbgpMultihopMaximumHopCount = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].EbgpMultihopMaximumHopCount = types.Int64Null()
 		}
-		if value := r.Get("bfd.minimum-interval"); value.Exists() {
+		if value := r.Get("bfd.minimum-interval"); value.Exists() && !data.Neighbors[i].BfdMinimumInterval.IsNull() {
 			data.Neighbors[i].BfdMinimumInterval = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].BfdMinimumInterval = types.Int64Null()
 		}
-		if value := r.Get("bfd.multiplier"); value.Exists() {
+		if value := r.Get("bfd.multiplier"); value.Exists() && !data.Neighbors[i].BfdMultiplier.IsNull() {
 			data.Neighbors[i].BfdMultiplier = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].BfdMultiplier = types.Int64Null()
 		}
-		if value := r.Get("local-as.as-number"); value.Exists() {
+		if value := r.Get("local-as.as-number"); value.Exists() && !data.Neighbors[i].LocalAs.IsNull() {
 			data.Neighbors[i].LocalAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].LocalAs = types.StringNull()
 		}
-		if value := r.Get("local-as.no-prepend"); value.Exists() {
-			data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(true)
+		if value := r.Get("local-as.no-prepend"); !data.Neighbors[i].LocalAsNoPrepend.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].LocalAsNoPrepend = types.BoolValue(false)
+			data.Neighbors[i].LocalAsNoPrepend = types.BoolNull()
 		}
-		if value := r.Get("local-as.no-prepend.replace-as"); value.Exists() {
-			data.Neighbors[i].LocalAsReplaceAs = types.BoolValue(true)
+		if value := r.Get("local-as.no-prepend.replace-as"); !data.Neighbors[i].LocalAsReplaceAs.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].LocalAsReplaceAs = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].LocalAsReplaceAs = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].LocalAsReplaceAs = types.BoolValue(false)
+			data.Neighbors[i].LocalAsReplaceAs = types.BoolNull()
 		}
-		if value := r.Get("local-as.no-prepend.replace-as.dual-as"); value.Exists() {
-			data.Neighbors[i].LocalAsDualAs = types.BoolValue(true)
+		if value := r.Get("local-as.no-prepend.replace-as.dual-as"); !data.Neighbors[i].LocalAsDualAs.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].LocalAsDualAs = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].LocalAsDualAs = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].LocalAsDualAs = types.BoolValue(false)
+			data.Neighbors[i].LocalAsDualAs = types.BoolNull()
 		}
-		if value := r.Get("password.encrypted"); value.Exists() {
+		if value := r.Get("password.encrypted"); value.Exists() && !data.Neighbors[i].Password.IsNull() {
 			data.Neighbors[i].Password = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].Password = types.StringNull()
 		}
-		if value := r.Get("shutdown"); value.Exists() {
-			data.Neighbors[i].Shutdown = types.BoolValue(true)
+		if value := r.Get("shutdown"); !data.Neighbors[i].Shutdown.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].Shutdown = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].Shutdown = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].Shutdown = types.BoolValue(false)
+			data.Neighbors[i].Shutdown = types.BoolNull()
 		}
-		if value := r.Get("timers.keepalive-interval"); value.Exists() {
+		if value := r.Get("timers.keepalive-interval"); value.Exists() && !data.Neighbors[i].TimersKeepaliveInterval.IsNull() {
 			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Value(value.Int())
 		} else {
 			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Null()
 		}
-		if value := r.Get("timers.holdtime"); value.Exists() {
+		if value := r.Get("timers.holdtime"); value.Exists() && !data.Neighbors[i].TimersHoldtime.IsNull() {
 			data.Neighbors[i].TimersHoldtime = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].TimersHoldtime = types.StringNull()
 		}
-		if value := r.Get("update-source"); value.Exists() {
+		if value := r.Get("update-source"); value.Exists() && !data.Neighbors[i].UpdateSource.IsNull() {
 			data.Neighbors[i].UpdateSource = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].UpdateSource = types.StringNull()
 		}
-		if value := r.Get("ttl-security"); value.Exists() {
-			data.Neighbors[i].TtlSecurity = types.BoolValue(true)
+		if value := r.Get("ttl-security"); !data.Neighbors[i].TtlSecurity.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].TtlSecurity = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].TtlSecurity = types.BoolValue(false)
+			}
 		} else {
-			data.Neighbors[i].TtlSecurity = types.BoolValue(false)
+			data.Neighbors[i].TtlSecurity = types.BoolNull()
 		}
 	}
 }
@@ -380,89 +411,6 @@ func (data *RouterBGP) fromBody(res []byte) {
 func (data *RouterBGP) fromPlan(plan RouterBGP) {
 	data.Device = plan.Device
 	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
-}
-
-func (data *RouterBGP) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.AsNumber.IsUnknown() {
-		data.AsNumber = types.StringNull()
-	}
-	if data.DefaultInformationOriginate.IsUnknown() {
-		data.DefaultInformationOriginate = types.BoolNull()
-	}
-	if data.DefaultMetric.IsUnknown() {
-		data.DefaultMetric = types.Int64Null()
-	}
-	if data.TimersBgpKeepaliveInterval.IsUnknown() {
-		data.TimersBgpKeepaliveInterval = types.Int64Null()
-	}
-	if data.TimersBgpHoldtime.IsUnknown() {
-		data.TimersBgpHoldtime = types.StringNull()
-	}
-	if data.BfdMinimumInterval.IsUnknown() {
-		data.BfdMinimumInterval = types.Int64Null()
-	}
-	if data.BfdMultiplier.IsUnknown() {
-		data.BfdMultiplier = types.Int64Null()
-	}
-	for i := range data.Neighbors {
-		if data.Neighbors[i].NeighborAddress.IsUnknown() {
-			data.Neighbors[i].NeighborAddress = types.StringNull()
-		}
-		if data.Neighbors[i].RemoteAs.IsUnknown() {
-			data.Neighbors[i].RemoteAs = types.StringNull()
-		}
-		if data.Neighbors[i].Description.IsUnknown() {
-			data.Neighbors[i].Description = types.StringNull()
-		}
-		if data.Neighbors[i].IgnoreConnectedCheck.IsUnknown() {
-			data.Neighbors[i].IgnoreConnectedCheck = types.BoolNull()
-		}
-		if data.Neighbors[i].EbgpMultihopMaximumHopCount.IsUnknown() {
-			data.Neighbors[i].EbgpMultihopMaximumHopCount = types.Int64Null()
-		}
-		if data.Neighbors[i].BfdMinimumInterval.IsUnknown() {
-			data.Neighbors[i].BfdMinimumInterval = types.Int64Null()
-		}
-		if data.Neighbors[i].BfdMultiplier.IsUnknown() {
-			data.Neighbors[i].BfdMultiplier = types.Int64Null()
-		}
-		if data.Neighbors[i].LocalAs.IsUnknown() {
-			data.Neighbors[i].LocalAs = types.StringNull()
-		}
-		if data.Neighbors[i].LocalAsNoPrepend.IsUnknown() {
-			data.Neighbors[i].LocalAsNoPrepend = types.BoolNull()
-		}
-		if data.Neighbors[i].LocalAsReplaceAs.IsUnknown() {
-			data.Neighbors[i].LocalAsReplaceAs = types.BoolNull()
-		}
-		if data.Neighbors[i].LocalAsDualAs.IsUnknown() {
-			data.Neighbors[i].LocalAsDualAs = types.BoolNull()
-		}
-		if data.Neighbors[i].Password.IsUnknown() {
-			data.Neighbors[i].Password = types.StringNull()
-		}
-		if data.Neighbors[i].Shutdown.IsUnknown() {
-			data.Neighbors[i].Shutdown = types.BoolNull()
-		}
-		if data.Neighbors[i].TimersKeepaliveInterval.IsUnknown() {
-			data.Neighbors[i].TimersKeepaliveInterval = types.Int64Null()
-		}
-		if data.Neighbors[i].TimersHoldtime.IsUnknown() {
-			data.Neighbors[i].TimersHoldtime = types.StringNull()
-		}
-		if data.Neighbors[i].UpdateSource.IsUnknown() {
-			data.Neighbors[i].UpdateSource = types.StringNull()
-		}
-		if data.Neighbors[i].TtlSecurity.IsUnknown() {
-			data.Neighbors[i].TtlSecurity = types.BoolNull()
-		}
-	}
 }
 
 func (data *RouterBGP) getDeletedListItems(state RouterBGP) []string {

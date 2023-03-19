@@ -47,7 +47,7 @@ func (data {{camelCase .Name}}) getPath() string {
 func (data {{camelCase .Name}}) toBody() string {
 	body := "{}"
 	{{- range .Attributes}}
-	{{- if and (ne .Reference true) (ne .Id true) (ne .Type "List")}}
+	{{- if and (ne .Reference true) (ne .Type "List")}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -95,23 +95,29 @@ func (data *{{camelCase .Name}}) updateFromBody(res []byte) {
 	{{- range .Attributes}}
 	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
 	{{- if eq .Type "Int64"}}
-	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
+	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
 	} else {
 		data.{{toGoName .TfName}} = types.Int64Null()
 	}
 	{{- else if eq .Type "Bool"}}
-	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
+	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); !data.{{toGoName .TfName}}.IsNull() {
 		{{- if eq .TypeYangBool "boolean"}}
-		data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
+		if value.Exists() {
+			data.{{toGoName .TfName}} = types.BoolValue(value.Bool())
+		}
 		{{- else}}
-		data.{{toGoName .TfName}} = types.BoolValue(true)
+		if value.Exists() {
+			data.{{toGoName .TfName}} = types.BoolValue(true)
+		} else {
+			data.{{toGoName .TfName}} = types.BoolValue(false)
+		}
 		{{- end}}
 	} else {
-		data.{{toGoName .TfName}} = types.BoolValue(false)
+		data.{{toGoName .TfName}} = types.BoolNull()
 	}
 	{{- else if eq .Type "String"}}
-	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
+	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.StringValue(value.String())
 	} else {
 		data.{{toGoName .TfName}} = types.StringNull()
@@ -147,23 +153,29 @@ func (data *{{camelCase .Name}}) updateFromBody(res []byte) {
 		{{- range .Attributes}}
 		{{- if ne .WriteOnly true}}
 		{{- if eq .Type "Int64"}}
-		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() {
+		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.Int64Value(value.Int())
 		} else {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.Int64Null()
 		}
 		{{- else if eq .Type "Bool"}}
-		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() {
+		if value := r.Get("{{toJsonPath .YangName .XPath}}"); !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 			{{- if eq .TypeYangBool "boolean"}}
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+			if value.Exists() {
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(value.Bool())
+			}
 			{{- else}}
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
+			if value.Exists() {
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(true)
+			} else {
+				data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
+			}
 			{{- end}}
 		} else {
-			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolValue(false)
+			data.{{$list}}[i].{{toGoName .TfName}} = types.BoolNull()
 		}
 		{{- else if eq .Type "String"}}
-		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() {
+		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.StringValue(value.String())
 		} else {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.StringNull()
@@ -246,31 +258,6 @@ func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
 	{{- end}}
 }
 
-func (data *{{camelCase .Name}}) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	{{- range .Attributes}}
-	{{- if ne .Type "List"}}
-	if data.{{toGoName .TfName}}.IsUnknown() {
-		data.{{toGoName .TfName}} = types.{{.Type}}Null()
-	}
-	{{- else}}
-	{{- $list := (toGoName .TfName)}}
-	for i := range data.{{$list}} {
-		{{- range .Attributes}}
-		if data.{{$list}}[i].{{toGoName .TfName}}.IsUnknown() {
-			data.{{$list}}[i].{{toGoName .TfName}} = types.{{.Type}}Null()
-		}
-		{{- end}}
-	}
-	{{- end}}
-	{{- end}}
-}
-
 func (data *{{camelCase .Name}}) getDeletedListItems(state {{camelCase .Name}}) []string {
 	deletedListItems := make([]string, 0)
 	{{- range .Attributes}}
@@ -329,7 +316,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
-	if !data.{{toGoName .TfName}}.ValueBool() {
+	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{.YangName}}", data.getPath()))
 	}
 	{{- end}}
@@ -338,9 +325,9 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
 	{{ range .Attributes}}{{ if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}{{ $hasEmpty = true}}{{ end}}{{- end}}
 	{{- if $hasEmpty}}
 	{{- $yangName := .YangName}}
-	keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
+		keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
 		keyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 		keyString := ""
 		for ki := range keys {
@@ -348,7 +335,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
 		}
 		{{- range .Attributes}}
 		{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
-		if !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
+		if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}", data.getPath(), keyString))
 		}
 		{{- end}}

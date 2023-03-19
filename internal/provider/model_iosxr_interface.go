@@ -45,6 +45,9 @@ func (data Interface) getPath() string {
 
 func (data Interface) toBody() string {
 	body := "{}"
+	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
+		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
+	}
 	if !data.L2transport.IsNull() && !data.L2transport.IsUnknown() {
 		if data.L2transport.ValueBool() {
 			body, _ = sjson.Set(body, "sub-interface-type.l2transport", map[string]string{})
@@ -120,80 +123,104 @@ func (data Interface) toBody() string {
 }
 
 func (data *Interface) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
-		data.L2transport = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
+		if value.Exists() {
+			data.L2transport = types.BoolValue(true)
+		} else {
+			data.L2transport = types.BoolValue(false)
+		}
 	} else {
-		data.L2transport = types.BoolValue(false)
+		data.L2transport = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); value.Exists() {
-		data.PointToPoint = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "sub-interface-type.point-to-point"); !data.PointToPoint.IsNull() {
+		if value.Exists() {
+			data.PointToPoint = types.BoolValue(true)
+		} else {
+			data.PointToPoint = types.BoolValue(false)
+		}
 	} else {
-		data.PointToPoint = types.BoolValue(false)
+		data.PointToPoint = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "sub-interface-type.multipoint"); value.Exists() {
-		data.Multipoint = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "sub-interface-type.multipoint"); !data.Multipoint.IsNull() {
+		if value.Exists() {
+			data.Multipoint = types.BoolValue(true)
+		} else {
+			data.Multipoint = types.BoolValue(false)
+		}
 	} else {
-		data.Multipoint = types.BoolValue(false)
+		data.Multipoint = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
-		data.Shutdown = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
+		if value.Exists() {
+			data.Shutdown = types.BoolValue(true)
+		} else {
+			data.Shutdown = types.BoolValue(false)
+		}
 	} else {
-		data.Shutdown = types.BoolValue(false)
+		data.Shutdown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
+	if value := gjson.GetBytes(res, "mtu"); value.Exists() && !data.Mtu.IsNull() {
 		data.Mtu = types.Int64Value(value.Int())
 	} else {
 		data.Mtu = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() {
+	if value := gjson.GetBytes(res, "bandwidth"); value.Exists() && !data.Bandwidth.IsNull() {
 		data.Bandwidth = types.Int64Value(value.Int())
 	} else {
 		data.Bandwidth = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
 	} else {
 		data.Vrf = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.address"); value.Exists() && !data.Ipv4Address.IsNull() {
 		data.Ipv4Address = types.StringValue(value.String())
 	} else {
 		data.Ipv4Address = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.address.netmask"); value.Exists() && !data.Ipv4Netmask.IsNull() {
 		data.Ipv4Netmask = types.StringValue(value.String())
 	} else {
 		data.Ipv4Netmask = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() && !data.Unnumbered.IsNull() {
 		data.Unnumbered = types.StringValue(value.String())
 	} else {
 		data.Unnumbered = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() && !data.Ipv6LinkLocalAddress.IsNull() {
 		data.Ipv6LinkLocalAddress = types.StringValue(value.String())
 	} else {
 		data.Ipv6LinkLocalAddress = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.zone"); value.Exists() && !data.Ipv6LinkLocalZone.IsNull() {
 		data.Ipv6LinkLocalZone = types.StringValue(value.String())
 	} else {
 		data.Ipv6LinkLocalZone = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); value.Exists() {
-		data.Ipv6Autoconfig = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.autoconfig"); !data.Ipv6Autoconfig.IsNull() {
+		if value.Exists() {
+			data.Ipv6Autoconfig = types.BoolValue(true)
+		} else {
+			data.Ipv6Autoconfig = types.BoolValue(false)
+		}
 	} else {
-		data.Ipv6Autoconfig = types.BoolValue(false)
+		data.Ipv6Autoconfig = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); value.Exists() {
-		data.Ipv6Enable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable"); !data.Ipv6Enable.IsNull() {
+		if value.Exists() {
+			data.Ipv6Enable = types.BoolValue(true)
+		} else {
+			data.Ipv6Enable = types.BoolValue(false)
+		}
 	} else {
-		data.Ipv6Enable = types.BoolValue(false)
+		data.Ipv6Enable = types.BoolNull()
 	}
 	for i := range data.Ipv6Addresses {
 		keys := [...]string{"address"}
@@ -218,17 +245,17 @@ func (data *Interface) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() {
+		if value := r.Get("address"); value.Exists() && !data.Ipv6Addresses[i].Address.IsNull() {
 			data.Ipv6Addresses[i].Address = types.StringValue(value.String())
 		} else {
 			data.Ipv6Addresses[i].Address = types.StringNull()
 		}
-		if value := r.Get("prefix-length"); value.Exists() {
+		if value := r.Get("prefix-length"); value.Exists() && !data.Ipv6Addresses[i].PrefixLength.IsNull() {
 			data.Ipv6Addresses[i].PrefixLength = types.Int64Value(value.Int())
 		} else {
 			data.Ipv6Addresses[i].PrefixLength = types.Int64Null()
 		}
-		if value := r.Get("zone"); value.Exists() {
+		if value := r.Get("zone"); value.Exists() && !data.Ipv6Addresses[i].Zone.IsNull() {
 			data.Ipv6Addresses[i].Zone = types.StringValue(value.String())
 		} else {
 			data.Ipv6Addresses[i].Zone = types.StringNull()
@@ -316,74 +343,6 @@ func (data *Interface) fromBody(res []byte) {
 func (data *Interface) fromPlan(plan Interface) {
 	data.Device = plan.Device
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
-func (data *Interface) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.InterfaceName.IsUnknown() {
-		data.InterfaceName = types.StringNull()
-	}
-	if data.L2transport.IsUnknown() {
-		data.L2transport = types.BoolNull()
-	}
-	if data.PointToPoint.IsUnknown() {
-		data.PointToPoint = types.BoolNull()
-	}
-	if data.Multipoint.IsUnknown() {
-		data.Multipoint = types.BoolNull()
-	}
-	if data.Shutdown.IsUnknown() {
-		data.Shutdown = types.BoolNull()
-	}
-	if data.Mtu.IsUnknown() {
-		data.Mtu = types.Int64Null()
-	}
-	if data.Bandwidth.IsUnknown() {
-		data.Bandwidth = types.Int64Null()
-	}
-	if data.Description.IsUnknown() {
-		data.Description = types.StringNull()
-	}
-	if data.Vrf.IsUnknown() {
-		data.Vrf = types.StringNull()
-	}
-	if data.Ipv4Address.IsUnknown() {
-		data.Ipv4Address = types.StringNull()
-	}
-	if data.Ipv4Netmask.IsUnknown() {
-		data.Ipv4Netmask = types.StringNull()
-	}
-	if data.Unnumbered.IsUnknown() {
-		data.Unnumbered = types.StringNull()
-	}
-	if data.Ipv6LinkLocalAddress.IsUnknown() {
-		data.Ipv6LinkLocalAddress = types.StringNull()
-	}
-	if data.Ipv6LinkLocalZone.IsUnknown() {
-		data.Ipv6LinkLocalZone = types.StringNull()
-	}
-	if data.Ipv6Autoconfig.IsUnknown() {
-		data.Ipv6Autoconfig = types.BoolNull()
-	}
-	if data.Ipv6Enable.IsUnknown() {
-		data.Ipv6Enable = types.BoolNull()
-	}
-	for i := range data.Ipv6Addresses {
-		if data.Ipv6Addresses[i].Address.IsUnknown() {
-			data.Ipv6Addresses[i].Address = types.StringNull()
-		}
-		if data.Ipv6Addresses[i].PrefixLength.IsUnknown() {
-			data.Ipv6Addresses[i].PrefixLength = types.Int64Null()
-		}
-		if data.Ipv6Addresses[i].Zone.IsUnknown() {
-			data.Ipv6Addresses[i].Zone = types.StringNull()
-		}
-	}
 }
 
 func (data *Interface) getDeletedListItems(state Interface) []string {

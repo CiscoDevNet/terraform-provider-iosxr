@@ -54,7 +54,6 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multi segment psedowire global description").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 64),
 				},
@@ -62,7 +61,6 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 			"router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Global L2VPN Router ID").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -76,7 +74,6 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 						"group_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -128,8 +125,6 @@ func (r *L2VPNResource) Create(ctx context.Context, req resource.CreateRequest, 
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -192,8 +187,6 @@ func (r *L2VPNResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

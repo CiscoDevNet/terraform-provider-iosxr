@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -66,17 +67,33 @@ func (data Gnmi) toBody(ctx context.Context) string {
 }
 
 func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
-	for attr := range data.Attributes.Elements() {
+	// Extract a list of keys from the path
+	keys := make([]string, 0)
+	path := data.Path.ValueString()
+	if strings.HasSuffix(path, "]") {
+		keyValuePairs := strings.Split(path[strings.LastIndex(path, "[")+1:len(path)-1], ",")
+		for _, v := range keyValuePairs {
+			keys = append(keys, strings.Split(v, "=")[0])
+		}
+	}
+
+	attributes := data.Attributes.Elements()
+	for attr := range attributes {
 		attrPath := strings.ReplaceAll(attr, "/", ".")
 		value := gjson.GetBytes(res, attrPath)
 		if !value.Exists() ||
 			(value.IsObject() && len(value.Map()) == 0) ||
 			value.Raw == "[null]" {
 
-			data.Attributes.Elements()[attr] = types.StringValue("")
+			if !helpers.Contains(keys, attr) {
+				attributes[attr] = types.StringValue("")
+			}
 		} else {
-			data.Attributes.Elements()[attr] = types.StringValue(value.String())
+			attributes[attr] = types.StringValue(value.String())
 		}
+	}
+	if len(attributes) > 0 {
+		data.Attributes = types.MapValueMust(types.StringType, attributes)
 	}
 
 	for i := range data.Lists {
@@ -112,17 +129,21 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 				},
 			)
 
-			for attr := range data.Lists[i].Items[ii].Elements() {
+			listAttributes := data.Lists[i].Items[ii].Elements()
+			for attr := range listAttributes {
 				attrPath := strings.ReplaceAll(attr, "/", ".")
 				value := r.Get(attrPath)
 				if !value.Exists() ||
 					(value.IsObject() && len(value.Map()) == 0) ||
 					value.Raw == "[null]" {
 
-					data.Lists[i].Items[ii].Elements()[attr] = types.StringValue("")
+					listAttributes[attr] = types.StringValue("")
 				} else {
-					data.Lists[i].Items[ii].Elements()[attr] = types.StringValue(value.String())
+					listAttributes[attr] = types.StringValue(value.String())
 				}
+			}
+			if len(listAttributes) > 0 {
+				data.Lists[i].Items[ii] = types.MapValueMust(types.StringType, listAttributes)
 			}
 		}
 	}

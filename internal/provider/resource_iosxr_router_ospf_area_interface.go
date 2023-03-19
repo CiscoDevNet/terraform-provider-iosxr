@@ -83,27 +83,22 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 			"network_broadcast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF broadcast multi-access network").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"network_non_broadcast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF NBMA network").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"network_point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF point-to-point network").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"network_point_to_multipoint": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify OSPF point-to-multipoint network").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"cost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interface cost").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 65535),
 				},
@@ -111,7 +106,6 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router priority").AddIntegerRangeDescription(0, 255).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
@@ -119,12 +113,10 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 			"passive_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable passive").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"passive_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
 				Optional:            true,
-				Computed:            true,
 			},
 		},
 	}
@@ -169,8 +161,6 @@ func (r *RouterOSPFAreaInterfaceResource) Create(ctx context.Context, req resour
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -233,8 +223,6 @@ func (r *RouterOSPFAreaInterfaceResource) Update(ctx context.Context, req resour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

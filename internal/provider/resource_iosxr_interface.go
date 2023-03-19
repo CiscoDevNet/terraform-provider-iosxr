@@ -65,27 +65,22 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"l2transport": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("l2transport sub-interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("point-to-point sub-interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"multipoint": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("multipoint sub-interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"shutdown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("shutdown the given interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"mtu": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set the MTU on an interface").AddIntegerRangeDescription(64, 65535).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 65535),
 				},
@@ -93,7 +88,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"bandwidth": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set the bandwidth of an interface").AddIntegerRangeDescription(0, 9223372036854775807).String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
@@ -101,7 +95,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this interface").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
 				},
@@ -109,7 +102,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set VRF in which the interface operates").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -118,7 +110,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"ipv4_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -127,7 +118,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"ipv4_netmask": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IP subnet mask").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -136,7 +126,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"unnumbered": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IP processing without an explicit address").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
@@ -144,12 +133,10 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"ipv6_link_local_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"ipv6_link_local_zone": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
 				Optional:            true,
-				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("0"),
 				},
@@ -157,12 +144,10 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"ipv6_autoconfig": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable slaac on Mgmt interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"ipv6_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable IPv6 on interface").String,
 				Optional:            true,
-				Computed:            true,
 			},
 			"ipv6_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
@@ -172,7 +157,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 name or address").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"prefix_length": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix length in bits").AddIntegerRangeDescription(0, 128).String,
@@ -184,7 +168,6 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 						"zone": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
 							Optional:            true,
-							Computed:            true,
 							PlanModifiers: []planmodifier.String{
 								helpers.StringDefaultModifier("0"),
 							},
@@ -235,8 +218,6 @@ func (r *InterfaceResource) Create(ctx context.Context, req resource.CreateReque
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -299,8 +280,6 @@ func (r *InterfaceResource) Update(ctx context.Context, req resource.UpdateReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

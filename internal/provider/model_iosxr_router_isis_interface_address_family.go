@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/tidwall/sjson"
 )
 
 type RouterISISInterfaceAddressFamily struct {
@@ -23,6 +24,12 @@ func (data RouterISISInterfaceAddressFamily) getPath() string {
 
 func (data RouterISISInterfaceAddressFamily) toBody() string {
 	body := "{}"
+	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
+		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
+	}
+	if !data.SafName.IsNull() && !data.SafName.IsUnknown() {
+		body, _ = sjson.Set(body, "saf-name", data.SafName.ValueString())
+	}
 	return body
 }
 
@@ -38,27 +45,6 @@ func (data *RouterISISInterfaceAddressFamily) fromPlan(plan RouterISISInterfaceA
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
 	data.AfName = types.StringValue(plan.AfName.ValueString())
 	data.SafName = types.StringValue(plan.SafName.ValueString())
-}
-
-func (data *RouterISISInterfaceAddressFamily) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.ProcessId.IsUnknown() {
-		data.ProcessId = types.StringNull()
-	}
-	if data.InterfaceName.IsUnknown() {
-		data.InterfaceName = types.StringNull()
-	}
-	if data.AfName.IsUnknown() {
-		data.AfName = types.StringNull()
-	}
-	if data.SafName.IsUnknown() {
-		data.SafName = types.StringNull()
-	}
 }
 
 func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(state RouterISISInterfaceAddressFamily) []string {

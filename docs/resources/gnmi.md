@@ -23,6 +23,7 @@ resource "iosxr_gnmi" "hostname" {
 resource "iosxr_gnmi" "vrf" {
   path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
   attributes = {
+    vrf-name    = "VRF1"
     description = "My Desc"
     "vpn/id"    = "1:1"
   }

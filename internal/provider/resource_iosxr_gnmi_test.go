@@ -72,6 +72,9 @@ func testAccIosxrGnmiConfig_list() string {
 	return `
 	resource "iosxr_gnmi" "test" {
 		path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+		attributes = {
+			"vrf-name" = "VRF1"
+		}
 		lists = [
 			{
 				name = "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt"

@@ -65,7 +65,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 			"is_type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Area type (level)").AddStringEnumDescription("level-1", "level-1-2", "level-2-only").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
@@ -78,7 +77,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"net_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("A Network Entity Title (NET) for this process").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -94,7 +92,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"af_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Address family name").AddStringEnumDescription("ipv4", "ipv6").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("ipv4", "ipv6"),
 							},
@@ -102,7 +99,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"saf_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Sub address family name").AddStringEnumDescription("multicast", "unicast").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("multicast", "unicast"),
 							},
@@ -110,27 +106,22 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"mpls_ldp_auto_config": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP interface auto-configuration").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"metric_style_narrow": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"metric_style_wide": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"metric_style_transition": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Send and accept both styles of TLVs during transition").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"router_id_interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Router ID Interface").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -138,12 +129,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"router_id_ip_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Router ID address").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"default_information_originate": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
 							Optional:            true,
-							Computed:            true,
 						},
 					},
 				},
@@ -156,7 +145,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enter the IS-IS interface configuration submode").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -164,7 +152,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"circuit_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure circuit type for interface").AddStringEnumDescription("level-1", "level-1-2", "level-2-only").String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 							},
@@ -172,17 +159,14 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"hello_padding_disable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Disable hello-padding").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"hello_padding_sometimes": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable hello-padding during adjacency formation only").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"priority": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
 							Optional:            true,
-							Computed:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 127),
 							},
@@ -190,22 +174,18 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						"point_to_point": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Treat active LAN interface as point-to-point").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"passive": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"suppressed": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not advertise connected prefixes of this interface").String,
 							Optional:            true,
-							Computed:            true,
 						},
 						"shutdown": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Shutdown IS-IS on this interface").String,
 							Optional:            true,
-							Computed:            true,
 						},
 					},
 				},
@@ -253,8 +233,6 @@ func (r *RouterISISResource) Create(ctx context.Context, req resource.CreateRequ
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -317,8 +295,6 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

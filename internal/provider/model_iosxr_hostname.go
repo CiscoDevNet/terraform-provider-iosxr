@@ -27,7 +27,7 @@ func (data Hostname) toBody() string {
 }
 
 func (data *Hostname) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	} else {
 		data.SystemNetworkName = types.StringNull()
@@ -42,18 +42,6 @@ func (data *Hostname) fromBody(res []byte) {
 
 func (data *Hostname) fromPlan(plan Hostname) {
 	data.Device = plan.Device
-}
-
-func (data *Hostname) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.SystemNetworkName.IsUnknown() {
-		data.SystemNetworkName = types.StringNull()
-	}
 }
 
 func (data *Hostname) getDeletedListItems(state Hostname) []string {

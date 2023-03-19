@@ -42,6 +42,9 @@ func (data L2VPNXconnectGroupP2P) getPath() string {
 
 func (data L2VPNXconnectGroupP2P) toBody() string {
 	body := "{}"
+	if !data.P2pXconnectName.IsNull() && !data.P2pXconnectName.IsUnknown() {
+		body, _ = sjson.Set(body, "p2p-xconnect-name", data.P2pXconnectName.ValueString())
+	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
@@ -85,7 +88,7 @@ func (data L2VPNXconnectGroupP2P) toBody() string {
 }
 
 func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
-	if value := gjson.GetBytes(res, "description"); value.Exists() {
+	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
@@ -113,7 +116,7 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("interface-name"); value.Exists() {
+		if value := r.Get("interface-name"); value.Exists() && !data.Interfaces[i].InterfaceName.IsNull() {
 			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
@@ -142,17 +145,17 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() {
+		if value := r.Get("address"); value.Exists() && !data.Ipv4Neighbors[i].Address.IsNull() {
 			data.Ipv4Neighbors[i].Address = types.StringValue(value.String())
 		} else {
 			data.Ipv4Neighbors[i].Address = types.StringNull()
 		}
-		if value := r.Get("pw-id"); value.Exists() {
+		if value := r.Get("pw-id"); value.Exists() && !data.Ipv4Neighbors[i].PwId.IsNull() {
 			data.Ipv4Neighbors[i].PwId = types.Int64Value(value.Int())
 		} else {
 			data.Ipv4Neighbors[i].PwId = types.Int64Null()
 		}
-		if value := r.Get("pw-class"); value.Exists() {
+		if value := r.Get("pw-class"); value.Exists() && !data.Ipv4Neighbors[i].PwClass.IsNull() {
 			data.Ipv4Neighbors[i].PwClass = types.StringValue(value.String())
 		} else {
 			data.Ipv4Neighbors[i].PwClass = types.StringNull()
@@ -181,17 +184,17 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() {
+		if value := r.Get("address"); value.Exists() && !data.Ipv6Neighbors[i].Address.IsNull() {
 			data.Ipv6Neighbors[i].Address = types.StringValue(value.String())
 		} else {
 			data.Ipv6Neighbors[i].Address = types.StringNull()
 		}
-		if value := r.Get("pw-id"); value.Exists() {
+		if value := r.Get("pw-id"); value.Exists() && !data.Ipv6Neighbors[i].PwId.IsNull() {
 			data.Ipv6Neighbors[i].PwId = types.Int64Value(value.Int())
 		} else {
 			data.Ipv6Neighbors[i].PwId = types.Int64Null()
 		}
-		if value := r.Get("pw-class"); value.Exists() {
+		if value := r.Get("pw-class"); value.Exists() && !data.Ipv6Neighbors[i].PwClass.IsNull() {
 			data.Ipv6Neighbors[i].PwClass = types.StringValue(value.String())
 		} else {
 			data.Ipv6Neighbors[i].PwClass = types.StringNull()
@@ -254,51 +257,6 @@ func (data *L2VPNXconnectGroupP2P) fromPlan(plan L2VPNXconnectGroupP2P) {
 	data.Device = plan.Device
 	data.GroupName = types.StringValue(plan.GroupName.ValueString())
 	data.P2pXconnectName = types.StringValue(plan.P2pXconnectName.ValueString())
-}
-
-func (data *L2VPNXconnectGroupP2P) setUnknownValues() {
-	if data.Device.IsUnknown() {
-		data.Device = types.StringNull()
-	}
-	if data.Id.IsUnknown() {
-		data.Id = types.StringNull()
-	}
-	if data.GroupName.IsUnknown() {
-		data.GroupName = types.StringNull()
-	}
-	if data.P2pXconnectName.IsUnknown() {
-		data.P2pXconnectName = types.StringNull()
-	}
-	if data.Description.IsUnknown() {
-		data.Description = types.StringNull()
-	}
-	for i := range data.Interfaces {
-		if data.Interfaces[i].InterfaceName.IsUnknown() {
-			data.Interfaces[i].InterfaceName = types.StringNull()
-		}
-	}
-	for i := range data.Ipv4Neighbors {
-		if data.Ipv4Neighbors[i].Address.IsUnknown() {
-			data.Ipv4Neighbors[i].Address = types.StringNull()
-		}
-		if data.Ipv4Neighbors[i].PwId.IsUnknown() {
-			data.Ipv4Neighbors[i].PwId = types.Int64Null()
-		}
-		if data.Ipv4Neighbors[i].PwClass.IsUnknown() {
-			data.Ipv4Neighbors[i].PwClass = types.StringNull()
-		}
-	}
-	for i := range data.Ipv6Neighbors {
-		if data.Ipv6Neighbors[i].Address.IsUnknown() {
-			data.Ipv6Neighbors[i].Address = types.StringNull()
-		}
-		if data.Ipv6Neighbors[i].PwId.IsUnknown() {
-			data.Ipv6Neighbors[i].PwId = types.Int64Null()
-		}
-		if data.Ipv6Neighbors[i].PwClass.IsUnknown() {
-			data.Ipv6Neighbors[i].PwClass = types.StringNull()
-		}
-	}
 }
 
 func (data *L2VPNXconnectGroupP2P) getDeletedListItems(state L2VPNXconnectGroupP2P) []string {

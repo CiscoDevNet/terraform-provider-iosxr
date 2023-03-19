@@ -70,9 +70,6 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				Required:            true,
 				{{- else}}
 				Optional:            true,
-				{{- if ne .Type "List"}}
-				Computed:            true,
-				{{- end}}
 				{{- end}}
 				{{- if len .EnumValues}}
 				Validators: []validator.String{
@@ -125,7 +122,6 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							Required:            true,
 							{{- else}}
 							Optional:            true,
-							Computed:            true,
 							{{- end}}
 							{{- if len .EnumValues}}
 							Validators: []validator.String{
@@ -206,8 +202,6 @@ func (r *{{camelCase .Name}}Resource) Create(ctx context.Context, req resource.C
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 	
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -270,8 +264,6 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

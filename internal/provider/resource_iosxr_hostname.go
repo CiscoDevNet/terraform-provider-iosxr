@@ -54,7 +54,6 @@ func (r *HostnameResource) Schema(ctx context.Context, req resource.SchemaReques
 			"system_network_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set system's network name").String,
 				Optional:            true,
-				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 253),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -104,8 +103,6 @@ func (r *HostnameResource) Create(ctx context.Context, req resource.CreateReques
 			return
 		}
 	}
-
-	plan.setUnknownValues()
 
 	plan.Id = types.StringValue(plan.getPath())
 
@@ -168,8 +165,6 @@ func (r *HostnameResource) Update(ctx context.Context, req resource.UpdateReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-
-	plan.setUnknownValues()
 
 	deletedListItems := plan.getDeletedListItems(state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))

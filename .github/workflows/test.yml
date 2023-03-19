@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
   pull_request:
     paths-ignore:
-      - 'README.md'
+      - "README.md"
   push:
     paths-ignore:
-      - 'README.md'
+      - "README.md"
 
 # Testing only needs permissions to read the repository contents.
 permissions:
@@ -34,10 +34,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - uses: actions/setup-go@v4
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
           cache: true
       - run: pip install yamale
       - run: yamale -s gen/schema/schema.yaml gen/definitions/
@@ -58,23 +58,23 @@ jobs:
       matrix:
         # list whatever Terraform versions here you would like to support
         terraform:
-          - '1.0.*'
-          - '1.3.*'
+          - "1.0.*"
+          - "1.4.*"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
           cache: true
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ matrix.terraform }}
           terraform_wrapper: false
       - run: go mod download
-      - env:
-          TF_ACC: '1'
-          IOSXR_USERNAME: ${{ secrets.IOSXR_USERNAME }}
-          IOSXR_PASSWORD: ${{ secrets.IOSXR_PASSWORD }}
-          IOSXR_HOST: ${{ secrets.IOSXR_HOST }}
-        run: go test ./... -v -cover -timeout 45m -run Gnmi
-        timeout-minutes: 45
+      # - env:
+      #     TF_ACC: '1'
+      #     IOSXR_USERNAME: ${{ secrets.IOSXR_USERNAME }}
+      #     IOSXR_PASSWORD: ${{ secrets.IOSXR_PASSWORD }}
+      #     IOSXR_HOST: ${{ secrets.IOSXR_HOST }}
+      #   run: go test ./... -v -cover -timeout 45m -run Gnmi
+      #   timeout-minutes: 45

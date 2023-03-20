@@ -3,6 +3,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -19,7 +21,7 @@ func (data BGPASFormat) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
 
-func (data BGPASFormat) toBody() string {
+func (data BGPASFormat) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Asdot.IsNull() && !data.Asdot.IsUnknown() {
 		if data.Asdot.ValueBool() {
@@ -34,7 +36,7 @@ func (data BGPASFormat) toBody() string {
 	return body
 }
 
-func (data *BGPASFormat) updateFromBody(res []byte) {
+func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); !data.Asdot.IsNull() {
 		if value.Exists() {
 			data.Asdot = types.BoolValue(true)
@@ -55,7 +57,7 @@ func (data *BGPASFormat) updateFromBody(res []byte) {
 	}
 }
 
-func (data *BGPASFormat) fromBody(res []byte) {
+func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
 		data.Asdot = types.BoolValue(true)
 	} else {
@@ -68,16 +70,16 @@ func (data *BGPASFormat) fromBody(res []byte) {
 	}
 }
 
-func (data *BGPASFormat) fromPlan(plan BGPASFormat) {
+func (data *BGPASFormat) fromPlan(ctx context.Context, plan BGPASFormat) {
 	data.Device = plan.Device
 }
 
-func (data *BGPASFormat) getDeletedListItems(state BGPASFormat) []string {
+func (data *BGPASFormat) getDeletedListItems(ctx context.Context, state BGPASFormat) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *BGPASFormat) getEmptyLeafsDelete() []string {
+func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

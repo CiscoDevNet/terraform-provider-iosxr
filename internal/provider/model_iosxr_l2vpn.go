@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -27,7 +28,7 @@ func (data L2VPN) getPath() string {
 	return "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 }
 
-func (data L2VPN) toBody() string {
+func (data L2VPN) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
@@ -46,7 +47,7 @@ func (data L2VPN) toBody() string {
 	return body
 }
 
-func (data *L2VPN) updateFromBody(res []byte) {
+func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
@@ -88,7 +89,7 @@ func (data *L2VPN) updateFromBody(res []byte) {
 	}
 }
 
-func (data *L2VPN) fromBody(res []byte) {
+func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -108,11 +109,11 @@ func (data *L2VPN) fromBody(res []byte) {
 	}
 }
 
-func (data *L2VPN) fromPlan(plan L2VPN) {
+func (data *L2VPN) fromPlan(ctx context.Context, plan L2VPN) {
 	data.Device = plan.Device
 }
 
-func (data *L2VPN) getDeletedListItems(state L2VPN) []string {
+func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.XconnectGroups {
 		keys := [...]string{"group-name"}
@@ -147,7 +148,7 @@ func (data *L2VPN) getDeletedListItems(state L2VPN) []string {
 	return deletedListItems
 }
 
-func (data *L2VPN) getEmptyLeafsDelete() []string {
+func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

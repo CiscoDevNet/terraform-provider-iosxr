@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -49,7 +50,7 @@ func (data RouterBGPVRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString())
 }
 
-func (data RouterBGPVRF) toBody() string {
+func (data RouterBGPVRF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -145,7 +146,7 @@ func (data RouterBGPVRF) toBody() string {
 	return body
 }
 
-func (data *RouterBGPVRF) updateFromBody(res []byte) {
+func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
 		if value.Exists() {
 			data.DefaultInformationOriginate = types.BoolValue(true)
@@ -315,7 +316,7 @@ func (data *RouterBGPVRF) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGPVRF) fromBody(res []byte) {
+func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
@@ -409,13 +410,13 @@ func (data *RouterBGPVRF) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGPVRF) fromPlan(plan RouterBGPVRF) {
+func (data *RouterBGPVRF) fromPlan(ctx context.Context, plan RouterBGPVRF) {
 	data.Device = plan.Device
 	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
-func (data *RouterBGPVRF) getDeletedListItems(state RouterBGPVRF) []string {
+func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterBGPVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Neighbors {
 		keys := [...]string{"neighbor-address"}
@@ -450,7 +451,7 @@ func (data *RouterBGPVRF) getDeletedListItems(state RouterBGPVRF) []string {
 	return deletedListItems
 }
 
-func (data *RouterBGPVRF) getEmptyLeafsDelete() []string {
+func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

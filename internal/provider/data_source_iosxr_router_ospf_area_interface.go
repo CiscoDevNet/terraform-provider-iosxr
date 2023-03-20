@@ -119,7 +119,7 @@ func (d *RouterOSPFAreaInterfaceDataSource) Read(ctx context.Context, req dataso
 		return
 	}
 
-	config.fromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))

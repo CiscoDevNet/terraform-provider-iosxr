@@ -44,7 +44,7 @@ func (data {{camelCase .Name}}) getPath() string {
 {{- end}}
 }
 
-func (data {{camelCase .Name}}) toBody() string {
+func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	body := "{}"
 	{{- range .Attributes}}
 	{{- if and (ne .Reference true) (ne .Type "List")}}
@@ -91,7 +91,7 @@ func (data {{camelCase .Name}}) toBody() string {
 	return body
 }
 
-func (data *{{camelCase .Name}}) updateFromBody(res []byte) {
+func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
 	{{- if eq .Type "Int64"}}
@@ -190,7 +190,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res []byte) {
 	{{- end}}
 }
 
-func (data *{{camelCase .Name}}) fromBody(res []byte) {
+func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
 	{{- if eq .Type "Int64"}}
@@ -249,7 +249,7 @@ func (data *{{camelCase .Name}}) fromBody(res []byte) {
 }
 
 
-func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
+func (data *{{camelCase .Name}}) fromPlan(ctx context.Context, plan {{camelCase .Name}}) {
 	data.Device = plan.Device
 	{{- range .Attributes}}
 	{{- if or (eq .Reference true) (eq .Id true) (eq .WriteOnly true)}}
@@ -258,7 +258,7 @@ func (data *{{camelCase .Name}}) fromPlan(plan {{camelCase .Name}}) {
 	{{- end}}
 }
 
-func (data *{{camelCase .Name}}) getDeletedListItems(state {{camelCase .Name}}) []string {
+func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedListItems := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if eq .Type "List"}}
@@ -312,7 +312,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(state {{camelCase .Name}}) 
 	return deletedListItems
 }
 
-func (data *{{camelCase .Name}}) getEmptyLeafsDelete() []string {
+func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}

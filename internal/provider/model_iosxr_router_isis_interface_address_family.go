@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -22,7 +23,7 @@ func (data RouterISISInterfaceAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
-func (data RouterISISInterfaceAddressFamily) toBody() string {
+func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
@@ -33,13 +34,13 @@ func (data RouterISISInterfaceAddressFamily) toBody() string {
 	return body
 }
 
-func (data *RouterISISInterfaceAddressFamily) updateFromBody(res []byte) {
+func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 }
 
-func (data *RouterISISInterfaceAddressFamily) fromBody(res []byte) {
+func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res []byte) {
 }
 
-func (data *RouterISISInterfaceAddressFamily) fromPlan(plan RouterISISInterfaceAddressFamily) {
+func (data *RouterISISInterfaceAddressFamily) fromPlan(ctx context.Context, plan RouterISISInterfaceAddressFamily) {
 	data.Device = plan.Device
 	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
@@ -47,12 +48,12 @@ func (data *RouterISISInterfaceAddressFamily) fromPlan(plan RouterISISInterfaceA
 	data.SafName = types.StringValue(plan.SafName.ValueString())
 }
 
-func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(state RouterISISInterfaceAddressFamily) []string {
+func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete() []string {
+func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

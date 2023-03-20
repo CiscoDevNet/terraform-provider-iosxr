@@ -215,7 +215,7 @@ func (r *RouterISISResource) Create(ctx context.Context, req resource.CreateRequ
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	// Create object
-	body := plan.toBody()
+	body := plan.toBody(ctx)
 
 	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
@@ -223,7 +223,7 @@ func (r *RouterISISResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
-	emptyLeafsDelete := plan.getEmptyLeafsDelete()
+	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
@@ -260,7 +260,7 @@ func (r *RouterISISResource) Read(ctx context.Context, req resource.ReadRequest,
 		return
 	}
 
-	state.updateFromBody(getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	state.updateFromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
@@ -288,7 +288,7 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
-	body := plan.toBody()
+	body := plan.toBody(ctx)
 
 	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
 	resp.Diagnostics.Append(diags...)
@@ -296,7 +296,7 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	deletedListItems := plan.getDeletedListItems(state)
+	deletedListItems := plan.getDeletedListItems(ctx, state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
@@ -307,7 +307,7 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 		}
 	}
 
-	emptyLeafsDelete := plan.getEmptyLeafsDelete()
+	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {

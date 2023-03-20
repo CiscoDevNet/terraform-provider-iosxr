@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -43,7 +44,7 @@ func (data Interface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
-func (data Interface) toBody() string {
+func (data Interface) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
@@ -122,7 +123,7 @@ func (data Interface) toBody() string {
 	return body
 }
 
-func (data *Interface) updateFromBody(res []byte) {
+func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); !data.L2transport.IsNull() {
 		if value.Exists() {
 			data.L2transport = types.BoolValue(true)
@@ -263,7 +264,7 @@ func (data *Interface) updateFromBody(res []byte) {
 	}
 }
 
-func (data *Interface) fromBody(res []byte) {
+func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
 		data.L2transport = types.BoolValue(true)
 	} else {
@@ -340,12 +341,12 @@ func (data *Interface) fromBody(res []byte) {
 	}
 }
 
-func (data *Interface) fromPlan(plan Interface) {
+func (data *Interface) fromPlan(ctx context.Context, plan Interface) {
 	data.Device = plan.Device
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
 }
 
-func (data *Interface) getDeletedListItems(state Interface) []string {
+func (data *Interface) getDeletedListItems(ctx context.Context, state Interface) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Ipv6Addresses {
 		keys := [...]string{"address"}
@@ -380,7 +381,7 @@ func (data *Interface) getDeletedListItems(state Interface) []string {
 	return deletedListItems
 }
 
-func (data *Interface) getEmptyLeafsDelete() []string {
+func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

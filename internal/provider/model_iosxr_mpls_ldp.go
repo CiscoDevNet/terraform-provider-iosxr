@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -30,7 +31,7 @@ func (data MPLSLDP) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 }
 
-func (data MPLSLDP) toBody() string {
+func (data MPLSLDP) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.ValueString())
@@ -54,7 +55,7 @@ func (data MPLSLDP) toBody() string {
 	return body
 }
 
-func (data *MPLSLDP) updateFromBody(res []byte) {
+func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() && !data.RouterId.IsNull() {
 		data.RouterId = types.StringValue(value.String())
 	} else {
@@ -120,7 +121,7 @@ func (data *MPLSLDP) updateFromBody(res []byte) {
 	}
 }
 
-func (data *MPLSLDP) fromBody(res []byte) {
+func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
@@ -148,11 +149,11 @@ func (data *MPLSLDP) fromBody(res []byte) {
 	}
 }
 
-func (data *MPLSLDP) fromPlan(plan MPLSLDP) {
+func (data *MPLSLDP) fromPlan(ctx context.Context, plan MPLSLDP) {
 	data.Device = plan.Device
 }
 
-func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
+func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -217,7 +218,7 @@ func (data *MPLSLDP) getDeletedListItems(state MPLSLDP) []string {
 	return deletedListItems
 }
 
-func (data *MPLSLDP) getEmptyLeafsDelete() []string {
+func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

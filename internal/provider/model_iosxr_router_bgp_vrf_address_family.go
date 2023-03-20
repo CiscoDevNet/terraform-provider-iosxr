@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -57,7 +58,7 @@ func (data RouterBGPVRFAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.AfName.ValueString())
 }
 
-func (data RouterBGPVRFAddressFamily) toBody() string {
+func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
@@ -178,7 +179,7 @@ func (data RouterBGPVRFAddressFamily) toBody() string {
 	return body
 }
 
-func (data *RouterBGPVRFAddressFamily) updateFromBody(res []byte) {
+func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() && !data.MaximumPathsEbgpMultipath.IsNull() {
 		data.MaximumPathsEbgpMultipath = types.Int64Value(value.Int())
 	} else {
@@ -425,7 +426,7 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGPVRFAddressFamily) fromBody(res []byte) {
+func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
 		data.MaximumPathsEbgpMultipath = types.Int64Value(value.Int())
 	}
@@ -550,14 +551,14 @@ func (data *RouterBGPVRFAddressFamily) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGPVRFAddressFamily) fromPlan(plan RouterBGPVRFAddressFamily) {
+func (data *RouterBGPVRFAddressFamily) fromPlan(ctx context.Context, plan RouterBGPVRFAddressFamily) {
 	data.Device = plan.Device
 	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 	data.AfName = types.StringValue(plan.AfName.ValueString())
 }
 
-func (data *RouterBGPVRFAddressFamily) getDeletedListItems(state RouterBGPVRFAddressFamily) []string {
+func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPVRFAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
@@ -664,7 +665,7 @@ func (data *RouterBGPVRFAddressFamily) getDeletedListItems(state RouterBGPVRFAdd
 	return deletedListItems
 }
 
-func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete() []string {
+func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

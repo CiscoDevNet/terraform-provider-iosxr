@@ -3,6 +3,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -21,7 +23,7 @@ func (data OCSystemConfig) getPath() string {
 	return "openconfig-system:/system/config"
 }
 
-func (data OCSystemConfig) toBody() string {
+func (data OCSystemConfig) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.Hostname.IsNull() && !data.Hostname.IsUnknown() {
 		body, _ = sjson.Set(body, "hostname", data.Hostname.ValueString())
@@ -38,7 +40,7 @@ func (data OCSystemConfig) toBody() string {
 	return body
 }
 
-func (data *OCSystemConfig) updateFromBody(res []byte) {
+func (data *OCSystemConfig) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() && !data.Hostname.IsNull() {
 		data.Hostname = types.StringValue(value.String())
 	} else {
@@ -61,7 +63,7 @@ func (data *OCSystemConfig) updateFromBody(res []byte) {
 	}
 }
 
-func (data *OCSystemConfig) fromBody(res []byte) {
+func (data *OCSystemConfig) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
 		data.Hostname = types.StringValue(value.String())
 	}
@@ -76,16 +78,16 @@ func (data *OCSystemConfig) fromBody(res []byte) {
 	}
 }
 
-func (data *OCSystemConfig) fromPlan(plan OCSystemConfig) {
+func (data *OCSystemConfig) fromPlan(ctx context.Context, plan OCSystemConfig) {
 	data.Device = plan.Device
 }
 
-func (data *OCSystemConfig) getDeletedListItems(state OCSystemConfig) []string {
+func (data *OCSystemConfig) getDeletedListItems(ctx context.Context, state OCSystemConfig) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *OCSystemConfig) getEmptyLeafsDelete() []string {
+func (data *OCSystemConfig) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

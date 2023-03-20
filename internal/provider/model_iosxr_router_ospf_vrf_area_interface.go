@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 
@@ -32,7 +33,7 @@ func (data RouterOSPFVRFAreaInterface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.VrfName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
 }
 
-func (data RouterOSPFVRFAreaInterface) toBody() string {
+func (data RouterOSPFVRFAreaInterface) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.InterfaceName.IsNull() && !data.InterfaceName.IsUnknown() {
 		body, _ = sjson.Set(body, "interface-name", data.InterfaceName.ValueString())
@@ -76,7 +77,7 @@ func (data RouterOSPFVRFAreaInterface) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFVRFAreaInterface) updateFromBody(res []byte) {
+func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); !data.NetworkBroadcast.IsNull() {
 		if value.Exists() {
 			data.NetworkBroadcast = types.BoolValue(true)
@@ -143,7 +144,7 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPFVRFAreaInterface) fromBody(res []byte) {
+func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast = types.BoolValue(true)
 	} else {
@@ -182,7 +183,7 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPFVRFAreaInterface) fromPlan(plan RouterOSPFVRFAreaInterface) {
+func (data *RouterOSPFVRFAreaInterface) fromPlan(ctx context.Context, plan RouterOSPFVRFAreaInterface) {
 	data.Device = plan.Device
 	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
@@ -190,12 +191,12 @@ func (data *RouterOSPFVRFAreaInterface) fromPlan(plan RouterOSPFVRFAreaInterface
 	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
 }
 
-func (data *RouterOSPFVRFAreaInterface) getDeletedListItems(state RouterOSPFVRFAreaInterface) []string {
+func (data *RouterOSPFVRFAreaInterface) getDeletedListItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete() []string {
+func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -40,7 +41,7 @@ func (data L2VPNXconnectGroupP2P) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
 }
 
-func (data L2VPNXconnectGroupP2P) toBody() string {
+func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.P2pXconnectName.IsNull() && !data.P2pXconnectName.IsUnknown() {
 		body, _ = sjson.Set(body, "p2p-xconnect-name", data.P2pXconnectName.ValueString())
@@ -87,7 +88,7 @@ func (data L2VPNXconnectGroupP2P) toBody() string {
 	return body
 }
 
-func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
+func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
@@ -202,7 +203,7 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(res []byte) {
 	}
 }
 
-func (data *L2VPNXconnectGroupP2P) fromBody(res []byte) {
+func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -253,13 +254,13 @@ func (data *L2VPNXconnectGroupP2P) fromBody(res []byte) {
 	}
 }
 
-func (data *L2VPNXconnectGroupP2P) fromPlan(plan L2VPNXconnectGroupP2P) {
+func (data *L2VPNXconnectGroupP2P) fromPlan(ctx context.Context, plan L2VPNXconnectGroupP2P) {
 	data.Device = plan.Device
 	data.GroupName = types.StringValue(plan.GroupName.ValueString())
 	data.P2pXconnectName = types.StringValue(plan.P2pXconnectName.ValueString())
 }
 
-func (data *L2VPNXconnectGroupP2P) getDeletedListItems(state L2VPNXconnectGroupP2P) []string {
+func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -366,7 +367,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(state L2VPNXconnectGroupP
 	return deletedListItems
 }
 
-func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete() []string {
+func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

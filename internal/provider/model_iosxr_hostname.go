@@ -3,6 +3,8 @@
 package provider
 
 import (
+	"context"
+
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
@@ -18,7 +20,7 @@ func (data Hostname) getPath() string {
 	return "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 }
 
-func (data Hostname) toBody() string {
+func (data Hostname) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.SystemNetworkName.IsNull() && !data.SystemNetworkName.IsUnknown() {
 		body, _ = sjson.Set(body, "system-network-name", data.SystemNetworkName.ValueString())
@@ -26,7 +28,7 @@ func (data Hostname) toBody() string {
 	return body
 }
 
-func (data *Hostname) updateFromBody(res []byte) {
+func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() && !data.SystemNetworkName.IsNull() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	} else {
@@ -34,22 +36,22 @@ func (data *Hostname) updateFromBody(res []byte) {
 	}
 }
 
-func (data *Hostname) fromBody(res []byte) {
+func (data *Hostname) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
 }
 
-func (data *Hostname) fromPlan(plan Hostname) {
+func (data *Hostname) fromPlan(ctx context.Context, plan Hostname) {
 	data.Device = plan.Device
 }
 
-func (data *Hostname) getDeletedListItems(state Hostname) []string {
+func (data *Hostname) getDeletedListItems(ctx context.Context, state Hostname) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *Hostname) getEmptyLeafsDelete() []string {
+func (data *Hostname) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -71,7 +72,7 @@ func (data RouterOSPF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
 }
 
-func (data RouterOSPF) toBody() string {
+func (data RouterOSPF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.ProcessName.IsNull() && !data.ProcessName.IsUnknown() {
 		body, _ = sjson.Set(body, "process-name", data.ProcessName.ValueString())
@@ -242,7 +243,7 @@ func (data RouterOSPF) toBody() string {
 	return body
 }
 
-func (data *RouterOSPF) updateFromBody(res []byte) {
+func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
 		if value.Exists() {
 			data.MplsLdpSync = types.BoolValue(true)
@@ -590,7 +591,7 @@ func (data *RouterOSPF) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPF) fromBody(res []byte) {
+func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
@@ -768,12 +769,12 @@ func (data *RouterOSPF) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPF) fromPlan(plan RouterOSPF) {
+func (data *RouterOSPF) fromPlan(ctx context.Context, plan RouterOSPF) {
 	data.Device = plan.Device
 	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
 }
 
-func (data *RouterOSPF) getDeletedListItems(state RouterOSPF) []string {
+func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSPF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Areas {
 		keys := [...]string{"area-id"}
@@ -898,7 +899,7 @@ func (data *RouterOSPF) getDeletedListItems(state RouterOSPF) []string {
 	return deletedListItems
 }
 
-func (data *RouterOSPF) getEmptyLeafsDelete() []string {
+func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

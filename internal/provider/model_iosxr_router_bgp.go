@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -48,7 +49,7 @@ func (data RouterBGP) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
 }
 
-func (data RouterBGP) toBody() string {
+func (data RouterBGP) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AsNumber.IsNull() && !data.AsNumber.IsUnknown() {
 		body, _ = sjson.Set(body, "as-number", data.AsNumber.ValueString())
@@ -144,7 +145,7 @@ func (data RouterBGP) toBody() string {
 	return body
 }
 
-func (data *RouterBGP) updateFromBody(res []byte) {
+func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
 		if value.Exists() {
 			data.DefaultInformationOriginate = types.BoolValue(true)
@@ -314,7 +315,7 @@ func (data *RouterBGP) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGP) fromBody(res []byte) {
+func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
@@ -408,12 +409,12 @@ func (data *RouterBGP) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterBGP) fromPlan(plan RouterBGP) {
+func (data *RouterBGP) fromPlan(ctx context.Context, plan RouterBGP) {
 	data.Device = plan.Device
 	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
 }
 
-func (data *RouterBGP) getDeletedListItems(state RouterBGP) []string {
+func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Neighbors {
 		keys := [...]string{"neighbor-address"}
@@ -448,7 +449,7 @@ func (data *RouterBGP) getDeletedListItems(state RouterBGP) []string {
 	return deletedListItems
 }
 
-func (data *RouterBGP) getEmptyLeafsDelete() []string {
+func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

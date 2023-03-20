@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -72,7 +73,7 @@ func (data RouterOSPFVRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]", data.ProcessName.ValueString(), data.VrfName.ValueString())
 }
 
-func (data RouterOSPFVRF) toBody() string {
+func (data RouterOSPFVRF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -243,7 +244,7 @@ func (data RouterOSPFVRF) toBody() string {
 	return body
 }
 
-func (data *RouterOSPFVRF) updateFromBody(res []byte) {
+func (data *RouterOSPFVRF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
 		if value.Exists() {
 			data.MplsLdpSync = types.BoolValue(true)
@@ -591,7 +592,7 @@ func (data *RouterOSPFVRF) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPFVRF) fromBody(res []byte) {
+func (data *RouterOSPFVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
@@ -769,13 +770,13 @@ func (data *RouterOSPFVRF) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterOSPFVRF) fromPlan(plan RouterOSPFVRF) {
+func (data *RouterOSPFVRF) fromPlan(ctx context.Context, plan RouterOSPFVRF) {
 	data.Device = plan.Device
 	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
-func (data *RouterOSPFVRF) getDeletedListItems(state RouterOSPFVRF) []string {
+func (data *RouterOSPFVRF) getDeletedListItems(ctx context.Context, state RouterOSPFVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Areas {
 		keys := [...]string{"area-id"}
@@ -900,7 +901,7 @@ func (data *RouterOSPFVRF) getDeletedListItems(state RouterOSPFVRF) []string {
 	return deletedListItems
 }
 
-func (data *RouterOSPFVRF) getEmptyLeafsDelete() []string {
+func (data *RouterOSPFVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

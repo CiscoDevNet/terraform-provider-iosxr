@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -51,7 +52,7 @@ func (data RouterISIS) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
 
-func (data RouterISIS) toBody() string {
+func (data RouterISIS) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.ProcessId.IsNull() && !data.ProcessId.IsUnknown() {
 		body, _ = sjson.Set(body, "process-id", data.ProcessId.ValueString())
@@ -156,7 +157,7 @@ func (data RouterISIS) toBody() string {
 	return body
 }
 
-func (data *RouterISIS) updateFromBody(res []byte) {
+func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() && !data.IsType.IsNull() {
 		data.IsType = types.StringValue(value.String())
 	} else {
@@ -375,7 +376,7 @@ func (data *RouterISIS) updateFromBody(res []byte) {
 	}
 }
 
-func (data *RouterISIS) fromBody(res []byte) {
+func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
 	}
@@ -484,12 +485,12 @@ func (data *RouterISIS) fromBody(res []byte) {
 	}
 }
 
-func (data *RouterISIS) fromPlan(plan RouterISIS) {
+func (data *RouterISIS) fromPlan(ctx context.Context, plan RouterISIS) {
 	data.Device = plan.Device
 	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
 }
 
-func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
+func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISIS) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Nets {
 		keys := [...]string{"net-id"}
@@ -590,7 +591,7 @@ func (data *RouterISIS) getDeletedListItems(state RouterISIS) []string {
 	return deletedListItems
 }
 
-func (data *RouterISIS) getEmptyLeafsDelete() []string {
+func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -108,7 +109,7 @@ func (data VRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
-func (data VRF) toBody() string {
+func (data VRF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -338,7 +339,7 @@ func (data VRF) toBody() string {
 	return body
 }
 
-func (data *VRF) updateFromBody(res []byte) {
+func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
@@ -927,7 +928,7 @@ func (data *VRF) updateFromBody(res []byte) {
 	}
 }
 
-func (data *VRF) fromBody(res []byte) {
+func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -1212,12 +1213,12 @@ func (data *VRF) fromBody(res []byte) {
 	}
 }
 
-func (data *VRF) fromPlan(plan VRF) {
+func (data *VRF) fromPlan(ctx context.Context, plan VRF) {
 	data.Device = plan.Device
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
-func (data *VRF) getDeletedListItems(state VRF) []string {
+func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
 		keys := [...]string{"as-number", "index", "stitching"}
@@ -1726,7 +1727,7 @@ func (data *VRF) getDeletedListItems(state VRF) []string {
 	return deletedListItems
 }
 
-func (data *VRF) getEmptyLeafsDelete() []string {
+func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

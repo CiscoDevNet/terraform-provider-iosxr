@@ -200,6 +200,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewRouterOSPFAreaInterfaceResource,
 		NewRouterOSPFVRFResource,
 		NewRouterOSPFVRFAreaInterfaceResource,
+		NewSSHResource,
 		NewVRFResource,
 	}
 }
@@ -224,6 +225,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewRouterOSPFAreaInterfaceDataSource,
 		NewRouterOSPFVRFDataSource,
 		NewRouterOSPFVRFAreaInterfaceDataSource,
+		NewSSHDataSource,
 		NewVRFDataSource,
 	}
 }

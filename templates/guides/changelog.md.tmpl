@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.1.4 (unreleased)
+
+- Add `iosxr_ssh` resource and data source
+
 ## 0.1.3
 
 - Add support for IOS-XR 7.8.1+

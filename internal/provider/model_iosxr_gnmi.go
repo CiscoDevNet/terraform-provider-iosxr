@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/tidwall/gjson"
@@ -66,7 +67,8 @@ func (data Gnmi) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
+func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
+	var diags diag.Diagnostics
 	// Extract a list of keys from the path
 	keys := make([]string, 0)
 	path := data.Path.ValueString()
@@ -101,7 +103,13 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 		for ii := range data.Lists[i].Items {
 			var keyValues []string
 			for _, key := range keys {
-				v, _ := data.Lists[i].Items[ii].Elements()[key].ToTerraformValue(ctx)
+				elements := data.Lists[i].Items[ii].Elements()
+				element, ok := elements[key]
+				if !ok {
+					diags.AddError("Missing key", fmt.Sprintf("Cannot locate key '%s' in list item: %v", key, elements))
+					return diags
+				}
+				v, _ := element.ToTerraformValue(ctx)
 				var keyValue string
 				v.As(&keyValue)
 				keyValues = append(keyValues, keyValue)
@@ -147,6 +155,7 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) {
 			}
 		}
 	}
+	return diags
 }
 
 func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string {

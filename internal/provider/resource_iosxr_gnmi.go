@@ -148,7 +148,11 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 

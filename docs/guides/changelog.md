@@ -10,6 +10,7 @@ description: |-
 ## 0.1.4 (unreleased)
 
 - Add `iosxr_ssh` resource and data source
+- Allow concurrent changes across different devices
 
 ## 0.1.3
 

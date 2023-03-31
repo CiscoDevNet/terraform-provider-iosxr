@@ -27,14 +27,12 @@ type SetOperation string
 
 const (
 	Update  SetOperation = "update"
-	Replace              = "replace"
-	Delete               = "delete"
+	Replace SetOperation = "replace"
+	Delete  SetOperation = "delete"
 )
 
 type Client struct {
-	setMutex sync.Mutex
-	target   *target.Target
-	devices  map[string]*target.Target
+	Devices map[string]*Device
 	// Maximum number of retries
 	MaxRetries int
 	// Minimum delay between two retries
@@ -45,10 +43,15 @@ type Client struct {
 	BackoffDelayFactor float64
 }
 
+type Device struct {
+	SetMutex *sync.Mutex
+	Target   *target.Target
+}
+
 func NewClient() Client {
-	devices := make(map[string]*target.Target)
+	devices := make(map[string]*Device)
 	return Client{
-		devices:            devices,
+		Devices:            devices,
 		MaxRetries:         DefaultMaxRetries,
 		BackoffMinDelay:    DefaultBackoffMinDelay,
 		BackoffMaxDelay:    DefaultBackoffMaxDelay,
@@ -87,9 +90,13 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 	}
 
 	if device == "" {
-		c.target = t
+		c.Devices[""] = &Device{}
+		c.Devices[""].Target = t
+		c.Devices[""].SetMutex = &sync.Mutex{}
 	} else {
-		c.devices[device] = t
+		c.Devices[device] = &Device{}
+		c.Devices[device].Target = t
+		c.Devices[device].SetMutex = &sync.Mutex{}
 	}
 
 	return nil
@@ -98,10 +105,7 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 func (c *Client) Set(ctx context.Context, device, path, body string, operation SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	target := c.target
-	if device != "" {
-		target = c.devices[device]
-	}
+	target := c.Devices[device].Target
 
 	var setReq *gnmi.SetRequest
 	var err error
@@ -135,9 +139,9 @@ func (c *Client) Set(ctx context.Context, device, path, body string, operation S
 
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
-		c.setMutex.Lock()
+		c.Devices[device].SetMutex.Lock()
 		setResp, err = target.Set(ctx, setReq)
-		c.setMutex.Unlock()
+		c.Devices[device].SetMutex.Unlock()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))
@@ -158,10 +162,7 @@ func (c *Client) Set(ctx context.Context, device, path, body string, operation S
 func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	target := c.target
-	if device != "" {
-		target = c.devices[device]
-	}
+	target := c.Devices[device].Target
 
 	getReq, err := api.NewGetRequest(api.Path(path), api.Encoding("json_ietf"))
 	if err != nil {
@@ -194,7 +195,7 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 func (c *Client) Backoff(ctx context.Context, attempts int) bool {
 	tflog.Debug(ctx, fmt.Sprintf("Begining backoff method: attempts %v on %v", attempts, c.MaxRetries))
 	if attempts >= c.MaxRetries {
-		tflog.Debug(ctx, fmt.Sprintf("Exit from backoff method with return value false"))
+		tflog.Debug(ctx, "Exit from backoff method with return value false")
 		return false
 	}
 
@@ -210,6 +211,6 @@ func (c *Client) Backoff(ctx context.Context, attempts int) bool {
 	backoffDuration := time.Duration(backoff)
 	tflog.Debug(ctx, fmt.Sprintf("Starting sleeping for %v", backoffDuration.Round(time.Second)))
 	time.Sleep(backoffDuration)
-	tflog.Debug(ctx, fmt.Sprintf("Exit from backoff method with return value true"))
+	tflog.Debug(ctx, "Exit from backoff method with return value true")
 	return true
 }

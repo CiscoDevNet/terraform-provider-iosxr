@@ -1,4 +1,4 @@
-## 0.1.4 (unreleased)
+## 0.1.4
 
 - Add `iosxr_ssh` resource and data source
 - Allow concurrent changes across different devices

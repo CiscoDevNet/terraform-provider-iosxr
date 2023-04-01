@@ -1,0 +1,10 @@
+---
+name: Prefix Set
+path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=%s]
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: PREFIX_SET_1
+  - yang_name: rpl-prefix-set
+    tf_name: rpl
+    example: "prefix-set PREFIX_SET_1\\n  10.1.1.0/26 ge 26,\\n  10.1.2.0/26 ge 26\\nend-set\\n"

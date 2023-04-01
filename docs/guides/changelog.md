@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.1.5 (unreleased)
+
+- Add `iosxr_prefix_set` resource and data source
+
 ## 0.1.4
 
 - Add `iosxr_ssh` resource and data source

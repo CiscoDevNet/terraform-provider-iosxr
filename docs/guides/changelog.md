@@ -10,6 +10,7 @@ description: |-
 ## 0.1.5 (unreleased)
 
 - Add `iosxr_prefix_set` resource and data source
+- Add `iosxr_route_policy` resource and data source
 
 ## 0.1.4
 

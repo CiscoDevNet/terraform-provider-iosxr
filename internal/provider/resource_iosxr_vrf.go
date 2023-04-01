@@ -81,6 +81,20 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Unicast sub address family").String,
 				Optional:            true,
 			},
+			"address_family_ipv4_unicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"address_family_ipv4_unicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
 			"address_family_ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,
 				Optional:            true,
@@ -92,6 +106,20 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			"address_family_ipv6_unicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Unicast sub address family").String,
 				Optional:            true,
+			},
+			"address_family_ipv6_unicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"address_family_ipv6_unicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
 			},
 			"address_family_ipv6_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,

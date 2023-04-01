@@ -8,15 +8,27 @@ attributes:
   - yang_name: description
     example: My VRF Description
   - yang_name: vpn/id
-    example: '1000:1000'
+    example: "1000:1000"
   - yang_name: address-family/ipv4/unicast
     example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
+    tf_name: address_family_ipv4_unicast_import_route_policy
+    example: ROUTE_POLICY_1
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
+    tf_name: address_family_ipv4_unicast_export_route_policy
+    example: ROUTE_POLICY_1
   - yang_name: address-family/ipv4/multicast
     example: true
   - yang_name: address-family/ipv4/flowspec
     example: true
   - yang_name: address-family/ipv6/unicast
     example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
+    tf_name: address_family_ipv6_unicast_import_route_policy
+    example: ROUTE_POLICY_1
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
+    tf_name: address_family_ipv6_unicast_export_route_policy
+    example: ROUTE_POLICY_1
   - yang_name: address-family/ipv6/multicast
     example: true
   - yang_name: address-family/ipv6/flowspec

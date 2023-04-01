@@ -61,6 +61,14 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Unicast sub address family",
 				Computed:            true,
 			},
+			"address_family_ipv4_unicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"address_family_ipv4_unicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
+				Computed:            true,
+			},
 			"address_family_ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: "Multicast topology",
 				Computed:            true,
@@ -71,6 +79,14 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"address_family_ipv6_unicast": schema.BoolAttribute{
 				MarkdownDescription: "Unicast sub address family",
+				Computed:            true,
+			},
+			"address_family_ipv6_unicast_import_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for import filtering",
+				Computed:            true,
+			},
+			"address_family_ipv6_unicast_export_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use route-policy for export",
 				Computed:            true,
 			},
 			"address_family_ipv6_multicast": schema.BoolAttribute{

@@ -11,6 +11,10 @@ description: |-
 
 - Add `iosxr_prefix_set` resource and data source
 - Add `iosxr_route_policy` resource and data source
+- Add `address_family_ipv4_unicast_import_route_policy` attribute to `iosxr_vrf` resource
+- Add `address_family_ipv4_unicast_export_route_policy` attribute to `iosxr_vrf` resource
+- Add `address_family_ipv6_unicast_import_route_policy` attribute to `iosxr_vrf` resource
+- Add `address_family_ipv6_unicast_export_route_policy` attribute to `iosxr_vrf` resource
 
 ## 0.1.4
 

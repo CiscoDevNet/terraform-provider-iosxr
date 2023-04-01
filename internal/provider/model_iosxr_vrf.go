@@ -20,9 +20,13 @@ type VRF struct {
 	Description                                               types.String                                                   `tfsdk:"description"`
 	VpnId                                                     types.String                                                   `tfsdk:"vpn_id"`
 	AddressFamilyIpv4Unicast                                  types.Bool                                                     `tfsdk:"address_family_ipv4_unicast"`
+	AddressFamilyIpv4UnicastImportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv4_unicast_import_route_policy"`
+	AddressFamilyIpv4UnicastExportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv4_unicast_export_route_policy"`
 	AddressFamilyIpv4Multicast                                types.Bool                                                     `tfsdk:"address_family_ipv4_multicast"`
 	AddressFamilyIpv4Flowspec                                 types.Bool                                                     `tfsdk:"address_family_ipv4_flowspec"`
 	AddressFamilyIpv6Unicast                                  types.Bool                                                     `tfsdk:"address_family_ipv6_unicast"`
+	AddressFamilyIpv6UnicastImportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv6_unicast_import_route_policy"`
+	AddressFamilyIpv6UnicastExportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv6_unicast_export_route_policy"`
 	AddressFamilyIpv6Multicast                                types.Bool                                                     `tfsdk:"address_family_ipv6_multicast"`
 	AddressFamilyIpv6Flowspec                                 types.Bool                                                     `tfsdk:"address_family_ipv6_flowspec"`
 	RdTwoByteAsAsNumber                                       types.String                                                   `tfsdk:"rd_two_byte_as_as_number"`
@@ -125,6 +129,12 @@ func (data VRF) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "address-family.ipv4.unicast", map[string]string{})
 		}
 	}
+	if !data.AddressFamilyIpv4UnicastImportRoutePolicy.IsNull() && !data.AddressFamilyIpv4UnicastImportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy", data.AddressFamilyIpv4UnicastImportRoutePolicy.ValueString())
+	}
+	if !data.AddressFamilyIpv4UnicastExportRoutePolicy.IsNull() && !data.AddressFamilyIpv4UnicastExportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.AddressFamilyIpv4UnicastExportRoutePolicy.ValueString())
+	}
 	if !data.AddressFamilyIpv4Multicast.IsNull() && !data.AddressFamilyIpv4Multicast.IsUnknown() {
 		if data.AddressFamilyIpv4Multicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv4.multicast", map[string]string{})
@@ -139,6 +149,12 @@ func (data VRF) toBody(ctx context.Context) string {
 		if data.AddressFamilyIpv6Unicast.ValueBool() {
 			body, _ = sjson.Set(body, "address-family.ipv6.unicast", map[string]string{})
 		}
+	}
+	if !data.AddressFamilyIpv6UnicastImportRoutePolicy.IsNull() && !data.AddressFamilyIpv6UnicastImportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy", data.AddressFamilyIpv6UnicastImportRoutePolicy.ValueString())
+	}
+	if !data.AddressFamilyIpv6UnicastExportRoutePolicy.IsNull() && !data.AddressFamilyIpv6UnicastExportRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy", data.AddressFamilyIpv6UnicastExportRoutePolicy.ValueString())
 	}
 	if !data.AddressFamilyIpv6Multicast.IsNull() && !data.AddressFamilyIpv6Multicast.IsUnknown() {
 		if data.AddressFamilyIpv6Multicast.ValueBool() {
@@ -359,6 +375,16 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AddressFamilyIpv4Unicast = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() && !data.AddressFamilyIpv4UnicastImportRoutePolicy.IsNull() {
+		data.AddressFamilyIpv4UnicastImportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.AddressFamilyIpv4UnicastImportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() && !data.AddressFamilyIpv4UnicastExportRoutePolicy.IsNull() {
+		data.AddressFamilyIpv4UnicastExportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.AddressFamilyIpv4UnicastExportRoutePolicy = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); !data.AddressFamilyIpv4Multicast.IsNull() {
 		if value.Exists() {
 			data.AddressFamilyIpv4Multicast = types.BoolValue(true)
@@ -385,6 +411,16 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.AddressFamilyIpv6Unicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() && !data.AddressFamilyIpv6UnicastImportRoutePolicy.IsNull() {
+		data.AddressFamilyIpv6UnicastImportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.AddressFamilyIpv6UnicastImportRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() && !data.AddressFamilyIpv6UnicastExportRoutePolicy.IsNull() {
+		data.AddressFamilyIpv6UnicastExportRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.AddressFamilyIpv6UnicastExportRoutePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); !data.AddressFamilyIpv6Multicast.IsNull() {
 		if value.Exists() {
@@ -940,6 +976,12 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AddressFamilyIpv4Unicast = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.AddressFamilyIpv4UnicastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.AddressFamilyIpv4UnicastExportRoutePolicy = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
 		data.AddressFamilyIpv4Multicast = types.BoolValue(true)
 	} else {
@@ -954,6 +996,12 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 		data.AddressFamilyIpv6Unicast = types.BoolValue(true)
 	} else {
 		data.AddressFamilyIpv6Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.AddressFamilyIpv6UnicastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.AddressFamilyIpv6UnicastExportRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
 		data.AddressFamilyIpv6Multicast = types.BoolValue(true)

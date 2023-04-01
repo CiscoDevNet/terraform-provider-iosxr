@@ -7,6 +7,7 @@ resource "iosxr_interface" "example" {
   mtu                     = 9000
   bandwidth               = 100000
   description             = "My Interface Description"
+  load_interval           = 30
   vrf                     = "VRF1"
   ipv4_address            = "1.1.1.1"
   ipv4_netmask            = "255.255.255.0"

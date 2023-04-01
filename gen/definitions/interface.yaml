@@ -15,6 +15,27 @@ attributes:
   - yang_name: sub-interface-type/multipoint
     tf_name: multipoint
     example: false
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id
+    tf_name: encapsulation_dot1q_vlan_id
+    no_augment_config: true
+    type: Int64
+    description: Configure first (outer) VLAN ID on the subinterface
+    min_int: 1
+    max_int: 4094
+    example: 1234
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id
+    example: 1234
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q
+    example: 1235
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one
+    example: true
+    exclude_test: true
+  - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two
+    example: false
+    exclude_test: true
   - yang_name: shutdown
     example: true
   - yang_name: mtu
@@ -23,27 +44,29 @@ attributes:
     example: 100000
   - yang_name: description
     example: My Interface Description
+  - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    example: 30
   - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
     example: VRF1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
     tf_name: ipv4_address
     optional: true
-    example: '1.1.1.1'
+    example: "1.1.1.1"
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
     tf_name: ipv4_netmask
     optional: true
-    example: '255.255.255.0'
+    example: "255.255.255.0"
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
     tf_name: unnumbered
     exclude_test: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address
     optional: true
-    example: 'fe80::1'
+    example: "fe80::1"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
     tf_name: ipv6_link_local_zone
-    default_value: '0'
-    example: '0'
+    default_value: "0"
+    example: "0"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
     tf_name: ipv6_autoconfig
     example: false
@@ -56,9 +79,9 @@ attributes:
     attributes:
       - yang_name: address
         id: true
-        example: '2001::1'
+        example: "2001::1"
       - yang_name: prefix-length
         example: 64
       - yang_name: zone
-        default_value: '0'
-        example: '0'
+        default_value: "0"
+        example: "0"

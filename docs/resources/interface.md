@@ -22,6 +22,7 @@ resource "iosxr_interface" "example" {
   mtu                     = 9000
   bandwidth               = 100000
   description             = "My Interface Description"
+  load_interval           = 30
   vrf                     = "VRF1"
   ipv4_address            = "1.1.1.1"
   ipv4_netmask            = "255.255.255.0"
@@ -52,6 +53,8 @@ resource "iosxr_interface" "example" {
   - Range: `0`-`9223372036854775807`
 - `description` (String) Set description for this interface
 - `device` (String) A device name from the provider configuration.
+- `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
+  - Range: `1`-`4094`
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
@@ -61,10 +64,15 @@ resource "iosxr_interface" "example" {
 - `ipv6_link_local_zone` (String) IPv6 address zone
   - Default value: `0`
 - `l2transport` (Boolean) l2transport sub-interface
+- `l2transport_encapsulation_dot1q_second_dot1q` (String) End of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `load_interval` (Number) Specify interval for load calculation for an interface
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`
 - `multipoint` (Boolean) multipoint sub-interface
 - `point_to_point` (Boolean) point-to-point sub-interface
+- `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
+- `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates

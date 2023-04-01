@@ -6,6 +6,12 @@
 - Add `address_family_ipv4_unicast_export_route_policy` attribute to `iosxr_vrf` resource
 - Add `address_family_ipv6_unicast_import_route_policy` attribute to `iosxr_vrf` resource
 - Add `address_family_ipv6_unicast_export_route_policy` attribute to `iosxr_vrf` resource
+- Add `l2transport_encapsulation_dot1q_vlan_id` attribute to `iosxr_interface` resource
+- Add `l2transport_encapsulation_dot1q_second_dot1q` attribute to `iosxr_interface` resource
+- Add `rewrite_ingress_tag_one` attribute to `iosxr_interface` resource
+- Add `rewrite_ingress_tag_two` attribute to `iosxr_interface` resource
+- Add `encapsulation_dot1q_vlan_id` attribute to `iosxr_interface` resource
+- Add `load_interval` attribute to `iosxr_interface` resource
 
 ## 0.1.4
 

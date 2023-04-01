@@ -74,6 +74,29 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("multipoint sub-interface").String,
 				Optional:            true,
 			},
+			"encapsulation_dot1q_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure first (outer) VLAN ID on the subinterface").AddIntegerRangeDescription(1, 4094).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4094),
+				},
+			},
+			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
+				Optional:            true,
+			},
+			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				Optional:            true,
+			},
+			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remove outer tag only").String,
+				Optional:            true,
+			},
+			"rewrite_ingress_tag_pop_two": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remove two outermost tags").String,
+				Optional:            true,
+			},
 			"shutdown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("shutdown the given interface").String,
 				Optional:            true,
@@ -98,6 +121,10 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
 				},
+			},
+			"load_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interval for load calculation for an interface").String,
+				Optional:            true,
 			},
 			"vrf": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set VRF in which the interface operates").String,

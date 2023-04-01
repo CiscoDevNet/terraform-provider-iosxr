@@ -14,25 +14,31 @@ import (
 )
 
 type Interface struct {
-	Device               types.String             `tfsdk:"device"`
-	Id                   types.String             `tfsdk:"id"`
-	InterfaceName        types.String             `tfsdk:"interface_name"`
-	L2transport          types.Bool               `tfsdk:"l2transport"`
-	PointToPoint         types.Bool               `tfsdk:"point_to_point"`
-	Multipoint           types.Bool               `tfsdk:"multipoint"`
-	Shutdown             types.Bool               `tfsdk:"shutdown"`
-	Mtu                  types.Int64              `tfsdk:"mtu"`
-	Bandwidth            types.Int64              `tfsdk:"bandwidth"`
-	Description          types.String             `tfsdk:"description"`
-	Vrf                  types.String             `tfsdk:"vrf"`
-	Ipv4Address          types.String             `tfsdk:"ipv4_address"`
-	Ipv4Netmask          types.String             `tfsdk:"ipv4_netmask"`
-	Unnumbered           types.String             `tfsdk:"unnumbered"`
-	Ipv6LinkLocalAddress types.String             `tfsdk:"ipv6_link_local_address"`
-	Ipv6LinkLocalZone    types.String             `tfsdk:"ipv6_link_local_zone"`
-	Ipv6Autoconfig       types.Bool               `tfsdk:"ipv6_autoconfig"`
-	Ipv6Enable           types.Bool               `tfsdk:"ipv6_enable"`
-	Ipv6Addresses        []InterfaceIpv6Addresses `tfsdk:"ipv6_addresses"`
+	Device                                   types.String             `tfsdk:"device"`
+	Id                                       types.String             `tfsdk:"id"`
+	InterfaceName                            types.String             `tfsdk:"interface_name"`
+	L2transport                              types.Bool               `tfsdk:"l2transport"`
+	PointToPoint                             types.Bool               `tfsdk:"point_to_point"`
+	Multipoint                               types.Bool               `tfsdk:"multipoint"`
+	EncapsulationDot1qVlanId                 types.Int64              `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId      types.String             `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q types.String             `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                  types.Bool               `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                  types.Bool               `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                 types.Bool               `tfsdk:"shutdown"`
+	Mtu                                      types.Int64              `tfsdk:"mtu"`
+	Bandwidth                                types.Int64              `tfsdk:"bandwidth"`
+	Description                              types.String             `tfsdk:"description"`
+	LoadInterval                             types.Int64              `tfsdk:"load_interval"`
+	Vrf                                      types.String             `tfsdk:"vrf"`
+	Ipv4Address                              types.String             `tfsdk:"ipv4_address"`
+	Ipv4Netmask                              types.String             `tfsdk:"ipv4_netmask"`
+	Unnumbered                               types.String             `tfsdk:"unnumbered"`
+	Ipv6LinkLocalAddress                     types.String             `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                        types.String             `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                           types.Bool               `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                               types.Bool               `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                            []InterfaceIpv6Addresses `tfsdk:"ipv6_addresses"`
 }
 type InterfaceIpv6Addresses struct {
 	Address      types.String `tfsdk:"address"`
@@ -64,6 +70,25 @@ func (data Interface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "sub-interface-type.multipoint", map[string]string{})
 		}
 	}
+	if !data.EncapsulationDot1qVlanId.IsNull() && !data.EncapsulationDot1qVlanId.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id", strconv.FormatInt(data.EncapsulationDot1qVlanId.ValueInt64(), 10))
+	}
+	if !data.L2transportEncapsulationDot1qVlanId.IsNull() && !data.L2transportEncapsulationDot1qVlanId.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id", data.L2transportEncapsulationDot1qVlanId.ValueString())
+	}
+	if !data.L2transportEncapsulationDot1qSecondDot1q.IsNull() && !data.L2transportEncapsulationDot1qSecondDot1q.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.second-dot1q", data.L2transportEncapsulationDot1qSecondDot1q.ValueString())
+	}
+	if !data.RewriteIngressTagPopOne.IsNull() && !data.RewriteIngressTagPopOne.IsUnknown() {
+		if data.RewriteIngressTagPopOne.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.one", map[string]string{})
+		}
+	}
+	if !data.RewriteIngressTagPopTwo.IsNull() && !data.RewriteIngressTagPopTwo.IsUnknown() {
+		if data.RewriteIngressTagPopTwo.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.two", map[string]string{})
+		}
+	}
 	if !data.Shutdown.IsNull() && !data.Shutdown.IsUnknown() {
 		if data.Shutdown.ValueBool() {
 			body, _ = sjson.Set(body, "shutdown", map[string]string{})
@@ -77,6 +102,9 @@ func (data Interface) toBody(ctx context.Context) string {
 	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
+	}
+	if !data.LoadInterval.IsNull() && !data.LoadInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-statistics-cfg:load-interval", strconv.FormatInt(data.LoadInterval.ValueInt64(), 10))
 	}
 	if !data.Vrf.IsNull() && !data.Vrf.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-vrf-cfg:vrf", data.Vrf.ValueString())
@@ -151,6 +179,39 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Multipoint = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() && !data.EncapsulationDot1qVlanId.IsNull() {
+		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
+	} else {
+		data.EncapsulationDot1qVlanId = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() && !data.L2transportEncapsulationDot1qVlanId.IsNull() {
+		data.L2transportEncapsulationDot1qVlanId = types.StringValue(value.String())
+	} else {
+		data.L2transportEncapsulationDot1qVlanId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.second-dot1q"); value.Exists() && !data.L2transportEncapsulationDot1qSecondDot1q.IsNull() {
+		data.L2transportEncapsulationDot1qSecondDot1q = types.StringValue(value.String())
+	} else {
+		data.L2transportEncapsulationDot1qSecondDot1q = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.one"); !data.RewriteIngressTagPopOne.IsNull() {
+		if value.Exists() {
+			data.RewriteIngressTagPopOne = types.BoolValue(true)
+		} else {
+			data.RewriteIngressTagPopOne = types.BoolValue(false)
+		}
+	} else {
+		data.RewriteIngressTagPopOne = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.two"); !data.RewriteIngressTagPopTwo.IsNull() {
+		if value.Exists() {
+			data.RewriteIngressTagPopTwo = types.BoolValue(true)
+		} else {
+			data.RewriteIngressTagPopTwo = types.BoolValue(false)
+		}
+	} else {
+		data.RewriteIngressTagPopTwo = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "shutdown"); !data.Shutdown.IsNull() {
 		if value.Exists() {
 			data.Shutdown = types.BoolValue(true)
@@ -174,6 +235,11 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() && !data.LoadInterval.IsNull() {
+		data.LoadInterval = types.Int64Value(value.Int())
+	} else {
+		data.LoadInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() && !data.Vrf.IsNull() {
 		data.Vrf = types.StringValue(value.String())
@@ -280,6 +346,25 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Multipoint = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() {
+		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.vlan-id"); value.Exists() {
+		data.L2transportEncapsulationDot1qVlanId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation.dot1q.second-dot1q"); value.Exists() {
+		data.L2transportEncapsulationDot1qSecondDot1q = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.one"); value.Exists() {
+		data.RewriteIngressTagPopOne = types.BoolValue(true)
+	} else {
+		data.RewriteIngressTagPopOne = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite.ingress.tag.pop.two"); value.Exists() {
+		data.RewriteIngressTagPopTwo = types.BoolValue(true)
+	} else {
+		data.RewriteIngressTagPopTwo = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
 		data.Shutdown = types.BoolValue(true)
 	} else {
@@ -293,6 +378,9 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-statistics-cfg:load-interval"); value.Exists() {
+		data.LoadInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-vrf-cfg:vrf"); value.Exists() {
 		data.Vrf = types.StringValue(value.String())

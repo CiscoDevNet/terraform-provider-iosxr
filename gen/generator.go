@@ -117,6 +117,7 @@ type YamlConfigAttribute struct {
 	StringMaxLength int64                 `yaml:"string_max_length"`
 	DefaultValue    string                `yaml:"default_value"`
 	RequiresReplace bool                  `yaml:"requires_replace"`
+	NoAugmentConfig bool                  `yaml:"no_augment_config"`
 	Attributes      []YamlConfigAttribute `yaml:"attributes"`
 }
 
@@ -385,7 +386,7 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 	addKeys(e, config)
 
 	for ia := range config.Attributes {
-		if config.Attributes[ia].Id || config.Attributes[ia].Reference {
+		if config.Attributes[ia].Id || config.Attributes[ia].Reference || config.Attributes[ia].NoAugmentConfig {
 			continue
 		}
 		parseAttribute(e, &config.Attributes[ia])

@@ -35,6 +35,7 @@ attribute:
   string_max_length: int(required=False)
   default_value: any(str(), int(), bool(), required=False)
   requires_replace: bool(required=False)
+  no_augment_config: bool(required=False)
   attributes: list(include('attribute'), required=False)
 
 test_prerequisite:

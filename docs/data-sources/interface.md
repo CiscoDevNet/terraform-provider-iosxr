@@ -33,6 +33,7 @@ data "iosxr_interface" "example" {
 
 - `bandwidth` (Number) Set the bandwidth of an interface
 - `description` (String) Set description for this interface
+- `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
 - `id` (String) The path of the retrieved object.
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
@@ -42,9 +43,14 @@ data "iosxr_interface" "example" {
 - `ipv6_link_local_address` (String) IPv6 address
 - `ipv6_link_local_zone` (String) IPv6 address zone
 - `l2transport` (Boolean) l2transport sub-interface
+- `l2transport_encapsulation_dot1q_second_dot1q` (String) End of VLAN range
+- `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
+- `load_interval` (Number) Specify interval for load calculation for an interface
 - `mtu` (Number) Set the MTU on an interface
 - `multipoint` (Boolean) multipoint sub-interface
 - `point_to_point` (Boolean) point-to-point sub-interface
+- `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
+- `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates

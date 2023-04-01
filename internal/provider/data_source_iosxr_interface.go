@@ -61,6 +61,26 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "multipoint sub-interface",
 				Computed:            true,
 			},
+			"encapsulation_dot1q_vlan_id": schema.Int64Attribute{
+				MarkdownDescription: "Configure first (outer) VLAN ID on the subinterface",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_vlan_id": schema.StringAttribute{
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
+				Computed:            true,
+			},
+			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
+				MarkdownDescription: "End of VLAN range",
+				Computed:            true,
+			},
+			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
+				MarkdownDescription: "Remove outer tag only",
+				Computed:            true,
+			},
+			"rewrite_ingress_tag_pop_two": schema.BoolAttribute{
+				MarkdownDescription: "Remove two outermost tags",
+				Computed:            true,
+			},
 			"shutdown": schema.BoolAttribute{
 				MarkdownDescription: "shutdown the given interface",
 				Computed:            true,
@@ -75,6 +95,10 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: "Set description for this interface",
+				Computed:            true,
+			},
+			"load_interval": schema.Int64Attribute{
+				MarkdownDescription: "Specify interval for load calculation for an interface",
 				Computed:            true,
 			},
 			"vrf": schema.StringAttribute{

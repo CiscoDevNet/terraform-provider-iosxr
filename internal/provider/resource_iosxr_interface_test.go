@@ -24,6 +24,7 @@ func TestAccIosxrInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_interface.test", "mtu", "9000"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "bandwidth", "100000"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "description", "My Interface Description"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "load_interval", "30"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "vrf", "VRF1"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_address", "1.1.1.1"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_netmask", "255.255.255.0"),
@@ -64,6 +65,7 @@ func testAccIosxrInterfaceConfig_all() string {
 		mtu = 9000
 		bandwidth = 100000
 		description = "My Interface Description"
+		load_interval = 30
 		vrf = "VRF1"
 		ipv4_address = "1.1.1.1"
 		ipv4_netmask = "255.255.255.0"

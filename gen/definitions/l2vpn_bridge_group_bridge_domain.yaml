@@ -1,0 +1,55 @@
+---
+name: L2VPN Bridge Group Bridge Domain
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]
+doc_category: L2VPN
+attributes:
+  - yang_name: group-name
+    tf_name: bridge_group_name
+    example: BG123
+  - yang_name: bridge-domain-name
+    example: BD123
+  - yang_name: evis/evi
+    tf_name: evis
+    type: List
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 1234
+  - yang_name: vnis/vni
+    tf_name: vnis
+    type: List
+    attributes:
+      - yang_name: vni-id
+        id: true
+        example: 1234
+  - yang_name: mtu
+    example: 1500
+    exclude_test: true
+  - yang_name: storm-control/broadcast/pps
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/broadcast/kbps
+    example: 1024
+    exclude_test: true
+  - yang_name: storm-control/multicast/pps
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/multicast/kbps
+    example: 1024
+    exclude_test: true
+  - yang_name: storm-control/unknown-unicast/pps
+    example: 100
+    exclude_test: true
+  - yang_name: storm-control/unknown-unicast/kbps
+    example: 1024
+    exclude_test: true
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: Bundle-Ether11.1234
+      - yang_name: split-horizon/group
+        example: true

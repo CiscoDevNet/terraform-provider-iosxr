@@ -17,6 +17,7 @@
 - Add `iosxr_evpn_interface` resource and data source
 - Add `iosxr_evpn` resource and data source
 - Add `iosxr_l2vpn_bridge_group` resource and data source
+- Add `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
 
 ## 0.1.4
 

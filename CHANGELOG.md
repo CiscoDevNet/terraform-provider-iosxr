@@ -13,6 +13,7 @@
 - Add `encapsulation_dot1q_vlan_id` attribute to `iosxr_interface` resource
 - Add `load_interval` attribute to `iosxr_interface` resource
 - Add `iosxr_evpn_evi` resource and data source
+- Add `iosxr_evpn_group` resource and data source
 
 ## 0.1.4
 

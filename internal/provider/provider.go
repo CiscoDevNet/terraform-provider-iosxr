@@ -184,6 +184,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewGnmiResource,
 		NewBGPASFormatResource,
+		NewEVPNResource,
 		NewEVPNEVIResource,
 		NewEVPNGroupResource,
 		NewEVPNInterfaceResource,
@@ -214,6 +215,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 	return []func() datasource.DataSource{
 		NewGnmiDataSource,
 		NewBGPASFormatDataSource,
+		NewEVPNDataSource,
 		NewEVPNEVIDataSource,
 		NewEVPNGroupDataSource,
 		NewEVPNInterfaceDataSource,

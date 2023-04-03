@@ -15,6 +15,7 @@
 - Add `iosxr_evpn_evi` resource and data source
 - Add `iosxr_evpn_group` resource and data source
 - Add `iosxr_evpn_interface` resource and data source
+- Add `iosxr_evpn` resource and data source
 
 ## 0.1.4
 

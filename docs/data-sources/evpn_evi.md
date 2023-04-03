@@ -52,6 +52,8 @@ data "iosxr_evpn_evi" "example" {
 - `etree_leaf` (Boolean) Designate EVPN Instance as EVPN E-Tree Leaf Site
 - `etree_rt_leaf` (Boolean) Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site
 - `id` (String) The path of the retrieved object.
+- `load_balancing` (Boolean) Configure EVPN Instance load-balancing
+- `load_balancing_flow_label_static` (Boolean) Static configuration of Flow Label
 - `unknown_unicast_suppression` (Boolean) Enabling unknown unicast suppression
 
 <a id="nestedatt--bgp_route_target_export_four_byte_as_format"></a>

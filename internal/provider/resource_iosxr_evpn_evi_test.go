@@ -18,6 +18,8 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "vpn_id", "1234"),
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "description", "My Description"),
+					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing", "true"),
+					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "load_balancing_flow_label_static", "true"),
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_two_byte_as_number", "1"),
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_rd_two_byte_as_assigned_number", "1"),
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"),
@@ -56,6 +58,8 @@ func testAccIosxrEVPNEVIConfig_all() string {
 	resource "iosxr_evpn_evi" "test" {
 		vpn_id = 1234
 		description = "My Description"
+		load_balancing = true
+		load_balancing_flow_label_static = true
 		bgp_rd_two_byte_as_number = 1
 		bgp_rd_two_byte_as_assigned_number = 1
 		bgp_route_target_import_two_byte_as_format = [{

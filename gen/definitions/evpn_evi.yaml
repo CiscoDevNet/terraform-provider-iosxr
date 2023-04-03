@@ -7,6 +7,10 @@ attributes:
     example: 1234
   - yang_name: description
     example: My Description
+  - yang_name: load-balancing
+    example: true
+  - yang_name: load-balancing/flow-label/static
+    example: true
   - yang_name: bgp/rd/two-byte-as-number
     optional: true
     example: 1

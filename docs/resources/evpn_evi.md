@@ -16,6 +16,8 @@ This resource can manage the EVPN EVI configuration.
 resource "iosxr_evpn_evi" "example" {
   vpn_id                             = 1234
   description                        = "My Description"
+  load_balancing                     = true
+  load_balancing_flow_label_static   = true
   bgp_rd_two_byte_as_number          = 1
   bgp_rd_two_byte_as_assigned_number = 1
   bgp_route_target_import_two_byte_as_format = [
@@ -77,6 +79,8 @@ resource "iosxr_evpn_evi" "example" {
 - `etree` (Boolean) Configure EVPN Instance E-Tree
 - `etree_leaf` (Boolean) Designate EVPN Instance as EVPN E-Tree Leaf Site
 - `etree_rt_leaf` (Boolean) Designate EVPN Instance as EVPN E-Tree Route-Target Leaf Site
+- `load_balancing` (Boolean) Configure EVPN Instance load-balancing
+- `load_balancing_flow_label_static` (Boolean) Static configuration of Flow Label
 - `unknown_unicast_suppression` (Boolean) Enabling unknown unicast suppression
 
 ### Read-Only

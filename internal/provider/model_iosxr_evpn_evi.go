@@ -18,6 +18,8 @@ type EVPNEVI struct {
 	Id                                    types.String                                   `tfsdk:"id"`
 	VpnId                                 types.Int64                                    `tfsdk:"vpn_id"`
 	Description                           types.String                                   `tfsdk:"description"`
+	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
+	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
 	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
 	BgpRdTwoByteAsAssignedNumber          types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_assigned_number"`
 	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
@@ -75,6 +77,16 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 	}
 	if !data.Description.IsNull() && !data.Description.IsUnknown() {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
+	}
+	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.IsUnknown() {
+		if data.LoadBalancing.ValueBool() {
+			body, _ = sjson.Set(body, "load-balancing", map[string]string{})
+		}
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.IsUnknown() {
+		if data.LoadBalancingFlowLabelStatic.ValueBool() {
+			body, _ = sjson.Set(body, "load-balancing.flow-label.static", map[string]string{})
+		}
 	}
 	if !data.BgpRdTwoByteAsNumber.IsNull() && !data.BgpRdTwoByteAsNumber.IsUnknown() {
 		body, _ = sjson.Set(body, "bgp.rd.two-byte-as-number", strconv.FormatInt(data.BgpRdTwoByteAsNumber.ValueInt64(), 10))
@@ -204,6 +216,24 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 		data.Description = types.StringValue(value.String())
 	} else {
 		data.Description = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "load-balancing"); !data.LoadBalancing.IsNull() {
+		if value.Exists() {
+			data.LoadBalancing = types.BoolValue(true)
+		} else {
+			data.LoadBalancing = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancing = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); !data.LoadBalancingFlowLabelStatic.IsNull() {
+		if value.Exists() {
+			data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+		} else {
+			data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() && !data.BgpRdTwoByteAsNumber.IsNull() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())
@@ -508,6 +538,16 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "load-balancing"); value.Exists() {
+		data.LoadBalancing = types.BoolValue(true)
+	} else {
+		data.LoadBalancing = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow-label.static"); value.Exists() {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowLabelStatic = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "bgp.rd.two-byte-as-number"); value.Exists() {
 		data.BgpRdTwoByteAsNumber = types.Int64Value(value.Int())

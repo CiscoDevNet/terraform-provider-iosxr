@@ -53,6 +53,14 @@ func (d *EVPNEVIDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Description for this EVPN Instance",
 				Computed:            true,
 			},
+			"load_balancing": schema.BoolAttribute{
+				MarkdownDescription: "Configure EVPN Instance load-balancing",
+				Computed:            true,
+			},
+			"load_balancing_flow_label_static": schema.BoolAttribute{
+				MarkdownDescription: "Static configuration of Flow Label",
+				Computed:            true,
+			},
 			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
 				MarkdownDescription: "Two Byte AS Number",
 				Computed:            true,

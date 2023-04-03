@@ -70,6 +70,14 @@ func (r *EVPNEVIResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringvalidator.LengthBetween(1, 64),
 				},
 			},
+			"load_balancing": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance load-balancing").String,
+				Optional:            true,
+			},
+			"load_balancing_flow_label_static": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Static configuration of Flow Label").String,
+				Optional:            true,
+			},
 			"bgp_rd_two_byte_as_number": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
 				Optional:            true,

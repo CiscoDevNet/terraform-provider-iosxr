@@ -41,3 +41,32 @@ attributes:
         example: 2
       - yang_name: pw-class
         example: PW_CLASS_1
+  - yang_name: neighbor/evpn/evi/targets/target
+    tf_name: evpn_target_neighbors
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 1000
+      - yang_name: remote-ac-id
+        id: true
+        example: 1001
+      - yang_name: source
+        id: true
+        example: 100
+      - yang_name: pw-class
+        example: PW_CLASS_1
+  - yang_name: neighbor/evpn/evi/services/service
+    tf_name: evpn_service_neighbors
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 1000
+      - yang_name: service-id
+        id: true
+        example: 1001
+      - yang_name: pw-class
+        example: PW_CLASS_1

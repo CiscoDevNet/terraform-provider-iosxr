@@ -14,14 +14,16 @@ import (
 )
 
 type L2VPNXconnectGroupP2P struct {
-	Device          types.String                         `tfsdk:"device"`
-	Id              types.String                         `tfsdk:"id"`
-	GroupName       types.String                         `tfsdk:"group_name"`
-	P2pXconnectName types.String                         `tfsdk:"p2p_xconnect_name"`
-	Description     types.String                         `tfsdk:"description"`
-	Interfaces      []L2VPNXconnectGroupP2PInterfaces    `tfsdk:"interfaces"`
-	Ipv4Neighbors   []L2VPNXconnectGroupP2PIpv4Neighbors `tfsdk:"ipv4_neighbors"`
-	Ipv6Neighbors   []L2VPNXconnectGroupP2PIpv6Neighbors `tfsdk:"ipv6_neighbors"`
+	Device               types.String                                `tfsdk:"device"`
+	Id                   types.String                                `tfsdk:"id"`
+	GroupName            types.String                                `tfsdk:"group_name"`
+	P2pXconnectName      types.String                                `tfsdk:"p2p_xconnect_name"`
+	Description          types.String                                `tfsdk:"description"`
+	Interfaces           []L2VPNXconnectGroupP2PInterfaces           `tfsdk:"interfaces"`
+	Ipv4Neighbors        []L2VPNXconnectGroupP2PIpv4Neighbors        `tfsdk:"ipv4_neighbors"`
+	Ipv6Neighbors        []L2VPNXconnectGroupP2PIpv6Neighbors        `tfsdk:"ipv6_neighbors"`
+	EvpnTargetNeighbors  []L2VPNXconnectGroupP2PEvpnTargetNeighbors  `tfsdk:"evpn_target_neighbors"`
+	EvpnServiceNeighbors []L2VPNXconnectGroupP2PEvpnServiceNeighbors `tfsdk:"evpn_service_neighbors"`
 }
 type L2VPNXconnectGroupP2PInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -35,6 +37,17 @@ type L2VPNXconnectGroupP2PIpv6Neighbors struct {
 	Address types.String `tfsdk:"address"`
 	PwId    types.Int64  `tfsdk:"pw_id"`
 	PwClass types.String `tfsdk:"pw_class"`
+}
+type L2VPNXconnectGroupP2PEvpnTargetNeighbors struct {
+	VpnId      types.Int64  `tfsdk:"vpn_id"`
+	RemoteAcId types.Int64  `tfsdk:"remote_ac_id"`
+	Source     types.Int64  `tfsdk:"source"`
+	PwClass    types.String `tfsdk:"pw_class"`
+}
+type L2VPNXconnectGroupP2PEvpnServiceNeighbors struct {
+	VpnId     types.Int64  `tfsdk:"vpn_id"`
+	ServiceId types.Int64  `tfsdk:"service_id"`
+	PwClass   types.String `tfsdk:"pw_class"`
 }
 
 func (data L2VPNXconnectGroupP2P) getPath() string {
@@ -82,6 +95,37 @@ func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {
 			}
 			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbor.ipv6s.ipv6"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.ValueString())
+			}
+		}
+	}
+	if len(data.EvpnTargetNeighbors) > 0 {
+		body, _ = sjson.Set(body, "neighbor.evpn.evi.targets.target", []interface{}{})
+		for index, item := range data.EvpnTargetNeighbors {
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.targets.target"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.RemoteAcId.IsNull() && !item.RemoteAcId.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.targets.target"+"."+strconv.Itoa(index)+"."+"remote-ac-id", strconv.FormatInt(item.RemoteAcId.ValueInt64(), 10))
+			}
+			if !item.Source.IsNull() && !item.Source.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.targets.target"+"."+strconv.Itoa(index)+"."+"source", strconv.FormatInt(item.Source.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.targets.target"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.ValueString())
+			}
+		}
+	}
+	if len(data.EvpnServiceNeighbors) > 0 {
+		body, _ = sjson.Set(body, "neighbor.evpn.evi.services.service", []interface{}{})
+		for index, item := range data.EvpnServiceNeighbors {
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.services.service"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
+			}
+			if !item.ServiceId.IsNull() && !item.ServiceId.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.services.service"+"."+strconv.Itoa(index)+"."+"service-id", strconv.FormatInt(item.ServiceId.ValueInt64(), 10))
+			}
+			if !item.PwClass.IsNull() && !item.PwClass.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor.evpn.evi.services.service"+"."+strconv.Itoa(index)+"."+"pw-class", item.PwClass.ValueString())
 			}
 		}
 	}
@@ -201,6 +245,89 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byt
 			data.Ipv6Neighbors[i].PwClass = types.StringNull()
 		}
 	}
+	for i := range data.EvpnTargetNeighbors {
+		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "neighbor.evpn.evi.targets.target").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vpn-id"); value.Exists() && !data.EvpnTargetNeighbors[i].VpnId.IsNull() {
+			data.EvpnTargetNeighbors[i].VpnId = types.Int64Value(value.Int())
+		} else {
+			data.EvpnTargetNeighbors[i].VpnId = types.Int64Null()
+		}
+		if value := r.Get("remote-ac-id"); value.Exists() && !data.EvpnTargetNeighbors[i].RemoteAcId.IsNull() {
+			data.EvpnTargetNeighbors[i].RemoteAcId = types.Int64Value(value.Int())
+		} else {
+			data.EvpnTargetNeighbors[i].RemoteAcId = types.Int64Null()
+		}
+		if value := r.Get("source"); value.Exists() && !data.EvpnTargetNeighbors[i].Source.IsNull() {
+			data.EvpnTargetNeighbors[i].Source = types.Int64Value(value.Int())
+		} else {
+			data.EvpnTargetNeighbors[i].Source = types.Int64Null()
+		}
+		if value := r.Get("pw-class"); value.Exists() && !data.EvpnTargetNeighbors[i].PwClass.IsNull() {
+			data.EvpnTargetNeighbors[i].PwClass = types.StringValue(value.String())
+		} else {
+			data.EvpnTargetNeighbors[i].PwClass = types.StringNull()
+		}
+	}
+	for i := range data.EvpnServiceNeighbors {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "neighbor.evpn.evi.services.service").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vpn-id"); value.Exists() && !data.EvpnServiceNeighbors[i].VpnId.IsNull() {
+			data.EvpnServiceNeighbors[i].VpnId = types.Int64Value(value.Int())
+		} else {
+			data.EvpnServiceNeighbors[i].VpnId = types.Int64Null()
+		}
+		if value := r.Get("service-id"); value.Exists() && !data.EvpnServiceNeighbors[i].ServiceId.IsNull() {
+			data.EvpnServiceNeighbors[i].ServiceId = types.Int64Value(value.Int())
+		} else {
+			data.EvpnServiceNeighbors[i].ServiceId = types.Int64Null()
+		}
+		if value := r.Get("pw-class"); value.Exists() && !data.EvpnServiceNeighbors[i].PwClass.IsNull() {
+			data.EvpnServiceNeighbors[i].PwClass = types.StringValue(value.String())
+		} else {
+			data.EvpnServiceNeighbors[i].PwClass = types.StringNull()
+		}
+	}
 }
 
 func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
@@ -249,6 +376,43 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 				item.PwClass = types.StringValue(cValue.String())
 			}
 			data.Ipv6Neighbors = append(data.Ipv6Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.evpn.evi.targets.target"); value.Exists() {
+		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("remote-ac-id"); cValue.Exists() {
+				item.RemoteAcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnTargetNeighbors = append(data.EvpnTargetNeighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.evpn.evi.services.service"); value.Exists() {
+		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnServiceNeighbors = append(data.EvpnServiceNeighbors, item)
 			return true
 		})
 	}
@@ -362,6 +526,84 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.EvpnTargetNeighbors {
+		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].Source.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.EvpnTargetNeighbors {
+			found = true
+			if state.EvpnTargetNeighbors[i].VpnId.ValueInt64() != data.EvpnTargetNeighbors[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64() != data.EvpnTargetNeighbors[j].RemoteAcId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnTargetNeighbors[i].Source.ValueInt64() != data.EvpnTargetNeighbors[j].Source.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.EvpnServiceNeighbors {
+		keys := [...]string{"vpn-id", "service-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.EvpnServiceNeighbors[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.EvpnServiceNeighbors[i].ServiceId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.EvpnServiceNeighbors {
+			found = true
+			if state.EvpnServiceNeighbors[i].VpnId.ValueInt64() != data.EvpnServiceNeighbors[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if state.EvpnServiceNeighbors[i].ServiceId.ValueInt64() != data.EvpnServiceNeighbors[j].ServiceId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

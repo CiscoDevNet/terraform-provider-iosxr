@@ -109,6 +109,50 @@ func (d *L2VPNXconnectGroupP2PDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
+			"evpn_target_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify remote attachment circuit identifier",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN Identifier",
+							Computed:            true,
+						},
+						"remote_ac_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify remote attachment circuit identifier",
+							Computed:            true,
+						},
+						"source": schema.Int64Attribute{
+							MarkdownDescription: "Specify source attachment circuit identifier",
+							Computed:            true,
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: "PW class template name to use",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"evpn_service_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN Identifier",
+							Computed:            true,
+						},
+						"service_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
+							Computed:            true,
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: "PW class template name to use",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

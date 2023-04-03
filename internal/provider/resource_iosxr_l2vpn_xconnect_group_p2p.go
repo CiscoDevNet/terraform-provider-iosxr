@@ -159,6 +159,73 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					},
 				},
 			},
+			"evpn_target_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify remote attachment circuit identifier").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+						"remote_ac_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify remote attachment circuit identifier").AddIntegerRangeDescription(1, 4294967294).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967294),
+							},
+						},
+						"source": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify source attachment circuit identifier").AddIntegerRangeDescription(1, 4294967294).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967294),
+							},
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"evpn_service_neighbors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+						"service_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").AddIntegerRangeDescription(1, 4294967294).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967294),
+							},
+						},
+						"pw_class": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PW class template name to use").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

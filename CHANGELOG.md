@@ -18,6 +18,8 @@
 - Add `iosxr_evpn` resource and data source
 - Add `iosxr_l2vpn_bridge_group` resource and data source
 - Add `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
+- Add `evpn_target_neighbors` attribute to `iosxr_l2vpn_xconnect_group_p2p` resource
+- Add `evpn_service_neighbors` attribute to `iosxr_l2vpn_xconnect_group_p2p` resource
 
 ## 0.1.4
 

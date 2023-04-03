@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNEVIConfig,
+				Config: testAccDataSourceIosxrEVPNEVIPrerequisitesConfig + testAccDataSourceIosxrEVPNEVIConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "load_balancing", "true"),
@@ -38,6 +38,17 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		route-policy-name = "ROUTE_POLICY_1"
+		rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
 
 const testAccDataSourceIosxrEVPNEVIConfig = `
 
@@ -64,6 +75,7 @@ resource "iosxr_evpn_evi" "test" {
 	etree = true
 	etree_leaf = false
 	etree_rt_leaf = true
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_evpn_evi" "test" {

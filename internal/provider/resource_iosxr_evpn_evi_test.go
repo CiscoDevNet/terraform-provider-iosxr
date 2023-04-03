@@ -14,7 +14,7 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrEVPNEVIConfig_all(),
+				Config: testAccIosxrEVPNEVIPrerequisitesConfig + testAccIosxrEVPNEVIConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "vpn_id", "1234"),
 					resource.TestCheckResourceAttr("iosxr_evpn_evi.test", "description", "My Description"),
@@ -45,10 +45,22 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 	})
 }
 
+const testAccIosxrEVPNEVIPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  attributes = {
+      route-policy-name = "ROUTE_POLICY_1"
+      rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrEVPNEVIConfig_minimum() string {
 	return `
 	resource "iosxr_evpn_evi" "test" {
 		vpn_id = 1234
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -78,6 +90,7 @@ func testAccIosxrEVPNEVIConfig_all() string {
 		etree = true
 		etree_leaf = false
 		etree_rt_leaf = true
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

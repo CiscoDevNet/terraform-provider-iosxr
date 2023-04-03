@@ -14,7 +14,7 @@ func TestAccIosxrVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrVRFConfig_all(),
+				Config: testAccIosxrVRFPrerequisitesConfig + testAccIosxrVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_vrf.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("iosxr_vrf.test", "description", "My VRF Description"),
@@ -78,10 +78,22 @@ func TestAccIosxrVRF(t *testing.T) {
 	})
 }
 
+const testAccIosxrVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  attributes = {
+      route-policy-name = "ROUTE_POLICY_1"
+      rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrVRFConfig_minimum() string {
 	return `
 	resource "iosxr_vrf" "test" {
 		vrf_name = "VRF1"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -164,6 +176,7 @@ func testAccIosxrVRFConfig_all() string {
 			index = 1
 			stitching = true
 		}]
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

@@ -34,10 +34,33 @@ data "iosxr_l2vpn_xconnect_group_p2p" "example" {
 ### Read-Only
 
 - `description` (String) Description for cross connect
+- `evpn_service_neighbors` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_service_neighbors))
+- `evpn_target_neighbors` (Attributes List) Specify remote attachment circuit identifier (see [below for nested schema](#nestedatt--evpn_target_neighbors))
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
 - `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
 - `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
+
+<a id="nestedatt--evpn_service_neighbors"></a>
+### Nested Schema for `evpn_service_neighbors`
+
+Read-Only:
+
+- `pw_class` (String) PW class template name to use
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+- `vpn_id` (Number) Ethernet VPN Identifier
+
+
+<a id="nestedatt--evpn_target_neighbors"></a>
+### Nested Schema for `evpn_target_neighbors`
+
+Read-Only:
+
+- `pw_class` (String) PW class template name to use
+- `remote_ac_id` (Number) Specify remote attachment circuit identifier
+- `source` (Number) Specify source attachment circuit identifier
+- `vpn_id` (Number) Ethernet VPN Identifier
+
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

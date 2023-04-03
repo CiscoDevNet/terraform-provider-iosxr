@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrVRFConfig,
+				Config: testAccDataSourceIosxrVRFPrerequisitesConfig + testAccDataSourceIosxrVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "description", "My VRF Description"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "vpn_id", "1000:1000"),
@@ -71,6 +71,17 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceIosxrVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		route-policy-name = "ROUTE_POLICY_1"
+		rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
 
 const testAccDataSourceIosxrVRFConfig = `
 
@@ -150,6 +161,7 @@ resource "iosxr_vrf" "test" {
 		index = 1
 		stitching = true
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_vrf" "test" {

@@ -44,6 +44,8 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 
 - `description` (String) Description for cross connect
 - `device` (String) A device name from the provider configuration.
+- `evpn_service_neighbors` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_service_neighbors))
+- `evpn_target_neighbors` (Attributes List) Specify remote attachment circuit identifier (see [below for nested schema](#nestedatt--evpn_target_neighbors))
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
 - `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
 - `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
@@ -51,6 +53,32 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--evpn_service_neighbors"></a>
+### Nested Schema for `evpn_service_neighbors`
+
+Optional:
+
+- `pw_class` (String) PW class template name to use
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+  - Range: `1`-`4294967294`
+- `vpn_id` (Number) Ethernet VPN Identifier
+  - Range: `1`-`65534`
+
+
+<a id="nestedatt--evpn_target_neighbors"></a>
+### Nested Schema for `evpn_target_neighbors`
+
+Optional:
+
+- `pw_class` (String) PW class template name to use
+- `remote_ac_id` (Number) Specify remote attachment circuit identifier
+  - Range: `1`-`4294967294`
+- `source` (Number) Specify source attachment circuit identifier
+  - Range: `1`-`4294967294`
+- `vpn_id` (Number) Ethernet VPN Identifier
+  - Range: `1`-`65534`
+
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

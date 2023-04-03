@@ -1,0 +1,26 @@
+resource "iosxr_evpn_evi" "example" {
+  vpn_id                             = 1234
+  description                        = "My Description"
+  bgp_rd_two_byte_as_number          = 1
+  bgp_rd_two_byte_as_assigned_number = 1
+  bgp_route_target_import_two_byte_as_format = [
+    {
+      as_number       = 1
+      assigned_number = 1
+    }
+  ]
+  bgp_route_target_export_ipv4_address_format = [
+    {
+      ipv4_address    = "1.1.1.1"
+      assigned_number = 1
+    }
+  ]
+  bgp_route_policy_import     = "ROUTE_POLICY_1"
+  bgp_route_policy_export     = "ROUTE_POLICY_1"
+  advertise_mac               = true
+  unknown_unicast_suppression = true
+  control_word_disable        = true
+  etree                       = true
+  etree_leaf                  = false
+  etree_rt_leaf               = true
+}

@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.1.6 (unreleased)
+## 0.1.6
 
 - BREAKING CHANGE: Remove `address_families` from `iosxr_router_isis` resource and data source
 - Add `iosxr_router_isis_address_family` resource and data source

@@ -1,6 +1,6 @@
 ---
 name: Router ISIS
-path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]
+path: Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]
 doc_category: ISIS
 attributes:
   - yang_name: process-id

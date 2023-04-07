@@ -72,7 +72,7 @@ func TestAccIosxrVRF(t *testing.T) {
 			{
 				ResourceName:  "iosxr_vrf.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]",
+				ImportStateId: "Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=VRF1]",
 			},
 		},
 	})

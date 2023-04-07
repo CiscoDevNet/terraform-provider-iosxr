@@ -39,7 +39,7 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 			{
 				ResourceName:  "iosxr_evpn_evi.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=1234]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:evpn/evis/evi[vpn-id=1234]",
 			},
 		},
 	})

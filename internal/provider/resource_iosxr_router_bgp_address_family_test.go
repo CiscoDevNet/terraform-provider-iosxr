@@ -54,7 +54,7 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_bgp_address_family.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv4-unicast]",
+				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv4-unicast]",
 			},
 		},
 	})

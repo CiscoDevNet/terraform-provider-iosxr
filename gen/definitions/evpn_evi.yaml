@@ -1,6 +1,6 @@
 ---
 name: EVPN EVI
-path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]
+path: Cisco-IOS-XR-um-l2vpn-cfg:evpn/evis/evi[vpn-id=%v]
 doc_category: EVPN
 attributes:
   - yang_name: vpn-id

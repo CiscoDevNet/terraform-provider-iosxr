@@ -1,6 +1,6 @@
 ---
 name: Router ISIS Address Family
-path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]
+path: Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]
 doc_category: ISIS
 attributes:
   - yang_name: process-id

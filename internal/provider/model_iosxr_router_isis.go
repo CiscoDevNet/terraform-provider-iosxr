@@ -58,7 +58,7 @@ type RouterISISInterfaces struct {
 }
 
 func (data RouterISIS) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
 
 func (data RouterISIS) toBody(ctx context.Context) string {

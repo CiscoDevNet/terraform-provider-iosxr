@@ -46,7 +46,7 @@ type RouterBGPNeighbors struct {
 }
 
 func (data RouterBGP) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
 }
 
 func (data RouterBGP) toBody(ctx context.Context) string {

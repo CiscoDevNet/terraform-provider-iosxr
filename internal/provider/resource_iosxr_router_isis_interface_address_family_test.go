@@ -26,7 +26,7 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_isis_interface_address_family.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
+				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
 			},
 		},
 	})

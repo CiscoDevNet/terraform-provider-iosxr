@@ -1,6 +1,6 @@
 ---
 name: VRF
-path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
+path: Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=%s]
 doc_category: VRF
 attributes:
   - yang_name: vrf-name

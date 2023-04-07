@@ -238,5 +238,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_vrf.example "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+terraform import iosxr_vrf.example "Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=VRF1]"
 ```

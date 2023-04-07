@@ -31,7 +31,7 @@ type RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels struct {
 }
 
 func (data RouterISISInterfaceAddressFamily) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
 func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string {

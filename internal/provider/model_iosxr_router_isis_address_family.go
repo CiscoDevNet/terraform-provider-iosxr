@@ -61,7 +61,7 @@ type RouterISISAddressFamilySpfPrefixPriorities struct {
 }
 
 func (data RouterISISAddressFamily) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
 func (data RouterISISAddressFamily) toBody(ctx context.Context) string {

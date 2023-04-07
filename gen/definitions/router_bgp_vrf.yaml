@@ -1,6 +1,6 @@
 ---
 name: Router BGP VRF
-path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]
+path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]
 doc_category: BGP
 attributes:
   - yang_name: as-number

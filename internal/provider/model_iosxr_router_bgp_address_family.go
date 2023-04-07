@@ -66,7 +66,7 @@ type RouterBGPAddressFamilyRedistributeOspf struct {
 }
 
 func (data RouterBGPAddressFamily) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.AfName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.AfName.ValueString())
 }
 
 func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {

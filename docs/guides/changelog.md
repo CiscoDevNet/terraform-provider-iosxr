@@ -7,6 +7,13 @@ description: |-
 
 # Changelog
 
+## 0.1.6 (unreleased)
+
+- BREAKING CHANGE: Remove `address_families` from `iosxr_router_isis` resource and data source
+- Add `iosxr_router_isis_address_family` resource and data source
+- BREAKING CHANGE: Remove `interfaces` from `iosxr_router_isis` resource and data source
+- Add `iosxr_router_isis_interface` resource and data source
+
 ## 0.1.5
 
 - Add `iosxr_prefix_set` resource and data source

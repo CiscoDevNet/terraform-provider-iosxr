@@ -37,6 +37,18 @@ data "iosxr_router_isis_interface_address_family" "example" {
 
 ### Read-Only
 
+- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
 - `id` (String) The path of the retrieved object.
+- `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
+- `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
+- `tag` (Number) Set interface tag
+
+<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_levels`
+
+Read-Only:
+
+- `level_id` (Number) Enable EPCFRR LFA for one level only
+- `ti_lfa` (Boolean) Enable TI LFA computation
 
 

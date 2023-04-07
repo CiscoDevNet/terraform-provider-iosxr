@@ -1,0 +1,40 @@
+---
+name: Router ISIS Interface
+path: Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]
+doc_category: ISIS
+attributes:
+  - yang_name: process-id
+    example: P1
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: circuit-type
+    example: level-1
+  - yang_name: hello-padding/disable
+    example: true
+  - yang_name: hello-padding/sometimes
+    example: false
+  - yang_name: priority/priority-value
+    tf_name: priority
+    example: 10
+  - yang_name: point-to-point
+    example: false
+  - yang_name: passive
+    example: false
+  - yang_name: suppressed
+    example: false
+  - yang_name: shutdown
+    example: false
+  - yang_name: hello-password/text/encrypted
+    tf_name: hello_password_text
+    optional: true
+    exclude_test: true
+    example: password123
+  - yang_name: hello-password/hmac-md5/encrypted
+    tf_name: hello_password_hmac_md5
+    optional: true
+    exclude_test: true
+    example: password123
+  - yang_name: hello-password/keychain/keychain-name
+    tf_name: hello_password_keychain
+    optional: true
+    example: KEY_CHAIN_1

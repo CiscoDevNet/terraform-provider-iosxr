@@ -31,27 +31,23 @@ data "iosxr_router_isis" "example" {
 
 ### Read-Only
 
-- `address_families` (Attributes List) IS-IS address family (see [below for nested schema](#nestedatt--address_families))
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
+- `log_adjacency_changes` (Boolean) Enable logging adjacency state changes
+- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP
+- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP
+- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
+- `lsp_refresh_interval` (Number) Set LSP refresh interval
+- `max_lsp_lifetime` (Number) Set maximum LSP lifetime
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
-
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
-
-Read-Only:
-
-- `af_name` (String) Address family name
-- `default_information_originate` (Boolean) Distribute a default route
-- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
-- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
-- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
-- `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
-- `router_id_interface_name` (String) Router ID Interface
-- `router_id_ip_address` (String) Router ID address
-- `saf_name` (String) Sub address family name
-
+- `nsf_cisco` (Boolean) Cisco Proprietary NSF restart
+- `nsf_ietf` (Boolean) IETF NSF restar
+- `nsf_interface_expires` (Number) # of times T1 can expire waiting for the restart ACK
+- `nsf_interface_timer` (Number) Timer used to wait for a restart ACK (seconds)
+- `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
+- `nsr` (Boolean) Enable NSR
+- `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -75,5 +71,18 @@ Read-Only:
 Read-Only:
 
 - `net_id` (String) A Network Entity Title (NET) for this process
+
+
+<a id="nestedatt--set_overload_bit_levels"></a>
+### Nested Schema for `set_overload_bit_levels`
+
+Read-Only:
+
+- `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
+- `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
+- `level_id` (Number) Set overload-bit for one level only
+- `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 

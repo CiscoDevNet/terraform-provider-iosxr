@@ -14,27 +14,36 @@ import (
 )
 
 type RouterISIS struct {
-	Device          types.String                `tfsdk:"device"`
-	Id              types.String                `tfsdk:"id"`
-	ProcessId       types.String                `tfsdk:"process_id"`
-	IsType          types.String                `tfsdk:"is_type"`
-	Nets            []RouterISISNets            `tfsdk:"nets"`
-	AddressFamilies []RouterISISAddressFamilies `tfsdk:"address_families"`
-	Interfaces      []RouterISISInterfaces      `tfsdk:"interfaces"`
+	Device                      types.String                     `tfsdk:"device"`
+	Id                          types.String                     `tfsdk:"id"`
+	ProcessId                   types.String                     `tfsdk:"process_id"`
+	IsType                      types.String                     `tfsdk:"is_type"`
+	SetOverloadBitLevels        []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                         types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                    types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                     types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                 types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer           types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires         types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges         types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait   types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait   types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval          types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime              types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	Nets                        []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                  []RouterISISInterfaces           `tfsdk:"interfaces"`
+}
+type RouterISISSetOverloadBitLevels struct {
+	LevelId                                       types.Int64 `tfsdk:"level_id"`
+	OnStartupAdvertiseAsOverloaded                types.Bool  `tfsdk:"on_startup_advertise_as_overloaded"`
+	OnStartupAdvertiseAsOverloadedTimeToAdvertise types.Int64 `tfsdk:"on_startup_advertise_as_overloaded_time_to_advertise"`
+	OnStartupWaitForBgp                           types.Bool  `tfsdk:"on_startup_wait_for_bgp"`
+	AdvertiseExternal                             types.Bool  `tfsdk:"advertise_external"`
+	AdvertiseInterlevel                           types.Bool  `tfsdk:"advertise_interlevel"`
 }
 type RouterISISNets struct {
 	NetId types.String `tfsdk:"net_id"`
-}
-type RouterISISAddressFamilies struct {
-	AfName                      types.String `tfsdk:"af_name"`
-	SafName                     types.String `tfsdk:"saf_name"`
-	MplsLdpAutoConfig           types.Bool   `tfsdk:"mpls_ldp_auto_config"`
-	MetricStyleNarrow           types.Bool   `tfsdk:"metric_style_narrow"`
-	MetricStyleWide             types.Bool   `tfsdk:"metric_style_wide"`
-	MetricStyleTransition       types.Bool   `tfsdk:"metric_style_transition"`
-	RouterIdInterfaceName       types.String `tfsdk:"router_id_interface_name"`
-	RouterIdIpAddress           types.String `tfsdk:"router_id_ip_address"`
-	DefaultInformationOriginate types.Bool   `tfsdk:"default_information_originate"`
 }
 type RouterISISInterfaces struct {
 	InterfaceName         types.String `tfsdk:"interface_name"`
@@ -60,53 +69,86 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if !data.IsType.IsNull() && !data.IsType.IsUnknown() {
 		body, _ = sjson.Set(body, "is-type", data.IsType.ValueString())
 	}
+	if !data.Nsr.IsNull() && !data.Nsr.IsUnknown() {
+		if data.Nsr.ValueBool() {
+			body, _ = sjson.Set(body, "nsr", map[string]string{})
+		}
+	}
+	if !data.NsfCisco.IsNull() && !data.NsfCisco.IsUnknown() {
+		if data.NsfCisco.ValueBool() {
+			body, _ = sjson.Set(body, "nsf.cisco", map[string]string{})
+		}
+	}
+	if !data.NsfIetf.IsNull() && !data.NsfIetf.IsUnknown() {
+		if data.NsfIetf.ValueBool() {
+			body, _ = sjson.Set(body, "nsf.ietf", map[string]string{})
+		}
+	}
+	if !data.NsfLifetime.IsNull() && !data.NsfLifetime.IsUnknown() {
+		body, _ = sjson.Set(body, "nsf.lifetime", strconv.FormatInt(data.NsfLifetime.ValueInt64(), 10))
+	}
+	if !data.NsfInterfaceTimer.IsNull() && !data.NsfInterfaceTimer.IsUnknown() {
+		body, _ = sjson.Set(body, "nsf.interface-timer", strconv.FormatInt(data.NsfInterfaceTimer.ValueInt64(), 10))
+	}
+	if !data.NsfInterfaceExpires.IsNull() && !data.NsfInterfaceExpires.IsUnknown() {
+		body, _ = sjson.Set(body, "nsf.interface-expires", strconv.FormatInt(data.NsfInterfaceExpires.ValueInt64(), 10))
+	}
+	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.IsUnknown() {
+		if data.LogAdjacencyChanges.ValueBool() {
+			body, _ = sjson.Set(body, "log.adjacency.changes", map[string]string{})
+		}
+	}
+	if !data.LspGenIntervalMaximumWait.IsNull() && !data.LspGenIntervalMaximumWait.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-gen-interval.maximum-wait", strconv.FormatInt(data.LspGenIntervalMaximumWait.ValueInt64(), 10))
+	}
+	if !data.LspGenIntervalInitialWait.IsNull() && !data.LspGenIntervalInitialWait.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-gen-interval.initial-wait", strconv.FormatInt(data.LspGenIntervalInitialWait.ValueInt64(), 10))
+	}
+	if !data.LspGenIntervalSecondaryWait.IsNull() && !data.LspGenIntervalSecondaryWait.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-gen-interval.secondary-wait", strconv.FormatInt(data.LspGenIntervalSecondaryWait.ValueInt64(), 10))
+	}
+	if !data.LspRefreshInterval.IsNull() && !data.LspRefreshInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-refresh-interval.lsp-refresh-interval-time", strconv.FormatInt(data.LspRefreshInterval.ValueInt64(), 10))
+	}
+	if !data.MaxLspLifetime.IsNull() && !data.MaxLspLifetime.IsUnknown() {
+		body, _ = sjson.Set(body, "max-lsp-lifetime.max-lsp-lifetime", strconv.FormatInt(data.MaxLspLifetime.ValueInt64(), 10))
+	}
+	if len(data.SetOverloadBitLevels) > 0 {
+		body, _ = sjson.Set(body, "set-overload-bit-levels.level", []interface{}{})
+		for index, item := range data.SetOverloadBitLevels {
+			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
+				body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
+			}
+			if !item.OnStartupAdvertiseAsOverloaded.IsNull() && !item.OnStartupAdvertiseAsOverloaded.IsUnknown() {
+				if item.OnStartupAdvertiseAsOverloaded.ValueBool() {
+					body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"on-startup.advertise-as-overloaded", map[string]string{})
+				}
+			}
+			if !item.OnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() && !item.OnStartupAdvertiseAsOverloadedTimeToAdvertise.IsUnknown() {
+				body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"on-startup.advertise-as-overloaded.time-to-advertise", strconv.FormatInt(item.OnStartupAdvertiseAsOverloadedTimeToAdvertise.ValueInt64(), 10))
+			}
+			if !item.OnStartupWaitForBgp.IsNull() && !item.OnStartupWaitForBgp.IsUnknown() {
+				if item.OnStartupWaitForBgp.ValueBool() {
+					body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"on-startup.wait-for-bgp", map[string]string{})
+				}
+			}
+			if !item.AdvertiseExternal.IsNull() && !item.AdvertiseExternal.IsUnknown() {
+				if item.AdvertiseExternal.ValueBool() {
+					body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"advertise.external", map[string]string{})
+				}
+			}
+			if !item.AdvertiseInterlevel.IsNull() && !item.AdvertiseInterlevel.IsUnknown() {
+				if item.AdvertiseInterlevel.ValueBool() {
+					body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"advertise.interlevel", map[string]string{})
+				}
+			}
+		}
+	}
 	if len(data.Nets) > 0 {
 		body, _ = sjson.Set(body, "nets.net", []interface{}{})
 		for index, item := range data.Nets {
 			if !item.NetId.IsNull() && !item.NetId.IsUnknown() {
 				body, _ = sjson.Set(body, "nets.net"+"."+strconv.Itoa(index)+"."+"net-id", item.NetId.ValueString())
-			}
-		}
-	}
-	if len(data.AddressFamilies) > 0 {
-		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
-		for index, item := range data.AddressFamilies {
-			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
-			}
-			if !item.SafName.IsNull() && !item.SafName.IsUnknown() {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"saf-name", item.SafName.ValueString())
-			}
-			if !item.MplsLdpAutoConfig.IsNull() && !item.MplsLdpAutoConfig.IsUnknown() {
-				if item.MplsLdpAutoConfig.ValueBool() {
-					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"mpls.ldp.auto-config", map[string]string{})
-				}
-			}
-			if !item.MetricStyleNarrow.IsNull() && !item.MetricStyleNarrow.IsUnknown() {
-				if item.MetricStyleNarrow.ValueBool() {
-					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.narrow", map[string]string{})
-				}
-			}
-			if !item.MetricStyleWide.IsNull() && !item.MetricStyleWide.IsUnknown() {
-				if item.MetricStyleWide.ValueBool() {
-					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.wide", map[string]string{})
-				}
-			}
-			if !item.MetricStyleTransition.IsNull() && !item.MetricStyleTransition.IsUnknown() {
-				if item.MetricStyleTransition.ValueBool() {
-					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"metric-style.transition", map[string]string{})
-				}
-			}
-			if !item.RouterIdInterfaceName.IsNull() && !item.RouterIdInterfaceName.IsUnknown() {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.interface-name", item.RouterIdInterfaceName.ValueString())
-			}
-			if !item.RouterIdIpAddress.IsNull() && !item.RouterIdIpAddress.IsUnknown() {
-				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"router-id.ip-address", item.RouterIdIpAddress.ValueString())
-			}
-			if !item.DefaultInformationOriginate.IsNull() && !item.DefaultInformationOriginate.IsUnknown() {
-				if item.DefaultInformationOriginate.ValueBool() {
-					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"default-information.originate", map[string]string{})
-				}
 			}
 		}
 	}
@@ -163,6 +205,152 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.IsType = types.StringNull()
 	}
+	for i := range data.SetOverloadBitLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "set-overload-bit-levels.level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-id"); value.Exists() && !data.SetOverloadBitLevels[i].LevelId.IsNull() {
+			data.SetOverloadBitLevels[i].LevelId = types.Int64Value(value.Int())
+		} else {
+			data.SetOverloadBitLevels[i].LevelId = types.Int64Null()
+		}
+		if value := r.Get("on-startup.advertise-as-overloaded"); !data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded.IsNull() {
+			if value.Exists() {
+				data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+			} else {
+				data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+			}
+		} else {
+			data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded = types.BoolNull()
+		}
+		if value := r.Get("on-startup.advertise-as-overloaded.time-to-advertise"); value.Exists() && !data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() {
+			data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(value.Int())
+		} else {
+			data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Null()
+		}
+		if value := r.Get("on-startup.wait-for-bgp"); !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() {
+			if value.Exists() {
+				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolValue(true)
+			} else {
+				data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolValue(false)
+			}
+		} else {
+			data.SetOverloadBitLevels[i].OnStartupWaitForBgp = types.BoolNull()
+		}
+		if value := r.Get("advertise.external"); !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() {
+			if value.Exists() {
+				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolValue(true)
+			} else {
+				data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolValue(false)
+			}
+		} else {
+			data.SetOverloadBitLevels[i].AdvertiseExternal = types.BoolNull()
+		}
+		if value := r.Get("advertise.interlevel"); !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() {
+			if value.Exists() {
+				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolValue(true)
+			} else {
+				data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolValue(false)
+			}
+		} else {
+			data.SetOverloadBitLevels[i].AdvertiseInterlevel = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "nsr"); !data.Nsr.IsNull() {
+		if value.Exists() {
+			data.Nsr = types.BoolValue(true)
+		} else {
+			data.Nsr = types.BoolValue(false)
+		}
+	} else {
+		data.Nsr = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "nsf.cisco"); !data.NsfCisco.IsNull() {
+		if value.Exists() {
+			data.NsfCisco = types.BoolValue(true)
+		} else {
+			data.NsfCisco = types.BoolValue(false)
+		}
+	} else {
+		data.NsfCisco = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "nsf.ietf"); !data.NsfIetf.IsNull() {
+		if value.Exists() {
+			data.NsfIetf = types.BoolValue(true)
+		} else {
+			data.NsfIetf = types.BoolValue(false)
+		}
+	} else {
+		data.NsfIetf = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() && !data.NsfLifetime.IsNull() {
+		data.NsfLifetime = types.Int64Value(value.Int())
+	} else {
+		data.NsfLifetime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() && !data.NsfInterfaceTimer.IsNull() {
+		data.NsfInterfaceTimer = types.Int64Value(value.Int())
+	} else {
+		data.NsfInterfaceTimer = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() && !data.NsfInterfaceExpires.IsNull() {
+		data.NsfInterfaceExpires = types.Int64Value(value.Int())
+	} else {
+		data.NsfInterfaceExpires = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); !data.LogAdjacencyChanges.IsNull() {
+		if value.Exists() {
+			data.LogAdjacencyChanges = types.BoolValue(true)
+		} else {
+			data.LogAdjacencyChanges = types.BoolValue(false)
+		}
+	} else {
+		data.LogAdjacencyChanges = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() && !data.LspGenIntervalMaximumWait.IsNull() {
+		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
+	} else {
+		data.LspGenIntervalMaximumWait = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() && !data.LspGenIntervalInitialWait.IsNull() {
+		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
+	} else {
+		data.LspGenIntervalInitialWait = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() && !data.LspGenIntervalSecondaryWait.IsNull() {
+		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
+	} else {
+		data.LspGenIntervalSecondaryWait = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "lsp-refresh-interval.lsp-refresh-interval-time"); value.Exists() && !data.LspRefreshInterval.IsNull() {
+		data.LspRefreshInterval = types.Int64Value(value.Int())
+	} else {
+		data.LspRefreshInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "max-lsp-lifetime.max-lsp-lifetime"); value.Exists() && !data.MaxLspLifetime.IsNull() {
+		data.MaxLspLifetime = types.Int64Value(value.Int())
+	} else {
+		data.MaxLspLifetime = types.Int64Null()
+	}
 	for i := range data.Nets {
 		keys := [...]string{"net-id"}
 		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
@@ -190,95 +378,6 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 			data.Nets[i].NetId = types.StringValue(value.String())
 		} else {
 			data.Nets[i].NetId = types.StringNull()
-		}
-	}
-	for i := range data.AddressFamilies {
-		keys := [...]string{"af-name", "saf-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString(), data.AddressFamilies[i].SafName.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "address-families.address-family").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("af-name"); value.Exists() && !data.AddressFamilies[i].AfName.IsNull() {
-			data.AddressFamilies[i].AfName = types.StringValue(value.String())
-		} else {
-			data.AddressFamilies[i].AfName = types.StringNull()
-		}
-		if value := r.Get("saf-name"); value.Exists() && !data.AddressFamilies[i].SafName.IsNull() {
-			data.AddressFamilies[i].SafName = types.StringValue(value.String())
-		} else {
-			data.AddressFamilies[i].SafName = types.StringNull()
-		}
-		if value := r.Get("mpls.ldp.auto-config"); !data.AddressFamilies[i].MplsLdpAutoConfig.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolValue(false)
-			}
-		} else {
-			data.AddressFamilies[i].MplsLdpAutoConfig = types.BoolNull()
-		}
-		if value := r.Get("metric-style.narrow"); !data.AddressFamilies[i].MetricStyleNarrow.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].MetricStyleNarrow = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].MetricStyleNarrow = types.BoolValue(false)
-			}
-		} else {
-			data.AddressFamilies[i].MetricStyleNarrow = types.BoolNull()
-		}
-		if value := r.Get("metric-style.wide"); !data.AddressFamilies[i].MetricStyleWide.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].MetricStyleWide = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].MetricStyleWide = types.BoolValue(false)
-			}
-		} else {
-			data.AddressFamilies[i].MetricStyleWide = types.BoolNull()
-		}
-		if value := r.Get("metric-style.transition"); !data.AddressFamilies[i].MetricStyleTransition.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].MetricStyleTransition = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].MetricStyleTransition = types.BoolValue(false)
-			}
-		} else {
-			data.AddressFamilies[i].MetricStyleTransition = types.BoolNull()
-		}
-		if value := r.Get("router-id.interface-name"); value.Exists() && !data.AddressFamilies[i].RouterIdInterfaceName.IsNull() {
-			data.AddressFamilies[i].RouterIdInterfaceName = types.StringValue(value.String())
-		} else {
-			data.AddressFamilies[i].RouterIdInterfaceName = types.StringNull()
-		}
-		if value := r.Get("router-id.ip-address"); value.Exists() && !data.AddressFamilies[i].RouterIdIpAddress.IsNull() {
-			data.AddressFamilies[i].RouterIdIpAddress = types.StringValue(value.String())
-		} else {
-			data.AddressFamilies[i].RouterIdIpAddress = types.StringNull()
-		}
-		if value := r.Get("default-information.originate"); !data.AddressFamilies[i].DefaultInformationOriginate.IsNull() {
-			if value.Exists() {
-				data.AddressFamilies[i].DefaultInformationOriginate = types.BoolValue(true)
-			} else {
-				data.AddressFamilies[i].DefaultInformationOriginate = types.BoolValue(false)
-			}
-		} else {
-			data.AddressFamilies[i].DefaultInformationOriginate = types.BoolNull()
 		}
 	}
 	for i := range data.Interfaces {
@@ -380,6 +479,84 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "set-overload-bit-levels.level"); value.Exists() {
+		data.SetOverloadBitLevels = make([]RouterISISSetOverloadBitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISSetOverloadBitLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("on-startup.advertise-as-overloaded"); cValue.Exists() {
+				item.OnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+			} else {
+				item.OnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+			}
+			if cValue := v.Get("on-startup.advertise-as-overloaded.time-to-advertise"); cValue.Exists() {
+				item.OnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
+				item.OnStartupWaitForBgp = types.BoolValue(true)
+			} else {
+				item.OnStartupWaitForBgp = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertise.external"); cValue.Exists() {
+				item.AdvertiseExternal = types.BoolValue(true)
+			} else {
+				item.AdvertiseExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertise.interlevel"); cValue.Exists() {
+				item.AdvertiseInterlevel = types.BoolValue(true)
+			} else {
+				item.AdvertiseInterlevel = types.BoolValue(false)
+			}
+			data.SetOverloadBitLevels = append(data.SetOverloadBitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
+		data.Nsr = types.BoolValue(true)
+	} else {
+		data.Nsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.cisco"); value.Exists() {
+		data.NsfCisco = types.BoolValue(true)
+	} else {
+		data.NsfCisco = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.ietf"); value.Exists() {
+		data.NsfIetf = types.BoolValue(true)
+	} else {
+		data.NsfIetf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() {
+		data.NsfLifetime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() {
+		data.NsfInterfaceTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() {
+		data.NsfInterfaceExpires = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() {
+		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() {
+		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() {
+		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-refresh-interval.lsp-refresh-interval-time"); value.Exists() {
+		data.LspRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "max-lsp-lifetime.max-lsp-lifetime"); value.Exists() {
+		data.MaxLspLifetime = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
 		data.Nets = make([]RouterISISNets, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -388,51 +565,6 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 				item.NetId = types.StringValue(cValue.String())
 			}
 			data.Nets = append(data.Nets, item)
-			return true
-		})
-	}
-	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
-		data.AddressFamilies = make([]RouterISISAddressFamilies, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilies{}
-			if cValue := v.Get("af-name"); cValue.Exists() {
-				item.AfName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("saf-name"); cValue.Exists() {
-				item.SafName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("mpls.ldp.auto-config"); cValue.Exists() {
-				item.MplsLdpAutoConfig = types.BoolValue(true)
-			} else {
-				item.MplsLdpAutoConfig = types.BoolValue(false)
-			}
-			if cValue := v.Get("metric-style.narrow"); cValue.Exists() {
-				item.MetricStyleNarrow = types.BoolValue(true)
-			} else {
-				item.MetricStyleNarrow = types.BoolValue(false)
-			}
-			if cValue := v.Get("metric-style.wide"); cValue.Exists() {
-				item.MetricStyleWide = types.BoolValue(true)
-			} else {
-				item.MetricStyleWide = types.BoolValue(false)
-			}
-			if cValue := v.Get("metric-style.transition"); cValue.Exists() {
-				item.MetricStyleTransition = types.BoolValue(true)
-			} else {
-				item.MetricStyleTransition = types.BoolValue(false)
-			}
-			if cValue := v.Get("router-id.interface-name"); cValue.Exists() {
-				item.RouterIdInterfaceName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("router-id.ip-address"); cValue.Exists() {
-				item.RouterIdIpAddress = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("default-information.originate"); cValue.Exists() {
-				item.DefaultInformationOriginate = types.BoolValue(true)
-			} else {
-				item.DefaultInformationOriginate = types.BoolValue(false)
-			}
-			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
 	}
@@ -492,6 +624,36 @@ func (data *RouterISIS) fromPlan(ctx context.Context, plan RouterISIS) {
 
 func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISIS) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.SetOverloadBitLevels {
+		keys := [...]string{"level-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SetOverloadBitLevels[i].LevelId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SetOverloadBitLevels {
+			found = true
+			if state.SetOverloadBitLevels[i].LevelId.ValueInt64() != data.SetOverloadBitLevels[j].LevelId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Nets {
 		keys := [...]string{"net-id"}
 		stateKeyValues := [...]string{state.Nets[i].NetId.ValueString()}
@@ -520,42 +682,6 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
-		}
-	}
-	for i := range state.AddressFamilies {
-		keys := [...]string{"af-name", "saf-name"}
-		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString(), state.AddressFamilies[i].SafName.ValueString()}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if !reflect.ValueOf(state.AddressFamilies[i].SafName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AddressFamilies {
-			found = true
-			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
-				found = false
-			}
-			if state.AddressFamilies[i].SafName.ValueString() != data.AddressFamilies[j].SafName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {

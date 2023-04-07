@@ -7,6 +7,49 @@ attributes:
     example: P1
   - yang_name: is-type
     example: level-1
+  - yang_name: set-overload-bit-levels/level
+    tf_name: set_overload_bit_levels
+    type: List
+    attributes:
+      - yang_name: level-id
+        id: true
+        example: 1
+      - yang_name: on-startup/advertise-as-overloaded
+        example: true
+      - yang_name: on-startup/advertise-as-overloaded/time-to-advertise
+        example: 10
+      - yang_name: on-startup/wait-for-bgp
+        example: false
+      - yang_name: advertise/external
+        example: true
+      - yang_name: advertise/interlevel
+        example: true
+  - yang_name: nsr
+    example: true
+  - yang_name: nsf/cisco
+    example: true
+  - yang_name: nsf/ietf
+    example: false
+  - yang_name: nsf/lifetime
+    example: 10
+  - yang_name: nsf/interface-timer
+    example: 5
+  - yang_name: nsf/interface-expires
+    example: 2
+  - yang_name: log/adjacency/changes
+    example: true
+  - yang_name: lsp-gen-interval/maximum-wait
+    example: 5000
+  - yang_name: lsp-gen-interval/initial-wait
+    example: 50
+  - yang_name: lsp-gen-interval/secondary-wait
+    example: 200
+  - yang_name: lsp-refresh-interval/lsp-refresh-interval-time
+    tf_name: lsp_refresh_interval
+    example: 65000
+  - yang_name: max-lsp-lifetime/max-lsp-lifetime
+    tf_name: max_lsp_lifetime
+    example: 65535
   - yang_name: nets/net
     tf_name: nets
     type: List
@@ -14,31 +57,6 @@ attributes:
       - yang_name: net-id
         id: true
         example: 49.0001.2222.2222.2222.00
-  - yang_name: address-families/address-family
-    tf_name: address_families
-    type: List
-    attributes:
-      - yang_name: af-name
-        id: true
-        example: ipv4
-      - yang_name: saf-name
-        id: true
-        example: unicast
-      - yang_name: mpls/ldp/auto-config
-        example: false
-      - yang_name: metric-style/narrow
-        example: false
-      - yang_name: metric-style/wide
-        example: true
-      - yang_name: metric-style/transition
-        example: false
-      - yang_name: router-id/interface-name
-        example: GigabitEthernet0/0/0/1
-        exclude_test: true
-      - yang_name: router-id/ip-address
-        example: 1.2.3.4
-      - yang_name: default-information/originate
-        example: true
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List

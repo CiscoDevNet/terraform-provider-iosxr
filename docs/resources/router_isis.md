@@ -16,21 +16,31 @@ This resource can manage the Router ISIS configuration.
 resource "iosxr_router_isis" "example" {
   process_id = "P1"
   is_type    = "level-1"
+  set_overload_bit_levels = [
+    {
+      level_id                                             = 1
+      on_startup_advertise_as_overloaded                   = true
+      on_startup_advertise_as_overloaded_time_to_advertise = 10
+      on_startup_wait_for_bgp                              = false
+      advertise_external                                   = true
+      advertise_interlevel                                 = true
+    }
+  ]
+  nsr                             = true
+  nsf_cisco                       = true
+  nsf_ietf                        = false
+  nsf_lifetime                    = 10
+  nsf_interface_timer             = 5
+  nsf_interface_expires           = 2
+  log_adjacency_changes           = true
+  lsp_gen_interval_maximum_wait   = 5000
+  lsp_gen_interval_initial_wait   = 50
+  lsp_gen_interval_secondary_wait = 200
+  lsp_refresh_interval            = 65000
+  max_lsp_lifetime                = 65535
   nets = [
     {
       net_id = "49.0001.2222.2222.2222.00"
-    }
-  ]
-  address_families = [
-    {
-      af_name                       = "ipv4"
-      saf_name                      = "unicast"
-      mpls_ldp_auto_config          = false
-      metric_style_narrow           = false
-      metric_style_wide             = true
-      metric_style_transition       = false
-      router_id_ip_address          = "1.2.3.4"
-      default_information_originate = true
     }
   ]
   interfaces = [
@@ -58,34 +68,36 @@ resource "iosxr_router_isis" "example" {
 
 ### Optional
 
-- `address_families` (Attributes List) IS-IS address family (see [below for nested schema](#nestedatt--address_families))
 - `device` (String) A device name from the provider configuration.
 - `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
   - Choices: `level-1`, `level-1-2`, `level-2-only`
+- `log_adjacency_changes` (Boolean) Enable logging adjacency state changes
+- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP
+  - Range: `0`-`120000`
+- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP
+  - Range: `0`-`120000`
+- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
+  - Range: `0`-`120000`
+- `lsp_refresh_interval` (Number) Set LSP refresh interval
+  - Range: `1`-`65535`
+- `max_lsp_lifetime` (Number) Set maximum LSP lifetime
+  - Range: `1`-`65535`
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
+- `nsf_cisco` (Boolean) Cisco Proprietary NSF restart
+- `nsf_ietf` (Boolean) IETF NSF restar
+- `nsf_interface_expires` (Number) # of times T1 can expire waiting for the restart ACK
+  - Range: `1`-`10`
+- `nsf_interface_timer` (Number) Timer used to wait for a restart ACK (seconds)
+  - Range: `1`-`20`
+- `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
+  - Range: `5`-`300`
+- `nsr` (Boolean) Enable NSR
+- `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
-
-<a id="nestedatt--address_families"></a>
-### Nested Schema for `address_families`
-
-Optional:
-
-- `af_name` (String) Address family name
-  - Choices: `ipv4`, `ipv6`
-- `default_information_originate` (Boolean) Distribute a default route
-- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
-- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
-- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
-- `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
-- `router_id_interface_name` (String) Router ID Interface
-- `router_id_ip_address` (String) Router ID address
-- `saf_name` (String) Sub address family name
-  - Choices: `multicast`, `unicast`
-
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -111,6 +123,24 @@ Optional:
 Optional:
 
 - `net_id` (String) A Network Entity Title (NET) for this process
+
+
+<a id="nestedatt--set_overload_bit_levels"></a>
+### Nested Schema for `set_overload_bit_levels`
+
+Required:
+
+- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+  - Range: `5`-`86400`
+
+Optional:
+
+- `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
+- `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
+- `level_id` (Number) Set overload-bit for one level only
+  - Range: `1`-`2`
+- `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 ## Import
 

@@ -21,24 +21,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*RouterISISInterfaceAddressFamilyResource)(nil)
+var _ resource.Resource = (*RouterISISInterfaceResource)(nil)
 
-func NewRouterISISInterfaceAddressFamilyResource() resource.Resource {
-	return &RouterISISInterfaceAddressFamilyResource{}
+func NewRouterISISInterfaceResource() resource.Resource {
+	return &RouterISISInterfaceResource{}
 }
 
-type RouterISISInterfaceAddressFamilyResource struct {
+type RouterISISInterfaceResource struct {
 	client *client.Client
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_isis_interface_address_family"
+func (r *RouterISISInterfaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_isis_interface"
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Router ISIS Interface Address Family configuration.",
+		MarkdownDescription: "This resource can manage the Router ISIS Interface configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -72,71 +72,70 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"af_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Address family name").AddStringEnumDescription("ipv4", "ipv6").String,
-				Required:            true,
+			"circuit_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure circuit type for interface").AddStringEnumDescription("level-1", "level-1-2", "level-2-only").String,
+				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("ipv4", "ipv6"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
-			"saf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sub address family name").AddStringEnumDescription("multicast", "unicast").String,
-				Required:            true,
+			"hello_padding_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable hello-padding").String,
+				Optional:            true,
+			},
+			"hello_padding_sometimes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable hello-padding during adjacency formation only").String,
+				Optional:            true,
+			},
+			"priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 127),
+				},
+			},
+			"point_to_point": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Treat active LAN interface as point-to-point").String,
+				Optional:            true,
+			},
+			"passive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").String,
+				Optional:            true,
+			},
+			"suppressed": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not advertise connected prefixes of this interface").String,
+				Optional:            true,
+			},
+			"shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Shutdown IS-IS on this interface").String,
+				Optional:            true,
+			},
+			"hello_password_text": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The encrypted LSP/SNP password").String,
+				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("multicast", "unicast"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"fast_reroute_per_prefix_levels": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").String,
+			"hello_password_hmac_md5": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The encrypted LSP/SNP password").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").AddIntegerRangeDescription(1, 2).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 2),
-							},
-						},
-						"ti_lfa": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
-							Optional:            true,
-						},
-					},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"tag": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set interface tag").AddIntegerRangeDescription(1, 4294967295).String,
+			"hello_password_keychain": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967295),
-				},
-			},
-			"prefix_sid_absolute": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Prefix Segement ID").AddIntegerRangeDescription(16000, 1048575).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048575),
-				},
-			},
-			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Prefix Segement ID").AddIntegerRangeDescription(16000, 1048575).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048575),
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
 		},
 	}
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterISISInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -144,8 +143,8 @@ func (r *RouterISISInterfaceAddressFamilyResource) Configure(ctx context.Context
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RouterISISInterfaceAddressFamily
+func (r *RouterISISInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterISISInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -184,8 +183,8 @@ func (r *RouterISISInterfaceAddressFamilyResource) Create(ctx context.Context, r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouterISISInterfaceAddressFamily
+func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterISISInterface
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -210,8 +209,8 @@ func (r *RouterISISInterfaceAddressFamilyResource) Read(ctx context.Context, req
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouterISISInterfaceAddressFamily
+func (r *RouterISISInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterISISInterface
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -266,8 +265,8 @@ func (r *RouterISISInterfaceAddressFamilyResource) Update(ctx context.Context, r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouterISISInterfaceAddressFamily
+func (r *RouterISISInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterISISInterface
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -289,6 +288,6 @@ func (r *RouterISISInterfaceAddressFamilyResource) Delete(ctx context.Context, r
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouterISISInterfaceAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

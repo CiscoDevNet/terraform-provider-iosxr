@@ -18,6 +18,13 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   interface_name = "GigabitEthernet0/0/0/1"
   af_name        = "ipv4"
   saf_name       = "unicast"
+  fast_reroute_per_prefix_levels = [
+    {
+      level_id = 1
+      ti_lfa   = true
+    }
+  ]
+  tag = 100
 }
 ```
 
@@ -36,10 +43,26 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
+- `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
+  - Range: `16000`-`1048575`
+- `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
+  - Range: `16000`-`1048575`
+- `tag` (Number) Set interface tag
+  - Range: `1`-`4294967295`
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_levels`
+
+Optional:
+
+- `level_id` (Number) Enable EPCFRR LFA for one level only
+  - Range: `1`-`2`
+- `ti_lfa` (Boolean) Enable TI LFA computation
 
 ## Import
 

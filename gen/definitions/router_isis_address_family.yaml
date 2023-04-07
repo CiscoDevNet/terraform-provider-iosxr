@@ -1,0 +1,93 @@
+---
+name: Router ISIS Address Family
+path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]
+doc_category: ISIS
+attributes:
+  - yang_name: process-id
+    example: P1
+  - yang_name: af-name
+    example: ipv4
+  - yang_name: saf-name
+    example: unicast
+  - yang_name: metric-style/narrow
+    example: false
+  - yang_name: metric-style/wide
+    example: true
+  - yang_name: metric-style/transition
+    example: false
+  - yang_name: metric-style/levels/level
+    tf_name: metric_style_levels
+    type: List
+    attributes:
+      - yang_name: level-id
+        id: true
+        example: 1
+      - yang_name: narrow
+        example: false
+      - yang_name: wide
+        example: true
+      - yang_name: transition
+        example: false
+  - yang_name: router-id/interface-name
+    example: GigabitEthernet0/0/0/1
+    exclude_test: true
+  - yang_name: router-id/ip-address
+    example: 1.2.3.4
+  - yang_name: default-information/originate
+    example: true
+  - yang_name: fast-reroute/delay-interval
+    example: 300
+  - yang_name: fast-reroute/per-link/priority-limit/critical
+    example: true
+  - yang_name: fast-reroute/per-link/priority-limit/high
+    example: false
+  - yang_name: fast-reroute/per-link/priority-limit/medium
+    example: false
+  - yang_name: fast-reroute/per-prefix/priority-limit/critical
+    example: true
+  - yang_name: fast-reroute/per-prefix/priority-limit/high
+    example: false
+  - yang_name: fast-reroute/per-prefix/priority-limit/medium
+    example: false
+  - yang_name: microloop/avoidance/protected
+    example: false
+  - yang_name: microloop/avoidance/segment-routing
+    example: true
+  - yang_name: advertise/passive-only
+    example: true
+  - yang_name: mpls/ldp/auto-config
+    example: false
+  - yang_name: mpls/traffic-eng/router-id/ip-address
+    example: 1.2.3.4
+  - yang_name: mpls/traffic-eng/router-id/interface
+    exclude_test: true
+    example: Loopback0
+  - yang_name: mpls/traffic-eng/level-1-2
+    example: false
+  - yang_name: mpls/traffic-eng/level-1
+    example: false
+  - yang_name: mpls/traffic-eng/level-2-only
+    example: true
+  - yang_name: spf-interval/maximum-wait/maximum-wait-time
+    tf_name: spf_interval_maximum_wait
+    example: 5000
+  - yang_name: spf-interval/initial-wait/initial-wait-time
+    tf_name: spf_interval_initial_wait
+    example: 50
+  - yang_name: spf-interval/secondary-wait/secondary-wait-time
+    tf_name: spf_interval_secondary_wait
+    example: 200
+  - yang_name: spf/prefix-priority/prefix-priority
+    tf_name: spf_prefix_priorities
+    type: List
+    attributes:
+      - yang_name: priority
+        id: true
+        example: critical
+      - yang_name: tag
+        example: 100
+      - yang_name: access-list-name
+        exclude_test: true
+        example: ACL1
+  - yang_name: segment-routing/mpls/sr-prefer
+    example: true

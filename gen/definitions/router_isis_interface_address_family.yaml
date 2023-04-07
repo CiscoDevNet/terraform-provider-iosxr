@@ -11,3 +11,25 @@ attributes:
     example: ipv4
   - yang_name: saf-name
     example: unicast
+  - yang_name: fast-reroute/per-prefix/per-prefix/levels/level
+    tf_name: fast_reroute_per_prefix_levels
+    type: List
+    attributes:
+      - yang_name: level-id
+        id: true
+        example: 1
+      - yang_name: ti-lfa
+        example: true
+  - yang_name: tag/interface-tag
+    tf_name: tag
+    example: 100
+  - yang_name: prefix-sid/sid/absolute/sid-value
+    tf_name: prefix_sid_absolute
+    optional: true
+    exclude_test: true
+    example: 16001
+  - yang_name: prefix-sid/strict-spf/absolute/sid-value
+    tf_name: prefix_sid_strict_spf_absolute
+    optional: true
+    exclude_test: true
+    example: 24001

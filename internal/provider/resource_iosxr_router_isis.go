@@ -69,6 +69,116 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
+			"set_overload_bit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set overload-bit for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set overload-bit for one level only").AddIntegerRangeDescription(1, 2).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"on_startup_advertise_as_overloaded": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").String,
+							Optional:            true,
+						},
+						"on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(5, 86400),
+							},
+						},
+						"on_startup_wait_for_bgp": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set overload bit on startup until BGP signals convergence, or timeout").String,
+							Optional:            true,
+						},
+						"advertise_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("If overload-bit set advertise IP prefixes learned from other protocols").String,
+							Optional:            true,
+						},
+						"advertise_interlevel": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("If overload-bit set advertise IP prefixes learned from another ISIS level").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable NSR").String,
+				Optional:            true,
+			},
+			"nsf_cisco": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco Proprietary NSF restart").String,
+				Optional:            true,
+			},
+			"nsf_ietf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IETF NSF restar").String,
+				Optional:            true,
+			},
+			"nsf_lifetime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum route lifetime following restart (seconds)").AddIntegerRangeDescription(5, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 300),
+				},
+			},
+			"nsf_interface_timer": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Timer used to wait for a restart ACK (seconds)").AddIntegerRangeDescription(1, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20),
+				},
+			},
+			"nsf_interface_expires": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("# of times T1 can expire waiting for the restart ACK").AddIntegerRangeDescription(1, 10).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 10),
+				},
+			},
+			"log_adjacency_changes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging adjacency state changes").String,
+				Optional:            true,
+			},
+			"lsp_gen_interval_maximum_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"lsp_gen_interval_initial_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"lsp_gen_interval_secondary_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"lsp_refresh_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set LSP refresh interval").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"max_lsp_lifetime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum LSP lifetime").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
 			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("A Network Entity Title (NET) for this process").String,
 				Optional:            true,
@@ -80,59 +190,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
-						},
-					},
-				},
-			},
-			"address_families": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS address family").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"af_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Address family name").AddStringEnumDescription("ipv4", "ipv6").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("ipv4", "ipv6"),
-							},
-						},
-						"saf_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Sub address family name").AddStringEnumDescription("multicast", "unicast").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("multicast", "unicast"),
-							},
-						},
-						"mpls_ldp_auto_config": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP interface auto-configuration").String,
-							Optional:            true,
-						},
-						"metric_style_narrow": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
-							Optional:            true,
-						},
-						"metric_style_wide": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
-							Optional:            true,
-						},
-						"metric_style_transition": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Send and accept both styles of TLVs during transition").String,
-							Optional:            true,
-						},
-						"router_id_interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Router ID Interface").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-						"router_id_ip_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Router ID address").String,
-							Optional:            true,
-						},
-						"default_information_originate": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
-							Optional:            true,
 						},
 					},
 				},

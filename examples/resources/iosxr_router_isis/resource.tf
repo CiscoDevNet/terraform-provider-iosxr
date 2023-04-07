@@ -1,21 +1,31 @@
 resource "iosxr_router_isis" "example" {
   process_id = "P1"
   is_type    = "level-1"
+  set_overload_bit_levels = [
+    {
+      level_id                                             = 1
+      on_startup_advertise_as_overloaded                   = true
+      on_startup_advertise_as_overloaded_time_to_advertise = 10
+      on_startup_wait_for_bgp                              = false
+      advertise_external                                   = true
+      advertise_interlevel                                 = true
+    }
+  ]
+  nsr                             = true
+  nsf_cisco                       = true
+  nsf_ietf                        = false
+  nsf_lifetime                    = 10
+  nsf_interface_timer             = 5
+  nsf_interface_expires           = 2
+  log_adjacency_changes           = true
+  lsp_gen_interval_maximum_wait   = 5000
+  lsp_gen_interval_initial_wait   = 50
+  lsp_gen_interval_secondary_wait = 200
+  lsp_refresh_interval            = 65000
+  max_lsp_lifetime                = 65535
   nets = [
     {
       net_id = "49.0001.2222.2222.2222.00"
-    }
-  ]
-  address_families = [
-    {
-      af_name                       = "ipv4"
-      saf_name                      = "unicast"
-      mpls_ldp_auto_config          = false
-      metric_style_narrow           = false
-      metric_style_wide             = true
-      metric_style_transition       = false
-      router_id_ip_address          = "1.2.3.4"
-      default_information_originate = true
     }
   ]
   interfaces = [

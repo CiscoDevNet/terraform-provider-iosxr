@@ -53,6 +53,86 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Area type (level)",
 				Computed:            true,
 			},
+			"set_overload_bit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set overload-bit for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: "Set overload-bit for one level only",
+							Computed:            true,
+						},
+						"on_startup_advertise_as_overloaded": schema.BoolAttribute{
+							MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
+							Computed:            true,
+						},
+						"on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+							MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
+							Computed:            true,
+						},
+						"on_startup_wait_for_bgp": schema.BoolAttribute{
+							MarkdownDescription: "Set overload bit on startup until BGP signals convergence, or timeout",
+							Computed:            true,
+						},
+						"advertise_external": schema.BoolAttribute{
+							MarkdownDescription: "If overload-bit set advertise IP prefixes learned from other protocols",
+							Computed:            true,
+						},
+						"advertise_interlevel": schema.BoolAttribute{
+							MarkdownDescription: "If overload-bit set advertise IP prefixes learned from another ISIS level",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: "Enable NSR",
+				Computed:            true,
+			},
+			"nsf_cisco": schema.BoolAttribute{
+				MarkdownDescription: "Cisco Proprietary NSF restart",
+				Computed:            true,
+			},
+			"nsf_ietf": schema.BoolAttribute{
+				MarkdownDescription: "IETF NSF restar",
+				Computed:            true,
+			},
+			"nsf_lifetime": schema.Int64Attribute{
+				MarkdownDescription: "Maximum route lifetime following restart (seconds)",
+				Computed:            true,
+			},
+			"nsf_interface_timer": schema.Int64Attribute{
+				MarkdownDescription: "Timer used to wait for a restart ACK (seconds)",
+				Computed:            true,
+			},
+			"nsf_interface_expires": schema.Int64Attribute{
+				MarkdownDescription: "# of times T1 can expire waiting for the restart ACK",
+				Computed:            true,
+			},
+			"log_adjacency_changes": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging adjacency state changes",
+				Computed:            true,
+			},
+			"lsp_gen_interval_maximum_wait": schema.Int64Attribute{
+				MarkdownDescription: "Maximum delay before generating an LSP",
+				Computed:            true,
+			},
+			"lsp_gen_interval_initial_wait": schema.Int64Attribute{
+				MarkdownDescription: "Initial delay before generating an LSP",
+				Computed:            true,
+			},
+			"lsp_gen_interval_secondary_wait": schema.Int64Attribute{
+				MarkdownDescription: "Secondary delay before generating an LSP",
+				Computed:            true,
+			},
+			"lsp_refresh_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set LSP refresh interval",
+				Computed:            true,
+			},
+			"max_lsp_lifetime": schema.Int64Attribute{
+				MarkdownDescription: "Set maximum LSP lifetime",
+				Computed:            true,
+			},
 			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: "A Network Entity Title (NET) for this process",
 				Computed:            true,
@@ -60,50 +140,6 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 					Attributes: map[string]schema.Attribute{
 						"net_id": schema.StringAttribute{
 							MarkdownDescription: "A Network Entity Title (NET) for this process",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"address_families": schema.ListNestedAttribute{
-				MarkdownDescription: "IS-IS address family",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"af_name": schema.StringAttribute{
-							MarkdownDescription: "Address family name",
-							Computed:            true,
-						},
-						"saf_name": schema.StringAttribute{
-							MarkdownDescription: "Sub address family name",
-							Computed:            true,
-						},
-						"mpls_ldp_auto_config": schema.BoolAttribute{
-							MarkdownDescription: "Enable LDP IGP interface auto-configuration",
-							Computed:            true,
-						},
-						"metric_style_narrow": schema.BoolAttribute{
-							MarkdownDescription: "Use old style of TLVs with narrow metric",
-							Computed:            true,
-						},
-						"metric_style_wide": schema.BoolAttribute{
-							MarkdownDescription: "Use new style of TLVs to carry wider metric",
-							Computed:            true,
-						},
-						"metric_style_transition": schema.BoolAttribute{
-							MarkdownDescription: "Send and accept both styles of TLVs during transition",
-							Computed:            true,
-						},
-						"router_id_interface_name": schema.StringAttribute{
-							MarkdownDescription: "Router ID Interface",
-							Computed:            true,
-						},
-						"router_id_ip_address": schema.StringAttribute{
-							MarkdownDescription: "Router ID address",
-							Computed:            true,
-						},
-						"default_information_originate": schema.BoolAttribute{
-							MarkdownDescription: "Distribute a default route",
 							Computed:            true,
 						},
 					},

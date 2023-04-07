@@ -5,18 +5,29 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
 type RouterISISInterfaceAddressFamily struct {
-	Device        types.String `tfsdk:"device"`
-	Id            types.String `tfsdk:"id"`
-	ProcessId     types.String `tfsdk:"process_id"`
-	InterfaceName types.String `tfsdk:"interface_name"`
-	AfName        types.String `tfsdk:"af_name"`
-	SafName       types.String `tfsdk:"saf_name"`
+	Device                     types.String                                                 `tfsdk:"device"`
+	Id                         types.String                                                 `tfsdk:"id"`
+	ProcessId                  types.String                                                 `tfsdk:"process_id"`
+	InterfaceName              types.String                                                 `tfsdk:"interface_name"`
+	AfName                     types.String                                                 `tfsdk:"af_name"`
+	SafName                    types.String                                                 `tfsdk:"saf_name"`
+	FastReroutePerPrefixLevels []RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels `tfsdk:"fast_reroute_per_prefix_levels"`
+	Tag                        types.Int64                                                  `tfsdk:"tag"`
+	PrefixSidAbsolute          types.Int64                                                  `tfsdk:"prefix_sid_absolute"`
+	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+}
+type RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels struct {
+	LevelId types.Int64 `tfsdk:"level_id"`
+	TiLfa   types.Bool  `tfsdk:"ti_lfa"`
 }
 
 func (data RouterISISInterfaceAddressFamily) getPath() string {
@@ -31,13 +42,113 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	if !data.SafName.IsNull() && !data.SafName.IsUnknown() {
 		body, _ = sjson.Set(body, "saf-name", data.SafName.ValueString())
 	}
+	if !data.Tag.IsNull() && !data.Tag.IsUnknown() {
+		body, _ = sjson.Set(body, "tag.interface-tag", strconv.FormatInt(data.Tag.ValueInt64(), 10))
+	}
+	if !data.PrefixSidAbsolute.IsNull() && !data.PrefixSidAbsolute.IsUnknown() {
+		body, _ = sjson.Set(body, "prefix-sid.sid.absolute.sid-value", strconv.FormatInt(data.PrefixSidAbsolute.ValueInt64(), 10))
+	}
+	if !data.PrefixSidStrictSpfAbsolute.IsNull() && !data.PrefixSidStrictSpfAbsolute.IsUnknown() {
+		body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.sid-value", strconv.FormatInt(data.PrefixSidStrictSpfAbsolute.ValueInt64(), 10))
+	}
+	if len(data.FastReroutePerPrefixLevels) > 0 {
+		body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level", []interface{}{})
+		for index, item := range data.FastReroutePerPrefixLevels {
+			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
+				body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
+			}
+			if !item.TiLfa.IsNull() && !item.TiLfa.IsUnknown() {
+				if item.TiLfa.ValueBool() {
+					body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level"+"."+strconv.Itoa(index)+"."+"ti-lfa", map[string]string{})
+				}
+			}
+		}
+	}
 	return body
 }
 
 func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+	for i := range data.FastReroutePerPrefixLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-id"); value.Exists() && !data.FastReroutePerPrefixLevels[i].LevelId.IsNull() {
+			data.FastReroutePerPrefixLevels[i].LevelId = types.Int64Value(value.Int())
+		} else {
+			data.FastReroutePerPrefixLevels[i].LevelId = types.Int64Null()
+		}
+		if value := r.Get("ti-lfa"); !data.FastReroutePerPrefixLevels[i].TiLfa.IsNull() {
+			if value.Exists() {
+				data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolValue(true)
+			} else {
+				data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolValue(false)
+			}
+		} else {
+			data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "tag.interface-tag"); value.Exists() && !data.Tag.IsNull() {
+		data.Tag = types.Int64Value(value.Int())
+	} else {
+		data.Tag = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.sid.absolute.sid-value"); value.Exists() && !data.PrefixSidAbsolute.IsNull() {
+		data.PrefixSidAbsolute = types.Int64Value(value.Int())
+	} else {
+		data.PrefixSidAbsolute = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.sid-value"); value.Exists() && !data.PrefixSidStrictSpfAbsolute.IsNull() {
+		data.PrefixSidStrictSpfAbsolute = types.Int64Value(value.Int())
+	} else {
+		data.PrefixSidStrictSpfAbsolute = types.Int64Null()
+	}
 }
 
 func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level"); value.Exists() {
+		data.FastReroutePerPrefixLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ti-lfa"); cValue.Exists() {
+				item.TiLfa = types.BoolValue(true)
+			} else {
+				item.TiLfa = types.BoolValue(false)
+			}
+			data.FastReroutePerPrefixLevels = append(data.FastReroutePerPrefixLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "tag.interface-tag"); value.Exists() {
+		data.Tag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.sid.absolute.sid-value"); value.Exists() {
+		data.PrefixSidAbsolute = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.sid-value"); value.Exists() {
+		data.PrefixSidStrictSpfAbsolute = types.Int64Value(value.Int())
+	}
 }
 
 func (data *RouterISISInterfaceAddressFamily) fromPlan(ctx context.Context, plan RouterISISInterfaceAddressFamily) {
@@ -50,10 +161,41 @@ func (data *RouterISISInterfaceAddressFamily) fromPlan(ctx context.Context, plan
 
 func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.FastReroutePerPrefixLevels {
+		keys := [...]string{"level-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FastReroutePerPrefixLevels {
+			found = true
+			if state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64() != data.FastReroutePerPrefixLevels[j].LevelId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

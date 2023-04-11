@@ -65,6 +65,22 @@ func (d *Syslog_vrfDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"host_ipv6_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: "IPV6 address of the logging host",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ipv6_address": schema.StringAttribute{
+							MarkdownDescription: "IPV6 address of the logging host",
+							Computed:            true,
+						},
+						"severity": schema.StringAttribute{
+							MarkdownDescription: "Set severity of  messages for particular remote host/vrf",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

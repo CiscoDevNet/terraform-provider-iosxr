@@ -10,7 +10,7 @@ resource "iosxr_syslog" "example" {
   facility_level               = "local7"
   hostnameprefix               = "ALMTX1P01"
   suppress_duplicates          = true
-  logging_source_interfaces = [
+  source_interfaces = [
     {
       source_interface_name = "Loopback10"
     }

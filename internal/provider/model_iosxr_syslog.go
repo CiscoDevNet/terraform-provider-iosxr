@@ -14,22 +14,22 @@ import (
 )
 
 type Syslog struct {
-	Device                    types.String                    `tfsdk:"device"`
-	Id                        types.String                    `tfsdk:"id"`
-	Ipv4Dscp                  types.String                    `tfsdk:"ipv4_dscp"`
-	Trap                      types.String                    `tfsdk:"trap"`
-	EventsDisplayLocation     types.Bool                      `tfsdk:"events_display_location"`
-	EventsLevel               types.String                    `tfsdk:"events_level"`
-	Console                   types.String                    `tfsdk:"console"`
-	Monitor                   types.String                    `tfsdk:"monitor"`
-	BufferedLoggingBufferSize types.Int64                     `tfsdk:"buffered_logging_buffer_size"`
-	BufferedLevel             types.String                    `tfsdk:"buffered_level"`
-	FacilityLevel             types.String                    `tfsdk:"facility_level"`
-	Hostnameprefix            types.String                    `tfsdk:"hostnameprefix"`
-	SuppressDuplicates        types.Bool                      `tfsdk:"suppress_duplicates"`
-	LoggingSourceInterfaces   []SyslogLoggingSourceInterfaces `tfsdk:"logging_source_interfaces"`
+	Device                    types.String             `tfsdk:"device"`
+	Id                        types.String             `tfsdk:"id"`
+	Ipv4Dscp                  types.String             `tfsdk:"ipv4_dscp"`
+	Trap                      types.String             `tfsdk:"trap"`
+	EventsDisplayLocation     types.Bool               `tfsdk:"events_display_location"`
+	EventsLevel               types.String             `tfsdk:"events_level"`
+	Console                   types.String             `tfsdk:"console"`
+	Monitor                   types.String             `tfsdk:"monitor"`
+	BufferedLoggingBufferSize types.Int64              `tfsdk:"buffered_logging_buffer_size"`
+	BufferedLevel             types.String             `tfsdk:"buffered_level"`
+	FacilityLevel             types.String             `tfsdk:"facility_level"`
+	Hostnameprefix            types.String             `tfsdk:"hostnameprefix"`
+	SuppressDuplicates        types.Bool               `tfsdk:"suppress_duplicates"`
+	SourceInterfaces          []SyslogSourceInterfaces `tfsdk:"source_interfaces"`
 }
-type SyslogLoggingSourceInterfaces struct {
+type SyslogSourceInterfaces struct {
 	SourceInterfaceName types.String `tfsdk:"source_interface_name"`
 }
 
@@ -76,9 +76,9 @@ func (data Syslog) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "suppress.duplicates", map[string]string{})
 		}
 	}
-	if len(data.LoggingSourceInterfaces) > 0 {
+	if len(data.SourceInterfaces) > 0 {
 		body, _ = sjson.Set(body, "source-interfaces.source-interface", []interface{}{})
-		for index, item := range data.LoggingSourceInterfaces {
+		for index, item := range data.SourceInterfaces {
 			if !item.SourceInterfaceName.IsNull() && !item.SourceInterfaceName.IsUnknown() {
 				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"source-interface-name", item.SourceInterfaceName.ValueString())
 			}
@@ -151,9 +151,9 @@ func (data *Syslog) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SuppressDuplicates = types.BoolNull()
 	}
-	for i := range data.LoggingSourceInterfaces {
+	for i := range data.SourceInterfaces {
 		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.LoggingSourceInterfaces[i].SourceInterfaceName.ValueString()}
+		keyValues := [...]string{data.SourceInterfaces[i].SourceInterfaceName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "source-interfaces.source-interface").ForEach(
@@ -174,10 +174,10 @@ func (data *Syslog) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("source-interface-name"); value.Exists() && !data.LoggingSourceInterfaces[i].SourceInterfaceName.IsNull() {
-			data.LoggingSourceInterfaces[i].SourceInterfaceName = types.StringValue(value.String())
+		if value := r.Get("source-interface-name"); value.Exists() && !data.SourceInterfaces[i].SourceInterfaceName.IsNull() {
+			data.SourceInterfaces[i].SourceInterfaceName = types.StringValue(value.String())
 		} else {
-			data.LoggingSourceInterfaces[i].SourceInterfaceName = types.StringNull()
+			data.SourceInterfaces[i].SourceInterfaceName = types.StringNull()
 		}
 	}
 }
@@ -221,13 +221,13 @@ func (data *Syslog) fromBody(ctx context.Context, res []byte) {
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
-		data.LoggingSourceInterfaces = make([]SyslogLoggingSourceInterfaces, 0)
+		data.SourceInterfaces = make([]SyslogSourceInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SyslogLoggingSourceInterfaces{}
+			item := SyslogSourceInterfaces{}
 			if cValue := v.Get("source-interface-name"); cValue.Exists() {
 				item.SourceInterfaceName = types.StringValue(cValue.String())
 			}
-			data.LoggingSourceInterfaces = append(data.LoggingSourceInterfaces, item)
+			data.SourceInterfaces = append(data.SourceInterfaces, item)
 			return true
 		})
 	}
@@ -239,12 +239,12 @@ func (data *Syslog) fromPlan(ctx context.Context, plan Syslog) {
 
 func (data *Syslog) getDeletedListItems(ctx context.Context, state Syslog) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.LoggingSourceInterfaces {
+	for i := range state.SourceInterfaces {
 		keys := [...]string{"source-interface-name"}
-		stateKeyValues := [...]string{state.LoggingSourceInterfaces[i].SourceInterfaceName.ValueString()}
+		stateKeyValues := [...]string{state.SourceInterfaces[i].SourceInterfaceName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.LoggingSourceInterfaces[i].SourceInterfaceName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.SourceInterfaces[i].SourceInterfaceName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -252,9 +252,9 @@ func (data *Syslog) getDeletedListItems(ctx context.Context, state Syslog) []str
 		}
 
 		found := false
-		for j := range data.LoggingSourceInterfaces {
+		for j := range data.SourceInterfaces {
 			found = true
-			if state.LoggingSourceInterfaces[i].SourceInterfaceName.ValueString() != data.LoggingSourceInterfaces[j].SourceInterfaceName.ValueString() {
+			if state.SourceInterfaces[i].SourceInterfaceName.ValueString() != data.SourceInterfaces[j].SourceInterfaceName.ValueString() {
 				found = false
 			}
 			if found {

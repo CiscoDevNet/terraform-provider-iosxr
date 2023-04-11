@@ -121,7 +121,7 @@ func (r *SyslogResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress consecutive duplicate messages").String,
 				Optional:            true,
 			},
-			"logging_source_interfaces": schema.ListNestedAttribute{
+			"source_interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

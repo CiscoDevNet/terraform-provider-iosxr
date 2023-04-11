@@ -1,3 +1,3 @@
 data "iosxr_syslog_vrf" "example" {
-  vrf_name = "CORE-Mgmt"
+  vrf_name = "VRF1"
 }

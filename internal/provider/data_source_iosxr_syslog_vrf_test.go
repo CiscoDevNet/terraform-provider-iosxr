@@ -16,8 +16,10 @@ func TestAccDataSourceIosxrSyslog_vrf(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrSyslog_vrfConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_syslog_vrf.test", "host_ipv4_addresses.0.ipv4_address", "10.5.110.120"),
+					resource.TestCheckResourceAttr("data.iosxr_syslog_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"),
 					resource.TestCheckResourceAttr("data.iosxr_syslog_vrf.test", "host_ipv4_addresses.0.severity", "info"),
+					resource.TestCheckResourceAttr("data.iosxr_syslog_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
+					resource.TestCheckResourceAttr("data.iosxr_syslog_vrf.test", "host_ipv6_addresses.0.severity", "info"),
 				),
 			},
 		},
@@ -27,15 +29,19 @@ func TestAccDataSourceIosxrSyslog_vrf(t *testing.T) {
 const testAccDataSourceIosxrSyslog_vrfConfig = `
 
 resource "iosxr_syslog_vrf" "test" {
-	vrf_name = "CORE-Mgmt"
+	vrf_name = "VRF1"
 	host_ipv4_addresses = [{
-		ipv4_address = "10.5.110.120"
+		ipv4_address = "1.1.1.1"
+		severity = "info"
+	}]
+	host_ipv6_addresses = [{
+		ipv6_address = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
 		severity = "info"
 	}]
 }
 
 data "iosxr_syslog_vrf" "test" {
-	vrf_name = "CORE-Mgmt"
+	vrf_name = "VRF1"
 	depends_on = [iosxr_syslog_vrf.test]
 }
 `

@@ -27,7 +27,7 @@ func TestAccIosxrSyslog(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_syslog.test", "facility_level", "local7"),
 					resource.TestCheckResourceAttr("iosxr_syslog.test", "hostnameprefix", "ALMTX1P01"),
 					resource.TestCheckResourceAttr("iosxr_syslog.test", "suppress_duplicates", "true"),
-					resource.TestCheckResourceAttr("iosxr_syslog.test", "logging_source_interfaces.0.source_interface_name", "Loopback10"),
+					resource.TestCheckResourceAttr("iosxr_syslog.test", "source_interfaces.0.source_interface_name", "Loopback10"),
 				),
 			},
 			{
@@ -60,7 +60,7 @@ func testAccIosxrSyslogConfig_all() string {
 		facility_level = "local7"
 		hostnameprefix = "ALMTX1P01"
 		suppress_duplicates = true
-		logging_source_interfaces = [{
+		source_interfaces = [{
 			source_interface_name = "Loopback10"
 		}]
 	}

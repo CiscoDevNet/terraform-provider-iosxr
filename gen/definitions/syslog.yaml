@@ -1,23 +1,19 @@
 ---
 name: syslog
 path: Cisco-IOS-XR-um-logging-cfg:/logging
-doc_category: logging
+doc_category: Management
 attributes:
   - yang_name: ipv4/dscp
     example: cs6
   - yang_name: trap
-    type: true
     example: informational
   - yang_name : events/display-location
     example : true
   - yang_name : events/level
-    type: true
     example : informational
   - yang_name : console
-    type: true
     example : disable
   - yang_name : monitor
-    type: true
     example : disable
   - yang_name : buffered/logging-buffer-size
     example : 4000000
@@ -30,9 +26,10 @@ attributes:
   - yang_name : suppress/duplicates
     example : true
   - yang_name : source-interfaces/source-interface
-    tf_name : logging_source_interfaces
+    tf_name : source_interfaces
     type : List
     attributes: 
       - yang_name : source-interface-name
         id : true
         example : Loopback10
+      

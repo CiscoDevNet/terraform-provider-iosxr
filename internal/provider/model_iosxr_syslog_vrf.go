@@ -18,9 +18,14 @@ type Syslog_vrf struct {
 	Id                types.String                  `tfsdk:"id"`
 	VrfName           types.String                  `tfsdk:"vrf_name"`
 	HostIpv4Addresses []Syslog_vrfHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
+	HostIpv6Addresses []Syslog_vrfHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
 }
 type Syslog_vrfHostIpv4Addresses struct {
 	Ipv4Address types.String `tfsdk:"ipv4_address"`
+	Severity    types.String `tfsdk:"severity"`
+}
+type Syslog_vrfHostIpv6Addresses struct {
+	Ipv6Address types.String `tfsdk:"ipv6_address"`
 	Severity    types.String `tfsdk:"severity"`
 }
 
@@ -41,6 +46,17 @@ func (data Syslog_vrf) toBody(ctx context.Context) string {
 			}
 			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
 				body, _ = sjson.Set(body, "host-ipv4-addresses.host-ipv4-address"+"."+strconv.Itoa(index)+"."+"severity", item.Severity.ValueString())
+			}
+		}
+	}
+	if len(data.HostIpv6Addresses) > 0 {
+		body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address", []interface{}{})
+		for index, item := range data.HostIpv6Addresses {
+			if !item.Ipv6Address.IsNull() && !item.Ipv6Address.IsUnknown() {
+				body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address"+"."+strconv.Itoa(index)+"."+"ipv6-address", item.Ipv6Address.ValueString())
+			}
+			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
+				body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address"+"."+strconv.Itoa(index)+"."+"severity", item.Severity.ValueString())
 			}
 		}
 	}
@@ -82,6 +98,40 @@ func (data *Syslog_vrf) updateFromBody(ctx context.Context, res []byte) {
 			data.HostIpv4Addresses[i].Severity = types.StringNull()
 		}
 	}
+	for i := range data.HostIpv6Addresses {
+		keys := [...]string{"ipv6-address"}
+		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("ipv6-address"); value.Exists() && !data.HostIpv6Addresses[i].Ipv6Address.IsNull() {
+			data.HostIpv6Addresses[i].Ipv6Address = types.StringValue(value.String())
+		} else {
+			data.HostIpv6Addresses[i].Ipv6Address = types.StringNull()
+		}
+		if value := r.Get("severity"); value.Exists() && !data.HostIpv6Addresses[i].Severity.IsNull() {
+			data.HostIpv6Addresses[i].Severity = types.StringValue(value.String())
+		} else {
+			data.HostIpv6Addresses[i].Severity = types.StringNull()
+		}
+	}
 }
 
 func (data *Syslog_vrf) fromBody(ctx context.Context, res []byte) {
@@ -96,6 +146,20 @@ func (data *Syslog_vrf) fromBody(ctx context.Context, res []byte) {
 				item.Severity = types.StringValue(cValue.String())
 			}
 			data.HostIpv4Addresses = append(data.HostIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
+		data.HostIpv6Addresses = make([]Syslog_vrfHostIpv6Addresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := Syslog_vrfHostIpv6Addresses{}
+			if cValue := v.Get("ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			data.HostIpv6Addresses = append(data.HostIpv6Addresses, item)
 			return true
 		})
 	}
@@ -136,6 +200,36 @@ func (data *Syslog_vrf) getDeletedListItems(ctx context.Context, state Syslog_vr
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/host-ipv4-addresses/host-ipv4-address%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.HostIpv6Addresses {
+		keys := [...]string{"ipv6-address"}
+		stateKeyValues := [...]string{state.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.HostIpv6Addresses[i].Ipv6Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.HostIpv6Addresses {
+			found = true
+			if state.HostIpv6Addresses[i].Ipv6Address.ValueString() != data.HostIpv6Addresses[j].Ipv6Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/host-ipv6-addresses/host-ipv6-address%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

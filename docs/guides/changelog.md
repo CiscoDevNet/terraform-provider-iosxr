@@ -11,6 +11,7 @@ description: |-
 
 - Add `iosxr_mpls_traffic_eng` resource and data source
 - Add `iosxr_mpls_oam` resource and data source
+- Add `iosxr_segment_routing` resource and data source
 
 ## 0.1.6
 

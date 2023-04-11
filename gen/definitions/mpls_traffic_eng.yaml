@@ -1,0 +1,7 @@
+---
+name: MPLS Traffic Eng
+path: Cisco-IOS-XR-um-mpls-te-cfg:mpls
+doc_category: MPLS
+attributes:
+  - yang_name: traffic-eng
+    example: true

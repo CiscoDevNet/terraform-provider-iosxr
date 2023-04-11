@@ -1,3 +1,7 @@
+## 0.1.7 (unreleased)
+
+- Add `iosxr_mpls_traffic_eng` resource and data source
+
 ## 0.1.6
 
 - BREAKING CHANGE: Remove `address_families` from `iosxr_router_isis` resource and data source

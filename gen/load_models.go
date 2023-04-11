@@ -23,6 +23,8 @@ var models = []string{
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-mpls-te-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-mpls-oam-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-router-bgp-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-logging-cfg.yang",
+	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-logging-events-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-router-isis-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-router-ospf-cfg.yang",
 	"https://raw.githubusercontent.com/YangModels/yang/main/vendor/cisco/xr/761/Cisco-IOS-XR-um-snmp-server-cfg.yang",

@@ -1,0 +1,18 @@
+---
+name: syslog_vrf
+path: Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]
+doc_category: logging
+attributes:
+  - yang_name: vrf-name
+    id: true
+    example: CORE-Mgmt
+
+  - yang_name: host-ipv4-addresses/host-ipv4-address
+    tf_name: host_ipv4_addresses  
+    type: List
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 10.5.110.120
+      - yang_name: severity
+        example: info

@@ -33,7 +33,7 @@ func TestAccIosxrLogging(t *testing.T) {
 			{
 				ResourceName:  "iosxr_logging.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging",
+				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:logging",
 			},
 		},
 	})

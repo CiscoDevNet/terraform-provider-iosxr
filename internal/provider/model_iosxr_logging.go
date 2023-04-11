@@ -34,7 +34,7 @@ type LoggingSourceInterfaces struct {
 }
 
 func (data Logging) getPath() string {
-	return "Cisco-IOS-XR-um-logging-cfg:/logging"
+	return "Cisco-IOS-XR-um-logging-cfg:logging"
 }
 
 func (data Logging) toBody(ctx context.Context) string {

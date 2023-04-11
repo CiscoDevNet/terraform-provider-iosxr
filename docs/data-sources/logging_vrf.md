@@ -3,12 +3,12 @@
 page_title: "iosxr_logging_vrf Data Source - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
-  This data source can read the Logging_vrf configuration.
+  This data source can read the Logging VRF configuration.
 ---
 
 # iosxr_logging_vrf (Data Source)
 
-This data source can read the Logging_vrf configuration.
+This data source can read the Logging VRF configuration.
 
 ## Example Usage
 

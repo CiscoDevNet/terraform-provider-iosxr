@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &Logging_vrfDataSource{}
-	_ datasource.DataSourceWithConfigure = &Logging_vrfDataSource{}
+	_ datasource.DataSource              = &LoggingVRFDataSource{}
+	_ datasource.DataSourceWithConfigure = &LoggingVRFDataSource{}
 )
 
-func NewLogging_vrfDataSource() datasource.DataSource {
-	return &Logging_vrfDataSource{}
+func NewLoggingVRFDataSource() datasource.DataSource {
+	return &LoggingVRFDataSource{}
 }
 
-type Logging_vrfDataSource struct {
+type LoggingVRFDataSource struct {
 	client *client.Client
 }
 
-func (d *Logging_vrfDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *LoggingVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_logging_vrf"
 }
 
-func (d *Logging_vrfDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *LoggingVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Logging_vrf configuration.",
+		MarkdownDescription: "This data source can read the Logging VRF configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -85,7 +85,7 @@ func (d *Logging_vrfDataSource) Schema(ctx context.Context, req datasource.Schem
 	}
 }
 
-func (d *Logging_vrfDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *LoggingVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -93,8 +93,8 @@ func (d *Logging_vrfDataSource) Configure(_ context.Context, req datasource.Conf
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *Logging_vrfDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Logging_vrf
+func (d *LoggingVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config LoggingVRF
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

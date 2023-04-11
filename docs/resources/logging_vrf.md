@@ -3,12 +3,12 @@
 page_title: "iosxr_logging_vrf Resource - terraform-provider-iosxr"
 subcategory: "Management"
 description: |-
-  This resource can manage the Logging_vrf configuration.
+  This resource can manage the Logging VRF configuration.
 ---
 
 # iosxr_logging_vrf (Resource)
 
-This resource can manage the Logging_vrf configuration.
+This resource can manage the Logging VRF configuration.
 
 ## Example Usage
 

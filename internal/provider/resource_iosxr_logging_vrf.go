@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*Logging_vrfResource)(nil)
+var _ resource.Resource = (*LoggingVRFResource)(nil)
 
-func NewLogging_vrfResource() resource.Resource {
-	return &Logging_vrfResource{}
+func NewLoggingVRFResource() resource.Resource {
+	return &LoggingVRFResource{}
 }
 
-type Logging_vrfResource struct {
+type LoggingVRFResource struct {
 	client *client.Client
 }
 
-func (r *Logging_vrfResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *LoggingVRFResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_logging_vrf"
 }
 
-func (r *Logging_vrfResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Logging_vrf configuration.",
+		MarkdownDescription: "This resource can manage the Logging VRF configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -109,7 +109,7 @@ func (r *Logging_vrfResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *Logging_vrfResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *LoggingVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -117,8 +117,8 @@ func (r *Logging_vrfResource) Configure(ctx context.Context, req resource.Config
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *Logging_vrfResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan Logging_vrf
+func (r *LoggingVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan LoggingVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -157,8 +157,8 @@ func (r *Logging_vrfResource) Create(ctx context.Context, req resource.CreateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *Logging_vrfResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Logging_vrf
+func (r *LoggingVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state LoggingVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -183,8 +183,8 @@ func (r *Logging_vrfResource) Read(ctx context.Context, req resource.ReadRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *Logging_vrfResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state Logging_vrf
+func (r *LoggingVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state LoggingVRF
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -239,8 +239,8 @@ func (r *Logging_vrfResource) Update(ctx context.Context, req resource.UpdateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *Logging_vrfResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state Logging_vrf
+func (r *LoggingVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state LoggingVRF
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -262,6 +262,6 @@ func (r *Logging_vrfResource) Delete(ctx context.Context, req resource.DeleteReq
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *Logging_vrfResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *LoggingVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

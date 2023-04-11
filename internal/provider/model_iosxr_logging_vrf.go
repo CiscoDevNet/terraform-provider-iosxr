@@ -13,27 +13,27 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type Logging_vrf struct {
-	Device            types.String                   `tfsdk:"device"`
-	Id                types.String                   `tfsdk:"id"`
-	VrfName           types.String                   `tfsdk:"vrf_name"`
-	HostIpv4Addresses []Logging_vrfHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
-	HostIpv6Addresses []Logging_vrfHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
+type LoggingVRF struct {
+	Device            types.String                  `tfsdk:"device"`
+	Id                types.String                  `tfsdk:"id"`
+	VrfName           types.String                  `tfsdk:"vrf_name"`
+	HostIpv4Addresses []LoggingVRFHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
+	HostIpv6Addresses []LoggingVRFHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
 }
-type Logging_vrfHostIpv4Addresses struct {
+type LoggingVRFHostIpv4Addresses struct {
 	Ipv4Address types.String `tfsdk:"ipv4_address"`
 	Severity    types.String `tfsdk:"severity"`
 }
-type Logging_vrfHostIpv6Addresses struct {
+type LoggingVRFHostIpv6Addresses struct {
 	Ipv6Address types.String `tfsdk:"ipv6_address"`
 	Severity    types.String `tfsdk:"severity"`
 }
 
-func (data Logging_vrf) getPath() string {
+func (data LoggingVRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
-func (data Logging_vrf) toBody(ctx context.Context) string {
+func (data LoggingVRF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
@@ -63,7 +63,7 @@ func (data Logging_vrf) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *Logging_vrf) updateFromBody(ctx context.Context, res []byte) {
+func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.HostIpv4Addresses {
 		keys := [...]string{"ipv4-address"}
 		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
@@ -134,11 +134,11 @@ func (data *Logging_vrf) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Logging_vrf) fromBody(ctx context.Context, res []byte) {
+func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
-		data.HostIpv4Addresses = make([]Logging_vrfHostIpv4Addresses, 0)
+		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := Logging_vrfHostIpv4Addresses{}
+			item := LoggingVRFHostIpv4Addresses{}
 			if cValue := v.Get("ipv4-address"); cValue.Exists() {
 				item.Ipv4Address = types.StringValue(cValue.String())
 			}
@@ -150,9 +150,9 @@ func (data *Logging_vrf) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 	if value := gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
-		data.HostIpv6Addresses = make([]Logging_vrfHostIpv6Addresses, 0)
+		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := Logging_vrfHostIpv6Addresses{}
+			item := LoggingVRFHostIpv6Addresses{}
 			if cValue := v.Get("ipv6-address"); cValue.Exists() {
 				item.Ipv6Address = types.StringValue(cValue.String())
 			}
@@ -165,12 +165,12 @@ func (data *Logging_vrf) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Logging_vrf) fromPlan(ctx context.Context, plan Logging_vrf) {
+func (data *LoggingVRF) fromPlan(ctx context.Context, plan LoggingVRF) {
 	data.Device = plan.Device
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
-func (data *Logging_vrf) getDeletedListItems(ctx context.Context, state Logging_vrf) []string {
+func (data *LoggingVRF) getDeletedListItems(ctx context.Context, state LoggingVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.HostIpv4Addresses {
 		keys := [...]string{"ipv4-address"}
@@ -235,7 +235,7 @@ func (data *Logging_vrf) getDeletedListItems(ctx context.Context, state Logging_
 	return deletedListItems
 }
 
-func (data *Logging_vrf) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

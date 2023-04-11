@@ -8,13 +8,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccIosxrLogging_vrf(t *testing.T) {
+func TestAccIosxrLoggingVRF(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrLogging_vrfConfig_all(),
+				Config: testAccIosxrLoggingVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "VRF1"),
 					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"),
@@ -32,7 +32,7 @@ func TestAccIosxrLogging_vrf(t *testing.T) {
 	})
 }
 
-func testAccIosxrLogging_vrfConfig_minimum() string {
+func testAccIosxrLoggingVRFConfig_minimum() string {
 	return `
 	resource "iosxr_logging_vrf" "test" {
 		vrf_name = "VRF1"
@@ -40,7 +40,7 @@ func testAccIosxrLogging_vrfConfig_minimum() string {
 	`
 }
 
-func testAccIosxrLogging_vrfConfig_all() string {
+func testAccIosxrLoggingVRFConfig_all() string {
 	return `
 	resource "iosxr_logging_vrf" "test" {
 		vrf_name = "VRF1"

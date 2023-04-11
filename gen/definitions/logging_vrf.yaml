@@ -1,5 +1,5 @@
 ---
-name: syslog_vrf
+name: Logging_vrf
 path: Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]
 doc_category: Management
 attributes:

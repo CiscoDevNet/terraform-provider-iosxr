@@ -1,4 +1,4 @@
-resource "iosxr_syslog_vrf" "example" {
+resource "iosxr_logging_vrf" "example" {
   vrf_name = "VRF1"
   host_ipv4_addresses = [
     {

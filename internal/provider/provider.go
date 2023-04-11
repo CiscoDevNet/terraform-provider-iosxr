@@ -194,6 +194,8 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewL2VPNBridgeGroupResource,
 		NewL2VPNBridgeGroupBridgeDomainResource,
 		NewL2VPNXconnectGroupP2PResource,
+		NewLoggingResource,
+		NewLogging_vrfResource,
 		NewMPLSLDPResource,
 		NewMPLSOAMResource,
 		NewMPLSTrafficEngResource,
@@ -213,8 +215,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewRouterOSPFVRFResource,
 		NewRouterOSPFVRFAreaInterfaceResource,
 		NewSSHResource,
-		NewSyslogResource,
-		NewSyslog_vrfResource,
 		NewVRFResource,
 	}
 }
@@ -233,6 +233,8 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewL2VPNBridgeGroupDataSource,
 		NewL2VPNBridgeGroupBridgeDomainDataSource,
 		NewL2VPNXconnectGroupP2PDataSource,
+		NewLoggingDataSource,
+		NewLogging_vrfDataSource,
 		NewMPLSLDPDataSource,
 		NewMPLSOAMDataSource,
 		NewMPLSTrafficEngDataSource,
@@ -252,8 +254,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewRouterOSPFVRFDataSource,
 		NewRouterOSPFVRFAreaInterfaceDataSource,
 		NewSSHDataSource,
-		NewSyslogDataSource,
-		NewSyslog_vrfDataSource,
 		NewVRFDataSource,
 	}
 }

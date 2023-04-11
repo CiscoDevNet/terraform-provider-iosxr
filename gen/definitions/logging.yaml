@@ -1,5 +1,5 @@
 ---
-name: syslog
+name: Logging
 path: Cisco-IOS-XR-um-logging-cfg:/logging
 doc_category: Management
 attributes:
@@ -22,7 +22,7 @@ attributes:
   - yang_name : facility/level
     example : local7
   - yang_name : hostnameprefix
-    example : ALMTX1P01
+    example : HOSTNAME01
   - yang_name : suppress/duplicates
     example : true
   - yang_name : source-interfaces/source-interface

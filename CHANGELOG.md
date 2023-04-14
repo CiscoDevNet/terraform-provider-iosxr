@@ -5,11 +5,11 @@
 - Add `iosxr_segment_routing` resource and data source
 - Add `iosxr_logging` resource and data source
 - Add `iosxr_logging_vrf` resource and data source
-- Add `iosxr_snmp_server` resource and data source
+<!-- - Add `iosxr_snmp_server` resource and data source
 - Add `iosxr_snmp_view` resource and data source
 - Add `iosxr_snmp_vrf` resource and data source
 - Add `iosxr_snmp_mib` resource and data source
-- Add `iosxr_snmp_version` resource and data source
+- Add `iosxr_snmp_version` resource and data source -->
 
 ## 0.1.6
 

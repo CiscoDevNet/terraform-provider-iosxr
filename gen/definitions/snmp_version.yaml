@@ -1,0 +1,7 @@
+---
+name: SNMP Version
+path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%s]/hosts/host[address=%s]/traps/unencrypted/unencrypted-string[community-string=%s]
+doc_category: Management
+attributes:
+  - yang_name: version/v3/security-level
+    example: true

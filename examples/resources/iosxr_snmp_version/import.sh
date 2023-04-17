@@ -1,0 +1,1 @@
+terraform import iosxr_snmp_version.example "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%!s(MISSING)]/hosts/host[address=%!s(MISSING)]/traps/unencrypted/unencrypted-string[community-string=%!s(MISSING)]"

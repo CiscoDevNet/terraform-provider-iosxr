@@ -215,6 +215,11 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewRouterOSPFVRFResource,
 		NewRouterOSPFVRFAreaInterfaceResource,
 		NewSegmentRoutingResource,
+		NewSNMPMIBResource,
+		NewSNMPServerResource,
+		NewSNMPVersionResource,
+		NewSNMPViewResource,
+		NewSNMPVRFResource,
 		NewSSHResource,
 		NewVRFResource,
 	}
@@ -255,6 +260,11 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewRouterOSPFVRFDataSource,
 		NewRouterOSPFVRFAreaInterfaceDataSource,
 		NewSegmentRoutingDataSource,
+		NewSNMPMIBDataSource,
+		NewSNMPServerDataSource,
+		NewSNMPVersionDataSource,
+		NewSNMPViewDataSource,
+		NewSNMPVRFDataSource,
 		NewSSHDataSource,
 		NewVRFDataSource,
 	}

@@ -1,0 +1,10 @@
+---
+name: SNMP Server MIB
+path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server-mibs
+doc_category: Management
+attributes:
+  - yang_name : Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long
+    example : true
+
+  - yang_name : Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist
+    example : true

@@ -37,23 +37,23 @@ resource "iosxr_snmp_server" "example" {
   traps_isis_authentication_failure = "enable"
   traps_bgp_cbgp2_updown            = true
   traps_bgp_bgp4_mib_updown         = true
-  snmp_server_user = [
+  users = [
     {
       user_name                  = "USER1"
       group_name                 = "GROUP1"
       v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
     }
   ]
-  snmp_server_group = [
+  groups = [
     {
       group_name = "GROUP12"
       v3_priv    = true
-      v3_read    = "READ-STRING"
-      v3_write   = "WRITE-STRING"
-      v3_context = "CONTEXT-STRING"
-      v3_notify  = "NOTIFY-STRING"
-      v3_ipv4    = "IPV4-STRING"
-      v3_ipv6    = "IPV6-STRING"
+      v3_read    = "VIEW1"
+      v3_write   = "VIEW2"
+      v3_context = "CONTEXT1"
+      v3_notify  = "VIEW3"
+      v3_ipv4    = "ACL1"
+      v3_ipv6    = "ACL2"
     }
   ]
 }
@@ -70,8 +70,7 @@ resource "iosxr_snmp_server" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `snmp_server_group` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--snmp_server_group))
-- `snmp_server_user` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--snmp_server_user))
+- `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
 - `trap_source_both` (String) Assign an interface for the source address of all traps
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
@@ -94,13 +93,14 @@ resource "iosxr_snmp_server" "example" {
 - `traps_snmp_linkdown` (Boolean) Enable SNMPv2-MIB linDownp traps
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
 - `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
+- `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--snmp_server_group"></a>
-### Nested Schema for `snmp_server_group`
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
 
 Optional:
 
@@ -114,8 +114,8 @@ Optional:
 - `v3_write` (String) specify a write view for this group
 
 
-<a id="nestedatt--snmp_server_user"></a>
-### Nested Schema for `snmp_server_user`
+<a id="nestedatt--users"></a>
+### Nested Schema for `users`
 
 Required:
 

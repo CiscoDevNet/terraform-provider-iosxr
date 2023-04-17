@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SNMPVRFDataSource{}
-	_ datasource.DataSourceWithConfigure = &SNMPVRFDataSource{}
+	_ datasource.DataSource              = &SNMPServerViewDataSource{}
+	_ datasource.DataSourceWithConfigure = &SNMPServerViewDataSource{}
 )
 
-func NewSNMPVRFDataSource() datasource.DataSource {
-	return &SNMPVRFDataSource{}
+func NewSNMPServerViewDataSource() datasource.DataSource {
+	return &SNMPServerViewDataSource{}
 }
 
-type SNMPVRFDataSource struct {
+type SNMPServerViewDataSource struct {
 	client *client.Client
 }
 
-func (d *SNMPVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (d *SNMPServerViewDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_server_view"
 }
 
-func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SNMPServerViewDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the SNMP VRF configuration.",
+		MarkdownDescription: "This data source can read the SNMP Server View configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -45,19 +45,35 @@ func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: "VRF name",
+			"view_name": schema.StringAttribute{
+				MarkdownDescription: "Name of the view",
 				Required:            true,
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
+			"mib_view_families": schema.ListNestedAttribute{
 				MarkdownDescription: "",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mib_view_family_name": schema.StringAttribute{
+							MarkdownDescription: "MIB view family name",
+							Computed:            true,
+						},
+						"included": schema.BoolAttribute{
+							MarkdownDescription: "MIB family is included in the view",
+							Computed:            true,
+						},
+						"excluded": schema.BoolAttribute{
+							MarkdownDescription: "MIB family is excluded from the view",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *SNMPServerViewDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -65,8 +81,8 @@ func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.Configur
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *SNMPVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPVRF
+func (d *SNMPServerViewDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config SNMPServerView
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

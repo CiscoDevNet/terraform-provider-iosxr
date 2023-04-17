@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccIosxrSNMPVRF(t *testing.T) {
+func TestAccIosxrSNMPVRFHost(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrSNMPVRFConfig_all(),
+				Config: testAccIosxrSNMPVRFHostConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_snmp_vrf.test", "traps_unencrypted_unencrypted_string_version_v3_security_level", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_vrf_host.test", "traps_unencrypted_unencrypted_string_version_v3_security_level", "true"),
 				),
 			},
 			{
-				ResourceName:  "iosxr_snmp_vrf.test",
+				ResourceName:  "iosxr_snmp_vrf_host.test",
 				ImportState:   true,
 				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-11.11.11.11]/hosts/host[address=%!s(MISSING)]",
 			},
@@ -28,18 +28,18 @@ func TestAccIosxrSNMPVRF(t *testing.T) {
 	})
 }
 
-func testAccIosxrSNMPVRFConfig_minimum() string {
+func testAccIosxrSNMPVRFHostConfig_minimum() string {
 	return `
-	resource "iosxr_snmp_vrf" "test" {
+	resource "iosxr_snmp_vrf_host" "test" {
 		vrf_name = "11.11.11.11"
 		traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
 	}
 	`
 }
 
-func testAccIosxrSNMPVRFConfig_all() string {
+func testAccIosxrSNMPVRFHostConfig_all() string {
 	return `
-	resource "iosxr_snmp_vrf" "test" {
+	resource "iosxr_snmp_vrf_host" "test" {
 		vrf_name = "11.11.11.11"
 		traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
 	}

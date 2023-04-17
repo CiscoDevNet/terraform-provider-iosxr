@@ -11,18 +11,18 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type SNMPVRF struct {
+type SNMPVRFHost struct {
 	Device                                                  types.String `tfsdk:"device"`
 	Id                                                      types.String `tfsdk:"id"`
 	VrfName                                                 types.String `tfsdk:"vrf_name"`
 	TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel types.String `tfsdk:"traps_unencrypted_unencrypted_string_version_v3_security_level"`
 }
 
-func (data SNMPVRF) getPath() string {
+func (data SNMPVRFHost) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%s]/hosts/host[address=%s]", data.VrfName.ValueString())
 }
 
-func (data SNMPVRF) toBody(ctx context.Context) string {
+func (data SNMPVRFHost) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsNull() && !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsUnknown() {
 		body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string.version.v3.security-level", data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.ValueString())
@@ -30,7 +30,7 @@ func (data SNMPVRF) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *SNMPVRF) updateFromBody(ctx context.Context, res []byte) {
+func (data *SNMPVRFHost) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string.version.v3.security-level"); value.Exists() && !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsNull() {
 		data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel = types.StringValue(value.String())
 	} else {
@@ -38,23 +38,23 @@ func (data *SNMPVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPVRF) fromBody(ctx context.Context, res []byte) {
+func (data *SNMPVRFHost) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string.version.v3.security-level"); value.Exists() {
 		data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel = types.StringValue(value.String())
 	}
 }
 
-func (data *SNMPVRF) fromPlan(ctx context.Context, plan SNMPVRF) {
+func (data *SNMPVRFHost) fromPlan(ctx context.Context, plan SNMPVRFHost) {
 	data.Device = plan.Device
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
 }
 
-func (data *SNMPVRF) getDeletedListItems(ctx context.Context, state SNMPVRF) []string {
+func (data *SNMPVRFHost) getDeletedListItems(ctx context.Context, state SNMPVRFHost) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *SNMPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SNMPVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }

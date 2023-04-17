@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SNMPVRFDataSource{}
-	_ datasource.DataSourceWithConfigure = &SNMPVRFDataSource{}
+	_ datasource.DataSource              = &SNMPServerMIBDataSource{}
+	_ datasource.DataSourceWithConfigure = &SNMPServerMIBDataSource{}
 )
 
-func NewSNMPVRFDataSource() datasource.DataSource {
-	return &SNMPVRFDataSource{}
+func NewSNMPServerMIBDataSource() datasource.DataSource {
+	return &SNMPServerMIBDataSource{}
 }
 
-type SNMPVRFDataSource struct {
+type SNMPServerMIBDataSource struct {
 	client *client.Client
 }
 
-func (d *SNMPVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (d *SNMPServerMIBDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_server_mib"
 }
 
-func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SNMPServerMIBDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the SNMP VRF configuration.",
+		MarkdownDescription: "This data source can read the SNMP Server MIB configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -45,19 +45,19 @@ func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: "VRF name",
-				Required:            true,
+			"ifmib_ifalias_long": schema.BoolAttribute{
+				MarkdownDescription: "Enable support for ifAlias values longer than 64 characters",
+				Computed:            true,
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
-				MarkdownDescription: "",
+			"ifindex_persist": schema.BoolAttribute{
+				MarkdownDescription: "Persist interface indices",
 				Computed:            true,
 			},
 		},
 	}
 }
 
-func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *SNMPServerMIBDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -65,8 +65,8 @@ func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.Configur
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *SNMPVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPVRF
+func (d *SNMPServerMIBDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config SNMPServerMIB
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -39,18 +39,6 @@ attributes:
     example: true
   - yang_name: traps/l2vpn/vc-down
     example: true
-
-  # - yang_name: traps/mpls/ldp/up
-  #   example: true
-  # - yang_name: traps/Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls/ldp/down
-  #   example: true
-  # - yang_name: traps/Cisco-IOS-XR-um-traps-mpls-ldp-cfg:mpls/ldp/threshold
-  #   example: true
-  # - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/vrf-up
-  #   example: true
-  # - yang_name: traps/Cisco-IOS-XR-um-mpls-l3vpn-cfg:mpls/l3vpn/vrf-down
-  #   example: true
-
   - yang_name: traps/sensor
     example: true
   - yang_name: traps/fru-ctrl
@@ -63,7 +51,7 @@ attributes:
     example: true
 
   - yang_name : users/user
-    tf_name : snmp_server_user
+    tf_name : users
     type : List
     attributes: 
       - yang_name : user-name
@@ -78,7 +66,7 @@ attributes:
         example : 073C05626E2A4841141D
 
   - yang_name : groups/group
-    tf_name : snmp_server_group
+    tf_name : groups
     type : List
     attributes: 
       - yang_name : group-name
@@ -87,15 +75,15 @@ attributes:
       - yang_name : v3/priv
         example : true
       - yang_name : v3/read
-        example : READ-STRING
+        example : VIEW1
 
       - yang_name : v3/write
-        example : WRITE-STRING
+        example : VIEW2
       - yang_name : v3/context
-        example : CONTEXT-STRING
+        example : CONTEXT1
       - yang_name : v3/notify
-        example : NOTIFY-STRING
+        example : VIEW3
       - yang_name : v3/ipv4
-        example : IPV4-STRING
+        example : ACL1
       - yang_name : v3/ipv6
-        example : IPV6-STRING
+        example : ACL2

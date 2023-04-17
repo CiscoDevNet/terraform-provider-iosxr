@@ -8,30 +8,30 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceIosxrSNMPVRF(t *testing.T) {
+func TestAccDataSourceIosxrSNMPVRFHost(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPVRFConfig,
+				Config: testAccDataSourceIosxrSNMPVRFHostConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_snmp_vrf.test", "traps_unencrypted_unencrypted_string_version_v3_security_level", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_snmp_vrf_host.test", "traps_unencrypted_unencrypted_string_version_v3_security_level", "true"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSNMPVRFConfig = `
+const testAccDataSourceIosxrSNMPVRFHostConfig = `
 
-resource "iosxr_snmp_vrf" "test" {
+resource "iosxr_snmp_vrf_host" "test" {
 	vrf_name = "11.11.11.11"
 	traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
 }
 
-data "iosxr_snmp_vrf" "test" {
+data "iosxr_snmp_vrf_host" "test" {
 	vrf_name = "11.11.11.11"
-	depends_on = [iosxr_snmp_vrf.test]
+	depends_on = [iosxr_snmp_vrf_host.test]
 }
 `

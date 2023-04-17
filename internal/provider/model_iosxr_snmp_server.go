@@ -14,41 +14,41 @@ import (
 )
 
 type SNMPServer struct {
-	Device                         types.String                `tfsdk:"device"`
-	Id                             types.String                `tfsdk:"id"`
-	TrapsRf                        types.Bool                  `tfsdk:"traps_rf"`
-	TrapsBfd                       types.Bool                  `tfsdk:"traps_bfd"`
-	TrapsNtp                       types.Bool                  `tfsdk:"traps_ntp"`
-	TrapsEthernetOamEvents         types.Bool                  `tfsdk:"traps_ethernet_oam_events"`
-	TrapsCopyComplete              types.Bool                  `tfsdk:"traps_copy_complete"`
-	TrapsSnmpLinkup                types.Bool                  `tfsdk:"traps_snmp_linkup"`
-	TrapsSnmpLinkdown              types.Bool                  `tfsdk:"traps_snmp_linkdown"`
-	TrapsPower                     types.Bool                  `tfsdk:"traps_power"`
-	TrapsConfig                    types.Bool                  `tfsdk:"traps_config"`
-	TrapsEntity                    types.Bool                  `tfsdk:"traps_entity"`
-	TrapsSystem                    types.Bool                  `tfsdk:"traps_system"`
-	TrapsBridgemib                 types.Bool                  `tfsdk:"traps_bridgemib"`
-	TrapsEntityStateOperstatus     types.Bool                  `tfsdk:"traps_entity_state_operstatus"`
-	TrapsEntityRedundancyAll       types.Bool                  `tfsdk:"traps_entity_redundancy_all"`
-	TrapSourceBoth                 types.String                `tfsdk:"trap_source_both"`
-	TrapsL2vpnAll                  types.Bool                  `tfsdk:"traps_l2vpn_all"`
-	TrapsL2vpnVcUp                 types.Bool                  `tfsdk:"traps_l2vpn_vc_up"`
-	TrapsL2vpnVcDown               types.Bool                  `tfsdk:"traps_l2vpn_vc_down"`
-	TrapsSensor                    types.Bool                  `tfsdk:"traps_sensor"`
-	TrapsFruCtrl                   types.Bool                  `tfsdk:"traps_fru_ctrl"`
-	TrapsIsisAuthenticationFailure types.String                `tfsdk:"traps_isis_authentication_failure"`
-	TrapsBgpCbgp2Updown            types.Bool                  `tfsdk:"traps_bgp_cbgp2_updown"`
-	TrapsBgpBgp4MibUpdown          types.Bool                  `tfsdk:"traps_bgp_bgp4_mib_updown"`
-	SnmpServerUser                 []SNMPServerSnmpServerUser  `tfsdk:"snmp_server_user"`
-	SnmpServerGroup                []SNMPServerSnmpServerGroup `tfsdk:"snmp_server_group"`
+	Device                         types.String       `tfsdk:"device"`
+	Id                             types.String       `tfsdk:"id"`
+	TrapsRf                        types.Bool         `tfsdk:"traps_rf"`
+	TrapsBfd                       types.Bool         `tfsdk:"traps_bfd"`
+	TrapsNtp                       types.Bool         `tfsdk:"traps_ntp"`
+	TrapsEthernetOamEvents         types.Bool         `tfsdk:"traps_ethernet_oam_events"`
+	TrapsCopyComplete              types.Bool         `tfsdk:"traps_copy_complete"`
+	TrapsSnmpLinkup                types.Bool         `tfsdk:"traps_snmp_linkup"`
+	TrapsSnmpLinkdown              types.Bool         `tfsdk:"traps_snmp_linkdown"`
+	TrapsPower                     types.Bool         `tfsdk:"traps_power"`
+	TrapsConfig                    types.Bool         `tfsdk:"traps_config"`
+	TrapsEntity                    types.Bool         `tfsdk:"traps_entity"`
+	TrapsSystem                    types.Bool         `tfsdk:"traps_system"`
+	TrapsBridgemib                 types.Bool         `tfsdk:"traps_bridgemib"`
+	TrapsEntityStateOperstatus     types.Bool         `tfsdk:"traps_entity_state_operstatus"`
+	TrapsEntityRedundancyAll       types.Bool         `tfsdk:"traps_entity_redundancy_all"`
+	TrapSourceBoth                 types.String       `tfsdk:"trap_source_both"`
+	TrapsL2vpnAll                  types.Bool         `tfsdk:"traps_l2vpn_all"`
+	TrapsL2vpnVcUp                 types.Bool         `tfsdk:"traps_l2vpn_vc_up"`
+	TrapsL2vpnVcDown               types.Bool         `tfsdk:"traps_l2vpn_vc_down"`
+	TrapsSensor                    types.Bool         `tfsdk:"traps_sensor"`
+	TrapsFruCtrl                   types.Bool         `tfsdk:"traps_fru_ctrl"`
+	TrapsIsisAuthenticationFailure types.String       `tfsdk:"traps_isis_authentication_failure"`
+	TrapsBgpCbgp2Updown            types.Bool         `tfsdk:"traps_bgp_cbgp2_updown"`
+	TrapsBgpBgp4MibUpdown          types.Bool         `tfsdk:"traps_bgp_bgp4_mib_updown"`
+	Users                          []SNMPServerUsers  `tfsdk:"users"`
+	Groups                         []SNMPServerGroups `tfsdk:"groups"`
 }
-type SNMPServerSnmpServerUser struct {
+type SNMPServerUsers struct {
 	UserName                   types.String `tfsdk:"user_name"`
 	GroupName                  types.String `tfsdk:"group_name"`
 	V3AuthMd5EncryptionAes     types.String `tfsdk:"v3_auth_md5_encryption_aes"`
 	V3AuthMd5EncryptionDefault types.String `tfsdk:"v3_auth_md5_encryption_default"`
 }
-type SNMPServerSnmpServerGroup struct {
+type SNMPServerGroups struct {
 	GroupName types.String `tfsdk:"group_name"`
 	V3Priv    types.Bool   `tfsdk:"v3_priv"`
 	V3Read    types.String `tfsdk:"v3_read"`
@@ -176,9 +176,9 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "traps.bgp.bgp4-mib-updown", map[string]string{})
 		}
 	}
-	if len(data.SnmpServerUser) > 0 {
+	if len(data.Users) > 0 {
 		body, _ = sjson.Set(body, "users.user", []interface{}{})
-		for index, item := range data.SnmpServerUser {
+		for index, item := range data.Users {
 			if !item.UserName.IsNull() && !item.UserName.IsUnknown() {
 				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"user-name", item.UserName.ValueString())
 			}
@@ -193,9 +193,9 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.SnmpServerGroup) > 0 {
+	if len(data.Groups) > 0 {
 		body, _ = sjson.Set(body, "groups.group", []interface{}{})
-		for index, item := range data.SnmpServerGroup {
+		for index, item := range data.Groups {
 			if !item.GroupName.IsNull() && !item.GroupName.IsUnknown() {
 				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"group-name", item.GroupName.ValueString())
 			}
@@ -427,9 +427,9 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpBgp4MibUpdown = types.BoolNull()
 	}
-	for i := range data.SnmpServerUser {
+	for i := range data.Users {
 		keys := [...]string{"user-name"}
-		keyValues := [...]string{data.SnmpServerUser[i].UserName.ValueString()}
+		keyValues := [...]string{data.Users[i].UserName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "users.user").ForEach(
@@ -450,30 +450,30 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("user-name"); value.Exists() && !data.SnmpServerUser[i].UserName.IsNull() {
-			data.SnmpServerUser[i].UserName = types.StringValue(value.String())
+		if value := r.Get("user-name"); value.Exists() && !data.Users[i].UserName.IsNull() {
+			data.Users[i].UserName = types.StringValue(value.String())
 		} else {
-			data.SnmpServerUser[i].UserName = types.StringNull()
+			data.Users[i].UserName = types.StringNull()
 		}
-		if value := r.Get("group-name"); value.Exists() && !data.SnmpServerUser[i].GroupName.IsNull() {
-			data.SnmpServerUser[i].GroupName = types.StringValue(value.String())
+		if value := r.Get("group-name"); value.Exists() && !data.Users[i].GroupName.IsNull() {
+			data.Users[i].GroupName = types.StringValue(value.String())
 		} else {
-			data.SnmpServerUser[i].GroupName = types.StringNull()
+			data.Users[i].GroupName = types.StringNull()
 		}
-		if value := r.Get("v3.auth.md5.encryption-aes"); value.Exists() && !data.SnmpServerUser[i].V3AuthMd5EncryptionAes.IsNull() {
-			data.SnmpServerUser[i].V3AuthMd5EncryptionAes = types.StringValue(value.String())
+		if value := r.Get("v3.auth.md5.encryption-aes"); value.Exists() && !data.Users[i].V3AuthMd5EncryptionAes.IsNull() {
+			data.Users[i].V3AuthMd5EncryptionAes = types.StringValue(value.String())
 		} else {
-			data.SnmpServerUser[i].V3AuthMd5EncryptionAes = types.StringNull()
+			data.Users[i].V3AuthMd5EncryptionAes = types.StringNull()
 		}
-		if value := r.Get("v3.auth.md5.encryption-default"); value.Exists() && !data.SnmpServerUser[i].V3AuthMd5EncryptionDefault.IsNull() {
-			data.SnmpServerUser[i].V3AuthMd5EncryptionDefault = types.StringValue(value.String())
+		if value := r.Get("v3.auth.md5.encryption-default"); value.Exists() && !data.Users[i].V3AuthMd5EncryptionDefault.IsNull() {
+			data.Users[i].V3AuthMd5EncryptionDefault = types.StringValue(value.String())
 		} else {
-			data.SnmpServerUser[i].V3AuthMd5EncryptionDefault = types.StringNull()
+			data.Users[i].V3AuthMd5EncryptionDefault = types.StringNull()
 		}
 	}
-	for i := range data.SnmpServerGroup {
+	for i := range data.Groups {
 		keys := [...]string{"group-name"}
-		keyValues := [...]string{data.SnmpServerGroup[i].GroupName.ValueString()}
+		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "groups.group").ForEach(
@@ -494,49 +494,49 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("group-name"); value.Exists() && !data.SnmpServerGroup[i].GroupName.IsNull() {
-			data.SnmpServerGroup[i].GroupName = types.StringValue(value.String())
+		if value := r.Get("group-name"); value.Exists() && !data.Groups[i].GroupName.IsNull() {
+			data.Groups[i].GroupName = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].GroupName = types.StringNull()
+			data.Groups[i].GroupName = types.StringNull()
 		}
-		if value := r.Get("v3.priv"); !data.SnmpServerGroup[i].V3Priv.IsNull() {
+		if value := r.Get("v3.priv"); !data.Groups[i].V3Priv.IsNull() {
 			if value.Exists() {
-				data.SnmpServerGroup[i].V3Priv = types.BoolValue(true)
+				data.Groups[i].V3Priv = types.BoolValue(true)
 			} else {
-				data.SnmpServerGroup[i].V3Priv = types.BoolValue(false)
+				data.Groups[i].V3Priv = types.BoolValue(false)
 			}
 		} else {
-			data.SnmpServerGroup[i].V3Priv = types.BoolNull()
+			data.Groups[i].V3Priv = types.BoolNull()
 		}
-		if value := r.Get("v3.read"); value.Exists() && !data.SnmpServerGroup[i].V3Read.IsNull() {
-			data.SnmpServerGroup[i].V3Read = types.StringValue(value.String())
+		if value := r.Get("v3.read"); value.Exists() && !data.Groups[i].V3Read.IsNull() {
+			data.Groups[i].V3Read = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Read = types.StringNull()
+			data.Groups[i].V3Read = types.StringNull()
 		}
-		if value := r.Get("v3.write"); value.Exists() && !data.SnmpServerGroup[i].V3Write.IsNull() {
-			data.SnmpServerGroup[i].V3Write = types.StringValue(value.String())
+		if value := r.Get("v3.write"); value.Exists() && !data.Groups[i].V3Write.IsNull() {
+			data.Groups[i].V3Write = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Write = types.StringNull()
+			data.Groups[i].V3Write = types.StringNull()
 		}
-		if value := r.Get("v3.context"); value.Exists() && !data.SnmpServerGroup[i].V3Context.IsNull() {
-			data.SnmpServerGroup[i].V3Context = types.StringValue(value.String())
+		if value := r.Get("v3.context"); value.Exists() && !data.Groups[i].V3Context.IsNull() {
+			data.Groups[i].V3Context = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Context = types.StringNull()
+			data.Groups[i].V3Context = types.StringNull()
 		}
-		if value := r.Get("v3.notify"); value.Exists() && !data.SnmpServerGroup[i].V3Notify.IsNull() {
-			data.SnmpServerGroup[i].V3Notify = types.StringValue(value.String())
+		if value := r.Get("v3.notify"); value.Exists() && !data.Groups[i].V3Notify.IsNull() {
+			data.Groups[i].V3Notify = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Notify = types.StringNull()
+			data.Groups[i].V3Notify = types.StringNull()
 		}
-		if value := r.Get("v3.ipv4"); value.Exists() && !data.SnmpServerGroup[i].V3Ipv4.IsNull() {
-			data.SnmpServerGroup[i].V3Ipv4 = types.StringValue(value.String())
+		if value := r.Get("v3.ipv4"); value.Exists() && !data.Groups[i].V3Ipv4.IsNull() {
+			data.Groups[i].V3Ipv4 = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Ipv4 = types.StringNull()
+			data.Groups[i].V3Ipv4 = types.StringNull()
 		}
-		if value := r.Get("v3.ipv6"); value.Exists() && !data.SnmpServerGroup[i].V3Ipv6.IsNull() {
-			data.SnmpServerGroup[i].V3Ipv6 = types.StringValue(value.String())
+		if value := r.Get("v3.ipv6"); value.Exists() && !data.Groups[i].V3Ipv6.IsNull() {
+			data.Groups[i].V3Ipv6 = types.StringValue(value.String())
 		} else {
-			data.SnmpServerGroup[i].V3Ipv6 = types.StringNull()
+			data.Groups[i].V3Ipv6 = types.StringNull()
 		}
 	}
 }
@@ -654,9 +654,9 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 		data.TrapsBgpBgp4MibUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "users.user"); value.Exists() {
-		data.SnmpServerUser = make([]SNMPServerSnmpServerUser, 0)
+		data.Users = make([]SNMPServerUsers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerSnmpServerUser{}
+			item := SNMPServerUsers{}
 			if cValue := v.Get("user-name"); cValue.Exists() {
 				item.UserName = types.StringValue(cValue.String())
 			}
@@ -669,14 +669,14 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("v3.auth.md5.encryption-default"); cValue.Exists() {
 				item.V3AuthMd5EncryptionDefault = types.StringValue(cValue.String())
 			}
-			data.SnmpServerUser = append(data.SnmpServerUser, item)
+			data.Users = append(data.Users, item)
 			return true
 		})
 	}
 	if value := gjson.GetBytes(res, "groups.group"); value.Exists() {
-		data.SnmpServerGroup = make([]SNMPServerSnmpServerGroup, 0)
+		data.Groups = make([]SNMPServerGroups, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerSnmpServerGroup{}
+			item := SNMPServerGroups{}
 			if cValue := v.Get("group-name"); cValue.Exists() {
 				item.GroupName = types.StringValue(cValue.String())
 			}
@@ -703,7 +703,7 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("v3.ipv6"); cValue.Exists() {
 				item.V3Ipv6 = types.StringValue(cValue.String())
 			}
-			data.SnmpServerGroup = append(data.SnmpServerGroup, item)
+			data.Groups = append(data.Groups, item)
 			return true
 		})
 	}
@@ -715,12 +715,12 @@ func (data *SNMPServer) fromPlan(ctx context.Context, plan SNMPServer) {
 
 func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServer) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.SnmpServerUser {
+	for i := range state.Users {
 		keys := [...]string{"user-name"}
-		stateKeyValues := [...]string{state.SnmpServerUser[i].UserName.ValueString()}
+		stateKeyValues := [...]string{state.Users[i].UserName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.SnmpServerUser[i].UserName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Users[i].UserName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -728,9 +728,9 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 		}
 
 		found := false
-		for j := range data.SnmpServerUser {
+		for j := range data.Users {
 			found = true
-			if state.SnmpServerUser[i].UserName.ValueString() != data.SnmpServerUser[j].UserName.ValueString() {
+			if state.Users[i].UserName.ValueString() != data.Users[j].UserName.ValueString() {
 				found = false
 			}
 			if found {
@@ -745,12 +745,12 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/users/user%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.SnmpServerGroup {
+	for i := range state.Groups {
 		keys := [...]string{"group-name"}
-		stateKeyValues := [...]string{state.SnmpServerGroup[i].GroupName.ValueString()}
+		stateKeyValues := [...]string{state.Groups[i].GroupName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.SnmpServerGroup[i].GroupName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Groups[i].GroupName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -758,9 +758,9 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 		}
 
 		found := false
-		for j := range data.SnmpServerGroup {
+		for j := range data.Groups {
 			found = true
-			if state.SnmpServerGroup[i].GroupName.ValueString() != data.SnmpServerGroup[j].GroupName.ValueString() {
+			if state.Groups[i].GroupName.ValueString() != data.Groups[j].GroupName.ValueString() {
 				found = false
 			}
 			if found {

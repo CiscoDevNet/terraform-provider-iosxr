@@ -1,0 +1,21 @@
+---
+name: SNMP Server View
+path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/views/view[view-name-%s]
+doc_category: Management
+attributes:
+  - yang_name: view-name
+    example: VIEW12
+
+  - yang_name: mib-view-families/mib-view-family
+    tf_name: mib_view_families
+    type: List
+    attributes:
+      - yang_name: mib-view-family-name
+        id: true
+        example: iso
+      - yang_name: included
+        example: true
+      - yang_name: excluded
+        exclude_test : true
+
+

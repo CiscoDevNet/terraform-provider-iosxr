@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*SNMPVRFResource)(nil)
+var _ resource.Resource = (*SNMPVRFHostResource)(nil)
 
-func NewSNMPVRFResource() resource.Resource {
-	return &SNMPVRFResource{}
+func NewSNMPVRFHostResource() resource.Resource {
+	return &SNMPVRFHostResource{}
 }
 
-type SNMPVRFResource struct {
+type SNMPVRFHostResource struct {
 	client *client.Client
 }
 
-func (r *SNMPVRFResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (r *SNMPVRFHostResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_vrf_host"
 }
 
-func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *SNMPVRFHostResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the SNMP VRF configuration.",
+		MarkdownDescription: "This resource can manage the SNMP VRF Host configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -73,7 +73,7 @@ func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 	}
 }
 
-func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPVRFHostResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -81,8 +81,8 @@ func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SNMPVRF
+func (r *SNMPVRFHostResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SNMPVRFHost
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -121,8 +121,8 @@ func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SNMPVRF
+func (r *SNMPVRFHostResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SNMPVRFHost
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -147,8 +147,8 @@ func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SNMPVRF
+func (r *SNMPVRFHostResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state SNMPVRFHost
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -203,8 +203,8 @@ func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SNMPVRF
+func (r *SNMPVRFHostResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SNMPVRFHost
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -226,6 +226,6 @@ func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SNMPVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *SNMPVRFHostResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

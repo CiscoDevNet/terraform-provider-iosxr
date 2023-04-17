@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*SNMPVRFResource)(nil)
+var _ resource.Resource = (*SNMPServerViewResource)(nil)
 
-func NewSNMPVRFResource() resource.Resource {
-	return &SNMPVRFResource{}
+func NewSNMPServerViewResource() resource.Resource {
+	return &SNMPServerViewResource{}
 }
 
-type SNMPVRFResource struct {
+type SNMPServerViewResource struct {
 	client *client.Client
 }
 
-func (r *SNMPVRFResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (r *SNMPServerViewResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_server_view"
 }
 
-func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *SNMPServerViewResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the SNMP VRF configuration.",
+		MarkdownDescription: "This resource can manage the SNMP Server View configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -51,8 +51,8 @@ func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name").String,
+			"view_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the view").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
@@ -62,18 +62,34 @@ func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("auth", "noauth", "priv"),
+			"mib_view_families": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"mib_view_family_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MIB view family name").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"included": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MIB family is included in the view").String,
+							Optional:            true,
+						},
+						"excluded": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MIB family is excluded from the view").String,
+							Optional:            true,
+						},
+					},
 				},
 			},
 		},
 	}
 }
 
-func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPServerViewResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -81,8 +97,8 @@ func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SNMPVRF
+func (r *SNMPServerViewResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SNMPServerView
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -121,8 +137,8 @@ func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SNMPVRF
+func (r *SNMPServerViewResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SNMPServerView
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -147,8 +163,8 @@ func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SNMPVRF
+func (r *SNMPServerViewResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state SNMPServerView
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -203,8 +219,8 @@ func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SNMPVRF
+func (r *SNMPServerViewResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SNMPServerView
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -226,6 +242,6 @@ func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SNMPVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *SNMPServerViewResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

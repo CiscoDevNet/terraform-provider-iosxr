@@ -5,39 +5,36 @@ package provider
 import (
 	"context"
 	"fmt"
-	"regexp"
 
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*SNMPVRFResource)(nil)
+var _ resource.Resource = (*SNMPServerMIBResource)(nil)
 
-func NewSNMPVRFResource() resource.Resource {
-	return &SNMPVRFResource{}
+func NewSNMPServerMIBResource() resource.Resource {
+	return &SNMPServerMIBResource{}
 }
 
-type SNMPVRFResource struct {
+type SNMPServerMIBResource struct {
 	client *client.Client
 }
 
-func (r *SNMPVRFResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (r *SNMPServerMIBResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_server_mib"
 }
 
-func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *SNMPServerMIBResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the SNMP VRF configuration.",
+		MarkdownDescription: "This resource can manage the SNMP Server MIB configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -51,29 +48,19 @@ func (r *SNMPVRFResource) Schema(ctx context.Context, req resource.SchemaRequest
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("VRF name").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
+			"ifmib_ifalias_long": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable support for ifAlias values longer than 64 characters").String,
+				Optional:            true,
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("auth", "noauth", "priv"),
-				},
+			"ifindex_persist": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Persist interface indices").String,
+				Optional:            true,
 			},
 		},
 	}
 }
 
-func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPServerMIBResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -81,8 +68,8 @@ func (r *SNMPVRFResource) Configure(ctx context.Context, req resource.ConfigureR
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SNMPVRF
+func (r *SNMPServerMIBResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SNMPServerMIB
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -121,8 +108,8 @@ func (r *SNMPVRFResource) Create(ctx context.Context, req resource.CreateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SNMPVRF
+func (r *SNMPServerMIBResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SNMPServerMIB
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -147,8 +134,8 @@ func (r *SNMPVRFResource) Read(ctx context.Context, req resource.ReadRequest, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SNMPVRF
+func (r *SNMPServerMIBResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state SNMPServerMIB
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -203,8 +190,8 @@ func (r *SNMPVRFResource) Update(ctx context.Context, req resource.UpdateRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SNMPVRF
+func (r *SNMPServerMIBResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SNMPServerMIB
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -226,6 +213,6 @@ func (r *SNMPVRFResource) Delete(ctx context.Context, req resource.DeleteRequest
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SNMPVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *SNMPServerMIBResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

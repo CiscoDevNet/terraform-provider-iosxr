@@ -26,9 +26,8 @@ data "iosxr_snmp_server" "example" {
 
 ### Read-Only
 
+- `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
 - `id` (String) The path of the retrieved object.
-- `snmp_server_group` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--snmp_server_group))
-- `snmp_server_user` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--snmp_server_user))
 - `trap_source_both` (String) Assign an interface for the source address of all traps
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
@@ -52,9 +51,10 @@ data "iosxr_snmp_server" "example" {
 - `traps_snmp_linkdown` (Boolean) Enable SNMPv2-MIB linDownp traps
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
 - `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
+- `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
 
-<a id="nestedatt--snmp_server_group"></a>
-### Nested Schema for `snmp_server_group`
+<a id="nestedatt--groups"></a>
+### Nested Schema for `groups`
 
 Read-Only:
 
@@ -68,8 +68,8 @@ Read-Only:
 - `v3_write` (String) specify a write view for this group
 
 
-<a id="nestedatt--snmp_server_user"></a>
-### Nested Schema for `snmp_server_user`
+<a id="nestedatt--users"></a>
+### Nested Schema for `users`
 
 Read-Only:
 

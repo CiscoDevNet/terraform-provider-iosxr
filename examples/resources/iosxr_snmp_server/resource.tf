@@ -22,23 +22,23 @@ resource "iosxr_snmp_server" "example" {
   traps_isis_authentication_failure = "enable"
   traps_bgp_cbgp2_updown            = true
   traps_bgp_bgp4_mib_updown         = true
-  snmp_server_user = [
+  users = [
     {
       user_name                  = "USER1"
       group_name                 = "GROUP1"
       v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
     }
   ]
-  snmp_server_group = [
+  groups = [
     {
       group_name = "GROUP12"
       v3_priv    = true
-      v3_read    = "READ-STRING"
-      v3_write   = "WRITE-STRING"
-      v3_context = "CONTEXT-STRING"
-      v3_notify  = "NOTIFY-STRING"
-      v3_ipv4    = "IPV4-STRING"
-      v3_ipv6    = "IPV6-STRING"
+      v3_read    = "VIEW1"
+      v3_write   = "VIEW2"
+      v3_context = "CONTEXT1"
+      v3_notify  = "VIEW3"
+      v3_ipv4    = "ACL1"
+      v3_ipv6    = "ACL2"
     }
   ]
 }

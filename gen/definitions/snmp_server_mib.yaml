@@ -1,4 +1,4 @@
-name: SNMP MIB
+name: SNMP Server MIB
 path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server-mibs
 doc_category: Management
 attributes:

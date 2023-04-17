@@ -137,7 +137,7 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
-			"snmp_server_user": schema.ListNestedAttribute{
+			"users": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of the user",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -161,7 +161,7 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
-			"snmp_server_group": schema.ListNestedAttribute{
+			"groups": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of the group",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

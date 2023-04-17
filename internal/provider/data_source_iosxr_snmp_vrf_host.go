@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SNMPVRFDataSource{}
-	_ datasource.DataSourceWithConfigure = &SNMPVRFDataSource{}
+	_ datasource.DataSource              = &SNMPVRFHostDataSource{}
+	_ datasource.DataSourceWithConfigure = &SNMPVRFHostDataSource{}
 )
 
-func NewSNMPVRFDataSource() datasource.DataSource {
-	return &SNMPVRFDataSource{}
+func NewSNMPVRFHostDataSource() datasource.DataSource {
+	return &SNMPVRFHostDataSource{}
 }
 
-type SNMPVRFDataSource struct {
+type SNMPVRFHostDataSource struct {
 	client *client.Client
 }
 
-func (d *SNMPVRFDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_snmp_vrf"
+func (d *SNMPVRFHostDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_snmp_vrf_host"
 }
 
-func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SNMPVRFHostDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the SNMP VRF configuration.",
+		MarkdownDescription: "This data source can read the SNMP VRF Host configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -57,7 +57,7 @@ func (d *SNMPVRFDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 	}
 }
 
-func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *SNMPVRFHostDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -65,8 +65,8 @@ func (d *SNMPVRFDataSource) Configure(_ context.Context, req datasource.Configur
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *SNMPVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPVRF
+func (d *SNMPVRFHostDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config SNMPVRFHost
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -62,11 +62,26 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("auth", "noauth", "priv"),
+			"unencrypted_strings": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community_string": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"version_v3_security_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("auth", "noauth", "priv"),
+							},
+						},
+					},
 				},
 			},
 		},

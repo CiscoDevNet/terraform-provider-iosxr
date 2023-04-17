@@ -14,8 +14,13 @@ This resource can manage the SNMP Server VRF Host configuration.
 
 ```terraform
 resource "iosxr_snmp_server_vrf_host" "example" {
-  vrf_name                                                       = "11.11.11.11"
-  traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
+  vrf_name = "11.11.11.11"
+  unencrypted_strings = [
+    {
+      community_string          = "COMMUNITY1"
+      version_v3_security_level = "auth"
+    }
+  ]
 }
 ```
 
@@ -24,16 +29,27 @@ resource "iosxr_snmp_server_vrf_host" "example" {
 
 ### Required
 
-- `traps_unencrypted_unencrypted_string_version_v3_security_level` (String) - Choices: `auth`, `noauth`, `priv`
 - `vrf_name` (String) VRF name
 
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--unencrypted_strings))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--unencrypted_strings"></a>
+### Nested Schema for `unencrypted_strings`
+
+Required:
+
+- `version_v3_security_level` (String) - Choices: `auth`, `noauth`, `priv`
+
+Optional:
+
+- `community_string` (String) The UNENCRYPTED (cleartext) community string
 
 ## Import
 

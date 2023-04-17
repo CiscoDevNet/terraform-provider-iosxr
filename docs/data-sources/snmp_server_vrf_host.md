@@ -32,6 +32,14 @@ data "iosxr_snmp_server_vrf_host" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `traps_unencrypted_unencrypted_string_version_v3_security_level` (String)
+- `unencrypted_strings` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--unencrypted_strings))
+
+<a id="nestedatt--unencrypted_strings"></a>
+### Nested Schema for `unencrypted_strings`
+
+Read-Only:
+
+- `community_string` (String) The UNENCRYPTED (cleartext) community string
+- `version_v3_security_level` (String)
 
 

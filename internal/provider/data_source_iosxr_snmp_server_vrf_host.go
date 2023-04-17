@@ -49,9 +49,21 @@ func (d *SNMPServerVRFHostDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "VRF name",
 				Required:            true,
 			},
-			"traps_unencrypted_unencrypted_string_version_v3_security_level": schema.StringAttribute{
-				MarkdownDescription: "",
+			"unencrypted_strings": schema.ListNestedAttribute{
+				MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community_string": schema.StringAttribute{
+							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+							Computed:            true,
+						},
+						"version_v3_security_level": schema.StringAttribute{
+							MarkdownDescription: "",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

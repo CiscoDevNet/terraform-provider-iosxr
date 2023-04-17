@@ -17,8 +17,8 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 				Config: testAccIosxrSNMPServerViewConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "view_name", "VIEW12"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.mib_view_family_name", "iso"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "name.0.mib_view_family_name", "iso"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "name.0.included", "true"),
 				),
 			},
 			{
@@ -42,7 +42,7 @@ func testAccIosxrSNMPServerViewConfig_all() string {
 	return `
 	resource "iosxr_snmp_server_view" "test" {
 		view_name = "VIEW12"
-		mib_view_families = [{
+		name = [{
 			mib_view_family_name = "iso"
 			included = true
 		}]

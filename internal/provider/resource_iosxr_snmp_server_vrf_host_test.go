@@ -16,7 +16,8 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 			{
 				Config: testAccIosxrSNMPServerVRFHostConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "traps_unencrypted_unencrypted_string_version_v3_security_level", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"),
 				),
 			},
 			{
@@ -32,7 +33,6 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	return `
 	resource "iosxr_snmp_server_vrf_host" "test" {
 		vrf_name = "11.11.11.11"
-		traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
 	}
 	`
 }
@@ -41,7 +41,10 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	return `
 	resource "iosxr_snmp_server_vrf_host" "test" {
 		vrf_name = "11.11.11.11"
-		traps_unencrypted_unencrypted_string_version_v3_security_level = "true"
+		unencrypted_strings = [{
+			community_string = "COMMUNITY1"
+			version_v3_security_level = "auth"
+		}]
 	}
 	`
 }

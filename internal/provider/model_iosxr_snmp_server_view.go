@@ -14,12 +14,12 @@ import (
 )
 
 type SNMPServerView struct {
-	Device          types.String                    `tfsdk:"device"`
-	Id              types.String                    `tfsdk:"id"`
-	ViewName        types.String                    `tfsdk:"view_name"`
-	MibViewFamilies []SNMPServerViewMibViewFamilies `tfsdk:"mib_view_families"`
+	Device   types.String         `tfsdk:"device"`
+	Id       types.String         `tfsdk:"id"`
+	ViewName types.String         `tfsdk:"view_name"`
+	Name     []SNMPServerViewName `tfsdk:"name"`
 }
-type SNMPServerViewMibViewFamilies struct {
+type SNMPServerViewName struct {
 	MibViewFamilyName types.String `tfsdk:"mib_view_family_name"`
 	Included          types.Bool   `tfsdk:"included"`
 	Excluded          types.Bool   `tfsdk:"excluded"`
@@ -34,9 +34,9 @@ func (data SNMPServerView) toBody(ctx context.Context) string {
 	if !data.ViewName.IsNull() && !data.ViewName.IsUnknown() {
 		body, _ = sjson.Set(body, "view-name", data.ViewName.ValueString())
 	}
-	if len(data.MibViewFamilies) > 0 {
+	if len(data.Name) > 0 {
 		body, _ = sjson.Set(body, "mib-view-families.mib-view-family", []interface{}{})
-		for index, item := range data.MibViewFamilies {
+		for index, item := range data.Name {
 			if !item.MibViewFamilyName.IsNull() && !item.MibViewFamilyName.IsUnknown() {
 				body, _ = sjson.Set(body, "mib-view-families.mib-view-family"+"."+strconv.Itoa(index)+"."+"mib-view-family-name", item.MibViewFamilyName.ValueString())
 			}
@@ -56,9 +56,9 @@ func (data SNMPServerView) toBody(ctx context.Context) string {
 }
 
 func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
-	for i := range data.MibViewFamilies {
+	for i := range data.Name {
 		keys := [...]string{"mib-view-family-name"}
-		keyValues := [...]string{data.MibViewFamilies[i].MibViewFamilyName.ValueString()}
+		keyValues := [...]string{data.Name[i].MibViewFamilyName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "mib-view-families.mib-view-family").ForEach(
@@ -79,37 +79,37 @@ func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("mib-view-family-name"); value.Exists() && !data.MibViewFamilies[i].MibViewFamilyName.IsNull() {
-			data.MibViewFamilies[i].MibViewFamilyName = types.StringValue(value.String())
+		if value := r.Get("mib-view-family-name"); value.Exists() && !data.Name[i].MibViewFamilyName.IsNull() {
+			data.Name[i].MibViewFamilyName = types.StringValue(value.String())
 		} else {
-			data.MibViewFamilies[i].MibViewFamilyName = types.StringNull()
+			data.Name[i].MibViewFamilyName = types.StringNull()
 		}
-		if value := r.Get("included"); !data.MibViewFamilies[i].Included.IsNull() {
+		if value := r.Get("included"); !data.Name[i].Included.IsNull() {
 			if value.Exists() {
-				data.MibViewFamilies[i].Included = types.BoolValue(true)
+				data.Name[i].Included = types.BoolValue(true)
 			} else {
-				data.MibViewFamilies[i].Included = types.BoolValue(false)
+				data.Name[i].Included = types.BoolValue(false)
 			}
 		} else {
-			data.MibViewFamilies[i].Included = types.BoolNull()
+			data.Name[i].Included = types.BoolNull()
 		}
-		if value := r.Get("excluded"); !data.MibViewFamilies[i].Excluded.IsNull() {
+		if value := r.Get("excluded"); !data.Name[i].Excluded.IsNull() {
 			if value.Exists() {
-				data.MibViewFamilies[i].Excluded = types.BoolValue(true)
+				data.Name[i].Excluded = types.BoolValue(true)
 			} else {
-				data.MibViewFamilies[i].Excluded = types.BoolValue(false)
+				data.Name[i].Excluded = types.BoolValue(false)
 			}
 		} else {
-			data.MibViewFamilies[i].Excluded = types.BoolNull()
+			data.Name[i].Excluded = types.BoolNull()
 		}
 	}
 }
 
 func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
-		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
+		data.Name = make([]SNMPServerViewName, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SNMPServerViewMibViewFamilies{}
+			item := SNMPServerViewName{}
 			if cValue := v.Get("mib-view-family-name"); cValue.Exists() {
 				item.MibViewFamilyName = types.StringValue(cValue.String())
 			}
@@ -123,7 +123,7 @@ func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.Excluded = types.BoolValue(false)
 			}
-			data.MibViewFamilies = append(data.MibViewFamilies, item)
+			data.Name = append(data.Name, item)
 			return true
 		})
 	}
@@ -136,12 +136,12 @@ func (data *SNMPServerView) fromPlan(ctx context.Context, plan SNMPServerView) {
 
 func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPServerView) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.MibViewFamilies {
+	for i := range state.Name {
 		keys := [...]string{"mib-view-family-name"}
-		stateKeyValues := [...]string{state.MibViewFamilies[i].MibViewFamilyName.ValueString()}
+		stateKeyValues := [...]string{state.Name[i].MibViewFamilyName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.MibViewFamilies[i].MibViewFamilyName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Name[i].MibViewFamilyName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -149,9 +149,9 @@ func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPS
 		}
 
 		found := false
-		for j := range data.MibViewFamilies {
+		for j := range data.Name {
 			found = true
-			if state.MibViewFamilies[i].MibViewFamilyName.ValueString() != data.MibViewFamilies[j].MibViewFamilyName.ValueString() {
+			if state.Name[i].MibViewFamilyName.ValueString() != data.Name[j].MibViewFamilyName.ValueString() {
 				found = false
 			}
 			if found {

@@ -5,6 +5,13 @@ doc_category: Management
 attributes:
   - yang_name: vrf-name
     example: 11.11.11.11
-  - yang_name: traps/unencrypted/unencrypted-string/version/v3/security-level
-    example: true
+  - yang_name: traps/unencrypted/unencrypted-string
+    tf_name: unencrypted_strings
+    type: List
+    attributes:
+      - yang_name: community-string
+        id: true
+        example: COMMUNITY1
+      - yang_name: version/v3/security-level
+        example: auth
     

@@ -5,6 +5,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -12,10 +14,14 @@ import (
 )
 
 type SNMPServerVRFHost struct {
-	Device                                                  types.String `tfsdk:"device"`
-	Id                                                      types.String `tfsdk:"id"`
-	VrfName                                                 types.String `tfsdk:"vrf_name"`
-	TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel types.String `tfsdk:"traps_unencrypted_unencrypted_string_version_v3_security_level"`
+	Device             types.String                          `tfsdk:"device"`
+	Id                 types.String                          `tfsdk:"id"`
+	VrfName            types.String                          `tfsdk:"vrf_name"`
+	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
+}
+type SNMPServerVRFHostUnencryptedStrings struct {
+	CommunityString        types.String `tfsdk:"community_string"`
+	VersionV3SecurityLevel types.String `tfsdk:"version_v3_security_level"`
 }
 
 func (data SNMPServerVRFHost) getPath() string {
@@ -24,23 +30,71 @@ func (data SNMPServerVRFHost) getPath() string {
 
 func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsNull() && !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsUnknown() {
-		body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string.version.v3.security-level", data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.ValueString())
+	if len(data.UnencryptedStrings) > 0 {
+		body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string", []interface{}{})
+		for index, item := range data.UnencryptedStrings {
+			if !item.CommunityString.IsNull() && !item.CommunityString.IsUnknown() {
+				body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"community-string", item.CommunityString.ValueString())
+			}
+			if !item.VersionV3SecurityLevel.IsNull() && !item.VersionV3SecurityLevel.IsUnknown() {
+				body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"version.v3.security-level", item.VersionV3SecurityLevel.ValueString())
+			}
+		}
 	}
 	return body
 }
 
 func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string.version.v3.security-level"); value.Exists() && !data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel.IsNull() {
-		data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel = types.StringValue(value.String())
-	} else {
-		data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel = types.StringNull()
+	for i := range data.UnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "traps.unencrypted.unencrypted-string").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("community-string"); value.Exists() && !data.UnencryptedStrings[i].CommunityString.IsNull() {
+			data.UnencryptedStrings[i].CommunityString = types.StringValue(value.String())
+		} else {
+			data.UnencryptedStrings[i].CommunityString = types.StringNull()
+		}
+		if value := r.Get("version.v3.security-level"); value.Exists() && !data.UnencryptedStrings[i].VersionV3SecurityLevel.IsNull() {
+			data.UnencryptedStrings[i].VersionV3SecurityLevel = types.StringValue(value.String())
+		} else {
+			data.UnencryptedStrings[i].VersionV3SecurityLevel = types.StringNull()
+		}
 	}
 }
 
 func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string.version.v3.security-level"); value.Exists() {
-		data.TrapsUnencryptedUnencryptedStringVersionV3SecurityLevel = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
+		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVRFHostUnencryptedStrings{}
+			if cValue := v.Get("community-string"); cValue.Exists() {
+				item.CommunityString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
+				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
+			}
+			data.UnencryptedStrings = append(data.UnencryptedStrings, item)
+			return true
+		})
 	}
 }
 
@@ -51,10 +105,41 @@ func (data *SNMPServerVRFHost) fromPlan(ctx context.Context, plan SNMPServerVRFH
 
 func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SNMPServerVRFHost) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.UnencryptedStrings {
+		keys := [...]string{"community-string"}
+		stateKeyValues := [...]string{state.UnencryptedStrings[i].CommunityString.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.UnencryptedStrings[i].CommunityString.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.UnencryptedStrings {
+			found = true
+			if state.UnencryptedStrings[i].CommunityString.ValueString() != data.UnencryptedStrings[j].CommunityString.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
 func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+
 	return emptyLeafsDelete
 }

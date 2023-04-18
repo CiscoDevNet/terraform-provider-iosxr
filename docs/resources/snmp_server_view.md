@@ -15,7 +15,7 @@ This resource can manage the SNMP Server View configuration.
 ```terraform
 resource "iosxr_snmp_server_view" "example" {
   view_name = "VIEW12"
-  name = [
+  mib_view_families = [
     {
       name     = "iso"
       included = true
@@ -34,14 +34,14 @@ resource "iosxr_snmp_server_view" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
-- `name` (Attributes List) (see [below for nested schema](#nestedatt--name))
+- `mib_view_families` (Attributes List) (see [below for nested schema](#nestedatt--mib_view_families))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--name"></a>
-### Nested Schema for `name`
+<a id="nestedatt--mib_view_families"></a>
+### Nested Schema for `mib_view_families`
 
 Optional:
 

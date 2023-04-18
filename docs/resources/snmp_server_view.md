@@ -17,8 +17,8 @@ resource "iosxr_snmp_server_view" "example" {
   view_name = "VIEW12"
   name = [
     {
-      mib_view_family_name = "iso"
-      included             = true
+      name     = "iso"
+      included = true
     }
   ]
 }
@@ -47,7 +47,7 @@ Optional:
 
 - `excluded` (Boolean) MIB family is excluded from the view
 - `included` (Boolean) MIB family is included in the view
-- `mib_view_family_name` (String) MIB view family name
+- `name` (String) MIB view family name
 
 ## Import
 

@@ -10,6 +10,7 @@ attributes:
     type: List
     attributes:
       - yang_name: mib-view-family-name
+        tf_name: name
         id: true
         example: iso
       - yang_name: included

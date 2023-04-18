@@ -41,6 +41,6 @@ Read-Only:
 
 - `excluded` (Boolean) MIB family is excluded from the view
 - `included` (Boolean) MIB family is included in the view
-- `mib_view_family_name` (String) MIB view family name
+- `name` (String) MIB view family name
 
 

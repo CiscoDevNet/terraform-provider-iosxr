@@ -67,7 +67,7 @@ func (r *SNMPServerViewResource) Schema(ctx context.Context, req resource.Schema
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"mib_view_family_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("MIB view family name").String,
 							Optional:            true,
 							Validators: []validator.String{

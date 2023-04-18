@@ -1,0 +1,87 @@
+name: SNMP Server
+path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server
+doc_category: Management
+attributes:
+  - yang_name: traps/rf
+    example: true
+  - yang_name: traps/bfd                                     
+    example: true
+  - yang_name: traps/ntp                                     
+    example: true
+  - yang_name: traps/ethernet/oam/events                     
+    example: true
+  - yang_name: traps/copy-complete                            
+    example: true
+  - yang_name: traps/snmp/linkup
+    example: true
+  - yang_name: traps/snmp/linkdown
+    example: true
+  - yang_name: traps/power
+    example: true
+  - yang_name: traps/config
+    example: true
+  - yang_name: traps/entity
+    example: true
+  - yang_name: traps/system
+    example: true
+  - yang_name: traps/bridgemib
+    example: true
+  - yang_name: traps/entity-state/operstatus
+    example: true
+  - yang_name: traps/entity-redundancy/all
+    example: true
+  - yang_name: trap-source/both
+    example: Loopback10
+  - yang_name: traps/l2vpn/all
+    example: true
+  - yang_name: traps/l2vpn/vc-up
+    example: true
+  - yang_name: traps/l2vpn/vc-down
+    example: true
+  - yang_name: traps/sensor
+    example: true
+  - yang_name: traps/fru-ctrl
+    example: true
+  - yang_name: traps/isis/authentication-failure
+    example: enable
+  - yang_name: traps/bgp/cbgp2-updown
+    example: true
+  - yang_name: traps/bgp/bgp4-mib-updown
+    example: true
+
+  - yang_name : users/user
+    tf_name : users
+    type : List
+    attributes: 
+      - yang_name : user-name
+        id : true 
+        example : USER1
+      - yang_name : group-name
+        example : GROUP1
+      - yang_name : v3/auth/md5/encryption-aes 
+        example : 073C05626E2A4841141D
+      - yang_name : v3/auth/md5/encryption-default 
+        exclude_test : true
+        example : 073C05626E2A4841141D
+
+  - yang_name : groups/group
+    tf_name : groups
+    type : List
+    attributes: 
+      - yang_name : group-name
+        id : true
+        example : GROUP12
+      - yang_name : v3/priv
+        example : true
+      - yang_name : v3/read
+        example : VIEW1
+      - yang_name : v3/write
+        example : VIEW2
+      - yang_name : v3/context
+        example : CONTEXT1
+      - yang_name : v3/notify
+        example : VIEW3
+      - yang_name : v3/ipv4
+        example : ACL1
+      - yang_name : v3/ipv6
+        example : ACL2

@@ -6,7 +6,7 @@ attributes:
     example: VIEW12
 
   - yang_name: mib-view-families/mib-view-family
-    tf_name: name
+    tf_name: mib_view_families
     type: List
     attributes:
       - yang_name: mib-view-family-name

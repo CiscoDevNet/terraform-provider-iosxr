@@ -27,7 +27,8 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerVRFHostConfig = `
 
 resource "iosxr_snmp_server_vrf_host" "test" {
-	vrf_name = "11.11.11.11"
+	vrf_name = "VRF1"
+	address = "11.11.11.11"
 	unencrypted_strings = [{
 		community_string = "COMMUNITY1"
 		version_v3_security_level = "auth"
@@ -35,7 +36,8 @@ resource "iosxr_snmp_server_vrf_host" "test" {
 }
 
 data "iosxr_snmp_server_vrf_host" "test" {
-	vrf_name = "11.11.11.11"
+	vrf_name = "VRF1"
+	address = "11.11.11.11"
 	depends_on = [iosxr_snmp_server_vrf_host.test]
 }
 `

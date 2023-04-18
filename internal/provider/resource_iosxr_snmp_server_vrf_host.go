@@ -62,6 +62,13 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify hosts to receive SNMP notifications").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
 			"unencrypted_strings": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
 				Optional:            true,

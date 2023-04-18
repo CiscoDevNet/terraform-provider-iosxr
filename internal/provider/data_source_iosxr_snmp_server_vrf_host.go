@@ -49,6 +49,10 @@ func (d *SNMPServerVRFHostDataSource) Schema(ctx context.Context, req datasource
 				MarkdownDescription: "VRF name",
 				Required:            true,
 			},
+			"address": schema.StringAttribute{
+				MarkdownDescription: "Specify hosts to receive SNMP notifications",
+				Required:            true,
+			},
 			"unencrypted_strings": schema.ListNestedAttribute{
 				MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 				Computed:            true,

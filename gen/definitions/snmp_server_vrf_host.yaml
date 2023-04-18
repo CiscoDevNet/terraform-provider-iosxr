@@ -4,6 +4,8 @@ path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%s]/hosts/ho
 doc_category: Management
 attributes:
   - yang_name: vrf-name
+    example: VRF1
+  - yang_name: address
     example: 11.11.11.11
   - yang_name: traps/unencrypted/unencrypted-string
     tf_name: unencrypted_strings
@@ -14,4 +16,3 @@ attributes:
         example: COMMUNITY1
       - yang_name: version/v3/security-level
         example: auth
-    

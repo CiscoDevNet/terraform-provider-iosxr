@@ -17,6 +17,7 @@ type SNMPServerVRFHost struct {
 	Device             types.String                          `tfsdk:"device"`
 	Id                 types.String                          `tfsdk:"id"`
 	VrfName            types.String                          `tfsdk:"vrf_name"`
+	Address            types.String                          `tfsdk:"address"`
 	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
 }
 type SNMPServerVRFHostUnencryptedStrings struct {
@@ -25,11 +26,14 @@ type SNMPServerVRFHostUnencryptedStrings struct {
 }
 
 func (data SNMPServerVRFHost) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%s]/hosts/host[address=%s]", data.VrfName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
 
 func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 	body := "{}"
+	if !data.Address.IsNull() && !data.Address.IsUnknown() {
+		body, _ = sjson.Set(body, "address", data.Address.ValueString())
+	}
 	if len(data.UnencryptedStrings) > 0 {
 		body, _ = sjson.Set(body, "traps.unencrypted.unencrypted-string", []interface{}{})
 		for index, item := range data.UnencryptedStrings {
@@ -101,6 +105,7 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 func (data *SNMPServerVRFHost) fromPlan(ctx context.Context, plan SNMPServerVRFHost) {
 	data.Device = plan.Device
 	data.VrfName = types.StringValue(plan.VrfName.ValueString())
+	data.Address = types.StringValue(plan.Address.ValueString())
 }
 
 func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SNMPServerVRFHost) []string {

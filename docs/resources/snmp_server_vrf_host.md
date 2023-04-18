@@ -14,7 +14,8 @@ This resource can manage the SNMP Server VRF Host configuration.
 
 ```terraform
 resource "iosxr_snmp_server_vrf_host" "example" {
-  vrf_name = "11.11.11.11"
+  vrf_name = "VRF1"
+  address  = "11.11.11.11"
   unencrypted_strings = [
     {
       community_string          = "COMMUNITY1"
@@ -29,6 +30,7 @@ resource "iosxr_snmp_server_vrf_host" "example" {
 
 ### Required
 
+- `address` (String) Specify hosts to receive SNMP notifications
 - `vrf_name` (String) VRF name
 
 ### Optional
@@ -56,5 +58,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_snmp_server_vrf_host.example "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-11.11.11.11]/hosts/host[address=%!s(MISSING)]"
+terraform import iosxr_snmp_server_vrf_host.example "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-VRF1]/hosts/host[address=11.11.11.11]"
 ```

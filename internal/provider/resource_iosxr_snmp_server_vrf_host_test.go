@@ -16,6 +16,7 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 			{
 				Config: testAccIosxrSNMPServerVRFHostConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "address", "11.11.11.11"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"),
 				),
@@ -23,7 +24,7 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 			{
 				ResourceName:  "iosxr_snmp_server_vrf_host.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-11.11.11.11]/hosts/host[address=%!s(MISSING)]",
+				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-VRF1]/hosts/host[address=11.11.11.11]",
 			},
 		},
 	})
@@ -32,7 +33,8 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	return `
 	resource "iosxr_snmp_server_vrf_host" "test" {
-		vrf_name = "11.11.11.11"
+		vrf_name = "VRF1"
+		address = "11.11.11.11"
 	}
 	`
 }
@@ -40,7 +42,8 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	return `
 	resource "iosxr_snmp_server_vrf_host" "test" {
-		vrf_name = "11.11.11.11"
+		vrf_name = "VRF1"
+		address = "11.11.11.11"
 		unencrypted_strings = [{
 			community_string = "COMMUNITY1"
 			version_v3_security_level = "auth"

@@ -51,23 +51,23 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"traps_rf": schema.BoolAttribute{
+			"rf": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RF-MIB traps").String,
 				Optional:            true,
 			},
-			"traps_bfd": schema.BoolAttribute{
+			"bfd": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD traps").String,
 				Optional:            true,
 			},
-			"traps_ntp": schema.BoolAttribute{
+			"ntp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Cisco Ntp traps").String,
 				Optional:            true,
 			},
-			"traps_ethernet_oam_events": schema.BoolAttribute{
+			"ethernet_oam_events": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all OAM event traps").String,
 				Optional:            true,
 			},
-			"traps_copy_complete": schema.BoolAttribute{
+			"copy_complete": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps").String,
 				Optional:            true,
 			},
@@ -79,31 +79,31 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB linDownp traps").String,
 				Optional:            true,
 			},
-			"traps_power": schema.BoolAttribute{
+			"power": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity power traps").String,
 				Optional:            true,
 			},
-			"traps_config": schema.BoolAttribute{
+			"config": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP config traps").String,
 				Optional:            true,
 			},
-			"traps_entity": schema.BoolAttribute{
+			"entity": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity traps").String,
 				Optional:            true,
 			},
-			"traps_system": schema.BoolAttribute{
+			"system": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP SYSTEMMIB-MIB traps").String,
 				Optional:            true,
 			},
-			"traps_bridgemib": schema.BoolAttribute{
+			"bridgemib": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Trap for Bridge MIB").String,
 				Optional:            true,
 			},
-			"traps_entity_state_operstatus": schema.BoolAttribute{
+			"entity_state_operstatus": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable entity oper status enable notification").String,
 				Optional:            true,
 			},
-			"traps_entity_redundancy_all": schema.BoolAttribute{
+			"entity_redundancy_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all CISCO-ENTITY-REDUNDANCY-MIB traps").String,
 				Optional:            true,
 			},
@@ -114,38 +114,164 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
-			"traps_l2vpn_all": schema.BoolAttribute{
+			"l2vpn_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all L2VPN traps").String,
 				Optional:            true,
 			},
-			"traps_l2vpn_vc_up": schema.BoolAttribute{
+			"l2vpn_vc_up": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VC up traps").String,
 				Optional:            true,
 			},
-			"traps_l2vpn_vc_down": schema.BoolAttribute{
+			"l2vpn_vc_down": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VC down traps").String,
 				Optional:            true,
 			},
-			"traps_sensor": schema.BoolAttribute{
+			"sensor": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity sensor traps").String,
 				Optional:            true,
 			},
-			"traps_fru_ctrl": schema.BoolAttribute{
+			"fru_ctrl": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity FRU control traps").String,
 				Optional:            true,
 			},
-			"traps_isis_authentication_failure": schema.StringAttribute{
+			"isis_all": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_database_overload": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_manual_address_drops": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_corrupted_lsp_detected": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_id_len_mismatch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_max_area_addresses_mismatch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_own_lsp_purge": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_sequence_number_skip": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_authentication_type_failure": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_authentication_failure": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"traps_bgp_cbgp2_updown": schema.BoolAttribute{
+			"isis_version_skew": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_area_mismatch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_rejected_adjacency": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_lsp_too_large_to_propagate": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_protocols_supported_mismatch": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_adjacency_change": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"isis_lsp_error_detected": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disable", "enable"),
+				},
+			},
+			"bgp_cbgp2_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_bgp4_mib_updown": schema.BoolAttribute{
+			"bgp_bgp4_mib_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},

@@ -14,29 +14,47 @@ This resource can manage the SNMP Server configuration.
 
 ```terraform
 resource "iosxr_snmp_server" "example" {
-  traps_rf                          = true
-  traps_bfd                         = true
-  traps_ntp                         = true
-  traps_ethernet_oam_events         = true
-  traps_copy_complete               = true
-  traps_snmp_linkup                 = true
-  traps_snmp_linkdown               = true
-  traps_power                       = true
-  traps_config                      = true
-  traps_entity                      = true
-  traps_system                      = true
-  traps_bridgemib                   = true
-  traps_entity_state_operstatus     = true
-  traps_entity_redundancy_all       = true
-  trap_source_both                  = "Loopback10"
-  traps_l2vpn_all                   = true
-  traps_l2vpn_vc_up                 = true
-  traps_l2vpn_vc_down               = true
-  traps_sensor                      = true
-  traps_fru_ctrl                    = true
-  traps_isis_authentication_failure = "enable"
-  traps_bgp_cbgp2_updown            = true
-  traps_bgp_bgp4_mib_updown         = true
+  rf                                  = true
+  bfd                                 = true
+  ntp                                 = true
+  ethernet_oam_events                 = true
+  copy_complete                       = true
+  traps_snmp_linkup                   = true
+  traps_snmp_linkdown                 = true
+  power                               = true
+  config                              = true
+  entity                              = true
+  system                              = true
+  bridgemib                           = true
+  entity_state_operstatus             = true
+  entity_redundancy_all               = true
+  trap_source_both                    = "Loopback10"
+  l2vpn_all                           = true
+  l2vpn_vc_up                         = true
+  l2vpn_vc_down                       = true
+  sensor                              = true
+  fru_ctrl                            = true
+  isis_all                            = "disable"
+  isis_database_overload              = "disable"
+  isis_manual_address_drops           = "disable"
+  isis_corrupted_lsp_detected         = "disable"
+  isis_attempt_to_exceed_max_sequence = "disable"
+  isis_id_len_mismatch                = "disable"
+  isis_max_area_addresses_mismatch    = "disable"
+  isis_own_lsp_purge                  = "disable"
+  isis_sequence_number_skip           = "disable"
+  isis_authentication_type_failure    = "disable"
+  isis_authentication_failure         = "enable"
+  isis_version_skew                   = "disable"
+  isis_area_mismatch                  = "disable"
+  isis_rejected_adjacency             = "disable"
+  isis_lsp_too_large_to_propagate     = "disable"
+  isis_orig_lsp_buff_size_mismatch    = "disable"
+  isis_protocols_supported_mismatch   = "disable"
+  isis_adjacency_change               = "disable"
+  isis_lsp_error_detected             = "disable"
+  bgp_cbgp2_updown                    = true
+  bgp_bgp4_mib_updown                 = true
   users = [
     {
       user_name                  = "USER1"
@@ -64,35 +82,71 @@ resource "iosxr_snmp_server" "example" {
 
 ### Required
 
-- `traps_isis_authentication_failure` (String) isisAuthenticationFailure
+- `isis_adjacency_change` (String) isisAdjacencyChange
+  - Choices: `disable`, `enable`
+- `isis_all` (String) Enable all IS-IS traps
+  - Choices: `disable`, `enable`
+- `isis_area_mismatch` (String) isisAreaMismatch
+  - Choices: `disable`, `enable`
+- `isis_attempt_to_exceed_max_sequence` (String) isisAttemptToExceedMaxSequence
+  - Choices: `disable`, `enable`
+- `isis_authentication_failure` (String) isisAuthenticationFailure
+  - Choices: `disable`, `enable`
+- `isis_authentication_type_failure` (String) isisAuthenticationTypeFailure
+  - Choices: `disable`, `enable`
+- `isis_corrupted_lsp_detected` (String) isisCorruptedLSPDetected
+  - Choices: `disable`, `enable`
+- `isis_database_overload` (String) isisDatabaseOverload
+  - Choices: `disable`, `enable`
+- `isis_id_len_mismatch` (String) isisIDLenMismatch
+  - Choices: `disable`, `enable`
+- `isis_lsp_error_detected` (String) isisLSPErrorDetected
+  - Choices: `disable`, `enable`
+- `isis_lsp_too_large_to_propagate` (String) isisLSPTooLargeToPropagate
+  - Choices: `disable`, `enable`
+- `isis_manual_address_drops` (String) isisManualAddressDrops
+  - Choices: `disable`, `enable`
+- `isis_max_area_addresses_mismatch` (String) isisMaxAreaAddressesMismatch
+  - Choices: `disable`, `enable`
+- `isis_orig_lsp_buff_size_mismatch` (String) isisOrigLSPBuffSizeMismatch
+  - Choices: `disable`, `enable`
+- `isis_own_lsp_purge` (String) isisOwnLSPPurge
+  - Choices: `disable`, `enable`
+- `isis_protocols_supported_mismatch` (String) isisProtocolsSupportedMismatch
+  - Choices: `disable`, `enable`
+- `isis_rejected_adjacency` (String) isisRejectedAdjacency
+  - Choices: `disable`, `enable`
+- `isis_sequence_number_skip` (String) isisSequenceNumberSkip
+  - Choices: `disable`, `enable`
+- `isis_version_skew` (String) isisVersionSkew
   - Choices: `disable`, `enable`
 
 ### Optional
 
+- `bfd` (Boolean) Enable BFD traps
+- `bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
+- `config` (Boolean) Enable SNMP config traps
+- `copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
 - `device` (String) A device name from the provider configuration.
+- `entity` (Boolean) Enable SNMP entity traps
+- `entity_redundancy_all` (Boolean) Enable all CISCO-ENTITY-REDUNDANCY-MIB traps
+- `entity_state_operstatus` (Boolean) Enable entity oper status enable notification
+- `ethernet_oam_events` (Boolean) Enable all OAM event traps
+- `fru_ctrl` (Boolean) Enable SNMP entity FRU control traps
 - `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
+- `l2vpn_all` (Boolean) Enable all L2VPN traps
+- `l2vpn_vc_down` (Boolean) Enable VC down traps
+- `l2vpn_vc_up` (Boolean) Enable VC up traps
+- `ntp` (Boolean) Enable SNMP Cisco Ntp traps
+- `power` (Boolean) Enable SNMP entity power traps
+- `rf` (Boolean) Enable SNMP RF-MIB traps
+- `sensor` (Boolean) Enable SNMP entity sensor traps
+- `system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
 - `trap_source_both` (String) Assign an interface for the source address of all traps
-- `traps_bfd` (Boolean) Enable BFD traps
-- `traps_bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
-- `traps_config` (Boolean) Enable SNMP config traps
-- `traps_copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
-- `traps_entity` (Boolean) Enable SNMP entity traps
-- `traps_entity_redundancy_all` (Boolean) Enable all CISCO-ENTITY-REDUNDANCY-MIB traps
-- `traps_entity_state_operstatus` (Boolean) Enable entity oper status enable notification
-- `traps_ethernet_oam_events` (Boolean) Enable all OAM event traps
-- `traps_fru_ctrl` (Boolean) Enable SNMP entity FRU control traps
-- `traps_l2vpn_all` (Boolean) Enable all L2VPN traps
-- `traps_l2vpn_vc_down` (Boolean) Enable VC down traps
-- `traps_l2vpn_vc_up` (Boolean) Enable VC up traps
-- `traps_ntp` (Boolean) Enable SNMP Cisco Ntp traps
-- `traps_power` (Boolean) Enable SNMP entity power traps
-- `traps_rf` (Boolean) Enable SNMP RF-MIB traps
-- `traps_sensor` (Boolean) Enable SNMP entity sensor traps
 - `traps_snmp_linkdown` (Boolean) Enable SNMPv2-MIB linDownp traps
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
-- `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
 - `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
 
 ### Read-Only

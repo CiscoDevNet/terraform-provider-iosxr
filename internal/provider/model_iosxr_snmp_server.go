@@ -16,29 +16,47 @@ import (
 type SNMPServer struct {
 	Device                         types.String       `tfsdk:"device"`
 	Id                             types.String       `tfsdk:"id"`
-	TrapsRf                        types.Bool         `tfsdk:"traps_rf"`
-	TrapsBfd                       types.Bool         `tfsdk:"traps_bfd"`
-	TrapsNtp                       types.Bool         `tfsdk:"traps_ntp"`
-	TrapsEthernetOamEvents         types.Bool         `tfsdk:"traps_ethernet_oam_events"`
-	TrapsCopyComplete              types.Bool         `tfsdk:"traps_copy_complete"`
+	Rf                             types.Bool         `tfsdk:"rf"`
+	Bfd                            types.Bool         `tfsdk:"bfd"`
+	Ntp                            types.Bool         `tfsdk:"ntp"`
+	EthernetOamEvents              types.Bool         `tfsdk:"ethernet_oam_events"`
+	CopyComplete                   types.Bool         `tfsdk:"copy_complete"`
 	TrapsSnmpLinkup                types.Bool         `tfsdk:"traps_snmp_linkup"`
 	TrapsSnmpLinkdown              types.Bool         `tfsdk:"traps_snmp_linkdown"`
-	TrapsPower                     types.Bool         `tfsdk:"traps_power"`
-	TrapsConfig                    types.Bool         `tfsdk:"traps_config"`
-	TrapsEntity                    types.Bool         `tfsdk:"traps_entity"`
-	TrapsSystem                    types.Bool         `tfsdk:"traps_system"`
-	TrapsBridgemib                 types.Bool         `tfsdk:"traps_bridgemib"`
-	TrapsEntityStateOperstatus     types.Bool         `tfsdk:"traps_entity_state_operstatus"`
-	TrapsEntityRedundancyAll       types.Bool         `tfsdk:"traps_entity_redundancy_all"`
+	Power                          types.Bool         `tfsdk:"power"`
+	Config                         types.Bool         `tfsdk:"config"`
+	Entity                         types.Bool         `tfsdk:"entity"`
+	System                         types.Bool         `tfsdk:"system"`
+	Bridgemib                      types.Bool         `tfsdk:"bridgemib"`
+	EntityStateOperstatus          types.Bool         `tfsdk:"entity_state_operstatus"`
+	EntityRedundancyAll            types.Bool         `tfsdk:"entity_redundancy_all"`
 	TrapSourceBoth                 types.String       `tfsdk:"trap_source_both"`
-	TrapsL2vpnAll                  types.Bool         `tfsdk:"traps_l2vpn_all"`
-	TrapsL2vpnVcUp                 types.Bool         `tfsdk:"traps_l2vpn_vc_up"`
-	TrapsL2vpnVcDown               types.Bool         `tfsdk:"traps_l2vpn_vc_down"`
-	TrapsSensor                    types.Bool         `tfsdk:"traps_sensor"`
-	TrapsFruCtrl                   types.Bool         `tfsdk:"traps_fru_ctrl"`
-	TrapsIsisAuthenticationFailure types.String       `tfsdk:"traps_isis_authentication_failure"`
-	TrapsBgpCbgp2Updown            types.Bool         `tfsdk:"traps_bgp_cbgp2_updown"`
-	TrapsBgpBgp4MibUpdown          types.Bool         `tfsdk:"traps_bgp_bgp4_mib_updown"`
+	L2vpnAll                       types.Bool         `tfsdk:"l2vpn_all"`
+	L2vpnVcUp                      types.Bool         `tfsdk:"l2vpn_vc_up"`
+	L2vpnVcDown                    types.Bool         `tfsdk:"l2vpn_vc_down"`
+	Sensor                         types.Bool         `tfsdk:"sensor"`
+	FruCtrl                        types.Bool         `tfsdk:"fru_ctrl"`
+	IsisAll                        types.String       `tfsdk:"isis_all"`
+	IsisDatabaseOverload           types.String       `tfsdk:"isis_database_overload"`
+	IsisManualAddressDrops         types.String       `tfsdk:"isis_manual_address_drops"`
+	IsisCorruptedLspDetected       types.String       `tfsdk:"isis_corrupted_lsp_detected"`
+	IsisAttemptToExceedMaxSequence types.String       `tfsdk:"isis_attempt_to_exceed_max_sequence"`
+	IsisIdLenMismatch              types.String       `tfsdk:"isis_id_len_mismatch"`
+	IsisMaxAreaAddressesMismatch   types.String       `tfsdk:"isis_max_area_addresses_mismatch"`
+	IsisOwnLspPurge                types.String       `tfsdk:"isis_own_lsp_purge"`
+	IsisSequenceNumberSkip         types.String       `tfsdk:"isis_sequence_number_skip"`
+	IsisAuthenticationTypeFailure  types.String       `tfsdk:"isis_authentication_type_failure"`
+	IsisAuthenticationFailure      types.String       `tfsdk:"isis_authentication_failure"`
+	IsisVersionSkew                types.String       `tfsdk:"isis_version_skew"`
+	IsisAreaMismatch               types.String       `tfsdk:"isis_area_mismatch"`
+	IsisRejectedAdjacency          types.String       `tfsdk:"isis_rejected_adjacency"`
+	IsisLspTooLargeToPropagate     types.String       `tfsdk:"isis_lsp_too_large_to_propagate"`
+	IsisOrigLspBuffSizeMismatch    types.String       `tfsdk:"isis_orig_lsp_buff_size_mismatch"`
+	IsisProtocolsSupportedMismatch types.String       `tfsdk:"isis_protocols_supported_mismatch"`
+	IsisAdjacencyChange            types.String       `tfsdk:"isis_adjacency_change"`
+	IsisLspErrorDetected           types.String       `tfsdk:"isis_lsp_error_detected"`
+	BgpCbgp2Updown                 types.Bool         `tfsdk:"bgp_cbgp2_updown"`
+	BgpBgp4MibUpdown               types.Bool         `tfsdk:"bgp_bgp4_mib_updown"`
 	Users                          []SNMPServerUsers  `tfsdk:"users"`
 	Groups                         []SNMPServerGroups `tfsdk:"groups"`
 }
@@ -65,29 +83,29 @@ func (data SNMPServer) getPath() string {
 
 func (data SNMPServer) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.TrapsRf.IsNull() && !data.TrapsRf.IsUnknown() {
-		if data.TrapsRf.ValueBool() {
-			body, _ = sjson.Set(body, "traps.rf", map[string]string{})
+	if !data.Rf.IsNull() && !data.Rf.IsUnknown() {
+		if data.Rf.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf", map[string]string{})
 		}
 	}
-	if !data.TrapsBfd.IsNull() && !data.TrapsBfd.IsUnknown() {
-		if data.TrapsBfd.ValueBool() {
-			body, _ = sjson.Set(body, "traps.bfd", map[string]string{})
+	if !data.Bfd.IsNull() && !data.Bfd.IsUnknown() {
+		if data.Bfd.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd", map[string]string{})
 		}
 	}
-	if !data.TrapsNtp.IsNull() && !data.TrapsNtp.IsUnknown() {
-		if data.TrapsNtp.ValueBool() {
-			body, _ = sjson.Set(body, "traps.ntp", map[string]string{})
+	if !data.Ntp.IsNull() && !data.Ntp.IsUnknown() {
+		if data.Ntp.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-ntp-cfg:ntp", map[string]string{})
 		}
 	}
-	if !data.TrapsEthernetOamEvents.IsNull() && !data.TrapsEthernetOamEvents.IsUnknown() {
-		if data.TrapsEthernetOamEvents.ValueBool() {
-			body, _ = sjson.Set(body, "traps.ethernet.oam.events", map[string]string{})
+	if !data.EthernetOamEvents.IsNull() && !data.EthernetOamEvents.IsUnknown() {
+		if data.EthernetOamEvents.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet.oam.events", map[string]string{})
 		}
 	}
-	if !data.TrapsCopyComplete.IsNull() && !data.TrapsCopyComplete.IsUnknown() {
-		if data.TrapsCopyComplete.ValueBool() {
-			body, _ = sjson.Set(body, "traps.copy-complete", map[string]string{})
+	if !data.CopyComplete.IsNull() && !data.CopyComplete.IsUnknown() {
+		if data.CopyComplete.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete", map[string]string{})
 		}
 	}
 	if !data.TrapsSnmpLinkup.IsNull() && !data.TrapsSnmpLinkup.IsUnknown() {
@@ -100,80 +118,134 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "traps.snmp.linkdown", map[string]string{})
 		}
 	}
-	if !data.TrapsPower.IsNull() && !data.TrapsPower.IsUnknown() {
-		if data.TrapsPower.ValueBool() {
-			body, _ = sjson.Set(body, "traps.power", map[string]string{})
+	if !data.Power.IsNull() && !data.Power.IsUnknown() {
+		if data.Power.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-power-cfg:power", map[string]string{})
 		}
 	}
-	if !data.TrapsConfig.IsNull() && !data.TrapsConfig.IsUnknown() {
-		if data.TrapsConfig.ValueBool() {
-			body, _ = sjson.Set(body, "traps.config", map[string]string{})
+	if !data.Config.IsNull() && !data.Config.IsUnknown() {
+		if data.Config.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-cfg-mibs-cfg:config", map[string]string{})
 		}
 	}
-	if !data.TrapsEntity.IsNull() && !data.TrapsEntity.IsUnknown() {
-		if data.TrapsEntity.ValueBool() {
-			body, _ = sjson.Set(body, "traps.entity", map[string]string{})
+	if !data.Entity.IsNull() && !data.Entity.IsUnknown() {
+		if data.Entity.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-entity-cfg:entity", map[string]string{})
 		}
 	}
-	if !data.TrapsSystem.IsNull() && !data.TrapsSystem.IsUnknown() {
-		if data.TrapsSystem.ValueBool() {
-			body, _ = sjson.Set(body, "traps.system", map[string]string{})
+	if !data.System.IsNull() && !data.System.IsUnknown() {
+		if data.System.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-system-cfg:system", map[string]string{})
 		}
 	}
-	if !data.TrapsBridgemib.IsNull() && !data.TrapsBridgemib.IsUnknown() {
-		if data.TrapsBridgemib.ValueBool() {
-			body, _ = sjson.Set(body, "traps.bridgemib", map[string]string{})
+	if !data.Bridgemib.IsNull() && !data.Bridgemib.IsUnknown() {
+		if data.Bridgemib.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib", map[string]string{})
 		}
 	}
-	if !data.TrapsEntityStateOperstatus.IsNull() && !data.TrapsEntityStateOperstatus.IsUnknown() {
-		if data.TrapsEntityStateOperstatus.ValueBool() {
-			body, _ = sjson.Set(body, "traps.entity-state.operstatus", map[string]string{})
+	if !data.EntityStateOperstatus.IsNull() && !data.EntityStateOperstatus.IsUnknown() {
+		if data.EntityStateOperstatus.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.operstatus", map[string]string{})
 		}
 	}
-	if !data.TrapsEntityRedundancyAll.IsNull() && !data.TrapsEntityRedundancyAll.IsUnknown() {
-		if data.TrapsEntityRedundancyAll.ValueBool() {
-			body, _ = sjson.Set(body, "traps.entity-redundancy.all", map[string]string{})
+	if !data.EntityRedundancyAll.IsNull() && !data.EntityRedundancyAll.IsUnknown() {
+		if data.EntityRedundancyAll.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.all", map[string]string{})
 		}
 	}
 	if !data.TrapSourceBoth.IsNull() && !data.TrapSourceBoth.IsUnknown() {
 		body, _ = sjson.Set(body, "trap-source.both", data.TrapSourceBoth.ValueString())
 	}
-	if !data.TrapsL2vpnAll.IsNull() && !data.TrapsL2vpnAll.IsUnknown() {
-		if data.TrapsL2vpnAll.ValueBool() {
-			body, _ = sjson.Set(body, "traps.l2vpn.all", map[string]string{})
+	if !data.L2vpnAll.IsNull() && !data.L2vpnAll.IsUnknown() {
+		if data.L2vpnAll.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.all", map[string]string{})
 		}
 	}
-	if !data.TrapsL2vpnVcUp.IsNull() && !data.TrapsL2vpnVcUp.IsUnknown() {
-		if data.TrapsL2vpnVcUp.ValueBool() {
-			body, _ = sjson.Set(body, "traps.l2vpn.vc-up", map[string]string{})
+	if !data.L2vpnVcUp.IsNull() && !data.L2vpnVcUp.IsUnknown() {
+		if data.L2vpnVcUp.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-up", map[string]string{})
 		}
 	}
-	if !data.TrapsL2vpnVcDown.IsNull() && !data.TrapsL2vpnVcDown.IsUnknown() {
-		if data.TrapsL2vpnVcDown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.l2vpn.vc-down", map[string]string{})
+	if !data.L2vpnVcDown.IsNull() && !data.L2vpnVcDown.IsUnknown() {
+		if data.L2vpnVcDown.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-down", map[string]string{})
 		}
 	}
-	if !data.TrapsSensor.IsNull() && !data.TrapsSensor.IsUnknown() {
-		if data.TrapsSensor.ValueBool() {
-			body, _ = sjson.Set(body, "traps.sensor", map[string]string{})
+	if !data.Sensor.IsNull() && !data.Sensor.IsUnknown() {
+		if data.Sensor.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor", map[string]string{})
 		}
 	}
-	if !data.TrapsFruCtrl.IsNull() && !data.TrapsFruCtrl.IsUnknown() {
-		if data.TrapsFruCtrl.ValueBool() {
-			body, _ = sjson.Set(body, "traps.fru-ctrl", map[string]string{})
+	if !data.FruCtrl.IsNull() && !data.FruCtrl.IsUnknown() {
+		if data.FruCtrl.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl", map[string]string{})
 		}
 	}
-	if !data.TrapsIsisAuthenticationFailure.IsNull() && !data.TrapsIsisAuthenticationFailure.IsUnknown() {
-		body, _ = sjson.Set(body, "traps.isis.authentication-failure", data.TrapsIsisAuthenticationFailure.ValueString())
+	if !data.IsisAll.IsNull() && !data.IsisAll.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all", data.IsisAll.ValueString())
 	}
-	if !data.TrapsBgpCbgp2Updown.IsNull() && !data.TrapsBgpCbgp2Updown.IsUnknown() {
-		if data.TrapsBgpCbgp2Updown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.bgp.cbgp2-updown", map[string]string{})
+	if !data.IsisDatabaseOverload.IsNull() && !data.IsisDatabaseOverload.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload", data.IsisDatabaseOverload.ValueString())
+	}
+	if !data.IsisManualAddressDrops.IsNull() && !data.IsisManualAddressDrops.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops", data.IsisManualAddressDrops.ValueString())
+	}
+	if !data.IsisCorruptedLspDetected.IsNull() && !data.IsisCorruptedLspDetected.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected", data.IsisCorruptedLspDetected.ValueString())
+	}
+	if !data.IsisAttemptToExceedMaxSequence.IsNull() && !data.IsisAttemptToExceedMaxSequence.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence", data.IsisAttemptToExceedMaxSequence.ValueString())
+	}
+	if !data.IsisIdLenMismatch.IsNull() && !data.IsisIdLenMismatch.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch", data.IsisIdLenMismatch.ValueString())
+	}
+	if !data.IsisMaxAreaAddressesMismatch.IsNull() && !data.IsisMaxAreaAddressesMismatch.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch", data.IsisMaxAreaAddressesMismatch.ValueString())
+	}
+	if !data.IsisOwnLspPurge.IsNull() && !data.IsisOwnLspPurge.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge", data.IsisOwnLspPurge.ValueString())
+	}
+	if !data.IsisSequenceNumberSkip.IsNull() && !data.IsisSequenceNumberSkip.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip", data.IsisSequenceNumberSkip.ValueString())
+	}
+	if !data.IsisAuthenticationTypeFailure.IsNull() && !data.IsisAuthenticationTypeFailure.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure", data.IsisAuthenticationTypeFailure.ValueString())
+	}
+	if !data.IsisAuthenticationFailure.IsNull() && !data.IsisAuthenticationFailure.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure", data.IsisAuthenticationFailure.ValueString())
+	}
+	if !data.IsisVersionSkew.IsNull() && !data.IsisVersionSkew.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew", data.IsisVersionSkew.ValueString())
+	}
+	if !data.IsisAreaMismatch.IsNull() && !data.IsisAreaMismatch.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch", data.IsisAreaMismatch.ValueString())
+	}
+	if !data.IsisRejectedAdjacency.IsNull() && !data.IsisRejectedAdjacency.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency", data.IsisRejectedAdjacency.ValueString())
+	}
+	if !data.IsisLspTooLargeToPropagate.IsNull() && !data.IsisLspTooLargeToPropagate.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate", data.IsisLspTooLargeToPropagate.ValueString())
+	}
+	if !data.IsisOrigLspBuffSizeMismatch.IsNull() && !data.IsisOrigLspBuffSizeMismatch.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch", data.IsisOrigLspBuffSizeMismatch.ValueString())
+	}
+	if !data.IsisProtocolsSupportedMismatch.IsNull() && !data.IsisProtocolsSupportedMismatch.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch", data.IsisProtocolsSupportedMismatch.ValueString())
+	}
+	if !data.IsisAdjacencyChange.IsNull() && !data.IsisAdjacencyChange.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change", data.IsisAdjacencyChange.ValueString())
+	}
+	if !data.IsisLspErrorDetected.IsNull() && !data.IsisLspErrorDetected.IsUnknown() {
+		body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected", data.IsisLspErrorDetected.ValueString())
+	}
+	if !data.BgpCbgp2Updown.IsNull() && !data.BgpCbgp2Updown.IsUnknown() {
+		if data.BgpCbgp2Updown.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp2-updown", map[string]string{})
 		}
 	}
-	if !data.TrapsBgpBgp4MibUpdown.IsNull() && !data.TrapsBgpBgp4MibUpdown.IsUnknown() {
-		if data.TrapsBgpBgp4MibUpdown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.bgp.bgp4-mib-updown", map[string]string{})
+	if !data.BgpBgp4MibUpdown.IsNull() && !data.BgpBgp4MibUpdown.IsUnknown() {
+		if data.BgpBgp4MibUpdown.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.bgp4-mib-updown", map[string]string{})
 		}
 	}
 	if len(data.Users) > 0 {
@@ -228,50 +300,50 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 }
 
 func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traps.rf"); !data.TrapsRf.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); !data.Rf.IsNull() {
 		if value.Exists() {
-			data.TrapsRf = types.BoolValue(true)
+			data.Rf = types.BoolValue(true)
 		} else {
-			data.TrapsRf = types.BoolValue(false)
+			data.Rf = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsRf = types.BoolNull()
+		data.Rf = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.bfd"); !data.TrapsBfd.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd"); !data.Bfd.IsNull() {
 		if value.Exists() {
-			data.TrapsBfd = types.BoolValue(true)
+			data.Bfd = types.BoolValue(true)
 		} else {
-			data.TrapsBfd = types.BoolValue(false)
+			data.Bfd = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsBfd = types.BoolNull()
+		data.Bfd = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.ntp"); !data.TrapsNtp.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ntp-cfg:ntp"); !data.Ntp.IsNull() {
 		if value.Exists() {
-			data.TrapsNtp = types.BoolValue(true)
+			data.Ntp = types.BoolValue(true)
 		} else {
-			data.TrapsNtp = types.BoolValue(false)
+			data.Ntp = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsNtp = types.BoolNull()
+		data.Ntp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.ethernet.oam.events"); !data.TrapsEthernetOamEvents.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet.oam.events"); !data.EthernetOamEvents.IsNull() {
 		if value.Exists() {
-			data.TrapsEthernetOamEvents = types.BoolValue(true)
+			data.EthernetOamEvents = types.BoolValue(true)
 		} else {
-			data.TrapsEthernetOamEvents = types.BoolValue(false)
+			data.EthernetOamEvents = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsEthernetOamEvents = types.BoolNull()
+		data.EthernetOamEvents = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.copy-complete"); !data.TrapsCopyComplete.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete"); !data.CopyComplete.IsNull() {
 		if value.Exists() {
-			data.TrapsCopyComplete = types.BoolValue(true)
+			data.CopyComplete = types.BoolValue(true)
 		} else {
-			data.TrapsCopyComplete = types.BoolValue(false)
+			data.CopyComplete = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsCopyComplete = types.BoolNull()
+		data.CopyComplete = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "traps.snmp.linkup"); !data.TrapsSnmpLinkup.IsNull() {
 		if value.Exists() {
@@ -291,141 +363,231 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsSnmpLinkdown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.power"); !data.TrapsPower.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-power-cfg:power"); !data.Power.IsNull() {
 		if value.Exists() {
-			data.TrapsPower = types.BoolValue(true)
+			data.Power = types.BoolValue(true)
 		} else {
-			data.TrapsPower = types.BoolValue(false)
+			data.Power = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsPower = types.BoolNull()
+		data.Power = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.config"); !data.TrapsConfig.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-cfg-mibs-cfg:config"); !data.Config.IsNull() {
 		if value.Exists() {
-			data.TrapsConfig = types.BoolValue(true)
+			data.Config = types.BoolValue(true)
 		} else {
-			data.TrapsConfig = types.BoolValue(false)
+			data.Config = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsConfig = types.BoolNull()
+		data.Config = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.entity"); !data.TrapsEntity.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-cfg:entity"); !data.Entity.IsNull() {
 		if value.Exists() {
-			data.TrapsEntity = types.BoolValue(true)
+			data.Entity = types.BoolValue(true)
 		} else {
-			data.TrapsEntity = types.BoolValue(false)
+			data.Entity = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsEntity = types.BoolNull()
+		data.Entity = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.system"); !data.TrapsSystem.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-system-cfg:system"); !data.System.IsNull() {
 		if value.Exists() {
-			data.TrapsSystem = types.BoolValue(true)
+			data.System = types.BoolValue(true)
 		} else {
-			data.TrapsSystem = types.BoolValue(false)
+			data.System = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsSystem = types.BoolNull()
+		data.System = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.bridgemib"); !data.TrapsBridgemib.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib"); !data.Bridgemib.IsNull() {
 		if value.Exists() {
-			data.TrapsBridgemib = types.BoolValue(true)
+			data.Bridgemib = types.BoolValue(true)
 		} else {
-			data.TrapsBridgemib = types.BoolValue(false)
+			data.Bridgemib = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsBridgemib = types.BoolNull()
+		data.Bridgemib = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.entity-state.operstatus"); !data.TrapsEntityStateOperstatus.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.operstatus"); !data.EntityStateOperstatus.IsNull() {
 		if value.Exists() {
-			data.TrapsEntityStateOperstatus = types.BoolValue(true)
+			data.EntityStateOperstatus = types.BoolValue(true)
 		} else {
-			data.TrapsEntityStateOperstatus = types.BoolValue(false)
+			data.EntityStateOperstatus = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsEntityStateOperstatus = types.BoolNull()
+		data.EntityStateOperstatus = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.entity-redundancy.all"); !data.TrapsEntityRedundancyAll.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.all"); !data.EntityRedundancyAll.IsNull() {
 		if value.Exists() {
-			data.TrapsEntityRedundancyAll = types.BoolValue(true)
+			data.EntityRedundancyAll = types.BoolValue(true)
 		} else {
-			data.TrapsEntityRedundancyAll = types.BoolValue(false)
+			data.EntityRedundancyAll = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsEntityRedundancyAll = types.BoolNull()
+		data.EntityRedundancyAll = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "trap-source.both"); value.Exists() && !data.TrapSourceBoth.IsNull() {
 		data.TrapSourceBoth = types.StringValue(value.String())
 	} else {
 		data.TrapSourceBoth = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.all"); !data.TrapsL2vpnAll.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.all"); !data.L2vpnAll.IsNull() {
 		if value.Exists() {
-			data.TrapsL2vpnAll = types.BoolValue(true)
+			data.L2vpnAll = types.BoolValue(true)
 		} else {
-			data.TrapsL2vpnAll = types.BoolValue(false)
+			data.L2vpnAll = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsL2vpnAll = types.BoolNull()
+		data.L2vpnAll = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.vc-up"); !data.TrapsL2vpnVcUp.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-up"); !data.L2vpnVcUp.IsNull() {
 		if value.Exists() {
-			data.TrapsL2vpnVcUp = types.BoolValue(true)
+			data.L2vpnVcUp = types.BoolValue(true)
 		} else {
-			data.TrapsL2vpnVcUp = types.BoolValue(false)
+			data.L2vpnVcUp = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsL2vpnVcUp = types.BoolNull()
+		data.L2vpnVcUp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.vc-down"); !data.TrapsL2vpnVcDown.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-down"); !data.L2vpnVcDown.IsNull() {
 		if value.Exists() {
-			data.TrapsL2vpnVcDown = types.BoolValue(true)
+			data.L2vpnVcDown = types.BoolValue(true)
 		} else {
-			data.TrapsL2vpnVcDown = types.BoolValue(false)
+			data.L2vpnVcDown = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsL2vpnVcDown = types.BoolNull()
+		data.L2vpnVcDown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.sensor"); !data.TrapsSensor.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor"); !data.Sensor.IsNull() {
 		if value.Exists() {
-			data.TrapsSensor = types.BoolValue(true)
+			data.Sensor = types.BoolValue(true)
 		} else {
-			data.TrapsSensor = types.BoolValue(false)
+			data.Sensor = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsSensor = types.BoolNull()
+		data.Sensor = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.fru-ctrl"); !data.TrapsFruCtrl.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl"); !data.FruCtrl.IsNull() {
 		if value.Exists() {
-			data.TrapsFruCtrl = types.BoolValue(true)
+			data.FruCtrl = types.BoolValue(true)
 		} else {
-			data.TrapsFruCtrl = types.BoolValue(false)
+			data.FruCtrl = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsFruCtrl = types.BoolNull()
+		data.FruCtrl = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.isis.authentication-failure"); value.Exists() && !data.TrapsIsisAuthenticationFailure.IsNull() {
-		data.TrapsIsisAuthenticationFailure = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all"); value.Exists() && !data.IsisAll.IsNull() {
+		data.IsisAll = types.StringValue(value.String())
 	} else {
-		data.TrapsIsisAuthenticationFailure = types.StringNull()
+		data.IsisAll = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "traps.bgp.cbgp2-updown"); !data.TrapsBgpCbgp2Updown.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload"); value.Exists() && !data.IsisDatabaseOverload.IsNull() {
+		data.IsisDatabaseOverload = types.StringValue(value.String())
+	} else {
+		data.IsisDatabaseOverload = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops"); value.Exists() && !data.IsisManualAddressDrops.IsNull() {
+		data.IsisManualAddressDrops = types.StringValue(value.String())
+	} else {
+		data.IsisManualAddressDrops = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected"); value.Exists() && !data.IsisCorruptedLspDetected.IsNull() {
+		data.IsisCorruptedLspDetected = types.StringValue(value.String())
+	} else {
+		data.IsisCorruptedLspDetected = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence"); value.Exists() && !data.IsisAttemptToExceedMaxSequence.IsNull() {
+		data.IsisAttemptToExceedMaxSequence = types.StringValue(value.String())
+	} else {
+		data.IsisAttemptToExceedMaxSequence = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch"); value.Exists() && !data.IsisIdLenMismatch.IsNull() {
+		data.IsisIdLenMismatch = types.StringValue(value.String())
+	} else {
+		data.IsisIdLenMismatch = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch"); value.Exists() && !data.IsisMaxAreaAddressesMismatch.IsNull() {
+		data.IsisMaxAreaAddressesMismatch = types.StringValue(value.String())
+	} else {
+		data.IsisMaxAreaAddressesMismatch = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge"); value.Exists() && !data.IsisOwnLspPurge.IsNull() {
+		data.IsisOwnLspPurge = types.StringValue(value.String())
+	} else {
+		data.IsisOwnLspPurge = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip"); value.Exists() && !data.IsisSequenceNumberSkip.IsNull() {
+		data.IsisSequenceNumberSkip = types.StringValue(value.String())
+	} else {
+		data.IsisSequenceNumberSkip = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure"); value.Exists() && !data.IsisAuthenticationTypeFailure.IsNull() {
+		data.IsisAuthenticationTypeFailure = types.StringValue(value.String())
+	} else {
+		data.IsisAuthenticationTypeFailure = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure"); value.Exists() && !data.IsisAuthenticationFailure.IsNull() {
+		data.IsisAuthenticationFailure = types.StringValue(value.String())
+	} else {
+		data.IsisAuthenticationFailure = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew"); value.Exists() && !data.IsisVersionSkew.IsNull() {
+		data.IsisVersionSkew = types.StringValue(value.String())
+	} else {
+		data.IsisVersionSkew = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch"); value.Exists() && !data.IsisAreaMismatch.IsNull() {
+		data.IsisAreaMismatch = types.StringValue(value.String())
+	} else {
+		data.IsisAreaMismatch = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency"); value.Exists() && !data.IsisRejectedAdjacency.IsNull() {
+		data.IsisRejectedAdjacency = types.StringValue(value.String())
+	} else {
+		data.IsisRejectedAdjacency = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate"); value.Exists() && !data.IsisLspTooLargeToPropagate.IsNull() {
+		data.IsisLspTooLargeToPropagate = types.StringValue(value.String())
+	} else {
+		data.IsisLspTooLargeToPropagate = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch"); value.Exists() && !data.IsisOrigLspBuffSizeMismatch.IsNull() {
+		data.IsisOrigLspBuffSizeMismatch = types.StringValue(value.String())
+	} else {
+		data.IsisOrigLspBuffSizeMismatch = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch"); value.Exists() && !data.IsisProtocolsSupportedMismatch.IsNull() {
+		data.IsisProtocolsSupportedMismatch = types.StringValue(value.String())
+	} else {
+		data.IsisProtocolsSupportedMismatch = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change"); value.Exists() && !data.IsisAdjacencyChange.IsNull() {
+		data.IsisAdjacencyChange = types.StringValue(value.String())
+	} else {
+		data.IsisAdjacencyChange = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected"); value.Exists() && !data.IsisLspErrorDetected.IsNull() {
+		data.IsisLspErrorDetected = types.StringValue(value.String())
+	} else {
+		data.IsisLspErrorDetected = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp2-updown"); !data.BgpCbgp2Updown.IsNull() {
 		if value.Exists() {
-			data.TrapsBgpCbgp2Updown = types.BoolValue(true)
+			data.BgpCbgp2Updown = types.BoolValue(true)
 		} else {
-			data.TrapsBgpCbgp2Updown = types.BoolValue(false)
+			data.BgpCbgp2Updown = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsBgpCbgp2Updown = types.BoolNull()
+		data.BgpCbgp2Updown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.bgp.bgp4-mib-updown"); !data.TrapsBgpBgp4MibUpdown.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.bgp4-mib-updown"); !data.BgpBgp4MibUpdown.IsNull() {
 		if value.Exists() {
-			data.TrapsBgpBgp4MibUpdown = types.BoolValue(true)
+			data.BgpBgp4MibUpdown = types.BoolValue(true)
 		} else {
-			data.TrapsBgpBgp4MibUpdown = types.BoolValue(false)
+			data.BgpBgp4MibUpdown = types.BoolValue(false)
 		}
 	} else {
-		data.TrapsBgpBgp4MibUpdown = types.BoolNull()
+		data.BgpBgp4MibUpdown = types.BoolNull()
 	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}
@@ -542,30 +704,30 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 }
 
 func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "traps.rf"); value.Exists() {
-		data.TrapsRf = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); value.Exists() {
+		data.Rf = types.BoolValue(true)
 	} else {
-		data.TrapsRf = types.BoolValue(false)
+		data.Rf = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.bfd"); value.Exists() {
-		data.TrapsBfd = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd"); value.Exists() {
+		data.Bfd = types.BoolValue(true)
 	} else {
-		data.TrapsBfd = types.BoolValue(false)
+		data.Bfd = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.ntp"); value.Exists() {
-		data.TrapsNtp = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ntp-cfg:ntp"); value.Exists() {
+		data.Ntp = types.BoolValue(true)
 	} else {
-		data.TrapsNtp = types.BoolValue(false)
+		data.Ntp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.ethernet.oam.events"); value.Exists() {
-		data.TrapsEthernetOamEvents = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet.oam.events"); value.Exists() {
+		data.EthernetOamEvents = types.BoolValue(true)
 	} else {
-		data.TrapsEthernetOamEvents = types.BoolValue(false)
+		data.EthernetOamEvents = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.copy-complete"); value.Exists() {
-		data.TrapsCopyComplete = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete"); value.Exists() {
+		data.CopyComplete = types.BoolValue(true)
 	} else {
-		data.TrapsCopyComplete = types.BoolValue(false)
+		data.CopyComplete = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "traps.snmp.linkup"); value.Exists() {
 		data.TrapsSnmpLinkup = types.BoolValue(true)
@@ -577,81 +739,135 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsSnmpLinkdown = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.power"); value.Exists() {
-		data.TrapsPower = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-power-cfg:power"); value.Exists() {
+		data.Power = types.BoolValue(true)
 	} else {
-		data.TrapsPower = types.BoolValue(false)
+		data.Power = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.config"); value.Exists() {
-		data.TrapsConfig = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-cfg-mibs-cfg:config"); value.Exists() {
+		data.Config = types.BoolValue(true)
 	} else {
-		data.TrapsConfig = types.BoolValue(false)
+		data.Config = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.entity"); value.Exists() {
-		data.TrapsEntity = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-cfg:entity"); value.Exists() {
+		data.Entity = types.BoolValue(true)
 	} else {
-		data.TrapsEntity = types.BoolValue(false)
+		data.Entity = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.system"); value.Exists() {
-		data.TrapsSystem = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-system-cfg:system"); value.Exists() {
+		data.System = types.BoolValue(true)
 	} else {
-		data.TrapsSystem = types.BoolValue(false)
+		data.System = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.bridgemib"); value.Exists() {
-		data.TrapsBridgemib = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib"); value.Exists() {
+		data.Bridgemib = types.BoolValue(true)
 	} else {
-		data.TrapsBridgemib = types.BoolValue(false)
+		data.Bridgemib = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.entity-state.operstatus"); value.Exists() {
-		data.TrapsEntityStateOperstatus = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state.operstatus"); value.Exists() {
+		data.EntityStateOperstatus = types.BoolValue(true)
 	} else {
-		data.TrapsEntityStateOperstatus = types.BoolValue(false)
+		data.EntityStateOperstatus = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.entity-redundancy.all"); value.Exists() {
-		data.TrapsEntityRedundancyAll = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy.all"); value.Exists() {
+		data.EntityRedundancyAll = types.BoolValue(true)
 	} else {
-		data.TrapsEntityRedundancyAll = types.BoolValue(false)
+		data.EntityRedundancyAll = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "trap-source.both"); value.Exists() {
 		data.TrapSourceBoth = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.all"); value.Exists() {
-		data.TrapsL2vpnAll = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.all"); value.Exists() {
+		data.L2vpnAll = types.BoolValue(true)
 	} else {
-		data.TrapsL2vpnAll = types.BoolValue(false)
+		data.L2vpnAll = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.vc-up"); value.Exists() {
-		data.TrapsL2vpnVcUp = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-up"); value.Exists() {
+		data.L2vpnVcUp = types.BoolValue(true)
 	} else {
-		data.TrapsL2vpnVcUp = types.BoolValue(false)
+		data.L2vpnVcUp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.l2vpn.vc-down"); value.Exists() {
-		data.TrapsL2vpnVcDown = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-l2vpn-cfg:l2vpn.vc-down"); value.Exists() {
+		data.L2vpnVcDown = types.BoolValue(true)
 	} else {
-		data.TrapsL2vpnVcDown = types.BoolValue(false)
+		data.L2vpnVcDown = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.sensor"); value.Exists() {
-		data.TrapsSensor = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor"); value.Exists() {
+		data.Sensor = types.BoolValue(true)
 	} else {
-		data.TrapsSensor = types.BoolValue(false)
+		data.Sensor = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.fru-ctrl"); value.Exists() {
-		data.TrapsFruCtrl = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl"); value.Exists() {
+		data.FruCtrl = types.BoolValue(true)
 	} else {
-		data.TrapsFruCtrl = types.BoolValue(false)
+		data.FruCtrl = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.isis.authentication-failure"); value.Exists() {
-		data.TrapsIsisAuthenticationFailure = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.all"); value.Exists() {
+		data.IsisAll = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "traps.bgp.cbgp2-updown"); value.Exists() {
-		data.TrapsBgpCbgp2Updown = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.database-overload"); value.Exists() {
+		data.IsisDatabaseOverload = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.manual-address-drops"); value.Exists() {
+		data.IsisManualAddressDrops = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.corrupted-lsp-detected"); value.Exists() {
+		data.IsisCorruptedLspDetected = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.attempt-to-exceed-max-sequence"); value.Exists() {
+		data.IsisAttemptToExceedMaxSequence = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.id-len-mismatch"); value.Exists() {
+		data.IsisIdLenMismatch = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.max-area-addresses-mismatch"); value.Exists() {
+		data.IsisMaxAreaAddressesMismatch = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.own-lsp-purge"); value.Exists() {
+		data.IsisOwnLspPurge = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.sequence-number-skip"); value.Exists() {
+		data.IsisSequenceNumberSkip = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-type-failure"); value.Exists() {
+		data.IsisAuthenticationTypeFailure = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.authentication-failure"); value.Exists() {
+		data.IsisAuthenticationFailure = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.version-skew"); value.Exists() {
+		data.IsisVersionSkew = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.area-mismatch"); value.Exists() {
+		data.IsisAreaMismatch = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.rejected-adjacency"); value.Exists() {
+		data.IsisRejectedAdjacency = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-too-large-to-propagate"); value.Exists() {
+		data.IsisLspTooLargeToPropagate = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.orig-lsp-buff-size-mismatch"); value.Exists() {
+		data.IsisOrigLspBuffSizeMismatch = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.protocols-supported-mismatch"); value.Exists() {
+		data.IsisProtocolsSupportedMismatch = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.adjacency-change"); value.Exists() {
+		data.IsisAdjacencyChange = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected"); value.Exists() {
+		data.IsisLspErrorDetected = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp2-updown"); value.Exists() {
+		data.BgpCbgp2Updown = types.BoolValue(true)
 	} else {
-		data.TrapsBgpCbgp2Updown = types.BoolValue(false)
+		data.BgpCbgp2Updown = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.bgp.bgp4-mib-updown"); value.Exists() {
-		data.TrapsBgpBgp4MibUpdown = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.bgp4-mib-updown"); value.Exists() {
+		data.BgpBgp4MibUpdown = types.BoolValue(true)
 	} else {
-		data.TrapsBgpBgp4MibUpdown = types.BoolValue(false)
+		data.BgpBgp4MibUpdown = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "users.user"); value.Exists() {
 		data.Users = make([]SNMPServerUsers, 0)

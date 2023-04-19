@@ -16,29 +16,47 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 			{
 				Config: testAccIosxrSNMPServerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_rf", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bfd", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_ntp", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_ethernet_oam_events", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_copy_complete", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "rf", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bfd", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "ntp", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "ethernet_oam_events", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "copy_complete", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_snmp_linkup", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_snmp_linkdown", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_power", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_config", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_system", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bridgemib", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_state_operstatus", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_redundancy_all", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "power", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "config", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "system", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bridgemib", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity_state_operstatus", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity_redundancy_all", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "trap_source_both", "Loopback10"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_all", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_up", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_sensor", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_fru_ctrl", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_failure", "enable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp2_updown", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_bgp4_mib_updown", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_all", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_vc_up", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_vc_down", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "sensor", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "fru_ctrl", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_all", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_database_overload", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_manual_address_drops", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_corrupted_lsp_detected", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_attempt_to_exceed_max_sequence", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_id_len_mismatch", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_max_area_addresses_mismatch", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_own_lsp_purge", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_sequence_number_skip", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_authentication_type_failure", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_authentication_failure", "enable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_version_skew", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_area_mismatch", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_rejected_adjacency", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_lsp_too_large_to_propagate", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_orig_lsp_buff_size_mismatch", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_protocols_supported_mismatch", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_adjacency_change", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_lsp_error_detected", "disable"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_cbgp2_updown", "true"),
+					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_bgp4_mib_updown", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.user_name", "USER1"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.group_name", "GROUP1"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"),
@@ -64,7 +82,25 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 func testAccIosxrSNMPServerConfig_minimum() string {
 	return `
 	resource "iosxr_snmp_server" "test" {
-		traps_isis_authentication_failure = "enable"
+		isis_all = "disable"
+		isis_database_overload = "disable"
+		isis_manual_address_drops = "disable"
+		isis_corrupted_lsp_detected = "disable"
+		isis_attempt_to_exceed_max_sequence = "disable"
+		isis_id_len_mismatch = "disable"
+		isis_max_area_addresses_mismatch = "disable"
+		isis_own_lsp_purge = "disable"
+		isis_sequence_number_skip = "disable"
+		isis_authentication_type_failure = "disable"
+		isis_authentication_failure = "enable"
+		isis_version_skew = "disable"
+		isis_area_mismatch = "disable"
+		isis_rejected_adjacency = "disable"
+		isis_lsp_too_large_to_propagate = "disable"
+		isis_orig_lsp_buff_size_mismatch = "disable"
+		isis_protocols_supported_mismatch = "disable"
+		isis_adjacency_change = "disable"
+		isis_lsp_error_detected = "disable"
 	}
 	`
 }
@@ -72,29 +108,47 @@ func testAccIosxrSNMPServerConfig_minimum() string {
 func testAccIosxrSNMPServerConfig_all() string {
 	return `
 	resource "iosxr_snmp_server" "test" {
-		traps_rf = true
-		traps_bfd = true
-		traps_ntp = true
-		traps_ethernet_oam_events = true
-		traps_copy_complete = true
+		rf = true
+		bfd = true
+		ntp = true
+		ethernet_oam_events = true
+		copy_complete = true
 		traps_snmp_linkup = true
 		traps_snmp_linkdown = true
-		traps_power = true
-		traps_config = true
-		traps_entity = true
-		traps_system = true
-		traps_bridgemib = true
-		traps_entity_state_operstatus = true
-		traps_entity_redundancy_all = true
+		power = true
+		config = true
+		entity = true
+		system = true
+		bridgemib = true
+		entity_state_operstatus = true
+		entity_redundancy_all = true
 		trap_source_both = "Loopback10"
-		traps_l2vpn_all = true
-		traps_l2vpn_vc_up = true
-		traps_l2vpn_vc_down = true
-		traps_sensor = true
-		traps_fru_ctrl = true
-		traps_isis_authentication_failure = "enable"
-		traps_bgp_cbgp2_updown = true
-		traps_bgp_bgp4_mib_updown = true
+		l2vpn_all = true
+		l2vpn_vc_up = true
+		l2vpn_vc_down = true
+		sensor = true
+		fru_ctrl = true
+		isis_all = "disable"
+		isis_database_overload = "disable"
+		isis_manual_address_drops = "disable"
+		isis_corrupted_lsp_detected = "disable"
+		isis_attempt_to_exceed_max_sequence = "disable"
+		isis_id_len_mismatch = "disable"
+		isis_max_area_addresses_mismatch = "disable"
+		isis_own_lsp_purge = "disable"
+		isis_sequence_number_skip = "disable"
+		isis_authentication_type_failure = "disable"
+		isis_authentication_failure = "enable"
+		isis_version_skew = "disable"
+		isis_area_mismatch = "disable"
+		isis_rejected_adjacency = "disable"
+		isis_lsp_too_large_to_propagate = "disable"
+		isis_orig_lsp_buff_size_mismatch = "disable"
+		isis_protocols_supported_mismatch = "disable"
+		isis_adjacency_change = "disable"
+		isis_lsp_error_detected = "disable"
+		bgp_cbgp2_updown = true
+		bgp_bgp4_mib_updown = true
 		users = [{
 			user_name = "USER1"
 			group_name = "GROUP1"

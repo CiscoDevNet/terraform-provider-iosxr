@@ -164,6 +164,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			"ipv6_link_local_zone": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
 				Optional:            true,
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					helpers.StringDefaultModifier("0"),
 				},
@@ -195,6 +196,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 						"zone": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
 							Optional:            true,
+							Computed:            true,
 							PlanModifiers: []planmodifier.String{
 								helpers.StringDefaultModifier("0"),
 							},

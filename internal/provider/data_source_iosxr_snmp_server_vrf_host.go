@@ -62,6 +62,10 @@ func (d *SNMPServerVRFHostDataSource) Schema(ctx context.Context, req datasource
 							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
 							Computed:            true,
 						},
+						"udp_port": schema.StringAttribute{
+							MarkdownDescription: "udp port to which notifications should be sent",
+							Computed:            true,
+						},
 						"version_v3_security_level": schema.StringAttribute{
 							MarkdownDescription: "",
 							Computed:            true,

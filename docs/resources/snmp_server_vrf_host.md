@@ -52,11 +52,13 @@ Required:
 Optional:
 
 - `community_string` (String) The UNENCRYPTED (cleartext) community string
+- `udp_port` (String) udp port to which notifications should be sent
+  - Default value: `default`
 
 ## Import
 
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_snmp_server_vrf_host.example "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name-VRF1]/hosts/host[address=11.11.11.11]"
+terraform import iosxr_snmp_server_vrf_host.example "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name=VRF1]/hosts/host[address=11.11.11.11]"
 ```

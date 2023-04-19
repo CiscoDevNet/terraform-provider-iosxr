@@ -71,6 +71,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- else}}
 				Optional:            true,
 				{{- end}}
+				{{- if len .DefaultValue}}
+				Computed:            true,
+				{{- end}}
 				{{- if len .EnumValues}}
 				Validators: []validator.String{
 					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
@@ -122,6 +125,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							Required:            true,
 							{{- else}}
 							Optional:            true,
+							{{- end}}
+							{{- if len .DefaultValue}}
+							Computed:            true,
 							{{- end}}
 							{{- if len .EnumValues}}
 							Validators: []validator.String{

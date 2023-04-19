@@ -81,6 +81,14 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 								stringvalidator.LengthBetween(1, 32),
 							},
 						},
+						"udp_port": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddDefaultValueDescription("default").String,
+							Optional:            true,
+							Computed:            true,
+							PlanModifiers: []planmodifier.String{
+								helpers.StringDefaultModifier("default"),
+							},
+						},
 						"version_v3_security_level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
 							Required:            true,

@@ -18,7 +18,7 @@ func TestAccDataSourceIosxrLoggingVRF(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"),
 					resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"),
-					resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
+					resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001::1"),
 					resource.TestCheckResourceAttr("data.iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"),
 				),
 			},
@@ -35,7 +35,7 @@ resource "iosxr_logging_vrf" "test" {
 		severity = "info"
 	}]
 	host_ipv6_addresses = [{
-		ipv6_address = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
+		ipv6_address = "2001::1"
 		severity = "info"
 	}]
 }

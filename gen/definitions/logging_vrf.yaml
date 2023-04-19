@@ -5,9 +5,8 @@ doc_category: Management
 attributes:
   - yang_name: vrf-name
     example: VRF1
-
   - yang_name: host-ipv4-addresses/host-ipv4-address
-    tf_name: host_ipv4_addresses  
+    tf_name: host_ipv4_addresses
     type: List
     attributes:
       - yang_name: ipv4-address
@@ -15,13 +14,12 @@ attributes:
         example: 1.1.1.1
       - yang_name: severity
         example: info
-
   - yang_name: host-ipv6-addresses/host-ipv6-address
-    tf_name: host_ipv6_addresses  
+    tf_name: host_ipv6_addresses
     type: List
     attributes:
       - yang_name: ipv6-address
         id: true
-        example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        example: 2001::1
       - yang_name: severity
         example: info

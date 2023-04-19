@@ -9,6 +9,12 @@
 - Add `iosxr_snmp_server_mib` resource and data source
 - Add `iosxr_snmp_server_view` resource and data source
 - Add `iosxr_snmp_server_vrf_host` resource and data source
+- Add `verify_certificate` provider attribute
+- Add `tls` provider attribute
+- Add `certificate` provider attribute
+- Add `key` provider attribute
+- Add `ca_certificate` provider attribute
+- BREAKING CHANGE: Use TLS by default
 
 ## 0.1.6
 

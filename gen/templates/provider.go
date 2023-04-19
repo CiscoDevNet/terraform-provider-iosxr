@@ -27,10 +27,15 @@ type iosxrProvider struct {}
 
 // providerData can be used to store data from the Terraform configuration.
 type providerData struct {
-	Username types.String         `tfsdk:"username"`
-	Password types.String         `tfsdk:"password"`
-	Host     types.String         `tfsdk:"host"`
-	Devices  []providerDataDevice `tfsdk:"devices"`
+	Username          types.String         `tfsdk:"username"`
+	Password          types.String         `tfsdk:"password"`
+	Host              types.String         `tfsdk:"host"`
+	VerifyCertificate types.Bool           `tfsdk:"verify_certificate"`
+	Tls               types.Bool           `tfsdk:"tls"`
+	Certificate       types.String         `tfsdk:"certificate"`
+	Key               types.String         `tfsdk:"key"`
+	CaCertificate     types.String         `tfsdk:"ca_certificate"`
+	Devices           []providerDataDevice `tfsdk:"devices"`
 }
 
 type providerDataDevice struct {
@@ -57,6 +62,26 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"host": schema.StringAttribute{
 				MarkdownDescription: "IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.",
+				Optional:            true,
+			},
+			"verify_certificate": schema.BoolAttribute{
+				MarkdownDescription: "Verify target certificate. This can also be set as the IOSXR_VERIFY_CERTIFICATE environment variable. Defaults to `false`.",
+				Optional:            true,
+			},
+			"tls": schema.BoolAttribute{
+				MarkdownDescription: "Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"certificate": schema.StringAttribute{
+				MarkdownDescription: "TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.",
+				Optional:            true,
+			},
+			"key": schema.StringAttribute{
+				MarkdownDescription: "TLS private key content. This can also be set as the IOSXR_KEY environment variable.",
+				Optional:            true,
+			},
+			"ca_certificate": schema.StringAttribute{
+				MarkdownDescription: "TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.",
 				Optional:            true,
 			},
 			"devices": schema.ListNestedAttribute{
@@ -169,13 +194,103 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 
+	var verifyCertificate bool
+	if config.VerifyCertificate.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as verify_certificate",
+		)
+		return
+	}
+
+	if config.VerifyCertificate.IsNull() {
+		verifyCertificateStr := os.Getenv("IOSXR_VERIFY_CERTIFICATE")
+		if verifyCertificateStr == "" {
+			verifyCertificate = false
+		} else {
+			verifyCertificate, _ = strconv.ParseBool(verifyCertificateStr)
+		}
+	} else {
+		verifyCertificate = config.VerifyCertificate.ValueBool()
+	}
+
+	var tls bool
+	if config.Tls.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as tls",
+		)
+		return
+	}
+
+	if config.Tls.IsNull() {
+		tlsStr := os.Getenv("IOSXR_TLS")
+		if tlsStr == "" {
+			tls = true
+		} else {
+			tls, _ = strconv.ParseBool(tlsStr)
+		}
+	} else {
+		tls = config.Tls.ValueBool()
+	}
+
+	var certificate string
+	if config.Certificate.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as certificate",
+		)
+		return
+	}
+
+	if config.Certificate.IsNull() {
+		certificate = os.Getenv("IOSXR_CERTIFICATE")
+	} else {
+		certificate = config.Certificate.ValueString()
+	}
+
+	var key string
+	if config.Key.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as key",
+		)
+		return
+	}
+
+	if config.Key.IsNull() {
+		key = os.Getenv("IOSXR_KEY")
+	} else {
+		key = config.Key.ValueString()
+	}
+
+	var caCertificate string
+	if config.CaCertificate.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as ca_certificate",
+		)
+		return
+	}
+
+	if config.CaCertificate.IsNull() {
+		caCertificate = os.Getenv("IOSXR_CA_CERTIFICATE")
+	} else {
+		caCertificate = config.CaCertificate.ValueString()
+	}
+
 	client := client.NewClient()
 
-	diags = client.AddTarget(ctx, "", host, username, password)
+	diags = client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
 	resp.Diagnostics.Append(diags...)
 
 	for _, device := range config.Devices {
-		diags = client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password)
+		diags = client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
 		resp.Diagnostics.Append(diags...)
 	}
 

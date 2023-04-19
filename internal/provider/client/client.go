@@ -59,7 +59,7 @@ func NewClient() Client {
 	}
 }
 
-func (c *Client) AddTarget(ctx context.Context, device, host, username, password string) diag.Diagnostics {
+func (c *Client) AddTarget(ctx context.Context, device, host, username, password, certificate, key, caCertificate string, verifyCertificate, Tls bool) diag.Diagnostics {
 	var diags diag.Diagnostics
 
 	if !strings.Contains(host, ":") {
@@ -71,7 +71,11 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		api.Address(host),
 		api.Username(username),
 		api.Password(password),
-		api.Insecure(true),
+		api.TLSCert(certificate),
+		api.TLSKey(key),
+		api.TLSCA(caCertificate),
+		api.SkipVerify(!verifyCertificate),
+		api.Insecure(!Tls),
 	)
 	if err != nil {
 		diags.AddError(

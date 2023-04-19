@@ -10,12 +10,10 @@ description: |-
 
 The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
 
-It currently only supports unsecured (no TLS) gRPC connections with user/password authentication. The required device configuration can be found below.
+The required device configuration can be found below.
 
 ```
 grpc
- port 57400
- no-tls
 ```
 
 All resources and data sources have been tested with IOS-XR 7.6.1 release, and might not be supported with earlier versions due to relying on unified YANG Models which were only started to be introduced in IOS-XR release 7.0.1.

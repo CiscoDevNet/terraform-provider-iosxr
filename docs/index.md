@@ -10,12 +10,10 @@ description: |-
 
 The IOSXR provider provides resources to interact with one or more Cisco IOS-XR devices.
 
-It currently only supports unsecured (no TLS) gRPC connections with user/password authentication. The required device configuration can be found below.
+The required device configuration can be found below.
 
 ```
 grpc
- port 57400
- no-tls
 ```
 
 All resources and data sources have been tested with IOS-XR 7.6.1 release, and might not be supported with earlier versions due to relying on unified YANG Models which were only started to be introduced in IOS-XR release 7.0.1.
@@ -35,10 +33,15 @@ provider "iosxr" {
 
 ### Optional
 
+- `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
+- `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `host` (String) IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.
+- `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
+- `tls` (Boolean) Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.
 - `username` (String) Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.
+- `verify_certificate` (Boolean) Verify target certificate. This can also be set as the IOSXR_VERIFY_CERTIFICATE environment variable. Defaults to `false`.
 
 <a id="nestedatt--devices"></a>
 ### Nested Schema for `devices`

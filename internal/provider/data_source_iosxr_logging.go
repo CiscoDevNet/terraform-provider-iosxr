@@ -89,18 +89,6 @@ func (d *LoggingDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Suppress consecutive duplicate messages",
 				Computed:            true,
 			},
-			"source_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify interface for source address in logging transactions",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"source_interface_name": schema.StringAttribute{
-							MarkdownDescription: "Specify interface for source address in logging transactions",
-							Computed:            true,
-						},
-					},
-				},
-			},
 		},
 	}
 }

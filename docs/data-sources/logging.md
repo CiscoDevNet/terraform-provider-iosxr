@@ -36,15 +36,7 @@ data "iosxr_logging" "example" {
 - `id` (String) The path of the retrieved object.
 - `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `monitor` (String) Set monitor logging
-- `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `trap` (String) Set trap logging
-
-<a id="nestedatt--source_interfaces"></a>
-### Nested Schema for `source_interfaces`
-
-Read-Only:
-
-- `source_interface_name` (String) Specify interface for source address in logging transactions
 
 

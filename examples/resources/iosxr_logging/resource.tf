@@ -10,9 +10,4 @@ resource "iosxr_logging" "example" {
   facility_level               = "local7"
   hostnameprefix               = "HOSTNAME01"
   suppress_duplicates          = true
-  source_interfaces = [
-    {
-      source_interface_name = "Loopback10"
-    }
-  ]
 }

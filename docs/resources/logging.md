@@ -25,11 +25,6 @@ resource "iosxr_logging" "example" {
   facility_level               = "local7"
   hostnameprefix               = "HOSTNAME01"
   suppress_duplicates          = true
-  source_interfaces = [
-    {
-      source_interface_name = "Loopback10"
-    }
-  ]
 }
 ```
 
@@ -54,7 +49,6 @@ resource "iosxr_logging" "example" {
 - `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `monitor` (String) Set monitor logging
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
-- `source_interfaces` (Attributes List) Specify interface for source address in logging transactions (see [below for nested schema](#nestedatt--source_interfaces))
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `trap` (String) Set trap logging
   - Choices: `alerts`, `critical`, `debugging`, `disable`, `emergencies`, `errors`, `informational`, `notifications`, `warning`
@@ -62,13 +56,6 @@ resource "iosxr_logging" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
-
-<a id="nestedatt--source_interfaces"></a>
-### Nested Schema for `source_interfaces`
-
-Optional:
-
-- `source_interface_name` (String) Specify interface for source address in logging transactions
 
 ## Import
 

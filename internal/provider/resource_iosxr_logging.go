@@ -121,21 +121,6 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				MarkdownDescription: helpers.NewAttributeDescription("Suppress consecutive duplicate messages").String,
 				Optional:            true,
 			},
-			"source_interfaces": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"source_interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify interface for source address in logging transactions").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-					},
-				},
-			},
 		},
 	}
 }

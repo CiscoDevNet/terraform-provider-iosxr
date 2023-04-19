@@ -4,8 +4,6 @@ package provider
 
 import (
 	"context"
-	"fmt"
-	"reflect"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,23 +12,19 @@ import (
 )
 
 type Logging struct {
-	Device                    types.String              `tfsdk:"device"`
-	Id                        types.String              `tfsdk:"id"`
-	Ipv4Dscp                  types.String              `tfsdk:"ipv4_dscp"`
-	Trap                      types.String              `tfsdk:"trap"`
-	EventsDisplayLocation     types.Bool                `tfsdk:"events_display_location"`
-	EventsLevel               types.String              `tfsdk:"events_level"`
-	Console                   types.String              `tfsdk:"console"`
-	Monitor                   types.String              `tfsdk:"monitor"`
-	BufferedLoggingBufferSize types.Int64               `tfsdk:"buffered_logging_buffer_size"`
-	BufferedLevel             types.String              `tfsdk:"buffered_level"`
-	FacilityLevel             types.String              `tfsdk:"facility_level"`
-	Hostnameprefix            types.String              `tfsdk:"hostnameprefix"`
-	SuppressDuplicates        types.Bool                `tfsdk:"suppress_duplicates"`
-	SourceInterfaces          []LoggingSourceInterfaces `tfsdk:"source_interfaces"`
-}
-type LoggingSourceInterfaces struct {
-	SourceInterfaceName types.String `tfsdk:"source_interface_name"`
+	Device                    types.String `tfsdk:"device"`
+	Id                        types.String `tfsdk:"id"`
+	Ipv4Dscp                  types.String `tfsdk:"ipv4_dscp"`
+	Trap                      types.String `tfsdk:"trap"`
+	EventsDisplayLocation     types.Bool   `tfsdk:"events_display_location"`
+	EventsLevel               types.String `tfsdk:"events_level"`
+	Console                   types.String `tfsdk:"console"`
+	Monitor                   types.String `tfsdk:"monitor"`
+	BufferedLoggingBufferSize types.Int64  `tfsdk:"buffered_logging_buffer_size"`
+	BufferedLevel             types.String `tfsdk:"buffered_level"`
+	FacilityLevel             types.String `tfsdk:"facility_level"`
+	Hostnameprefix            types.String `tfsdk:"hostnameprefix"`
+	SuppressDuplicates        types.Bool   `tfsdk:"suppress_duplicates"`
 }
 
 func (data Logging) getPath() string {
@@ -47,11 +41,11 @@ func (data Logging) toBody(ctx context.Context) string {
 	}
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.IsUnknown() {
 		if data.EventsDisplayLocation.ValueBool() {
-			body, _ = sjson.Set(body, "events.display-location", map[string]string{})
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location", map[string]string{})
 		}
 	}
 	if !data.EventsLevel.IsNull() && !data.EventsLevel.IsUnknown() {
-		body, _ = sjson.Set(body, "events.level", data.EventsLevel.ValueString())
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-logging-events-cfg:events.level", data.EventsLevel.ValueString())
 	}
 	if !data.Console.IsNull() && !data.Console.IsUnknown() {
 		body, _ = sjson.Set(body, "console", data.Console.ValueString())
@@ -76,14 +70,6 @@ func (data Logging) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "suppress.duplicates", map[string]string{})
 		}
 	}
-	if len(data.SourceInterfaces) > 0 {
-		body, _ = sjson.Set(body, "source-interfaces.source-interface", []interface{}{})
-		for index, item := range data.SourceInterfaces {
-			if !item.SourceInterfaceName.IsNull() && !item.SourceInterfaceName.IsUnknown() {
-				body, _ = sjson.Set(body, "source-interfaces.source-interface"+"."+strconv.Itoa(index)+"."+"source-interface-name", item.SourceInterfaceName.ValueString())
-			}
-		}
-	}
 	return body
 }
 
@@ -98,7 +84,7 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Trap = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "events.display-location"); !data.EventsDisplayLocation.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); !data.EventsDisplayLocation.IsNull() {
 		if value.Exists() {
 			data.EventsDisplayLocation = types.BoolValue(true)
 		} else {
@@ -107,7 +93,7 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EventsDisplayLocation = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "events.level"); value.Exists() && !data.EventsLevel.IsNull() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() && !data.EventsLevel.IsNull() {
 		data.EventsLevel = types.StringValue(value.String())
 	} else {
 		data.EventsLevel = types.StringNull()
@@ -151,35 +137,6 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SuppressDuplicates = types.BoolNull()
 	}
-	for i := range data.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		keyValues := [...]string{data.SourceInterfaces[i].SourceInterfaceName.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "source-interfaces.source-interface").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("source-interface-name"); value.Exists() && !data.SourceInterfaces[i].SourceInterfaceName.IsNull() {
-			data.SourceInterfaces[i].SourceInterfaceName = types.StringValue(value.String())
-		} else {
-			data.SourceInterfaces[i].SourceInterfaceName = types.StringNull()
-		}
-	}
 }
 
 func (data *Logging) fromBody(ctx context.Context, res []byte) {
@@ -189,12 +146,12 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "trap"); value.Exists() {
 		data.Trap = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "events.display-location"); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
 		data.EventsDisplayLocation = types.BoolValue(true)
 	} else {
 		data.EventsDisplayLocation = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "events.level"); value.Exists() {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
 		data.EventsLevel = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "console"); value.Exists() {
@@ -220,17 +177,6 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SuppressDuplicates = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "source-interfaces.source-interface"); value.Exists() {
-		data.SourceInterfaces = make([]LoggingSourceInterfaces, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := LoggingSourceInterfaces{}
-			if cValue := v.Get("source-interface-name"); cValue.Exists() {
-				item.SourceInterfaceName = types.StringValue(cValue.String())
-			}
-			data.SourceInterfaces = append(data.SourceInterfaces, item)
-			return true
-		})
-	}
 }
 
 func (data *Logging) fromPlan(ctx context.Context, plan Logging) {
@@ -239,41 +185,10 @@ func (data *Logging) fromPlan(ctx context.Context, plan Logging) {
 
 func (data *Logging) getDeletedListItems(ctx context.Context, state Logging) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.SourceInterfaces {
-		keys := [...]string{"source-interface-name"}
-		stateKeyValues := [...]string{state.SourceInterfaces[i].SourceInterfaceName.ValueString()}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SourceInterfaces[i].SourceInterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SourceInterfaces {
-			found = true
-			if state.SourceInterfaces[i].SourceInterfaceName.ValueString() != data.SourceInterfaces[j].SourceInterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/source-interfaces/source-interface%v", state.getPath(), keyString))
-		}
-	}
 	return deletedListItems
 }
 
 func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	return emptyLeafsDelete
 }

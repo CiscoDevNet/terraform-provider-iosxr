@@ -7,29 +7,21 @@ attributes:
     example: cs6
   - yang_name: trap
     example: informational
-  - yang_name : events/display-location
-    example : true
-  - yang_name : events/level
-    example : informational
-  - yang_name : console
-    example : disable
-  - yang_name : monitor
-    example : disable
-  - yang_name : buffered/logging-buffer-size
-    example : 4000000
-  - yang_name : buffered/level                  
-    example : debugging
-  - yang_name : facility/level
-    example : local7
-  - yang_name : hostnameprefix
-    example : HOSTNAME01
-  - yang_name : suppress/duplicates
-    example : true
-  - yang_name : source-interfaces/source-interface
-    tf_name : source_interfaces
-    type : List
-    attributes: 
-      - yang_name : source-interface-name
-        id : true
-        example : Loopback10
-      
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/display-location
+    example: true
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/level
+    example: informational
+  - yang_name: console
+    example: disable
+  - yang_name: monitor
+    example: disable
+  - yang_name: buffered/logging-buffer-size
+    example: 4000000
+  - yang_name: buffered/level
+    example: debugging
+  - yang_name: facility/level
+    example: local7
+  - yang_name: hostnameprefix
+    example: HOSTNAME01
+  - yang_name: suppress/duplicates
+    example: true

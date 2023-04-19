@@ -1,0 +1,17 @@
+---
+name: Logging Source Interface
+path: Cisco-IOS-XR-um-logging-cfg:logging/source-interfaces/source-interface[source-interface-name=%v]
+doc_category: Management
+attributes:
+  - yang_name: source-interface-name
+    tf_name: name
+    example: Loopback0
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        tf_name: name
+        id: true
+        default_value: default
+        example: VRF1

@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.8.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
 	github.com/openconfig/gnmi v0.9.1
-	github.com/openconfig/gnmic v0.29.1-0.20230316011533-118f85102272
+	github.com/openconfig/gnmic v0.30.0
 	github.com/openconfig/goyang v1.2.0
 	github.com/tidwall/gjson v1.14.4
 	github.com/tidwall/sjson v1.2.5
@@ -177,5 +177,5 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	inet.af/netaddr v0.0.0-20220811202034-502d2d690317 // indirect
-	k8s.io/client-go v0.26.2 // indirect
+	k8s.io/client-go v0.26.3 // indirect
 )

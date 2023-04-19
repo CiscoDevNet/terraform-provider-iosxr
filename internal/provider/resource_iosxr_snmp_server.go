@@ -135,136 +135,212 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"isis_all": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_database_overload": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_manual_address_drops": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_corrupted_lsp_detected": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_id_len_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_max_area_addresses_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_own_lsp_purge": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_sequence_number_skip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_authentication_type_failure": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_authentication_failure": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_version_skew": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_area_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_rejected_adjacency": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_lsp_too_large_to_propagate": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_protocols_supported_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"isis_adjacency_change": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
+				},
 			},
 			"isis_lsp_error_detected": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").String,
-				Required:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+				Optional:            true,
+				Computed:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
+				},
+				PlanModifiers: []planmodifier.String{
+					helpers.StringDefaultModifier("disable"),
 				},
 			},
 			"bgp_cbgp2_updown": schema.BoolAttribute{

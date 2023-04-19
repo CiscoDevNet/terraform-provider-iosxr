@@ -36,25 +36,7 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_vc_down", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "sensor", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "fru_ctrl", "true"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_all", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_database_overload", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_manual_address_drops", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_corrupted_lsp_detected", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_attempt_to_exceed_max_sequence", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_id_len_mismatch", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_max_area_addresses_mismatch", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_own_lsp_purge", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_sequence_number_skip", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_authentication_type_failure", "disable"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_authentication_failure", "enable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_version_skew", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_area_mismatch", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_rejected_adjacency", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_lsp_too_large_to_propagate", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_orig_lsp_buff_size_mismatch", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_protocols_supported_mismatch", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_adjacency_change", "disable"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_lsp_error_detected", "disable"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_cbgp2_updown", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_bgp4_mib_updown", "true"),
 					resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.user_name", "USER1"),
@@ -82,25 +64,6 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 func testAccIosxrSNMPServerConfig_minimum() string {
 	return `
 	resource "iosxr_snmp_server" "test" {
-		isis_all = "disable"
-		isis_database_overload = "disable"
-		isis_manual_address_drops = "disable"
-		isis_corrupted_lsp_detected = "disable"
-		isis_attempt_to_exceed_max_sequence = "disable"
-		isis_id_len_mismatch = "disable"
-		isis_max_area_addresses_mismatch = "disable"
-		isis_own_lsp_purge = "disable"
-		isis_sequence_number_skip = "disable"
-		isis_authentication_type_failure = "disable"
-		isis_authentication_failure = "enable"
-		isis_version_skew = "disable"
-		isis_area_mismatch = "disable"
-		isis_rejected_adjacency = "disable"
-		isis_lsp_too_large_to_propagate = "disable"
-		isis_orig_lsp_buff_size_mismatch = "disable"
-		isis_protocols_supported_mismatch = "disable"
-		isis_adjacency_change = "disable"
-		isis_lsp_error_detected = "disable"
 	}
 	`
 }
@@ -128,25 +91,7 @@ func testAccIosxrSNMPServerConfig_all() string {
 		l2vpn_vc_down = true
 		sensor = true
 		fru_ctrl = true
-		isis_all = "disable"
-		isis_database_overload = "disable"
-		isis_manual_address_drops = "disable"
-		isis_corrupted_lsp_detected = "disable"
-		isis_attempt_to_exceed_max_sequence = "disable"
-		isis_id_len_mismatch = "disable"
-		isis_max_area_addresses_mismatch = "disable"
-		isis_own_lsp_purge = "disable"
-		isis_sequence_number_skip = "disable"
-		isis_authentication_type_failure = "disable"
 		isis_authentication_failure = "enable"
-		isis_version_skew = "disable"
-		isis_area_mismatch = "disable"
-		isis_rejected_adjacency = "disable"
-		isis_lsp_too_large_to_propagate = "disable"
-		isis_orig_lsp_buff_size_mismatch = "disable"
-		isis_protocols_supported_mismatch = "disable"
-		isis_adjacency_change = "disable"
-		isis_lsp_error_detected = "disable"
 		bgp_cbgp2_updown = true
 		bgp_bgp4_mib_updown = true
 		users = [{

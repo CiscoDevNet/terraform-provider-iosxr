@@ -16,6 +16,8 @@
 - Add `key` provider attribute
 - Add `ca_certificate` provider attribute
 - BREAKING CHANGE: Use TLS by default
+- Add `iosxr_router_bgp_vrf_neighbor_address_family` provider attribute
+- Add `iosxr_router_bgp_neighbor_group_address_family` provider attribute
 
 ## 0.1.6
 

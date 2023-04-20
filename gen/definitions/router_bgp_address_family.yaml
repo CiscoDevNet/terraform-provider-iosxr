@@ -7,6 +7,18 @@ attributes:
     example: 65001
   - yang_name: af-name
     example: ipv4-unicast
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/selection/route-policy
+    example: BGP_POLICY_NAME
+  - yang_name: allocate-label/all/unlabeled-path
+    example: true
+  - yang_name: advertise/best-external
+    example: true
+  - yang_name: allocate-label/all
+    example: true
   - yang_name: maximum-paths/ebgp/multipath
     example: 10
     optional: true
@@ -55,6 +67,8 @@ attributes:
       - yang_name: masklength
         id: true
         example: 16
+      - yang_name: route-policy
+        example: Route-policy-name
   - yang_name: redistribute/isis
     tf_name: redistribute_isis
     type: List

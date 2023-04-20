@@ -17,6 +17,10 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 				Config: testAccIosxrRouterBGPVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "vrf_name", "VRF1"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_auto", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_two_byte_as", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_four_byte_as", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_ip_address_ipv4_address", "IP-ADDRESS"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_metric", "125"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "5"),
@@ -40,6 +44,7 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_holdtime", "20"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.ttl_security", "false"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_strict_mode", "true"),
 				),
 			},
 			{
@@ -56,6 +61,7 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	resource "iosxr_router_bgp_vrf" "test" {
 		as_number = "65001"
 		vrf_name = "VRF1"
+		rd_ip_address_ipv4_address = "IP-ADDRESS"
 		timers_bgp_keepalive_interval = 5
 		timers_bgp_holdtime = "20"
 	}
@@ -67,6 +73,10 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	resource "iosxr_router_bgp_vrf" "test" {
 		as_number = "65001"
 		vrf_name = "VRF1"
+		rd_auto = true
+		rd_two_byte_as = true
+		rd_four_byte_as = true
+		rd_ip_address_ipv4_address = "IP-ADDRESS"
 		default_information_originate = true
 		default_metric = 125
 		timers_bgp_keepalive_interval = 5
@@ -91,6 +101,7 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 			timers_holdtime = "20"
 			update_source = "GigabitEthernet0/0/0/1"
 			ttl_security = false
+			bfd_fast_detect_strict_mode = true
 		}]
 	}
 	`

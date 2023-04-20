@@ -53,6 +53,22 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Specify a vrf name",
 				Required:            true,
 			},
+			"rd_auto": schema.BoolAttribute{
+				MarkdownDescription: "Automatic route distinguisher",
+				Computed:            true,
+			},
+			"rd_two_byte_as": schema.BoolAttribute{
+				MarkdownDescription: "",
+				Computed:            true,
+			},
+			"rd_four_byte_as": schema.BoolAttribute{
+				MarkdownDescription: "",
+				Computed:            true,
+			},
+			"rd_ip_address_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "configure this node",
+				Computed:            true,
+			},
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: "Distribute a default route",
 				Computed:            true,
@@ -148,6 +164,10 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: "Enable EBGP TTL security",
+							Computed:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: "Hold down neighbor session until BFD session is up",
 							Computed:            true,
 						},
 					},

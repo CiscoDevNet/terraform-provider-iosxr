@@ -7,6 +7,14 @@ attributes:
     example: 65001
   - yang_name: vrf-name
     example: VRF1
+  - yang_name: rd/auto
+    example: true
+  - yang_name: rd/two-byte-as
+    example: true
+  - yang_name: rd/four-byte-as
+    example: true
+  - yang_name: rd/ip-address/ipv4-address
+    example: IP-ADDRESS
   - yang_name: default-information/originate
     example: true
   - yang_name: default-metric
@@ -62,3 +70,5 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
+      - yang_name: bfd/fast-detect/strict-mode
+        example: true

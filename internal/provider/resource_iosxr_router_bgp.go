@@ -59,6 +59,10 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"nsr": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable non-stop-routing support for all neighbors").String,
+				Optional:            true,
+			},
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
 				Optional:            true,
@@ -95,6 +99,26 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(2, 16),
 				},
 			},
+			"bgp_router_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Router-id").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"bgp_graceful_restart_graceful_reset": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reset gracefully if configuration change forces a peer reset").String,
+				Optional:            true,
+			},
+			"ibgp_policy_out_enforce_modifications": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow policy to modify all attributes").String,
+				Optional:            true,
+			},
+			"bgp_log_neighbor_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include extra detail in change messages").String,
+				Optional:            true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
 				Optional:            true,
@@ -107,6 +131,13 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
+						},
+						"use_neighbor_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration from a neighbor-group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,
@@ -187,6 +218,44 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"neighbor_groups": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"neighbor_group_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 900),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"remote_as": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+							Optional:            true,
+						},
+						"update_source": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"ao_key_chain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"ao_include_tcp_options_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
 							Optional:            true,
 						},
 					},

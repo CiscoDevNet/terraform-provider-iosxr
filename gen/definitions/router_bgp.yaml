@@ -5,6 +5,8 @@ doc_category: BGP
 attributes:
   - yang_name: as-number
     example: 65001
+  - yang_name: nsr
+    example: true
   - yang_name: default-information/originate
     example: true
   - yang_name: default-metric
@@ -17,6 +19,14 @@ attributes:
     example: 10
   - yang_name: bfd/multiplier
     example: 4
+  - yang_name: bgp/router-id
+    example: 22.22.22.22
+  - yang_name: bgp/graceful-restart/graceful-reset
+    example: true
+  - yang_name: ibgp/policy/out/enforce-modifications
+    example: true
+  - yang_name: bgp/log/neighbor/changes/detail
+    example: true
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List
@@ -26,6 +36,8 @@ attributes:
         example: 10.1.1.2
       - yang_name: remote-as
         example: 65002
+      - yang_name: use/neighbor-group
+        example: GROUP11
       - yang_name: description
         example: My Neighbor Description
       - yang_name: ignore-connected-check
@@ -60,3 +72,18 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
+  - yang_name: neighbor-groups/neighbor-group
+    tf_name: neighbor_groups
+    type: List
+    attributes:
+      - yang_name: neighbor-group-name
+        id: true
+        example: GROUP1
+      - yang_name: remote-as
+        example: 11111
+      - yang_name: update-source
+        example: Loopback0
+      - yang_name: ao/key-chain-name
+        example: BGP-GROUP1-CLIENTS
+      - yang_name: ao/include-tcp-options/enable
+        example: true

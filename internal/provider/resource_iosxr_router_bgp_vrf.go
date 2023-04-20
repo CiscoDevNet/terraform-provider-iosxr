@@ -70,6 +70,26 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"rd_auto": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Automatic route distinguisher").String,
+				Optional:            true,
+			},
+			"rd_two_byte_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("").String,
+				Optional:            true,
+			},
+			"rd_four_byte_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("").String,
+				Optional:            true,
+			},
+			"rd_ip_address_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Distribute a default route").String,
 				Optional:            true,
@@ -198,6 +218,10 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
+							Optional:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
 							Optional:            true,
 						},
 					},

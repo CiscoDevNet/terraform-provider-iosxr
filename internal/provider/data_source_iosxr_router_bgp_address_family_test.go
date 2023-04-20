@@ -16,6 +16,12 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrRouterBGPAddressFamilyConfig,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_send", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_receive", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_selection_route_policy", "BGP_POLICY_NAME"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "allocate_label_all_unlabeled_path", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "advertise_best_external", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "allocate_label_all", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_multipath", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_multipath", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "label_mode_per_ce", "false"),
@@ -31,6 +37,7 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "aggregate_addresses.0.summary_only", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "networks.0.address", "10.1.0.0"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "networks.0.masklength", "16"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "networks.0.route_policy", "Route-policy-name"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.instance_name", "P1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_one", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_one_two", "true"),
@@ -59,6 +66,12 @@ const testAccDataSourceIosxrRouterBGPAddressFamilyConfig = `
 resource "iosxr_router_bgp_address_family" "test" {
 	as_number = "65001"
 	af_name = "ipv4-unicast"
+	additional_paths_send = true
+	additional_paths_receive = true
+	additional_paths_selection_route_policy = "BGP_POLICY_NAME"
+	allocate_label_all_unlabeled_path = true
+	advertise_best_external = true
+	allocate_label_all = true
 	maximum_paths_ebgp_multipath = 10
 	maximum_paths_ibgp_multipath = 10
 	label_mode_per_ce = false
@@ -77,6 +90,7 @@ resource "iosxr_router_bgp_address_family" "test" {
 	networks = [{
 		address = "10.1.0.0"
 		masklength = 16
+		route_policy = "Route-policy-name"
 	}]
 	redistribute_isis = [{
 		instance_name = "P1"

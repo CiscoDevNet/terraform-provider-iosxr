@@ -1,0 +1,13 @@
+---
+name: Router BGP Neighbor Group Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: neighbor-group-name
+    example: NEIGHBOR1
+  - yang_name: af-name
+    example: ipv4 labled-unicast
+  - yang_name: soft-reconfiguration/inbound/always
+    example: true

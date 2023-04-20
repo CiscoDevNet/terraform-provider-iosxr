@@ -1,15 +1,21 @@
 resource "iosxr_router_bgp" "example" {
-  as_number                     = "65001"
-  default_information_originate = true
-  default_metric                = 125
-  timers_bgp_keepalive_interval = 5
-  timers_bgp_holdtime           = "20"
-  bfd_minimum_interval          = 10
-  bfd_multiplier                = 4
+  as_number                             = "65001"
+  nsr                                   = true
+  default_information_originate         = true
+  default_metric                        = 125
+  timers_bgp_keepalive_interval         = 5
+  timers_bgp_holdtime                   = "20"
+  bfd_minimum_interval                  = 10
+  bfd_multiplier                        = 4
+  bgp_router_id                         = "22.22.22.22"
+  bgp_graceful_restart_graceful_reset   = true
+  ibgp_policy_out_enforce_modifications = true
+  bgp_log_neighbor_changes_detail       = true
   neighbors = [
     {
       neighbor_address                = "10.1.1.2"
       remote_as                       = "65002"
+      use_neighbor_group              = "GROUP11"
       description                     = "My Neighbor Description"
       ignore_connected_check          = true
       ebgp_multihop_maximum_hop_count = 10
@@ -25,6 +31,15 @@ resource "iosxr_router_bgp" "example" {
       timers_holdtime                 = "20"
       update_source                   = "GigabitEthernet0/0/0/1"
       ttl_security                    = false
+    }
+  ]
+  neighbor_groups = [
+    {
+      neighbor_group_name           = "GROUP1"
+      remote_as                     = "11111"
+      update_source                 = "Loopback0"
+      ao_key_chain_name             = "BGP-GROUP1-CLIENTS"
+      ao_include_tcp_options_enable = true
     }
   ]
 }

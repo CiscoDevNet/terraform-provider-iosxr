@@ -16,14 +16,20 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrRouterBGPConfig,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nsr", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "default_metric", "125"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_keepalive_interval", "5"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_holdtime", "20"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_minimum_interval", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_multiplier", "4"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_router_id", "22.22.22.22"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_graceful_restart_graceful_reset", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "ibgp_policy_out_enforce_modifications", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_log_neighbor_changes_detail", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.neighbor_address", "10.1.1.2"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.remote_as", "65002"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.use_neighbor_group", "GROUP11"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.description", "My Neighbor Description"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.ignore_connected_check", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"),
@@ -39,6 +45,11 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime", "20"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.ttl_security", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.neighbor_group_name", "GROUP1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.remote_as", "11111"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.update_source", "Loopback0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.ao_key_chain_name", "BGP-GROUP1-CLIENTS"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.ao_include_tcp_options_enable", "true"),
 				),
 			},
 		},
@@ -49,15 +60,21 @@ const testAccDataSourceIosxrRouterBGPConfig = `
 
 resource "iosxr_router_bgp" "test" {
 	as_number = "65001"
+	nsr = true
 	default_information_originate = true
 	default_metric = 125
 	timers_bgp_keepalive_interval = 5
 	timers_bgp_holdtime = "20"
 	bfd_minimum_interval = 10
 	bfd_multiplier = 4
+	bgp_router_id = "22.22.22.22"
+	bgp_graceful_restart_graceful_reset = true
+	ibgp_policy_out_enforce_modifications = true
+	bgp_log_neighbor_changes_detail = true
 	neighbors = [{
 		neighbor_address = "10.1.1.2"
 		remote_as = "65002"
+		use_neighbor_group = "GROUP11"
 		description = "My Neighbor Description"
 		ignore_connected_check = true
 		ebgp_multihop_maximum_hop_count = 10
@@ -73,6 +90,13 @@ resource "iosxr_router_bgp" "test" {
 		timers_holdtime = "20"
 		update_source = "GigabitEthernet0/0/0/1"
 		ttl_security = false
+	}]
+	neighbor_groups = [{
+		neighbor_group_name = "GROUP1"
+		remote_as = "11111"
+		update_source = "Loopback0"
+		ao_key_chain_name = "BGP-GROUP1-CLIENTS"
+		ao_include_tcp_options_enable = true
 	}]
 }
 

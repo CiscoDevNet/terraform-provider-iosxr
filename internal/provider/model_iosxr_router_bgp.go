@@ -14,20 +14,27 @@ import (
 )
 
 type RouterBGP struct {
-	Device                      types.String         `tfsdk:"device"`
-	Id                          types.String         `tfsdk:"id"`
-	AsNumber                    types.String         `tfsdk:"as_number"`
-	DefaultInformationOriginate types.Bool           `tfsdk:"default_information_originate"`
-	DefaultMetric               types.Int64          `tfsdk:"default_metric"`
-	TimersBgpKeepaliveInterval  types.Int64          `tfsdk:"timers_bgp_keepalive_interval"`
-	TimersBgpHoldtime           types.String         `tfsdk:"timers_bgp_holdtime"`
-	BfdMinimumInterval          types.Int64          `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier               types.Int64          `tfsdk:"bfd_multiplier"`
-	Neighbors                   []RouterBGPNeighbors `tfsdk:"neighbors"`
+	Device                            types.String              `tfsdk:"device"`
+	Id                                types.String              `tfsdk:"id"`
+	AsNumber                          types.String              `tfsdk:"as_number"`
+	Nsr                               types.Bool                `tfsdk:"nsr"`
+	DefaultInformationOriginate       types.Bool                `tfsdk:"default_information_originate"`
+	DefaultMetric                     types.Int64               `tfsdk:"default_metric"`
+	TimersBgpKeepaliveInterval        types.Int64               `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHoldtime                 types.String              `tfsdk:"timers_bgp_holdtime"`
+	BfdMinimumInterval                types.Int64               `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                     types.Int64               `tfsdk:"bfd_multiplier"`
+	BgpRouterId                       types.String              `tfsdk:"bgp_router_id"`
+	BgpGracefulRestartGracefulReset   types.Bool                `tfsdk:"bgp_graceful_restart_graceful_reset"`
+	IbgpPolicyOutEnforceModifications types.Bool                `tfsdk:"ibgp_policy_out_enforce_modifications"`
+	BgpLogNeighborChangesDetail       types.Bool                `tfsdk:"bgp_log_neighbor_changes_detail"`
+	Neighbors                         []RouterBGPNeighbors      `tfsdk:"neighbors"`
+	NeighborGroups                    []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
 }
 type RouterBGPNeighbors struct {
 	NeighborAddress             types.String `tfsdk:"neighbor_address"`
 	RemoteAs                    types.String `tfsdk:"remote_as"`
+	UseNeighborGroup            types.String `tfsdk:"use_neighbor_group"`
 	Description                 types.String `tfsdk:"description"`
 	IgnoreConnectedCheck        types.Bool   `tfsdk:"ignore_connected_check"`
 	EbgpMultihopMaximumHopCount types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
@@ -44,6 +51,13 @@ type RouterBGPNeighbors struct {
 	UpdateSource                types.String `tfsdk:"update_source"`
 	TtlSecurity                 types.Bool   `tfsdk:"ttl_security"`
 }
+type RouterBGPNeighborGroups struct {
+	NeighborGroupName         types.String `tfsdk:"neighbor_group_name"`
+	RemoteAs                  types.String `tfsdk:"remote_as"`
+	UpdateSource              types.String `tfsdk:"update_source"`
+	AoKeyChainName            types.String `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable types.Bool   `tfsdk:"ao_include_tcp_options_enable"`
+}
 
 func (data RouterBGP) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
@@ -53,6 +67,11 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AsNumber.IsNull() && !data.AsNumber.IsUnknown() {
 		body, _ = sjson.Set(body, "as-number", data.AsNumber.ValueString())
+	}
+	if !data.Nsr.IsNull() && !data.Nsr.IsUnknown() {
+		if data.Nsr.ValueBool() {
+			body, _ = sjson.Set(body, "nsr", map[string]string{})
+		}
 	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
 		if data.DefaultInformationOriginate.ValueBool() {
@@ -74,6 +93,24 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
+	if !data.BgpRouterId.IsNull() && !data.BgpRouterId.IsUnknown() {
+		body, _ = sjson.Set(body, "bgp.router-id", data.BgpRouterId.ValueString())
+	}
+	if !data.BgpGracefulRestartGracefulReset.IsNull() && !data.BgpGracefulRestartGracefulReset.IsUnknown() {
+		if data.BgpGracefulRestartGracefulReset.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.graceful-restart.graceful-reset", map[string]string{})
+		}
+	}
+	if !data.IbgpPolicyOutEnforceModifications.IsNull() && !data.IbgpPolicyOutEnforceModifications.IsUnknown() {
+		if data.IbgpPolicyOutEnforceModifications.ValueBool() {
+			body, _ = sjson.Set(body, "ibgp.policy.out.enforce-modifications", map[string]string{})
+		}
+	}
+	if !data.BgpLogNeighborChangesDetail.IsNull() && !data.BgpLogNeighborChangesDetail.IsUnknown() {
+		if data.BgpLogNeighborChangesDetail.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.log.neighbor.changes.detail", map[string]string{})
+		}
+	}
 	if len(data.Neighbors) > 0 {
 		body, _ = sjson.Set(body, "neighbors.neighbor", []interface{}{})
 		for index, item := range data.Neighbors {
@@ -82,6 +119,9 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 			}
 			if !item.RemoteAs.IsNull() && !item.RemoteAs.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"remote-as", item.RemoteAs.ValueString())
+			}
+			if !item.UseNeighborGroup.IsNull() && !item.UseNeighborGroup.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"use.neighbor-group", item.UseNeighborGroup.ValueString())
 			}
 			if !item.Description.IsNull() && !item.Description.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"description", item.Description.ValueString())
@@ -142,10 +182,41 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 			}
 		}
 	}
+	if len(data.NeighborGroups) > 0 {
+		body, _ = sjson.Set(body, "neighbor-groups.neighbor-group", []interface{}{})
+		for index, item := range data.NeighborGroups {
+			if !item.NeighborGroupName.IsNull() && !item.NeighborGroupName.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"neighbor-group-name", item.NeighborGroupName.ValueString())
+			}
+			if !item.RemoteAs.IsNull() && !item.RemoteAs.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"remote-as", item.RemoteAs.ValueString())
+			}
+			if !item.UpdateSource.IsNull() && !item.UpdateSource.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"update-source", item.UpdateSource.ValueString())
+			}
+			if !item.AoKeyChainName.IsNull() && !item.AoKeyChainName.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"ao.key-chain-name", item.AoKeyChainName.ValueString())
+			}
+			if !item.AoIncludeTcpOptionsEnable.IsNull() && !item.AoIncludeTcpOptionsEnable.IsUnknown() {
+				if item.AoIncludeTcpOptionsEnable.ValueBool() {
+					body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"ao.include-tcp-options.enable", map[string]string{})
+				}
+			}
+		}
+	}
 	return body
 }
 
 func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "nsr"); !data.Nsr.IsNull() {
+		if value.Exists() {
+			data.Nsr = types.BoolValue(true)
+		} else {
+			data.Nsr = types.BoolValue(false)
+		}
+	} else {
+		data.Nsr = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
 		if value.Exists() {
 			data.DefaultInformationOriginate = types.BoolValue(true)
@@ -180,6 +251,38 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BfdMultiplier = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() && !data.BgpRouterId.IsNull() {
+		data.BgpRouterId = types.StringValue(value.String())
+	} else {
+		data.BgpRouterId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.graceful-reset"); !data.BgpGracefulRestartGracefulReset.IsNull() {
+		if value.Exists() {
+			data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
+		} else {
+			data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
+		}
+	} else {
+		data.BgpGracefulRestartGracefulReset = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ibgp.policy.out.enforce-modifications"); !data.IbgpPolicyOutEnforceModifications.IsNull() {
+		if value.Exists() {
+			data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
+		} else {
+			data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
+		}
+	} else {
+		data.IbgpPolicyOutEnforceModifications = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.detail"); !data.BgpLogNeighborChangesDetail.IsNull() {
+		if value.Exists() {
+			data.BgpLogNeighborChangesDetail = types.BoolValue(true)
+		} else {
+			data.BgpLogNeighborChangesDetail = types.BoolValue(false)
+		}
+	} else {
+		data.BgpLogNeighborChangesDetail = types.BoolNull()
+	}
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
@@ -212,6 +315,11 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].RemoteAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].RemoteAs = types.StringNull()
+		}
+		if value := r.Get("use.neighbor-group"); value.Exists() && !data.Neighbors[i].UseNeighborGroup.IsNull() {
+			data.Neighbors[i].UseNeighborGroup = types.StringValue(value.String())
+		} else {
+			data.Neighbors[i].UseNeighborGroup = types.StringNull()
 		}
 		if value := r.Get("description"); value.Exists() && !data.Neighbors[i].Description.IsNull() {
 			data.Neighbors[i].Description = types.StringValue(value.String())
@@ -313,9 +421,67 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].TtlSecurity = types.BoolNull()
 		}
 	}
+	for i := range data.NeighborGroups {
+		keys := [...]string{"neighbor-group-name"}
+		keyValues := [...]string{data.NeighborGroups[i].NeighborGroupName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "neighbor-groups.neighbor-group").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("neighbor-group-name"); value.Exists() && !data.NeighborGroups[i].NeighborGroupName.IsNull() {
+			data.NeighborGroups[i].NeighborGroupName = types.StringValue(value.String())
+		} else {
+			data.NeighborGroups[i].NeighborGroupName = types.StringNull()
+		}
+		if value := r.Get("remote-as"); value.Exists() && !data.NeighborGroups[i].RemoteAs.IsNull() {
+			data.NeighborGroups[i].RemoteAs = types.StringValue(value.String())
+		} else {
+			data.NeighborGroups[i].RemoteAs = types.StringNull()
+		}
+		if value := r.Get("update-source"); value.Exists() && !data.NeighborGroups[i].UpdateSource.IsNull() {
+			data.NeighborGroups[i].UpdateSource = types.StringValue(value.String())
+		} else {
+			data.NeighborGroups[i].UpdateSource = types.StringNull()
+		}
+		if value := r.Get("ao.key-chain-name"); value.Exists() && !data.NeighborGroups[i].AoKeyChainName.IsNull() {
+			data.NeighborGroups[i].AoKeyChainName = types.StringValue(value.String())
+		} else {
+			data.NeighborGroups[i].AoKeyChainName = types.StringNull()
+		}
+		if value := r.Get("ao.include-tcp-options.enable"); !data.NeighborGroups[i].AoIncludeTcpOptionsEnable.IsNull() {
+			if value.Exists() {
+				data.NeighborGroups[i].AoIncludeTcpOptionsEnable = types.BoolValue(true)
+			} else {
+				data.NeighborGroups[i].AoIncludeTcpOptionsEnable = types.BoolValue(false)
+			}
+		} else {
+			data.NeighborGroups[i].AoIncludeTcpOptionsEnable = types.BoolNull()
+		}
+	}
 }
 
 func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
+		data.Nsr = types.BoolValue(true)
+	} else {
+		data.Nsr = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
@@ -336,6 +502,24 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
 		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() {
+		data.BgpRouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.graceful-reset"); value.Exists() {
+		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
+	} else {
+		data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ibgp.policy.out.enforce-modifications"); value.Exists() {
+		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
+	} else {
+		data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.detail"); value.Exists() {
+		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
+	} else {
+		data.BgpLogNeighborChangesDetail = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -345,6 +529,9 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("remote-as"); cValue.Exists() {
 				item.RemoteAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("use.neighbor-group"); cValue.Exists() {
+				item.UseNeighborGroup = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("description"); cValue.Exists() {
 				item.Description = types.StringValue(cValue.String())
@@ -407,6 +594,31 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "neighbor-groups.neighbor-group"); value.Exists() {
+		data.NeighborGroups = make([]RouterBGPNeighborGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPNeighborGroups{}
+			if cValue := v.Get("neighbor-group-name"); cValue.Exists() {
+				item.NeighborGroupName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("remote-as"); cValue.Exists() {
+				item.RemoteAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("update-source"); cValue.Exists() {
+				item.UpdateSource = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ao.key-chain-name"); cValue.Exists() {
+				item.AoKeyChainName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ao.include-tcp-options.enable"); cValue.Exists() {
+				item.AoIncludeTcpOptionsEnable = types.BoolValue(true)
+			} else {
+				item.AoIncludeTcpOptionsEnable = types.BoolValue(false)
+			}
+			data.NeighborGroups = append(data.NeighborGroups, item)
+			return true
+		})
+	}
 }
 
 func (data *RouterBGP) fromPlan(ctx context.Context, plan RouterBGP) {
@@ -444,6 +656,36 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.NeighborGroups {
+		keys := [...]string{"neighbor-group-name"}
+		stateKeyValues := [...]string{state.NeighborGroups[i].NeighborGroupName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.NeighborGroups[i].NeighborGroupName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.NeighborGroups {
+			found = true
+			if state.NeighborGroups[i].NeighborGroupName.ValueString() != data.NeighborGroups[j].NeighborGroupName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor-groups/neighbor-group%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

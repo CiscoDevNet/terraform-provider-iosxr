@@ -1,0 +1,1 @@
+terraform import iosxr_router_bgp_vrf_neighbor_address_family.example "Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=33333]/vrfs/vrf[vrf-name=VRF33]/neighbors/neighbor[neighbor-address=44.44.44.44]/address-families/address-family[af-name=ipv4-unicast1]"

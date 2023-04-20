@@ -14,17 +14,23 @@ This resource can manage the Router BGP configuration.
 
 ```terraform
 resource "iosxr_router_bgp" "example" {
-  as_number                     = "65001"
-  default_information_originate = true
-  default_metric                = 125
-  timers_bgp_keepalive_interval = 5
-  timers_bgp_holdtime           = "20"
-  bfd_minimum_interval          = 10
-  bfd_multiplier                = 4
+  as_number                             = "65001"
+  nsr                                   = true
+  default_information_originate         = true
+  default_metric                        = 125
+  timers_bgp_keepalive_interval         = 5
+  timers_bgp_holdtime                   = "20"
+  bfd_minimum_interval                  = 10
+  bfd_multiplier                        = 4
+  bgp_router_id                         = "22.22.22.22"
+  bgp_graceful_restart_graceful_reset   = true
+  ibgp_policy_out_enforce_modifications = true
+  bgp_log_neighbor_changes_detail       = true
   neighbors = [
     {
       neighbor_address                = "10.1.1.2"
       remote_as                       = "65002"
+      use_neighbor_group              = "GROUP11"
       description                     = "My Neighbor Description"
       ignore_connected_check          = true
       ebgp_multihop_maximum_hop_count = 10
@@ -40,6 +46,15 @@ resource "iosxr_router_bgp" "example" {
       timers_holdtime                 = "20"
       update_source                   = "GigabitEthernet0/0/0/1"
       ttl_security                    = false
+    }
+  ]
+  neighbor_groups = [
+    {
+      neighbor_group_name           = "GROUP1"
+      remote_as                     = "11111"
+      update_source                 = "Loopback0"
+      ao_key_chain_name             = "BGP-GROUP1-CLIENTS"
+      ao_include_tcp_options_enable = true
     }
   ]
 }
@@ -61,15 +76,33 @@ resource "iosxr_router_bgp" "example" {
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
+- `bgp_graceful_restart_graceful_reset` (Boolean) Reset gracefully if configuration change forces a peer reset
+- `bgp_log_neighbor_changes_detail` (Boolean) Include extra detail in change messages
+- `bgp_router_id` (String) Configure Router-id
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
   - Range: `1`-`4294967295`
 - `device` (String) A device name from the provider configuration.
+- `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
+- `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `nsr` (Boolean) Enable non-stop-routing support for all neighbors
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--neighbor_groups"></a>
+### Nested Schema for `neighbor_groups`
+
+Optional:
+
+- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
+- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `neighbor_group_name` (String) Specify a Neighbor-group
+- `remote_as` (String) bgp as-number
+- `update_source` (String) Source of routing updates
+
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
@@ -100,6 +133,7 @@ Optional:
 - `shutdown` (Boolean) Administratively shut down this neighbor
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
+- `use_neighbor_group` (String) Inherit configuration from a neighbor-group
 
 ## Import
 

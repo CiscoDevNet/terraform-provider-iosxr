@@ -16,6 +16,10 @@ This resource can manage the Router BGP VRF configuration.
 resource "iosxr_router_bgp_vrf" "example" {
   as_number                     = "65001"
   vrf_name                      = "VRF1"
+  rd_auto                       = true
+  rd_two_byte_as                = true
+  rd_four_byte_as               = true
+  rd_ip_address_ipv4_address    = "IP-ADDRESS"
   default_information_originate = true
   default_metric                = 125
   timers_bgp_keepalive_interval = 5
@@ -41,6 +45,7 @@ resource "iosxr_router_bgp_vrf" "example" {
       timers_holdtime                 = "20"
       update_source                   = "GigabitEthernet0/0/0/1"
       ttl_security                    = false
+      bfd_fast_detect_strict_mode     = true
     }
   ]
 }
@@ -52,6 +57,7 @@ resource "iosxr_router_bgp_vrf" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
+- `rd_ip_address_ipv4_address` (String) configure this node
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
   - Range: `0`-`65535`
@@ -68,6 +74,9 @@ resource "iosxr_router_bgp_vrf" "example" {
   - Range: `1`-`4294967295`
 - `device` (String) A device name from the provider configuration.
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `rd_auto` (Boolean) Automatic route distinguisher
+- `rd_four_byte_as` (Boolean)
+- `rd_two_byte_as` (Boolean)
 
 ### Read-Only
 
@@ -86,6 +95,7 @@ Required:
 
 Optional:
 
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier

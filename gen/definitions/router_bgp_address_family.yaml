@@ -7,6 +7,20 @@ attributes:
     example: 65001
   - yang_name: af-name
     example: ipv4-unicast
+
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/selection/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: allocate-label/all/unlabeled-path
+    example: true
+  - yang_name: advertise/best-external
+    example: true
+  - yang_name: allocate-label/all
+    example: true
+
   - yang_name: maximum-paths/ebgp/multipath
     example: 10
     optional: true
@@ -99,3 +113,19 @@ attributes:
         example: false
       - yang_name: metric
         example: 100
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  if destination in PREFIX_SET_1 then\\n    set extcommunity rt (12345:1) additive\\n  endif\\n  pass\\nend-policy\\n"
+
+
+  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=%s]
+    attributes:
+      - name: set-name
+        value: PREFIX_SET_1
+      - name: rpl-prefix-set
+        value: "prefix-set PREFIX_SET_1\\n  10.1.1.0/26 ge 26,\\n  10.1.2.0/26 ge 26\\nend-set\\n"

@@ -9,10 +9,22 @@ attributes:
     example: true
   - yang_name: default-metric
     example: 125
+  - yang_name: nsr
+    example: true
   - yang_name: timers/bgp/keepalive-interval
     example: 5
   - yang_name: timers/bgp/holdtime
     example: 20
+
+  - yang_name: bgp/router-id
+    example: 22.22.22.22
+  - yang_name: bgp/graceful-restart/graceful-reset
+    example: true
+  - yang_name: ibgp/policy/out/enforce-modifications
+    example: true
+  - yang_name: bgp/log/neighbor/changes/detail
+    example: true
+
   - yang_name: bfd/minimum-interval
     example: 10
   - yang_name: bfd/multiplier
@@ -28,6 +40,10 @@ attributes:
         example: 65002
       - yang_name: description
         example: My Neighbor Description
+
+      - yang_name: use/neighbor-group
+        example: GROUP1
+
       - yang_name: ignore-connected-check
         example: true
       - yang_name: ebgp-multihop/maximum-hop-count
@@ -60,3 +76,21 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
+        
+  - yang_name: neighbor-groups/neighbor-group
+    tf_name: neighbor_groups
+    type: List
+    attributes:
+      - yang_name: neighbor-group-name
+        id: true
+        example: GROUP1
+      - yang_name: remote-as
+        example: 65001
+      - yang_name: update-source
+        example: Loopback0
+      - yang_name: ao/key-chain-name
+        example: BGP-GROUP1-CLIENTS
+        exclude_test: true
+      - yang_name: ao/include-tcp-options/enable
+        example: true
+        exclude_test: true

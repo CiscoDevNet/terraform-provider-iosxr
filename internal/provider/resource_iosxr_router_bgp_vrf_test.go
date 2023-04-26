@@ -17,6 +17,13 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 				Config: testAccIosxrRouterBGPVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "vrf_name", "VRF1"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_auto", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_two_byte_as_as_number", "65004"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_two_byte_as_index", "1"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_four_byte_as_as_number", "65005"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_four_byte_as_index", "2"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_ip_address_ipv4_address", "14.14.14.14"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_ip_address_index", "3"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_metric", "125"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "5"),
@@ -56,6 +63,12 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	resource "iosxr_router_bgp_vrf" "test" {
 		as_number = "65001"
 		vrf_name = "VRF1"
+		rd_two_byte_as_as_number = "65004"
+		rd_two_byte_as_index = 1
+		rd_four_byte_as_as_number = "65005"
+		rd_four_byte_as_index = 2
+		rd_ip_address_ipv4_address = "14.14.14.14"
+		rd_ip_address_index = 3
 		timers_bgp_keepalive_interval = 5
 		timers_bgp_holdtime = "20"
 	}
@@ -67,6 +80,13 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	resource "iosxr_router_bgp_vrf" "test" {
 		as_number = "65001"
 		vrf_name = "VRF1"
+		rd_auto = true
+		rd_two_byte_as_as_number = "65004"
+		rd_two_byte_as_index = 1
+		rd_four_byte_as_as_number = "65005"
+		rd_four_byte_as_index = 2
+		rd_ip_address_ipv4_address = "14.14.14.14"
+		rd_ip_address_index = 3
 		default_information_originate = true
 		default_metric = 125
 		timers_bgp_keepalive_interval = 5

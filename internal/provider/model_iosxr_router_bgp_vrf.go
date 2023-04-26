@@ -18,6 +18,13 @@ type RouterBGPVRF struct {
 	Id                          types.String            `tfsdk:"id"`
 	AsNumber                    types.String            `tfsdk:"as_number"`
 	VrfName                     types.String            `tfsdk:"vrf_name"`
+	RdAuto                      types.Bool              `tfsdk:"rd_auto"`
+	RdTwoByteAsAsNumber         types.String            `tfsdk:"rd_two_byte_as_as_number"`
+	RdTwoByteAsIndex            types.Int64             `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsAsNumber        types.String            `tfsdk:"rd_four_byte_as_as_number"`
+	RdFourByteAsIndex           types.Int64             `tfsdk:"rd_four_byte_as_index"`
+	RdIpAddressIpv4Address      types.String            `tfsdk:"rd_ip_address_ipv4_address"`
+	RdIpAddressIndex            types.Int64             `tfsdk:"rd_ip_address_index"`
 	DefaultInformationOriginate types.Bool              `tfsdk:"default_information_originate"`
 	DefaultMetric               types.Int64             `tfsdk:"default_metric"`
 	TimersBgpKeepaliveInterval  types.Int64             `tfsdk:"timers_bgp_keepalive_interval"`
@@ -54,6 +61,29 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrfName.IsNull() && !data.VrfName.IsUnknown() {
 		body, _ = sjson.Set(body, "vrf-name", data.VrfName.ValueString())
+	}
+	if !data.RdAuto.IsNull() && !data.RdAuto.IsUnknown() {
+		if data.RdAuto.ValueBool() {
+			body, _ = sjson.Set(body, "rd.auto", map[string]string{})
+		}
+	}
+	if !data.RdTwoByteAsAsNumber.IsNull() && !data.RdTwoByteAsAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.two-byte-as.as-number", data.RdTwoByteAsAsNumber.ValueString())
+	}
+	if !data.RdTwoByteAsIndex.IsNull() && !data.RdTwoByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.two-byte-as.index", strconv.FormatInt(data.RdTwoByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.RdFourByteAsAsNumber.IsNull() && !data.RdFourByteAsAsNumber.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.four-byte-as.as-number", data.RdFourByteAsAsNumber.ValueString())
+	}
+	if !data.RdFourByteAsIndex.IsNull() && !data.RdFourByteAsIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.four-byte-as.index", strconv.FormatInt(data.RdFourByteAsIndex.ValueInt64(), 10))
+	}
+	if !data.RdIpAddressIpv4Address.IsNull() && !data.RdIpAddressIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.ip-address.ipv4-address", data.RdIpAddressIpv4Address.ValueString())
+	}
+	if !data.RdIpAddressIndex.IsNull() && !data.RdIpAddressIndex.IsUnknown() {
+		body, _ = sjson.Set(body, "rd.ip-address.index", strconv.FormatInt(data.RdIpAddressIndex.ValueInt64(), 10))
 	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.IsUnknown() {
 		if data.DefaultInformationOriginate.ValueBool() {
@@ -147,6 +177,45 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 }
 
 func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rd.auto"); !data.RdAuto.IsNull() {
+		if value.Exists() {
+			data.RdAuto = types.BoolValue(true)
+		} else {
+			data.RdAuto = types.BoolValue(false)
+		}
+	} else {
+		data.RdAuto = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.as-number"); value.Exists() && !data.RdTwoByteAsAsNumber.IsNull() {
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
+	} else {
+		data.RdTwoByteAsAsNumber = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.index"); value.Exists() && !data.RdTwoByteAsIndex.IsNull() {
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.RdTwoByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.as-number"); value.Exists() && !data.RdFourByteAsAsNumber.IsNull() {
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
+	} else {
+		data.RdFourByteAsAsNumber = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.index"); value.Exists() && !data.RdFourByteAsIndex.IsNull() {
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
+	} else {
+		data.RdFourByteAsIndex = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.ipv4-address"); value.Exists() && !data.RdIpAddressIpv4Address.IsNull() {
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
+	} else {
+		data.RdIpAddressIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.index"); value.Exists() && !data.RdIpAddressIndex.IsNull() {
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
+	} else {
+		data.RdIpAddressIndex = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
 		if value.Exists() {
 			data.DefaultInformationOriginate = types.BoolValue(true)
@@ -317,6 +386,29 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 }
 
 func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rd.auto"); value.Exists() {
+		data.RdAuto = types.BoolValue(true)
+	} else {
+		data.RdAuto = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.as-number"); value.Exists() {
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.index"); value.Exists() {
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.as-number"); value.Exists() {
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.index"); value.Exists() {
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.ipv4-address"); value.Exists() {
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.index"); value.Exists() {
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {

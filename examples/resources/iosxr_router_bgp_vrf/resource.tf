@@ -1,6 +1,13 @@
 resource "iosxr_router_bgp_vrf" "example" {
   as_number                     = "65001"
   vrf_name                      = "VRF1"
+  rd_auto                       = true
+  rd_two_byte_as_as_number      = "65004"
+  rd_two_byte_as_index          = 1
+  rd_four_byte_as_as_number     = "65005"
+  rd_four_byte_as_index         = 2
+  rd_ip_address_ipv4_address    = "14.14.14.14"
+  rd_ip_address_index           = 3
   default_information_originate = true
   default_metric                = 125
   timers_bgp_keepalive_interval = 5

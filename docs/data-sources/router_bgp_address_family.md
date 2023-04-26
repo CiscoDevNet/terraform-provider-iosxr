@@ -33,7 +33,13 @@ data "iosxr_router_bgp_address_family" "example" {
 
 ### Read-Only
 
+- `additional_paths_receive` (Boolean) Additional paths Receive capability
+- `additional_paths_selection_route_policy` (String) Route-policy for additional paths selection
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `advertise_best_external` (Boolean) Advertise best-external path
 - `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
+- `allocate_label_all` (Boolean) Allocate labels for all prefixes
+- `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `id` (String) The path of the retrieved object.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode

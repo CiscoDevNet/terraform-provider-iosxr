@@ -14,8 +14,14 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPAddressFamilyConfig,
+				Config: testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterBGPAddressFamilyConfig,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_send", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_receive", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_selection_route_policy", "ROUTE_POLICY_1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "allocate_label_all_unlabeled_path", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "advertise_best_external", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "allocate_label_all", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_multipath", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_multipath", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "label_mode_per_ce", "false"),
@@ -54,11 +60,36 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 	})
 }
 
+const testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]"
+	attributes = {
+		route-policy-name = "ROUTE_POLICY_1"
+		rpl-route-policy = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=%s]"
+	attributes = {
+		set-name = "PREFIX_SET_1"
+		rpl-prefix-set = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
+	}
+}
+
+`
+
 const testAccDataSourceIosxrRouterBGPAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_address_family" "test" {
 	as_number = "65001"
 	af_name = "ipv4-unicast"
+	additional_paths_send = true
+	additional_paths_receive = true
+	additional_paths_selection_route_policy = "ROUTE_POLICY_1"
+	allocate_label_all_unlabeled_path = true
+	advertise_best_external = true
+	allocate_label_all = true
 	maximum_paths_ebgp_multipath = 10
 	maximum_paths_ibgp_multipath = 10
 	label_mode_per_ce = false
@@ -99,6 +130,7 @@ resource "iosxr_router_bgp_address_family" "test" {
 		match_nssa_external = false
 		metric = 100
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 }
 
 data "iosxr_router_bgp_address_family" "test" {

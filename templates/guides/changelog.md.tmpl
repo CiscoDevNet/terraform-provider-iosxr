@@ -10,6 +10,7 @@ description: |-
 ## 0.1.8 (unreleased)
 
 - Fix incompatibility with gNMI and IOS-XR 7.6
+- Remove `iosxr_segment_routing` resource and data source due to unified model being deprecated
 
 ## 0.1.7
 

@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.26.1
 	github.com/openconfig/gnmi v0.9.1
 	github.com/openconfig/gnmic v0.30.0
-	github.com/openconfig/goyang v1.2.0
+	github.com/openconfig/goyang v1.3.0
 	github.com/tidwall/gjson v1.14.4
 	github.com/tidwall/sjson v1.2.5
 	golang.org/x/tools v0.8.0

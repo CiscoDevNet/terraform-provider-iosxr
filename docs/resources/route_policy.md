@@ -14,8 +14,8 @@ This resource can manage the Route Policy configuration.
 
 ```terraform
 resource "iosxr_route_policy" "example" {
-  route_policy_name = "ROUTE_POLICY_1"
-  rpl               = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"
+  route_policy_name = "BGP_POLICY_NAME"
+  rpl               = "route-policy BGP_POLICY_NAME\n  pass\nend-policy\n"
 }
 ```
 
@@ -40,5 +40,5 @@ resource "iosxr_route_policy" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_route_policy.example "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+terraform import iosxr_route_policy.example "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=BGP_POLICY_NAME]"
 ```

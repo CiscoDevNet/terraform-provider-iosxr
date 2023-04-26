@@ -14,16 +14,22 @@ This resource can manage the Router BGP Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_address_family" "example" {
-  as_number                     = "65001"
-  af_name                       = "ipv4-unicast"
-  maximum_paths_ebgp_multipath  = 10
-  maximum_paths_ibgp_multipath  = 10
-  label_mode_per_ce             = false
-  label_mode_per_vrf            = false
-  redistribute_connected        = true
-  redistribute_connected_metric = 10
-  redistribute_static           = true
-  redistribute_static_metric    = 10
+  as_number                               = "65001"
+  af_name                                 = "ipv4-unicast"
+  additional_paths_send                   = true
+  additional_paths_receive                = true
+  additional_paths_selection_route_policy = "BGP_POLICY_NAME"
+  allocate_label_all_unlabeled_path       = true
+  advertise_best_external                 = true
+  allocate_label_all                      = true
+  maximum_paths_ebgp_multipath            = 10
+  maximum_paths_ibgp_multipath            = 10
+  label_mode_per_ce                       = false
+  label_mode_per_vrf                      = false
+  redistribute_connected                  = true
+  redistribute_connected_metric           = 10
+  redistribute_static                     = true
+  redistribute_static_metric              = 10
   aggregate_addresses = [
     {
       address       = "10.0.0.0"
@@ -75,18 +81,24 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `af_name` (String) Enter Address Family command mode
   - Choices: `all-address-family`, `ipv4-flowspec`, `ipv4-labeled-unicast`, `ipv4-mdt`, `ipv4-multicast`, `ipv4-mvpn`, `ipv4-rt-filter`, `ipv4-sr-policy`, `ipv4-tunnel`, `ipv4-unicast`, `ipv6-flowspec`, `ipv6-labeled-unicast`, `ipv6-multicast`, `ipv6-mvpn`, `ipv6-sr-policy`, `ipv6-unicast`, `l2vpn-evpn`, `l2vpn-mspw`, `l2vpn-vpls-vpws`, `link-state-link-state`, `vpnv4-flowspec`, `vpnv4-multicast`, `vpnv4-unicast`, `vpnv6-flowspec`, `vpnv6-multicast`, `vpnv6-unicast`
 - `as_number` (String) bgp as-number
+- `maximum_paths_ebgp_multipath` (Number) eBGP-multipath
+  - Range: `2`-`1024`
+- `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
+  - Range: `2`-`1024`
 
 ### Optional
 
+- `additional_paths_receive` (Boolean) Additional paths Receive capability
+- `additional_paths_selection_route_policy` (String) Route-policy for additional paths selection
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `advertise_best_external` (Boolean) Advertise best-external path
 - `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
+- `allocate_label_all` (Boolean) Allocate labels for all prefixes
+- `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `device` (String) A device name from the provider configuration.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
-- `maximum_paths_ebgp_multipath` (Number) eBGP-multipath
-  - Range: `2`-`1024`
 - `maximum_paths_eibgp_multipath` (Number) eiBGP-multipath
-  - Range: `2`-`1024`
-- `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
   - Range: `2`-`1024`
 - `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
 - `redistribute_connected` (Boolean) Connected routes

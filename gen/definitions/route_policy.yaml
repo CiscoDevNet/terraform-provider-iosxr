@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-polic
 doc_category: Route Policy
 attributes:
   - yang_name: route-policy-name
-    example: ROUTE_POLICY_1
+    example: BGP_POLICY_NAME
   - yang_name: rpl-route-policy
     tf_name: rpl
-    example: "route-policy ROUTE_POLICY_1\\n  if destination in PREFIX_SET_1 then\\n    set extcommunity rt (12345:1) additive\\n  endif\\n  pass\\nend-policy\\n"
+    example: "route-policy BGP_POLICY_NAME\\n  pass\\nend-policy\\n"

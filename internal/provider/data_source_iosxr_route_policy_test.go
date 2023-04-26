@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrRoutePolicyConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_route_policy.test", "rpl", "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"),
+					resource.TestCheckResourceAttr("data.iosxr_route_policy.test", "rpl", "route-policy BGP_POLICY_NAME\n  pass\nend-policy\n"),
 				),
 			},
 		},
@@ -26,12 +26,12 @@ func TestAccDataSourceIosxrRoutePolicy(t *testing.T) {
 const testAccDataSourceIosxrRoutePolicyConfig = `
 
 resource "iosxr_route_policy" "test" {
-	route_policy_name = "ROUTE_POLICY_1"
-	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"
+	route_policy_name = "BGP_POLICY_NAME"
+	rpl = "route-policy BGP_POLICY_NAME\n  pass\nend-policy\n"
 }
 
 data "iosxr_route_policy" "test" {
-	route_policy_name = "ROUTE_POLICY_1"
+	route_policy_name = "BGP_POLICY_NAME"
 	depends_on = [iosxr_route_policy.test]
 }
 `

@@ -16,6 +16,13 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrRouterBGPVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_auto", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_two_byte_as_as_number", "65004"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_two_byte_as_index", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_four_byte_as_as_number", "65005"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_four_byte_as_index", "2"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_ip_address_ipv4_address", "14.14.14.14"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_ip_address_index", "3"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "default_metric", "125"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "5"),
@@ -39,6 +46,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.timers_holdtime", "20"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ttl_security", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_strict_mode", "true"),
 				),
 			},
 		},
@@ -50,6 +58,13 @@ const testAccDataSourceIosxrRouterBGPVRFConfig = `
 resource "iosxr_router_bgp_vrf" "test" {
 	as_number = "65001"
 	vrf_name = "VRF1"
+	rd_auto = true
+	rd_two_byte_as_as_number = "65004"
+	rd_two_byte_as_index = 1
+	rd_four_byte_as_as_number = "65005"
+	rd_four_byte_as_index = 2
+	rd_ip_address_ipv4_address = "14.14.14.14"
+	rd_ip_address_index = 3
 	default_information_originate = true
 	default_metric = 125
 	timers_bgp_keepalive_interval = 5
@@ -74,6 +89,7 @@ resource "iosxr_router_bgp_vrf" "test" {
 		timers_holdtime = "20"
 		update_source = "GigabitEthernet0/0/0/1"
 		ttl_security = false
+		bfd_fast_detect_strict_mode = true
 	}]
 }
 

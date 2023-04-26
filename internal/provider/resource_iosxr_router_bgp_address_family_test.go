@@ -14,9 +14,15 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrRouterBGPAddressFamilyConfig_all(),
+				Config: testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "af_name", "ipv4-unicast"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "additional_paths_send", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "additional_paths_receive", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "additional_paths_selection_route_policy", "BGP_POLICY_NAME"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "allocate_label_all_unlabeled_path", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "advertise_best_external", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "allocate_label_all", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_multipath", "10"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_multipath", "10"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "label_mode_per_ce", "false"),
@@ -60,11 +66,25 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]"
+  attributes = {
+      route-policy-name = "BGP_POLICY_NAME"
+      rpl-route-policy = "route-policy BGP_POLICY_NAME\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 	return `
 	resource "iosxr_router_bgp_address_family" "test" {
 		as_number = "65001"
 		af_name = "ipv4-unicast"
+		maximum_paths_ebgp_multipath = 10
+		maximum_paths_ibgp_multipath = 10
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -74,6 +94,12 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	resource "iosxr_router_bgp_address_family" "test" {
 		as_number = "65001"
 		af_name = "ipv4-unicast"
+		additional_paths_send = true
+		additional_paths_receive = true
+		additional_paths_selection_route_policy = "BGP_POLICY_NAME"
+		allocate_label_all_unlabeled_path = true
+		advertise_best_external = true
+		allocate_label_all = true
 		maximum_paths_ebgp_multipath = 10
 		maximum_paths_ibgp_multipath = 10
 		label_mode_per_ce = false
@@ -114,6 +140,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 			match_nssa_external = false
 			metric = 100
 		}]
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

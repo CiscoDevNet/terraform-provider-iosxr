@@ -1,0 +1,43 @@
+---
+name: Router BGP VRF Neighbor Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: vrf-name
+    example: VRF1
+  - yang_name: neighbor-address
+    id: true
+    example: 10.1.1.2
+  - yang_name: af-name
+    example: ipv4-labeled-unicast
+
+  - yang_name: route-policy/retention/route-policy-name
+    example: BGP_POLICY_NAME
+
+  - yang_name: route-policy/in
+    example: true 
+  - yang_name: route-policy/out
+    example: true 
+  - yang_name: default-originate/route-policy
+    example: BGP_POLICY_NAME
+  - yang_name: default-originate/inheritance-disable
+    example: true
+    exclude_test: true
+  - yang_name: next-hop-self/inheritance-disable
+    example: true
+  - yang_name: soft-reconfiguration/inbound/always
+    example: true
+  - yang_name: send-community-ebgp/inheritance-disable
+    example: true
+  - yang_name: remove-private-as/inheritance-disable
+    example: true
+  # - yang_name: remove-private-as-inbound/inheritance-disable
+  #   example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/address-families/address-family[af-name=%s]
+    attributes:
+      - name: af-name
+        value: ipv4-unicast

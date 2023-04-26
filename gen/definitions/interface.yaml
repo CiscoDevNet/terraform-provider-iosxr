@@ -1,6 +1,6 @@
 ---
 name: Interface
-path: Cisco-IOS-XR-um-interface-cfg:interfaces/interface[interface-name=%s]
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]
 no_delete: true
 doc_category: Interface
 attributes:

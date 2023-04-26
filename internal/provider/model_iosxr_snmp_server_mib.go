@@ -18,7 +18,7 @@ type SNMPServerMIB struct {
 }
 
 func (data SNMPServerMIB) getPath() string {
-	return "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server-mibs"
+	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
 }
 
 func (data SNMPServerMIB) toBody(ctx context.Context) string {

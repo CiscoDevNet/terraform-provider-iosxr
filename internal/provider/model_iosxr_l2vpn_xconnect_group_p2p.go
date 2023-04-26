@@ -51,7 +51,7 @@ type L2VPNXconnectGroupP2PEvpnServiceNeighbors struct {
 }
 
 func (data L2VPNXconnectGroupP2P) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
 }
 
 func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {

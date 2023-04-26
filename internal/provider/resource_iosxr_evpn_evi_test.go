@@ -39,7 +39,7 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 			{
 				ResourceName:  "iosxr_evpn_evi.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:evpn/evis/evi[vpn-id=1234]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=1234]",
 			},
 		},
 	})
@@ -47,7 +47,7 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 
 const testAccIosxrEVPNEVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
   attributes = {
       route-policy-name = "ROUTE_POLICY_1"
       rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"

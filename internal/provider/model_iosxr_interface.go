@@ -47,7 +47,7 @@ type InterfaceIpv6Addresses struct {
 }
 
 func (data Interface) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
 func (data Interface) toBody(ctx context.Context) string {

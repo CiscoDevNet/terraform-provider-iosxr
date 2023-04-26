@@ -30,7 +30,7 @@ func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_ospf_vrf_area_interface.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+				ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
 			},
 		},
 	})

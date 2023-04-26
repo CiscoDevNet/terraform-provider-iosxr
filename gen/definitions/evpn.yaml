@@ -1,6 +1,6 @@
 ---
 name: EVPN
-path: Cisco-IOS-XR-um-l2vpn-cfg:evpn
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn
 doc_category: EVPN
 attributes:
   - yang_name: source/interface

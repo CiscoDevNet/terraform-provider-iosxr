@@ -41,7 +41,7 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 
 const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		route-policy-name = "ROUTE_POLICY_1"
 		rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"

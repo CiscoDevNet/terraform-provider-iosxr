@@ -1,6 +1,6 @@
 ---
 name: Hostname
-path: Cisco-IOS-XR-um-hostname-cfg:hostname
+path: Cisco-IOS-XR-um-hostname-cfg:/hostname
 no_delete: true
 doc_category: System
 attributes:

@@ -35,5 +35,5 @@ resource "iosxr_hostname" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_hostname.example "Cisco-IOS-XR-um-hostname-cfg:hostname"
+terraform import iosxr_hostname.example "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 ```

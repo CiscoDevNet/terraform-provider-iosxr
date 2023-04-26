@@ -1,6 +1,6 @@
 ---
 name: Prefix Set
-path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=%s]
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=%s]
 doc_category: Route Policy
 attributes:
   - yang_name: set-name

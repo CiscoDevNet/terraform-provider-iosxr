@@ -1,6 +1,6 @@
 ---
 name: L2VPN Bridge Group Bridge Domain
-path: Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]
 doc_category: L2VPN
 attributes:
   - yang_name: group-name

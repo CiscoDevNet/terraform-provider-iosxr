@@ -62,5 +62,5 @@ resource "iosxr_router_ospf_vrf_area_interface" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_ospf_vrf_area_interface.example "Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+terraform import iosxr_router_ospf_vrf_area_interface.example "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
 ```

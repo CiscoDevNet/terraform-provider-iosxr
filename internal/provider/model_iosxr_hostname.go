@@ -17,7 +17,7 @@ type Hostname struct {
 }
 
 func (data Hostname) getPath() string {
-	return "Cisco-IOS-XR-um-hostname-cfg:hostname"
+	return "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 }
 
 func (data Hostname) toBody(ctx context.Context) string {

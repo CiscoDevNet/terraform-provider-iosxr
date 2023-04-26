@@ -19,7 +19,7 @@ type RoutePolicy struct {
 }
 
 func (data RoutePolicy) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]", data.RoutePolicyName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=%s]", data.RoutePolicyName.ValueString())
 }
 
 func (data RoutePolicy) toBody(ctx context.Context) string {

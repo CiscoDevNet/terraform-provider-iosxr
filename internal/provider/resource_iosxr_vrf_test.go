@@ -72,7 +72,7 @@ func TestAccIosxrVRF(t *testing.T) {
 			{
 				ResourceName:  "iosxr_vrf.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=VRF1]",
+				ImportStateId: "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]",
 			},
 		},
 	})
@@ -80,7 +80,7 @@ func TestAccIosxrVRF(t *testing.T) {
 
 const testAccIosxrVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
   attributes = {
       route-policy-name = "ROUTE_POLICY_1"
       rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"

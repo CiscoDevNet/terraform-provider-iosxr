@@ -25,7 +25,7 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 			{
 				ResourceName:  "iosxr_segment_routing.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-segment-routing-cfg:segment-routing",
+				ImportStateId: "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing",
 			},
 		},
 	})

@@ -55,7 +55,7 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 			{
 				ResourceName:  "iosxr_snmp_server.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server",
+				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server",
 			},
 		},
 	})

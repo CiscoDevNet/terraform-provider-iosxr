@@ -22,7 +22,7 @@ func TestAccIosxrOCSystemConfig(t *testing.T) {
 			{
 				ResourceName:  "iosxr_oc_system_config.test",
 				ImportState:   true,
-				ImportStateId: "openconfig-system:system/config",
+				ImportStateId: "openconfig-system:/system/config",
 			},
 		},
 	})

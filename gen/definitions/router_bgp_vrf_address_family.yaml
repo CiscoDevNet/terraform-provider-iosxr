@@ -1,6 +1,6 @@
 ---
 name: Router BGP VRF Address Family
-path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:
   - yang_name: as-number
@@ -79,22 +79,22 @@ attributes:
       - yang_name: metric
         example: 100
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=VRF1]
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
     attributes:
       - name: vrf-name
         value: VRF1
-  - path: Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
       - name: as-number
         value: 1
       - name: index
         value: 1
     dependencies: [0]
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
       - name: as-number
         value: 65001
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
     dependencies: [1, 2]
     attributes:
       - name: af-name

@@ -24,7 +24,7 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 			{
 				ResourceName:  "iosxr_snmp_server_view.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/views/view[view-name=VIEW12]",
+				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=VIEW12]",
 			},
 		},
 	})

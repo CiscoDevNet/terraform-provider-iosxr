@@ -69,7 +69,7 @@ type RouterOSPFRedistributeOspf struct {
 }
 
 func (data RouterOSPF) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
 }
 
 func (data RouterOSPF) toBody(ctx context.Context) string {

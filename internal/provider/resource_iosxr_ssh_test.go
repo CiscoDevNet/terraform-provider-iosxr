@@ -27,7 +27,7 @@ func TestAccIosxrSSH(t *testing.T) {
 			{
 				ResourceName:  "iosxr_ssh.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-ssh-cfg:ssh",
+				ImportStateId: "Cisco-IOS-XR-um-ssh-cfg:/ssh",
 			},
 		},
 	})

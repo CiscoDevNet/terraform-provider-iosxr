@@ -1,6 +1,6 @@
 ---
 name: MPLS LDP
-path: Cisco-IOS-XR-um-mpls-ldp-cfg:mpls/ldp
+path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp
 doc_category: MPLS
 attributes:
   - yang_name: router-id

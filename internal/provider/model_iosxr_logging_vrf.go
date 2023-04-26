@@ -30,7 +30,7 @@ type LoggingVRFHostIpv6Addresses struct {
 }
 
 func (data LoggingVRF) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
 func (data LoggingVRF) toBody(ctx context.Context) string {

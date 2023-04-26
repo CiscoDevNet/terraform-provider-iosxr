@@ -31,7 +31,7 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_isis_interface.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
 			},
 		},
 	})

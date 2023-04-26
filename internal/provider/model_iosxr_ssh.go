@@ -28,7 +28,7 @@ type SSHServerVrfs struct {
 }
 
 func (data SSH) getPath() string {
-	return "Cisco-IOS-XR-um-ssh-cfg:ssh"
+	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 }
 
 func (data SSH) toBody(ctx context.Context) string {

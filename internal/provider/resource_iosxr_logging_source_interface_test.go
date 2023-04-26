@@ -23,7 +23,7 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 			{
 				ResourceName:  "iosxr_logging_source_interface.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:logging/source-interfaces/source-interface[source-interface-name=Loopback0]",
+				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=Loopback0]",
 			},
 		},
 	})

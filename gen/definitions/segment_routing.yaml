@@ -1,6 +1,6 @@
 ---
 name: Segment Routing
-path: Cisco-IOS-XR-um-segment-routing-cfg:segment-routing
+path: Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing
 doc_category: Segment Routing
 attributes:
   - yang_name: global-block/lower-bound

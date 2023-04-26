@@ -1,6 +1,6 @@
 ---
 name: BGP AS Format
-path: Cisco-IOS-XR-um-router-bgp-cfg:as-format
+path: Cisco-IOS-XR-um-router-bgp-cfg:/as-format
 doc_category: BGP
 attributes:
   - yang_name: asdot

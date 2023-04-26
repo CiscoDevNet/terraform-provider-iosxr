@@ -1,6 +1,6 @@
 ---
 name: MPLS OAM
-path: Cisco-IOS-XR-um-mpls-oam-cfg:mpls
+path: Cisco-IOS-XR-um-mpls-oam-cfg:/mpls
 doc_category: MPLS
 attributes:
   - yang_name: oam

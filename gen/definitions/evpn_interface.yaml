@@ -1,6 +1,6 @@
 ---
 name: EVPN Interface
-path: Cisco-IOS-XR-um-l2vpn-cfg:evpn/interface/interface[interface-name=%s]
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]
 doc_category: EVPN
 attributes:
   - yang_name: interface-name

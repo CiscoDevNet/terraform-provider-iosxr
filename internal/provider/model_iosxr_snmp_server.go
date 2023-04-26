@@ -78,7 +78,7 @@ type SNMPServerGroups struct {
 }
 
 func (data SNMPServer) getPath() string {
-	return "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server"
+	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server"
 }
 
 func (data SNMPServer) toBody(ctx context.Context) string {

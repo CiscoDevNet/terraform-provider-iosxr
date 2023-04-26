@@ -21,7 +21,7 @@ type SegmentRouting struct {
 }
 
 func (data SegmentRouting) getPath() string {
-	return "Cisco-IOS-XR-um-segment-routing-cfg:segment-routing"
+	return "Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing"
 }
 
 func (data SegmentRouting) toBody(ctx context.Context) string {

@@ -17,7 +17,7 @@ type MPLSTrafficEng struct {
 }
 
 func (data MPLSTrafficEng) getPath() string {
-	return "Cisco-IOS-XR-um-mpls-te-cfg:mpls"
+	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
 }
 
 func (data MPLSTrafficEng) toBody(ctx context.Context) string {

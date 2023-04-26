@@ -26,7 +26,7 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 			{
 				ResourceName:  "iosxr_mpls_oam.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-mpls-oam-cfg:mpls",
+				ImportStateId: "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls",
 			},
 		},
 	})

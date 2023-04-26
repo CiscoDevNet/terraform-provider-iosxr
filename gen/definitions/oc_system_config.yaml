@@ -1,6 +1,6 @@
 ---
 name: OC System Config
-path: openconfig-system:system/config
+path: openconfig-system:/system/config
 no_delete: true
 ds_description: This data source can read the system configuration.
 res_description: This resource can manage the system configuration.

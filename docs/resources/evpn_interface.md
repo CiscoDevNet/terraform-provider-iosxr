@@ -56,5 +56,5 @@ resource "iosxr_evpn_interface" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_evpn_interface.example "Cisco-IOS-XR-um-l2vpn-cfg:evpn/interface/interface[interface-name=Bundle-Ether12]"
+terraform import iosxr_evpn_interface.example "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=Bundle-Ether12]"
 ```

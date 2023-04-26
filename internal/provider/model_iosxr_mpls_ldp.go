@@ -28,7 +28,7 @@ type MPLSLDPInterfaces struct {
 }
 
 func (data MPLSLDP) getPath() string {
-	return "Cisco-IOS-XR-um-mpls-ldp-cfg:mpls/ldp"
+	return "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 }
 
 func (data MPLSLDP) toBody(ctx context.Context) string {

@@ -24,7 +24,7 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 			{
 				ResourceName:  "iosxr_snmp_server_vrf_host.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name=VRF1]/hosts/host[address=11.11.11.11]",
+				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]/hosts/host[address=11.11.11.11]",
 			},
 		},
 	})

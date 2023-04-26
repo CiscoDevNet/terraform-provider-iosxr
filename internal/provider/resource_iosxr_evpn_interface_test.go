@@ -28,7 +28,7 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 			{
 				ResourceName:  "iosxr_evpn_interface.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:evpn/interface/interface[interface-name=Bundle-Ether12]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=Bundle-Ether12]",
 			},
 		},
 	})

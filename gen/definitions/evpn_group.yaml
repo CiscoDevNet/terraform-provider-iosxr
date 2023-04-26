@@ -1,6 +1,6 @@
 ---
 name: EVPN Group
-path: Cisco-IOS-XR-um-l2vpn-cfg:evpn/groups/group[group-name=%v]
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]
 doc_category: EVPN
 attributes:
   - yang_name: group-name

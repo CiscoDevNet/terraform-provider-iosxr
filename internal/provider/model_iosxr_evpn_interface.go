@@ -30,7 +30,7 @@ type EVPNInterface struct {
 }
 
 func (data EVPNInterface) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:evpn/interface/interface[interface-name=%s]", data.InterfaceName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
 func (data EVPNInterface) toBody(ctx context.Context) string {

@@ -1,6 +1,6 @@
 ---
 name: SNMP Server VRF Host
-path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]
+path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]
 doc_category: Management
 attributes:
   - yang_name: vrf-name

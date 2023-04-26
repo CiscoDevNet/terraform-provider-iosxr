@@ -1,6 +1,6 @@
 ---
 name: L2VPN Xconnect Group P2P
-path: Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]
 doc_category: L2VPN
 attributes:
   - yang_name: group-name

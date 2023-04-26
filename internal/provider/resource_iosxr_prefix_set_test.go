@@ -23,7 +23,7 @@ func TestAccIosxrPrefixSet(t *testing.T) {
 			{
 				ResourceName:  "iosxr_prefix_set.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]",
+				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]",
 			},
 		},
 	})

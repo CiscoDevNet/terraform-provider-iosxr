@@ -1,6 +1,6 @@
 ---
 name: L2VPN
-path: Cisco-IOS-XR-um-l2vpn-cfg:l2vpn
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
 doc_category: L2VPN
 attributes:
   - yang_name: description

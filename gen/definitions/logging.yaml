@@ -1,6 +1,6 @@
 ---
 name: Logging
-path: Cisco-IOS-XR-um-logging-cfg:logging
+path: Cisco-IOS-XR-um-logging-cfg:/logging
 doc_category: Management
 attributes:
   - yang_name: ipv4/dscp

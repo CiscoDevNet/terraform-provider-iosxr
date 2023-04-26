@@ -45,7 +45,7 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_bgp_vrf.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]",
+				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]",
 			},
 		},
 	})

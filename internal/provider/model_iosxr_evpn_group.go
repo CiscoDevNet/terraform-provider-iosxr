@@ -24,7 +24,7 @@ type EVPNGroupCoreInterfaces struct {
 }
 
 func (data EVPNGroup) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:evpn/groups/group[group-name=%v]", data.GroupId.ValueInt64())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]", data.GroupId.ValueInt64())
 }
 
 func (data EVPNGroup) toBody(ctx context.Context) string {

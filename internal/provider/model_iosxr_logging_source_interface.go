@@ -24,7 +24,7 @@ type LoggingSourceInterfaceVrfs struct {
 }
 
 func (data LoggingSourceInterface) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
 }
 
 func (data LoggingSourceInterface) toBody(ctx context.Context) string {

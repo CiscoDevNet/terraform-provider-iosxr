@@ -35,5 +35,5 @@ resource "iosxr_evpn" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_evpn.example "Cisco-IOS-XR-um-l2vpn-cfg:evpn"
+terraform import iosxr_evpn.example "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 ```

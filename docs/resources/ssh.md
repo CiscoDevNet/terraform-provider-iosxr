@@ -59,5 +59,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_ssh.example "Cisco-IOS-XR-um-ssh-cfg:ssh"
+terraform import iosxr_ssh.example "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 ```

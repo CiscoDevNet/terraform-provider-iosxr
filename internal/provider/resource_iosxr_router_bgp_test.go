@@ -45,7 +45,7 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_bgp.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]",
+				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]",
 			},
 		},
 	})

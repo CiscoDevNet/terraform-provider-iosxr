@@ -1,6 +1,6 @@
 ---
 name: EVPN EVI
-path: Cisco-IOS-XR-um-l2vpn-cfg:evpn/evis/evi[vpn-id=%v]
+path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]
 doc_category: EVPN
 attributes:
   - yang_name: vpn-id
@@ -119,7 +119,7 @@ attributes:
     example: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
     attributes:
       - name: route-policy-name
         value: ROUTE_POLICY_1

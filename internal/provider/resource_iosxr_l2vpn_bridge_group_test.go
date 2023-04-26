@@ -22,7 +22,7 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 			{
 				ResourceName:  "iosxr_l2vpn_bridge_group.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/bridge/groups/group[group-name=BG123]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]",
 			},
 		},
 	})

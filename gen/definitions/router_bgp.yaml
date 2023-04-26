@@ -1,6 +1,6 @@
 ---
 name: Router BGP
-path: Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=%s]
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]
 doc_category: BGP
 attributes:
   - yang_name: as-number

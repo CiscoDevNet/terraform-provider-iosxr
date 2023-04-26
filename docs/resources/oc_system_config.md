@@ -38,5 +38,5 @@ resource "iosxr_oc_system_config" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_oc_system_config.example "openconfig-system:system/config"
+terraform import iosxr_oc_system_config.example "openconfig-system:/system/config"
 ```

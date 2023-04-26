@@ -67,7 +67,7 @@ type EVPNEVIBgpRouteTargetExportIpv4AddressFormat struct {
 }
 
 func (data EVPNEVI) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
 
 func (data EVPNEVI) toBody(ctx context.Context) string {

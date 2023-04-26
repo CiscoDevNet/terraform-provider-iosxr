@@ -37,5 +37,5 @@ resource "iosxr_bgp_as_format" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_bgp_as_format.example "Cisco-IOS-XR-um-router-bgp-cfg:as-format"
+terraform import iosxr_bgp_as_format.example "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 ```

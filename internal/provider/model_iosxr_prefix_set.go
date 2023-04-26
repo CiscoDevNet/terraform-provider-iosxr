@@ -19,7 +19,7 @@ type PrefixSet struct {
 }
 
 func (data PrefixSet) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:routing-policy/sets/prefix-sets/prefix-set[set-name=%s]", data.SetName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=%s]", data.SetName.ValueString())
 }
 
 func (data PrefixSet) toBody(ctx context.Context) string {

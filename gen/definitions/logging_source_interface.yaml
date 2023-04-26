@@ -1,6 +1,6 @@
 ---
 name: Logging Source Interface
-path: Cisco-IOS-XR-um-logging-cfg:logging/source-interfaces/source-interface[source-interface-name=%v]
+path: Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]
 doc_category: Management
 attributes:
   - yang_name: source-interface-name

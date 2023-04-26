@@ -45,5 +45,5 @@ resource "iosxr_mpls_oam" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_mpls_oam.example "Cisco-IOS-XR-um-mpls-oam-cfg:mpls"
+terraform import iosxr_mpls_oam.example "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
 ```

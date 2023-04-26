@@ -18,7 +18,7 @@ type BGPASFormat struct {
 }
 
 func (data BGPASFormat) getPath() string {
-	return "Cisco-IOS-XR-um-router-bgp-cfg:as-format"
+	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
 
 func (data BGPASFormat) toBody(ctx context.Context) string {

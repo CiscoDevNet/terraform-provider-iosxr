@@ -1,6 +1,6 @@
 ---
 name: Router OSPF VRF
-path: Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]
 doc_category: OSPF
 attributes:
   - yang_name: process-name

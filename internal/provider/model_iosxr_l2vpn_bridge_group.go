@@ -17,7 +17,7 @@ type L2VPNBridgeGroup struct {
 }
 
 func (data L2VPNBridgeGroup) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/bridge/groups/group[group-name=%s]", data.GroupName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]", data.GroupName.ValueString())
 }
 
 func (data L2VPNBridgeGroup) toBody(ctx context.Context) string {

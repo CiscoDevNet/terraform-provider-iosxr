@@ -1,5 +1,5 @@
 name: SNMP Server
-path: Cisco-IOS-XR-um-snmp-server-cfg:snmp-server
+path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server
 doc_category: Management
 attributes:
   - yang_name: traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf

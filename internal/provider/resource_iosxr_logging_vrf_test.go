@@ -26,7 +26,7 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 			{
 				ResourceName:  "iosxr_logging_vrf.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:logging/vrfs/vrf[vrf-name=VRF1]",
+				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=VRF1]",
 			},
 		},
 	})

@@ -110,7 +110,7 @@ type VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat struct {
 }
 
 func (data VRF) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
 func (data VRF) toBody(ctx context.Context) string {

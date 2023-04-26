@@ -27,7 +27,7 @@ type SNMPServerVRFHostUnencryptedStrings struct {
 }
 
 func (data SNMPServerVRFHost) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
 
 func (data SNMPServerVRFHost) toBody(ctx context.Context) string {

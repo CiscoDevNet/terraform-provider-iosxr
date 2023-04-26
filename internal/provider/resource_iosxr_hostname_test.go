@@ -22,7 +22,7 @@ func TestAccIosxrHostname(t *testing.T) {
 			{
 				ResourceName:  "iosxr_hostname.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-hostname-cfg:hostname",
+				ImportStateId: "Cisco-IOS-XR-um-hostname-cfg:/hostname",
 			},
 		},
 	})

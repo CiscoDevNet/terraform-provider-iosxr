@@ -24,7 +24,7 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 			{
 				ResourceName:  "iosxr_mpls_ldp.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-mpls-ldp-cfg:mpls/ldp",
+				ImportStateId: "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp",
 			},
 		},
 	})

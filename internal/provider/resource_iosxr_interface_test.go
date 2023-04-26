@@ -40,7 +40,7 @@ func TestAccIosxrInterface(t *testing.T) {
 			{
 				ResourceName:  "iosxr_interface.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-interface-cfg:interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+				ImportStateId: "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
 			},
 		},
 	})

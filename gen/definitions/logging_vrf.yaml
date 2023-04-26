@@ -1,6 +1,6 @@
 ---
 name: Logging VRF
-path: Cisco-IOS-XR-um-logging-cfg:logging/vrfs/vrf[vrf-name=%s]
+path: Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]
 doc_category: Management
 attributes:
   - yang_name: vrf-name

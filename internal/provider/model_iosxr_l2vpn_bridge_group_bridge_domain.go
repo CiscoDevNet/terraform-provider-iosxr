@@ -41,7 +41,7 @@ type L2VPNBridgeGroupBridgeDomainInterfaces struct {
 }
 
 func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
 }
 
 func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {

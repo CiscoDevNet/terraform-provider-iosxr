@@ -17,7 +17,7 @@ type EVPN struct {
 }
 
 func (data EVPN) getPath() string {
-	return "Cisco-IOS-XR-um-l2vpn-cfg:evpn"
+	return "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 }
 
 func (data EVPN) toBody(ctx context.Context) string {

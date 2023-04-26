@@ -22,7 +22,7 @@ func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 			{
 				ResourceName:  "iosxr_mpls_traffic_eng.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-mpls-te-cfg:mpls",
+				ImportStateId: "Cisco-IOS-XR-um-mpls-te-cfg:/mpls",
 			},
 		},
 	})

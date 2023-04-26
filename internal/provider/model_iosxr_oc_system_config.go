@@ -20,7 +20,7 @@ type OCSystemConfig struct {
 }
 
 func (data OCSystemConfig) getPath() string {
-	return "openconfig-system:system/config"
+	return "openconfig-system:/system/config"
 }
 
 func (data OCSystemConfig) toBody(ctx context.Context) string {

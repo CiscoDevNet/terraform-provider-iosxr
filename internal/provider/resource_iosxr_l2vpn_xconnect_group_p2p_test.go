@@ -27,7 +27,7 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 			{
 				ResourceName:  "iosxr_l2vpn_xconnect_group_p2p.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/xconnect/groups/group[group-name=P2P]/p2ps/p2p[p2p-xconnect-name=XC]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]/p2ps/p2p[p2p-xconnect-name=XC]",
 			},
 		},
 	})

@@ -23,7 +23,7 @@ func TestAccIosxrBGPASFormat(t *testing.T) {
 			{
 				ResourceName:  "iosxr_bgp_as_format.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:as-format",
+				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/as-format",
 			},
 		},
 	})

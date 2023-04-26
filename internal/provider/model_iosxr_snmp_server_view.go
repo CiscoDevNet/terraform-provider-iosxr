@@ -26,7 +26,7 @@ type SNMPServerViewMibViewFamilies struct {
 }
 
 func (data SNMPServerView) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
 }
 
 func (data SNMPServerView) toBody(ctx context.Context) string {

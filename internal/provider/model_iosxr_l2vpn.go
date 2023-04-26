@@ -25,7 +25,7 @@ type L2VPNXconnectGroups struct {
 }
 
 func (data L2VPN) getPath() string {
-	return "Cisco-IOS-XR-um-l2vpn-cfg:l2vpn"
+	return "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 }
 
 func (data L2VPN) toBody(ctx context.Context) string {

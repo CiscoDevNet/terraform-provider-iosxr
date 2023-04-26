@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.1.8 (unreleased)
+
+- Fix incompatibility with gNMI and IOS-XR 7.6
+
 ## 0.1.7
 
 - Add `iosxr_mpls_traffic_eng` resource and data source

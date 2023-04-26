@@ -1,5 +1,5 @@
 name: SSH
-path: Cisco-IOS-XR-um-ssh-cfg:ssh
+path: Cisco-IOS-XR-um-ssh-cfg:/ssh
 doc_category: System
 attributes:
   - yang_name: server/dscp

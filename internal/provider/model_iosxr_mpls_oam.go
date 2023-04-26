@@ -22,7 +22,7 @@ type MPLSOAM struct {
 }
 
 func (data MPLSOAM) getPath() string {
-	return "Cisco-IOS-XR-um-mpls-oam-cfg:mpls"
+	return "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
 }
 
 func (data MPLSOAM) toBody(ctx context.Context) string {

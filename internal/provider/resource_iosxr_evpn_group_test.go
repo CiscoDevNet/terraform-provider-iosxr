@@ -23,7 +23,7 @@ func TestAccIosxrEVPNGroup(t *testing.T) {
 			{
 				ResourceName:  "iosxr_evpn_group.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:evpn/groups/group[group-name=1]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=1]",
 			},
 		},
 	})

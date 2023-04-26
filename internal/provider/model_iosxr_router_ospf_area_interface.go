@@ -29,7 +29,7 @@ type RouterOSPFAreaInterface struct {
 }
 
 func (data RouterOSPFAreaInterface) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
 }
 
 func (data RouterOSPFAreaInterface) toBody(ctx context.Context) string {

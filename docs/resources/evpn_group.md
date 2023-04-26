@@ -52,5 +52,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_evpn_group.example "Cisco-IOS-XR-um-l2vpn-cfg:evpn/groups/group[group-name=1]"
+terraform import iosxr_evpn_group.example "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=1]"
 ```

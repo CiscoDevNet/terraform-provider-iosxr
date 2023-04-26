@@ -1,6 +1,6 @@
 ---
 name: Router OSPF
-path: Cisco-IOS-XR-um-router-ospf-cfg:router/ospf/processes/process[process-name=%s]
+path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]
 doc_category: OSPF
 attributes:
   - yang_name: process-name

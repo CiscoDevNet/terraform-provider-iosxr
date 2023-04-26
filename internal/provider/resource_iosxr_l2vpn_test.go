@@ -24,7 +24,7 @@ func TestAccIosxrL2VPN(t *testing.T) {
 			{
 				ResourceName:  "iosxr_l2vpn.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:l2vpn",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn",
 			},
 		},
 	})

@@ -133,5 +133,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_bgp_vrf_address_family.example "Cisco-IOS-XR-um-router-bgp-cfg:router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/address-families/address-family[af-name=ipv4-unicast]"
+terraform import iosxr_router_bgp_vrf_address_family.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/address-families/address-family[af-name=ipv4-unicast]"
 ```

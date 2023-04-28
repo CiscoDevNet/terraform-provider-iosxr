@@ -15,6 +15,58 @@ attributes:
   - yang_name: sub-interface-type/multipoint
     tf_name: multipoint
     example: false
+
+  - yang_name: dampening/decay-half-life/value
+    example: 2
+
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point
+    tf_name: ipv4_point_to_point
+    example:  true
+
+  - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
+    tf_name: input_policy
+    type: List
+    attributes:
+      - yang_name: service-policy-name
+        id: true
+        example: CORE-INPUT-POLICY
+
+  - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
+    tf_name: output_policy
+    type: List
+    attributes:
+      - yang_name: service-policy-name
+        id: true
+        example: CORE-OUTPUT-POLICY
+
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf
+    tf_name: bfd_mode_ietf
+    example: true
+    no_augment_config: true
+    type: Bool
+    description: Use IETF standard for BoB
+    type_yang_bool: presence
+
+  # - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bfd/address-family/ipv4
+  #   tf_name: address_family
+  #   type: List
+  #   attributes:
+  #     - yang_name: destination
+  #       example: Destination
+  #     - yang_name: minimum-interval
+  #       example: 50
+  #     - yang_name: multiplier
+  #       example: 3
+  #     - yang_name: fast-detect
+  #       example: true
+
+  # - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bfd/address-family/ipv4/timers
+  #   tf_name: ipv4_timers
+  #   type: List
+  #   attributes:
+  #     - yang_name: start
+  #       example: 180
+
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id
     tf_name: encapsulation_dot1q_vlan_id
     no_augment_config: true

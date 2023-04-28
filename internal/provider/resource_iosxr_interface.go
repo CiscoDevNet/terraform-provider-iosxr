@@ -74,6 +74,51 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("multipoint sub-interface").String,
 				Optional:            true,
 			},
+			"dampening_decay_half_life_value": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Decay half life (in minutes)").AddIntegerRangeDescription(1, 45).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 45),
+				},
+			},
+			"ipv4_point_to_point": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable point-to-point handling for this interface.").String,
+				Optional:            true,
+			},
+			"input_policy": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a policy in the input direction").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9._@$%+#:=<>\\-]{0,62}`), ""),
+							},
+						},
+					},
+				},
+			},
+			"output_policy": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("direction of service policy application").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"service_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9._@$%+#:=<>\\-]{0,62}`), ""),
+							},
+						},
+					},
+				},
+			},
+			"bfd_mode_ietf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use IETF standard for BoB").String,
+				Optional:            true,
+			},
 			"encapsulation_dot1q_vlan_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure first (outer) VLAN ID on the subinterface").AddIntegerRangeDescription(1, 4094).String,
 				Optional:            true,

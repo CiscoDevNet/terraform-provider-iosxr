@@ -37,6 +37,7 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_protected", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_segment_routing", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_passive_only", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_link_attributes", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_ldp_auto_config", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_router_id_ip_address", "1.2.3.4"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1_2", "false"),
@@ -48,6 +49,8 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.priority", "critical"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.tag", "100"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_mpls_sr_prefer", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
 				),
 			},
 			{
@@ -96,6 +99,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 		microloop_avoidance_protected = false
 		microloop_avoidance_segment_routing = true
 		advertise_passive_only = true
+		advertise_link_attributes = true
 		mpls_ldp_auto_config = false
 		mpls_traffic_eng_router_id_ip_address = "1.2.3.4"
 		mpls_traffic_eng_level_1_2 = false
@@ -109,6 +113,10 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 			tag = 100
 		}]
 		segment_routing_mpls_sr_prefer = true
+		maximum_redistributed_prefixes = 100
+		maximum_redistributed_prefixes_levels = [{
+			level_id = 1
+		}]
 	}
 	`
 }

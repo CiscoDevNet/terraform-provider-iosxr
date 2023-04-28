@@ -35,6 +35,7 @@ data "iosxr_router_isis_address_family" "example" {
 
 ### Read-Only
 
+- `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
 - `default_information_originate` (Boolean) Distribute a default route
 - `fast_reroute_delay_interval` (Number) Delay before running FRR computation
@@ -45,6 +46,8 @@ data "iosxr_router_isis_address_family" "example" {
 - `fast_reroute_per_prefix_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
 - `fast_reroute_per_prefix_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
 - `id` (String) The path of the retrieved object.
+- `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
+- `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
 - `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
 - `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
@@ -64,6 +67,14 @@ data "iosxr_router_isis_address_family" "example" {
 - `spf_interval_maximum_wait` (Number) Maximum delay before running a route calculation
 - `spf_interval_secondary_wait` (Number) Secondary delay before running a route calculation
 - `spf_prefix_priorities` (Attributes List) Configure a prefix priority list (see [below for nested schema](#nestedatt--spf_prefix_priorities))
+
+<a id="nestedatt--maximum_redistributed_prefixes_levels"></a>
+### Nested Schema for `maximum_redistributed_prefixes_levels`
+
+Read-Only:
+
+- `level_id` (Number) Set maximum redistributed prefixes for one level only
+
 
 <a id="nestedatt--metric_style_levels"></a>
 ### Nested Schema for `metric_style_levels`

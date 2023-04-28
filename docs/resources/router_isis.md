@@ -26,18 +26,33 @@ resource "iosxr_router_isis" "example" {
       advertise_interlevel                                 = true
     }
   ]
-  nsr                             = true
-  nsf_cisco                       = true
-  nsf_ietf                        = false
-  nsf_lifetime                    = 10
-  nsf_interface_timer             = 5
-  nsf_interface_expires           = 2
-  log_adjacency_changes           = true
-  lsp_gen_interval_maximum_wait   = 5000
-  lsp_gen_interval_initial_wait   = 50
-  lsp_gen_interval_secondary_wait = 200
-  lsp_refresh_interval            = 65000
-  max_lsp_lifetime                = 65535
+  nsr                                 = true
+  nsf_cisco                           = true
+  nsf_ietf                            = false
+  nsf_lifetime                        = 10
+  nsf_interface_timer                 = 5
+  nsf_interface_expires               = 2
+  log_adjacency_changes               = true
+  lsp_gen_interval_maximum_wait       = 5000
+  lsp_gen_interval_initial_wait       = 50
+  lsp_gen_interval_secondary_wait     = 200
+  lsp_refresh_interval                = 65000
+  max_lsp_lifetime                    = 65535
+  lsp_password_keychain_keychain_name = "ISIS-KEY"
+  distribute_link_state_instance_id   = 32
+  affinity_maps = [
+    {
+      affinity_map_name = "22"
+      bit_position      = 4
+    }
+  ]
+  flex_algos = [
+    {
+      algorithm_number     = 128
+      advertise_definition = true
+      metric_type_delay    = true
+    }
+  ]
   nets = [
     {
       net_id = "49.0001.2222.2222.2222.00"
@@ -64,11 +79,20 @@ resource "iosxr_router_isis" "example" {
 
 ### Required
 
+- `lsp_password_keychain_keychain_name` (String) Specifies a Key Chain name will follow
 - `process_id` (String) Process ID
 
 ### Optional
 
+- `affinity_maps` (Attributes List) Affinity map configuration (see [below for nested schema](#nestedatt--affinity_maps))
 - `device` (String) A device name from the provider configuration.
+- `distribute_link_state_instance_id` (Number) Set distribution process instance identifier
+  - Range: `32`-`4294967295`
+- `distribute_link_state_level` (Number) Set distribution for one level only
+  - Range: `1`-`2`
+- `distribute_link_state_throttle` (Number) Set throttle update in seconds
+  - Range: `1`-`20`
+- `flex_algos` (Attributes List) Flex Algorithm definition (see [below for nested schema](#nestedatt--flex_algos))
 - `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
   - Choices: `level-1`, `level-1-2`, `level-2-only`
@@ -98,6 +122,30 @@ resource "iosxr_router_isis" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--affinity_maps"></a>
+### Nested Schema for `affinity_maps`
+
+Required:
+
+- `bit_position` (Number) Bit position for affinity attribute value
+  - Range: `0`-`255`
+
+Optional:
+
+- `affinity_map_name` (String) Affinity map configuration
+
+
+<a id="nestedatt--flex_algos"></a>
+### Nested Schema for `flex_algos`
+
+Optional:
+
+- `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
+- `algorithm_number` (Number) Flex Algorithm definition
+  - Range: `128`-`255`
+- `metric_type_delay` (Boolean) Use delay as metric
+
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`

@@ -7,6 +7,21 @@ attributes:
     example: 65001
   - yang_name: af-name
     example: ipv4-unicast
+
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/selection/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: allocate-label/all/unlabeled-path
+    example: true
+    exclude_test: true
+  - yang_name: advertise/best-external
+    example: true
+  - yang_name: allocate-label/all
+    example: true
+
   - yang_name: maximum-paths/ebgp/multipath
     example: 10
     optional: true
@@ -99,3 +114,9 @@ attributes:
         example: false
       - yang_name: metric
         example: 100
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1

@@ -145,6 +145,10 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Advertise prefixes of passive interfaces only",
 				Computed:            true,
 			},
+			"advertise_link_attributes": schema.BoolAttribute{
+				MarkdownDescription: "Advertise additional link attributes",
+				Computed:            true,
+			},
 			"mpls_ldp_auto_config": schema.BoolAttribute{
 				MarkdownDescription: "Enable LDP IGP interface auto-configuration",
 				Computed:            true,
@@ -204,6 +208,22 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 			"segment_routing_mpls_sr_prefer": schema.BoolAttribute{
 				MarkdownDescription: "Prefer segment routing labels over LDP labels",
 				Computed:            true,
+			},
+			"maximum_redistributed_prefixes": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of redistributed prefixes",
+				Computed:            true,
+			},
+			"maximum_redistributed_prefixes_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set maximum redistributed prefixes for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: "Set maximum redistributed prefixes for one level only",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

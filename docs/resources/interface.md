@@ -14,10 +14,23 @@ This resource can manage the Interface configuration.
 
 ```terraform
 resource "iosxr_interface" "example" {
-  interface_name          = "GigabitEthernet0/0/0/1"
-  l2transport             = false
-  point_to_point          = false
-  multipoint              = false
+  interface_name                  = "GigabitEthernet0/0/0/1"
+  l2transport                     = false
+  point_to_point                  = false
+  multipoint                      = false
+  dampening_decay_half_life_value = 2
+  ipv4_point_to_point             = true
+  input_policy = [
+    {
+      service_policy_name = "CORE-INPUT-POLICY"
+    }
+  ]
+  output_policy = [
+    {
+      service_policy_name = "CORE-OUTPUT-POLICY"
+    }
+  ]
+  bfd_mode_ietf           = true
   shutdown                = true
   mtu                     = 9000
   bandwidth               = 100000
@@ -45,18 +58,23 @@ resource "iosxr_interface" "example" {
 
 ### Required
 
+- `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
+  - Range: `1`-`45`
 - `interface_name` (String) Interface configuration subcommands
 
 ### Optional
 
 - `bandwidth` (Number) Set the bandwidth of an interface
   - Range: `0`-`9223372036854775807`
+- `bfd_mode_ietf` (Boolean) Use IETF standard for BoB
 - `description` (String) Set description for this interface
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
   - Range: `1`-`4094`
+- `input_policy` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--input_policy))
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
+- `ipv4_point_to_point` (Boolean) Enable point-to-point handling for this interface.
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
 - `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
@@ -70,6 +88,7 @@ resource "iosxr_interface" "example" {
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`
 - `multipoint` (Boolean) multipoint sub-interface
+- `output_policy` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--output_policy))
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
 - `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
@@ -80,6 +99,14 @@ resource "iosxr_interface" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--input_policy"></a>
+### Nested Schema for `input_policy`
+
+Optional:
+
+- `service_policy_name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
+
 
 <a id="nestedatt--ipv6_addresses"></a>
 ### Nested Schema for `ipv6_addresses`
@@ -94,6 +121,14 @@ Optional:
 - `address` (String) IPv6 name or address
 - `zone` (String) IPv6 address zone
   - Default value: `0`
+
+
+<a id="nestedatt--output_policy"></a>
+### Nested Schema for `output_policy`
+
+Optional:
+
+- `service_policy_name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
 
 ## Import
 

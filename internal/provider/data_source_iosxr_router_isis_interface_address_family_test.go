@@ -19,6 +19,7 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "tag", "100"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"),
 				),
 			},
 		},
@@ -37,6 +38,7 @@ resource "iosxr_router_isis_interface_address_family" "test" {
 		ti_lfa = true
 	}]
 	tag = 100
+	advertise_prefix_route_policy = "ROUTE_POLICY_1"
 }
 
 data "iosxr_router_isis_interface_address_family" "test" {

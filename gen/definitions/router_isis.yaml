@@ -50,6 +50,40 @@ attributes:
   - yang_name: max-lsp-lifetime/max-lsp-lifetime
     tf_name: max_lsp_lifetime
     example: 65535
+
+  - yang_name: lsp-password/keychain/keychain-name
+    example: ISIS-KEY
+  - yang_name: distribute/link-state/instance-id
+    example: 32
+  - yang_name: distribute/link-state/throttle
+    example: 1
+    exclude_test: true
+  - yang_name: distribute/link-state/level
+    example: 2
+    exclude_test: true
+
+  - yang_name: affinity-maps/affinity-map
+    tf_name: affinity_maps
+    type: List
+    attributes:
+      - yang_name: affinity-map-name
+        id: true
+        example: 22
+      - yang_name: bit-position
+        example: 4
+
+  - yang_name: flex-algos/flex-algo
+    tf_name: flex_algos
+    type: List
+    attributes: 
+      - yang_name: algorithm-number
+        id: true
+        example: 128
+      - yang_name: advertise-definition
+        example: true
+      - yang_name: metric-type/delay
+        example: true
+
   - yang_name: nets/net
     tf_name: nets
     type: List

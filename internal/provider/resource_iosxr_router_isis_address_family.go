@@ -179,6 +179,10 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise prefixes of passive interfaces only").String,
 				Optional:            true,
 			},
+			"advertise_link_attributes": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise additional link attributes").String,
+				Optional:            true,
+			},
 			"mpls_ldp_auto_config": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP interface auto-configuration").String,
 				Optional:            true,
@@ -263,6 +267,28 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 			"segment_routing_mpls_sr_prefer": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefer segment routing labels over LDP labels").String,
 				Optional:            true,
+			},
+			"maximum_redistributed_prefixes": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of redistributed prefixes").AddIntegerRangeDescription(1, 28000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 28000),
+				},
+			},
+			"maximum_redistributed_prefixes_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set maximum redistributed prefixes for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set maximum redistributed prefixes for one level only").AddIntegerRangeDescription(1, 2).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+					},
+				},
 			},
 		},
 	}

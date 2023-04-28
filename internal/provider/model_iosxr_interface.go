@@ -20,6 +20,11 @@ type Interface struct {
 	L2transport                              types.Bool               `tfsdk:"l2transport"`
 	PointToPoint                             types.Bool               `tfsdk:"point_to_point"`
 	Multipoint                               types.Bool               `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue              types.Int64              `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                         types.Bool               `tfsdk:"ipv4_point_to_point"`
+	InputPolicy                              []InterfaceInputPolicy   `tfsdk:"input_policy"`
+	OutputPolicy                             []InterfaceOutputPolicy  `tfsdk:"output_policy"`
+	BfdModeIetf                              types.Bool               `tfsdk:"bfd_mode_ietf"`
 	EncapsulationDot1qVlanId                 types.Int64              `tfsdk:"encapsulation_dot1q_vlan_id"`
 	L2transportEncapsulationDot1qVlanId      types.String             `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
 	L2transportEncapsulationDot1qSecondDot1q types.String             `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
@@ -39,6 +44,12 @@ type Interface struct {
 	Ipv6Autoconfig                           types.Bool               `tfsdk:"ipv6_autoconfig"`
 	Ipv6Enable                               types.Bool               `tfsdk:"ipv6_enable"`
 	Ipv6Addresses                            []InterfaceIpv6Addresses `tfsdk:"ipv6_addresses"`
+}
+type InterfaceInputPolicy struct {
+	ServicePolicyName types.String `tfsdk:"service_policy_name"`
+}
+type InterfaceOutputPolicy struct {
+	ServicePolicyName types.String `tfsdk:"service_policy_name"`
 }
 type InterfaceIpv6Addresses struct {
 	Address      types.String `tfsdk:"address"`
@@ -68,6 +79,19 @@ func (data Interface) toBody(ctx context.Context) string {
 	if !data.Multipoint.IsNull() && !data.Multipoint.IsUnknown() {
 		if data.Multipoint.ValueBool() {
 			body, _ = sjson.Set(body, "sub-interface-type.multipoint", map[string]string{})
+		}
+	}
+	if !data.DampeningDecayHalfLifeValue.IsNull() && !data.DampeningDecayHalfLifeValue.IsUnknown() {
+		body, _ = sjson.Set(body, "dampening.decay-half-life.value", strconv.FormatInt(data.DampeningDecayHalfLifeValue.ValueInt64(), 10))
+	}
+	if !data.Ipv4PointToPoint.IsNull() && !data.Ipv4PointToPoint.IsUnknown() {
+		if data.Ipv4PointToPoint.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point", map[string]string{})
+		}
+	}
+	if !data.BfdModeIetf.IsNull() && !data.BfdModeIetf.IsUnknown() {
+		if data.BfdModeIetf.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bfd.mode.ietf", map[string]string{})
 		}
 	}
 	if !data.EncapsulationDot1qVlanId.IsNull() && !data.EncapsulationDot1qVlanId.IsUnknown() {
@@ -134,6 +158,22 @@ func (data Interface) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable", map[string]string{})
 		}
 	}
+	if len(data.InputPolicy) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input", []interface{}{})
+		for index, item := range data.InputPolicy {
+			if !item.ServicePolicyName.IsNull() && !item.ServicePolicyName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"+"."+strconv.Itoa(index)+"."+"service-policy-name", item.ServicePolicyName.ValueString())
+			}
+		}
+	}
+	if len(data.OutputPolicy) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output", []interface{}{})
+		for index, item := range data.OutputPolicy {
+			if !item.ServicePolicyName.IsNull() && !item.ServicePolicyName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"+"."+strconv.Itoa(index)+"."+"service-policy-name", item.ServicePolicyName.ValueString())
+			}
+		}
+	}
 	if len(data.Ipv6Addresses) > 0 {
 		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address", []interface{}{})
 		for index, item := range data.Ipv6Addresses {
@@ -178,6 +218,87 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Multipoint = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() && !data.DampeningDecayHalfLifeValue.IsNull() {
+		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
+	} else {
+		data.DampeningDecayHalfLifeValue = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point"); !data.Ipv4PointToPoint.IsNull() {
+		if value.Exists() {
+			data.Ipv4PointToPoint = types.BoolValue(true)
+		} else {
+			data.Ipv4PointToPoint = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4PointToPoint = types.BoolNull()
+	}
+	for i := range data.InputPolicy {
+		keys := [...]string{"service-policy-name"}
+		keyValues := [...]string{data.InputPolicy[i].ServicePolicyName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("service-policy-name"); value.Exists() && !data.InputPolicy[i].ServicePolicyName.IsNull() {
+			data.InputPolicy[i].ServicePolicyName = types.StringValue(value.String())
+		} else {
+			data.InputPolicy[i].ServicePolicyName = types.StringNull()
+		}
+	}
+	for i := range data.OutputPolicy {
+		keys := [...]string{"service-policy-name"}
+		keyValues := [...]string{data.OutputPolicy[i].ServicePolicyName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("service-policy-name"); value.Exists() && !data.OutputPolicy[i].ServicePolicyName.IsNull() {
+			data.OutputPolicy[i].ServicePolicyName = types.StringValue(value.String())
+		} else {
+			data.OutputPolicy[i].ServicePolicyName = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bfd.mode.ietf"); !data.BfdModeIetf.IsNull() {
+		if value.Exists() {
+			data.BfdModeIetf = types.BoolValue(true)
+		} else {
+			data.BfdModeIetf = types.BoolValue(false)
+		}
+	} else {
+		data.BfdModeIetf = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() && !data.EncapsulationDot1qVlanId.IsNull() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
@@ -346,6 +467,41 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Multipoint = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() {
+		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point"); value.Exists() {
+		data.Ipv4PointToPoint = types.BoolValue(true)
+	} else {
+		data.Ipv4PointToPoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input"); value.Exists() {
+		data.InputPolicy = make([]InterfaceInputPolicy, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceInputPolicy{}
+			if cValue := v.Get("service-policy-name"); cValue.Exists() {
+				item.ServicePolicyName = types.StringValue(cValue.String())
+			}
+			data.InputPolicy = append(data.InputPolicy, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.output"); value.Exists() {
+		data.OutputPolicy = make([]InterfaceOutputPolicy, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceOutputPolicy{}
+			if cValue := v.Get("service-policy-name"); cValue.Exists() {
+				item.ServicePolicyName = types.StringValue(cValue.String())
+			}
+			data.OutputPolicy = append(data.OutputPolicy, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bfd.mode.ietf"); value.Exists() {
+		data.BfdModeIetf = types.BoolValue(true)
+	} else {
+		data.BfdModeIetf = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation.dot1q.vlan-id"); value.Exists() {
 		data.EncapsulationDot1qVlanId = types.Int64Value(value.Int())
 	}
@@ -436,6 +592,66 @@ func (data *Interface) fromPlan(ctx context.Context, plan Interface) {
 
 func (data *Interface) getDeletedListItems(ctx context.Context, state Interface) []string {
 	deletedListItems := make([]string, 0)
+	for i := range state.InputPolicy {
+		keys := [...]string{"service-policy-name"}
+		stateKeyValues := [...]string{state.InputPolicy[i].ServicePolicyName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.InputPolicy[i].ServicePolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.InputPolicy {
+			found = true
+			if state.InputPolicy[i].ServicePolicyName.ValueString() != data.InputPolicy[j].ServicePolicyName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.OutputPolicy {
+		keys := [...]string{"service-policy-name"}
+		stateKeyValues := [...]string{state.OutputPolicy[i].ServicePolicyName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.OutputPolicy[i].ServicePolicyName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.OutputPolicy {
+			found = true
+			if state.OutputPolicy[i].ServicePolicyName.ValueString() != data.OutputPolicy[j].ServicePolicyName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Ipv6Addresses {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.Ipv6Addresses[i].Address.ValueString()}

@@ -52,7 +52,7 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"key_chain_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
 				Required:            true,
 				Validators: []validator.String{

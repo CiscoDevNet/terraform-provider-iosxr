@@ -14,10 +14,10 @@ import (
 )
 
 type KeyChain struct {
-	Device       types.String   `tfsdk:"device"`
-	Id           types.String   `tfsdk:"id"`
-	KeyChainName types.String   `tfsdk:"key_chain_name"`
-	Keys         []KeyChainKeys `tfsdk:"keys"`
+	Device types.String   `tfsdk:"device"`
+	Id     types.String   `tfsdk:"id"`
+	Name   types.String   `tfsdk:"name"`
+	Keys   []KeyChainKeys `tfsdk:"keys"`
 }
 type KeyChainKeys struct {
 	KeyName                           types.String `tfsdk:"key_name"`
@@ -40,13 +40,13 @@ type KeyChainKeys struct {
 }
 
 func (data KeyChain) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]", data.KeyChainName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]", data.Name.ValueString())
 }
 
 func (data KeyChain) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.KeyChainName.IsNull() && !data.KeyChainName.IsUnknown() {
-		body, _ = sjson.Set(body, "key-chain-name", data.KeyChainName.ValueString())
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "key-chain-name", data.Name.ValueString())
 	}
 	if len(data.Keys) > 0 {
 		body, _ = sjson.Set(body, "keys.key", []interface{}{})
@@ -299,7 +299,7 @@ func (data *KeyChain) fromBody(ctx context.Context, res []byte) {
 
 func (data *KeyChain) fromPlan(ctx context.Context, plan KeyChain) {
 	data.Device = plan.Device
-	data.KeyChainName = types.StringValue(plan.KeyChainName.ValueString())
+	data.Name = types.StringValue(plan.Name.ValueString())
 }
 
 func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) []string {

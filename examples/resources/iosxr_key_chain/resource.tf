@@ -1,5 +1,5 @@
 resource "iosxr_key_chain" "example" {
-  key_chain_name = "KEY11"
+  name = "KEY11"
   keys = [
     {
       key_name                                = "1"

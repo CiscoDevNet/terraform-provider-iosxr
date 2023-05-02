@@ -42,7 +42,7 @@ func TestAccDataSourceIosxrKeyChain(t *testing.T) {
 const testAccDataSourceIosxrKeyChainConfig = `
 
 resource "iosxr_key_chain" "test" {
-	key_chain_name = "KEY11"
+	name = "KEY11"
 	keys = [{
 		key_name = "1"
 		key_string_password = "00071A150754"
@@ -65,7 +65,7 @@ resource "iosxr_key_chain" "test" {
 }
 
 data "iosxr_key_chain" "test" {
-	key_chain_name = "KEY11"
+	name = "KEY11"
 	depends_on = [iosxr_key_chain.test]
 }
 `

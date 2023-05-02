@@ -45,7 +45,7 @@ func (d *KeyChainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"key_chain_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Name of the key chain - maximum 32 characters",
 				Required:            true,
 			},

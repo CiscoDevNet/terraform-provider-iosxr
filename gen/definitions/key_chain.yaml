@@ -1,9 +1,10 @@
 ---
 name: Key Chain
 path: Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]
-doc_category: KeyChain
+doc_category: System
 attributes:
   - yang_name: key-chain-name
+    tf_name: name
     id: true
     example: KEY11
   - yang_name: keys/key

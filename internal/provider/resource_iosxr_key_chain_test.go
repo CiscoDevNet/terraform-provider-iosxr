@@ -16,7 +16,7 @@ func TestAccIosxrKeyChain(t *testing.T) {
 			{
 				Config: testAccIosxrKeyChainConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_key_chain.test", "key_chain_name", "KEY11"),
+					resource.TestCheckResourceAttr("iosxr_key_chain.test", "name", "KEY11"),
 					resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_name", "1"),
 					resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.key_string_password", "00071A150754"),
 					resource.TestCheckResourceAttr("iosxr_key_chain.test", "keys.0.cryptographic_algorithm", "hmac-md5"),
@@ -48,7 +48,7 @@ func TestAccIosxrKeyChain(t *testing.T) {
 func testAccIosxrKeyChainConfig_minimum() string {
 	return `
 	resource "iosxr_key_chain" "test" {
-		key_chain_name = "KEY11"
+		name = "KEY11"
 	}
 	`
 }
@@ -56,7 +56,7 @@ func testAccIosxrKeyChainConfig_minimum() string {
 func testAccIosxrKeyChainConfig_all() string {
 	return `
 	resource "iosxr_key_chain" "test" {
-		key_chain_name = "KEY11"
+		name = "KEY11"
 		keys = [{
 			key_name = "1"
 			key_string_password = "00071A150754"

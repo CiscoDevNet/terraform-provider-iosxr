@@ -5,6 +5,7 @@
 - Add `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
 - Add `iosxr_router_bgp_neighbor_group_address_family` resource and data source
 - Add `iosxr_router_static` resource and data source
+- Add `iosxr_key_chain` resource and data source
 
 ## 0.1.7
 

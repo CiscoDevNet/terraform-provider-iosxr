@@ -43,7 +43,7 @@ data "iosxr_router_isis" "example" {
 - `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP
 - `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP
 - `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
-- `lsp_password_keychain_keychain_name` (String) Specifies a Key Chain name will follow
+- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
 - `max_lsp_lifetime` (Number) Set maximum LSP lifetime
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
@@ -60,8 +60,8 @@ data "iosxr_router_isis" "example" {
 
 Read-Only:
 
-- `affinity_map_name` (String) Affinity map configuration
 - `bit_position` (Number) Bit position for affinity attribute value
+- `name` (String) Affinity map configuration
 
 
 <a id="nestedatt--flex_algos"></a>

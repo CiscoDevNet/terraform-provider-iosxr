@@ -51,7 +51,7 @@ type RouterBGPNeighbors struct {
 	TtlSecurity                 types.Bool   `tfsdk:"ttl_security"`
 }
 type RouterBGPNeighborGroups struct {
-	NeighborGroupName         types.String `tfsdk:"neighbor_group_name"`
+	Name                      types.String `tfsdk:"name"`
 	RemoteAs                  types.String `tfsdk:"remote_as"`
 	UpdateSource              types.String `tfsdk:"update_source"`
 	AoKeyChainName            types.String `tfsdk:"ao_key_chain_name"`
@@ -179,8 +179,8 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	if len(data.NeighborGroups) > 0 {
 		body, _ = sjson.Set(body, "neighbor-groups.neighbor-group", []interface{}{})
 		for index, item := range data.NeighborGroups {
-			if !item.NeighborGroupName.IsNull() && !item.NeighborGroupName.IsUnknown() {
-				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"neighbor-group-name", item.NeighborGroupName.ValueString())
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"neighbor-group-name", item.Name.ValueString())
 			}
 			if !item.RemoteAs.IsNull() && !item.RemoteAs.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbor-groups.neighbor-group"+"."+strconv.Itoa(index)+"."+"remote-as", item.RemoteAs.ValueString())
@@ -408,7 +408,7 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.NeighborGroups {
 		keys := [...]string{"neighbor-group-name"}
-		keyValues := [...]string{data.NeighborGroups[i].NeighborGroupName.ValueString()}
+		keyValues := [...]string{data.NeighborGroups[i].Name.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "neighbor-groups.neighbor-group").ForEach(
@@ -429,10 +429,10 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("neighbor-group-name"); value.Exists() && !data.NeighborGroups[i].NeighborGroupName.IsNull() {
-			data.NeighborGroups[i].NeighborGroupName = types.StringValue(value.String())
+		if value := r.Get("neighbor-group-name"); value.Exists() && !data.NeighborGroups[i].Name.IsNull() {
+			data.NeighborGroups[i].Name = types.StringValue(value.String())
 		} else {
-			data.NeighborGroups[i].NeighborGroupName = types.StringNull()
+			data.NeighborGroups[i].Name = types.StringNull()
 		}
 		if value := r.Get("remote-as"); value.Exists() && !data.NeighborGroups[i].RemoteAs.IsNull() {
 			data.NeighborGroups[i].RemoteAs = types.StringValue(value.String())
@@ -579,7 +579,7 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterBGPNeighborGroups{}
 			if cValue := v.Get("neighbor-group-name"); cValue.Exists() {
-				item.NeighborGroupName = types.StringValue(cValue.String())
+				item.Name = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("remote-as"); cValue.Exists() {
 				item.RemoteAs = types.StringValue(cValue.String())
@@ -640,10 +640,10 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 	}
 	for i := range state.NeighborGroups {
 		keys := [...]string{"neighbor-group-name"}
-		stateKeyValues := [...]string{state.NeighborGroups[i].NeighborGroupName.ValueString()}
+		stateKeyValues := [...]string{state.NeighborGroups[i].Name.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.NeighborGroups[i].NeighborGroupName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.NeighborGroups[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -653,7 +653,7 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 		found := false
 		for j := range data.NeighborGroups {
 			found = true
-			if state.NeighborGroups[i].NeighborGroupName.ValueString() != data.NeighborGroups[j].NeighborGroupName.ValueString() {
+			if state.NeighborGroups[i].Name.ValueString() != data.NeighborGroups[j].Name.ValueString() {
 				found = false
 			}
 			if found {

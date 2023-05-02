@@ -14,31 +14,31 @@ import (
 )
 
 type RouterISIS struct {
-	Device                          types.String                     `tfsdk:"device"`
-	Id                              types.String                     `tfsdk:"id"`
-	ProcessId                       types.String                     `tfsdk:"process_id"`
-	IsType                          types.String                     `tfsdk:"is_type"`
-	SetOverloadBitLevels            []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
-	Nsr                             types.Bool                       `tfsdk:"nsr"`
-	NsfCisco                        types.Bool                       `tfsdk:"nsf_cisco"`
-	NsfIetf                         types.Bool                       `tfsdk:"nsf_ietf"`
-	NsfLifetime                     types.Int64                      `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer               types.Int64                      `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires             types.Int64                      `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges             types.Bool                       `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait       types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait       types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait     types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval              types.Int64                      `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime                  types.Int64                      `tfsdk:"max_lsp_lifetime"`
-	LspPasswordKeychainKeychainName types.String                     `tfsdk:"lsp_password_keychain_keychain_name"`
-	DistributeLinkStateInstanceId   types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
-	DistributeLinkStateThrottle     types.Int64                      `tfsdk:"distribute_link_state_throttle"`
-	DistributeLinkStateLevel        types.Int64                      `tfsdk:"distribute_link_state_level"`
-	AffinityMaps                    []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
-	FlexAlgos                       []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
-	Nets                            []RouterISISNets                 `tfsdk:"nets"`
-	Interfaces                      []RouterISISInterfaces           `tfsdk:"interfaces"`
+	Device                        types.String                     `tfsdk:"device"`
+	Id                            types.String                     `tfsdk:"id"`
+	ProcessId                     types.String                     `tfsdk:"process_id"`
+	IsType                        types.String                     `tfsdk:"is_type"`
+	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                           types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                      types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                       types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                   types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer             types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires           types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges           types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait     types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait     types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait   types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval            types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordKeychain           types.String                     `tfsdk:"lsp_password_keychain"`
+	DistributeLinkStateInstanceId types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle   types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel      types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                  []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                     []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                          []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 type RouterISISSetOverloadBitLevels struct {
 	LevelId                                       types.Int64 `tfsdk:"level_id"`
@@ -49,8 +49,8 @@ type RouterISISSetOverloadBitLevels struct {
 	AdvertiseInterlevel                           types.Bool  `tfsdk:"advertise_interlevel"`
 }
 type RouterISISAffinityMaps struct {
-	AffinityMapName types.String `tfsdk:"affinity_map_name"`
-	BitPosition     types.Int64  `tfsdk:"bit_position"`
+	Name        types.String `tfsdk:"name"`
+	BitPosition types.Int64  `tfsdk:"bit_position"`
 }
 type RouterISISFlexAlgos struct {
 	AlgorithmNumber     types.Int64 `tfsdk:"algorithm_number"`
@@ -128,8 +128,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if !data.MaxLspLifetime.IsNull() && !data.MaxLspLifetime.IsUnknown() {
 		body, _ = sjson.Set(body, "max-lsp-lifetime.max-lsp-lifetime", strconv.FormatInt(data.MaxLspLifetime.ValueInt64(), 10))
 	}
-	if !data.LspPasswordKeychainKeychainName.IsNull() && !data.LspPasswordKeychainKeychainName.IsUnknown() {
-		body, _ = sjson.Set(body, "lsp-password.keychain.keychain-name", data.LspPasswordKeychainKeychainName.ValueString())
+	if !data.LspPasswordKeychain.IsNull() && !data.LspPasswordKeychain.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-password.keychain.keychain-name", data.LspPasswordKeychain.ValueString())
 	}
 	if !data.DistributeLinkStateInstanceId.IsNull() && !data.DistributeLinkStateInstanceId.IsUnknown() {
 		body, _ = sjson.Set(body, "distribute.link-state.instance-id", strconv.FormatInt(data.DistributeLinkStateInstanceId.ValueInt64(), 10))
@@ -174,8 +174,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if len(data.AffinityMaps) > 0 {
 		body, _ = sjson.Set(body, "affinity-maps.affinity-map", []interface{}{})
 		for index, item := range data.AffinityMaps {
-			if !item.AffinityMapName.IsNull() && !item.AffinityMapName.IsUnknown() {
-				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"affinity-map-name", item.AffinityMapName.ValueString())
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"affinity-map-name", item.Name.ValueString())
 			}
 			if !item.BitPosition.IsNull() && !item.BitPosition.IsUnknown() {
 				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"bit-position", strconv.FormatInt(item.BitPosition.ValueInt64(), 10))
@@ -407,10 +407,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MaxLspLifetime = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychainKeychainName.IsNull() {
-		data.LspPasswordKeychainKeychainName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychain.IsNull() {
+		data.LspPasswordKeychain = types.StringValue(value.String())
 	} else {
-		data.LspPasswordKeychainKeychainName = types.StringNull()
+		data.LspPasswordKeychain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() && !data.DistributeLinkStateInstanceId.IsNull() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
@@ -429,7 +429,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-map-name"}
-		keyValues := [...]string{data.AffinityMaps[i].AffinityMapName.ValueString()}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "affinity-maps.affinity-map").ForEach(
@@ -450,10 +450,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("affinity-map-name"); value.Exists() && !data.AffinityMaps[i].AffinityMapName.IsNull() {
-			data.AffinityMaps[i].AffinityMapName = types.StringValue(value.String())
+		if value := r.Get("affinity-map-name"); value.Exists() && !data.AffinityMaps[i].Name.IsNull() {
+			data.AffinityMaps[i].Name = types.StringValue(value.String())
 		} else {
-			data.AffinityMaps[i].AffinityMapName = types.StringNull()
+			data.AffinityMaps[i].Name = types.StringNull()
 		}
 		if value := r.Get("bit-position"); value.Exists() && !data.AffinityMaps[i].BitPosition.IsNull() {
 			data.AffinityMaps[i].BitPosition = types.Int64Value(value.Int())
@@ -715,7 +715,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		data.MaxLspLifetime = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() {
-		data.LspPasswordKeychainKeychainName = types.StringValue(value.String())
+		data.LspPasswordKeychain = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
@@ -731,7 +731,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAffinityMaps{}
 			if cValue := v.Get("affinity-map-name"); cValue.Exists() {
-				item.AffinityMapName = types.StringValue(cValue.String())
+				item.Name = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("bit-position"); cValue.Exists() {
 				item.BitPosition = types.Int64Value(cValue.Int())
@@ -860,10 +860,10 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 	}
 	for i := range state.AffinityMaps {
 		keys := [...]string{"affinity-map-name"}
-		stateKeyValues := [...]string{state.AffinityMaps[i].AffinityMapName.ValueString()}
+		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AffinityMaps[i].AffinityMapName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -873,7 +873,7 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 		found := false
 		for j := range data.AffinityMaps {
 			found = true
-			if state.AffinityMaps[i].AffinityMapName.ValueString() != data.AffinityMaps[j].AffinityMapName.ValueString() {
+			if state.AffinityMaps[i].Name.ValueString() != data.AffinityMaps[j].Name.ValueString() {
 				found = false
 			}
 			if found {

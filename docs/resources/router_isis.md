@@ -26,24 +26,24 @@ resource "iosxr_router_isis" "example" {
       advertise_interlevel                                 = true
     }
   ]
-  nsr                                 = true
-  nsf_cisco                           = true
-  nsf_ietf                            = false
-  nsf_lifetime                        = 10
-  nsf_interface_timer                 = 5
-  nsf_interface_expires               = 2
-  log_adjacency_changes               = true
-  lsp_gen_interval_maximum_wait       = 5000
-  lsp_gen_interval_initial_wait       = 50
-  lsp_gen_interval_secondary_wait     = 200
-  lsp_refresh_interval                = 65000
-  max_lsp_lifetime                    = 65535
-  lsp_password_keychain_keychain_name = "ISIS-KEY"
-  distribute_link_state_instance_id   = 32
+  nsr                               = true
+  nsf_cisco                         = true
+  nsf_ietf                          = false
+  nsf_lifetime                      = 10
+  nsf_interface_timer               = 5
+  nsf_interface_expires             = 2
+  log_adjacency_changes             = true
+  lsp_gen_interval_maximum_wait     = 5000
+  lsp_gen_interval_initial_wait     = 50
+  lsp_gen_interval_secondary_wait   = 200
+  lsp_refresh_interval              = 65000
+  max_lsp_lifetime                  = 65535
+  lsp_password_keychain             = "ISIS-KEY"
+  distribute_link_state_instance_id = 32
   affinity_maps = [
     {
-      affinity_map_name = "22"
-      bit_position      = 4
+      name         = "22"
+      bit_position = 4
     }
   ]
   flex_algos = [
@@ -79,7 +79,7 @@ resource "iosxr_router_isis" "example" {
 
 ### Required
 
-- `lsp_password_keychain_keychain_name` (String) Specifies a Key Chain name will follow
+- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `process_id` (String) Process ID
 
 ### Optional
@@ -133,7 +133,7 @@ Required:
 
 Optional:
 
-- `affinity_map_name` (String) Affinity map configuration
+- `name` (String) Affinity map configuration
 
 
 <a id="nestedatt--flex_algos"></a>

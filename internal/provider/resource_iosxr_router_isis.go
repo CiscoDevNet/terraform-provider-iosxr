@@ -179,7 +179,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					int64validator.Between(1, 65535),
 				},
 			},
-			"lsp_password_keychain_keychain_name": schema.StringAttribute{
+			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 				Required:            true,
 				Validators: []validator.String{
@@ -212,7 +212,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"affinity_map_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Affinity map configuration").String,
 							Optional:            true,
 							Validators: []validator.String{

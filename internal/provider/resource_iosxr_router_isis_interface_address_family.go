@@ -125,7 +125,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					int64validator.Between(16000, 1048575),
 				},
 			},
-			"prefix_sid_sid_n_flag_clear": schema.BoolAttribute{
+			"prefix_sid_n_flag_clear": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Clear N-flag for the prefix-SID ").String,
 				Optional:            true,
 			},

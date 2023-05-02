@@ -174,7 +174,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"neighbor_group_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Specify a Neighbor-group",
 							Computed:            true,
 						},

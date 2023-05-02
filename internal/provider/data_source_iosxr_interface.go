@@ -69,24 +69,24 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Enable point-to-point handling for this interface.",
 				Computed:            true,
 			},
-			"input_policy": schema.ListNestedAttribute{
+			"service_policy_input": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure a policy in the input direction",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"service_policy_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"output_policy": schema.ListNestedAttribute{
+			"service_policy_output": schema.ListNestedAttribute{
 				MarkdownDescription: "direction of service policy application",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"service_policy_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces",
 							Computed:            true,
 						},

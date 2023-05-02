@@ -52,7 +52,7 @@ Read-Only:
 
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
-- `neighbor_group_name` (String) Specify a Neighbor-group
+- `name` (String) Specify a Neighbor-group
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates
 

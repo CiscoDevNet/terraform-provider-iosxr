@@ -37,7 +37,6 @@ data "iosxr_interface" "example" {
 - `description` (String) Set description for this interface
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
 - `id` (String) The path of the retrieved object.
-- `input_policy` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--input_policy))
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv4_point_to_point` (Boolean) Enable point-to-point handling for this interface.
@@ -52,21 +51,14 @@ data "iosxr_interface" "example" {
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `mtu` (Number) Set the MTU on an interface
 - `multipoint` (Boolean) multipoint sub-interface
-- `output_policy` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--output_policy))
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
 - `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
+- `service_policy_input` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--service_policy_input))
+- `service_policy_output` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--service_policy_output))
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
-
-<a id="nestedatt--input_policy"></a>
-### Nested Schema for `input_policy`
-
-Read-Only:
-
-- `service_policy_name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
-
 
 <a id="nestedatt--ipv6_addresses"></a>
 ### Nested Schema for `ipv6_addresses`
@@ -78,11 +70,19 @@ Read-Only:
 - `zone` (String) IPv6 address zone
 
 
-<a id="nestedatt--output_policy"></a>
-### Nested Schema for `output_policy`
+<a id="nestedatt--service_policy_input"></a>
+### Nested Schema for `service_policy_input`
 
 Read-Only:
 
-- `service_policy_name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
+- `name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
+
+
+<a id="nestedatt--service_policy_output"></a>
+### Nested Schema for `service_policy_output`
+
+Read-Only:
+
+- `name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
 
 

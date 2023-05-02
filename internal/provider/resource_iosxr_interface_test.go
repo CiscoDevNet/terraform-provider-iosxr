@@ -22,8 +22,8 @@ func TestAccIosxrInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_interface.test", "multipoint", "false"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "dampening_decay_half_life_value", "2"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_point_to_point", "true"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "input_policy.0.service_policy_name", "CORE-INPUT-POLICY"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "output_policy.0.service_policy_name", "CORE-OUTPUT-POLICY"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_input.0.name", "CORE-INPUT-POLICY"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_output.0.name", "CORE-OUTPUT-POLICY"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "bfd_mode_ietf", "true"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "shutdown", "true"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "mtu", "9000"),
@@ -69,11 +69,11 @@ func testAccIosxrInterfaceConfig_all() string {
 		multipoint = false
 		dampening_decay_half_life_value = 2
 		ipv4_point_to_point = true
-		input_policy = [{
-			service_policy_name = "CORE-INPUT-POLICY"
+		service_policy_input = [{
+			name = "CORE-INPUT-POLICY"
 		}]
-		output_policy = [{
-			service_policy_name = "CORE-OUTPUT-POLICY"
+		service_policy_output = [{
+			name = "CORE-OUTPUT-POLICY"
 		}]
 		bfd_mode_ietf = true
 		shutdown = true

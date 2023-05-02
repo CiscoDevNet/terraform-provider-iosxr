@@ -50,7 +50,7 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   - Range: `16000`-`1048575`
 - `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
   - Range: `0`-`1048575`
-- `prefix_sid_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
+- `prefix_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
 - `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
   - Range: `16000`-`1048575`
 - `tag` (Number) Set interface tag

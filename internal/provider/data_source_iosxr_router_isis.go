@@ -133,7 +133,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Set maximum LSP lifetime",
 				Computed:            true,
 			},
-			"lsp_password_keychain_keychain_name": schema.StringAttribute{
+			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
@@ -154,7 +154,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"affinity_map_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Affinity map configuration",
 							Computed:            true,
 						},

@@ -85,12 +85,12 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Enable point-to-point handling for this interface.").String,
 				Optional:            true,
 			},
-			"input_policy": schema.ListNestedAttribute{
+			"service_policy_input": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure a policy in the input direction").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"service_policy_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces").String,
 							Optional:            true,
 							Validators: []validator.String{
@@ -100,12 +100,12 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 				},
 			},
-			"output_policy": schema.ListNestedAttribute{
+			"service_policy_output": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("direction of service policy application").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"service_policy_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces").String,
 							Optional:            true,
 							Validators: []validator.String{

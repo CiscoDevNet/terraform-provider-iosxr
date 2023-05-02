@@ -5,14 +5,14 @@ resource "iosxr_interface" "example" {
   multipoint                      = false
   dampening_decay_half_life_value = 2
   ipv4_point_to_point             = true
-  input_policy = [
+  service_policy_input = [
     {
-      service_policy_name = "CORE-INPUT-POLICY"
+      name = "CORE-INPUT-POLICY"
     }
   ]
-  output_policy = [
+  service_policy_output = [
     {
-      service_policy_name = "CORE-OUTPUT-POLICY"
+      name = "CORE-OUTPUT-POLICY"
     }
   ]
   bfd_mode_ietf           = true

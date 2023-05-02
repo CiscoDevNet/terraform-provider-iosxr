@@ -20,14 +20,14 @@ resource "iosxr_interface" "example" {
   multipoint                      = false
   dampening_decay_half_life_value = 2
   ipv4_point_to_point             = true
-  input_policy = [
+  service_policy_input = [
     {
-      service_policy_name = "CORE-INPUT-POLICY"
+      name = "CORE-INPUT-POLICY"
     }
   ]
-  output_policy = [
+  service_policy_output = [
     {
-      service_policy_name = "CORE-OUTPUT-POLICY"
+      name = "CORE-OUTPUT-POLICY"
     }
   ]
   bfd_mode_ietf           = true
@@ -71,7 +71,6 @@ resource "iosxr_interface" "example" {
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
   - Range: `1`-`4094`
-- `input_policy` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--input_policy))
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv4_point_to_point` (Boolean) Enable point-to-point handling for this interface.
@@ -88,10 +87,11 @@ resource "iosxr_interface" "example" {
 - `mtu` (Number) Set the MTU on an interface
   - Range: `64`-`65535`
 - `multipoint` (Boolean) multipoint sub-interface
-- `output_policy` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--output_policy))
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
 - `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
+- `service_policy_input` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--service_policy_input))
+- `service_policy_output` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--service_policy_output))
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
@@ -99,14 +99,6 @@ resource "iosxr_interface" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
-
-<a id="nestedatt--input_policy"></a>
-### Nested Schema for `input_policy`
-
-Optional:
-
-- `service_policy_name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
-
 
 <a id="nestedatt--ipv6_addresses"></a>
 ### Nested Schema for `ipv6_addresses`
@@ -123,12 +115,20 @@ Optional:
   - Default value: `0`
 
 
-<a id="nestedatt--output_policy"></a>
-### Nested Schema for `output_policy`
+<a id="nestedatt--service_policy_input"></a>
+### Nested Schema for `service_policy_input`
 
 Optional:
 
-- `service_policy_name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
+- `name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
+
+
+<a id="nestedatt--service_policy_output"></a>
+### Nested Schema for `service_policy_output`
+
+Optional:
+
+- `name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
 
 ## Import
 

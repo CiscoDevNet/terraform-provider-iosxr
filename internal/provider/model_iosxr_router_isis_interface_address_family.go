@@ -23,7 +23,7 @@ type RouterISISInterfaceAddressFamily struct {
 	FastReroutePerPrefixLevels []RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels `tfsdk:"fast_reroute_per_prefix_levels"`
 	Tag                        types.Int64                                                  `tfsdk:"tag"`
 	PrefixSidAbsolute          types.Int64                                                  `tfsdk:"prefix_sid_absolute"`
-	PrefixSidSidNFlagClear     types.Bool                                                   `tfsdk:"prefix_sid_sid_n_flag_clear"`
+	PrefixSidNFlagClear        types.Bool                                                   `tfsdk:"prefix_sid_n_flag_clear"`
 	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
 	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
 	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
@@ -51,8 +51,8 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	if !data.PrefixSidAbsolute.IsNull() && !data.PrefixSidAbsolute.IsUnknown() {
 		body, _ = sjson.Set(body, "prefix-sid.sid.absolute.sid-value", strconv.FormatInt(data.PrefixSidAbsolute.ValueInt64(), 10))
 	}
-	if !data.PrefixSidSidNFlagClear.IsNull() && !data.PrefixSidSidNFlagClear.IsUnknown() {
-		if data.PrefixSidSidNFlagClear.ValueBool() {
+	if !data.PrefixSidNFlagClear.IsNull() && !data.PrefixSidNFlagClear.IsUnknown() {
+		if data.PrefixSidNFlagClear.ValueBool() {
 			body, _ = sjson.Set(body, "prefix-sid.sid.n-flag-clear", map[string]string{})
 		}
 	}
@@ -130,14 +130,14 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	} else {
 		data.PrefixSidAbsolute = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "prefix-sid.sid.n-flag-clear"); !data.PrefixSidSidNFlagClear.IsNull() {
+	if value := gjson.GetBytes(res, "prefix-sid.sid.n-flag-clear"); !data.PrefixSidNFlagClear.IsNull() {
 		if value.Exists() {
-			data.PrefixSidSidNFlagClear = types.BoolValue(true)
+			data.PrefixSidNFlagClear = types.BoolValue(true)
 		} else {
-			data.PrefixSidSidNFlagClear = types.BoolValue(false)
+			data.PrefixSidNFlagClear = types.BoolValue(false)
 		}
 	} else {
-		data.PrefixSidSidNFlagClear = types.BoolNull()
+		data.PrefixSidNFlagClear = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "advertise.prefix.route-policy"); value.Exists() && !data.AdvertisePrefixRoutePolicy.IsNull() {
 		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
@@ -180,9 +180,9 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 		data.PrefixSidAbsolute = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "prefix-sid.sid.n-flag-clear"); value.Exists() {
-		data.PrefixSidSidNFlagClear = types.BoolValue(true)
+		data.PrefixSidNFlagClear = types.BoolValue(true)
 	} else {
-		data.PrefixSidSidNFlagClear = types.BoolValue(false)
+		data.PrefixSidNFlagClear = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "advertise.prefix.route-policy"); value.Exists() {
 		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())

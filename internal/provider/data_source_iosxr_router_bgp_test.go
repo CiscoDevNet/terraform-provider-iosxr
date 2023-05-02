@@ -44,7 +44,7 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime", "20"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.ttl_security", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.neighbor_group_name", "GROUP1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.name", "GROUP1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.remote_as", "65001"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.update_source", "Loopback0"),
 				),
@@ -88,7 +88,7 @@ resource "iosxr_router_bgp" "test" {
 		ttl_security = false
 	}]
 	neighbor_groups = [{
-		neighbor_group_name = "GROUP1"
+		name = "GROUP1"
 		remote_as = "65001"
 		update_source = "Loopback0"
 	}]

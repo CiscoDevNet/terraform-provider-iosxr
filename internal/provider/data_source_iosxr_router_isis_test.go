@@ -35,9 +35,9 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_secondary_wait", "200"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval", "65000"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime", "65535"),
-					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_keychain_keychain_name", "ISIS-KEY"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_keychain", "ISIS-KEY"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_instance_id", "32"),
-					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.affinity_map_name", "22"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.name", "22"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.algorithm_number", "128"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"),
@@ -83,10 +83,10 @@ resource "iosxr_router_isis" "test" {
 	lsp_gen_interval_secondary_wait = 200
 	lsp_refresh_interval = 65000
 	max_lsp_lifetime = 65535
-	lsp_password_keychain_keychain_name = "ISIS-KEY"
+	lsp_password_keychain = "ISIS-KEY"
 	distribute_link_state_instance_id = 32
 	affinity_maps = [{
-		affinity_map_name = "22"
+		name = "22"
 		bit_position = 4
 	}]
 	flex_algos = [{

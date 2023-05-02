@@ -224,7 +224,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"neighbor_group_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
 							Optional:            true,
 							Validators: []validator.String{

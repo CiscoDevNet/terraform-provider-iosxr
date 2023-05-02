@@ -85,7 +85,7 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
 				Computed:            true,
 			},
-			"prefix_sid_sid_n_flag_clear": schema.BoolAttribute{
+			"prefix_sid_n_flag_clear": schema.BoolAttribute{
 				MarkdownDescription: "Clear N-flag for the prefix-SID ",
 				Computed:            true,
 			},

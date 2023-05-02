@@ -13,7 +13,6 @@ attributes:
     example: 5
   - yang_name: timers/bgp/holdtime
     example: 20
-
   - yang_name: bgp/router-id
     example: 22.22.22.22
   - yang_name: bgp/graceful-restart/graceful-reset
@@ -22,7 +21,6 @@ attributes:
     example: true
   - yang_name: bgp/log/neighbor/changes/detail
     example: true
-
   - yang_name: bfd/minimum-interval
     example: 10
   - yang_name: bfd/multiplier
@@ -38,10 +36,8 @@ attributes:
         example: 65002
       - yang_name: description
         example: My Neighbor Description
-
       - yang_name: use/neighbor-group
         example: GROUP1
-
       - yang_name: ignore-connected-check
         example: true
       - yang_name: ebgp-multihop/maximum-hop-count
@@ -80,6 +76,7 @@ attributes:
     type: List
     attributes:
       - yang_name: neighbor-group-name
+        tf_name: name
         id: true
         example: GROUP1
       - yang_name: remote-as

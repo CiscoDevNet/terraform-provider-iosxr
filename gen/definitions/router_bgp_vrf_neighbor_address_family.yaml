@@ -32,7 +32,6 @@ attributes:
 
 
 test_prerequisites:
-
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
     attributes:
       - name: af-name
@@ -49,7 +48,6 @@ test_prerequisites:
       - name: remote-as
         value: 65002
     dependencies: [1]
-
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
     attributes:
       - name: route-policy-name

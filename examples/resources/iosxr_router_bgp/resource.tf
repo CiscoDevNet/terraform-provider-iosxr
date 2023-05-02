@@ -34,9 +34,9 @@ resource "iosxr_router_bgp" "example" {
   ]
   neighbor_groups = [
     {
-      neighbor_group_name = "GROUP1"
-      remote_as           = "65001"
-      update_source       = "Loopback0"
+      name          = "GROUP1"
+      remote_as     = "65001"
+      update_source = "Loopback0"
     }
   ]
 }

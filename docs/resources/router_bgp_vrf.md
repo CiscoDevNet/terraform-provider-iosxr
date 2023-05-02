@@ -16,6 +16,9 @@ This resource can manage the Router BGP VRF configuration.
 resource "iosxr_router_bgp_vrf" "example" {
   as_number                     = "65001"
   vrf_name                      = "VRF1"
+  rd_auto                       = false
+  rd_ip_address_ipv4_address    = "14.14.14.14"
+  rd_ip_address_index           = 3
   default_information_originate = true
   default_metric                = 125
   timers_bgp_keepalive_interval = 5
@@ -52,6 +55,15 @@ resource "iosxr_router_bgp_vrf" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
+- `rd_four_byte_as_as_number` (String) 4-byte AS number
+- `rd_four_byte_as_index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `rd_ip_address_index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `rd_ip_address_ipv4_address` (String) configure this node
+- `rd_two_byte_as_as_number` (String) bgp as-number
+- `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
   - Range: `0`-`65535`
@@ -68,6 +80,7 @@ resource "iosxr_router_bgp_vrf" "example" {
   - Range: `1`-`4294967295`
 - `device` (String) A device name from the provider configuration.
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `rd_auto` (Boolean) Automatic route distinguisher
 
 ### Read-Only
 

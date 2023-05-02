@@ -39,6 +39,13 @@ data "iosxr_router_bgp_vrf" "example" {
 - `default_metric` (Number) default redistributed metric
 - `id` (String) The path of the retrieved object.
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `rd_auto` (Boolean) Automatic route distinguisher
+- `rd_four_byte_as_as_number` (String) 4-byte AS number
+- `rd_four_byte_as_index` (Number) ASN2:index (hex or decimal format)
+- `rd_ip_address_index` (Number) IPv4Address:index (hex or decimal format)
+- `rd_ip_address_ipv4_address` (String) configure this node
+- `rd_two_byte_as_as_number` (String) bgp as-number
+- `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
 

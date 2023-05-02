@@ -53,6 +53,30 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Enter Address Family command mode",
 				Required:            true,
 			},
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Send capability",
+				Computed:            true,
+			},
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Receive capability",
+				Computed:            true,
+			},
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route-policy for additional paths selection",
+				Computed:            true,
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: "Allocate label for unlabeled paths too",
+				Computed:            true,
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Advertise best-external path",
+				Computed:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: "Allocate labels for all prefixes",
+				Computed:            true,
+			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: "eBGP-multipath",
 				Computed:            true,

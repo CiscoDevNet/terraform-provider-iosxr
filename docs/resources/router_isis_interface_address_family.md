@@ -24,7 +24,8 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       ti_lfa   = true
     }
   ]
-  tag = 100
+  tag                           = 100
+  advertise_prefix_route_policy = "ROUTE_POLICY_1"
 }
 ```
 
@@ -42,10 +43,14 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 
 ### Optional
 
+- `advertise_prefix_route_policy` (String) Filter routes based on a route policy
 - `device` (String) A device name from the provider configuration.
 - `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
 - `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
   - Range: `16000`-`1048575`
+- `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
+  - Range: `0`-`1048575`
+- `prefix_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
 - `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
   - Range: `16000`-`1048575`
 - `tag` (Number) Set interface tag

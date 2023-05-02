@@ -14,23 +14,29 @@ import (
 )
 
 type RouterBGPAddressFamily struct {
-	Device                      types.String                               `tfsdk:"device"`
-	Id                          types.String                               `tfsdk:"id"`
-	AsNumber                    types.String                               `tfsdk:"as_number"`
-	AfName                      types.String                               `tfsdk:"af_name"`
-	MaximumPathsEbgpMultipath   types.Int64                                `tfsdk:"maximum_paths_ebgp_multipath"`
-	MaximumPathsEibgpMultipath  types.Int64                                `tfsdk:"maximum_paths_eibgp_multipath"`
-	MaximumPathsIbgpMultipath   types.Int64                                `tfsdk:"maximum_paths_ibgp_multipath"`
-	LabelModePerCe              types.Bool                                 `tfsdk:"label_mode_per_ce"`
-	LabelModePerVrf             types.Bool                                 `tfsdk:"label_mode_per_vrf"`
-	RedistributeConnected       types.Bool                                 `tfsdk:"redistribute_connected"`
-	RedistributeConnectedMetric types.Int64                                `tfsdk:"redistribute_connected_metric"`
-	RedistributeStatic          types.Bool                                 `tfsdk:"redistribute_static"`
-	RedistributeStaticMetric    types.Int64                                `tfsdk:"redistribute_static_metric"`
-	AggregateAddresses          []RouterBGPAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
-	Networks                    []RouterBGPAddressFamilyNetworks           `tfsdk:"networks"`
-	RedistributeIsis            []RouterBGPAddressFamilyRedistributeIsis   `tfsdk:"redistribute_isis"`
-	RedistributeOspf            []RouterBGPAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
+	Device                              types.String                               `tfsdk:"device"`
+	Id                                  types.String                               `tfsdk:"id"`
+	AsNumber                            types.String                               `tfsdk:"as_number"`
+	AfName                              types.String                               `tfsdk:"af_name"`
+	AdditionalPathsSend                 types.Bool                                 `tfsdk:"additional_paths_send"`
+	AdditionalPathsReceive              types.Bool                                 `tfsdk:"additional_paths_receive"`
+	AdditionalPathsSelectionRoutePolicy types.String                               `tfsdk:"additional_paths_selection_route_policy"`
+	AllocateLabelAllUnlabeledPath       types.Bool                                 `tfsdk:"allocate_label_all_unlabeled_path"`
+	AdvertiseBestExternal               types.Bool                                 `tfsdk:"advertise_best_external"`
+	AllocateLabelAll                    types.Bool                                 `tfsdk:"allocate_label_all"`
+	MaximumPathsEbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ebgp_multipath"`
+	MaximumPathsEibgpMultipath          types.Int64                                `tfsdk:"maximum_paths_eibgp_multipath"`
+	MaximumPathsIbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ibgp_multipath"`
+	LabelModePerCe                      types.Bool                                 `tfsdk:"label_mode_per_ce"`
+	LabelModePerVrf                     types.Bool                                 `tfsdk:"label_mode_per_vrf"`
+	RedistributeConnected               types.Bool                                 `tfsdk:"redistribute_connected"`
+	RedistributeConnectedMetric         types.Int64                                `tfsdk:"redistribute_connected_metric"`
+	RedistributeStatic                  types.Bool                                 `tfsdk:"redistribute_static"`
+	RedistributeStaticMetric            types.Int64                                `tfsdk:"redistribute_static_metric"`
+	AggregateAddresses                  []RouterBGPAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
+	Networks                            []RouterBGPAddressFamilyNetworks           `tfsdk:"networks"`
+	RedistributeIsis                    []RouterBGPAddressFamilyRedistributeIsis   `tfsdk:"redistribute_isis"`
+	RedistributeOspf                    []RouterBGPAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
 }
 type RouterBGPAddressFamilyAggregateAddresses struct {
 	Address     types.String `tfsdk:"address"`
@@ -73,6 +79,34 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
+	}
+	if !data.AdditionalPathsSend.IsNull() && !data.AdditionalPathsSend.IsUnknown() {
+		if data.AdditionalPathsSend.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.send", map[string]string{})
+		}
+	}
+	if !data.AdditionalPathsReceive.IsNull() && !data.AdditionalPathsReceive.IsUnknown() {
+		if data.AdditionalPathsReceive.ValueBool() {
+			body, _ = sjson.Set(body, "additional-paths.receive", map[string]string{})
+		}
+	}
+	if !data.AdditionalPathsSelectionRoutePolicy.IsNull() && !data.AdditionalPathsSelectionRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "additional-paths.selection.route-policy", data.AdditionalPathsSelectionRoutePolicy.ValueString())
+	}
+	if !data.AllocateLabelAllUnlabeledPath.IsNull() && !data.AllocateLabelAllUnlabeledPath.IsUnknown() {
+		if data.AllocateLabelAllUnlabeledPath.ValueBool() {
+			body, _ = sjson.Set(body, "allocate-label.all.unlabeled-path", map[string]string{})
+		}
+	}
+	if !data.AdvertiseBestExternal.IsNull() && !data.AdvertiseBestExternal.IsUnknown() {
+		if data.AdvertiseBestExternal.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.best-external", map[string]string{})
+		}
+	}
+	if !data.AllocateLabelAll.IsNull() && !data.AllocateLabelAll.IsUnknown() {
+		if data.AllocateLabelAll.ValueBool() {
+			body, _ = sjson.Set(body, "allocate-label.all", map[string]string{})
+		}
 	}
 	if !data.MaximumPathsEbgpMultipath.IsNull() && !data.MaximumPathsEbgpMultipath.IsUnknown() {
 		body, _ = sjson.Set(body, "maximum-paths.ebgp.multipath", strconv.FormatInt(data.MaximumPathsEbgpMultipath.ValueInt64(), 10))
@@ -237,6 +271,56 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 }
 
 func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "additional-paths.send"); !data.AdditionalPathsSend.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsSend = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsSend = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsSend = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive"); !data.AdditionalPathsReceive.IsNull() {
+		if value.Exists() {
+			data.AdditionalPathsReceive = types.BoolValue(true)
+		} else {
+			data.AdditionalPathsReceive = types.BoolValue(false)
+		}
+	} else {
+		data.AdditionalPathsReceive = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "additional-paths.selection.route-policy"); value.Exists() && !data.AdditionalPathsSelectionRoutePolicy.IsNull() {
+		data.AdditionalPathsSelectionRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.AdditionalPathsSelectionRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "allocate-label.all.unlabeled-path"); !data.AllocateLabelAllUnlabeledPath.IsNull() {
+		if value.Exists() {
+			data.AllocateLabelAllUnlabeledPath = types.BoolValue(true)
+		} else {
+			data.AllocateLabelAllUnlabeledPath = types.BoolValue(false)
+		}
+	} else {
+		data.AllocateLabelAllUnlabeledPath = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.best-external"); !data.AdvertiseBestExternal.IsNull() {
+		if value.Exists() {
+			data.AdvertiseBestExternal = types.BoolValue(true)
+		} else {
+			data.AdvertiseBestExternal = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseBestExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "allocate-label.all"); !data.AllocateLabelAll.IsNull() {
+		if value.Exists() {
+			data.AllocateLabelAll = types.BoolValue(true)
+		} else {
+			data.AllocateLabelAll = types.BoolValue(false)
+		}
+	} else {
+		data.AllocateLabelAll = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() && !data.MaximumPathsEbgpMultipath.IsNull() {
 		data.MaximumPathsEbgpMultipath = types.Int64Value(value.Int())
 	} else {
@@ -581,6 +665,34 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 }
 
 func (data *RouterBGPAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
+		data.AdditionalPathsSend = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsSend = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.receive"); value.Exists() {
+		data.AdditionalPathsReceive = types.BoolValue(true)
+	} else {
+		data.AdditionalPathsReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "additional-paths.selection.route-policy"); value.Exists() {
+		data.AdditionalPathsSelectionRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "allocate-label.all.unlabeled-path"); value.Exists() {
+		data.AllocateLabelAllUnlabeledPath = types.BoolValue(true)
+	} else {
+		data.AllocateLabelAllUnlabeledPath = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.best-external"); value.Exists() {
+		data.AdvertiseBestExternal = types.BoolValue(true)
+	} else {
+		data.AdvertiseBestExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "allocate-label.all"); value.Exists() {
+		data.AllocateLabelAll = types.BoolValue(true)
+	} else {
+		data.AllocateLabelAll = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
 		data.MaximumPathsEbgpMultipath = types.Int64Value(value.Int())
 	}

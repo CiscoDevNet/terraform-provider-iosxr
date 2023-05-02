@@ -33,12 +33,29 @@ data "iosxr_router_bgp" "example" {
 
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
+- `bgp_graceful_restart_graceful_reset` (Boolean) Reset gracefully if configuration change forces a peer reset
+- `bgp_log_neighbor_changes_detail` (Boolean) Include extra detail in change messages
+- `bgp_router_id` (String) Configure Router-id
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
+- `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
 - `id` (String) The path of the retrieved object.
+- `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
+
+<a id="nestedatt--neighbor_groups"></a>
+### Nested Schema for `neighbor_groups`
+
+Read-Only:
+
+- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
+- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `name` (String) Specify a Neighbor-group
+- `remote_as` (String) bgp as-number
+- `update_source` (String) Source of routing updates
+
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
@@ -62,5 +79,6 @@ Read-Only:
 - `timers_keepalive_interval` (Number) BGP timers
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
+- `use_neighbor_group` (String) Inherit configuration from a neighbor-group
 
 

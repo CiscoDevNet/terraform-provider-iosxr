@@ -25,9 +25,20 @@ attributes:
     example: 100
   - yang_name: prefix-sid/sid/absolute/sid-value
     tf_name: prefix_sid_absolute
+    example: 16000
     optional: true
     exclude_test: true
-    example: 16001
+  - yang_name: prefix-sid/sid/n-flag-clear
+    tf_name: prefix_sid_n_flag_clear
+    example: true
+    exclude_test: true
+  - yang_name: advertise/prefix/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: prefix-sid/sid/index/sid-index
+    tf_name: prefix_sid_index
+    example: 150
+    exclude_test: true
+    optional: true
   - yang_name: prefix-sid/strict-spf/absolute/sid-value
     tf_name: prefix_sid_strict_spf_absolute
     optional: true

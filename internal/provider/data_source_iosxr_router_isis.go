@@ -133,6 +133,58 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Set maximum LSP lifetime",
 				Computed:            true,
 			},
+			"lsp_password_keychain": schema.StringAttribute{
+				MarkdownDescription: "Specifies a Key Chain name will follow",
+				Computed:            true,
+			},
+			"distribute_link_state_instance_id": schema.Int64Attribute{
+				MarkdownDescription: "Set distribution process instance identifier",
+				Computed:            true,
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: "Set throttle update in seconds",
+				Computed:            true,
+			},
+			"distribute_link_state_level": schema.Int64Attribute{
+				MarkdownDescription: "Set distribution for one level only",
+				Computed:            true,
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: "Affinity map configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Affinity map configuration",
+							Computed:            true,
+						},
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: "Bit position for affinity attribute value",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: "Flex Algorithm definition",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm_number": schema.Int64Attribute{
+							MarkdownDescription: "Flex Algorithm definition",
+							Computed:            true,
+						},
+						"advertise_definition": schema.BoolAttribute{
+							MarkdownDescription: "Advertise the Flex-Algo Definition",
+							Computed:            true,
+						},
+						"metric_type_delay": schema.BoolAttribute{
+							MarkdownDescription: "Use delay as metric",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: "A Network Entity Title (NET) for this process",
 				Computed:            true,

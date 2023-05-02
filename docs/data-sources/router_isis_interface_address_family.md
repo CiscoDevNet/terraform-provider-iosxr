@@ -37,9 +37,12 @@ data "iosxr_router_isis_interface_address_family" "example" {
 
 ### Read-Only
 
+- `advertise_prefix_route_policy` (String) Filter routes based on a route policy
 - `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
 - `id` (String) The path of the retrieved object.
 - `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
+- `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
+- `prefix_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
 - `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
 - `tag` (Number) Set interface tag
 

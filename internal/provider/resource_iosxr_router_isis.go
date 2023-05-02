@@ -179,6 +179,80 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					int64validator.Between(1, 65535),
 				},
 			},
+			"lsp_password_keychain": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"distribute_link_state_instance_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set distribution process instance identifier").AddIntegerRangeDescription(32, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(32, 4294967295),
+				},
+			},
+			"distribute_link_state_throttle": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set throttle update in seconds").AddIntegerRangeDescription(1, 20).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 20),
+				},
+			},
+			"distribute_link_state_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set distribution for one level only").AddIntegerRangeDescription(1, 2).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 2),
+				},
+			},
+			"affinity_maps": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Affinity map configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity map configuration").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"bit_position": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bit position for affinity attribute value").AddIntegerRangeDescription(0, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
+				},
+			},
+			"flex_algos": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").AddIntegerRangeDescription(128, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(128, 255),
+							},
+						},
+						"advertise_definition": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the Flex-Algo Definition").String,
+							Optional:            true,
+						},
+						"metric_type_delay": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use delay as metric").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 			"nets": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("A Network Entity Title (NET) for this process").String,
 				Optional:            true,

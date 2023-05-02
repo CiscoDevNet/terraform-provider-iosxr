@@ -69,6 +69,33 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+				Optional:            true,
+			},
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Receive capability").String,
+				Optional:            true,
+			},
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-policy for additional paths selection").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
+				Optional:            true,
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+				Optional:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate labels for all prefixes").String,
+				Optional:            true,
+			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("eBGP-multipath").AddIntegerRangeDescription(2, 1024).String,
 				Optional:            true,

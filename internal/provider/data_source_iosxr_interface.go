@@ -61,6 +61,42 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "multipoint sub-interface",
 				Computed:            true,
 			},
+			"dampening_decay_half_life_value": schema.Int64Attribute{
+				MarkdownDescription: "Decay half life (in minutes)",
+				Computed:            true,
+			},
+			"ipv4_point_to_point": schema.BoolAttribute{
+				MarkdownDescription: "Enable point-to-point handling for this interface.",
+				Computed:            true,
+			},
+			"service_policy_input": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a policy in the input direction",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"service_policy_output": schema.ListNestedAttribute{
+				MarkdownDescription: "direction of service policy application",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bfd_mode_ietf": schema.BoolAttribute{
+				MarkdownDescription: "Use IETF standard for BoB",
+				Computed:            true,
+			},
 			"encapsulation_dot1q_vlan_id": schema.Int64Attribute{
 				MarkdownDescription: "Configure first (outer) VLAN ID on the subinterface",
 				Computed:            true,

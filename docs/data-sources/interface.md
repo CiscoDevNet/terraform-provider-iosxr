@@ -32,11 +32,14 @@ data "iosxr_interface" "example" {
 ### Read-Only
 
 - `bandwidth` (Number) Set the bandwidth of an interface
+- `bfd_mode_ietf` (Boolean) Use IETF standard for BoB
+- `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
 - `description` (String) Set description for this interface
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
 - `id` (String) The path of the retrieved object.
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
+- `ipv4_point_to_point` (Boolean) Enable point-to-point handling for this interface.
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
 - `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
@@ -51,6 +54,8 @@ data "iosxr_interface" "example" {
 - `point_to_point` (Boolean) point-to-point sub-interface
 - `rewrite_ingress_tag_pop_one` (Boolean) Remove outer tag only
 - `rewrite_ingress_tag_pop_two` (Boolean) Remove two outermost tags
+- `service_policy_input` (Attributes List) Configure a policy in the input direction (see [below for nested schema](#nestedatt--service_policy_input))
+- `service_policy_output` (Attributes List) direction of service policy application (see [below for nested schema](#nestedatt--service_policy_output))
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
@@ -63,5 +68,21 @@ Read-Only:
 - `address` (String) IPv6 name or address
 - `prefix_length` (Number) Prefix length in bits
 - `zone` (String) IPv6 address zone
+
+
+<a id="nestedatt--service_policy_input"></a>
+### Nested Schema for `service_policy_input`
+
+Read-Only:
+
+- `name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
+
+
+<a id="nestedatt--service_policy_output"></a>
+### Nested Schema for `service_policy_output`
+
+Read-Only:
+
+- `name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
 
 

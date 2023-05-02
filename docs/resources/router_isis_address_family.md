@@ -40,6 +40,7 @@ resource "iosxr_router_isis_address_family" "example" {
   microloop_avoidance_protected                   = false
   microloop_avoidance_segment_routing             = true
   advertise_passive_only                          = true
+  advertise_link_attributes                       = true
   mpls_ldp_auto_config                            = false
   mpls_traffic_eng_router_id_ip_address           = "1.2.3.4"
   mpls_traffic_eng_level_1_2                      = false
@@ -55,6 +56,12 @@ resource "iosxr_router_isis_address_family" "example" {
     }
   ]
   segment_routing_mpls_sr_prefer = true
+  maximum_redistributed_prefixes = 100
+  maximum_redistributed_prefixes_levels = [
+    {
+      level_id = 1
+    }
+  ]
 }
 ```
 
@@ -71,6 +78,7 @@ resource "iosxr_router_isis_address_family" "example" {
 
 ### Optional
 
+- `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
 - `default_information_originate` (Boolean) Distribute a default route
 - `device` (String) A device name from the provider configuration.
@@ -82,6 +90,9 @@ resource "iosxr_router_isis_address_family" "example" {
 - `fast_reroute_per_prefix_priority_limit_critical` (Boolean) Compute for critical priority prefixes only
 - `fast_reroute_per_prefix_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
 - `fast_reroute_per_prefix_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
+- `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
+  - Range: `1`-`28000`
+- `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
 - `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
 - `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
@@ -108,6 +119,15 @@ resource "iosxr_router_isis_address_family" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--maximum_redistributed_prefixes_levels"></a>
+### Nested Schema for `maximum_redistributed_prefixes_levels`
+
+Optional:
+
+- `level_id` (Number) Set maximum redistributed prefixes for one level only
+  - Range: `1`-`2`
+
 
 <a id="nestedatt--metric_style_levels"></a>
 ### Nested Schema for `metric_style_levels`

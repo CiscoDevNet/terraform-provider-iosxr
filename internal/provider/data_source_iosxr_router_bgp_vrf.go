@@ -53,6 +53,34 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Specify a vrf name",
 				Required:            true,
 			},
+			"rd_auto": schema.BoolAttribute{
+				MarkdownDescription: "Automatic route distinguisher",
+				Computed:            true,
+			},
+			"rd_two_byte_as_as_number": schema.StringAttribute{
+				MarkdownDescription: "bgp as-number",
+				Computed:            true,
+			},
+			"rd_two_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "ASN2:index (hex or decimal format)",
+				Computed:            true,
+			},
+			"rd_four_byte_as_as_number": schema.StringAttribute{
+				MarkdownDescription: "4-byte AS number",
+				Computed:            true,
+			},
+			"rd_four_byte_as_index": schema.Int64Attribute{
+				MarkdownDescription: "ASN2:index (hex or decimal format)",
+				Computed:            true,
+			},
+			"rd_ip_address_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "configure this node",
+				Computed:            true,
+			},
+			"rd_ip_address_index": schema.Int64Attribute{
+				MarkdownDescription: "IPv4Address:index (hex or decimal format)",
+				Computed:            true,
+			},
 			"default_information_originate": schema.BoolAttribute{
 				MarkdownDescription: "Distribute a default route",
 				Computed:            true,

@@ -85,6 +85,18 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
 				Computed:            true,
 			},
+			"prefix_sid_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: "Clear N-flag for the prefix-SID ",
+				Computed:            true,
+			},
+			"advertise_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Filter routes based on a route policy",
+				Computed:            true,
+			},
+			"prefix_sid_index": schema.Int64Attribute{
+				MarkdownDescription: "Specify the index of Prefix Segement ID",
+				Computed:            true,
+			},
 			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
 				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
 				Computed:            true,

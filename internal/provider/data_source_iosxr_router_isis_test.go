@@ -35,6 +35,13 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_gen_interval_secondary_wait", "200"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_refresh_interval", "65000"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "max_lsp_lifetime", "65535"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "lsp_password_keychain", "ISIS-KEY"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_instance_id", "32"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.name", "22"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.algorithm_number", "128"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.metric_type_delay", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nets.0.net_id", "49.0001.2222.2222.2222.00"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "interfaces.0.circuit_type", "level-1"),
@@ -76,6 +83,17 @@ resource "iosxr_router_isis" "test" {
 	lsp_gen_interval_secondary_wait = 200
 	lsp_refresh_interval = 65000
 	max_lsp_lifetime = 65535
+	lsp_password_keychain = "ISIS-KEY"
+	distribute_link_state_instance_id = 32
+	affinity_maps = [{
+		name = "22"
+		bit_position = 4
+	}]
+	flex_algos = [{
+		algorithm_number = 128
+		advertise_definition = true
+		metric_type_delay = true
+	}]
 	nets = [{
 		net_id = "49.0001.2222.2222.2222.00"
 	}]

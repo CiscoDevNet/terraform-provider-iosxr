@@ -125,6 +125,24 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					int64validator.Between(16000, 1048575),
 				},
 			},
+			"prefix_sid_n_flag_clear": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Clear N-flag for the prefix-SID ").String,
+				Optional:            true,
+			},
+			"advertise_prefix_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Filter routes based on a route policy").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"prefix_sid_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the index of Prefix Segement ID").AddIntegerRangeDescription(0, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1048575),
+				},
+			},
 			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Prefix Segement ID").AddIntegerRangeDescription(16000, 1048575).String,
 				Optional:            true,

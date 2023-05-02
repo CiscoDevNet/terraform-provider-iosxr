@@ -65,6 +65,22 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
 				Computed:            true,
 			},
+			"bgp_router_id": schema.StringAttribute{
+				MarkdownDescription: "Configure Router-id",
+				Computed:            true,
+			},
+			"bgp_graceful_restart_graceful_reset": schema.BoolAttribute{
+				MarkdownDescription: "Reset gracefully if configuration change forces a peer reset",
+				Computed:            true,
+			},
+			"ibgp_policy_out_enforce_modifications": schema.BoolAttribute{
+				MarkdownDescription: "Allow policy to modify all attributes",
+				Computed:            true,
+			},
+			"bgp_log_neighbor_changes_detail": schema.BoolAttribute{
+				MarkdownDescription: "Include extra detail in change messages",
+				Computed:            true,
+			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: "Hello interval",
 				Computed:            true,
@@ -88,6 +104,10 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "Neighbor specific description",
+							Computed:            true,
+						},
+						"use_neighbor_group": schema.StringAttribute{
+							MarkdownDescription: "Inherit configuration from a neighbor-group",
 							Computed:            true,
 						},
 						"ignore_connected_check": schema.BoolAttribute{
@@ -144,6 +164,34 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: "Enable EBGP TTL security",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"neighbor_groups": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a Neighbor-group",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Specify a Neighbor-group",
+							Computed:            true,
+						},
+						"remote_as": schema.StringAttribute{
+							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+						"update_source": schema.StringAttribute{
+							MarkdownDescription: "Source of routing updates",
+							Computed:            true,
+						},
+						"ao_key_chain_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the key chain - maximum 32 characters",
+							Computed:            true,
+						},
+						"ao_include_tcp_options_enable": schema.BoolAttribute{
+							MarkdownDescription: "Include other TCP options in the header",
 							Computed:            true,
 						},
 					},

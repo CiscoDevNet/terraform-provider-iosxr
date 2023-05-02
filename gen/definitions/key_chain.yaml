@@ -1,0 +1,51 @@
+---
+name: Key Chain
+path: Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]
+doc_category: System
+attributes:
+  - yang_name: key-chain-name
+    tf_name: name
+    id: true
+    example: KEY11
+  - yang_name: keys/key
+    tf_name: keys
+    type: List
+    attributes:
+      - yang_name: key-name
+        id: true
+        example: 1
+      - yang_name: key-string/password
+        example: 00071A150754
+      - yang_name: cryptographic-algorithm
+        example: hmac-md5
+      - yang_name: accept-lifetime/start-time/hour
+        example: 11
+      - yang_name: accept-lifetime/start-time/minute
+        example: 52
+      - yang_name: accept-lifetime/start-time/second
+        example: 55
+      - yang_name: accept-lifetime/start-time/day-of-month
+        example: 21
+      - yang_name: accept-lifetime/start-time/month
+        example: january
+      - yang_name: accept-lifetime/start-time/year
+        example: 2023
+      - yang_name: accept-lifetime/infinite
+        example: true
+      - yang_name: send-lifetime/start-time/hour
+        example: 8
+      - yang_name: send-lifetime/start-time/minute
+        example: 36
+      - yang_name: send-lifetime/start-time/second
+        example: 22
+      - yang_name: send-lifetime/start-time/day-of-month
+        example: 15
+      - yang_name: send-lifetime/start-time/month
+        example: january
+      - yang_name: send-lifetime/start-time/year
+        example: 2023
+      - yang_name: send-lifetime/infinite
+        example: true
+
+
+   

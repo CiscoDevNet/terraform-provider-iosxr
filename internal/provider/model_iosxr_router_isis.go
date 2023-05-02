@@ -14,25 +14,31 @@ import (
 )
 
 type RouterISIS struct {
-	Device                      types.String                     `tfsdk:"device"`
-	Id                          types.String                     `tfsdk:"id"`
-	ProcessId                   types.String                     `tfsdk:"process_id"`
-	IsType                      types.String                     `tfsdk:"is_type"`
-	SetOverloadBitLevels        []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
-	Nsr                         types.Bool                       `tfsdk:"nsr"`
-	NsfCisco                    types.Bool                       `tfsdk:"nsf_cisco"`
-	NsfIetf                     types.Bool                       `tfsdk:"nsf_ietf"`
-	NsfLifetime                 types.Int64                      `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer           types.Int64                      `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires         types.Int64                      `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges         types.Bool                       `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait   types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait   types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval          types.Int64                      `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime              types.Int64                      `tfsdk:"max_lsp_lifetime"`
-	Nets                        []RouterISISNets                 `tfsdk:"nets"`
-	Interfaces                  []RouterISISInterfaces           `tfsdk:"interfaces"`
+	Device                        types.String                     `tfsdk:"device"`
+	Id                            types.String                     `tfsdk:"id"`
+	ProcessId                     types.String                     `tfsdk:"process_id"`
+	IsType                        types.String                     `tfsdk:"is_type"`
+	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                           types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                      types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                       types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                   types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer             types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires           types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges           types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait     types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait     types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait   types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval            types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordKeychain           types.String                     `tfsdk:"lsp_password_keychain"`
+	DistributeLinkStateInstanceId types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle   types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel      types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                  []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                     []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                          []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 type RouterISISSetOverloadBitLevels struct {
 	LevelId                                       types.Int64 `tfsdk:"level_id"`
@@ -41,6 +47,15 @@ type RouterISISSetOverloadBitLevels struct {
 	OnStartupWaitForBgp                           types.Bool  `tfsdk:"on_startup_wait_for_bgp"`
 	AdvertiseExternal                             types.Bool  `tfsdk:"advertise_external"`
 	AdvertiseInterlevel                           types.Bool  `tfsdk:"advertise_interlevel"`
+}
+type RouterISISAffinityMaps struct {
+	Name        types.String `tfsdk:"name"`
+	BitPosition types.Int64  `tfsdk:"bit_position"`
+}
+type RouterISISFlexAlgos struct {
+	AlgorithmNumber     types.Int64 `tfsdk:"algorithm_number"`
+	AdvertiseDefinition types.Bool  `tfsdk:"advertise_definition"`
+	MetricTypeDelay     types.Bool  `tfsdk:"metric_type_delay"`
 }
 type RouterISISNets struct {
 	NetId types.String `tfsdk:"net_id"`
@@ -113,6 +128,18 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if !data.MaxLspLifetime.IsNull() && !data.MaxLspLifetime.IsUnknown() {
 		body, _ = sjson.Set(body, "max-lsp-lifetime.max-lsp-lifetime", strconv.FormatInt(data.MaxLspLifetime.ValueInt64(), 10))
 	}
+	if !data.LspPasswordKeychain.IsNull() && !data.LspPasswordKeychain.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-password.keychain.keychain-name", data.LspPasswordKeychain.ValueString())
+	}
+	if !data.DistributeLinkStateInstanceId.IsNull() && !data.DistributeLinkStateInstanceId.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute.link-state.instance-id", strconv.FormatInt(data.DistributeLinkStateInstanceId.ValueInt64(), 10))
+	}
+	if !data.DistributeLinkStateThrottle.IsNull() && !data.DistributeLinkStateThrottle.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute.link-state.throttle", strconv.FormatInt(data.DistributeLinkStateThrottle.ValueInt64(), 10))
+	}
+	if !data.DistributeLinkStateLevel.IsNull() && !data.DistributeLinkStateLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "distribute.link-state.level", strconv.FormatInt(data.DistributeLinkStateLevel.ValueInt64(), 10))
+	}
 	if len(data.SetOverloadBitLevels) > 0 {
 		body, _ = sjson.Set(body, "set-overload-bit-levels.level", []interface{}{})
 		for index, item := range data.SetOverloadBitLevels {
@@ -140,6 +167,35 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			if !item.AdvertiseInterlevel.IsNull() && !item.AdvertiseInterlevel.IsUnknown() {
 				if item.AdvertiseInterlevel.ValueBool() {
 					body, _ = sjson.Set(body, "set-overload-bit-levels.level"+"."+strconv.Itoa(index)+"."+"advertise.interlevel", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.AffinityMaps) > 0 {
+		body, _ = sjson.Set(body, "affinity-maps.affinity-map", []interface{}{})
+		for index, item := range data.AffinityMaps {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"affinity-map-name", item.Name.ValueString())
+			}
+			if !item.BitPosition.IsNull() && !item.BitPosition.IsUnknown() {
+				body, _ = sjson.Set(body, "affinity-maps.affinity-map"+"."+strconv.Itoa(index)+"."+"bit-position", strconv.FormatInt(item.BitPosition.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.FlexAlgos) > 0 {
+		body, _ = sjson.Set(body, "flex-algos.flex-algo", []interface{}{})
+		for index, item := range data.FlexAlgos {
+			if !item.AlgorithmNumber.IsNull() && !item.AlgorithmNumber.IsUnknown() {
+				body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"algorithm-number", strconv.FormatInt(item.AlgorithmNumber.ValueInt64(), 10))
+			}
+			if !item.AdvertiseDefinition.IsNull() && !item.AdvertiseDefinition.IsUnknown() {
+				if item.AdvertiseDefinition.ValueBool() {
+					body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"advertise-definition", map[string]string{})
+				}
+			}
+			if !item.MetricTypeDelay.IsNull() && !item.MetricTypeDelay.IsUnknown() {
+				if item.MetricTypeDelay.ValueBool() {
+					body, _ = sjson.Set(body, "flex-algos.flex-algo"+"."+strconv.Itoa(index)+"."+"metric-type.delay", map[string]string{})
 				}
 			}
 		}
@@ -351,6 +407,107 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.MaxLspLifetime = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychain.IsNull() {
+		data.LspPasswordKeychain = types.StringValue(value.String())
+	} else {
+		data.LspPasswordKeychain = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() && !data.DistributeLinkStateInstanceId.IsNull() {
+		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
+	} else {
+		data.DistributeLinkStateInstanceId = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() && !data.DistributeLinkStateThrottle.IsNull() {
+		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
+	} else {
+		data.DistributeLinkStateThrottle = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() && !data.DistributeLinkStateLevel.IsNull() {
+		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
+	} else {
+		data.DistributeLinkStateLevel = types.Int64Null()
+	}
+	for i := range data.AffinityMaps {
+		keys := [...]string{"affinity-map-name"}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "affinity-maps.affinity-map").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("affinity-map-name"); value.Exists() && !data.AffinityMaps[i].Name.IsNull() {
+			data.AffinityMaps[i].Name = types.StringValue(value.String())
+		} else {
+			data.AffinityMaps[i].Name = types.StringNull()
+		}
+		if value := r.Get("bit-position"); value.Exists() && !data.AffinityMaps[i].BitPosition.IsNull() {
+			data.AffinityMaps[i].BitPosition = types.Int64Value(value.Int())
+		} else {
+			data.AffinityMaps[i].BitPosition = types.Int64Null()
+		}
+	}
+	for i := range data.FlexAlgos {
+		keys := [...]string{"algorithm-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "flex-algos.flex-algo").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("algorithm-number"); value.Exists() && !data.FlexAlgos[i].AlgorithmNumber.IsNull() {
+			data.FlexAlgos[i].AlgorithmNumber = types.Int64Value(value.Int())
+		} else {
+			data.FlexAlgos[i].AlgorithmNumber = types.Int64Null()
+		}
+		if value := r.Get("advertise-definition"); !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
+			if value.Exists() {
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(true)
+			} else {
+				data.FlexAlgos[i].AdvertiseDefinition = types.BoolValue(false)
+			}
+		} else {
+			data.FlexAlgos[i].AdvertiseDefinition = types.BoolNull()
+		}
+		if value := r.Get("metric-type.delay"); !data.FlexAlgos[i].MetricTypeDelay.IsNull() {
+			if value.Exists() {
+				data.FlexAlgos[i].MetricTypeDelay = types.BoolValue(true)
+			} else {
+				data.FlexAlgos[i].MetricTypeDelay = types.BoolValue(false)
+			}
+		} else {
+			data.FlexAlgos[i].MetricTypeDelay = types.BoolNull()
+		}
+	}
 	for i := range data.Nets {
 		keys := [...]string{"net-id"}
 		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
@@ -557,6 +714,53 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "max-lsp-lifetime.max-lsp-lifetime"); value.Exists() {
 		data.MaxLspLifetime = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() {
+		data.LspPasswordKeychain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
+		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() {
+		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() {
+		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "affinity-maps.affinity-map"); value.Exists() {
+		data.AffinityMaps = make([]RouterISISAffinityMaps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAffinityMaps{}
+			if cValue := v.Get("affinity-map-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bit-position"); cValue.Exists() {
+				item.BitPosition = types.Int64Value(cValue.Int())
+			}
+			data.AffinityMaps = append(data.AffinityMaps, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flex-algos.flex-algo"); value.Exists() {
+		data.FlexAlgos = make([]RouterISISFlexAlgos, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISFlexAlgos{}
+			if cValue := v.Get("algorithm-number"); cValue.Exists() {
+				item.AlgorithmNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertise-definition"); cValue.Exists() {
+				item.AdvertiseDefinition = types.BoolValue(true)
+			} else {
+				item.AdvertiseDefinition = types.BoolValue(false)
+			}
+			if cValue := v.Get("metric-type.delay"); cValue.Exists() {
+				item.MetricTypeDelay = types.BoolValue(true)
+			} else {
+				item.MetricTypeDelay = types.BoolValue(false)
+			}
+			data.FlexAlgos = append(data.FlexAlgos, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
 		data.Nets = make([]RouterISISNets, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -652,6 +856,66 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.AffinityMaps {
+		keys := [...]string{"affinity-map-name"}
+		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.AffinityMaps {
+			found = true
+			if state.AffinityMaps[i].Name.ValueString() != data.AffinityMaps[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlexAlgos {
+		keys := [...]string{"algorithm-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlexAlgos[i].AlgorithmNumber.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlexAlgos {
+			found = true
+			if state.FlexAlgos[i].AlgorithmNumber.ValueInt64() != data.FlexAlgos[j].AlgorithmNumber.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/flex-algos/flex-algo%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Nets {

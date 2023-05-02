@@ -14,39 +14,42 @@ import (
 )
 
 type RouterISISAddressFamily struct {
-	Device                                    types.String                                 `tfsdk:"device"`
-	Id                                        types.String                                 `tfsdk:"id"`
-	ProcessId                                 types.String                                 `tfsdk:"process_id"`
-	AfName                                    types.String                                 `tfsdk:"af_name"`
-	SafName                                   types.String                                 `tfsdk:"saf_name"`
-	MetricStyleNarrow                         types.Bool                                   `tfsdk:"metric_style_narrow"`
-	MetricStyleWide                           types.Bool                                   `tfsdk:"metric_style_wide"`
-	MetricStyleTransition                     types.Bool                                   `tfsdk:"metric_style_transition"`
-	MetricStyleLevels                         []RouterISISAddressFamilyMetricStyleLevels   `tfsdk:"metric_style_levels"`
-	RouterIdInterfaceName                     types.String                                 `tfsdk:"router_id_interface_name"`
-	RouterIdIpAddress                         types.String                                 `tfsdk:"router_id_ip_address"`
-	DefaultInformationOriginate               types.Bool                                   `tfsdk:"default_information_originate"`
-	FastRerouteDelayInterval                  types.Int64                                  `tfsdk:"fast_reroute_delay_interval"`
-	FastReroutePerLinkPriorityLimitCritical   types.Bool                                   `tfsdk:"fast_reroute_per_link_priority_limit_critical"`
-	FastReroutePerLinkPriorityLimitHigh       types.Bool                                   `tfsdk:"fast_reroute_per_link_priority_limit_high"`
-	FastReroutePerLinkPriorityLimitMedium     types.Bool                                   `tfsdk:"fast_reroute_per_link_priority_limit_medium"`
-	FastReroutePerPrefixPriorityLimitCritical types.Bool                                   `tfsdk:"fast_reroute_per_prefix_priority_limit_critical"`
-	FastReroutePerPrefixPriorityLimitHigh     types.Bool                                   `tfsdk:"fast_reroute_per_prefix_priority_limit_high"`
-	FastReroutePerPrefixPriorityLimitMedium   types.Bool                                   `tfsdk:"fast_reroute_per_prefix_priority_limit_medium"`
-	MicroloopAvoidanceProtected               types.Bool                                   `tfsdk:"microloop_avoidance_protected"`
-	MicroloopAvoidanceSegmentRouting          types.Bool                                   `tfsdk:"microloop_avoidance_segment_routing"`
-	AdvertisePassiveOnly                      types.Bool                                   `tfsdk:"advertise_passive_only"`
-	MplsLdpAutoConfig                         types.Bool                                   `tfsdk:"mpls_ldp_auto_config"`
-	MplsTrafficEngRouterIdIpAddress           types.String                                 `tfsdk:"mpls_traffic_eng_router_id_ip_address"`
-	MplsTrafficEngRouterIdInterface           types.String                                 `tfsdk:"mpls_traffic_eng_router_id_interface"`
-	MplsTrafficEngLevel12                     types.Bool                                   `tfsdk:"mpls_traffic_eng_level_1_2"`
-	MplsTrafficEngLevel1                      types.Bool                                   `tfsdk:"mpls_traffic_eng_level_1"`
-	MplsTrafficEngLevel2Only                  types.Bool                                   `tfsdk:"mpls_traffic_eng_level_2_only"`
-	SpfIntervalMaximumWait                    types.Int64                                  `tfsdk:"spf_interval_maximum_wait"`
-	SpfIntervalInitialWait                    types.Int64                                  `tfsdk:"spf_interval_initial_wait"`
-	SpfIntervalSecondaryWait                  types.Int64                                  `tfsdk:"spf_interval_secondary_wait"`
-	SpfPrefixPriorities                       []RouterISISAddressFamilySpfPrefixPriorities `tfsdk:"spf_prefix_priorities"`
-	SegmentRoutingMplsSrPrefer                types.Bool                                   `tfsdk:"segment_routing_mpls_sr_prefer"`
+	Device                                    types.String                                                `tfsdk:"device"`
+	Id                                        types.String                                                `tfsdk:"id"`
+	ProcessId                                 types.String                                                `tfsdk:"process_id"`
+	AfName                                    types.String                                                `tfsdk:"af_name"`
+	SafName                                   types.String                                                `tfsdk:"saf_name"`
+	MetricStyleNarrow                         types.Bool                                                  `tfsdk:"metric_style_narrow"`
+	MetricStyleWide                           types.Bool                                                  `tfsdk:"metric_style_wide"`
+	MetricStyleTransition                     types.Bool                                                  `tfsdk:"metric_style_transition"`
+	MetricStyleLevels                         []RouterISISAddressFamilyMetricStyleLevels                  `tfsdk:"metric_style_levels"`
+	RouterIdInterfaceName                     types.String                                                `tfsdk:"router_id_interface_name"`
+	RouterIdIpAddress                         types.String                                                `tfsdk:"router_id_ip_address"`
+	DefaultInformationOriginate               types.Bool                                                  `tfsdk:"default_information_originate"`
+	FastRerouteDelayInterval                  types.Int64                                                 `tfsdk:"fast_reroute_delay_interval"`
+	FastReroutePerLinkPriorityLimitCritical   types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_critical"`
+	FastReroutePerLinkPriorityLimitHigh       types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_high"`
+	FastReroutePerLinkPriorityLimitMedium     types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_medium"`
+	FastReroutePerPrefixPriorityLimitCritical types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_critical"`
+	FastReroutePerPrefixPriorityLimitHigh     types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_high"`
+	FastReroutePerPrefixPriorityLimitMedium   types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_medium"`
+	MicroloopAvoidanceProtected               types.Bool                                                  `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRouting          types.Bool                                                  `tfsdk:"microloop_avoidance_segment_routing"`
+	AdvertisePassiveOnly                      types.Bool                                                  `tfsdk:"advertise_passive_only"`
+	AdvertiseLinkAttributes                   types.Bool                                                  `tfsdk:"advertise_link_attributes"`
+	MplsLdpAutoConfig                         types.Bool                                                  `tfsdk:"mpls_ldp_auto_config"`
+	MplsTrafficEngRouterIdIpAddress           types.String                                                `tfsdk:"mpls_traffic_eng_router_id_ip_address"`
+	MplsTrafficEngRouterIdInterface           types.String                                                `tfsdk:"mpls_traffic_eng_router_id_interface"`
+	MplsTrafficEngLevel12                     types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_1_2"`
+	MplsTrafficEngLevel1                      types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_1"`
+	MplsTrafficEngLevel2Only                  types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_2_only"`
+	SpfIntervalMaximumWait                    types.Int64                                                 `tfsdk:"spf_interval_maximum_wait"`
+	SpfIntervalInitialWait                    types.Int64                                                 `tfsdk:"spf_interval_initial_wait"`
+	SpfIntervalSecondaryWait                  types.Int64                                                 `tfsdk:"spf_interval_secondary_wait"`
+	SpfPrefixPriorities                       []RouterISISAddressFamilySpfPrefixPriorities                `tfsdk:"spf_prefix_priorities"`
+	SegmentRoutingMplsSrPrefer                types.Bool                                                  `tfsdk:"segment_routing_mpls_sr_prefer"`
+	MaximumRedistributedPrefixes              types.Int64                                                 `tfsdk:"maximum_redistributed_prefixes"`
+	MaximumRedistributedPrefixesLevels        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels `tfsdk:"maximum_redistributed_prefixes_levels"`
 }
 type RouterISISAddressFamilyMetricStyleLevels struct {
 	LevelId    types.Int64 `tfsdk:"level_id"`
@@ -58,6 +61,9 @@ type RouterISISAddressFamilySpfPrefixPriorities struct {
 	Priority       types.String `tfsdk:"priority"`
 	Tag            types.Int64  `tfsdk:"tag"`
 	AccessListName types.String `tfsdk:"access_list_name"`
+}
+type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
+	LevelId types.Int64 `tfsdk:"level_id"`
 }
 
 func (data RouterISISAddressFamily) getPath() string {
@@ -146,6 +152,11 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "advertise.passive-only", map[string]string{})
 		}
 	}
+	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.IsUnknown() {
+		if data.AdvertiseLinkAttributes.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.link.attributes", map[string]string{})
+		}
+	}
 	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.IsUnknown() {
 		if data.MplsLdpAutoConfig.ValueBool() {
 			body, _ = sjson.Set(body, "mpls.ldp.auto-config", map[string]string{})
@@ -184,6 +195,9 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.SegmentRoutingMplsSrPrefer.IsNull() && !data.SegmentRoutingMplsSrPrefer.IsUnknown() {
 		body, _ = sjson.Set(body, "segment-routing.mpls.sr-prefer", data.SegmentRoutingMplsSrPrefer.ValueBool())
 	}
+	if !data.MaximumRedistributedPrefixes.IsNull() && !data.MaximumRedistributedPrefixes.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-redistributed-prefixes.maximum-prefixes", strconv.FormatInt(data.MaximumRedistributedPrefixes.ValueInt64(), 10))
+	}
 	if len(data.MetricStyleLevels) > 0 {
 		body, _ = sjson.Set(body, "metric-style.levels.level", []interface{}{})
 		for index, item := range data.MetricStyleLevels {
@@ -218,6 +232,14 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.AccessListName.IsNull() && !item.AccessListName.IsUnknown() {
 				body, _ = sjson.Set(body, "spf.prefix-priority.prefix-priority"+"."+strconv.Itoa(index)+"."+"access-list-name", item.AccessListName.ValueString())
+			}
+		}
+	}
+	if len(data.MaximumRedistributedPrefixesLevels) > 0 {
+		body, _ = sjson.Set(body, "maximum-redistributed-prefixes.levels.level", []interface{}{})
+		for index, item := range data.MaximumRedistributedPrefixesLevels {
+			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
+				body, _ = sjson.Set(body, "maximum-redistributed-prefixes.levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
 			}
 		}
 	}
@@ -413,6 +435,15 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.AdvertisePassiveOnly = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); !data.AdvertiseLinkAttributes.IsNull() {
+		if value.Exists() {
+			data.AdvertiseLinkAttributes = types.BoolValue(true)
+		} else {
+			data.AdvertiseLinkAttributes = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); !data.MplsLdpAutoConfig.IsNull() {
 		if value.Exists() {
 			data.MplsLdpAutoConfig = types.BoolValue(true)
@@ -520,6 +551,40 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.SegmentRoutingMplsSrPrefer = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes.maximum-prefixes"); value.Exists() && !data.MaximumRedistributedPrefixes.IsNull() {
+		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
+	} else {
+		data.MaximumRedistributedPrefixes = types.Int64Null()
+	}
+	for i := range data.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "maximum-redistributed-prefixes.levels.level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-id"); value.Exists() && !data.MaximumRedistributedPrefixesLevels[i].LevelId.IsNull() {
+			data.MaximumRedistributedPrefixesLevels[i].LevelId = types.Int64Value(value.Int())
+		} else {
+			data.MaximumRedistributedPrefixesLevels[i].LevelId = types.Int64Null()
+		}
+	}
 }
 
 func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
@@ -623,6 +688,11 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AdvertisePassiveOnly = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
+		data.AdvertiseLinkAttributes = types.BoolValue(true)
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
 		data.MplsLdpAutoConfig = types.BoolValue(true)
 	} else {
@@ -679,6 +749,20 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(value.Bool())
 	} else {
 		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes.maximum-prefixes"); value.Exists() {
+		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes.levels.level"); value.Exists() {
+		data.MaximumRedistributedPrefixesLevels = make([]RouterISISAddressFamilyMaximumRedistributedPrefixesLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMaximumRedistributedPrefixesLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			data.MaximumRedistributedPrefixesLevels = append(data.MaximumRedistributedPrefixesLevels, item)
+			return true
+		})
 	}
 }
 
@@ -749,6 +833,36 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/spf/prefix-priority/prefix-priority%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MaximumRedistributedPrefixesLevels {
+			found = true
+			if state.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64() != data.MaximumRedistributedPrefixesLevels[j].LevelId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

@@ -9,5 +9,6 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       ti_lfa   = true
     }
   ]
-  tag = 100
+  tag                           = 100
+  advertise_prefix_route_policy = "ROUTE_POLICY_1"
 }

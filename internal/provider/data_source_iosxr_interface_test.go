@@ -19,6 +19,11 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "l2transport", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "point_to_point", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "multipoint", "false"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening_decay_half_life_value", "2"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_point_to_point", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_input.0.name", "CORE-INPUT-POLICY"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_output.0.name", "CORE-OUTPUT-POLICY"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "bfd_mode_ietf", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "shutdown", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "mtu", "9000"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "bandwidth", "100000"),
@@ -47,6 +52,15 @@ resource "iosxr_interface" "test" {
 	l2transport = false
 	point_to_point = false
 	multipoint = false
+	dampening_decay_half_life_value = 2
+	ipv4_point_to_point = true
+	service_policy_input = [{
+		name = "CORE-INPUT-POLICY"
+	}]
+	service_policy_output = [{
+		name = "CORE-OUTPUT-POLICY"
+	}]
+	bfd_mode_ietf = true
 	shutdown = true
 	mtu = 9000
 	bandwidth = 100000

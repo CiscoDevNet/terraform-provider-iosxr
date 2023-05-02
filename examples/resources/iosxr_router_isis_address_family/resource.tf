@@ -25,6 +25,7 @@ resource "iosxr_router_isis_address_family" "example" {
   microloop_avoidance_protected                   = false
   microloop_avoidance_segment_routing             = true
   advertise_passive_only                          = true
+  advertise_link_attributes                       = true
   mpls_ldp_auto_config                            = false
   mpls_traffic_eng_router_id_ip_address           = "1.2.3.4"
   mpls_traffic_eng_level_1_2                      = false
@@ -40,4 +41,10 @@ resource "iosxr_router_isis_address_family" "example" {
     }
   ]
   segment_routing_mpls_sr_prefer = true
+  maximum_redistributed_prefixes = 100
+  maximum_redistributed_prefixes_levels = [
+    {
+      level_id = 1
+    }
+  ]
 }

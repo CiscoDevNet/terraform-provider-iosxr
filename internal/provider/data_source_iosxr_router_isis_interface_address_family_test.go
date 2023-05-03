@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig,
+				Config: testAccDataSourceIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"),
@@ -25,6 +25,17 @@ func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
 
 const testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig = `
 
@@ -39,6 +50,7 @@ resource "iosxr_router_isis_interface_address_family" "test" {
 	}]
 	tag = 100
 	advertise_prefix_route_policy = "ROUTE_POLICY_1"
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_isis_interface_address_family" "test" {

@@ -14,7 +14,7 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
+				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "af_name", "ipv4"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "saf_name", "unicast"),
@@ -33,6 +33,17 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  attributes = {
+      "route-policy-name" = "ROUTE_POLICY_1"
+      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 	return `
 	resource "iosxr_router_isis_interface_address_family" "test" {
@@ -40,6 +51,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 		interface_name = "GigabitEthernet0/0/0/1"
 		af_name = "ipv4"
 		saf_name = "unicast"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -57,6 +69,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 		}]
 		tag = 100
 		advertise_prefix_route_policy = "ROUTE_POLICY_1"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

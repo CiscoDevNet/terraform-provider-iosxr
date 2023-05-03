@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.1.9 (unreleased)
+## 0.1.9
 
 - Add `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
 - Add `iosxr_router_bgp_neighbor_group` resource and data source

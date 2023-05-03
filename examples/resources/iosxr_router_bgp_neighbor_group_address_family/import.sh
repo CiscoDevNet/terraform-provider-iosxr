@@ -1,1 +1,0 @@
-terraform import iosxr_router_bgp_neighbor_group_address_family.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbor-groups/neighbor-group[neighbor-group-name=GROUP1]/address-families/address-family[af-name=ipv4-labeled-unicast]"

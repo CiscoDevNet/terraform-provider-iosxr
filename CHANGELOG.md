@@ -1,11 +1,21 @@
+## 0.1.9 (unreleased)
+
+- Add `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
+- Add `iosxr_router_bgp_neighbor_group` resource and data source
+- Add `iosxr_router_static` resource and data source
+- Add `iosxr_key_chain` resource and data source
+- Add attributes to `iosxr_interface` resource and data source
+- Add attributes to `iosxr_router_bgp` resource and data source
+- Add attributes to `iosxr_router_bgp_address_family` resource and data source
+- Add attributes to `iosxr_router_bgp_vrf` resource and data source
+- Add attributes to `iosxr_router_isis` resource and data source
+- Add attributes to `iosxr_router_isis_address_family` resource and data source
+- Add attributes to `iosxr_router_isis_interface_address_family` resource and data source
+
 ## 0.1.8
 
 - Fix incompatibility with gNMI and IOS-XR 7.6
 - Remove `iosxr_segment_routing` resource and data source due to unified model being deprecated
-- Add `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
-- Add `iosxr_router_bgp_neighbor_group_address_family` resource and data source
-- Add `iosxr_router_static` resource and data source
-- Add `iosxr_key_chain` resource and data source
 
 ## 0.1.7
 

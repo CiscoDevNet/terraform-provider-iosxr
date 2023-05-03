@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*RouterBGPNeighborGroupAddressFamilyResource)(nil)
+var _ resource.Resource = (*RouterBGPNeighborGroupResource)(nil)
 
-func NewRouterBGPNeighborGroupAddressFamilyResource() resource.Resource {
-	return &RouterBGPNeighborGroupAddressFamilyResource{}
+func NewRouterBGPNeighborGroupResource() resource.Resource {
+	return &RouterBGPNeighborGroupResource{}
 }
 
-type RouterBGPNeighborGroupAddressFamilyResource struct {
+type RouterBGPNeighborGroupResource struct {
 	client *client.Client
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbor_group_address_family"
+func (r *RouterBGPNeighborGroupResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbor_group"
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Router BGP Neighbor Group Address Family configuration.",
+		MarkdownDescription: "This resource can manage the Router BGP Neighbor Group configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -58,7 +58,7 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Schema(ctx context.Context
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"neighbor_group_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
 				Required:            true,
 				Validators: []validator.String{
@@ -69,25 +69,52 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Schema(ctx context.Context
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"af_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").AddStringEnumDescription("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast").String,
-				Required:            true,
+			"remote_as": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+				Optional:            true,
+			},
+			"update_source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
+				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
-			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+			"ao_key_chain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+				},
+			},
+			"ao_include_tcp_options_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
+				Optional:            true,
+			},
+			"address_families": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"af_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").AddStringEnumDescription("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast"),
+							},
+						},
+						"soft_reconfiguration_inbound_always": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+							Optional:            true,
+						},
+					},
+				},
 			},
 		},
 	}
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPNeighborGroupResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -95,8 +122,8 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Configure(ctx context.Cont
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RouterBGPNeighborGroupAddressFamily
+func (r *RouterBGPNeighborGroupResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterBGPNeighborGroup
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -135,8 +162,8 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Create(ctx context.Context
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouterBGPNeighborGroupAddressFamily
+func (r *RouterBGPNeighborGroupResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterBGPNeighborGroup
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -161,8 +188,8 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Read(ctx context.Context, 
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouterBGPNeighborGroupAddressFamily
+func (r *RouterBGPNeighborGroupResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterBGPNeighborGroup
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -217,8 +244,8 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Update(ctx context.Context
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouterBGPNeighborGroupAddressFamily
+func (r *RouterBGPNeighborGroupResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterBGPNeighborGroup
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -240,6 +267,6 @@ func (r *RouterBGPNeighborGroupAddressFamilyResource) Delete(ctx context.Context
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouterBGPNeighborGroupAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterBGPNeighborGroupResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

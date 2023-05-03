@@ -15,7 +15,7 @@ This data source can read the Router BGP VRF configuration.
 ```terraform
 data "iosxr_router_bgp_vrf" "example" {
   as_number = "65001"
-  vrf_name  = "VRF1"
+  vrf_name  = "VRF2"
 }
 ```
 

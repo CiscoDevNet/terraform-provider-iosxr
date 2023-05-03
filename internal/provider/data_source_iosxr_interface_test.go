@@ -14,16 +14,15 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrInterfaceConfig,
+				Config: testAccDataSourceIosxrInterfacePrerequisitesConfig + testAccDataSourceIosxrInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "l2transport", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "point_to_point", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "multipoint", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening_decay_half_life_value", "2"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_point_to_point", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_input.0.name", "CORE-INPUT-POLICY"),
-					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_output.0.name", "CORE-OUTPUT-POLICY"),
-					resource.TestCheckResourceAttr("data.iosxr_interface.test", "bfd_mode_ietf", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_input.0.name", "PMAP-IN"),
+					resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_output.0.name", "PMAP-OUT"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "shutdown", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "mtu", "9000"),
 					resource.TestCheckResourceAttr("data.iosxr_interface.test", "bandwidth", "100000"),
@@ -45,6 +44,49 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	})
 }
 
+const testAccDataSourceIosxrInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
+	attributes = {
+		"policy-map-name" = "PMAP-IN"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/qos-group" = "0"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
+	attributes = {
+		"policy-map-name" = "PMAP-OUT"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/dscp" = "0"
+				},
+			]
+		},
+	]
+}
+
+`
+
 const testAccDataSourceIosxrInterfaceConfig = `
 
 resource "iosxr_interface" "test" {
@@ -55,12 +97,11 @@ resource "iosxr_interface" "test" {
 	dampening_decay_half_life_value = 2
 	ipv4_point_to_point = true
 	service_policy_input = [{
-		name = "CORE-INPUT-POLICY"
+		name = "PMAP-IN"
 	}]
 	service_policy_output = [{
-		name = "CORE-OUTPUT-POLICY"
+		name = "PMAP-OUT"
 	}]
-	bfd_mode_ietf = true
 	shutdown = true
 	mtu = 9000
 	bandwidth = 100000
@@ -78,6 +119,7 @@ resource "iosxr_interface" "test" {
 		prefix_length = 64
 		zone = "0"
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 }
 
 data "iosxr_interface" "test" {

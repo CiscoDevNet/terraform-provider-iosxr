@@ -49,6 +49,7 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "segment_routing_mpls_sr_prefer", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"),
 				),
 			},
 		},
@@ -99,6 +100,7 @@ resource "iosxr_router_isis_address_family" "test" {
 	maximum_redistributed_prefixes = 100
 	maximum_redistributed_prefixes_levels = [{
 		level_id = 1
+		maximum_prefixes = 1000
 	}]
 }
 

@@ -74,6 +74,7 @@ data "iosxr_router_isis_address_family" "example" {
 Read-Only:
 
 - `level_id` (Number) Set maximum redistributed prefixes for one level only
+- `maximum_prefixes` (Number) Maximum number of redistributed prefixes
 
 
 <a id="nestedatt--metric_style_levels"></a>

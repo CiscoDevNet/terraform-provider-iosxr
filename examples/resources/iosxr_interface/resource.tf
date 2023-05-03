@@ -7,15 +7,14 @@ resource "iosxr_interface" "example" {
   ipv4_point_to_point             = true
   service_policy_input = [
     {
-      name = "CORE-INPUT-POLICY"
+      name = "PMAP-IN"
     }
   ]
   service_policy_output = [
     {
-      name = "CORE-OUTPUT-POLICY"
+      name = "PMAP-OUT"
     }
   ]
-  bfd_mode_ietf           = true
   shutdown                = true
   mtu                     = 9000
   bandwidth               = 100000

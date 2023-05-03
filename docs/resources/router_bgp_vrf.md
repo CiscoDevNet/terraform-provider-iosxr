@@ -15,7 +15,7 @@ This resource can manage the Router BGP VRF configuration.
 ```terraform
 resource "iosxr_router_bgp_vrf" "example" {
   as_number                     = "65001"
-  vrf_name                      = "VRF1"
+  vrf_name                      = "VRF2"
   rd_auto                       = false
   rd_ip_address_ipv4_address    = "14.14.14.14"
   rd_ip_address_index           = 3
@@ -55,15 +55,6 @@ resource "iosxr_router_bgp_vrf" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `rd_four_byte_as_as_number` (String) 4-byte AS number
-- `rd_four_byte_as_index` (Number) ASN2:index (hex or decimal format)
-  - Range: `0`-`4294967295`
-- `rd_ip_address_index` (Number) IPv4Address:index (hex or decimal format)
-  - Range: `0`-`65535`
-- `rd_ip_address_ipv4_address` (String) configure this node
-- `rd_two_byte_as_as_number` (String) bgp as-number
-- `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
-  - Range: `0`-`4294967295`
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
   - Range: `0`-`65535`
@@ -81,6 +72,15 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `device` (String) A device name from the provider configuration.
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 - `rd_auto` (Boolean) Automatic route distinguisher
+- `rd_four_byte_as_as_number` (String) 4-byte AS number
+- `rd_four_byte_as_index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
+- `rd_ip_address_index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
+- `rd_ip_address_ipv4_address` (String) configure this node
+- `rd_two_byte_as_as_number` (String) bgp as-number
+- `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
+  - Range: `0`-`4294967295`
 
 ### Read-Only
 
@@ -121,5 +121,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_bgp_vrf.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
+terraform import iosxr_router_bgp_vrf.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]"
 ```

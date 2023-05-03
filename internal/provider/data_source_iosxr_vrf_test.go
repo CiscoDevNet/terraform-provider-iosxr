@@ -28,8 +28,8 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_policy", "ROUTE_POLICY_1"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_multicast", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_flowspec", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_as_number", "1"),
-					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_index", "1"),
+					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_as_number", "123"),
+					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_index", "123"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.as_number", "1"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.index", "1"),
 					resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.stitching", "true"),
@@ -76,8 +76,8 @@ const testAccDataSourceIosxrVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
-		route-policy-name = "ROUTE_POLICY_1"
-		rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
 }
 
@@ -86,7 +86,7 @@ resource "iosxr_gnmi" "PreReq0" {
 const testAccDataSourceIosxrVRFConfig = `
 
 resource "iosxr_vrf" "test" {
-	vrf_name = "VRF1"
+	vrf_name = "VRF3"
 	description = "My VRF Description"
 	vpn_id = "1000:1000"
 	address_family_ipv4_unicast = true
@@ -99,8 +99,8 @@ resource "iosxr_vrf" "test" {
 	address_family_ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"
 	address_family_ipv6_multicast = true
 	address_family_ipv6_flowspec = true
-	rd_two_byte_as_as_number = "1"
-	rd_two_byte_as_index = 1
+	rd_two_byte_as_as_number = "123"
+	rd_two_byte_as_index = 123
 	address_family_ipv4_unicast_import_route_target_two_byte_as_format = [{
 		as_number = 1
 		index = 1
@@ -165,7 +165,7 @@ resource "iosxr_vrf" "test" {
 }
 
 data "iosxr_vrf" "test" {
-	vrf_name = "VRF1"
+	vrf_name = "VRF3"
 	depends_on = [iosxr_vrf.test]
 }
 `

@@ -69,7 +69,7 @@ const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
   path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]"
   attributes = {
-      route-policy-name = "ROUTE_POLICY_1"
+      "route-policy-name" = "ROUTE_POLICY_1"
   }
 }
 

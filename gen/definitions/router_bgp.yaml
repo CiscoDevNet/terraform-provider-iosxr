@@ -70,7 +70,6 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
-
   - yang_name: neighbor-groups/neighbor-group
     tf_name: neighbor_groups
     type: List

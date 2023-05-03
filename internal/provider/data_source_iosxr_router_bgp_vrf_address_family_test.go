@@ -49,15 +49,15 @@ const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
 	attributes = {
-		vrf-name = "VRF1"
+		"vrf-name" = "VRF1"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
 	attributes = {
-		as-number = "1"
-		index = "1"
+		"as-number" = "1"
+		"index" = "1"
 	}
 	depends_on = [iosxr_gnmi.PreReq0, ]
 }
@@ -65,14 +65,14 @@ resource "iosxr_gnmi" "PreReq1" {
 resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
-		as-number = "65001"
+		"as-number" = "65001"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq3" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
 	attributes = {
-		af-name = "vpnv4-unicast"
+		"af-name" = "vpnv4-unicast"
 	}
 	depends_on = [iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 }

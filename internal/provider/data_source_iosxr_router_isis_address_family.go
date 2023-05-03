@@ -222,6 +222,10 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Set maximum redistributed prefixes for one level only",
 							Computed:            true,
 						},
+						"maximum_prefixes": schema.Int64Attribute{
+							MarkdownDescription: "Maximum number of redistributed prefixes",
+							Computed:            true,
+						},
 					},
 				},
 			},

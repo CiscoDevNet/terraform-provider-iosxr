@@ -287,6 +287,13 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 2),
 							},
 						},
+						"maximum_prefixes": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum number of redistributed prefixes").AddIntegerRangeDescription(1, 28000).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 28000),
+							},
+						},
 					},
 				},
 			},

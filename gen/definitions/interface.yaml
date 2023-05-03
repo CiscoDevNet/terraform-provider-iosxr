@@ -17,9 +17,9 @@ attributes:
     example: false
   - yang_name: dampening/decay-half-life/value
     example: 2
-  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point
     tf_name: ipv4_point_to_point
-    example:  true
+    example: true
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
     tf_name: service_policy_input
     type: List
@@ -27,7 +27,7 @@ attributes:
       - yang_name: service-policy-name
         tf_name: name
         id: true
-        example: CORE-INPUT-POLICY
+        example: PMAP-IN
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
     tf_name: service_policy_output
     type: List
@@ -35,7 +35,7 @@ attributes:
       - yang_name: service-policy-name
         tf_name: name
         id: true
-        example: CORE-OUTPUT-POLICY
+        example: PMAP-OUT
   - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf
     tf_name: bfd_mode_ietf
     example: true
@@ -43,6 +43,7 @@ attributes:
     type: Bool
     description: Use IETF standard for BoB
     type_yang_bool: presence
+    exclude_test: true
   - yang_name: Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id
     tf_name: encapsulation_dot1q_vlan_id
     no_augment_config: true
@@ -113,3 +114,34 @@ attributes:
       - yang_name: zone
         default_value: "0"
         example: "0"
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]
+    attributes:
+      - name: policy-map-name
+        value: PMAP-IN
+    lists:
+      - name: class
+        key: name,type
+        items:
+          - attributes:
+              - name: name
+                value: class-default
+              - name: type
+                value: qos
+              - name: set/qos-group
+                value: 0
+  - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]
+    attributes:
+      - name: policy-map-name
+        value: PMAP-OUT
+    lists:
+      - name: class
+        key: name,type
+        items:
+          - attributes:
+              - name: name
+                value: class-default
+              - name: type
+                value: qos
+              - name: set/dscp
+                value: 0

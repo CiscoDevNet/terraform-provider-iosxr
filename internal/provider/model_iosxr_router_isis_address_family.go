@@ -63,7 +63,8 @@ type RouterISISAddressFamilySpfPrefixPriorities struct {
 	AccessListName types.String `tfsdk:"access_list_name"`
 }
 type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
-	LevelId types.Int64 `tfsdk:"level_id"`
+	LevelId         types.Int64 `tfsdk:"level_id"`
+	MaximumPrefixes types.Int64 `tfsdk:"maximum_prefixes"`
 }
 
 func (data RouterISISAddressFamily) getPath() string {
@@ -240,6 +241,9 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 		for index, item := range data.MaximumRedistributedPrefixesLevels {
 			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
 				body, _ = sjson.Set(body, "maximum-redistributed-prefixes.levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
+			}
+			if !item.MaximumPrefixes.IsNull() && !item.MaximumPrefixes.IsUnknown() {
+				body, _ = sjson.Set(body, "maximum-redistributed-prefixes.levels.level"+"."+strconv.Itoa(index)+"."+"maximum-prefixes", strconv.FormatInt(item.MaximumPrefixes.ValueInt64(), 10))
 			}
 		}
 	}
@@ -584,6 +588,11 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.MaximumRedistributedPrefixesLevels[i].LevelId = types.Int64Null()
 		}
+		if value := r.Get("maximum-prefixes"); value.Exists() && !data.MaximumRedistributedPrefixesLevels[i].MaximumPrefixes.IsNull() {
+			data.MaximumRedistributedPrefixesLevels[i].MaximumPrefixes = types.Int64Value(value.Int())
+		} else {
+			data.MaximumRedistributedPrefixesLevels[i].MaximumPrefixes = types.Int64Null()
+		}
 	}
 }
 
@@ -759,6 +768,9 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			item := RouterISISAddressFamilyMaximumRedistributedPrefixesLevels{}
 			if cValue := v.Get("level-id"); cValue.Exists() {
 				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maximum-prefixes"); cValue.Exists() {
+				item.MaximumPrefixes = types.Int64Value(cValue.Int())
 			}
 			data.MaximumRedistributedPrefixesLevels = append(data.MaximumRedistributedPrefixesLevels, item)
 			return true

@@ -86,7 +86,7 @@ func (data Interface) toBody(ctx context.Context) string {
 	}
 	if !data.Ipv4PointToPoint.IsNull() && !data.Ipv4PointToPoint.IsUnknown() {
 		if data.Ipv4PointToPoint.ValueBool() {
-			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point", map[string]string{})
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point", map[string]string{})
 		}
 	}
 	if !data.BfdModeIetf.IsNull() && !data.BfdModeIetf.IsUnknown() {
@@ -224,7 +224,7 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.DampeningDecayHalfLifeValue = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point"); !data.Ipv4PointToPoint.IsNull() {
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point"); !data.Ipv4PointToPoint.IsNull() {
 		if value.Exists() {
 			data.Ipv4PointToPoint = types.BoolValue(true)
 		} else {
@@ -470,7 +470,7 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() {
 		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:point-to-point"); value.Exists() {
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point"); value.Exists() {
 		data.Ipv4PointToPoint = types.BoolValue(true)
 	} else {
 		data.Ipv4PointToPoint = types.BoolValue(false)

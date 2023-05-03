@@ -1,6 +1,6 @@
 resource "iosxr_router_bgp_vrf" "example" {
   as_number                     = "65001"
-  vrf_name                      = "VRF1"
+  vrf_name                      = "VRF2"
   rd_auto                       = false
   rd_ip_address_ipv4_address    = "14.14.14.14"
   rd_ip_address_index           = 3

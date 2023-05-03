@@ -54,7 +54,7 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
   {{- end}}
   attributes = {
     {{- range  .Attributes}}
-      {{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+      "{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
     {{- end}}
   }
   {{- if .Lists}}
@@ -67,7 +67,7 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
         {{- range .Items}}
           {
 			{{- range .Attributes}}
-			{{.Name}} = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+			"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
 			{{- end}}
           },
         {{- end}}

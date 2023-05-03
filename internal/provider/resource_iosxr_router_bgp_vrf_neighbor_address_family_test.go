@@ -39,14 +39,14 @@ const testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
   path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
   attributes = {
-      af-name = "vpnv4-unicast"
+      "af-name" = "vpnv4-unicast"
   }
 }
 
 resource "iosxr_gnmi" "PreReq1" {
   path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/address-families/address-family[af-name=ipv4-unicast]"
   attributes = {
-      af-name = "ipv4-unicast"
+      "af-name" = "ipv4-unicast"
   }
   depends_on = [iosxr_gnmi.PreReq0, ]
 }
@@ -54,8 +54,8 @@ resource "iosxr_gnmi" "PreReq1" {
 resource "iosxr_gnmi" "PreReq2" {
   path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/neighbors/neighbor[neighbor-address=10.1.1.2]"
   attributes = {
-      neighbor-address = "10.1.1.2"
-      remote-as = "65002"
+      "neighbor-address" = "10.1.1.2"
+      "remote-as" = "65002"
   }
   depends_on = [iosxr_gnmi.PreReq1, ]
 }
@@ -63,8 +63,8 @@ resource "iosxr_gnmi" "PreReq2" {
 resource "iosxr_gnmi" "PreReq3" {
   path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
   attributes = {
-      route-policy-name = "ROUTE_POLICY_1"
-      rpl-route-policy = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+      "route-policy-name" = "ROUTE_POLICY_1"
+      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
   }
 }
 

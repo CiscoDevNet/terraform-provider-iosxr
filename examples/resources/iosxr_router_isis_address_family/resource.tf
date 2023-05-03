@@ -44,7 +44,8 @@ resource "iosxr_router_isis_address_family" "example" {
   maximum_redistributed_prefixes = 100
   maximum_redistributed_prefixes_levels = [
     {
-      level_id = 1
+      level_id         = 1
+      maximum_prefixes = 1000
     }
   ]
 }

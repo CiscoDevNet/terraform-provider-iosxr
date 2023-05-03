@@ -103,3 +103,5 @@ attributes:
       - yang_name: level-id
         id: true
         example: 1
+      - yang_name: maximum-prefixes
+        example: 1000

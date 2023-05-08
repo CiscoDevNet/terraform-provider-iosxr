@@ -343,26 +343,25 @@ func (r *RouterISISResource) Create(ctx context.Context, req resource.CreateRequ
 		return
 	}
 
+	var ops []client.SetOperation
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	// Create object
 	body := plan.toBody(ctx)
-
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
 	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
+		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+	}
+
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	plan.Id = types.StringValue(plan.getPath())
@@ -416,37 +415,32 @@ func (r *RouterISISResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
+	var ops []client.SetOperation
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	// Update object
 	body := plan.toBody(ctx)
-
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), plan.getPath(), body, client.Update)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
-	}
+	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
 	deletedListItems := plan.getDeletedListItems(ctx, state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
-		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
+		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
 	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 	for _, i := range emptyLeafsDelete {
-		_, diags = r.client.Set(ctx, plan.Device.ValueString(), i, "", client.Delete)
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
-			return
-		}
+		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+	}
+
+	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
@@ -467,7 +461,7 @@ func (r *RouterISISResource) Delete(ctx context.Context, req resource.DeleteRequ
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), state.getPath(), "", client.Delete)
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

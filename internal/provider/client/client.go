@@ -23,12 +23,12 @@ const (
 	DefaultBackoffDelayFactor float64 = 3
 )
 
-type SetOperation string
+type SetOperationType string
 
 const (
-	Update  SetOperation = "update"
-	Replace SetOperation = "replace"
-	Delete  SetOperation = "delete"
+	Update  SetOperationType = "update"
+	Replace SetOperationType = "replace"
+	Delete  SetOperationType = "delete"
 )
 
 type Client struct {
@@ -46,6 +46,12 @@ type Client struct {
 type Device struct {
 	SetMutex *sync.Mutex
 	Target   *target.Target
+}
+
+type SetOperation struct {
+	Path      string
+	Body      string
+	Operation SetOperationType
 }
 
 func NewClient() Client {
@@ -93,47 +99,30 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		return diags
 	}
 
-	if device == "" {
-		c.Devices[""] = &Device{}
-		c.Devices[""].Target = t
-		c.Devices[""].SetMutex = &sync.Mutex{}
-	} else {
-		c.Devices[device] = &Device{}
-		c.Devices[device].Target = t
-		c.Devices[device].SetMutex = &sync.Mutex{}
-	}
+	c.Devices[device] = &Device{}
+	c.Devices[device].Target = t
+	c.Devices[device].SetMutex = &sync.Mutex{}
 
 	return nil
 }
 
-func (c *Client) Set(ctx context.Context, device, path, body string, operation SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
+func (c *Client) Set(ctx context.Context, device string, operations ...SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
 	target := c.Devices[device].Target
 
-	var setReq *gnmi.SetRequest
-	var err error
-	if operation == Update {
-		setReq, err = api.NewSetRequest(
-			api.Update(
-				api.Path(path),
-				api.Value(body, "json_ietf"),
-			),
-		)
-	} else if operation == Replace {
-		setReq, err = api.NewSetRequest(
-			api.Replace(
-				api.Path(path),
-				api.Value(body, "json_ietf"),
-			),
-		)
-	} else if operation == Delete {
-		setReq, err = api.NewSetRequest(
-			api.Delete(
-				path,
-			),
-		)
+	var ops []api.GNMIOption
+	for _, op := range operations {
+		if op.Operation == Update {
+			ops = append(ops, api.Update(api.Path(op.Path), api.Value(op.Body, "json_ietf")))
+		} else if op.Operation == Replace {
+			ops = append(ops, api.Replace(api.Path(op.Path), api.Value(op.Body, "json_ietf")))
+		} else if op.Operation == Delete {
+			ops = append(ops, api.Delete(op.Path))
+		}
 	}
+
+	setReq, err := api.NewSetRequest(ops...)
 	if err != nil {
 		diags.AddError("Client Error", fmt.Sprintf("Failed to create set request, got error: %s", err))
 		return nil, diags

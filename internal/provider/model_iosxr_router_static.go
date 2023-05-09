@@ -317,12 +317,6 @@ func (data *RouterStatic) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterStatic) fromPlan(ctx context.Context, plan RouterStatic) {
-	data.Device = plan.Device
-	data.PrefixAddress = types.StringValue(plan.PrefixAddress.ValueString())
-	data.PrefixLength = types.Int64Value(plan.PrefixLength.ValueInt64())
-}
-
 func (data *RouterStatic) getDeletedListItems(ctx context.Context, state RouterStatic) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.NexthopInterfaces {

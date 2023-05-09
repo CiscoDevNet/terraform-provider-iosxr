@@ -502,12 +502,6 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterBGPVRF) fromPlan(ctx context.Context, plan RouterBGPVRF) {
-	data.Device = plan.Device
-	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-}
-
 func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterBGPVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Neighbors {
@@ -545,6 +539,38 @@ func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterB
 
 func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.RdAuto.IsNull() && !data.RdAuto.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/rd/auto", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
 
+	for i := range data.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Neighbors[i].IgnoreConnectedCheck.IsNull() && !data.Neighbors[i].IgnoreConnectedCheck.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].LocalAsNoPrepend.IsNull() && !data.Neighbors[i].LocalAsNoPrepend.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].LocalAsReplaceAs.IsNull() && !data.Neighbors[i].LocalAsReplaceAs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend/replace-as", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].LocalAsDualAs.IsNull() && !data.Neighbors[i].LocalAsDualAs.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend/replace-as/dual-as", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].Shutdown.IsNull() && !data.Neighbors[i].Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/shutdown", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].TtlSecurity.IsNull() && !data.Neighbors[i].TtlSecurity.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

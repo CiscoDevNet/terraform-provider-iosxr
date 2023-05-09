@@ -42,10 +42,6 @@ func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPN) fromPlan(ctx context.Context, plan EVPN) {
-	data.Device = plan.Device
-}
-
 func (data *EVPN) getDeletedListItems(ctx context.Context, state EVPN) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

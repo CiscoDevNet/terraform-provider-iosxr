@@ -47,11 +47,6 @@ func (data *RoutePolicy) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RoutePolicy) fromPlan(ctx context.Context, plan RoutePolicy) {
-	data.Device = plan.Device
-	data.RoutePolicyName = types.StringValue(plan.RoutePolicyName.ValueString())
-}
-
 func (data *RoutePolicy) getDeletedListItems(ctx context.Context, state RoutePolicy) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

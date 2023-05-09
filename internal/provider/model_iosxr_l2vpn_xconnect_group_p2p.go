@@ -418,12 +418,6 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *L2VPNXconnectGroupP2P) fromPlan(ctx context.Context, plan L2VPNXconnectGroupP2P) {
-	data.Device = plan.Device
-	data.GroupName = types.StringValue(plan.GroupName.ValueString())
-	data.P2pXconnectName = types.StringValue(plan.P2pXconnectName.ValueString())
-}
-
 func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Interfaces {

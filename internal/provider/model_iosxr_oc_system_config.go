@@ -78,10 +78,6 @@ func (data *OCSystemConfig) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *OCSystemConfig) fromPlan(ctx context.Context, plan OCSystemConfig) {
-	data.Device = plan.Device
-}
-
 func (data *OCSystemConfig) getDeletedListItems(ctx context.Context, state OCSystemConfig) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

@@ -165,11 +165,6 @@ func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LoggingVRF) fromPlan(ctx context.Context, plan LoggingVRF) {
-	data.Device = plan.Device
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-}
-
 func (data *LoggingVRF) getDeletedListItems(ctx context.Context, state LoggingVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.HostIpv4Addresses {

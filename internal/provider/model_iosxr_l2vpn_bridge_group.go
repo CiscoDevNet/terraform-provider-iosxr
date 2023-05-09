@@ -34,11 +34,6 @@ func (data *L2VPNBridgeGroup) updateFromBody(ctx context.Context, res []byte) {
 func (data *L2VPNBridgeGroup) fromBody(ctx context.Context, res []byte) {
 }
 
-func (data *L2VPNBridgeGroup) fromPlan(ctx context.Context, plan L2VPNBridgeGroup) {
-	data.Device = plan.Device
-	data.GroupName = types.StringValue(plan.GroupName.ValueString())
-}
-
 func (data *L2VPNBridgeGroup) getDeletedListItems(ctx context.Context, state L2VPNBridgeGroup) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

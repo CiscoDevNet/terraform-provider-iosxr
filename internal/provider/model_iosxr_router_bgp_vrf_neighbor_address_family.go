@@ -174,14 +174,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 	}
 }
 
-func (data *RouterBGPVRFNeighborAddressFamily) fromPlan(ctx context.Context, plan RouterBGPVRFNeighborAddressFamily) {
-	data.Device = plan.Device
-	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-	data.NeighborAddress = types.StringValue(plan.NeighborAddress.ValueString())
-	data.AfName = types.StringValue(plan.AfName.ValueString())
-}
-
 func (data *RouterBGPVRFNeighborAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPVRFNeighborAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -189,5 +181,20 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedListItems(ctx context.C
 
 func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() && !data.RemovePrivateAsInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inheritance-disable", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

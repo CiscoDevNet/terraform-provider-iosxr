@@ -89,11 +89,6 @@ func (data *EVPNGroup) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNGroup) fromPlan(ctx context.Context, plan EVPNGroup) {
-	data.Device = plan.Device
-	data.GroupId = types.Int64Value(plan.GroupId.ValueInt64())
-}
-
 func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.CoreInterfaces {

@@ -778,13 +778,6 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISISAddressFamily) fromPlan(ctx context.Context, plan RouterISISAddressFamily) {
-	data.Device = plan.Device
-	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
-	data.AfName = types.StringValue(plan.AfName.ValueString())
-	data.SafName = types.StringValue(plan.SafName.ValueString())
-}
-
 func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.MetricStyleLevels {
@@ -882,6 +875,78 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
+	}
+	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide", data.getPath()))
+	}
+	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
+	}
+
+	for i := range data.MetricStyleLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MetricStyleLevels[i].Narrow.IsNull() && !data.MetricStyleLevels[i].Narrow.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/levels/level%v/narrow", data.getPath(), keyString))
+		}
+		if !data.MetricStyleLevels[i].Wide.IsNull() && !data.MetricStyleLevels[i].Wide.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/levels/level%v/wide", data.getPath(), keyString))
+		}
+		if !data.MetricStyleLevels[i].Transition.IsNull() && !data.MetricStyleLevels[i].Transition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/levels/level%v/transition", data.getPath(), keyString))
+		}
+	}
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitCritical.IsNull() && !data.FastReroutePerLinkPriorityLimitCritical.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/critical", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitHigh.IsNull() && !data.FastReroutePerLinkPriorityLimitHigh.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/high", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitMedium.IsNull() && !data.FastReroutePerLinkPriorityLimitMedium.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/medium", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitCritical.IsNull() && !data.FastReroutePerPrefixPriorityLimitCritical.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/critical", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitHigh.IsNull() && !data.FastReroutePerPrefixPriorityLimitHigh.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/high", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitMedium.IsNull() && !data.FastReroutePerPrefixPriorityLimitMedium.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/medium", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/protected", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceSegmentRouting.IsNull() && !data.MicroloopAvoidanceSegmentRouting.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/segment-routing", data.getPath()))
+	}
+	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
+	}
+	if !data.AdvertiseLinkAttributes.IsNull() && !data.AdvertiseLinkAttributes.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
+	}
+	if !data.MplsLdpAutoConfig.IsNull() && !data.MplsLdpAutoConfig.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/level-1-2", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/level-1", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/level-2-only", data.getPath()))
+	}
 
 	return emptyLeafsDelete
 }

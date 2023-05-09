@@ -129,11 +129,6 @@ func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerView) fromPlan(ctx context.Context, plan SNMPServerView) {
-	data.Device = plan.Device
-	data.ViewName = types.StringValue(plan.ViewName.ValueString())
-}
-
 func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPServerView) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.MibViewFamilies {
@@ -172,5 +167,19 @@ func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPS
 func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
+	for i := range data.MibViewFamilies {
+		keys := [...]string{"mib-view-family-name"}
+		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MibViewFamilies[i].Included.IsNull() && !data.MibViewFamilies[i].Included.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", data.getPath(), keyString))
+		}
+		if !data.MibViewFamilies[i].Excluded.IsNull() && !data.MibViewFamilies[i].Excluded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

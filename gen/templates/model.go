@@ -248,16 +248,6 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	{{- end}}
 }
 
-
-func (data *{{camelCase .Name}}) fromPlan(ctx context.Context, plan {{camelCase .Name}}) {
-	data.Device = plan.Device
-	{{- range .Attributes}}
-	{{- if or (eq .Reference true) (eq .Id true) (eq .WriteOnly true)}}
-	data.{{toGoName .TfName}} = types.{{.Type}}Value(plan.{{toGoName .TfName}}.Value{{.Type}}())
-	{{- end}}
-	{{- end}}
-}
-
 func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedListItems := make([]string, 0)
 	{{- range .Attributes}}
@@ -315,14 +305,14 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range .Attributes}}
-	{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+	{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{.YangName}}", data.getPath()))
 	}
 	{{- end}}
 	{{- if eq .Type "List"}}
 	{{- $hasEmpty := false}}
-	{{ range .Attributes}}{{ if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}{{ $hasEmpty = true}}{{ end}}{{- end}}
+	{{ range .Attributes}}{{ if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}{{ $hasEmpty = true}}{{ end}}{{- end}}
 	{{- if $hasEmpty}}
 	{{- $yangName := .YangName}}
 	for i := range data.{{toGoName .TfName}} {
@@ -334,7 +324,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
 		{{- range .Attributes}}
-		{{- if and (eq .Type "Bool") (eq .TypeYangBool "empty")}}
+		{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 		if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}", data.getPath(), keyString))
 		}

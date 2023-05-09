@@ -200,11 +200,6 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNInterface) fromPlan(ctx context.Context, plan EVPNInterface) {
-	data.Device = plan.Device
-	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
 func (data *EVPNInterface) getDeletedListItems(ctx context.Context, state EVPNInterface) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -212,5 +207,17 @@ func (data *EVPNInterface) getDeletedListItems(ctx context.Context, state EVPNIn
 
 func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", data.getPath()))
+	}
+	if !data.EthernetSegmentLoadBalancingModePortActive.IsNull() && !data.EthernetSegmentLoadBalancingModePortActive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", data.getPath()))
+	}
+	if !data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleActive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", data.getPath()))
+	}
+	if !data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && !data.EthernetSegmentLoadBalancingModeSingleFlowActive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

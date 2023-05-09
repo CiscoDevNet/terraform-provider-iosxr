@@ -925,10 +925,6 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServer) fromPlan(ctx context.Context, plan SNMPServer) {
-	data.Device = plan.Device
-}
-
 func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServer) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Users {
@@ -996,6 +992,80 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 
 func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.Rf.IsNull() && !data.Rf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf", data.getPath()))
+	}
+	if !data.Bfd.IsNull() && !data.Bfd.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd", data.getPath()))
+	}
+	if !data.Ntp.IsNull() && !data.Ntp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-ntp-cfg:ntp", data.getPath()))
+	}
+	if !data.EthernetOamEvents.IsNull() && !data.EthernetOamEvents.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-ethernet-oam-cfg:ethernet/oam/events", data.getPath()))
+	}
+	if !data.CopyComplete.IsNull() && !data.CopyComplete.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-config-copy-cfg:copy-complete", data.getPath()))
+	}
+	if !data.TrapsSnmpLinkup.IsNull() && !data.TrapsSnmpLinkup.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/snmp/linkup", data.getPath()))
+	}
+	if !data.TrapsSnmpLinkdown.IsNull() && !data.TrapsSnmpLinkdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/snmp/linkdown", data.getPath()))
+	}
+	if !data.Power.IsNull() && !data.Power.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-power-cfg:power", data.getPath()))
+	}
+	if !data.Config.IsNull() && !data.Config.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-cfg-mibs-cfg:config", data.getPath()))
+	}
+	if !data.Entity.IsNull() && !data.Entity.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-entity-cfg:entity", data.getPath()))
+	}
+	if !data.System.IsNull() && !data.System.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-system-cfg:system", data.getPath()))
+	}
+	if !data.Bridgemib.IsNull() && !data.Bridgemib.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-bridgemib-cfg:bridgemib", data.getPath()))
+	}
+	if !data.EntityStateOperstatus.IsNull() && !data.EntityStateOperstatus.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-entity-state-cfg:entity-state/operstatus", data.getPath()))
+	}
+	if !data.EntityRedundancyAll.IsNull() && !data.EntityRedundancyAll.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-entity-redundancy-cfg:entity-redundancy/all", data.getPath()))
+	}
+	if !data.L2vpnAll.IsNull() && !data.L2vpnAll.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/all", data.getPath()))
+	}
+	if !data.L2vpnVcUp.IsNull() && !data.L2vpnVcUp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/vc-up", data.getPath()))
+	}
+	if !data.L2vpnVcDown.IsNull() && !data.L2vpnVcDown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-l2vpn-cfg:l2vpn/vc-down", data.getPath()))
+	}
+	if !data.Sensor.IsNull() && !data.Sensor.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-mibs-sensormib-cfg:sensor", data.getPath()))
+	}
+	if !data.FruCtrl.IsNull() && !data.FruCtrl.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl", data.getPath()))
+	}
+	if !data.BgpCbgp2Updown.IsNull() && !data.BgpCbgp2Updown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp2-updown", data.getPath()))
+	}
+	if !data.BgpBgp4MibUpdown.IsNull() && !data.BgpBgp4MibUpdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown", data.getPath()))
+	}
 
+	for i := range data.Groups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Groups[i].V3Priv.IsNull() && !data.Groups[i].V3Priv.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/groups/group%v/v3/priv", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

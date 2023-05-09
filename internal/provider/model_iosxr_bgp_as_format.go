@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -70,10 +71,6 @@ func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *BGPASFormat) fromPlan(ctx context.Context, plan BGPASFormat) {
-	data.Device = plan.Device
-}
-
 func (data *BGPASFormat) getDeletedListItems(ctx context.Context, state BGPASFormat) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -81,5 +78,11 @@ func (data *BGPASFormat) getDeletedListItems(ctx context.Context, state BGPASFor
 
 func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.Asdot.IsNull() && !data.Asdot.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/asdot", data.getPath()))
+	}
+	if !data.Asplain.IsNull() && !data.Asplain.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/asplain", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

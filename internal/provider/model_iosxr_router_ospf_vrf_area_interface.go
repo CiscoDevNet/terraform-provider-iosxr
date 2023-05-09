@@ -183,14 +183,6 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res []byte
 	}
 }
 
-func (data *RouterOSPFVRFAreaInterface) fromPlan(ctx context.Context, plan RouterOSPFVRFAreaInterface) {
-	data.Device = plan.Device
-	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-	data.AreaId = types.StringValue(plan.AreaId.ValueString())
-	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
 func (data *RouterOSPFVRFAreaInterface) getDeletedListItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -198,5 +190,23 @@ func (data *RouterOSPFVRFAreaInterface) getDeletedListItems(ctx context.Context,
 
 func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.NetworkBroadcast.IsNull() && !data.NetworkBroadcast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/network/broadcast", data.getPath()))
+	}
+	if !data.NetworkNonBroadcast.IsNull() && !data.NetworkNonBroadcast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/network/non-broadcast", data.getPath()))
+	}
+	if !data.NetworkPointToPoint.IsNull() && !data.NetworkPointToPoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/network/point-to-point", data.getPath()))
+	}
+	if !data.NetworkPointToMultipoint.IsNull() && !data.NetworkPointToMultipoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/network/point-to-multipoint", data.getPath()))
+	}
+	if !data.PassiveEnable.IsNull() && !data.PassiveEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/enable", data.getPath()))
+	}
+	if !data.PassiveDisable.IsNull() && !data.PassiveDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/disable", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

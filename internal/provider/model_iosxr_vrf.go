@@ -1261,11 +1261,6 @@ func (data *VRF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *VRF) fromPlan(ctx context.Context, plan VRF) {
-	data.Device = plan.Device
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-}
-
 func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
@@ -1777,6 +1772,24 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 
 func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.AddressFamilyIpv4Unicast.IsNull() && !data.AddressFamilyIpv4Unicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/unicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4Multicast.IsNull() && !data.AddressFamilyIpv4Multicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/multicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4Flowspec.IsNull() && !data.AddressFamilyIpv4Flowspec.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv4/flowspec", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Unicast.IsNull() && !data.AddressFamilyIpv6Unicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/unicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Multicast.IsNull() && !data.AddressFamilyIpv6Multicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/multicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Flowspec.IsNull() && !data.AddressFamilyIpv6Flowspec.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/flowspec", data.getPath()))
+	}
 
 	return emptyLeafsDelete
 }

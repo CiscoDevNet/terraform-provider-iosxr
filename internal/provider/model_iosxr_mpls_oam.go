@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -115,10 +116,6 @@ func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSOAM) fromPlan(ctx context.Context, plan MPLSOAM) {
-	data.Device = plan.Device
-}
-
 func (data *MPLSOAM) getDeletedListItems(ctx context.Context, state MPLSOAM) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -126,5 +123,14 @@ func (data *MPLSOAM) getDeletedListItems(ctx context.Context, state MPLSOAM) []s
 
 func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.Oam.IsNull() && !data.Oam.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam", data.getPath()))
+	}
+	if !data.OamEchoDisableVendorExtension.IsNull() && !data.OamEchoDisableVendorExtension.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getPath()))
+	}
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

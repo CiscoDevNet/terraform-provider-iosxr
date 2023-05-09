@@ -551,13 +551,6 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 	}
 }
 
-func (data *RouterBGPVRFAddressFamily) fromPlan(ctx context.Context, plan RouterBGPVRFAddressFamily) {
-	data.Device = plan.Device
-	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-	data.AfName = types.StringValue(plan.AfName.ValueString())
-}
-
 func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPVRFAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AggregateAddresses {
@@ -667,6 +660,62 @@ func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, 
 
 func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.LabelModePerCe.IsNull() && !data.LabelModePerCe.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/label/mode/per-ce", data.getPath()))
+	}
+	if !data.LabelModePerVrf.IsNull() && !data.LabelModePerVrf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/label/mode/per-vrf", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
 
+	for i := range data.AggregateAddresses {
+		keys := [...]string{"address", "masklength"}
+		keyValues := [...]string{data.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(data.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.AggregateAddresses[i].AsSet.IsNull() && !data.AggregateAddresses[i].AsSet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/as-set", data.getPath(), keyString))
+		}
+		if !data.AggregateAddresses[i].AsConfedSet.IsNull() && !data.AggregateAddresses[i].AsConfedSet.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/as-confed-set", data.getPath(), keyString))
+		}
+		if !data.AggregateAddresses[i].SummaryOnly.IsNull() && !data.AggregateAddresses[i].SummaryOnly.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/summary-only", data.getPath(), keyString))
+		}
+	}
+
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"router-tag"}
+		keyValues := [...]string{data.RedistributeOspf[i].RouterTag.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchInternalExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal/external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchInternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal/nssa-external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchExternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternalNssaExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/external/nssa-external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

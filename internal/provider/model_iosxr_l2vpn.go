@@ -109,10 +109,6 @@ func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *L2VPN) fromPlan(ctx context.Context, plan L2VPN) {
-	data.Device = plan.Device
-}
-
 func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.XconnectGroups {

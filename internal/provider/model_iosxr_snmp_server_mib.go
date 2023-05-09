@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -70,10 +71,6 @@ func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerMIB) fromPlan(ctx context.Context, plan SNMPServerMIB) {
-	data.Device = plan.Device
-}
-
 func (data *SNMPServerMIB) getDeletedListItems(ctx context.Context, state SNMPServerMIB) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -81,5 +78,11 @@ func (data *SNMPServerMIB) getDeletedListItems(ctx context.Context, state SNMPSe
 
 func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
+	}
+	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

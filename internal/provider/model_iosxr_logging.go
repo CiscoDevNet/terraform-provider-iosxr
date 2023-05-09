@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -179,10 +180,6 @@ func (data *Logging) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Logging) fromPlan(ctx context.Context, plan Logging) {
-	data.Device = plan.Device
-}
-
 func (data *Logging) getDeletedListItems(ctx context.Context, state Logging) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -190,5 +187,11 @@ func (data *Logging) getDeletedListItems(ctx context.Context, state Logging) []s
 
 func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+	}
+	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

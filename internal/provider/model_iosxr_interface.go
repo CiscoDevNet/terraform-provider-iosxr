@@ -585,11 +585,6 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Interface) fromPlan(ctx context.Context, plan Interface) {
-	data.Device = plan.Device
-	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
 func (data *Interface) getDeletedListItems(ctx context.Context, state Interface) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.ServicePolicyInput {
@@ -687,6 +682,37 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 
 func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.L2transport.IsNull() && !data.L2transport.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
+	}
+	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
+	}
+	if !data.Multipoint.IsNull() && !data.Multipoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/multipoint", data.getPath()))
+	}
+	if !data.Ipv4PointToPoint.IsNull() && !data.Ipv4PointToPoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point", data.getPath()))
+	}
+
+	if !data.BfdModeIetf.IsNull() && !data.BfdModeIetf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf", data.getPath()))
+	}
+	if !data.RewriteIngressTagPopOne.IsNull() && !data.RewriteIngressTagPopOne.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one", data.getPath()))
+	}
+	if !data.RewriteIngressTagPopTwo.IsNull() && !data.RewriteIngressTagPopTwo.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two", data.getPath()))
+	}
+	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getPath()))
+	}
+	if !data.Ipv6Autoconfig.IsNull() && !data.Ipv6Autoconfig.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig", data.getPath()))
+	}
+	if !data.Ipv6Enable.IsNull() && !data.Ipv6Enable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", data.getPath()))
+	}
 
 	return emptyLeafsDelete
 }

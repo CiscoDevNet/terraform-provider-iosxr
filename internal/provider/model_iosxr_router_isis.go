@@ -821,11 +821,6 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISIS) fromPlan(ctx context.Context, plan RouterISIS) {
-	data.Device = plan.Device
-	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
-}
-
 func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISIS) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.SetOverloadBitLevels {
@@ -984,5 +979,79 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
+	for i := range data.SetOverloadBitLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded.IsNull() && !data.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/level%v/on-startup/advertise-as-overloaded", data.getPath(), keyString))
+		}
+		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/level%v/on-startup/wait-for-bgp", data.getPath(), keyString))
+		}
+		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/level%v/advertise/external", data.getPath(), keyString))
+		}
+		if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/level%v/advertise/interlevel", data.getPath(), keyString))
+		}
+	}
+	if !data.Nsr.IsNull() && !data.Nsr.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getPath()))
+	}
+	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/cisco", data.getPath()))
+	}
+	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/ietf", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	}
+
+	for i := range data.FlexAlgos {
+		keys := [...]string{"algorithm-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.FlexAlgos[i].AdvertiseDefinition.IsNull() && !data.FlexAlgos[i].AdvertiseDefinition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algos/flex-algo%v/advertise-definition", data.getPath(), keyString))
+		}
+		if !data.FlexAlgos[i].MetricTypeDelay.IsNull() && !data.FlexAlgos[i].MetricTypeDelay.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algos/flex-algo%v/metric-type/delay", data.getPath(), keyString))
+		}
+	}
+
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Interfaces[i].HelloPaddingDisable.IsNull() && !data.Interfaces[i].HelloPaddingDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/hello-padding/disable", data.getPath(), keyString))
+		}
+		if !data.Interfaces[i].HelloPaddingSometimes.IsNull() && !data.Interfaces[i].HelloPaddingSometimes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/hello-padding/sometimes", data.getPath(), keyString))
+		}
+		if !data.Interfaces[i].PointToPoint.IsNull() && !data.Interfaces[i].PointToPoint.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", data.getPath(), keyString))
+		}
+		if !data.Interfaces[i].Passive.IsNull() && !data.Interfaces[i].Passive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/passive", data.getPath(), keyString))
+		}
+		if !data.Interfaces[i].Suppressed.IsNull() && !data.Interfaces[i].Suppressed.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/suppressed", data.getPath(), keyString))
+		}
+		if !data.Interfaces[i].Shutdown.IsNull() && !data.Interfaces[i].Shutdown.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/shutdown", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

@@ -217,12 +217,6 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISISInterface) fromPlan(ctx context.Context, plan RouterISISInterface) {
-	data.Device = plan.Device
-	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
-	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-}
-
 func (data *RouterISISInterface) getDeletedListItems(ctx context.Context, state RouterISISInterface) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -230,5 +224,23 @@ func (data *RouterISISInterface) getDeletedListItems(ctx context.Context, state 
 
 func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.HelloPaddingDisable.IsNull() && !data.HelloPaddingDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-padding/disable", data.getPath()))
+	}
+	if !data.HelloPaddingSometimes.IsNull() && !data.HelloPaddingSometimes.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-padding/sometimes", data.getPath()))
+	}
+	if !data.PointToPoint.IsNull() && !data.PointToPoint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/point-to-point", data.getPath()))
+	}
+	if !data.Passive.IsNull() && !data.Passive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive", data.getPath()))
+	}
+	if !data.Suppressed.IsNull() && !data.Suppressed.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppressed", data.getPath()))
+	}
+	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

@@ -47,11 +47,6 @@ func (data *PrefixSet) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PrefixSet) fromPlan(ctx context.Context, plan PrefixSet) {
-	data.Device = plan.Device
-	data.SetName = types.StringValue(plan.SetName.ValueString())
-}
-
 func (data *PrefixSet) getDeletedListItems(ctx context.Context, state PrefixSet) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

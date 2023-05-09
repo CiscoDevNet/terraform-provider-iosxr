@@ -195,14 +195,6 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 }
 
-func (data *RouterISISInterfaceAddressFamily) fromPlan(ctx context.Context, plan RouterISISInterfaceAddressFamily) {
-	data.Device = plan.Device
-	data.ProcessId = types.StringValue(plan.ProcessId.ValueString())
-	data.InterfaceName = types.StringValue(plan.InterfaceName.ValueString())
-	data.AfName = types.StringValue(plan.AfName.ValueString())
-	data.SafName = types.StringValue(plan.SafName.ValueString())
-}
-
 func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.FastReroutePerPrefixLevels {
@@ -241,5 +233,19 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Co
 func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
+	for i := range data.FastReroutePerPrefixLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.FastReroutePerPrefixLevels[i].TiLfa.IsNull() && !data.FastReroutePerPrefixLevels[i].TiLfa.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v/ti-lfa", data.getPath(), keyString))
+		}
+	}
+	if !data.PrefixSidNFlagClear.IsNull() && !data.PrefixSidNFlagClear.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-sid/sid/n-flag-clear", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

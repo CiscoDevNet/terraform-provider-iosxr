@@ -297,11 +297,6 @@ func (data *KeyChain) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *KeyChain) fromPlan(ctx context.Context, plan KeyChain) {
-	data.Device = plan.Device
-	data.Name = types.StringValue(plan.Name.ValueString())
-}
-
 func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Keys {
@@ -340,5 +335,19 @@ func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) [
 func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
+	for i := range data.Keys {
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Keys[i].AcceptLifetimeInfinite.IsNull() && !data.Keys[i].AcceptLifetimeInfinite.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", data.getPath(), keyString))
+		}
+		if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

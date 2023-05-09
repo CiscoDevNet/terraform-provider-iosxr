@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -50,10 +51,6 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSTrafficEng) fromPlan(ctx context.Context, plan MPLSTrafficEng) {
-	data.Device = plan.Device
-}
-
 func (data *MPLSTrafficEng) getDeletedListItems(ctx context.Context, state MPLSTrafficEng) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
@@ -61,5 +58,8 @@ func (data *MPLSTrafficEng) getDeletedListItems(ctx context.Context, state MPLST
 
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.TrafficEng.IsNull() && !data.TrafficEng.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traffic-eng", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

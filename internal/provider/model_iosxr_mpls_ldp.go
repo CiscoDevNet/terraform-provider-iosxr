@@ -149,10 +149,6 @@ func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSLDP) fromPlan(ctx context.Context, plan MPLSLDP) {
-	data.Device = plan.Device
-}
-
 func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilies {

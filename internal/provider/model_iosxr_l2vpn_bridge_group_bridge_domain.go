@@ -298,12 +298,6 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 	}
 }
 
-func (data *L2VPNBridgeGroupBridgeDomain) fromPlan(ctx context.Context, plan L2VPNBridgeGroupBridgeDomain) {
-	data.Device = plan.Device
-	data.BridgeGroupName = types.StringValue(plan.BridgeGroupName.ValueString())
-	data.BridgeDomainName = types.StringValue(plan.BridgeDomainName.ValueString())
-}
-
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomain) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Evis {
@@ -402,5 +396,16 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Interfaces[i].SplitHorizonGroup.IsNull() && !data.Interfaces[i].SplitHorizonGroup.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

@@ -770,12 +770,6 @@ func (data *RouterOSPFVRF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterOSPFVRF) fromPlan(ctx context.Context, plan RouterOSPFVRF) {
-	data.Device = plan.Device
-	data.ProcessName = types.StringValue(plan.ProcessName.ValueString())
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-}
-
 func (data *RouterOSPFVRF) getDeletedListItems(ctx context.Context, state RouterOSPFVRF) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Areas {
@@ -903,6 +897,71 @@ func (data *RouterOSPFVRF) getDeletedListItems(ctx context.Context, state Router
 
 func (data *RouterOSPFVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+	}
+	if !data.MtuIgnoreEnable.IsNull() && !data.MtuIgnoreEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/enable", data.getPath()))
+	}
+	if !data.MtuIgnoreDisable.IsNull() && !data.MtuIgnoreDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mtu-ignore/disable", data.getPath()))
+	}
+	if !data.PassiveEnable.IsNull() && !data.PassiveEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/enable", data.getPath()))
+	}
+	if !data.PassiveDisable.IsNull() && !data.PassiveDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/disable", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() && !data.RedistributeConnected.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.DefaultInformationOriginateAlways.IsNull() && !data.DefaultInformationOriginateAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate/always", data.getPath()))
+	}
 
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeIsis[i].Level1.IsNull() && !data.RedistributeIsis[i].Level1.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1", data.getPath(), keyString))
+		}
+		if !data.RedistributeIsis[i].Level2.IsNull() && !data.RedistributeIsis[i].Level2.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-2", data.getPath(), keyString))
+		}
+		if !data.RedistributeIsis[i].Level12.IsNull() && !data.RedistributeIsis[i].Level12.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", data.getPath(), keyString))
+		}
+	}
+
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.RedistributeOspf[i].MatchInternal.IsNull() && !data.RedistributeOspf[i].MatchInternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/external", data.getPath(), keyString))
+		}
+		if !data.RedistributeOspf[i].MatchNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

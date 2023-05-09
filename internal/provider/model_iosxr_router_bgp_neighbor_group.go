@@ -166,12 +166,6 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterBGPNeighborGroup) fromPlan(ctx context.Context, plan RouterBGPNeighborGroup) {
-	data.Device = plan.Device
-	data.AsNumber = types.StringValue(plan.AsNumber.ValueString())
-	data.Name = types.StringValue(plan.Name.ValueString())
-}
-
 func (data *RouterBGPNeighborGroup) getDeletedListItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.AddressFamilies {
@@ -209,6 +203,20 @@ func (data *RouterBGPNeighborGroup) getDeletedListItems(ctx context.Context, sta
 
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.AoIncludeTcpOptionsEnable.IsNull() && !data.AoIncludeTcpOptionsEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/include-tcp-options/enable", data.getPath()))
+	}
 
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && !data.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", data.getPath(), keyString))
+		}
+	}
 	return emptyLeafsDelete
 }

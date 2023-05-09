@@ -114,12 +114,6 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerVRFHost) fromPlan(ctx context.Context, plan SNMPServerVRFHost) {
-	data.Device = plan.Device
-	data.VrfName = types.StringValue(plan.VrfName.ValueString())
-	data.Address = types.StringValue(plan.Address.ValueString())
-}
-
 func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SNMPServerVRFHost) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.UnencryptedStrings {

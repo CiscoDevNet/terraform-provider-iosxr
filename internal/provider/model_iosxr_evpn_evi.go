@@ -689,11 +689,6 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNEVI) fromPlan(ctx context.Context, plan EVPNEVI) {
-	data.Device = plan.Device
-	data.VpnId = types.Int64Value(plan.VpnId.ValueInt64())
-}
-
 func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
@@ -917,6 +912,30 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 
 func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing", data.getPath()))
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() && !data.LoadBalancingFlowLabelStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+	}
 
+	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	if !data.UnknownUnicastSuppression.IsNull() && !data.UnknownUnicastSuppression.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
+	}
+	if !data.ControlWordDisable.IsNull() && !data.ControlWordDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/control-word-disable", data.getPath()))
+	}
+	if !data.Etree.IsNull() && !data.Etree.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree", data.getPath()))
+	}
+	if !data.EtreeLeaf.IsNull() && !data.EtreeLeaf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/leaf", data.getPath()))
+	}
+	if !data.EtreeRtLeaf.IsNull() && !data.EtreeRtLeaf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
+	}
 	return emptyLeafsDelete
 }

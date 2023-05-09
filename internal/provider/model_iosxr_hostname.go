@@ -42,10 +42,6 @@ func (data *Hostname) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Hostname) fromPlan(ctx context.Context, plan Hostname) {
-	data.Device = plan.Device
-}
-
 func (data *Hostname) getDeletedListItems(ctx context.Context, state Hostname) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems

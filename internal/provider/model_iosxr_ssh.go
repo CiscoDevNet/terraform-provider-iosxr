@@ -161,10 +161,6 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SSH) fromPlan(ctx context.Context, plan SSH) {
-	data.Device = plan.Device
-}
-
 func (data *SSH) getDeletedListItems(ctx context.Context, state SSH) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.ServerVrfs {
@@ -202,6 +198,12 @@ func (data *SSH) getDeletedListItems(ctx context.Context, state SSH) []string {
 
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getPath()))
+	}
+	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getPath()))
+	}
 
 	return emptyLeafsDelete
 }

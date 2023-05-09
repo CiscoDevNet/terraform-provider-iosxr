@@ -89,11 +89,6 @@ func (data *LoggingSourceInterface) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LoggingSourceInterface) fromPlan(ctx context.Context, plan LoggingSourceInterface) {
-	data.Device = plan.Device
-	data.Name = types.StringValue(plan.Name.ValueString())
-}
-
 func (data *LoggingSourceInterface) getDeletedListItems(ctx context.Context, state LoggingSourceInterface) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Vrfs {

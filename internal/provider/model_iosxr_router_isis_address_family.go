@@ -50,6 +50,7 @@ type RouterISISAddressFamily struct {
 	SegmentRoutingMplsSrPrefer                types.Bool                                                  `tfsdk:"segment_routing_mpls_sr_prefer"`
 	MaximumRedistributedPrefixes              types.Int64                                                 `tfsdk:"maximum_redistributed_prefixes"`
 	MaximumRedistributedPrefixesLevels        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels `tfsdk:"maximum_redistributed_prefixes_levels"`
+	RedistributeId                            []RouterISISAddressFamilyRedistributeId                     `tfsdk:"redistribute_id"`
 }
 type RouterISISAddressFamilyMetricStyleLevels struct {
 	LevelId    types.Int64 `tfsdk:"level_id"`
@@ -65,6 +66,10 @@ type RouterISISAddressFamilySpfPrefixPriorities struct {
 type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
 	LevelId         types.Int64 `tfsdk:"level_id"`
 	MaximumPrefixes types.Int64 `tfsdk:"maximum_prefixes"`
+}
+type RouterISISAddressFamilyRedistributeId struct {
+	InstanceId  types.String `tfsdk:"instance_id"`
+	RoutePolicy types.String `tfsdk:"route_policy"`
 }
 
 func (data RouterISISAddressFamily) getPath() string {
@@ -244,6 +249,17 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.MaximumPrefixes.IsNull() && !item.MaximumPrefixes.IsUnknown() {
 				body, _ = sjson.Set(body, "maximum-redistributed-prefixes.levels.level"+"."+strconv.Itoa(index)+"."+"maximum-prefixes", strconv.FormatInt(item.MaximumPrefixes.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.RedistributeId) > 0 {
+		body, _ = sjson.Set(body, "redistribute.isis", []interface{}{})
+		for index, item := range data.RedistributeId {
+			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"instance-id", item.InstanceId.ValueString())
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
 		}
 	}
@@ -594,6 +610,40 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.MaximumRedistributedPrefixesLevels[i].MaximumPrefixes = types.Int64Null()
 		}
 	}
+	for i := range data.RedistributeId {
+		keys := [...]string{"instance-id"}
+		keyValues := [...]string{data.RedistributeId[i].InstanceId.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "redistribute.isis").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("instance-id"); value.Exists() && !data.RedistributeId[i].InstanceId.IsNull() {
+			data.RedistributeId[i].InstanceId = types.StringValue(value.String())
+		} else {
+			data.RedistributeId[i].InstanceId = types.StringNull()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeId[i].RoutePolicy.IsNull() {
+			data.RedistributeId[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeId[i].RoutePolicy = types.StringNull()
+		}
+	}
 }
 
 func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
@@ -776,6 +826,20 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+		data.RedistributeId = make([]RouterISISAddressFamilyRedistributeId, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeId{}
+			if cValue := v.Get("instance-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			data.RedistributeId = append(data.RedistributeId, item)
+			return true
+		})
+	}
 }
 
 func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISAddressFamily) []string {
@@ -868,6 +932,36 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.RedistributeId {
+		keys := [...]string{"instance-id"}
+		stateKeyValues := [...]string{state.RedistributeId[i].InstanceId.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.RedistributeId[i].InstanceId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.RedistributeId {
+			found = true
+			if state.RedistributeId[i].InstanceId.ValueString() != data.RedistributeId[j].InstanceId.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

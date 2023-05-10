@@ -6,7 +6,7 @@ attributes:
   - yang_name: process-id
     example: P1
   - yang_name: af-name
-    example: ipv4
+    example: ipv6      #need to add support for ipv4 as well
   - yang_name: saf-name
     example: unicast
   - yang_name: metric-style/narrow
@@ -105,3 +105,21 @@ attributes:
         example: 1
       - yang_name: maximum-prefixes
         example: 1000
+
+  - yang_name: redistribute/isis
+    tf_name: redistribute_id
+    type: List
+    attributes:
+      - yang_name: instance-id
+        id: true
+        example: CORE
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
+
+
+# test_prerequisites:
+#   - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
+#     attributes:
+#       - name: route-policy-name
+#         value: ROUTE_POLICY_1
+

@@ -97,6 +97,10 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
+			"bfd_fast_detect_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "Address Family",
+				Computed:            true,
+			},
 		},
 	}
 }

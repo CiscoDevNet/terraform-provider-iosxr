@@ -1,0 +1,64 @@
+---
+name: Segment Routing Traffic Engineering
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
+doc_category: Segment Routing
+attributes:
+  - yang_name: on-demand-colors/on-demand-color
+    tf_name: on_demand_colors
+    type: List
+    attributes: 
+      - yang_name: color
+        id: true
+        example: 266
+      - yang_name: srv6/enable  
+        example: true
+        exclude_test: true
+      - yang_name: srv6/locator/locator-name
+        example: LOC11
+      - yang_name: srv6/locator/behavior
+        example: ub6-insert-reduced
+      - yang_name: srv6/locator/binding-sid-type
+        example: srv6-dynamic
+      - yang_name: source-address/source-address
+        example: fccc:0:213::1
+      - yang_name: source-address/ip-address-type
+        example: end-point-type-ipv6
+      - yang_name: effective-metric/enable
+        example: true
+        exclude_test: true
+      - yang_name: effective-metric/metric-value-type/metric-value
+        example: 4444
+      - yang_name: effective-metric/metric-value-type/metric-type
+        example: igp
+      - yang_name: constraint/segments/protection-type
+        example: protected-only
+      - yang_name: constraint/segments/sid-algorithm
+        example: 128
+
+
+  - yang_name: policies/policy
+    tf_name: policies
+    type: List
+    attributes:
+      - yang_name: policy-name
+        id: true
+        example: POLICY1
+      - yang_name: srv6/enable
+        example: true
+        exclude_test: true
+      - yang_name: srv6/locator/locator-name
+        example: Locator11
+      - yang_name: srv6/locator/binding-sid-type
+        example: srv6-dynamic
+      - yang_name: srv6/locator/behavior
+        example: ub6-insert-reduced
+      - yang_name: source-address/source-address
+        example: fccc:0:103::1
+      - yang_name: source-address/ip-address-type
+        example: end-point-type-ipv6
+      - yang_name: policy-color-endpoint/color
+        example: 65534
+      - yang_name: policy-color-endpoint/end-point-type
+        example: end-point-type-ipv6
+      - yang_name: policy-color-endpoint/end-point-address
+        example: fccc:0:215::1

@@ -1,6 +1,6 @@
 resource "iosxr_router_isis_address_family" "example" {
   process_id              = "P1"
-  af_name                 = "ipv4"
+  af_name                 = "ipv6"
   saf_name                = "unicast"
   metric_style_narrow     = false
   metric_style_wide       = true
@@ -46,6 +46,12 @@ resource "iosxr_router_isis_address_family" "example" {
     {
       level_id         = 1
       maximum_prefixes = 1000
+    }
+  ]
+  redistribute_id = [
+    {
+      instance_id  = "CORE"
+      route_policy = "ROUTE_POLICY_1"
     }
   ]
 }

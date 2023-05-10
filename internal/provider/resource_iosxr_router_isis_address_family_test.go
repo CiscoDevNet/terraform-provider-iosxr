@@ -16,7 +16,7 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 			{
 				Config: testAccIosxrRouterISISAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv4"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv6"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_narrow", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_wide", "true"),
@@ -52,12 +52,14 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_id.0.instance_id", "CORE"),
+					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_id.0.route_policy", "ROUTE_POLICY_1"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_router_isis_address_family.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
+				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv6][saf-name=unicast]",
 			},
 		},
 	})
@@ -67,7 +69,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 	return `
 	resource "iosxr_router_isis_address_family" "test" {
 		process_id = "P1"
-		af_name = "ipv4"
+		af_name = "ipv6"
 		saf_name = "unicast"
 	}
 	`
@@ -77,7 +79,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	return `
 	resource "iosxr_router_isis_address_family" "test" {
 		process_id = "P1"
-		af_name = "ipv4"
+		af_name = "ipv6"
 		saf_name = "unicast"
 		metric_style_narrow = false
 		metric_style_wide = true
@@ -118,6 +120,10 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 		maximum_redistributed_prefixes_levels = [{
 			level_id = 1
 			maximum_prefixes = 1000
+		}]
+		redistribute_id = [{
+			instance_id = "CORE"
+			route_policy = "ROUTE_POLICY_1"
 		}]
 	}
 	`

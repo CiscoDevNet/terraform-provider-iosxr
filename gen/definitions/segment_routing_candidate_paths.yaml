@@ -1,0 +1,28 @@
+---
+name: Segment Routing Candidate Paths
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/policies/policy[policy-name=%s]/candidate-paths/preferences/preference[path-index=%d]
+doc_category: Segment Routing
+attributes:
+  - yang_name: policy-name
+    # id: true
+    example: POLICY1
+  - yang_name: path-index
+    # id: true
+    example: 100
+  - yang_name: path-infos/path-info
+    tf_name: candidate_paths_type
+    type: List
+    attributes: 
+      - yang_name: type
+        id: true
+        example: dynamic
+      - yang_name: pcep
+        example: false
+      - yang_name: metric/metric-type
+        example: igp
+      - yang_name: hop-type
+        id: true
+        example: srv6
+      - yang_name: segment-list-name
+        id: true  
+        example: LIST1

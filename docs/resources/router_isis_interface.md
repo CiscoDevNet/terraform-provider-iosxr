@@ -25,6 +25,7 @@ resource "iosxr_router_isis_interface" "example" {
   suppressed              = false
   shutdown                = false
   hello_password_keychain = "KEY_CHAIN_1"
+  bfd_fast_detect_ipv6    = true
 }
 ```
 
@@ -38,6 +39,7 @@ resource "iosxr_router_isis_interface" "example" {
 
 ### Optional
 
+- `bfd_fast_detect_ipv6` (Boolean) Address Family
 - `circuit_type` (String) Configure circuit type for interface
   - Choices: `level-1`, `level-1-2`, `level-2-only`
 - `device` (String) A device name from the provider configuration.

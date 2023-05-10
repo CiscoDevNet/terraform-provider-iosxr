@@ -1,0 +1,26 @@
+---
+name: Segment Routing ISIS
+path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]
+doc_category: Segment Routing
+attributes:
+  - yang_name: process-id
+    example: P1
+  - yang_name: af-name
+    example: ipv6
+  - yang_name: saf-name
+    example: unicast
+  - yang_name: metric-style/wide
+    example: true
+  - yang_name: microloop/avoidance/segment-routing
+    example: true
+  - yang_name: router-id/interface-name
+    example: Loopback0
+  - yang_name: segment-routing/srv6/locators/locator
+    tf_name: locators
+    type: List
+    attributes:
+      - yang_name: locator-name
+        id: true
+        example: AlgoLocator
+      - yang_name: level
+        example: 1

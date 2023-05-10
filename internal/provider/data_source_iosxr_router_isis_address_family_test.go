@@ -50,6 +50,8 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "redistribute_id.0.instance_id", "CORE"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "redistribute_id.0.route_policy", "ROUTE_POLICY_1"),
 				),
 			},
 		},
@@ -60,7 +62,7 @@ const testAccDataSourceIosxrRouterISISAddressFamilyConfig = `
 
 resource "iosxr_router_isis_address_family" "test" {
 	process_id = "P1"
-	af_name = "ipv4"
+	af_name = "ipv6"
 	saf_name = "unicast"
 	metric_style_narrow = false
 	metric_style_wide = true
@@ -102,11 +104,15 @@ resource "iosxr_router_isis_address_family" "test" {
 		level_id = 1
 		maximum_prefixes = 1000
 	}]
+	redistribute_id = [{
+		instance_id = "CORE"
+		route_policy = "ROUTE_POLICY_1"
+	}]
 }
 
 data "iosxr_router_isis_address_family" "test" {
 	process_id = "P1"
-	af_name = "ipv4"
+	af_name = "ipv6"
 	saf_name = "unicast"
 	depends_on = [iosxr_router_isis_address_family.test]
 }

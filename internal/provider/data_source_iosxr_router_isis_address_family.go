@@ -229,6 +229,22 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
+			"redistribute_id": schema.ListNestedAttribute{
+				MarkdownDescription: "IS-IS",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_id": schema.StringAttribute{
+							MarkdownDescription: "IS-IS",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

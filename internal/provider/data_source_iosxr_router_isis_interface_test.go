@@ -25,6 +25,7 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "suppressed", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "shutdown", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_keychain", "KEY_CHAIN_1"),
+					resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"),
 				),
 			},
 		},
@@ -45,6 +46,7 @@ resource "iosxr_router_isis_interface" "test" {
 	suppressed = false
 	shutdown = false
 	hello_password_keychain = "KEY_CHAIN_1"
+	bfd_fast_detect_ipv6 = true
 }
 
 data "iosxr_router_isis_interface" "test" {

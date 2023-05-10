@@ -131,6 +131,10 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
+			"bfd_fast_detect_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
+				Optional:            true,
+			},
 		},
 	}
 }

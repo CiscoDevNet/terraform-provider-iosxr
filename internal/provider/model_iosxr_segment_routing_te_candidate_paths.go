@@ -13,14 +13,14 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type SegmentRoutingCandidatePaths struct {
-	Device             types.String                                     `tfsdk:"device"`
-	Id                 types.String                                     `tfsdk:"id"`
-	PolicyName         types.String                                     `tfsdk:"policy_name"`
-	PathIndex          types.Int64                                      `tfsdk:"path_index"`
-	CandidatePathsType []SegmentRoutingCandidatePathsCandidatePathsType `tfsdk:"candidate_paths_type"`
+type SegmentRoutingTECandidatePaths struct {
+	Device             types.String                                       `tfsdk:"device"`
+	Id                 types.String                                       `tfsdk:"id"`
+	PolicyName         types.String                                       `tfsdk:"policy_name"`
+	PathIndex          types.Int64                                        `tfsdk:"path_index"`
+	CandidatePathsType []SegmentRoutingTECandidatePathsCandidatePathsType `tfsdk:"candidate_paths_type"`
 }
-type SegmentRoutingCandidatePathsCandidatePathsType struct {
+type SegmentRoutingTECandidatePathsCandidatePathsType struct {
 	Type             types.String `tfsdk:"type"`
 	Pcep             types.Bool   `tfsdk:"pcep"`
 	MetricMetricType types.String `tfsdk:"metric_metric_type"`
@@ -28,11 +28,11 @@ type SegmentRoutingCandidatePathsCandidatePathsType struct {
 	SegmentListName  types.String `tfsdk:"segment_list_name"`
 }
 
-func (data SegmentRoutingCandidatePaths) getPath() string {
+func (data SegmentRoutingTECandidatePaths) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/policies/policy[policy-name=%s]/candidate-paths/preferences/preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
 }
 
-func (data SegmentRoutingCandidatePaths) toBody(ctx context.Context) string {
+func (data SegmentRoutingTECandidatePaths) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.PathIndex.IsNull() && !data.PathIndex.IsUnknown() {
 		body, _ = sjson.Set(body, "path-index", strconv.FormatInt(data.PathIndex.ValueInt64(), 10))
@@ -62,7 +62,7 @@ func (data SegmentRoutingCandidatePaths) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *SegmentRoutingCandidatePaths) updateFromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingTECandidatePaths) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.CandidatePathsType {
 		keys := [...]string{"type", "hop-type", "segment-list-name"}
 		keyValues := [...]string{data.CandidatePathsType[i].Type.ValueString(), data.CandidatePathsType[i].HopType.ValueString(), data.CandidatePathsType[i].SegmentListName.ValueString()}
@@ -118,11 +118,11 @@ func (data *SegmentRoutingCandidatePaths) updateFromBody(ctx context.Context, re
 	}
 }
 
-func (data *SegmentRoutingCandidatePaths) fromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingTECandidatePaths) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
-		data.CandidatePathsType = make([]SegmentRoutingCandidatePathsCandidatePathsType, 0)
+		data.CandidatePathsType = make([]SegmentRoutingTECandidatePathsCandidatePathsType, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := SegmentRoutingCandidatePathsCandidatePathsType{}
+			item := SegmentRoutingTECandidatePathsCandidatePathsType{}
 			if cValue := v.Get("type"); cValue.Exists() {
 				item.Type = types.StringValue(cValue.String())
 			}
@@ -146,7 +146,7 @@ func (data *SegmentRoutingCandidatePaths) fromBody(ctx context.Context, res []by
 	}
 }
 
-func (data *SegmentRoutingCandidatePaths) getDeletedListItems(ctx context.Context, state SegmentRoutingCandidatePaths) []string {
+func (data *SegmentRoutingTECandidatePaths) getDeletedListItems(ctx context.Context, state SegmentRoutingTECandidatePaths) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.CandidatePathsType {
 		keys := [...]string{"type", "hop-type", "segment-list-name"}
@@ -193,7 +193,7 @@ func (data *SegmentRoutingCandidatePaths) getDeletedListItems(ctx context.Contex
 	return deletedListItems
 }
 
-func (data *SegmentRoutingCandidatePaths) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *SegmentRoutingTECandidatePaths) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	for i := range data.CandidatePathsType {

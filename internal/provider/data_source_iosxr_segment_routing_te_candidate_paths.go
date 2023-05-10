@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SegmentRoutingCandidatePathsDataSource{}
-	_ datasource.DataSourceWithConfigure = &SegmentRoutingCandidatePathsDataSource{}
+	_ datasource.DataSource              = &SegmentRoutingTECandidatePathsDataSource{}
+	_ datasource.DataSourceWithConfigure = &SegmentRoutingTECandidatePathsDataSource{}
 )
 
-func NewSegmentRoutingCandidatePathsDataSource() datasource.DataSource {
-	return &SegmentRoutingCandidatePathsDataSource{}
+func NewSegmentRoutingTECandidatePathsDataSource() datasource.DataSource {
+	return &SegmentRoutingTECandidatePathsDataSource{}
 }
 
-type SegmentRoutingCandidatePathsDataSource struct {
+type SegmentRoutingTECandidatePathsDataSource struct {
 	client *client.Client
 }
 
-func (d *SegmentRoutingCandidatePathsDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_segment_routing_candidate_paths"
+func (d *SegmentRoutingTECandidatePathsDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_segment_routing_te_candidate_paths"
 }
 
-func (d *SegmentRoutingCandidatePathsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *SegmentRoutingTECandidatePathsDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Segment Routing Candidate Paths configuration.",
+		MarkdownDescription: "This data source can read the Segment Routing TE Candidate Paths configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -85,7 +85,7 @@ func (d *SegmentRoutingCandidatePathsDataSource) Schema(ctx context.Context, req
 	}
 }
 
-func (d *SegmentRoutingCandidatePathsDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *SegmentRoutingTECandidatePathsDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -93,8 +93,8 @@ func (d *SegmentRoutingCandidatePathsDataSource) Configure(_ context.Context, re
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *SegmentRoutingCandidatePathsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SegmentRoutingCandidatePaths
+func (d *SegmentRoutingTECandidatePathsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config SegmentRoutingTECandidatePaths
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

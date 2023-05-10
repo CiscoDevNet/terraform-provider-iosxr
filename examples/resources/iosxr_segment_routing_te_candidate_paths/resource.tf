@@ -1,4 +1,4 @@
-resource "iosxr_segment_routing_candidate_paths" "example" {
+resource "iosxr_segment_routing_te_candidate_paths" "example" {
   policy_name = "POLICY1"
   path_index  = 100
   candidate_paths_type = [
@@ -6,8 +6,8 @@ resource "iosxr_segment_routing_candidate_paths" "example" {
       type               = "dynamic"
       pcep               = false
       metric_metric_type = "igp"
-      hop_type           = "srv6"
-      segment_list_name  = "LIST1"
+      hop_type           = "mpls"
+      segment_list_name  = "dynamic"
     }
   ]
 }

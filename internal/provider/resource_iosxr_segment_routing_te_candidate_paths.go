@@ -22,24 +22,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*SegmentRoutingCandidatePathsResource)(nil)
+var _ resource.Resource = (*SegmentRoutingTECandidatePathsResource)(nil)
 
-func NewSegmentRoutingCandidatePathsResource() resource.Resource {
-	return &SegmentRoutingCandidatePathsResource{}
+func NewSegmentRoutingTECandidatePathsResource() resource.Resource {
+	return &SegmentRoutingTECandidatePathsResource{}
 }
 
-type SegmentRoutingCandidatePathsResource struct {
+type SegmentRoutingTECandidatePathsResource struct {
 	client *client.Client
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_segment_routing_candidate_paths"
+func (r *SegmentRoutingTECandidatePathsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_segment_routing_te_candidate_paths"
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *SegmentRoutingTECandidatePathsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Segment Routing Candidate Paths configuration.",
+		MarkdownDescription: "This resource can manage the Segment Routing TE Candidate Paths configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -119,7 +119,7 @@ func (r *SegmentRoutingCandidatePathsResource) Schema(ctx context.Context, req r
 	}
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SegmentRoutingTECandidatePathsResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -127,8 +127,8 @@ func (r *SegmentRoutingCandidatePathsResource) Configure(ctx context.Context, re
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SegmentRoutingCandidatePaths
+func (r *SegmentRoutingTECandidatePathsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan SegmentRoutingTECandidatePaths
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -166,8 +166,8 @@ func (r *SegmentRoutingCandidatePathsResource) Create(ctx context.Context, req r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SegmentRoutingCandidatePaths
+func (r *SegmentRoutingTECandidatePathsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state SegmentRoutingTECandidatePaths
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -192,8 +192,8 @@ func (r *SegmentRoutingCandidatePathsResource) Read(ctx context.Context, req res
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SegmentRoutingCandidatePaths
+func (r *SegmentRoutingTECandidatePathsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state SegmentRoutingTECandidatePaths
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -243,8 +243,8 @@ func (r *SegmentRoutingCandidatePathsResource) Update(ctx context.Context, req r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingCandidatePathsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SegmentRoutingCandidatePaths
+func (r *SegmentRoutingTECandidatePathsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state SegmentRoutingTECandidatePaths
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -266,6 +266,6 @@ func (r *SegmentRoutingCandidatePathsResource) Delete(ctx context.Context, req r
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SegmentRoutingCandidatePathsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *SegmentRoutingTECandidatePathsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

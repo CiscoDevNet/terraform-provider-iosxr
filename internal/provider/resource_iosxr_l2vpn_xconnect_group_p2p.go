@@ -226,6 +226,37 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					},
 				},
 			},
+			"evpn_segment_routing_service": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65534),
+							},
+						},
+						"service_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").AddIntegerRangeDescription(1, 4294967294).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967294),
+							},
+						},
+						"segment_routing_srv6_locator": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("PW locator to use for EVPN SID allocation").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 58),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

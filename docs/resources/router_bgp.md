@@ -17,6 +17,9 @@ resource "iosxr_router_bgp" "example" {
   as_number                             = "65001"
   default_information_originate         = true
   default_metric                        = 125
+  nsr_disable                           = false
+  bgp_redistribute_internal             = true
+  segment_routing_srv6_locator          = "locator11"
   timers_bgp_keepalive_interval         = 5
   timers_bgp_holdtime                   = "20"
   bgp_router_id                         = "22.22.22.22"
@@ -75,6 +78,7 @@ resource "iosxr_router_bgp" "example" {
   - Range: `2`-`16`
 - `bgp_graceful_restart_graceful_reset` (Boolean) Reset gracefully if configuration change forces a peer reset
 - `bgp_log_neighbor_changes_detail` (Boolean) Include extra detail in change messages
+- `bgp_redistribute_internal` (Boolean) Allow redistribution of iBGP into IGPs (dangerous)
 - `bgp_router_id` (String) Configure Router-id
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
@@ -83,6 +87,8 @@ resource "iosxr_router_bgp" "example" {
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
 - `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
+- `segment_routing_srv6_locator` (String) Configure locator name
 
 ### Read-Only
 

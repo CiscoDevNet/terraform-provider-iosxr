@@ -9,6 +9,12 @@ attributes:
     example: true
   - yang_name: default-metric
     example: 125
+  - yang_name: nsr/disable
+    example: false
+  - yang_name: bgp/redistribute-internal
+    example: true
+  - yang_name: segment-routing/srv6/locator
+    example: locator11
   - yang_name: timers/bgp/keepalive-interval
     example: 5
   - yang_name: timers/bgp/holdtime

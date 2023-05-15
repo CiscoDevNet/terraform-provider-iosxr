@@ -2,6 +2,9 @@ resource "iosxr_router_bgp" "example" {
   as_number                             = "65001"
   default_information_originate         = true
   default_metric                        = 125
+  nsr_disable                           = false
+  bgp_redistribute_internal             = true
+  segment_routing_srv6_locator          = "locator11"
   timers_bgp_keepalive_interval         = 5
   timers_bgp_holdtime                   = "20"
   bgp_router_id                         = "22.22.22.22"

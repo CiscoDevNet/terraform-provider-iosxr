@@ -14,17 +14,19 @@ This resource can manage the Router BGP VRF Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf_address_family" "example" {
-  as_number                     = "65001"
-  vrf_name                      = "VRF1"
-  af_name                       = "ipv4-unicast"
-  maximum_paths_ebgp_multipath  = 10
-  maximum_paths_ibgp_multipath  = 10
-  label_mode_per_ce             = false
-  label_mode_per_vrf            = false
-  redistribute_connected        = true
-  redistribute_connected_metric = 10
-  redistribute_static           = true
-  redistribute_static_metric    = 10
+  as_number                               = "65001"
+  vrf_name                                = "VRF1"
+  af_name                                 = "ipv4-unicast"
+  maximum_paths_ebgp_multipath            = 10
+  maximum_paths_ibgp_multipath            = 10
+  label_mode_per_ce                       = false
+  label_mode_per_vrf                      = false
+  redistribute_connected                  = true
+  redistribute_connected_metric           = 10
+  redistribute_static                     = true
+  redistribute_static_metric              = 10
+  segment_routing_srv6_locator            = "LocAlgo11"
+  segment_routing_srv6_alloc_mode_per_vrf = true
   aggregate_addresses = [
     {
       address       = "10.0.0.0"
@@ -85,6 +87,8 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
+- `segment_routing_srv6_alloc_mode_per_vrf` (Boolean) Set per VRF label mode
+- `segment_routing_srv6_locator` (String) Specify locator
 
 ### Read-Only
 

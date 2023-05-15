@@ -93,6 +93,14 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Metric for redistributed routes",
 				Computed:            true,
 			},
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: "Specify locator",
+				Computed:            true,
+			},
+			"segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: "Set per VRF label mode",
+				Computed:            true,
+			},
 			"aggregate_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
 				Computed:            true,

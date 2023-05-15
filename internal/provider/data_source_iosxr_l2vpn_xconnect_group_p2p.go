@@ -153,6 +153,26 @@ func (d *L2VPNXconnectGroupP2PDataSource) Schema(ctx context.Context, req dataso
 					},
 				},
 			},
+			"evpn_segment_routing_service": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN Identifier",
+							Computed:            true,
+						},
+						"service_id": schema.Int64Attribute{
+							MarkdownDescription: "Specify service ID (used as local and remote ac-id)",
+							Computed:            true,
+						},
+						"segment_routing_srv6_locator": schema.StringAttribute{
+							MarkdownDescription: "PW locator to use for EVPN SID allocation",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

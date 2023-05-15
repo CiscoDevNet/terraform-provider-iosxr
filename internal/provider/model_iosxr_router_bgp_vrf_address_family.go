@@ -14,23 +14,25 @@ import (
 )
 
 type RouterBGPVRFAddressFamily struct {
-	Device                      types.String                                  `tfsdk:"device"`
-	Id                          types.String                                  `tfsdk:"id"`
-	AsNumber                    types.String                                  `tfsdk:"as_number"`
-	VrfName                     types.String                                  `tfsdk:"vrf_name"`
-	AfName                      types.String                                  `tfsdk:"af_name"`
-	MaximumPathsEbgpMultipath   types.Int64                                   `tfsdk:"maximum_paths_ebgp_multipath"`
-	MaximumPathsEibgpMultipath  types.Int64                                   `tfsdk:"maximum_paths_eibgp_multipath"`
-	MaximumPathsIbgpMultipath   types.Int64                                   `tfsdk:"maximum_paths_ibgp_multipath"`
-	LabelModePerCe              types.Bool                                    `tfsdk:"label_mode_per_ce"`
-	LabelModePerVrf             types.Bool                                    `tfsdk:"label_mode_per_vrf"`
-	RedistributeConnected       types.Bool                                    `tfsdk:"redistribute_connected"`
-	RedistributeConnectedMetric types.Int64                                   `tfsdk:"redistribute_connected_metric"`
-	RedistributeStatic          types.Bool                                    `tfsdk:"redistribute_static"`
-	RedistributeStaticMetric    types.Int64                                   `tfsdk:"redistribute_static_metric"`
-	AggregateAddresses          []RouterBGPVRFAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
-	Networks                    []RouterBGPVRFAddressFamilyNetworks           `tfsdk:"networks"`
-	RedistributeOspf            []RouterBGPVRFAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
+	Device                            types.String                                  `tfsdk:"device"`
+	Id                                types.String                                  `tfsdk:"id"`
+	AsNumber                          types.String                                  `tfsdk:"as_number"`
+	VrfName                           types.String                                  `tfsdk:"vrf_name"`
+	AfName                            types.String                                  `tfsdk:"af_name"`
+	MaximumPathsEbgpMultipath         types.Int64                                   `tfsdk:"maximum_paths_ebgp_multipath"`
+	MaximumPathsEibgpMultipath        types.Int64                                   `tfsdk:"maximum_paths_eibgp_multipath"`
+	MaximumPathsIbgpMultipath         types.Int64                                   `tfsdk:"maximum_paths_ibgp_multipath"`
+	LabelModePerCe                    types.Bool                                    `tfsdk:"label_mode_per_ce"`
+	LabelModePerVrf                   types.Bool                                    `tfsdk:"label_mode_per_vrf"`
+	RedistributeConnected             types.Bool                                    `tfsdk:"redistribute_connected"`
+	RedistributeConnectedMetric       types.Int64                                   `tfsdk:"redistribute_connected_metric"`
+	RedistributeStatic                types.Bool                                    `tfsdk:"redistribute_static"`
+	RedistributeStaticMetric          types.Int64                                   `tfsdk:"redistribute_static_metric"`
+	SegmentRoutingSrv6Locator         types.String                                  `tfsdk:"segment_routing_srv6_locator"`
+	SegmentRoutingSrv6AllocModePerVrf types.Bool                                    `tfsdk:"segment_routing_srv6_alloc_mode_per_vrf"`
+	AggregateAddresses                []RouterBGPVRFAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
+	Networks                          []RouterBGPVRFAddressFamilyNetworks           `tfsdk:"networks"`
+	RedistributeOspf                  []RouterBGPVRFAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
 }
 type RouterBGPVRFAddressFamilyAggregateAddresses struct {
 	Address     types.String `tfsdk:"address"`
@@ -97,6 +99,14 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.RedistributeStaticMetric.IsNull() && !data.RedistributeStaticMetric.IsUnknown() {
 		body, _ = sjson.Set(body, "redistribute.static.metric", strconv.FormatInt(data.RedistributeStaticMetric.ValueInt64(), 10))
+	}
+	if !data.SegmentRoutingSrv6Locator.IsNull() && !data.SegmentRoutingSrv6Locator.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing.srv6.locator", data.SegmentRoutingSrv6Locator.ValueString())
+	}
+	if !data.SegmentRoutingSrv6AllocModePerVrf.IsNull() && !data.SegmentRoutingSrv6AllocModePerVrf.IsUnknown() {
+		if data.SegmentRoutingSrv6AllocModePerVrf.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.srv6.alloc.mode.per-vrf", map[string]string{})
+		}
 	}
 	if len(data.AggregateAddresses) > 0 {
 		body, _ = sjson.Set(body, "aggregate-addresses.aggregate-address", []interface{}{})
@@ -240,6 +250,20 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	} else {
 		data.RedistributeStaticMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() && !data.SegmentRoutingSrv6Locator.IsNull() {
+		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
+	} else {
+		data.SegmentRoutingSrv6Locator = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.alloc.mode.per-vrf"); !data.SegmentRoutingSrv6AllocModePerVrf.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingSrv6AllocModePerVrf = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingSrv6AllocModePerVrf = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingSrv6AllocModePerVrf = types.BoolNull()
 	}
 	for i := range data.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
@@ -462,6 +486,14 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.alloc.mode.per-vrf"); value.Exists() {
+		data.SegmentRoutingSrv6AllocModePerVrf = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6AllocModePerVrf = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "aggregate-addresses.aggregate-address"); value.Exists() {
 		data.AggregateAddresses = make([]RouterBGPVRFAddressFamilyAggregateAddresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -671,6 +703,9 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 	}
 	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.SegmentRoutingSrv6AllocModePerVrf.IsNull() && !data.SegmentRoutingSrv6AllocModePerVrf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/alloc/mode/per-vrf", data.getPath()))
 	}
 
 	for i := range data.AggregateAddresses {

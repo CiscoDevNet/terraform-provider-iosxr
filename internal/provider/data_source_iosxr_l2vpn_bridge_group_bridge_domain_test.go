@@ -18,6 +18,7 @@ func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"),
 					resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "vnis.0.vni_id", "1234"),
+					resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "segment_routing_srv6_evis_evi_vpn_id", "32"),
 				),
 			},
 		},
@@ -35,6 +36,7 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
 	vnis = [{
 		vni_id = 1234
 	}]
+	segment_routing_srv6_evis_evi_vpn_id = 32
 }
 
 data "iosxr_l2vpn_bridge_group_bridge_domain" "test" {

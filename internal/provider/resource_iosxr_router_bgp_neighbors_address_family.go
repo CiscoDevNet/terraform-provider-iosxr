@@ -5,14 +5,11 @@ package provider
 import (
 	"context"
 	"fmt"
-	"regexp"
 
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -22,24 +19,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*SegmentRoutingTECandidatePathsResource)(nil)
+var _ resource.Resource = (*RouterBGPNeighborsAddressFamilyResource)(nil)
 
-func NewSegmentRoutingTECandidatePathsResource() resource.Resource {
-	return &SegmentRoutingTECandidatePathsResource{}
+func NewRouterBGPNeighborsAddressFamilyResource() resource.Resource {
+	return &RouterBGPNeighborsAddressFamilyResource{}
 }
 
-type SegmentRoutingTECandidatePathsResource struct {
+type RouterBGPNeighborsAddressFamilyResource struct {
 	client *client.Client
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_segment_routing_te_candidate_paths"
+func (r *RouterBGPNeighborsAddressFamilyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbors_address_family"
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterBGPNeighborsAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Segment Routing TE Candidate Paths configuration.",
+		MarkdownDescription: "This resource can manage the Router BGP Neighbors Address Family configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -53,73 +50,55 @@ func (r *SegmentRoutingTECandidatePathsResource) Schema(ctx context.Context, req
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"policy_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy name").String,
+			"as_number": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"neighbor_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+				Required:            true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"af_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").AddStringEnumDescription("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 59),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.OneOf("all-address-family", "ipv4-flowspec", "ipv4-labeled-unicast", "ipv4-mdt", "ipv4-multicast", "ipv4-mvpn", "ipv4-rt-filter", "ipv4-sr-policy", "ipv4-tunnel", "ipv4-unicast", "ipv6-flowspec", "ipv6-labeled-unicast", "ipv6-multicast", "ipv6-mvpn", "ipv6-sr-policy", "ipv6-unicast", "l2vpn-evpn", "l2vpn-mspw", "l2vpn-vpls-vpws", "link-state-link-state", "vpnv4-flowspec", "vpnv4-multicast", "vpnv4-unicast", "vpnv6-flowspec", "vpnv6-multicast", "vpnv6-unicast"),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"path_index": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Path-option preference").AddIntegerRangeDescription(1, 65535).String,
-				Required:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 65535),
-				},
-				PlanModifiers: []planmodifier.Int64{
-					int64planmodifier.RequiresReplace(),
-				},
-			},
-			"candidate_paths_type": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Policy configuration").String,
+			"import_stitching_rt_re_originate_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Path-option type").AddStringEnumDescription("dynamic", "explicit").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("dynamic", "explicit"),
-							},
-						},
-						"pcep": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Path Computation Element Protocol").String,
-							Optional:            true,
-						},
-						"metric_metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
-							},
-						},
-						"hop_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Type of dynamic path to be computed").AddStringEnumDescription("mpls", "srv6").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("mpls", "srv6"),
-							},
-						},
-						"segment_list_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 128),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-					},
-				},
+			},
+			"route_reflector_client_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"advertise_vpnv4_unicast_enable_re_originated_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
+				Optional:            true,
+			},
+			"next_hop_self_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"encapsulation_type_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 encapsulation").String,
+				Optional:            true,
 			},
 		},
 	}
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPNeighborsAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -127,8 +106,8 @@ func (r *SegmentRoutingTECandidatePathsResource) Configure(ctx context.Context, 
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SegmentRoutingTECandidatePaths
+func (r *RouterBGPNeighborsAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterBGPNeighborsAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -166,8 +145,8 @@ func (r *SegmentRoutingTECandidatePathsResource) Create(ctx context.Context, req
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SegmentRoutingTECandidatePaths
+func (r *RouterBGPNeighborsAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterBGPNeighborsAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -192,8 +171,8 @@ func (r *SegmentRoutingTECandidatePathsResource) Read(ctx context.Context, req r
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SegmentRoutingTECandidatePaths
+func (r *RouterBGPNeighborsAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterBGPNeighborsAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -243,8 +222,8 @@ func (r *SegmentRoutingTECandidatePathsResource) Update(ctx context.Context, req
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SegmentRoutingTECandidatePaths
+func (r *RouterBGPNeighborsAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterBGPNeighborsAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -266,6 +245,6 @@ func (r *SegmentRoutingTECandidatePathsResource) Delete(ctx context.Context, req
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SegmentRoutingTECandidatePathsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterBGPNeighborsAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

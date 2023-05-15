@@ -19,6 +19,9 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "as_number", "65001"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "default_metric", "125"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "nsr_disable", "false"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_redistribute_internal", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "segment_routing_srv6_locator", "locator11"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_keepalive_interval", "5"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_holdtime", "20"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_router_id", "22.22.22.22"),
@@ -75,6 +78,9 @@ func testAccIosxrRouterBGPConfig_all() string {
 		as_number = "65001"
 		default_information_originate = true
 		default_metric = 125
+		nsr_disable = false
+		bgp_redistribute_internal = true
+		segment_routing_srv6_locator = "locator11"
 		timers_bgp_keepalive_interval = 5
 		timers_bgp_holdtime = "20"
 		bgp_router_id = "22.22.22.22"

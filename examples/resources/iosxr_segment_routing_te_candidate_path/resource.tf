@@ -1,4 +1,4 @@
-resource "iosxr_segment_routing_te_candidate_paths" "example" {
+resource "iosxr_segment_routing_te_candidate_path" "example" {
   policy_name = "POLICY1"
   path_index  = 100
   candidate_paths_type = [

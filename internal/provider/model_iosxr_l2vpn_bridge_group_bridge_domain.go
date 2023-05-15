@@ -28,6 +28,7 @@ type L2VPNBridgeGroupBridgeDomain struct {
 	StormControlUnknownUnicastPps  types.Int64                              `tfsdk:"storm_control_unknown_unicast_pps"`
 	StormControlUnknownUnicastKbps types.Int64                              `tfsdk:"storm_control_unknown_unicast_kbps"`
 	Interfaces                     []L2VPNBridgeGroupBridgeDomainInterfaces `tfsdk:"interfaces"`
+	SegmentRoutingSrv6EvisEviVpnId types.Int64                              `tfsdk:"segment_routing_srv6_evis_evi_vpn_id"`
 }
 type L2VPNBridgeGroupBridgeDomainEvis struct {
 	VpnId types.Int64 `tfsdk:"vpn_id"`
@@ -69,6 +70,9 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 	}
 	if !data.StormControlUnknownUnicastKbps.IsNull() && !data.StormControlUnknownUnicastKbps.IsUnknown() {
 		body, _ = sjson.Set(body, "storm-control.unknown-unicast.kbps", strconv.FormatInt(data.StormControlUnknownUnicastKbps.ValueInt64(), 10))
+	}
+	if !data.SegmentRoutingSrv6EvisEviVpnId.IsNull() && !data.SegmentRoutingSrv6EvisEviVpnId.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing-srv6-evis.evi.vpn-id", strconv.FormatInt(data.SegmentRoutingSrv6EvisEviVpnId.ValueInt64(), 10))
 	}
 	if len(data.Evis) > 0 {
 		body, _ = sjson.Set(body, "evis.evi", []interface{}{})
@@ -234,6 +238,11 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi.vpn-id"); value.Exists() && !data.SegmentRoutingSrv6EvisEviVpnId.IsNull() {
+		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Value(value.Int())
+	} else {
+		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Null()
+	}
 }
 
 func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []byte) {
@@ -295,6 +304,9 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 			data.Interfaces = append(data.Interfaces, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi.vpn-id"); value.Exists() {
+		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Value(value.Int())
 	}
 }
 

@@ -48,6 +48,8 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF/OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
+- `segment_routing_srv6_alloc_mode_per_vrf` (Boolean) Set per VRF label mode
+- `segment_routing_srv6_locator` (String) Specify locator
 
 <a id="nestedatt--aggregate_addresses"></a>
 ### Nested Schema for `aggregate_addresses`

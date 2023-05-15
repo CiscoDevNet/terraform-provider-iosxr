@@ -22,11 +22,11 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
       interface_name = "GigabitEthernet0/0/0/2"
     }
   ]
-  ipv4_neighbors = [
+  evpn_segment_routing_service = [
     {
-      address  = "2.3.4.5"
-      pw_id    = 1
-      pw_class = "PW_CLASS_1"
+      vpn_id                       = 4600
+      service_id                   = 600
+      segment_routing_srv6_locator = "LOC11"
     }
   ]
 }
@@ -44,6 +44,7 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 
 - `description` (String) Description for cross connect
 - `device` (String) A device name from the provider configuration.
+- `evpn_segment_routing_service` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_segment_routing_service))
 - `evpn_service_neighbors` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_service_neighbors))
 - `evpn_target_neighbors` (Attributes List) Specify remote attachment circuit identifier (see [below for nested schema](#nestedatt--evpn_target_neighbors))
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
@@ -53,6 +54,18 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--evpn_segment_routing_service"></a>
+### Nested Schema for `evpn_segment_routing_service`
+
+Optional:
+
+- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+  - Range: `1`-`4294967294`
+- `vpn_id` (Number) Ethernet VPN Identifier
+  - Range: `1`-`65534`
+
 
 <a id="nestedatt--evpn_service_neighbors"></a>
 ### Nested Schema for `evpn_service_neighbors`

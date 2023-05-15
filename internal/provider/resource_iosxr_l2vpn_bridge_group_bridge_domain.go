@@ -172,6 +172,13 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					},
 				},
 			},
+			"segment_routing_srv6_evis_evi_vpn_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").AddIntegerRangeDescription(1, 65534).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65534),
+				},
+			},
 		},
 	}
 }

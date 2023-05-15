@@ -34,12 +34,23 @@ data "iosxr_l2vpn_xconnect_group_p2p" "example" {
 ### Read-Only
 
 - `description` (String) Description for cross connect
+- `evpn_segment_routing_service` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_segment_routing_service))
 - `evpn_service_neighbors` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_service_neighbors))
 - `evpn_target_neighbors` (Attributes List) Specify remote attachment circuit identifier (see [below for nested schema](#nestedatt--evpn_target_neighbors))
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
 - `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
 - `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
+
+<a id="nestedatt--evpn_segment_routing_service"></a>
+### Nested Schema for `evpn_segment_routing_service`
+
+Read-Only:
+
+- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+- `vpn_id` (Number) Ethernet VPN Identifier
+
 
 <a id="nestedatt--evpn_service_neighbors"></a>
 ### Nested Schema for `evpn_service_neighbors`

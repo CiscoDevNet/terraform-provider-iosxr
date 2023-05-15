@@ -26,6 +26,7 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
       vni_id = 1234
     }
   ]
+  segment_routing_srv6_evis_evi_vpn_id = 32
 }
 ```
 
@@ -44,6 +45,8 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 - `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
 - `mtu` (Number) Maximum transmission unit (payload) for this Bridge Domain
   - Range: `46`-`65535`
+- `segment_routing_srv6_evis_evi_vpn_id` (Number) Ethernet VPN identifier for srv6
+  - Range: `1`-`65534`
 - `storm_control_broadcast_kbps` (Number) Set the storm control kbps
   - Range: `64`-`1280000`
 - `storm_control_broadcast_pps` (Number) Set the storm control pps

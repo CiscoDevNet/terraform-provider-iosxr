@@ -31,6 +31,10 @@ attributes:
     example: true
   - yang_name: redistribute/static/metric
     example: 10
+  - yang_name: segment-routing/srv6/locator
+    example: LocAlgo11
+  - yang_name: segment-routing/srv6/alloc/mode/per-vrf
+    example: true    
   - yang_name: aggregate-addresses/aggregate-address
     tf_name: aggregate_addresses
     type: List

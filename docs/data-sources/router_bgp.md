@@ -35,6 +35,7 @@ data "iosxr_router_bgp" "example" {
 - `bfd_multiplier` (Number) Detect multiplier
 - `bgp_graceful_restart_graceful_reset` (Boolean) Reset gracefully if configuration change forces a peer reset
 - `bgp_log_neighbor_changes_detail` (Boolean) Include extra detail in change messages
+- `bgp_redistribute_internal` (Boolean) Allow redistribution of iBGP into IGPs (dangerous)
 - `bgp_router_id` (String) Configure Router-id
 - `default_information_originate` (Boolean) Distribute a default route
 - `default_metric` (Number) default redistributed metric
@@ -42,6 +43,8 @@ data "iosxr_router_bgp" "example" {
 - `id` (String) The path of the retrieved object.
 - `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
+- `segment_routing_srv6_locator` (String) Configure locator name
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
 

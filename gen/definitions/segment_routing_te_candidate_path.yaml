@@ -1,5 +1,5 @@
 ---
-name: Segment Routing TE Candidate Paths
+name: Segment Routing TE Candidate Path
 path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/policies/policy[policy-name=%s]/candidate-paths/preferences/preference[path-index=%d]
 doc_category: Segment Routing
 attributes:

@@ -70,11 +70,11 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 							MarkdownDescription: "Specify Locator's behavior",
 							Computed:            true,
 						},
-						"locator_prefix": schema.StringAttribute{
+						"prefix": schema.StringAttribute{
 							MarkdownDescription: "IPv6 Prefix",
 							Computed:            true,
 						},
-						"prefix_prefix_length": schema.Int64Attribute{
+						"prefix_length": schema.Int64Attribute{
 							MarkdownDescription: "Prefix length",
 							Computed:            true,
 						},

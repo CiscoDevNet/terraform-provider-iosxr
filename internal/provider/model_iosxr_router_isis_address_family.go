@@ -50,7 +50,8 @@ type RouterISISAddressFamily struct {
 	SegmentRoutingMplsSrPrefer                types.Bool                                                  `tfsdk:"segment_routing_mpls_sr_prefer"`
 	MaximumRedistributedPrefixes              types.Int64                                                 `tfsdk:"maximum_redistributed_prefixes"`
 	MaximumRedistributedPrefixesLevels        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels `tfsdk:"maximum_redistributed_prefixes_levels"`
-	RedistributeId                            []RouterISISAddressFamilyRedistributeId                     `tfsdk:"redistribute_id"`
+	RedistributeIsis                          []RouterISISAddressFamilyRedistributeIsis                   `tfsdk:"redistribute_isis"`
+	SegmentRoutingSrv6Locators                []RouterISISAddressFamilySegmentRoutingSrv6Locators         `tfsdk:"segment_routing_srv6_locators"`
 }
 type RouterISISAddressFamilyMetricStyleLevels struct {
 	LevelId    types.Int64 `tfsdk:"level_id"`
@@ -67,9 +68,13 @@ type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
 	LevelId         types.Int64 `tfsdk:"level_id"`
 	MaximumPrefixes types.Int64 `tfsdk:"maximum_prefixes"`
 }
-type RouterISISAddressFamilyRedistributeId struct {
+type RouterISISAddressFamilyRedistributeIsis struct {
 	InstanceId  types.String `tfsdk:"instance_id"`
 	RoutePolicy types.String `tfsdk:"route_policy"`
+}
+type RouterISISAddressFamilySegmentRoutingSrv6Locators struct {
+	LocatorName types.String `tfsdk:"locator_name"`
+	Level       types.Int64  `tfsdk:"level"`
 }
 
 func (data RouterISISAddressFamily) getPath() string {
@@ -252,14 +257,25 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.RedistributeId) > 0 {
+	if len(data.RedistributeIsis) > 0 {
 		body, _ = sjson.Set(body, "redistribute.isis", []interface{}{})
-		for index, item := range data.RedistributeId {
+		for index, item := range data.RedistributeIsis {
 			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"instance-id", item.InstanceId.ValueString())
 			}
 			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
+		}
+	}
+	if len(data.SegmentRoutingSrv6Locators) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator", []interface{}{})
+		for index, item := range data.SegmentRoutingSrv6Locators {
+			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-name", item.LocatorName.ValueString())
+			}
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"level", strconv.FormatInt(item.Level.ValueInt64(), 10))
 			}
 		}
 	}
@@ -610,9 +626,9 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.MaximumRedistributedPrefixesLevels[i].MaximumPrefixes = types.Int64Null()
 		}
 	}
-	for i := range data.RedistributeId {
+	for i := range data.RedistributeIsis {
 		keys := [...]string{"instance-id"}
-		keyValues := [...]string{data.RedistributeId[i].InstanceId.ValueString()}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "redistribute.isis").ForEach(
@@ -633,15 +649,49 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 				return true
 			},
 		)
-		if value := r.Get("instance-id"); value.Exists() && !data.RedistributeId[i].InstanceId.IsNull() {
-			data.RedistributeId[i].InstanceId = types.StringValue(value.String())
+		if value := r.Get("instance-id"); value.Exists() && !data.RedistributeIsis[i].InstanceId.IsNull() {
+			data.RedistributeIsis[i].InstanceId = types.StringValue(value.String())
 		} else {
-			data.RedistributeId[i].InstanceId = types.StringNull()
+			data.RedistributeIsis[i].InstanceId = types.StringNull()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeId[i].RoutePolicy.IsNull() {
-			data.RedistributeId[i].RoutePolicy = types.StringValue(value.String())
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
+			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
 		} else {
-			data.RedistributeId[i].RoutePolicy = types.StringNull()
+			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
+		}
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.srv6.locators.locator").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("locator-name"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].LocatorName.IsNull() {
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringNull()
+		}
+		if value := r.Get("level"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].Level.IsNull() {
+			data.SegmentRoutingSrv6Locators[i].Level = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingSrv6Locators[i].Level = types.Int64Null()
 		}
 	}
 }
@@ -827,16 +877,30 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
-		data.RedistributeId = make([]RouterISISAddressFamilyRedistributeId, 0)
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyRedistributeId{}
+			item := RouterISISAddressFamilyRedistributeIsis{}
 			if cValue := v.Get("instance-id"); cValue.Exists() {
 				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("route-policy"); cValue.Exists() {
 				item.RoutePolicy = types.StringValue(cValue.String())
 			}
-			data.RedistributeId = append(data.RedistributeId, item)
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locators = make([]RouterISISAddressFamilySegmentRoutingSrv6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
 			return true
 		})
 	}
@@ -934,12 +998,12 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.RedistributeId {
+	for i := range state.RedistributeIsis {
 		keys := [...]string{"instance-id"}
-		stateKeyValues := [...]string{state.RedistributeId[i].InstanceId.ValueString()}
+		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceId.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.RedistributeId[i].InstanceId.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceId.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -947,9 +1011,9 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 		}
 
 		found := false
-		for j := range data.RedistributeId {
+		for j := range data.RedistributeIsis {
 			found = true
-			if state.RedistributeId[i].InstanceId.ValueString() != data.RedistributeId[j].InstanceId.ValueString() {
+			if state.RedistributeIsis[i].InstanceId.ValueString() != data.RedistributeIsis[j].InstanceId.ValueString() {
 				found = false
 			}
 			if found {
@@ -962,6 +1026,36 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		stateKeyValues := [...]string{state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingSrv6Locators {
+			found = true
+			if state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString() != data.SegmentRoutingSrv6Locators[j].LocatorName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems

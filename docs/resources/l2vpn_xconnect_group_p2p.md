@@ -22,7 +22,7 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
       interface_name = "GigabitEthernet0/0/0/2"
     }
   ]
-  evpn_segment_routing_service = [
+  neighbor_evpn_evi_segment_routing_services = [
     {
       vpn_id                       = 4600
       service_id                   = 600
@@ -44,28 +44,16 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 
 - `description` (String) Description for cross connect
 - `device` (String) A device name from the provider configuration.
-- `evpn_segment_routing_service` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_segment_routing_service))
 - `evpn_service_neighbors` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--evpn_service_neighbors))
 - `evpn_target_neighbors` (Attributes List) Specify remote attachment circuit identifier (see [below for nested schema](#nestedatt--evpn_target_neighbors))
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
 - `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
 - `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
+- `neighbor_evpn_evi_segment_routing_services` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--neighbor_evpn_evi_segment_routing_services))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
-
-<a id="nestedatt--evpn_segment_routing_service"></a>
-### Nested Schema for `evpn_segment_routing_service`
-
-Optional:
-
-- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
-- `service_id` (Number) Specify service ID (used as local and remote ac-id)
-  - Range: `1`-`4294967294`
-- `vpn_id` (Number) Ethernet VPN Identifier
-  - Range: `1`-`65534`
-
 
 <a id="nestedatt--evpn_service_neighbors"></a>
 ### Nested Schema for `evpn_service_neighbors`
@@ -121,6 +109,18 @@ Optional:
 - `pw_class` (String) PW class template name to use for this XC
 - `pw_id` (Number) Specify the pseudowire id
   - Range: `1`-`4294967295`
+
+
+<a id="nestedatt--neighbor_evpn_evi_segment_routing_services"></a>
+### Nested Schema for `neighbor_evpn_evi_segment_routing_services`
+
+Optional:
+
+- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+  - Range: `1`-`4294967294`
+- `vpn_id` (Number) Ethernet VPN Identifier
+  - Range: `1`-`65534`
 
 ## Import
 

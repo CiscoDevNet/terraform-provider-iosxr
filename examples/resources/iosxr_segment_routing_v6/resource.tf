@@ -6,8 +6,8 @@ resource "iosxr_segment_routing_v6" "example" {
       locator_enable         = true
       name                   = "Locator1"
       micro_segment_behavior = "unode-psp-usd"
-      locator_prefix         = "fccc:0:214::"
-      prefix_prefix_length   = 48
+      prefix                 = "fccc:0:214::"
+      prefix_length          = 48
     }
   ]
 }

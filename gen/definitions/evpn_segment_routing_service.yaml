@@ -1,5 +1,5 @@
 ---
-name: EVPN Segment Routing Services
+name: EVPN Segment Routing SRv6 EVI
 path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]
 doc_category: EVPN
 attributes:
@@ -8,7 +8,7 @@ attributes:
   - yang_name: description
     example: My Description
   - yang_name: bgp/route-target/import/two-byte-as-rts/two-byte-as-rt
-    tf_name: evpn_bgp_route_target_import_two_byte_as_format
+    tf_name: bgp_route_target_import_two_byte_as_format
     type: List
     attributes:
       - yang_name: two-byte-as-number
@@ -19,7 +19,7 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-target/import/four-byte-as-rts/four-byte-as-rt
-    tf_name: evpn_bgp_route_target_import_four_byte_as_format
+    tf_name: bgp_route_target_import_four_byte_as_format
     type: List
     exclude_test: true
     attributes:
@@ -31,7 +31,7 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-target/import/ipv4-address-rts/ipv4-address-rt
-    tf_name: evpn_bgp_route_target_import_ipv4_address_format
+    tf_name: bgp_route_target_import_ipv4_address_format
     type: List
     exclude_test: true
     attributes:
@@ -42,7 +42,7 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-target/export/two-byte-as-rts/two-byte-as-rt
-    tf_name: evpn_bgp_route_target_export_two_byte_as_format
+    tf_name: bgp_route_target_export_two_byte_as_format
     type: List
     exclude_test: true
     attributes:
@@ -54,7 +54,7 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-target/export/four-byte-as-rts/four-byte-as-rt
-    tf_name: evpn_bgp_route_target_export_four_byte_as_format
+    tf_name: bgp_route_target_export_four_byte_as_format
     type: List
     exclude_test: true
     attributes:
@@ -66,7 +66,7 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-target/export/ipv4-address-rts/ipv4-address-rt
-    tf_name: evpn_bgp_route_target_export_ipv4_address_format
+    tf_name: bgp_route_target_export_ipv4_address_format
     type: List
     attributes:
       - yang_name: ipv4-address
@@ -75,7 +75,7 @@ attributes:
       - yang_name: assigned-number
         id: true
         example: 1
-  - yang_name: advertise-mac/bvi-mac
+  - yang_name: advertise-mac
     example: true
   - yang_name: locator  
     example: LOC12

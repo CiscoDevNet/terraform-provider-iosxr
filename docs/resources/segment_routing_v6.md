@@ -21,8 +21,8 @@ resource "iosxr_segment_routing_v6" "example" {
       locator_enable         = true
       name                   = "Locator1"
       micro_segment_behavior = "unode-psp-usd"
-      locator_prefix         = "fccc:0:214::"
-      prefix_prefix_length   = 48
+      prefix                 = "fccc:0:214::"
+      prefix_length          = 48
     }
   ]
 }
@@ -48,11 +48,11 @@ resource "iosxr_segment_routing_v6" "example" {
 Optional:
 
 - `locator_enable` (Boolean) Enable a SRv6 locator
-- `locator_prefix` (String) IPv6 Prefix
 - `micro_segment_behavior` (String) Specify Locator's behavior
   - Choices: `unode-psp-usd`, `unode-shift-only`
 - `name` (String) Locator name
-- `prefix_prefix_length` (Number) Prefix length
+- `prefix` (String) IPv6 Prefix
+- `prefix_length` (Number) Prefix length
   - Range: `32`-`112`
 
 ## Import

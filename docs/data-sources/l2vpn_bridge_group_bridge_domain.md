@@ -37,7 +37,7 @@ data "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
 - `mtu` (Number) Maximum transmission unit (payload) for this Bridge Domain
-- `segment_routing_srv6_evis_evi_vpn_id` (Number) Ethernet VPN identifier for srv6
+- `segment_routing_srv6_evis` (Attributes List) Ethernet VPN identifier for srv6 (see [below for nested schema](#nestedatt--segment_routing_srv6_evis))
 - `storm_control_broadcast_kbps` (Number) Set the storm control kbps
 - `storm_control_broadcast_pps` (Number) Set the storm control pps
 - `storm_control_multicast_kbps` (Number) Set the storm control kbps
@@ -61,6 +61,14 @@ Read-Only:
 
 - `interface_name` (String) Specify interface name
 - `split_horizon_group` (Boolean) Configure split-horizon group
+
+
+<a id="nestedatt--segment_routing_srv6_evis"></a>
+### Nested Schema for `segment_routing_srv6_evis`
+
+Read-Only:
+
+- `vpn_id` (Number) Ethernet VPN identifier for srv6
 
 
 <a id="nestedatt--vnis"></a>

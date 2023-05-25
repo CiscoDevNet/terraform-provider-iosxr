@@ -226,7 +226,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					},
 				},
 			},
-			"evpn_segment_routing_service": schema.ListNestedAttribute{
+			"neighbor_evpn_evi_segment_routing_services": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

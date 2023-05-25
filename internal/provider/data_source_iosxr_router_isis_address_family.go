@@ -229,7 +229,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 					},
 				},
 			},
-			"redistribute_id": schema.ListNestedAttribute{
+			"redistribute_isis": schema.ListNestedAttribute{
 				MarkdownDescription: "IS-IS",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -240,6 +240,22 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 						},
 						"route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_routing_srv6_locators": schema.ListNestedAttribute{
+				MarkdownDescription: "Enter SRv6 Locator submode",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: "Enter SRv6 Locator submode",
+							Computed:            true,
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: "Advertise the locator only in the specified level",
 							Computed:            true,
 						},
 					},

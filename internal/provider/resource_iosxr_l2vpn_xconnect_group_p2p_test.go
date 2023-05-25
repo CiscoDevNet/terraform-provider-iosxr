@@ -19,9 +19,9 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "p2p_xconnect_name", "XC"),
 					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "description", "My P2P Description"),
 					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/2"),
-					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "evpn_segment_routing_service.0.vpn_id", "4600"),
-					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "evpn_segment_routing_service.0.service_id", "600"),
-					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "evpn_segment_routing_service.0.segment_routing_srv6_locator", "LOC11"),
+					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.vpn_id", "4600"),
+					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.service_id", "600"),
+					resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.segment_routing_srv6_locator", "LOC11"),
 				),
 			},
 			{
@@ -51,7 +51,7 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
 		interfaces = [{
 			interface_name = "GigabitEthernet0/0/0/2"
 		}]
-		evpn_segment_routing_service = [{
+		neighbor_evpn_evi_segment_routing_services = [{
 			vpn_id = 4600
 			service_id = 600
 			segment_routing_srv6_locator = "LOC11"

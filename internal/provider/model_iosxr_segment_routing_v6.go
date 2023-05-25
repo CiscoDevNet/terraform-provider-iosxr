@@ -24,8 +24,8 @@ type SegmentRoutingV6Locators struct {
 	LocatorEnable        types.Bool   `tfsdk:"locator_enable"`
 	Name                 types.String `tfsdk:"name"`
 	MicroSegmentBehavior types.String `tfsdk:"micro_segment_behavior"`
-	LocatorPrefix        types.String `tfsdk:"locator_prefix"`
-	PrefixPrefixLength   types.Int64  `tfsdk:"prefix_prefix_length"`
+	Prefix               types.String `tfsdk:"prefix"`
+	PrefixLength         types.Int64  `tfsdk:"prefix_length"`
 }
 
 func (data SegmentRoutingV6) getPath() string {
@@ -56,11 +56,11 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 			if !item.MicroSegmentBehavior.IsNull() && !item.MicroSegmentBehavior.IsUnknown() {
 				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"micro-segment.behavior", item.MicroSegmentBehavior.ValueString())
 			}
-			if !item.LocatorPrefix.IsNull() && !item.LocatorPrefix.IsUnknown() {
-				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix", item.LocatorPrefix.ValueString())
+			if !item.Prefix.IsNull() && !item.Prefix.IsUnknown() {
+				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix", item.Prefix.ValueString())
 			}
-			if !item.PrefixPrefixLength.IsNull() && !item.PrefixPrefixLength.IsUnknown() {
-				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix-length", strconv.FormatInt(item.PrefixPrefixLength.ValueInt64(), 10))
+			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
+				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
 			}
 		}
 	}
@@ -124,15 +124,15 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Locators[i].MicroSegmentBehavior = types.StringNull()
 		}
-		if value := r.Get("prefix.prefix"); value.Exists() && !data.Locators[i].LocatorPrefix.IsNull() {
-			data.Locators[i].LocatorPrefix = types.StringValue(value.String())
+		if value := r.Get("prefix.prefix"); value.Exists() && !data.Locators[i].Prefix.IsNull() {
+			data.Locators[i].Prefix = types.StringValue(value.String())
 		} else {
-			data.Locators[i].LocatorPrefix = types.StringNull()
+			data.Locators[i].Prefix = types.StringNull()
 		}
-		if value := r.Get("prefix.prefix-length"); value.Exists() && !data.Locators[i].PrefixPrefixLength.IsNull() {
-			data.Locators[i].PrefixPrefixLength = types.Int64Value(value.Int())
+		if value := r.Get("prefix.prefix-length"); value.Exists() && !data.Locators[i].PrefixLength.IsNull() {
+			data.Locators[i].PrefixLength = types.Int64Value(value.Int())
 		} else {
-			data.Locators[i].PrefixPrefixLength = types.Int64Null()
+			data.Locators[i].PrefixLength = types.Int64Null()
 		}
 	}
 }
@@ -162,10 +162,10 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
 				item.MicroSegmentBehavior = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
-				item.LocatorPrefix = types.StringValue(cValue.String())
+				item.Prefix = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
-				item.PrefixPrefixLength = types.Int64Value(cValue.Int())
+				item.PrefixLength = types.Int64Value(cValue.Int())
 			}
 			data.Locators = append(data.Locators, item)
 			return true

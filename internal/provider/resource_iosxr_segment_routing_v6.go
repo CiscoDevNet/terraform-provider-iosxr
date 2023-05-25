@@ -84,11 +84,11 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 								stringvalidator.OneOf("unode-psp-usd", "unode-shift-only"),
 							},
 						},
-						"locator_prefix": schema.StringAttribute{
+						"prefix": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Prefix").String,
 							Optional:            true,
 						},
-						"prefix_prefix_length": schema.Int64Attribute{
+						"prefix_length": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix length").AddIntegerRangeDescription(32, 112).String,
 							Optional:            true,
 							Validators: []validator.Int64{

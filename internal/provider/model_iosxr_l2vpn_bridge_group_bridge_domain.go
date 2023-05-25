@@ -14,21 +14,21 @@ import (
 )
 
 type L2VPNBridgeGroupBridgeDomain struct {
-	Device                         types.String                             `tfsdk:"device"`
-	Id                             types.String                             `tfsdk:"id"`
-	BridgeGroupName                types.String                             `tfsdk:"bridge_group_name"`
-	BridgeDomainName               types.String                             `tfsdk:"bridge_domain_name"`
-	Evis                           []L2VPNBridgeGroupBridgeDomainEvis       `tfsdk:"evis"`
-	Vnis                           []L2VPNBridgeGroupBridgeDomainVnis       `tfsdk:"vnis"`
-	Mtu                            types.Int64                              `tfsdk:"mtu"`
-	StormControlBroadcastPps       types.Int64                              `tfsdk:"storm_control_broadcast_pps"`
-	StormControlBroadcastKbps      types.Int64                              `tfsdk:"storm_control_broadcast_kbps"`
-	StormControlMulticastPps       types.Int64                              `tfsdk:"storm_control_multicast_pps"`
-	StormControlMulticastKbps      types.Int64                              `tfsdk:"storm_control_multicast_kbps"`
-	StormControlUnknownUnicastPps  types.Int64                              `tfsdk:"storm_control_unknown_unicast_pps"`
-	StormControlUnknownUnicastKbps types.Int64                              `tfsdk:"storm_control_unknown_unicast_kbps"`
-	Interfaces                     []L2VPNBridgeGroupBridgeDomainInterfaces `tfsdk:"interfaces"`
-	SegmentRoutingSrv6EvisEviVpnId types.Int64                              `tfsdk:"segment_routing_srv6_evis_evi_vpn_id"`
+	Device                         types.String                                         `tfsdk:"device"`
+	Id                             types.String                                         `tfsdk:"id"`
+	BridgeGroupName                types.String                                         `tfsdk:"bridge_group_name"`
+	BridgeDomainName               types.String                                         `tfsdk:"bridge_domain_name"`
+	Evis                           []L2VPNBridgeGroupBridgeDomainEvis                   `tfsdk:"evis"`
+	Vnis                           []L2VPNBridgeGroupBridgeDomainVnis                   `tfsdk:"vnis"`
+	Mtu                            types.Int64                                          `tfsdk:"mtu"`
+	StormControlBroadcastPps       types.Int64                                          `tfsdk:"storm_control_broadcast_pps"`
+	StormControlBroadcastKbps      types.Int64                                          `tfsdk:"storm_control_broadcast_kbps"`
+	StormControlMulticastPps       types.Int64                                          `tfsdk:"storm_control_multicast_pps"`
+	StormControlMulticastKbps      types.Int64                                          `tfsdk:"storm_control_multicast_kbps"`
+	StormControlUnknownUnicastPps  types.Int64                                          `tfsdk:"storm_control_unknown_unicast_pps"`
+	StormControlUnknownUnicastKbps types.Int64                                          `tfsdk:"storm_control_unknown_unicast_kbps"`
+	Interfaces                     []L2VPNBridgeGroupBridgeDomainInterfaces             `tfsdk:"interfaces"`
+	SegmentRoutingSrv6Evis         []L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis `tfsdk:"segment_routing_srv6_evis"`
 }
 type L2VPNBridgeGroupBridgeDomainEvis struct {
 	VpnId types.Int64 `tfsdk:"vpn_id"`
@@ -39,6 +39,9 @@ type L2VPNBridgeGroupBridgeDomainVnis struct {
 type L2VPNBridgeGroupBridgeDomainInterfaces struct {
 	InterfaceName     types.String `tfsdk:"interface_name"`
 	SplitHorizonGroup types.Bool   `tfsdk:"split_horizon_group"`
+}
+type L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis struct {
+	VpnId types.Int64 `tfsdk:"vpn_id"`
 }
 
 func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
@@ -71,9 +74,6 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 	if !data.StormControlUnknownUnicastKbps.IsNull() && !data.StormControlUnknownUnicastKbps.IsUnknown() {
 		body, _ = sjson.Set(body, "storm-control.unknown-unicast.kbps", strconv.FormatInt(data.StormControlUnknownUnicastKbps.ValueInt64(), 10))
 	}
-	if !data.SegmentRoutingSrv6EvisEviVpnId.IsNull() && !data.SegmentRoutingSrv6EvisEviVpnId.IsUnknown() {
-		body, _ = sjson.Set(body, "segment-routing-srv6-evis.evi.vpn-id", strconv.FormatInt(data.SegmentRoutingSrv6EvisEviVpnId.ValueInt64(), 10))
-	}
 	if len(data.Evis) > 0 {
 		body, _ = sjson.Set(body, "evis.evi", []interface{}{})
 		for index, item := range data.Evis {
@@ -100,6 +100,14 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 				if item.SplitHorizonGroup.ValueBool() {
 					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"split-horizon.group", map[string]string{})
 				}
+			}
+		}
+	}
+	if len(data.SegmentRoutingSrv6Evis) > 0 {
+		body, _ = sjson.Set(body, "segment-routing-srv6-evis.evi", []interface{}{})
+		for index, item := range data.SegmentRoutingSrv6Evis {
+			if !item.VpnId.IsNull() && !item.VpnId.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing-srv6-evis.evi"+"."+strconv.Itoa(index)+"."+"vpn-id", strconv.FormatInt(item.VpnId.ValueInt64(), 10))
 			}
 		}
 	}
@@ -238,10 +246,34 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 			data.Interfaces[i].SplitHorizonGroup = types.BoolNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi.vpn-id"); value.Exists() && !data.SegmentRoutingSrv6EvisEviVpnId.IsNull() {
-		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Value(value.Int())
-	} else {
-		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Null()
+	for i := range data.SegmentRoutingSrv6Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing-srv6-evis.evi").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vpn-id"); value.Exists() && !data.SegmentRoutingSrv6Evis[i].VpnId.IsNull() {
+			data.SegmentRoutingSrv6Evis[i].VpnId = types.Int64Value(value.Int())
+		} else {
+			data.SegmentRoutingSrv6Evis[i].VpnId = types.Int64Null()
+		}
 	}
 }
 
@@ -305,8 +337,16 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi.vpn-id"); value.Exists() {
-		data.SegmentRoutingSrv6EvisEviVpnId = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi"); value.Exists() {
+		data.SegmentRoutingSrv6Evis = make([]L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.SegmentRoutingSrv6Evis = append(data.SegmentRoutingSrv6Evis, item)
+			return true
+		})
 	}
 }
 
@@ -402,6 +442,36 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.SegmentRoutingSrv6Evis {
+		keys := [...]string{"vpn-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingSrv6Evis {
+			found = true
+			if state.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64() != data.SegmentRoutingSrv6Evis[j].VpnId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
@@ -419,5 +489,6 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", data.getPath(), keyString))
 		}
 	}
+
 	return emptyLeafsDelete
 }

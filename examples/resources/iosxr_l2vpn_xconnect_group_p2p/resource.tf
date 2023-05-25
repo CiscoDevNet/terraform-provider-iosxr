@@ -7,7 +7,7 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
       interface_name = "GigabitEthernet0/0/0/2"
     }
   ]
-  evpn_segment_routing_service = [
+  neighbor_evpn_evi_segment_routing_services = [
     {
       vpn_id                       = 4600
       service_id                   = 600

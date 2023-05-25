@@ -11,5 +11,4 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
       vni_id = 1234
     }
   ]
-  segment_routing_srv6_evis_evi_vpn_id = 32
 }

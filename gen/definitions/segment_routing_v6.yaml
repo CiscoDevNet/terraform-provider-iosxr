@@ -19,7 +19,8 @@ attributes:
       - yang_name: micro-segment/behavior
         example: unode-psp-usd
       - yang_name: prefix/prefix
-        tf_name: locator_prefix
+        tf_name: prefix
         example: "fccc:0:214::"
       - yang_name: prefix/prefix-length
+        tf_name: prefix_length
         example: 48

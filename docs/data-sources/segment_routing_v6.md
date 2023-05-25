@@ -37,9 +37,9 @@ data "iosxr_segment_routing_v6" "example" {
 Read-Only:
 
 - `locator_enable` (Boolean) Enable a SRv6 locator
-- `locator_prefix` (String) IPv6 Prefix
 - `micro_segment_behavior` (String) Specify Locator's behavior
 - `name` (String) Locator name
-- `prefix_prefix_length` (Number) Prefix length
+- `prefix` (String) IPv6 Prefix
+- `prefix_length` (Number) Prefix length
 
 

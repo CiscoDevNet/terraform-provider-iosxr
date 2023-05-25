@@ -21,8 +21,8 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"),
 					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.locator_prefix", "fccc:0:214::"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_prefix_length", "48"),
+					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"),
+					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"),
 				),
 			},
 		},
@@ -38,8 +38,8 @@ resource "iosxr_segment_routing_v6" "test" {
 		locator_enable = true
 		name = "Locator1"
 		micro_segment_behavior = "unode-psp-usd"
-		locator_prefix = "fccc:0:214::"
-		prefix_prefix_length = 48
+		prefix = "fccc:0:214::"
+		prefix_length = 48
 	}]
 }
 

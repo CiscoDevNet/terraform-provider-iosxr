@@ -60,10 +60,11 @@ data "iosxr_router_isis_address_family" "example" {
 - `mpls_traffic_eng_level_2_only` (Boolean) Enable mpls traffic-eng at level 2
 - `mpls_traffic_eng_router_id_interface` (String)
 - `mpls_traffic_eng_router_id_ip_address` (String) configure this node
-- `redistribute_id` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_id))
+- `redistribute_isis` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
 - `segment_routing_mpls_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
+- `segment_routing_srv6_locators` (Attributes List) Enter SRv6 Locator submode (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
 - `spf_interval_initial_wait` (Number) Initial delay before running a route calculation
 - `spf_interval_maximum_wait` (Number) Maximum delay before running a route calculation
 - `spf_interval_secondary_wait` (Number) Secondary delay before running a route calculation
@@ -89,13 +90,22 @@ Read-Only:
 - `wide` (Boolean) Use new style of TLVs to carry wider metric
 
 
-<a id="nestedatt--redistribute_id"></a>
-### Nested Schema for `redistribute_id`
+<a id="nestedatt--redistribute_isis"></a>
+### Nested Schema for `redistribute_isis`
 
 Read-Only:
 
 - `instance_id` (String) IS-IS
 - `route_policy` (String) Route policy reference
+
+
+<a id="nestedatt--segment_routing_srv6_locators"></a>
+### Nested Schema for `segment_routing_srv6_locators`
+
+Read-Only:
+
+- `level` (Number) Advertise the locator only in the specified level
+- `locator_name` (String) Enter SRv6 Locator submode
 
 
 <a id="nestedatt--spf_prefix_priorities"></a>

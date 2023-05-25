@@ -297,7 +297,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					},
 				},
 			},
-			"redistribute_id": schema.ListNestedAttribute{
+			"redistribute_isis": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -314,6 +314,29 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"segment_routing_srv6_locators": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enter SRv6 Locator submode").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enter SRv6 Locator submode").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 59),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"level": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the locator only in the specified level").AddIntegerRangeDescription(1, 2).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
 							},
 						},
 					},

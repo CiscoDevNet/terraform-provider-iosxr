@@ -73,7 +73,7 @@ attributes:
         example: PW_CLASS_1
         
   - yang_name: neighbor/evpn/evi/segment-routing-services/service
-    tf_name: evpn_segment_routing_service
+    tf_name: neighbor_evpn_evi_segment_routing_services
     type: List
     attributes:
       - yang_name: vpn-id

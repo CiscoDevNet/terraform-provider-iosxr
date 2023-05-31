@@ -57,6 +57,18 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "default redistributed metric",
 				Computed:            true,
 			},
+			"nsr_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable non-stop-routing support for all neighbors",
+				Computed:            true,
+			},
+			"bgp_redistribute_internal": schema.BoolAttribute{
+				MarkdownDescription: "Allow redistribution of iBGP into IGPs (dangerous)",
+				Computed:            true,
+			},
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: "Configure locator name",
+				Computed:            true,
+			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
 				MarkdownDescription: "BGP timers",
 				Computed:            true,

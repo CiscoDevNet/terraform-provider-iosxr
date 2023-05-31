@@ -1,6 +1,6 @@
 resource "iosxr_router_isis_address_family" "example" {
   process_id              = "P1"
-  af_name                 = "ipv4"
+  af_name                 = "ipv6"
   saf_name                = "unicast"
   metric_style_narrow     = false
   metric_style_wide       = true
@@ -13,7 +13,7 @@ resource "iosxr_router_isis_address_family" "example" {
       transition = false
     }
   ]
-  router_id_ip_address                            = "1.2.3.4"
+  router_id_ip_address                            = "1050:0000:0000:0000:0005:0600:300c:326b"
   default_information_originate                   = true
   fast_reroute_delay_interval                     = 300
   fast_reroute_per_link_priority_limit_critical   = true
@@ -27,10 +27,8 @@ resource "iosxr_router_isis_address_family" "example" {
   advertise_passive_only                          = true
   advertise_link_attributes                       = true
   mpls_ldp_auto_config                            = false
-  mpls_traffic_eng_router_id_ip_address           = "1.2.3.4"
   mpls_traffic_eng_level_1_2                      = false
   mpls_traffic_eng_level_1                        = false
-  mpls_traffic_eng_level_2_only                   = true
   spf_interval_maximum_wait                       = 5000
   spf_interval_initial_wait                       = 50
   spf_interval_secondary_wait                     = 200
@@ -40,12 +38,23 @@ resource "iosxr_router_isis_address_family" "example" {
       tag      = 100
     }
   ]
-  segment_routing_mpls_sr_prefer = true
   maximum_redistributed_prefixes = 100
   maximum_redistributed_prefixes_levels = [
     {
       level_id         = 1
       maximum_prefixes = 1000
+    }
+  ]
+  redistribute_isis = [
+    {
+      instance_id  = "CORE"
+      route_policy = "ROUTE_POLICY_1"
+    }
+  ]
+  segment_routing_srv6_locators = [
+    {
+      locator_name = "AlgoLocator"
+      level        = 1
     }
   ]
 }

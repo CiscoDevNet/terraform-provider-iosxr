@@ -70,6 +70,22 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(1, 4294967295),
 				},
 			},
+			"nsr_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable non-stop-routing support for all neighbors").String,
+				Optional:            true,
+			},
+			"bgp_redistribute_internal": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow redistribution of iBGP into IGPs (dangerous)").String,
+				Optional:            true,
+			},
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure locator name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
 				Required:            true,

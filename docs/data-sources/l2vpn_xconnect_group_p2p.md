@@ -40,6 +40,7 @@ data "iosxr_l2vpn_xconnect_group_p2p" "example" {
 - `interfaces` (Attributes List) Specify (sub-)interface name to cross connect (see [below for nested schema](#nestedatt--interfaces))
 - `ipv4_neighbors` (Attributes List) IPv4 (see [below for nested schema](#nestedatt--ipv4_neighbors))
 - `ipv6_neighbors` (Attributes List) IPv6 (see [below for nested schema](#nestedatt--ipv6_neighbors))
+- `neighbor_evpn_evi_segment_routing_services` (Attributes List) Specify service ID (used as local and remote ac-id) (see [below for nested schema](#nestedatt--neighbor_evpn_evi_segment_routing_services))
 
 <a id="nestedatt--evpn_service_neighbors"></a>
 ### Nested Schema for `evpn_service_neighbors`
@@ -88,5 +89,15 @@ Read-Only:
 - `address` (String) IPv6
 - `pw_class` (String) PW class template name to use for this XC
 - `pw_id` (Number) Specify the pseudowire id
+
+
+<a id="nestedatt--neighbor_evpn_evi_segment_routing_services"></a>
+### Nested Schema for `neighbor_evpn_evi_segment_routing_services`
+
+Read-Only:
+
+- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
+- `service_id` (Number) Specify service ID (used as local and remote ac-id)
+- `vpn_id` (Number) Ethernet VPN Identifier
 
 

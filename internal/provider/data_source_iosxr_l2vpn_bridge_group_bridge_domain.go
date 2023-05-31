@@ -121,6 +121,18 @@ func (d *L2VPNBridgeGroupBridgeDomainDataSource) Schema(ctx context.Context, req
 					},
 				},
 			},
+			"segment_routing_srv6_evis": schema.ListNestedAttribute{
+				MarkdownDescription: "Ethernet VPN identifier for srv6",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vpn_id": schema.Int64Attribute{
+							MarkdownDescription: "Ethernet VPN identifier for srv6",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

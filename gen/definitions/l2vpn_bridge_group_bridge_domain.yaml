@@ -53,3 +53,11 @@ attributes:
         example: Bundle-Ether11.1234
       - yang_name: split-horizon/group
         example: true
+  - yang_name: segment-routing-srv6-evis/evi
+    tf_name: segment_routing_srv6_evis
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 32

@@ -7,11 +7,11 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
       interface_name = "GigabitEthernet0/0/0/2"
     }
   ]
-  ipv4_neighbors = [
+  neighbor_evpn_evi_segment_routing_services = [
     {
-      address  = "2.3.4.5"
-      pw_id    = 1
-      pw_class = "PW_CLASS_1"
+      vpn_id                       = 4600
+      service_id                   = 600
+      segment_routing_srv6_locator = "LOC11"
     }
   ]
 }

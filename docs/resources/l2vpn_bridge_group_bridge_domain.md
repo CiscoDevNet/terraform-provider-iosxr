@@ -44,6 +44,7 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 - `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
 - `mtu` (Number) Maximum transmission unit (payload) for this Bridge Domain
   - Range: `46`-`65535`
+- `segment_routing_srv6_evis` (Attributes List) Ethernet VPN identifier for srv6 (see [below for nested schema](#nestedatt--segment_routing_srv6_evis))
 - `storm_control_broadcast_kbps` (Number) Set the storm control kbps
   - Range: `64`-`1280000`
 - `storm_control_broadcast_pps` (Number) Set the storm control pps
@@ -78,6 +79,15 @@ Optional:
 
 - `interface_name` (String) Specify interface name
 - `split_horizon_group` (Boolean) Configure split-horizon group
+
+
+<a id="nestedatt--segment_routing_srv6_evis"></a>
+### Nested Schema for `segment_routing_srv6_evis`
+
+Optional:
+
+- `vpn_id` (Number) Ethernet VPN identifier for srv6
+  - Range: `1`-`65534`
 
 
 <a id="nestedatt--vnis"></a>

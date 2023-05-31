@@ -38,3 +38,6 @@ attributes:
     tf_name: hello_password_keychain
     optional: true
     example: KEY_CHAIN_1
+    
+  - yang_name: bfd/fast-detect/ipv6
+    example: true

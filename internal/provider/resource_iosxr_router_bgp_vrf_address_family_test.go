@@ -25,6 +25,8 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_connected_metric", "10"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_static_metric", "10"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_locator", "LocAlgo11"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "segment_routing_srv6_alloc_mode_per_vrf", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.address", "10.0.0.0"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.masklength", "8"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "aggregate_addresses.0.as_set", "false"),
@@ -95,6 +97,8 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 		redistribute_connected_metric = 10
 		redistribute_static = true
 		redistribute_static_metric = 10
+		segment_routing_srv6_locator = "LocAlgo11"
+		segment_routing_srv6_alloc_mode_per_vrf = true
 		aggregate_addresses = [{
 			address = "10.0.0.0"
 			masklength = 8

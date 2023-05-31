@@ -131,6 +131,17 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"segment_routing_srv6_locator": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify locator").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"segment_routing_srv6_alloc_mode_per_vrf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
+				Optional:            true,
+			},
 			"aggregate_addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
 				Optional:            true,

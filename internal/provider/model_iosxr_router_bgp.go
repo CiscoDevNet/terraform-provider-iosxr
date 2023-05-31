@@ -19,6 +19,9 @@ type RouterBGP struct {
 	AsNumber                          types.String              `tfsdk:"as_number"`
 	DefaultInformationOriginate       types.Bool                `tfsdk:"default_information_originate"`
 	DefaultMetric                     types.Int64               `tfsdk:"default_metric"`
+	NsrDisable                        types.Bool                `tfsdk:"nsr_disable"`
+	BgpRedistributeInternal           types.Bool                `tfsdk:"bgp_redistribute_internal"`
+	SegmentRoutingSrv6Locator         types.String              `tfsdk:"segment_routing_srv6_locator"`
 	TimersBgpKeepaliveInterval        types.Int64               `tfsdk:"timers_bgp_keepalive_interval"`
 	TimersBgpHoldtime                 types.String              `tfsdk:"timers_bgp_holdtime"`
 	BgpRouterId                       types.String              `tfsdk:"bgp_router_id"`
@@ -74,6 +77,19 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	}
 	if !data.DefaultMetric.IsNull() && !data.DefaultMetric.IsUnknown() {
 		body, _ = sjson.Set(body, "default-metric", strconv.FormatInt(data.DefaultMetric.ValueInt64(), 10))
+	}
+	if !data.NsrDisable.IsNull() && !data.NsrDisable.IsUnknown() {
+		if data.NsrDisable.ValueBool() {
+			body, _ = sjson.Set(body, "nsr.disable", map[string]string{})
+		}
+	}
+	if !data.BgpRedistributeInternal.IsNull() && !data.BgpRedistributeInternal.IsUnknown() {
+		if data.BgpRedistributeInternal.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.redistribute-internal", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingSrv6Locator.IsNull() && !data.SegmentRoutingSrv6Locator.IsUnknown() {
+		body, _ = sjson.Set(body, "segment-routing.srv6.locator", data.SegmentRoutingSrv6Locator.ValueString())
 	}
 	if !data.TimersBgpKeepaliveInterval.IsNull() && !data.TimersBgpKeepaliveInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "timers.bgp.keepalive-interval", strconv.FormatInt(data.TimersBgpKeepaliveInterval.ValueInt64(), 10))
@@ -215,6 +231,29 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	} else {
 		data.DefaultMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "nsr.disable"); !data.NsrDisable.IsNull() {
+		if value.Exists() {
+			data.NsrDisable = types.BoolValue(true)
+		} else {
+			data.NsrDisable = types.BoolValue(false)
+		}
+	} else {
+		data.NsrDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.redistribute-internal"); !data.BgpRedistributeInternal.IsNull() {
+		if value.Exists() {
+			data.BgpRedistributeInternal = types.BoolValue(true)
+		} else {
+			data.BgpRedistributeInternal = types.BoolValue(false)
+		}
+	} else {
+		data.BgpRedistributeInternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() && !data.SegmentRoutingSrv6Locator.IsNull() {
+		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
+	} else {
+		data.SegmentRoutingSrv6Locator = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() && !data.TimersBgpKeepaliveInterval.IsNull() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
@@ -470,6 +509,19 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
 		data.DefaultMetric = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "nsr.disable"); value.Exists() {
+		data.NsrDisable = types.BoolValue(true)
+	} else {
+		data.NsrDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.redistribute-internal"); value.Exists() {
+		data.BgpRedistributeInternal = types.BoolValue(true)
+	} else {
+		data.BgpRedistributeInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
 		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
 	}
@@ -670,6 +722,12 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.NsrDisable.IsNull() && !data.NsrDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr/disable", data.getPath()))
+	}
+	if !data.BgpRedistributeInternal.IsNull() && !data.BgpRedistributeInternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/redistribute-internal", data.getPath()))
 	}
 	if !data.BgpGracefulRestartGracefulReset.IsNull() && !data.BgpGracefulRestartGracefulReset.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/graceful-restart/graceful-reset", data.getPath()))

@@ -6,7 +6,7 @@ attributes:
   - yang_name: process-id
     example: P1
   - yang_name: af-name
-    example: ipv4
+    example: ipv6
   - yang_name: saf-name
     example: unicast
   - yang_name: metric-style/narrow
@@ -32,7 +32,7 @@ attributes:
     example: GigabitEthernet0/0/0/1
     exclude_test: true
   - yang_name: router-id/ip-address
-    example: 1.2.3.4
+    example: 1050:0000:0000:0000:0005:0600:300c:326b
   - yang_name: default-information/originate
     example: true
   - yang_name: fast-reroute/delay-interval
@@ -61,6 +61,7 @@ attributes:
     example: false
   - yang_name: mpls/traffic-eng/router-id/ip-address
     example: 1.2.3.4
+    exclude_test: true
   - yang_name: mpls/traffic-eng/router-id/interface
     exclude_test: true
     example: Loopback0
@@ -70,6 +71,7 @@ attributes:
     example: false
   - yang_name: mpls/traffic-eng/level-2-only
     example: true
+    exclude_test: true
   - yang_name: spf-interval/maximum-wait/maximum-wait-time
     tf_name: spf_interval_maximum_wait
     example: 5000
@@ -93,6 +95,8 @@ attributes:
         example: ACL1
   - yang_name: segment-routing/mpls/sr-prefer
     example: true
+    exclude_test: true
+
   - yang_name: maximum-redistributed-prefixes/maximum-prefixes
     tf_name: maximum_redistributed_prefixes
     example: 100
@@ -105,3 +109,24 @@ attributes:
         example: 1
       - yang_name: maximum-prefixes
         example: 1000
+
+  - yang_name: redistribute/isis
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: instance-id
+        id: true
+        example: CORE
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
+
+
+  - yang_name: segment-routing/srv6/locators/locator
+    tf_name: segment_routing_srv6_locators
+    type: List
+    attributes:
+      - yang_name: locator-name
+        id: true
+        example: AlgoLocator
+      - yang_name: level
+        example: 1

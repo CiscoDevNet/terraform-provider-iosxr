@@ -1,3 +1,11 @@
+0.1.10 (unreleased)
+- Add `iosxr_segment_routing_v6` resource and data source
+- Add `iosxr_segment_routing_traffic_engineering` resource and data source
+- Add `iosxr_segment_routing_te_candidate_path` resource and data source
+- Add `iosxr_router_bgp_neighbors_address_family` resource and data source
+- Add `iosxr_evpn_segment_routing_services` resource and data source
+
+
 ## 0.1.9
 
 - Add `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source

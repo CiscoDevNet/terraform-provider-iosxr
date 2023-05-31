@@ -33,6 +33,7 @@ data "iosxr_router_isis_interface" "example" {
 
 ### Read-Only
 
+- `bfd_fast_detect_ipv6` (Boolean) Address Family
 - `circuit_type` (String) Configure circuit type for interface
 - `hello_padding_disable` (Boolean) Disable hello-padding
 - `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only

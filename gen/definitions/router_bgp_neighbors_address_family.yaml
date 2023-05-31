@@ -1,0 +1,33 @@
+---
+name: Router BGP Neighbors Address Family
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]
+doc_category: BGP
+attributes:
+  - yang_name: as-number
+    example: 65001
+  - yang_name: neighbor-address
+    example: 10.1.1.2
+  - yang_name: af-name
+    example: vpnv4-unicast
+  - yang_name: import/stitching-rt/re-originate/stitching-rt
+    example: true
+  - yang_name: route-reflector-client/inheritance-disable
+    example: true
+  - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
+    example: true
+  - yang_name: next-hop-self/inheritance-disable
+    example: true
+  - yang_name: encapsulation-type/srv6
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
+    attributes:
+      - name: af-name
+        value: vpnv4-unicast
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]
+    attributes:
+      - name: neighbor-address
+        value: 10.1.1.2
+      - name: remote-as
+        value: 65002

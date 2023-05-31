@@ -1,0 +1,26 @@
+---
+name: Segment Routing V6
+path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-cfg:srv6
+doc_category: Segment Routing
+attributes:
+  - yang_name: enable
+    example: true
+  - yang_name: encapsulation/source-address
+    example: fccc:0:214::1
+  - yang_name: locators/locators/locator
+    tf_name: locators
+    type: List
+    attributes:
+      - yang_name: locator-enable
+        example: true
+      - yang_name: name
+        id: true
+        example: Locator1        
+      - yang_name: micro-segment/behavior
+        example: unode-psp-usd
+      - yang_name: prefix/prefix
+        tf_name: prefix
+        example: "fccc:0:214::"
+      - yang_name: prefix/prefix-length
+        tf_name: prefix_length
+        example: 48

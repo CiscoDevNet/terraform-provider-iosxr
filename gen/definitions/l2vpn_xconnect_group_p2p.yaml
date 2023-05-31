@@ -19,6 +19,7 @@ attributes:
   - yang_name: neighbor/ipv4s/ipv4
     tf_name: ipv4_neighbors
     type: List
+    exclude_test: true
     attributes:
       - yang_name: address
         id: true
@@ -70,3 +71,16 @@ attributes:
         example: 1001
       - yang_name: pw-class
         example: PW_CLASS_1
+        
+  - yang_name: neighbor/evpn/evi/segment-routing-services/service
+    tf_name: neighbor_evpn_evi_segment_routing_services
+    type: List
+    attributes:
+      - yang_name: vpn-id
+        id: true
+        example: 4600
+      - yang_name: service-id
+        id: true
+        example: 600
+      - yang_name: segment-routing/srv6/locator
+        example: LOC11  

@@ -10,4 +10,5 @@ resource "iosxr_router_isis_interface" "example" {
   suppressed              = false
   shutdown                = false
   hello_password_keychain = "KEY_CHAIN_1"
+  bfd_fast_detect_ipv6    = true
 }

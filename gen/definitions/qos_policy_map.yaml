@@ -4,7 +4,6 @@ path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-nam
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    id: true
     example: core-ingress-classifier
   - yang_name: class/name
     example: class-default

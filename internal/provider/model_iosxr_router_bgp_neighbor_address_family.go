@@ -11,7 +11,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type RouterBGPNeighborsAddressFamily struct {
+type RouterBGPNeighborAddressFamily struct {
 	Device                                             types.String `tfsdk:"device"`
 	Id                                                 types.String `tfsdk:"id"`
 	AsNumber                                           types.String `tfsdk:"as_number"`
@@ -24,11 +24,11 @@ type RouterBGPNeighborsAddressFamily struct {
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
 }
 
-func (data RouterBGPNeighborsAddressFamily) getPath() string {
+func (data RouterBGPNeighborAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.NeighborAddress.ValueString(), data.AfName.ValueString())
 }
 
-func (data RouterBGPNeighborsAddressFamily) toBody(ctx context.Context) string {
+func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.AfName.IsNull() && !data.AfName.IsUnknown() {
 		body, _ = sjson.Set(body, "af-name", data.AfName.ValueString())
@@ -61,7 +61,7 @@ func (data RouterBGPNeighborsAddressFamily) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *RouterBGPNeighborsAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
 		if value.Exists() {
 			data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
@@ -109,7 +109,7 @@ func (data *RouterBGPNeighborsAddressFamily) updateFromBody(ctx context.Context,
 	}
 }
 
-func (data *RouterBGPNeighborsAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
 		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
 	} else {
@@ -137,12 +137,12 @@ func (data *RouterBGPNeighborsAddressFamily) fromBody(ctx context.Context, res [
 	}
 }
 
-func (data *RouterBGPNeighborsAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPNeighborsAddressFamily) []string {
+func (data *RouterBGPNeighborAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *RouterBGPNeighborsAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate/stitching-rt", data.getPath()))

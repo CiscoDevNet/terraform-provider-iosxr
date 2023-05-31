@@ -19,24 +19,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*RouterBGPNeighborsAddressFamilyResource)(nil)
+var _ resource.Resource = (*RouterBGPNeighborAddressFamilyResource)(nil)
 
-func NewRouterBGPNeighborsAddressFamilyResource() resource.Resource {
-	return &RouterBGPNeighborsAddressFamilyResource{}
+func NewRouterBGPNeighborAddressFamilyResource() resource.Resource {
+	return &RouterBGPNeighborAddressFamilyResource{}
 }
 
-type RouterBGPNeighborsAddressFamilyResource struct {
+type RouterBGPNeighborAddressFamilyResource struct {
 	client *client.Client
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbors_address_family"
+func (r *RouterBGPNeighborAddressFamilyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbor_address_family"
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Router BGP Neighbors Address Family configuration.",
+		MarkdownDescription: "This resource can manage the Router BGP Neighbor Address Family configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -98,7 +98,7 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Schema(ctx context.Context, re
 	}
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPNeighborAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -106,8 +106,8 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Configure(ctx context.Context,
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RouterBGPNeighborsAddressFamily
+func (r *RouterBGPNeighborAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterBGPNeighborAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -145,8 +145,8 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Create(ctx context.Context, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouterBGPNeighborsAddressFamily
+func (r *RouterBGPNeighborAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterBGPNeighborAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -171,8 +171,8 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Read(ctx context.Context, req 
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouterBGPNeighborsAddressFamily
+func (r *RouterBGPNeighborAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterBGPNeighborAddressFamily
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -222,8 +222,8 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Update(ctx context.Context, re
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouterBGPNeighborsAddressFamily
+func (r *RouterBGPNeighborAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterBGPNeighborAddressFamily
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -245,6 +245,6 @@ func (r *RouterBGPNeighborsAddressFamilyResource) Delete(ctx context.Context, re
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouterBGPNeighborsAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterBGPNeighborAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

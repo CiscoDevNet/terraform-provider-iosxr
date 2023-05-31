@@ -8,24 +8,24 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccIosxrRouterBGPNeighborsAddressFamily(t *testing.T) {
+func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrRouterBGPNeighborsAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborsAddressFamilyConfig_all(),
+				Config: testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "af_name", "vpnv4-unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "route_reflector_client_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "next_hop_self_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbors_address_family.test", "encapsulation_type_srv6", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "af_name", "vpnv4-unicast"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"),
+					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type_srv6", "true"),
 				),
 			},
 			{
-				ResourceName:  "iosxr_router_bgp_neighbors_address_family.test",
+				ResourceName:  "iosxr_router_bgp_neighbor_address_family.test",
 				ImportState:   true,
 				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]/address-families/address-family[af-name=vpnv4-unicast]",
 			},
@@ -33,7 +33,7 @@ func TestAccIosxrRouterBGPNeighborsAddressFamily(t *testing.T) {
 	})
 }
 
-const testAccIosxrRouterBGPNeighborsAddressFamilyPrerequisitesConfig = `
+const testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
   path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
   attributes = {
@@ -51,9 +51,9 @@ resource "iosxr_gnmi" "PreReq1" {
 
 `
 
-func testAccIosxrRouterBGPNeighborsAddressFamilyConfig_minimum() string {
+func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 	return `
-	resource "iosxr_router_bgp_neighbors_address_family" "test" {
+	resource "iosxr_router_bgp_neighbor_address_family" "test" {
 		as_number = "65001"
 		neighbor_address = "10.1.1.2"
 		af_name = "vpnv4-unicast"
@@ -62,9 +62,9 @@ func testAccIosxrRouterBGPNeighborsAddressFamilyConfig_minimum() string {
 	`
 }
 
-func testAccIosxrRouterBGPNeighborsAddressFamilyConfig_all() string {
+func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	return `
-	resource "iosxr_router_bgp_neighbors_address_family" "test" {
+	resource "iosxr_router_bgp_neighbor_address_family" "test" {
 		as_number = "65001"
 		neighbor_address = "10.1.1.2"
 		af_name = "vpnv4-unicast"

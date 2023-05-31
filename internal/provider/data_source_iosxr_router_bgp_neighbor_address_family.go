@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &RouterBGPNeighborsAddressFamilyDataSource{}
-	_ datasource.DataSourceWithConfigure = &RouterBGPNeighborsAddressFamilyDataSource{}
+	_ datasource.DataSource              = &RouterBGPNeighborAddressFamilyDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterBGPNeighborAddressFamilyDataSource{}
 )
 
-func NewRouterBGPNeighborsAddressFamilyDataSource() datasource.DataSource {
-	return &RouterBGPNeighborsAddressFamilyDataSource{}
+func NewRouterBGPNeighborAddressFamilyDataSource() datasource.DataSource {
+	return &RouterBGPNeighborAddressFamilyDataSource{}
 }
 
-type RouterBGPNeighborsAddressFamilyDataSource struct {
+type RouterBGPNeighborAddressFamilyDataSource struct {
 	client *client.Client
 }
 
-func (d *RouterBGPNeighborsAddressFamilyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbors_address_family"
+func (d *RouterBGPNeighborAddressFamilyDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_bgp_neighbor_address_family"
 }
 
-func (d *RouterBGPNeighborsAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Router BGP Neighbors Address Family configuration.",
+		MarkdownDescription: "This data source can read the Router BGP Neighbor Address Family configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -81,7 +81,7 @@ func (d *RouterBGPNeighborsAddressFamilyDataSource) Schema(ctx context.Context, 
 	}
 }
 
-func (d *RouterBGPNeighborsAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *RouterBGPNeighborAddressFamilyDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -89,8 +89,8 @@ func (d *RouterBGPNeighborsAddressFamilyDataSource) Configure(_ context.Context,
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *RouterBGPNeighborsAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterBGPNeighborsAddressFamily
+func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config RouterBGPNeighborAddressFamily
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

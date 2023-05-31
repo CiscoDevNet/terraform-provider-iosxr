@@ -7,13 +7,19 @@ description: |-
 
 # Changelog
 
-0.1.10 (unreleased)
-- Add `iosxr_segment_routing_v6` resource and data source
-- Add `iosxr_segment_routing_traffic_engineering` resource and data source
-- Add `iosxr_segment_routing_te_candidate_path` resource and data source
-- Add `iosxr_router_bgp_neighbors_address_family` resource and data source
-- Add `iosxr_evpn_segment_routing_services` resource and data source
+## 0.1.10 (unreleased)
 
+- Add `iosxr_segment_routing_v6` resource and data source
+- Add `iosxr_segment_routing_te` resource and data source
+- Add `iosxr_segment_routing_te_policy_candidate_path` resource and data source
+- Add `iosxr_router_bgp_neighbor_address_family` resource and data source
+- Add `iosxr_evpn_segment_routing_srv6_evi` resource and data source
+- Add `segment_routing_srv6_evis` attribute to `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
+- Add `neighbor_evpn_evi_segment_routing_services` attribute to `iosxr_l2vpn_xconnect_group_p2p` resource and data source
+- Add `nsr_disable`, `bgp_redistribute_internal` and `segment_routing_srv6_locator` attributes to `iosxr_router_bgp` resource and data source
+- Add `segment_routing_srv6_locator` and `segment_routing_srv6_alloc_mode_per_vrf` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
+- Add `redistribute_isis` and `segment_routing_srv6_locators` attributes to `iosxr_router_isis_address_family` resource and data source
+- Add `bfd_fast_detect_ipv6` attribute to `iosxr_router_isis_interface` resource and data source
 
 ## 0.1.9
 

@@ -1,5 +1,5 @@
 ---
-name: Router BGP Neighbors Address Family
+name: Router BGP Neighbor Address Family
 path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:

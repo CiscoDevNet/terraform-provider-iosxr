@@ -3,10 +3,40 @@ name: Segment Routing TE
 path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
 doc_category: Segment Routing
 attributes:
+  - yang_name: logging/pcep-peer-status
+    example: true     
+  - yang_name: logging/policy-status
+    example: true
+  - yang_name: pcc/report-all
+    example: true
+  - yang_name: pcc/source-address
+    example: 88.88.88.8
+  - yang_name: pcc/delegation-timeout
+    example: 10
+  - yang_name: pcc/dead-timer-interval
+    example: 60
+  - yang_name: pcc/initiated-state-interval
+    example: 15
+  - yang_name: pcc/initiated-orphan-interval
+    example: 10
+  - yang_name: pcc/pce-peers/pce-peer
+    tf_name: pce_peers
+    type: List
+    attributes: 
+      - yang_name: pce-address
+        id: true 
+        example: 66.66.66.6
+      - yang_name: precedence
+        example: 122
+
   - yang_name: on-demand-colors/on-demand-color
     tf_name: on_demand_colors
     type: List
     attributes: 
+      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast  
+        example: true
+      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type
+        example: te
       - yang_name: color
         id: true
         example: 266

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -87,6 +88,54 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 							},
 						},
 					},
+				},
+			},
+			"capabilities_sac_ipv4_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable exchanging IPv4 prefix label bindings").String,
+				Optional:            true,
+			},
+			"mldp_logging_notifications": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MLDP logging notifications").String,
+				Optional:            true,
+			},
+			"mldp_address_families": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"af_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure Address Family and its parameters").AddStringEnumDescription("ipv4").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("ipv4"),
+							},
+						},
+						"make_before_break_delay_forwarding_delay": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MBB delay").AddIntegerRangeDescription(0, 600).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 600),
+							},
+						},
+						"forwarding_recursive_route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"recursive_fec_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MLDP Recursive FEC enable").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"session_protection_for_for_access_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IP Access list to specify LDP Peers").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
 		},

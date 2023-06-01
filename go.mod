@@ -14,7 +14,7 @@ require (
 	github.com/openconfig/goyang v1.4.0
 	github.com/tidwall/gjson v1.14.4
 	github.com/tidwall/sjson v1.2.5
-	golang.org/x/tools v0.9.1
+	golang.org/x/tools v0.9.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 

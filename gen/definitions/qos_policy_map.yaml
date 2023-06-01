@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-nam
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    example: core-ingress-classifier
+    example: core-policy1
   - yang_name: class/name
     example: class-default
   - yang_name: class/type
@@ -20,12 +20,12 @@ attributes:
     example: 2
     exclude_test: true
   - yang_name: class/queue-limits/queue-limit
-    tf: class_queue-limits
+    tf_name: class_queue_limits
     type: List
     attributes:
       - yang_name: value
         id: true
-        example: 100
+        example: 10
       - yang_name: unit
         id: true
         example: us
@@ -33,7 +33,7 @@ attributes:
   - yang_name: class/service-policy/name
     example: SERVICEPOLICY
   - yang_name: class/police/rate/value
-    example: 5
+    example: 100
   - yang_name: class/police/rate/unit
     example: gbps
   - yang_name: class/shape/average/rate/value

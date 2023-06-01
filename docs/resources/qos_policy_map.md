@@ -14,19 +14,19 @@ This resource can manage the QOS Policy Map configuration.
 
 ```terraform
 resource "iosxr_qos_policy_map" "example" {
-  policy_map_name                     = "core-ingress-classifier"
+  policy_map_name                     = "core-policy1"
   class_name                          = "class-default"
   class_type                          = "qos"
   class_set_mpls_experimental_topmost = 0
   class_set_dscp                      = "0"
-  class_queue_limits_queue_limit = [
+  class_queue_limits = [
     {
-      value = "100"
+      value = "10"
       unit  = "us"
     }
   ]
   class_service_policy_name      = "SERVICEPOLICY"
-  class_police_rate_value        = "5"
+  class_police_rate_value        = "100"
   class_police_rate_unit         = "gbps"
   class_shape_average_rate_value = "100"
   class_shape_average_rate_unit  = "gbps"
@@ -51,7 +51,7 @@ resource "iosxr_qos_policy_map" "example" {
 - `class_police_rate_value` (String) Committed Information Rate
 - `class_priority_level` (Number) Configure a priority level
   - Range: `1`-`7`
-- `class_queue_limits_queue_limit` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--class_queue_limits_queue_limit))
+- `class_queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--class_queue_limits))
 - `class_service_policy_name` (String) Name of the child service policy
 - `class_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `class_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
@@ -67,8 +67,8 @@ resource "iosxr_qos_policy_map" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--class_queue_limits_queue_limit"></a>
-### Nested Schema for `class_queue_limits_queue_limit`
+<a id="nestedatt--class_queue_limits"></a>
+### Nested Schema for `class_queue_limits`
 
 Optional:
 
@@ -81,5 +81,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]"
+terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-policy1]"
 ```

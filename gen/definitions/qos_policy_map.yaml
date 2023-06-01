@@ -22,7 +22,6 @@ attributes:
   - yang_name: class/queue-limits/queue-limit
     tf: class_queue-limits
     type: List
-    exclude_test: true
     attributes:
       - yang_name: value
         id: true
@@ -33,23 +32,19 @@ attributes:
 
   - yang_name: class/service-policy/name
     example: SERVICEPOLICY
-    exclude_test: true
   - yang_name: class/police/rate/value
     example: 5
-    exclude_test: true
   - yang_name: class/police/rate/unit
     example: gbps
-    exclude_test: true
   - yang_name: class/shape/average/rate/value
     example: 100
-    exclude_test: true
   - yang_name: class/shape/average/rate/unit
     example: gbps
-    exclude_test: true
   - yang_name: class/bandwidth-remaining/unit
     example: percent
     exclude_test: true
   - yang_name: class/bandwidth-remaining/value
     example: 1
     exclude_test: true
+
 

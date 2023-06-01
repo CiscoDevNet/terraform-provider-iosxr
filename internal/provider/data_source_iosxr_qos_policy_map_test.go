@@ -20,6 +20,13 @@ func TestAccDataSourceIosxrQOSPolicyMap(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_type", "qos"),
 					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_set_mpls_experimental_topmost", "0"),
 					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_set_dscp", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_queue_limits_queue_limit.0.value", "100"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_queue_limits_queue_limit.0.unit", "us"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_service_policy_name", "SERVICEPOLICY"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_police_rate_value", "5"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_police_rate_unit", "gbps"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_shape_average_rate_value", "100"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_shape_average_rate_unit", "gbps"),
 				),
 			},
 		},
@@ -34,6 +41,15 @@ resource "iosxr_qos_policy_map" "test" {
 	class_type = "qos"
 	class_set_mpls_experimental_topmost = 0
 	class_set_dscp = "0"
+	class_queue_limits_queue_limit = [{
+		value = "100"
+		unit = "us"
+	}]
+	class_service_policy_name = "SERVICEPOLICY"
+	class_police_rate_value = "5"
+	class_police_rate_unit = "gbps"
+	class_shape_average_rate_value = "100"
+	class_shape_average_rate_unit = "gbps"
 }
 
 data "iosxr_qos_policy_map" "test" {

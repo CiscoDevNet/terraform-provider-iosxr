@@ -31,5 +31,3 @@ data "iosxr_oc_system_config" "example" {
 - `id` (String) The path of the retrieved object.
 - `login_banner` (String) The console login message displayed before the login prompt, i.e., before a user logs into the system.
 - `motd_banner` (String) The console message displayed after a user logs into the system.  They system may append additional standard information such as the current system date and time, uptime, last login timestamp, etc.
-
-

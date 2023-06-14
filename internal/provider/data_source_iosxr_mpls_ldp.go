@@ -73,6 +73,42 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
+			"capabilities_sac_ipv4_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging IPv4 prefix label bindings",
+				Computed:            true,
+			},
+			"mldp_logging_notifications": schema.BoolAttribute{
+				MarkdownDescription: "MLDP logging notifications",
+				Computed:            true,
+			},
+			"mldp_address_families": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure Address Family and its parameters",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"af_name": schema.StringAttribute{
+							MarkdownDescription: "Configure Address Family and its parameters",
+							Computed:            true,
+						},
+						"make_before_break_delay_forwarding_delay": schema.Int64Attribute{
+							MarkdownDescription: "MBB delay",
+							Computed:            true,
+						},
+						"forwarding_recursive_route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy",
+							Computed:            true,
+						},
+						"recursive_fec_enable": schema.BoolAttribute{
+							MarkdownDescription: "MLDP Recursive FEC enable",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"session_protection_for_for_access_list": schema.StringAttribute{
+				MarkdownDescription: "IP Access list to specify LDP Peers",
+				Computed:            true,
+			},
 		},
 	}
 }

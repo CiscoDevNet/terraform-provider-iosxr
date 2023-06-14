@@ -28,5 +28,3 @@ data "iosxr_evpn" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
-
-

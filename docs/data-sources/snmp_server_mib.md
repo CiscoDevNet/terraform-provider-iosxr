@@ -29,5 +29,3 @@ data "iosxr_snmp_server_mib" "example" {
 - `id` (String) The path of the retrieved object.
 - `ifindex_persist` (Boolean) Persist interface indices
 - `ifmib_ifalias_long` (Boolean) Enable support for ifAlias values longer than 64 characters
-
-

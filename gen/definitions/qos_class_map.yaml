@@ -1,0 +1,22 @@
+---
+name: Class Map
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]
+doc_category: QoS
+attributes:
+  - yang_name: class-map-name
+    id: true
+    example: TEST
+  - yang_name: match-any
+    example: true
+  - yang_name: description
+    example: description1
+  - yang_name: match/dscp/value
+    example: 46
+  - yang_name: match/mpls/experimental/topmost/label
+    example: 5
+  - yang_name: match/qos-group/id
+    example: group1
+    exclude_test: true
+  - yang_name: match/traffic-class/id
+    example: traffic1
+    exclude_test: true

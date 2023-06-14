@@ -1,0 +1,529 @@
+---
+name: IPv4 Access List
+path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=%s]
+doc_category: System
+attributes:
+  - yang_name: access-list-name
+    example: ACCESS1
+  - yang_name: sequences/sequence
+    tf_name: sequences
+    type: List
+    attributes:
+      - yang_name: sequence-number
+        id: true
+        example: 11
+      - yang_name: remark
+        example: remark for access list
+        exclude_test: true
+      - yang_name: permit/protocol
+        example: tcp
+      - yang_name: permit/eq
+        example: 122
+        exclude_test: true
+      - yang_name: permit/igmp-type
+        example: 0
+        exclude_test: true
+      - yang_name: permit/precedence
+        example: 7
+        exclude_test: true
+      - yang_name: permit/fragment-type
+        example: first-fragment
+        exclude_test: true
+      - yang_name: permit/fragments
+        example: true
+        exclude_test: true
+      - yang_name: permit/counter
+        example: COUNTER
+        exclude_test: true
+      - yang_name: permit/default
+        example: true
+      - yang_name: permit/capture
+        example: true
+        exclude_test: true
+      - yang_name: permit/range/start-protocol
+        example: eigrp
+        exclude_test: true
+      - yang_name: permit/range/end-protocol
+        example: gre
+        exclude_test: true
+      - yang_name: permit/source/address
+        example: 18.0.0.0
+      - yang_name: permit/source/wildcard-mask
+        example: 0.255.255.255
+      - yang_name: permit/source/prefix-length
+        example: 28
+        exclude_test: true
+      - yang_name: permit/source/any
+        example: true
+        exclude_test: true
+      - yang_name: permit/source/host
+        example: 99.99.99.1
+        exclude_test: true
+      - yang_name: permit/source/net-group
+        example: 64
+        exclude_test: true
+      - yang_name: permit/source/port-group
+        example: 32
+        exclude_test: true
+      - yang_name: permit/source/port/eq
+        example: 12
+        exclude_test: true
+      - yang_name: permit/source/port/gt
+        example: 2446
+        exclude_test: true
+      - yang_name: permit/source/port/lt
+        example: 222
+        exclude_test: true
+      - yang_name: permit/source/port/neq
+        example: 333
+        exclude_test: true
+      - yang_name: permit/source/port/range/start-value
+        example: 100
+      - yang_name: permit/source/port/range/end-value
+        example: 200
+      - yang_name: permit/destination/address
+        example: 1.1.1.1
+        exclude_test: true
+      - yang_name: permit/destination/wildcard-mask
+        example: 0.0.0.255
+        exclude_test: true
+      - yang_name: permit/destination/prefix-length
+        example: 28
+        exclude_test: true
+      - yang_name: permit/destination/any
+        example: true
+        exclude_test: true
+      - yang_name: permit/destination/host
+        example: 11.1.1.1
+      - yang_name: permit/destination/net-group
+        example: 64
+        exclude_test: true
+      - yang_name: permit/destination/port-group
+        example: 32
+        exclude_test: true
+      - yang_name: permit/destination/port/eq
+        example: 300
+      - yang_name: permit/destination/port/gt
+        example: 44
+        exclude_test: true
+      - yang_name: permit/destination/port/lt
+        example: 55
+        exclude_test: true
+      - yang_name: permit/destination/port/neq
+        example: 88
+        exclude_test: true
+      - yang_name: permit/destination/port/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: permit/destination/port/range/end-value
+        example: 200
+        exclude_test: true
+
+      # - yang_name: permit/tcp-flags/tcp-bits
+      #   tf_name: permit_tcp_bits
+      #   example: "rst ack"
+      # - yang_name: permit/tcp-flags/match-all/tcp-bits
+      #   example: ack
+      # - yang_name: permit/tcp-flags/match-any/tcp-bits
+      #   example: ack
+
+      - yang_name: permit/icmp/message-type-name
+        example: AdministrativelyProhibited
+        exclude_test: true
+      - yang_name: permit/icmp/message-type
+        example: 255
+        exclude_test: true
+      - yang_name: permit/icmp/message-code
+        example: 255
+        exclude_test: true
+      - yang_name: permit/dscp/dscp-value
+        example: cs1
+      - yang_name: permit/dscp/eq
+        example: 14
+        exclude_test: true
+      - yang_name: permit/dscp/gt
+        example: 15
+        exclude_test: true
+      - yang_name: permit/dscp/lt
+        example: 16
+        exclude_test: true
+      - yang_name: permit/dscp/neq
+        example: 17
+        exclude_test: true
+      - yang_name: permit/dscp/range/start-value
+        example: 300
+        exclude_test: true
+      - yang_name: permit/dscp/range/end-value
+        example: 400
+        exclude_test: true
+      - yang_name: permit/packet-length/eq
+        example: 22
+        exclude_test: true
+      - yang_name: permit/packet-length/gt
+        example: 23
+        exclude_test: true
+      - yang_name: permit/packet-length/lt
+        example: 24
+        exclude_test: true
+      - yang_name: permit/packet-length/neq
+        example: 25
+        exclude_test: true
+      - yang_name: permit/packet-length/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: permit/packet-length/range/end-value
+        example: 200
+        exclude_test: true
+      - yang_name: permit/ttl/eq
+        example: 10
+      - yang_name: permit/ttl/gt
+        example: 30
+        exclude_test: true
+      - yang_name: permit/ttl/lt
+        example: 31
+        exclude_test: true
+      - yang_name: permit/ttl/neq
+        example: 32
+        exclude_test: true
+      - yang_name: permit/ttl/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: permit/ttl/range/end-value
+        example: 200
+        exclude_test: true
+      - yang_name: permit/fragment-offset/eq
+        example: 11
+        exclude_test: true
+      - yang_name: permit/fragment-offset/gt
+        example: 22
+        exclude_test: true
+      - yang_name: permit/fragment-offset/lt
+        example: 33
+        exclude_test: true
+      - yang_name: permit/fragment-offset/neq
+        example: 44
+        exclude_test: true
+      - yang_name: permit/fragment-offset/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: permit/fragment-offset/range/end-value
+        example: 200
+        exclude_test: true
+      - yang_name: permit/police/value
+        example: 42949
+        exclude_test: true
+      - yang_name: permit/police/unit
+        example: gbps
+        exclude_test: true
+      - yang_name: permit/police/peak-rate
+        example: 35949
+        exclude_test: true
+      - yang_name: permit/police/peak-unit
+        example: gbps
+        exclude_test: true
+      - yang_name: permit/police/priority
+        example: critical
+        exclude_test: true
+      - yang_name: permit/nexthop1/ipv4
+        example: 1.2.3.4
+      - yang_name: permit/nexthop1/track
+        example: 32
+        exclude_test: true
+      - yang_name: permit/nexthop1/vrf
+        example: 32
+        exclude_test: true
+      - yang_name: permit/nexthop2/ipv4
+        example: 3.4.5.6
+      - yang_name: permit/nexthop2/track
+        example: 28
+        exclude_test: true
+      - yang_name: permit/nexthop2/vrf
+        example: 28
+        exclude_test: true
+      - yang_name: permit/nexthop3/ipv4
+        example: 33.33.33.33
+        exclude_test: true
+      - yang_name: permit/nexthop3/track
+        example: 29
+        exclude_test: true
+      - yang_name: permit/nexthop3/vrf
+        example: 29
+        exclude_test: true
+      - yang_name: permit/log
+        example: true
+      - yang_name: permit/log-input
+        example: true
+        exclude_test: true
+      - yang_name: permit/set/qos-group
+        example: 255
+        exclude_test: true
+      - yang_name: permit/set/ttl
+        example: 255
+        exclude_test: true
+
+      - yang_name: deny/eq
+        example: 123
+        exclude_test: true
+      - yang_name: deny/protocol
+        example: tcp
+        exclude_test: true
+      - yang_name: deny/source/address
+        example: 20.0.0.0
+        exclude_test: true
+      - yang_name: deny/source/wildcard-mask
+        example: 0.255.255.255
+        exclude_test: true
+      - yang_name: deny/source/prefix-length
+        example: 28
+        exclude_test: true
+      - yang_name: deny/source/any
+        example: true
+        exclude_test: true
+      - yang_name: deny/source/host
+        example: 99.99.99.1
+        exclude_test: true
+      - yang_name: deny/source/net-group
+        example: 64
+        exclude_test: true
+      - yang_name: deny/source/port-group
+        example: 32
+        exclude_test: true
+      - yang_name: deny/source/port/eq
+        example: 22
+        exclude_test: true
+      - yang_name: deny/source/port/gt
+        example: 244
+        exclude_test: true
+      - yang_name: deny/source/port/lt
+        example: 155
+        exclude_test: true
+      - yang_name: deny/source/port/neq
+        example: 156
+        exclude_test: true
+      - yang_name: deny/source/port/range/start-value
+        example: 300
+        exclude_test: true
+      - yang_name: deny/source/port/range/end-value
+        example: 400
+        exclude_test: true
+      - yang_name: deny/destination/address
+        example: 1.1.1.1
+        exclude_test: true
+      - yang_name: deny/destination/wildcard-mask
+        example: 0.0.0.255
+        exclude_test: true
+      - yang_name: deny/destination/prefix-length
+        example: 28
+        exclude_test: true
+      - yang_name: deny/destination/any
+        example: true
+        exclude_test: true
+      - yang_name: deny/destination/host
+        example: 20.0.0.0
+        exclude_test: true
+      - yang_name: deny/destination/net-group
+        example: 64
+        exclude_test: true
+      - yang_name: deny/destination/port-group
+        example: 32
+        exclude_test: true
+      - yang_name: deny/destination/port/eq
+        example: 100
+        exclude_test: true
+      - yang_name: deny/destination/port/gt
+        example: 455
+        exclude_test: true
+      - yang_name: deny/destination/port/lt
+        example: 555
+        exclude_test: true
+      - yang_name: deny/destination/port/neq
+        example: 666
+        exclude_test: true
+      - yang_name: deny/destination/port/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: deny/destination/port/range/end-value
+        example: 200
+        exclude_test: true
+      - yang_name: deny/igmp-type
+        example: trace
+        exclude_test: true
+      - yang_name: deny/precedence
+        example: 7
+        exclude_test: true
+      - yang_name: deny/fragment-type
+        example: first-fragment
+        exclude_test: true
+      - yang_name: deny/fragments
+        example: true
+        exclude_test: true
+      - yang_name: deny/counter
+        example: COUNTER
+        exclude_test: true
+      - yang_name: deny/default
+        example: true
+        exclude_test: true
+      - yang_name: deny/capture
+        example: true
+        exclude_test: true
+      - yang_name: deny/icmp-off
+        example: true
+        exclude_test: true
+      - yang_name: deny/icmp-on
+        example: true
+        exclude_test: true
+      - yang_name: deny/range/start-protocol
+        example: gre
+        exclude_test: true
+      - yang_name: deny/range/end-protocol
+        example: gre
+        exclude_test: true
+      - yang_name: deny/icmp/message-type-name
+        example: AdministrativelyProhibited
+        exclude_test: true
+      - yang_name: deny/icmp/message-type
+        example: 255
+        exclude_test: true
+      - yang_name: deny/icmp/message-code
+        example: 255
+        exclude_test: true
+
+      # - yang_name: deny/tcp-flags/tcp-bits
+      #   example: "rst"
+      #   exclude_test: true
+      # - yang_name: deny/tcp-flags/match-all/tcp-bits
+      #   example: ack
+      #   exclude_test: true
+      # - yang_name: deny/tcp-flags/match-any/tcp-bits
+      #   example: ack
+      #   exclude_test: true
+
+      - yang_name: deny/dscp/dscp-value
+        example: cs2
+        exclude_test: true
+      - yang_name: deny/dscp/eq
+        example: 178
+        exclude_test: true
+      - yang_name: deny/dscp/gt
+        example: 179
+        exclude_test: true
+      - yang_name: deny/dscp/lt
+        example: 180
+        exclude_test: true
+      - yang_name: deny/dscp/neq
+        example: 188
+        exclude_test: true
+      - yang_name: deny/dscp/range/start-value
+        example: 100
+        exclude_test: true
+      - yang_name: deny/dscp/range/end-value
+        example: 200
+        exclude_test: true
+      - yang_name: deny/packet-length/eq
+        example: 100
+        exclude_test: true
+      - yang_name: deny/packet-length/gt
+        example: 188
+        exclude_test: true
+      - yang_name: deny/packet-length/lt
+        example: 288
+        exclude_test: true
+      - yang_name: deny/packet-length/neq
+        example: 182
+        exclude_test: true
+      - yang_name: deny/packet-length/range/start-value
+        example: 190
+        exclude_test: true
+      - yang_name: deny/packet-length/range/end-value
+        example: 192
+        exclude_test: true
+      - yang_name: deny/ttl/eq
+        example: 177
+        exclude_test: true
+      - yang_name: deny/ttl/gt
+        example: 178
+        exclude_test: true
+      - yang_name: deny/ttl/lt
+        example: 179
+        exclude_test: true
+      - yang_name: deny/ttl/neq
+        example: 180
+        exclude_test: true
+      - yang_name: deny/ttl/range/start-value
+        example: 188
+        exclude_test: true
+      - yang_name: deny/ttl/range/end-value
+        example: 190
+        exclude_test: true
+      - yang_name: deny/fragment-offset/eq
+        example: 10
+        exclude_test: true
+      - yang_name: deny/fragment-offset/gt
+        example: 20
+        exclude_test: true
+      - yang_name: deny/fragment-offset/lt
+        example: 30
+        exclude_test: true
+      - yang_name: deny/fragment-offset/neq
+        example: 40
+        exclude_test: true
+      - yang_name: deny/fragment-offset/range/start-value
+        example: 40
+        exclude_test: true
+      - yang_name: deny/fragment-offset/range/end-value
+        example: 100
+        exclude_test: true
+      - yang_name: deny/police/value
+        example: 42949
+        exclude_test: true
+      - yang_name: deny/police/unit
+        example: mbps
+        exclude_test: true
+      - yang_name: deny/police/peak-rate
+        example: 35949
+        exclude_test: true
+      - yang_name: deny/police/peak-unit
+        example: gbps
+        exclude_test: true
+      - yang_name: deny/police/priority
+        example: critical
+        exclude_test: true
+      - yang_name: deny/nexthop1/ipv4
+        example: 11.11.11.11
+        exclude_test: true
+      - yang_name: deny/nexthop1/track
+        example: 32
+        exclude_test: true
+      - yang_name: deny/nexthop1/vrf
+        example: 32
+        exclude_test: true
+      - yang_name: deny/nexthop2/ipv4
+        example: 22.22.22.22
+        exclude_test: true
+      - yang_name: deny/nexthop2/track
+        example: 28
+        exclude_test: true
+      - yang_name: deny/nexthop2/vrf
+        example: 28
+        exclude_test: true
+      - yang_name: deny/nexthop3/ipv4
+        example: 33.33.33.33
+        exclude_test: true
+      - yang_name: deny/nexthop3/track
+        example: 29
+        exclude_test: true
+      - yang_name: deny/nexthop3/vrf
+        example: 29
+        exclude_test: true
+      - yang_name: deny/log
+        example: true
+        exclude_test: true
+      - yang_name: deny/log-input
+        example: true
+        exclude_test: true
+      - yang_name: deny/set/qos-group
+        example: 255
+        exclude_test: true
+      - yang_name: deny/set/ttl
+        example: 255
+        exclude_test: true

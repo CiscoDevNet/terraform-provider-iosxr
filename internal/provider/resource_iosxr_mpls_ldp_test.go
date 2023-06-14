@@ -14,11 +14,18 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrMPLSLDPConfig_all(),
+				Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "router_id", "1.2.3.4"),
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"),
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.af_name", "ipv4"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay_forwarding_delay", "30"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "ROUTE_POLICY_1"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec_enable", "true"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection_for_for_access_list", "true"),
 				),
 			},
 			{
@@ -30,9 +37,22 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 	})
 }
 
+const testAccIosxrMPLSLDPPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  attributes = {
+      "route-policy-name" = "ROUTE_POLICY_1"
+      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrMPLSLDPConfig_minimum() string {
 	return `
 	resource "iosxr_mpls_ldp" "test" {
+		session_protection_for_for_access_list = "true"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -47,6 +67,16 @@ func testAccIosxrMPLSLDPConfig_all() string {
 		interfaces = [{
 			interface_name = "GigabitEthernet0/0/0/1"
 		}]
+		capabilities_sac_ipv4_disable = true
+		mldp_logging_notifications = true
+		mldp_address_families = [{
+			af_name = "ipv4"
+			make_before_break_delay_forwarding_delay = 30
+			forwarding_recursive_route_policy = "ROUTE_POLICY_1"
+			recursive_fec_enable = true
+		}]
+		session_protection_for_for_access_list = "true"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

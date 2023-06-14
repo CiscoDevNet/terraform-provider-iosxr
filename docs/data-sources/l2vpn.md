@@ -37,5 +37,3 @@ data "iosxr_l2vpn" "example" {
 Read-Only:
 
 - `group_name` (String) Specify the group the cross connects belong to
-
-

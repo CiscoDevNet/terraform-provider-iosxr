@@ -28,5 +28,3 @@ data "iosxr_mpls_traffic_eng" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `traffic_eng` (Boolean) Go into the MPLS-TE submode
-
-

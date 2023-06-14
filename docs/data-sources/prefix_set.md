@@ -33,5 +33,3 @@ data "iosxr_prefix_set" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `rpl` (String) prefix statements
-
-

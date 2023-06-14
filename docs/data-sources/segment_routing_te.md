@@ -27,7 +27,16 @@ data "iosxr_segment_routing_te" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
+- `logging_pcep_peer_status` (Boolean) Enable logging for pcep peer status
+- `logging_policy_status` (Boolean) Enable logging for policy status
 - `on_demand_colors` (Attributes List) On-demand color configuration (see [below for nested schema](#nestedatt--on_demand_colors))
+- `pcc_dead_timer_interval` (Number) Amount of time after which the peer can declare this session down, if no PCEP message has been received
+- `pcc_delegation_timeout` (Number) Maximum time delegated SR-TE policies can remain up without an active connection to a PCE
+- `pcc_initiated_orphan_interval` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
+- `pcc_initiated_state_interval` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
+- `pcc_report_all` (Boolean) Report all local SR policies to connected PCEP peers
+- `pcc_source_address` (String) Local source IP address to use on PCEP sessions
+- `pce_peers` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers))
 - `policies` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--policies))
 
 <a id="nestedatt--on_demand_colors"></a>
@@ -41,12 +50,23 @@ Read-Only:
 - `effective_metric_enable` (Boolean) True only
 - `effective_metric_type` (String) Metric type, advertised to other protocols
 - `effective_metric_value` (Number) Integer value of metric
+- `on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
+- `on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type` (String) Metric Type
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
 - `srv6_enable` (Boolean) True only
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
 - `srv6_locator_name` (String) SRv6 locator name
+
+
+<a id="nestedatt--pce_peers"></a>
+### Nested Schema for `pce_peers`
+
+Read-Only:
+
+- `pce_address` (String) Remote PCE address
+- `precedence` (Number) Precedence value of this PCE
 
 
 <a id="nestedatt--policies"></a>
@@ -64,5 +84,3 @@ Read-Only:
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
 - `srv6_locator_name` (String) SRv6 locator name
-
-

@@ -44,5 +44,3 @@ data "iosxr_router_ospf_area_interface" "example" {
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
-
-

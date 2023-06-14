@@ -41,5 +41,3 @@ Read-Only:
 - `name` (String) Locator name
 - `prefix` (String) IPv6 Prefix
 - `prefix_length` (Number) Prefix length
-
-

@@ -14,24 +14,24 @@ import (
 )
 
 type QOSPolicyMap struct {
-	Device                          types.String                             `tfsdk:"device"`
-	Id                              types.String                             `tfsdk:"id"`
-	PolicyMapName                   types.String                             `tfsdk:"policy_map_name"`
-	ClassName                       types.String                             `tfsdk:"class_name"`
-	ClassType                       types.String                             `tfsdk:"class_type"`
-	ClassSetMplsExperimentalTopmost types.Int64                              `tfsdk:"class_set_mpls_experimental_topmost"`
-	ClassSetDscp                    types.String                             `tfsdk:"class_set_dscp"`
-	ClassPriorityLevel              types.Int64                              `tfsdk:"class_priority_level"`
-	ClassQueueLimitsQueueLimit      []QOSPolicyMapClassQueueLimitsQueueLimit `tfsdk:"class_queue_limits_queue_limit"`
-	ClassServicePolicyName          types.String                             `tfsdk:"class_service_policy_name"`
-	ClassPoliceRateValue            types.String                             `tfsdk:"class_police_rate_value"`
-	ClassPoliceRateUnit             types.String                             `tfsdk:"class_police_rate_unit"`
-	ClassShapeAverageRateValue      types.String                             `tfsdk:"class_shape_average_rate_value"`
-	ClassShapeAverageRateUnit       types.String                             `tfsdk:"class_shape_average_rate_unit"`
-	ClassBandwidthRemainingUnit     types.String                             `tfsdk:"class_bandwidth_remaining_unit"`
-	ClassBandwidthRemainingValue    types.String                             `tfsdk:"class_bandwidth_remaining_value"`
+	Device                          types.String                   `tfsdk:"device"`
+	Id                              types.String                   `tfsdk:"id"`
+	PolicyMapName                   types.String                   `tfsdk:"policy_map_name"`
+	ClassName                       types.String                   `tfsdk:"class_name"`
+	ClassType                       types.String                   `tfsdk:"class_type"`
+	ClassSetMplsExperimentalTopmost types.Int64                    `tfsdk:"class_set_mpls_experimental_topmost"`
+	ClassSetDscp                    types.String                   `tfsdk:"class_set_dscp"`
+	ClassPriorityLevel              types.Int64                    `tfsdk:"class_priority_level"`
+	ClassQueueLimits                []QOSPolicyMapClassQueueLimits `tfsdk:"class_queue_limits"`
+	ClassServicePolicyName          types.String                   `tfsdk:"class_service_policy_name"`
+	ClassPoliceRateValue            types.String                   `tfsdk:"class_police_rate_value"`
+	ClassPoliceRateUnit             types.String                   `tfsdk:"class_police_rate_unit"`
+	ClassShapeAverageRateValue      types.String                   `tfsdk:"class_shape_average_rate_value"`
+	ClassShapeAverageRateUnit       types.String                   `tfsdk:"class_shape_average_rate_unit"`
+	ClassBandwidthRemainingUnit     types.String                   `tfsdk:"class_bandwidth_remaining_unit"`
+	ClassBandwidthRemainingValue    types.String                   `tfsdk:"class_bandwidth_remaining_value"`
 }
-type QOSPolicyMapClassQueueLimitsQueueLimit struct {
+type QOSPolicyMapClassQueueLimits struct {
 	Value types.String `tfsdk:"value"`
 	Unit  types.String `tfsdk:"unit"`
 }
@@ -81,9 +81,9 @@ func (data QOSPolicyMap) toBody(ctx context.Context) string {
 	if !data.ClassBandwidthRemainingValue.IsNull() && !data.ClassBandwidthRemainingValue.IsUnknown() {
 		body, _ = sjson.Set(body, "class.bandwidth-remaining.value", data.ClassBandwidthRemainingValue.ValueString())
 	}
-	if len(data.ClassQueueLimitsQueueLimit) > 0 {
+	if len(data.ClassQueueLimits) > 0 {
 		body, _ = sjson.Set(body, "class.queue-limits.queue-limit", []interface{}{})
-		for index, item := range data.ClassQueueLimitsQueueLimit {
+		for index, item := range data.ClassQueueLimits {
 			if !item.Value.IsNull() && !item.Value.IsUnknown() {
 				body, _ = sjson.Set(body, "class.queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"value", item.Value.ValueString())
 			}
@@ -121,9 +121,9 @@ func (data *QOSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.ClassPriorityLevel = types.Int64Null()
 	}
-	for i := range data.ClassQueueLimitsQueueLimit {
+	for i := range data.ClassQueueLimits {
 		keys := [...]string{"value", "unit"}
-		keyValues := [...]string{data.ClassQueueLimitsQueueLimit[i].Value.ValueString(), data.ClassQueueLimitsQueueLimit[i].Unit.ValueString()}
+		keyValues := [...]string{data.ClassQueueLimits[i].Value.ValueString(), data.ClassQueueLimits[i].Unit.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "class.queue-limits.queue-limit").ForEach(
@@ -144,15 +144,15 @@ func (data *QOSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("value"); value.Exists() && !data.ClassQueueLimitsQueueLimit[i].Value.IsNull() {
-			data.ClassQueueLimitsQueueLimit[i].Value = types.StringValue(value.String())
+		if value := r.Get("value"); value.Exists() && !data.ClassQueueLimits[i].Value.IsNull() {
+			data.ClassQueueLimits[i].Value = types.StringValue(value.String())
 		} else {
-			data.ClassQueueLimitsQueueLimit[i].Value = types.StringNull()
+			data.ClassQueueLimits[i].Value = types.StringNull()
 		}
-		if value := r.Get("unit"); value.Exists() && !data.ClassQueueLimitsQueueLimit[i].Unit.IsNull() {
-			data.ClassQueueLimitsQueueLimit[i].Unit = types.StringValue(value.String())
+		if value := r.Get("unit"); value.Exists() && !data.ClassQueueLimits[i].Unit.IsNull() {
+			data.ClassQueueLimits[i].Unit = types.StringValue(value.String())
 		} else {
-			data.ClassQueueLimitsQueueLimit[i].Unit = types.StringNull()
+			data.ClassQueueLimits[i].Unit = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "class.service-policy.name"); value.Exists() && !data.ClassServicePolicyName.IsNull() {
@@ -209,16 +209,16 @@ func (data *QOSPolicyMap) fromBody(ctx context.Context, res []byte) {
 		data.ClassPriorityLevel = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "class.queue-limits.queue-limit"); value.Exists() {
-		data.ClassQueueLimitsQueueLimit = make([]QOSPolicyMapClassQueueLimitsQueueLimit, 0)
+		data.ClassQueueLimits = make([]QOSPolicyMapClassQueueLimits, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := QOSPolicyMapClassQueueLimitsQueueLimit{}
+			item := QOSPolicyMapClassQueueLimits{}
 			if cValue := v.Get("value"); cValue.Exists() {
 				item.Value = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("unit"); cValue.Exists() {
 				item.Unit = types.StringValue(cValue.String())
 			}
-			data.ClassQueueLimitsQueueLimit = append(data.ClassQueueLimitsQueueLimit, item)
+			data.ClassQueueLimits = append(data.ClassQueueLimits, item)
 			return true
 		})
 	}
@@ -247,15 +247,15 @@ func (data *QOSPolicyMap) fromBody(ctx context.Context, res []byte) {
 
 func (data *QOSPolicyMap) getDeletedListItems(ctx context.Context, state QOSPolicyMap) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.ClassQueueLimitsQueueLimit {
+	for i := range state.ClassQueueLimits {
 		keys := [...]string{"value", "unit"}
-		stateKeyValues := [...]string{state.ClassQueueLimitsQueueLimit[i].Value.ValueString(), state.ClassQueueLimitsQueueLimit[i].Unit.ValueString()}
+		stateKeyValues := [...]string{state.ClassQueueLimits[i].Value.ValueString(), state.ClassQueueLimits[i].Unit.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.ClassQueueLimitsQueueLimit[i].Value.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.ClassQueueLimits[i].Value.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.ClassQueueLimitsQueueLimit[i].Unit.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.ClassQueueLimits[i].Unit.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -263,12 +263,12 @@ func (data *QOSPolicyMap) getDeletedListItems(ctx context.Context, state QOSPoli
 		}
 
 		found := false
-		for j := range data.ClassQueueLimitsQueueLimit {
+		for j := range data.ClassQueueLimits {
 			found = true
-			if state.ClassQueueLimitsQueueLimit[i].Value.ValueString() != data.ClassQueueLimitsQueueLimit[j].Value.ValueString() {
+			if state.ClassQueueLimits[i].Value.ValueString() != data.ClassQueueLimits[j].Value.ValueString() {
 				found = false
 			}
-			if state.ClassQueueLimitsQueueLimit[i].Unit.ValueString() != data.ClassQueueLimitsQueueLimit[j].Unit.ValueString() {
+			if state.ClassQueueLimits[i].Unit.ValueString() != data.ClassQueueLimits[j].Unit.ValueString() {
 				found = false
 			}
 			if found {

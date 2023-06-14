@@ -91,7 +91,7 @@ func (r *QOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 					int64validator.Between(1, 7),
 				},
 			},
-			"class_queue_limits_queue_limit": schema.ListNestedAttribute{
+			"class_queue_limits": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure queue-limit (taildrop threshold) for this class").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

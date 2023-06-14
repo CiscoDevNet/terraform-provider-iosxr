@@ -69,7 +69,7 @@ func (d *QOSPolicyMapDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Configure a priority level",
 				Computed:            true,
 			},
-			"class_queue_limits_queue_limit": schema.ListNestedAttribute{
+			"class_queue_limits": schema.ListNestedAttribute{
 				MarkdownDescription: "Configure queue-limit (taildrop threshold) for this class",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

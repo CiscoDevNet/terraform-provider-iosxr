@@ -18,7 +18,7 @@ attributes:
     example: 2
     exclude_test: true
   - yang_name: class/queue-limits/queue-limit
-    tf: class_queue_limits
+    tf_name: class_queue_limits
     type: List
     exclude_test: true
     attributes:

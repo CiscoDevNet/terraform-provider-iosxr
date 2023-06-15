@@ -77,5 +77,3 @@ Read-Only:
 Read-Only:
 
 - `vni_id` (Number) VxLAN VPN identifier
-
-

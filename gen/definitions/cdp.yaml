@@ -1,0 +1,15 @@
+---
+name: CDP
+path: Cisco-IOS-XR-um-cdp-cfg:/cdp
+doc_category: System
+attributes:
+  - yang_name: enable
+    example: true
+  - yang_name: holdtime
+    example: 12
+  - yang_name: timer
+    example: 34
+  - yang_name: advertise/v1
+    example: true
+  - yang_name: log/adjacency/changes
+    example: true

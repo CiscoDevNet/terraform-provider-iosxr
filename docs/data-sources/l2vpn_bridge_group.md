@@ -32,5 +32,3 @@ data "iosxr_l2vpn_bridge_group" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-
-

@@ -45,5 +45,3 @@ Read-Only:
 Read-Only:
 
 - `interface_name` (String) Enable LDP on an interface and enter interface submode
-
-

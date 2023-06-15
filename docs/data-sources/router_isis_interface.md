@@ -46,5 +46,3 @@ data "iosxr_router_isis_interface" "example" {
 - `priority` (Number) Set priority for Designated Router election
 - `shutdown` (Boolean) Shutdown IS-IS on this interface
 - `suppressed` (Boolean) Do not advertise connected prefixes of this interface
-
-

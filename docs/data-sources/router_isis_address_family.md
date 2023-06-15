@@ -116,5 +116,3 @@ Read-Only:
 - `access_list_name` (String) Access-list name
 - `priority` (String) prefix priority
 - `tag` (Number) Specify a tag to indicate priority
-
-

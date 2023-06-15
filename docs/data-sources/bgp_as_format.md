@@ -29,5 +29,3 @@ data "iosxr_bgp_as_format" "example" {
 - `asdot` (Boolean) AS Dot format
 - `asplain` (Boolean) AS Plain format
 - `id` (String) The path of the retrieved object.
-
-

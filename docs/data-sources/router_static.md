@@ -70,5 +70,3 @@ Read-Only:
 - `distance_metric` (Number) Distance metric for this route
 - `interface_name` (String) Forwarding interface
 - `tag` (Number) Set tag for this route
-
-

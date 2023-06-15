@@ -1,0 +1,29 @@
+---
+name: IPv6 Prefix List
+path: Cisco-IOS-XR-um-ipv6-prefix-list-cfg:/ipv6/prefix-lists/prefix-list[prefix-list-name=%s]
+doc_category: System
+attributes:
+  - yang_name: prefix-list-name
+    id: true
+    example: LIST1
+  - yang_name: sequences/sequence
+    tf_name: sequences
+    type: List
+    attributes:
+      - yang_name: sequence-number
+        id: true
+        example: 4096
+      - yang_name: remark
+        example: REMARK
+      - yang_name: permission
+        example: permit
+      - yang_name: prefix
+        example: 2001:db8:3333:4444:5555:6666:7777:8888
+      - yang_name: mask
+        example: 64
+      - yang_name: match-prefix-length/eq
+        example: 10
+      - yang_name: match-prefix-length/ge
+        example: 20
+      - yang_name: match-prefix-length/le
+        example: 20

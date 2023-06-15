@@ -46,5 +46,3 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
-
-

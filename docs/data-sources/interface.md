@@ -84,5 +84,3 @@ Read-Only:
 Read-Only:
 
 - `name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
-
-

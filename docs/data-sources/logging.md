@@ -38,5 +38,3 @@ data "iosxr_logging" "example" {
 - `monitor` (String) Set monitor logging
 - `suppress_duplicates` (Boolean) Suppress consecutive duplicate messages
 - `trap` (String) Set trap logging
-
-

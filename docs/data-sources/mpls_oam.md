@@ -32,5 +32,3 @@ data "iosxr_mpls_oam" "example" {
 - `oam_dpm_pps` (Number) DPM packets per second rate - default is 50pps
 - `oam_echo_disable_vendor_extension` (Boolean) Disable sending vendor extension TLV with echo req
 - `oam_echo_reply_mode_control_channel_allow_reverse_lsp` (Boolean) Use Reverse LSP as the control channel
-
-

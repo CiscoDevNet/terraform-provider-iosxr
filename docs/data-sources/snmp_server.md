@@ -95,5 +95,3 @@ Read-Only:
 - `user_name` (String) Name of the user
 - `v3_auth_md5_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
 - `v3_auth_md5_encryption_default` (String) Specifies an default ENCRYPTED authentication password
-
-

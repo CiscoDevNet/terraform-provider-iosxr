@@ -85,5 +85,3 @@ Read-Only:
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
 - `router_tag` (String) Open Shortest Path First (OSPF)
-
-

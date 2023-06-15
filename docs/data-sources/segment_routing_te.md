@@ -64,5 +64,3 @@ Read-Only:
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
 - `srv6_locator_name` (String) SRv6 locator name
-
-

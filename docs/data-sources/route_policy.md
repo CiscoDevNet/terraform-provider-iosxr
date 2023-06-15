@@ -33,5 +33,3 @@ data "iosxr_route_policy" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `rpl` (String) policy statements
-
-

@@ -47,5 +47,3 @@ Read-Only:
 
 - `af_name` (String) Enter Address Family command mode
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
-
-

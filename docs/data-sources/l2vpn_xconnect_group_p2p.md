@@ -99,5 +99,3 @@ Read-Only:
 - `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
 - `service_id` (Number) Specify service ID (used as local and remote ac-id)
 - `vpn_id` (Number) Ethernet VPN Identifier
-
-

@@ -44,5 +44,3 @@ Read-Only:
 - `community_string` (String) The UNENCRYPTED (cleartext) community string
 - `udp_port` (String) udp port to which notifications should be sent
 - `version_v3_security_level` (String)
-
-

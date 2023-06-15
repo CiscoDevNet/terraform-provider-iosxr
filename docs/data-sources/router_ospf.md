@@ -100,5 +100,3 @@ Read-Only:
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
 - `tag` (Number) Set tag for routes redistributed into OSPF
-
-

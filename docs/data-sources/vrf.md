@@ -181,5 +181,3 @@ Read-Only:
 - `as_number` (Number) Two Byte AS Number
 - `index` (Number) ASN2:index (hex or decimal format)
 - `stitching` (Boolean) These are stitching RTs
-
-

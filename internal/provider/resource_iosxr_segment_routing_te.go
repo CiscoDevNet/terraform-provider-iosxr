@@ -52,11 +52,85 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"logging_pcep_peer_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for pcep peer status").String,
+				Optional:            true,
+			},
+			"logging_policy_status": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable logging for policy status").String,
+				Optional:            true,
+			},
+			"pcc_report_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Report all local SR policies to connected PCEP peers").String,
+				Optional:            true,
+			},
+			"pcc_source_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Local source IP address to use on PCEP sessions").String,
+				Optional:            true,
+			},
+			"pcc_delegation_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum time delegated SR-TE policies can remain up without an active connection to a PCE").AddIntegerRangeDescription(0, 1576800000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1576800000),
+				},
+			},
+			"pcc_dead_timer_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Amount of time after which the peer can declare this session down, if no PCEP message has been received").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"pcc_initiated_state_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up").AddIntegerRangeDescription(0, 86400).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 86400),
+				},
+			},
+			"pcc_initiated_orphan_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Amount of time that PCE initiated policy remains delegated to a peer that has gone down").AddIntegerRangeDescription(0, 180).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 180),
+				},
+			},
+			"pce_peers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("PCE peer").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Remote PCE address").String,
+							Optional:            true,
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Precedence value of this PCE").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+					},
+				},
+			},
 			"on_demand_colors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("On-demand color configuration").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies").String,
+							Optional:            true,
+						},
+						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric Type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("hopcount", "igp", "latency", "te"),
+							},
+						},
 						"color": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Color").AddIntegerRangeDescription(1, 4294967295).String,
 							Optional:            true,

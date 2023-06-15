@@ -45,11 +45,67 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
+			"logging_pcep_peer_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for pcep peer status",
+				Computed:            true,
+			},
+			"logging_policy_status": schema.BoolAttribute{
+				MarkdownDescription: "Enable logging for policy status",
+				Computed:            true,
+			},
+			"pcc_report_all": schema.BoolAttribute{
+				MarkdownDescription: "Report all local SR policies to connected PCEP peers",
+				Computed:            true,
+			},
+			"pcc_source_address": schema.StringAttribute{
+				MarkdownDescription: "Local source IP address to use on PCEP sessions",
+				Computed:            true,
+			},
+			"pcc_delegation_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Maximum time delegated SR-TE policies can remain up without an active connection to a PCE",
+				Computed:            true,
+			},
+			"pcc_dead_timer_interval": schema.Int64Attribute{
+				MarkdownDescription: "Amount of time after which the peer can declare this session down, if no PCEP message has been received",
+				Computed:            true,
+			},
+			"pcc_initiated_state_interval": schema.Int64Attribute{
+				MarkdownDescription: "Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up",
+				Computed:            true,
+			},
+			"pcc_initiated_orphan_interval": schema.Int64Attribute{
+				MarkdownDescription: "Amount of time that PCE initiated policy remains delegated to a peer that has gone down",
+				Computed:            true,
+			},
+			"pce_peers": schema.ListNestedAttribute{
+				MarkdownDescription: "PCE peer",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"pce_address": schema.StringAttribute{
+							MarkdownDescription: "Remote PCE address",
+							Computed:            true,
+						},
+						"precedence": schema.Int64Attribute{
+							MarkdownDescription: "Precedence value of this PCE",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"on_demand_colors": schema.ListNestedAttribute{
 				MarkdownDescription: "On-demand color configuration",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast": schema.BoolAttribute{
+							MarkdownDescription: "Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies",
+							Computed:            true,
+						},
+						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type": schema.StringAttribute{
+							MarkdownDescription: "Metric Type",
+							Computed:            true,
+						},
 						"color": schema.Int64Attribute{
 							MarkdownDescription: "Color",
 							Computed:            true,

@@ -27,9 +27,13 @@ data "iosxr_mpls_ldp" "example" {
 ### Read-Only
 
 - `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
+- `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
+- `mldp_logging_notifications` (Boolean) MLDP logging notifications
 - `router_id` (String) Configure router Id
+- `session_protection_for_for_access_list` (String) IP Access list to specify LDP Peers
 
 <a id="nestedatt--address_families"></a>
 ### Nested Schema for `address_families`
@@ -45,3 +49,14 @@ Read-Only:
 Read-Only:
 
 - `interface_name` (String) Enable LDP on an interface and enter interface submode
+
+
+<a id="nestedatt--mldp_address_families"></a>
+### Nested Schema for `mldp_address_families`
+
+Read-Only:
+
+- `af_name` (String) Configure Address Family and its parameters
+- `forwarding_recursive_route_policy` (String) Route policy
+- `make_before_break_delay_forwarding_delay` (Number) MBB delay
+- `recursive_fec_enable` (Boolean) MLDP Recursive FEC enable

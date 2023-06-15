@@ -33,5 +33,3 @@ data "iosxr_gnmi" "example" {
 
 - `attributes` (Map of String) Map of key-value pairs which represents the attributes and its values.
 - `id` (String) The path of the retrieved object.
-
-

@@ -23,6 +23,7 @@ attributes:
   - yang_name: maximum-paths/ebgp/multipath
     example: 10
     optional: true
+    exclude_test: true
   - yang_name: maximum-paths/eibgp/multipath
     example: 10
     optional: true
@@ -30,6 +31,7 @@ attributes:
   - yang_name: maximum-paths/ibgp/multipath
     optional: true
     example: 10
+    exclude_test: true
   - yang_name: label/mode/per-ce
     example: false
   - yang_name: label/mode/per-vrf
@@ -113,8 +115,9 @@ attributes:
       - yang_name: metric
         example: 100
 
+
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
-    attributes:
-      - name: route-policy-name
-        value: ROUTE_POLICY_1
+- path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
+  attributes:
+    - name: route-policy-name
+      value: ROUTE_POLICY_1

@@ -31,6 +31,10 @@ attributes:
     example: 10
   - yang_name: bfd/multiplier
     example: 4
+  - yang_name: nexthop/validation/color-extcomm/sr-policy
+    example : true
+  - yang_name: nexthop/validation/color-extcomm/disable
+    example : true
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List
@@ -94,3 +98,5 @@ attributes:
       - yang_name: ao/include-tcp-options/enable
         example: true
         exclude_test: true
+      - yang_name: bfd/minimum-interval
+        example: 3

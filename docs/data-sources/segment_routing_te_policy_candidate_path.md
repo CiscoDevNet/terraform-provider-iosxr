@@ -46,5 +46,3 @@ Read-Only:
 - `pcep` (Boolean) Path Computation Element Protocol
 - `segment_list_name` (String) Segment-list name
 - `type` (String) Path-option type
-
-

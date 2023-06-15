@@ -51,5 +51,3 @@ Read-Only:
 
 - `ipv6_address` (String) IPV6 address of the logging host
 - `severity` (String) Set severity of  messages for particular remote host/vrf
-
-

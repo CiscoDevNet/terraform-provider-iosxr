@@ -43,5 +43,3 @@ data "iosxr_evpn_interface" "example" {
 - `ethernet_segment_load_balancing_mode_single_active` (Boolean) Single-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_flow_active` (Boolean) Single-Flow-Active load balancing
 - `id` (String) The path of the retrieved object.
-
-

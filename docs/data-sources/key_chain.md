@@ -56,5 +56,3 @@ Read-Only:
 - `send_lifetime_start_time_month` (String) Month of the year
 - `send_lifetime_start_time_second` (Number) Start time second
 - `send_lifetime_start_time_year` (Number) Year
-
-

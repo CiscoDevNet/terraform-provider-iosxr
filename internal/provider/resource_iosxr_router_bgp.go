@@ -131,6 +131,14 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(2, 16),
 				},
 			},
+			"nexthop_validation_color_extcomm_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths").String,
+				Optional:            true,
+			},
+			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable next-hop reachability validation for color-extcomm path").String,
+				Optional:            true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
 				Optional:            true,
@@ -269,6 +277,13 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"ao_include_tcp_options_enable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
 							Optional:            true,
+						},
+						"bfd_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 30000),
+							},
 						},
 					},
 				},

@@ -28,5 +28,3 @@ data "iosxr_hostname" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `system_network_name` (String) Set system's network name
-
-

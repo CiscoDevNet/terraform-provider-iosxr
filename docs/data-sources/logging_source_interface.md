@@ -40,5 +40,3 @@ data "iosxr_logging_source_interface" "example" {
 Read-Only:
 
 - `name` (String) Set VRF option
-
-

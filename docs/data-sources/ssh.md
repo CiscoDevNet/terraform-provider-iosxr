@@ -40,5 +40,3 @@ data "iosxr_ssh" "example" {
 Read-Only:
 
 - `vrf_name` (String) Cisco sshd VRF name
-
-

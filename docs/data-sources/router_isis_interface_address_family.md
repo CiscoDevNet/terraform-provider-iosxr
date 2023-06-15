@@ -53,5 +53,3 @@ Read-Only:
 
 - `level_id` (Number) Enable EPCFRR LFA for one level only
 - `ti_lfa` (Boolean) Enable TI LFA computation
-
-

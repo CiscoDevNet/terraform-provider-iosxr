@@ -40,5 +40,3 @@ data "iosxr_evpn_group" "example" {
 Read-Only:
 
 - `interface_name` (String) configure EVPN group core interface
-
-

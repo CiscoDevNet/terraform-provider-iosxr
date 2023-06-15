@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -91,6 +92,17 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
 				Optional:            true,
 			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 30000),
+				},
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+				Optional:            true,
+			},
 			"address_families": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enter Address Family command mode").String,
 				Optional:            true,
@@ -105,6 +117,14 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 						},
 						"soft_reconfiguration_inbound_always": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+							Optional:            true,
+						},
+						"next_hop_self_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
+							Optional:            true,
+						},
+						"route_reflector_client_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 							Optional:            true,
 						},
 					},

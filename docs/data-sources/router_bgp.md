@@ -43,6 +43,8 @@ data "iosxr_router_bgp" "example" {
 - `id` (String) The path of the retrieved object.
 - `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
+- `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
 - `segment_routing_srv6_locator` (String) Configure locator name
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
@@ -55,6 +57,7 @@ Read-Only:
 
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `bfd_minimum_interval` (Number) Hello interval
 - `name` (String) Specify a Neighbor-group
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates
@@ -83,5 +86,3 @@ Read-Only:
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group
-
-

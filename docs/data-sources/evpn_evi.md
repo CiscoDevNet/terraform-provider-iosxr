@@ -108,5 +108,3 @@ Read-Only:
 
 - `as_number` (Number) Two Byte AS Number
 - `assigned_number` (Number) AS:nn (hex or decimal format)
-
-

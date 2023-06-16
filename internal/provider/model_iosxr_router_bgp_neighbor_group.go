@@ -22,11 +22,15 @@ type RouterBGPNeighborGroup struct {
 	UpdateSource              types.String                            `tfsdk:"update_source"`
 	AoKeyChainName            types.String                            `tfsdk:"ao_key_chain_name"`
 	AoIncludeTcpOptionsEnable types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval        types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdFastDetect             types.Bool                              `tfsdk:"bfd_fast_detect"`
 	AddressFamilies           []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 type RouterBGPNeighborGroupAddressFamilies struct {
-	AfName                           types.String `tfsdk:"af_name"`
-	SoftReconfigurationInboundAlways types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	AfName                                 types.String `tfsdk:"af_name"`
+	SoftReconfigurationInboundAlways       types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	NextHopSelfInheritanceDisable          types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	RouteReflectorClientInheritanceDisable types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 }
 
 func (data RouterBGPNeighborGroup) getPath() string {
@@ -52,6 +56,14 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "ao.include-tcp-options.enable", map[string]string{})
 		}
 	}
+	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "bfd.minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
+		if data.BfdFastDetect.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect", map[string]string{})
+		}
+	}
 	if len(data.AddressFamilies) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
 		for index, item := range data.AddressFamilies {
@@ -61,6 +73,16 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			if !item.SoftReconfigurationInboundAlways.IsNull() && !item.SoftReconfigurationInboundAlways.IsUnknown() {
 				if item.SoftReconfigurationInboundAlways.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"soft-reconfiguration.inbound.always", map[string]string{})
+				}
+			}
+			if !item.NextHopSelfInheritanceDisable.IsNull() && !item.NextHopSelfInheritanceDisable.IsUnknown() {
+				if item.NextHopSelfInheritanceDisable.ValueBool() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"next-hop-self.inheritance-disable", map[string]string{})
+				}
+			}
+			if !item.RouteReflectorClientInheritanceDisable.IsNull() && !item.RouteReflectorClientInheritanceDisable.IsUnknown() {
+				if item.RouteReflectorClientInheritanceDisable.ValueBool() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-reflector-client.inheritance-disable", map[string]string{})
 				}
 			}
 		}
@@ -92,6 +114,20 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		}
 	} else {
 		data.AoIncludeTcpOptionsEnable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	} else {
+		data.BfdMinimumInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetect = types.BoolValue(true)
+		} else {
+			data.BfdFastDetect = types.BoolValue(false)
+		}
+	} else {
+		data.BfdFastDetect = types.BoolNull()
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -130,6 +166,24 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolNull()
 		}
+		if value := r.Get("next-hop-self.inheritance-disable"); !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() {
+			if value.Exists() {
+				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
+			} else {
+				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(false)
+			}
+		} else {
+			data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolNull()
+		}
+		if value := r.Get("route-reflector-client.inheritance-disable"); !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() {
+			if value.Exists() {
+				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			} else {
+				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			}
+		} else {
+			data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolNull()
+		}
 	}
 }
 
@@ -148,6 +202,14 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AoIncludeTcpOptionsEnable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -159,6 +221,16 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
 			} else {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
+			}
+			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-reflector-client.inheritance-disable"); cValue.Exists() {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
 			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
@@ -206,6 +278,9 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 	if !data.AoIncludeTcpOptionsEnable.IsNull() && !data.AoIncludeTcpOptionsEnable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/include-tcp-options/enable", data.getPath()))
 	}
+	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
 
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -216,6 +291,12 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		}
 		if !data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && !data.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", data.getPath(), keyString))
+		}
+		if !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && !data.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", data.getPath(), keyString))
+		}
+		if !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete

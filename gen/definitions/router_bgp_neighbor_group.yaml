@@ -19,6 +19,10 @@ attributes:
   - yang_name: ao/include-tcp-options/enable
     example: true
     exclude_test: true
+  - yang_name: bfd/minimum-interval
+    example: 3
+  - yang_name: bfd/fast-detect
+    example: true
   - yang_name: address-families/address-family
     tf_name: address_families
     type: List
@@ -28,3 +32,8 @@ attributes:
         example: ipv4-labeled-unicast
       - yang_name: soft-reconfiguration/inbound/always
         example: true
+      - yang_name: next-hop-self/inheritance-disable
+        example: true
+      - yang_name: route-reflector-client/inheritance-disable
+        example: true
+

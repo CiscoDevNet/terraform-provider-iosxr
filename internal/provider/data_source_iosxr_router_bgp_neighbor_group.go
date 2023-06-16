@@ -69,6 +69,14 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Include other TCP options in the header",
 				Computed:            true,
 			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Hello interval",
+				Computed:            true,
+			},
+			"bfd_fast_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable Fast detection",
+				Computed:            true,
+			},
 			"address_families": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter Address Family command mode",
 				Computed:            true,
@@ -80,6 +88,14 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 						},
 						"soft_reconfiguration_inbound_always": schema.BoolAttribute{
 							MarkdownDescription: "Always use soft reconfig, even if route refresh is supported",
+							Computed:            true,
+						},
+						"next_hop_self_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent next-hop-self from being inherited from the parent",
+							Computed:            true,
+						},
+						"route_reflector_client_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent route-reflector-client from being inherited from the parent",
 							Computed:            true,
 						},
 					},

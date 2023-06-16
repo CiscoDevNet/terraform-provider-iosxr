@@ -14,14 +14,18 @@ This resource can manage the Router BGP Neighbor Group configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_group" "example" {
-  as_number     = "65001"
-  name          = "GROUP1"
-  remote_as     = "65001"
-  update_source = "Loopback0"
+  as_number            = "65001"
+  name                 = "GROUP1"
+  remote_as            = "65001"
+  update_source        = "Loopback0"
+  bfd_minimum_interval = 3
+  bfd_fast_detect      = true
   address_families = [
     {
-      af_name                             = "ipv4-labeled-unicast"
-      soft_reconfiguration_inbound_always = true
+      af_name                                    = "ipv4-labeled-unicast"
+      soft_reconfiguration_inbound_always        = true
+      next_hop_self_inheritance_disable          = true
+      route_reflector_client_inheritance_disable = true
     }
   ]
 }
@@ -40,6 +44,9 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_minimum_interval` (Number) Hello interval
+  - Range: `3`-`30000`
 - `device` (String) A device name from the provider configuration.
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates
@@ -55,6 +62,8 @@ Optional:
 
 - `af_name` (String) Enter Address Family command mode
   - Choices: `all-address-family`, `ipv4-flowspec`, `ipv4-labeled-unicast`, `ipv4-mdt`, `ipv4-multicast`, `ipv4-mvpn`, `ipv4-rt-filter`, `ipv4-sr-policy`, `ipv4-tunnel`, `ipv4-unicast`, `ipv6-flowspec`, `ipv6-labeled-unicast`, `ipv6-multicast`, `ipv6-mvpn`, `ipv6-sr-policy`, `ipv6-unicast`, `l2vpn-evpn`, `l2vpn-mspw`, `l2vpn-vpls-vpws`, `link-state-link-state`, `vpnv4-flowspec`, `vpnv4-multicast`, `vpnv4-unicast`, `vpnv6-flowspec`, `vpnv6-multicast`, `vpnv6-unicast`
+- `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
 
 ## Import

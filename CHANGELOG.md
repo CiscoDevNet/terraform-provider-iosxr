@@ -1,5 +1,6 @@
 ## 0.1.10 (unreleased)
 
+- Add `iosxr_extcommunity_opaque_set` resource and data source
 - Add `iosxr_segment_routing_v6` resource and data source
 - Add `iosxr_segment_routing_te` resource and data source
 - Add `iosxr_segment_routing_te_policy_candidate_path` resource and data source
@@ -11,6 +12,7 @@
 - Add `segment_routing_srv6_locator` and `segment_routing_srv6_alloc_mode_per_vrf` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
 - Add `redistribute_isis` and `segment_routing_srv6_locators` attributes to `iosxr_router_isis_address_family` resource and data source
 - Add `bfd_fast_detect_ipv6` attribute to `iosxr_router_isis_interface` resource and data source
+- Add `bfd_minimum_interval` ,`next_hop_self_inheritance_disable` ,`route_reflector_client_inheritance_disable`,`bfd_fast_detect`  attribute to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `iosxr_segment_routing` resource and data source
 - Add `iosxr_pce` resource and data source
 - Add `iosxr_class_map` resource and data source

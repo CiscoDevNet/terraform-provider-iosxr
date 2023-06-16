@@ -10,14 +10,14 @@
 - Add `iosxr_evpn_segment_routing_srv6_evi` resource and data source
 - Add `segment_routing_srv6_evis` attribute to `iosxr_l2vpn_bridge_group_bridge_domain` resource and data source
 - Add `neighbor_evpn_evi_segment_routing_services` attribute to `iosxr_l2vpn_xconnect_group_p2p` resource and data source
-- Add `nsr_disable`, `bgp_redistribute_internal` and `segment_routing_srv6_locator` attributes to `iosxr_router_bgp` resource and data source
+- Add `nexthop_validation_color_extcomm_sr_policy`, `nexthop_validation_color_extcomm_disable`, `bfd_minimum_interval`, `nsr_disable`, `bgp_redistribute_internal` and `segment_routing_srv6_locator` attributes to `iosxr_router_bgp` resource and data source
 - Add `segment_routing_srv6_locator` and `segment_routing_srv6_alloc_mode_per_vrf` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
 - Add `redistribute_isis` and `segment_routing_srv6_locators` attributes to `iosxr_router_isis_address_family` resource and data source
 - Add `bfd_fast_detect_ipv6` attribute to `iosxr_router_isis_interface` resource and data source
-- Add `bfd_minimum_interval` ,`next_hop_self_inheritance_disable` ,`route_reflector_client_inheritance_disable`,`bfd_fast_detect`  attribute to `iosxr_router_bgp_neighbor_group` resource and data source
+- Add `bfd_minimum_interval`, `next_hop_self_inheritance_disable`, `route_reflector_client_inheritance_disable`, `bfd_fast_detect` attribute to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `iosxr_segment_routing` resource and data source
 - Add `iosxr_pce` resource and data source
-- Add `iosxr_class_map` resource and data source
+- Add `iosxr_qos_class_map` resource and data source
 - Add `iosxr_qos_policy_map` resource and data source
 - Add `iosxr_ipv4_access_list` resource and data source
 - Add `iosxr_ipv4_access_list_options` resource and data source
@@ -25,8 +25,8 @@
 - Add `iosxr_ipv6_access_list` resource and data source
 - Add `iosxr_ipv6_access_list_options` resource and data source
 - Add `iosxr_ipv6_prefix_list` resource and data source
-- Add `capabilities/sac/ipv4-disable`, `mldp/logging/notifications`, `mldp_address_families` and `session/protection/for/for-access-list` attributes to `iosxr_mpls_ldp` resource and data source
-- Add `logging/pcep-peer-status`, `logging/policy-status`, `pcc/report-all`, ` pcc/source-address`, `pcc/delegation-timeout`, `pcc/dead-timer-interval`, `pcc/initiated-state-interval`, `pcc/initiated-orphan-interval`, `pce_peers` `on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast` and `on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type` attributes to `iosxr_segment_routing_te` resource and data source
+- Add `capabilities_sac_ipv4_disable`, `capabilities_sac_ipv6_disable`, `capabilities_sac_fec128_disable`, `capabilities_sac_fec129_disable`, `mldp_logging_notifications`, `mldp_address_families` and `session_protection` attributes to `iosxr_mpls_ldp` resource and data source
+- Add `logging_pcep_peer_status`, `logging_policy_status`, `pcc_report_all`, `pcc_source_address`, `pcc_delegation_timeout`, `pcc_dead_timer`, `pcc_initiated_state`, `pcc_initiated_orphan`, `pce_peers` `dynamic_anycast_sid_inclusion` and `dynamic_metric_type` attributes to `iosxr_segment_routing_te` resource and data source
 
 ## 0.1.9
 

@@ -34,7 +34,7 @@ func (d *ExtcommunityOpaqueSetDataSource) Metadata(_ context.Context, req dataso
 func (d *ExtcommunityOpaqueSetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Extcommunity opaque Set configuration.",
+		MarkdownDescription: "This data source can read the Extcommunity Opaque Set configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{

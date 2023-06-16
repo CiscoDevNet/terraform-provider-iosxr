@@ -14,8 +14,8 @@ This resource can manage the Banner configuration.
 
 ```terraform
 resource "iosxr_banner" "example" {
-  banner_type = "prompt-timeout"
-  line        = ", banner-text ,"
+  banner_type = "login"
+  line        = " Hello user  !"
 }
 ```
 
@@ -41,5 +41,5 @@ resource "iosxr_banner" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_banner.example "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=prompt-timeout]"
+terraform import iosxr_banner.example "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=login]"
 ```

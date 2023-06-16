@@ -8,7 +8,8 @@ description: |-
 # Changelog
 
 ## 0.1.10 (unreleased)
-
+- Add `iosxr_banner` resource and data source
+- Add `iosxr_cdp` resource and data source
 - Add `iosxr_segment_routing_v6` resource and data source
 - Add `iosxr_segment_routing_te` resource and data source
 - Add `iosxr_segment_routing_te_policy_candidate_path` resource and data source

@@ -16,14 +16,14 @@ func TestAccIosxrBanner(t *testing.T) {
 			{
 				Config: testAccIosxrBannerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "prompt-timeout"),
-					resource.TestCheckResourceAttr("iosxr_banner.test", "line", ", banner-text ,"),
+					resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"),
+					resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user  !"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_banner.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=prompt-timeout]",
+				ImportStateId: "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=login]",
 			},
 		},
 	})
@@ -32,8 +32,8 @@ func TestAccIosxrBanner(t *testing.T) {
 func testAccIosxrBannerConfig_minimum() string {
 	return `
 	resource "iosxr_banner" "test" {
-		banner_type = "prompt-timeout"
-		line = ", banner-text ,"
+		banner_type = "login"
+		line = " Hello user  !"
 	}
 	`
 }
@@ -41,8 +41,8 @@ func testAccIosxrBannerConfig_minimum() string {
 func testAccIosxrBannerConfig_all() string {
 	return `
 	resource "iosxr_banner" "test" {
-		banner_type = "prompt-timeout"
-		line = ", banner-text ,"
+		banner_type = "login"
+		line = " Hello user  !"
 	}
 	`
 }

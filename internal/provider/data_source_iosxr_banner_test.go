@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrBanner(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrBannerConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", ", banner-text ,"),
+					resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", " Hello user  !"),
 				),
 			},
 		},
@@ -26,12 +26,12 @@ func TestAccDataSourceIosxrBanner(t *testing.T) {
 const testAccDataSourceIosxrBannerConfig = `
 
 resource "iosxr_banner" "test" {
-	banner_type = "prompt-timeout"
-	line = ", banner-text ,"
+	banner_type = "login"
+	line = " Hello user  !"
 }
 
 data "iosxr_banner" "test" {
-	banner_type = "prompt-timeout"
+	banner_type = "login"
 	depends_on = [iosxr_banner.test]
 }
 `

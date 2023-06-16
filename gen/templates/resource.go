@@ -54,7 +54,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			{{- range  .Attributes}}
-			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else}}{{.Type}}{{end}}Attribute{
+			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 					{{- if len .EnumValues -}}
 					.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
@@ -66,6 +66,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					.AddDefaultValueDescription("{{.DefaultValue}}")
 					{{- end -}}
 					.String,
+				{{- if eq .Type "StringList"}}
+				ElementType:         types.StringType,
+				{{- else if eq .Type "Int64List"}}
+				ElementType:         types.Int64Type,
+				{{- end}}
 				{{- if or (eq .Id true) (eq .Reference true) (eq .Mandatory true)}}
 				Required:            true,
 				{{- else}}
@@ -109,7 +114,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
+						"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 								{{- if len .EnumValues -}}
 								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
@@ -121,6 +126,11 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								.AddDefaultValueDescription("{{.DefaultValue}}")
 								{{- end -}}
 								.String,
+							{{- if eq .Type "StringList"}}
+							ElementType:         types.StringType,
+							{{- else if eq .Type "Int64List"}}
+							ElementType:         types.Int64Type,
+							{{- end}}
 							{{- if eq .Mandatory true}}
 							Required:            true,
 							{{- else}}

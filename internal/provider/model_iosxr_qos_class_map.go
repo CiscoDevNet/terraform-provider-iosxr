@@ -5,9 +5,9 @@ package provider
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
@@ -18,10 +18,10 @@ type QoSClassMap struct {
 	ClassMapName                 types.String `tfsdk:"class_map_name"`
 	MatchAny                     types.Bool   `tfsdk:"match_any"`
 	Description                  types.String `tfsdk:"description"`
-	MatchDscp                    types.String `tfsdk:"match_dscp"`
-	MatchMplsExperimentalTopmost types.Int64  `tfsdk:"match_mpls_experimental_topmost"`
-	MatchQosGroup                types.String `tfsdk:"match_qos_group"`
-	MatchTrafficClass            types.String `tfsdk:"match_traffic_class"`
+	MatchDscp                    types.List   `tfsdk:"match_dscp"`
+	MatchMplsExperimentalTopmost types.List   `tfsdk:"match_mpls_experimental_topmost"`
+	MatchQosGroup                types.List   `tfsdk:"match_qos_group"`
+	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
 }
 
 func (data QoSClassMap) getPath() string {
@@ -42,16 +42,24 @@ func (data QoSClassMap) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
 	if !data.MatchDscp.IsNull() && !data.MatchDscp.IsUnknown() {
-		body, _ = sjson.Set(body, "match.dscp.value", data.MatchDscp.ValueString())
+		var values []string
+		data.MatchDscp.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.dscp.value", values)
 	}
 	if !data.MatchMplsExperimentalTopmost.IsNull() && !data.MatchMplsExperimentalTopmost.IsUnknown() {
-		body, _ = sjson.Set(body, "match.mpls.experimental.topmost.label", strconv.FormatInt(data.MatchMplsExperimentalTopmost.ValueInt64(), 10))
+		var values []int
+		data.MatchMplsExperimentalTopmost.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.mpls.experimental.topmost.label", values)
 	}
 	if !data.MatchQosGroup.IsNull() && !data.MatchQosGroup.IsUnknown() {
-		body, _ = sjson.Set(body, "match.qos-group.id", data.MatchQosGroup.ValueString())
+		var values []string
+		data.MatchQosGroup.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.qos-group.id", values)
 	}
 	if !data.MatchTrafficClass.IsNull() && !data.MatchTrafficClass.IsUnknown() {
-		body, _ = sjson.Set(body, "match.traffic-class.id", data.MatchTrafficClass.ValueString())
+		var values []string
+		data.MatchTrafficClass.ElementsAs(ctx, &values, false)
+		body, _ = sjson.Set(body, "match.traffic-class.id", values)
 	}
 	return body
 }
@@ -72,24 +80,24 @@ func (data *QoSClassMap) updateFromBody(ctx context.Context, res []byte) {
 		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() && !data.MatchDscp.IsNull() {
-		data.MatchDscp = types.StringValue(value.String())
+		data.MatchDscp = helpers.GetStringList(value.Array())
 	} else {
-		data.MatchDscp = types.StringNull()
+		data.MatchDscp = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() && !data.MatchMplsExperimentalTopmost.IsNull() {
-		data.MatchMplsExperimentalTopmost = types.Int64Value(value.Int())
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
 	} else {
-		data.MatchMplsExperimentalTopmost = types.Int64Null()
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.qos-group.id"); value.Exists() && !data.MatchQosGroup.IsNull() {
-		data.MatchQosGroup = types.StringValue(value.String())
+		data.MatchQosGroup = helpers.GetStringList(value.Array())
 	} else {
-		data.MatchQosGroup = types.StringNull()
+		data.MatchQosGroup = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() && !data.MatchTrafficClass.IsNull() {
-		data.MatchTrafficClass = types.StringValue(value.String())
+		data.MatchTrafficClass = helpers.GetStringList(value.Array())
 	} else {
-		data.MatchTrafficClass = types.StringNull()
+		data.MatchTrafficClass = types.ListNull(types.StringType)
 	}
 }
 
@@ -103,16 +111,24 @@ func (data *QoSClassMap) fromBody(ctx context.Context, res []byte) {
 		data.Description = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
-		data.MatchDscp = types.StringValue(value.String())
+		data.MatchDscp = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchDscp = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
-		data.MatchMplsExperimentalTopmost = types.Int64Value(value.Int())
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
 	}
 	if value := gjson.GetBytes(res, "match.qos-group.id"); value.Exists() {
-		data.MatchQosGroup = types.StringValue(value.String())
+		data.MatchQosGroup = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchQosGroup = types.ListNull(types.StringType)
 	}
 	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
-		data.MatchTrafficClass = types.StringValue(value.String())
+		data.MatchTrafficClass = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchTrafficClass = types.ListNull(types.StringType)
 	}
 }
 

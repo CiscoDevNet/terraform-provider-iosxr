@@ -49,8 +49,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			{{- range  .Attributes}}
-			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else}}{{.Type}}{{end}}Attribute{
+			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 				MarkdownDescription: "{{.Description}}",
+				{{- if eq .Type "StringList"}}
+				ElementType:         types.StringType,
+				{{- else if eq .Type "Int64List"}}
+				ElementType:         types.Int64Type,
+				{{- end}}
 				{{- if or (eq .Id true) (eq .Reference true)}}
 				Required:            true,
 				{{- else}}
@@ -60,8 +65,13 @@ func (d *{{camelCase .Name}}DataSource) Schema(ctx context.Context, req datasour
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{.Type}}Attribute{
+						"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 							MarkdownDescription: "{{.Description}}",
+							{{- if eq .Type "StringList"}}
+							ElementType:         types.StringType,
+							{{- else if eq .Type "Int64List"}}
+							ElementType:         types.Int64Type,
+							{{- end}}
 							Computed:            true,
 						},
 						{{- end}}

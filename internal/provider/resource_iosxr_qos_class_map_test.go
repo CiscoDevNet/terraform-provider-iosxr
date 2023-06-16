@@ -19,8 +19,8 @@ func TestAccIosxrQoSClassMap(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "class_map_name", "TEST"),
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_any", "true"),
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "description", "description1"),
-					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_dscp", "46"),
-					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_mpls_experimental_topmost", "5"),
+					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_dscp.0", "46"),
+					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_mpls_experimental_topmost.0", "5"),
 				),
 			},
 			{
@@ -46,8 +46,8 @@ func testAccIosxrQoSClassMapConfig_all() string {
 		class_map_name = "TEST"
 		match_any = true
 		description = "description1"
-		match_dscp = "46"
-		match_mpls_experimental_topmost = 5
+		match_dscp = ["46"]
+		match_mpls_experimental_topmost = [5]
 	}
 	`
 }

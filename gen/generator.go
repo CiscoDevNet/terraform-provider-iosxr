@@ -315,8 +315,16 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 	//fmt.Printf("%s, Entry: %+v\n\n", attr.YangName, e)
 	//fmt.Printf("%s, Kind: %+v, Type: %+v\n\n", leaf.Name, leaf.Kind, leaf.Type)
 	if leaf.Kind.String() == "Leaf" {
-		// TODO parse union type
-		if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+		if leaf.ListAttr != nil {
+			if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
+				attr.Type = "StringList"
+			} else if contains([]string{"uint8", "uint16", "uint32", "uint64"}, leaf.Type.Kind.String()) {
+				attr.Type = "Int64List"
+			} else {
+				panic(fmt.Sprintf("Unknown leaf-list type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
+			}
+			// TODO parse union type
+		} else if contains([]string{"string", "union", "leafref"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			if leaf.Type.Length != nil {
 				attr.StringMinLength = int64(leaf.Type.Length[0].Min.Value)
@@ -346,6 +354,8 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		} else if contains([]string{"enumeration"}, leaf.Type.Kind.String()) {
 			attr.Type = "String"
 			attr.EnumValues = leaf.Type.Enum.Names()
+		} else {
+			panic(fmt.Sprintf("Unknown leaf type, attribute: %s, type: %s", attr.YangName, leaf.Type.Kind.String()))
 		}
 	}
 	if _, ok := leaf.Extra["presence"]; ok {

@@ -16,7 +16,7 @@ attribute:
   yang_scope: str(required=False)
   tf_name: str(required=False)
   xpath: str(required=False)
-  type: enum('String', 'Int64', 'Bool', 'List', required=False)
+  type: enum('String', 'Int64', 'Bool', 'List', 'StringList', 'Int64List', required=False)
   type_yang_bool: enum('empty', 'presence', 'boolean', required=False)
   id: bool(required=False)
   reference: bool(required=False)

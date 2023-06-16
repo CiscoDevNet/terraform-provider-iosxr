@@ -17,8 +17,8 @@ resource "iosxr_qos_class_map" "example" {
   class_map_name                  = "TEST"
   match_any                       = true
   description                     = "description1"
-  match_dscp                      = "46"
-  match_mpls_experimental_topmost = 5
+  match_dscp                      = ["46"]
+  match_mpls_experimental_topmost = [5]
 }
 ```
 
@@ -34,11 +34,10 @@ resource "iosxr_qos_class_map" "example" {
 - `description` (String) Set description for this class-map
 - `device` (String) A device name from the provider configuration.
 - `match_any` (Boolean) Match any match criteria (default)
-- `match_dscp` (String) DSCP value
-- `match_mpls_experimental_topmost` (Number) MPLS experimental label
-  - Range: `0`-`7`
-- `match_qos_group` (String) QoS Group Id
-- `match_traffic_class` (String) Traffic Class Id
+- `match_dscp` (List of String) DSCP value
+- `match_mpls_experimental_topmost` (List of Number) MPLS experimental label
+- `match_qos_group` (List of String) QoS Group Id
+- `match_traffic_class` (List of String) Traffic Class Id
 
 ### Read-Only
 

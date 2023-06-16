@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -70,23 +69,24 @@ func (r *QoSClassMapResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this class-map").String,
 				Optional:            true,
 			},
-			"match_dscp": schema.StringAttribute{
+			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
+				ElementType:         types.StringType,
 				Optional:            true,
 			},
-			"match_mpls_experimental_topmost": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("MPLS experimental label").AddIntegerRangeDescription(0, 7).String,
+			"match_mpls_experimental_topmost": schema.ListAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS experimental label").String,
+				ElementType:         types.Int64Type,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 7),
-				},
 			},
-			"match_qos_group": schema.StringAttribute{
+			"match_qos_group": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("QoS Group Id").String,
+				ElementType:         types.StringType,
 				Optional:            true,
 			},
-			"match_traffic_class": schema.StringAttribute{
+			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Traffic Class Id").String,
+				ElementType:         types.StringType,
 				Optional:            true,
 			},
 		},

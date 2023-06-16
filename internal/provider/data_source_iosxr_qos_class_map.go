@@ -57,20 +57,24 @@ func (d *QoSClassMapDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "Set description for this class-map",
 				Computed:            true,
 			},
-			"match_dscp": schema.StringAttribute{
+			"match_dscp": schema.ListAttribute{
 				MarkdownDescription: "DSCP value",
+				ElementType:         types.StringType,
 				Computed:            true,
 			},
-			"match_mpls_experimental_topmost": schema.Int64Attribute{
+			"match_mpls_experimental_topmost": schema.ListAttribute{
 				MarkdownDescription: "MPLS experimental label",
+				ElementType:         types.Int64Type,
 				Computed:            true,
 			},
-			"match_qos_group": schema.StringAttribute{
+			"match_qos_group": schema.ListAttribute{
 				MarkdownDescription: "QoS Group Id",
+				ElementType:         types.StringType,
 				Computed:            true,
 			},
-			"match_traffic_class": schema.StringAttribute{
+			"match_traffic_class": schema.ListAttribute{
 				MarkdownDescription: "Traffic Class Id",
+				ElementType:         types.StringType,
 				Computed:            true,
 			},
 		},

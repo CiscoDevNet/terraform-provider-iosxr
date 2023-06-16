@@ -3,12 +3,12 @@
 page_title: "iosxr_extcommunity_opaque_set Resource - terraform-provider-iosxr"
 subcategory: "Route Policy"
 description: |-
-  This resource can manage the Extcommunity opaque Set configuration.
+  This resource can manage the Extcommunity Opaque Set configuration.
 ---
 
 # iosxr_extcommunity_opaque_set (Resource)
 
-This resource can manage the Extcommunity opaque Set configuration.
+This resource can manage the Extcommunity Opaque Set configuration.
 
 ## Example Usage
 

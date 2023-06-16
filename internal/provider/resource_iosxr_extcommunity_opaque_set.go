@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*ExtcommunitySetResource)(nil)
+var _ resource.Resource = (*ExtcommunityOpaqueSetResource)(nil)
 
-func NewExtcommunitySetResource() resource.Resource {
-	return &ExtcommunitySetResource{}
+func NewExtcommunityOpaqueSetResource() resource.Resource {
+	return &ExtcommunityOpaqueSetResource{}
 }
 
-type ExtcommunitySetResource struct {
+type ExtcommunityOpaqueSetResource struct {
 	client *client.Client
 }
 
-func (r *ExtcommunitySetResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_extcommunity_set"
+func (r *ExtcommunityOpaqueSetResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_extcommunity_opaque_set"
 }
 
-func (r *ExtcommunitySetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ExtcommunityOpaqueSetResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Extcommunity Set configuration.",
+		MarkdownDescription: "This resource can manage the Extcommunity opaque Set configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -61,7 +61,7 @@ func (r *ExtcommunitySetResource) Schema(ctx context.Context, req resource.Schem
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"rpl_extended_community_opaque_set": schema.StringAttribute{
+			"rpl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Extended Community Opaque Set").String,
 				Required:            true,
 			},
@@ -69,7 +69,7 @@ func (r *ExtcommunitySetResource) Schema(ctx context.Context, req resource.Schem
 	}
 }
 
-func (r *ExtcommunitySetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *ExtcommunityOpaqueSetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -77,8 +77,8 @@ func (r *ExtcommunitySetResource) Configure(ctx context.Context, req resource.Co
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *ExtcommunitySetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan ExtcommunitySet
+func (r *ExtcommunityOpaqueSetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ExtcommunityOpaqueSet
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -116,8 +116,8 @@ func (r *ExtcommunitySetResource) Create(ctx context.Context, req resource.Creat
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ExtcommunitySetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state ExtcommunitySet
+func (r *ExtcommunityOpaqueSetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ExtcommunityOpaqueSet
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -142,8 +142,8 @@ func (r *ExtcommunitySetResource) Read(ctx context.Context, req resource.ReadReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ExtcommunitySetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state ExtcommunitySet
+func (r *ExtcommunityOpaqueSetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state ExtcommunityOpaqueSet
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -193,8 +193,8 @@ func (r *ExtcommunitySetResource) Update(ctx context.Context, req resource.Updat
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *ExtcommunitySetResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state ExtcommunitySet
+func (r *ExtcommunityOpaqueSetResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ExtcommunityOpaqueSet
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -216,6 +216,6 @@ func (r *ExtcommunitySetResource) Delete(ctx context.Context, req resource.Delet
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *ExtcommunitySetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ExtcommunityOpaqueSetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

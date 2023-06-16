@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &ExtcommunitySetDataSource{}
-	_ datasource.DataSourceWithConfigure = &ExtcommunitySetDataSource{}
+	_ datasource.DataSource              = &ExtcommunityOpaqueSetDataSource{}
+	_ datasource.DataSourceWithConfigure = &ExtcommunityOpaqueSetDataSource{}
 )
 
-func NewExtcommunitySetDataSource() datasource.DataSource {
-	return &ExtcommunitySetDataSource{}
+func NewExtcommunityOpaqueSetDataSource() datasource.DataSource {
+	return &ExtcommunityOpaqueSetDataSource{}
 }
 
-type ExtcommunitySetDataSource struct {
+type ExtcommunityOpaqueSetDataSource struct {
 	client *client.Client
 }
 
-func (d *ExtcommunitySetDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_extcommunity_set"
+func (d *ExtcommunityOpaqueSetDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_extcommunity_opaque_set"
 }
 
-func (d *ExtcommunitySetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *ExtcommunityOpaqueSetDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Extcommunity Set configuration.",
+		MarkdownDescription: "This data source can read the Extcommunity opaque Set configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -49,7 +49,7 @@ func (d *ExtcommunitySetDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "Set name",
 				Required:            true,
 			},
-			"rpl_extended_community_opaque_set": schema.StringAttribute{
+			"rpl": schema.StringAttribute{
 				MarkdownDescription: "Extended Community Opaque Set",
 				Computed:            true,
 			},
@@ -57,7 +57,7 @@ func (d *ExtcommunitySetDataSource) Schema(ctx context.Context, req datasource.S
 	}
 }
 
-func (d *ExtcommunitySetDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *ExtcommunityOpaqueSetDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -65,8 +65,8 @@ func (d *ExtcommunitySetDataSource) Configure(_ context.Context, req datasource.
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *ExtcommunitySetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ExtcommunitySet
+func (d *ExtcommunityOpaqueSetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config ExtcommunityOpaqueSet
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

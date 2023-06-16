@@ -115,7 +115,6 @@ attributes:
       - yang_name: metric
         example: 100
 
-
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
     attributes:

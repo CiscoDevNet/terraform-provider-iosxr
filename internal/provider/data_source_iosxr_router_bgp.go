@@ -101,6 +101,14 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Detect multiplier",
 				Computed:            true,
 			},
+			"nexthop_validation_color_extcomm_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths",
+				Computed:            true,
+			},
+			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm path",
+				Computed:            true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "Neighbor address",
 				Computed:            true,
@@ -204,6 +212,10 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"ao_include_tcp_options_enable": schema.BoolAttribute{
 							MarkdownDescription: "Include other TCP options in the header",
+							Computed:            true,
+						},
+						"bfd_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval",
 							Computed:            true,
 						},
 					},

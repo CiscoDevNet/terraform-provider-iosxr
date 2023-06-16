@@ -29,6 +29,8 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_log_neighbor_changes_detail", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_minimum_interval", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_multiplier", "4"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nexthop_validation_color_extcomm_sr_policy", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nexthop_validation_color_extcomm_disable", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.neighbor_address", "10.1.1.2"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.remote_as", "65002"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.description", "My Neighbor Description"),
@@ -50,6 +52,7 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.name", "GROUP1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.remote_as", "65001"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.update_source", "Loopback0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbor_groups.0.bfd_minimum_interval", "3"),
 				),
 			},
 		},
@@ -73,6 +76,8 @@ resource "iosxr_router_bgp" "test" {
 	bgp_log_neighbor_changes_detail = true
 	bfd_minimum_interval = 10
 	bfd_multiplier = 4
+	nexthop_validation_color_extcomm_sr_policy = true
+	nexthop_validation_color_extcomm_disable = true
 	neighbors = [{
 		neighbor_address = "10.1.1.2"
 		remote_as = "65002"
@@ -97,6 +102,7 @@ resource "iosxr_router_bgp" "test" {
 		name = "GROUP1"
 		remote_as = "65001"
 		update_source = "Loopback0"
+		bfd_minimum_interval = 3
 	}]
 }
 

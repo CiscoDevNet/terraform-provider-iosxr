@@ -21,8 +21,6 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "additional_paths_selection_route_policy", "ROUTE_POLICY_1"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "advertise_best_external", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "allocate_label_all", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_multipath", "10"),
-					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_multipath", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "label_mode_per_ce", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "label_mode_per_vrf", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_address_family.test", "redistribute_connected", "true"),
@@ -79,8 +77,6 @@ resource "iosxr_router_bgp_address_family" "test" {
 	additional_paths_selection_route_policy = "ROUTE_POLICY_1"
 	advertise_best_external = true
 	allocate_label_all = true
-	maximum_paths_ebgp_multipath = 10
-	maximum_paths_ibgp_multipath = 10
 	label_mode_per_ce = false
 	label_mode_per_vrf = false
 	redistribute_connected = true

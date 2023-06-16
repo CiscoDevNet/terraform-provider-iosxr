@@ -21,8 +21,6 @@ resource "iosxr_router_bgp_address_family" "example" {
   additional_paths_selection_route_policy = "ROUTE_POLICY_1"
   advertise_best_external                 = true
   allocate_label_all                      = true
-  maximum_paths_ebgp_multipath            = 10
-  maximum_paths_ibgp_multipath            = 10
   label_mode_per_ce                       = false
   label_mode_per_vrf                      = false
   redistribute_connected                  = true

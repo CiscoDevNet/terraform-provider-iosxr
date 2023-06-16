@@ -1,0 +1,12 @@
+---
+name: IPv4 Access List Options
+path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options
+doc_category: System
+attributes:
+  - yang_name: log-update/threshold
+    example: 214748
+  - yang_name: log-update/rate
+    example: 1000
+  - yang_name: icmp-off
+    example: true
+    exclude_test: true

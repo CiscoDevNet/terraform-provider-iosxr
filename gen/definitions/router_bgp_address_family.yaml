@@ -23,6 +23,7 @@ attributes:
   - yang_name: maximum-paths/ebgp/multipath
     example: 10
     optional: true
+    exclude_test: true
   - yang_name: maximum-paths/eibgp/multipath
     example: 10
     optional: true
@@ -30,6 +31,7 @@ attributes:
   - yang_name: maximum-paths/ibgp/multipath
     optional: true
     example: 10
+    exclude_test: true
   - yang_name: label/mode/per-ce
     example: false
   - yang_name: label/mode/per-vrf

@@ -14,20 +14,22 @@ This resource can manage the Router BGP configuration.
 
 ```terraform
 resource "iosxr_router_bgp" "example" {
-  as_number                             = "65001"
-  default_information_originate         = true
-  default_metric                        = 125
-  nsr_disable                           = false
-  bgp_redistribute_internal             = true
-  segment_routing_srv6_locator          = "locator11"
-  timers_bgp_keepalive_interval         = 5
-  timers_bgp_holdtime                   = "20"
-  bgp_router_id                         = "22.22.22.22"
-  bgp_graceful_restart_graceful_reset   = true
-  ibgp_policy_out_enforce_modifications = true
-  bgp_log_neighbor_changes_detail       = true
-  bfd_minimum_interval                  = 10
-  bfd_multiplier                        = 4
+  as_number                                  = "65001"
+  default_information_originate              = true
+  default_metric                             = 125
+  nsr_disable                                = false
+  bgp_redistribute_internal                  = true
+  segment_routing_srv6_locator               = "locator11"
+  timers_bgp_keepalive_interval              = 5
+  timers_bgp_holdtime                        = "20"
+  bgp_router_id                              = "22.22.22.22"
+  bgp_graceful_restart_graceful_reset        = true
+  ibgp_policy_out_enforce_modifications      = true
+  bgp_log_neighbor_changes_detail            = true
+  bfd_minimum_interval                       = 10
+  bfd_multiplier                             = 4
+  nexthop_validation_color_extcomm_sr_policy = true
+  nexthop_validation_color_extcomm_disable   = true
   neighbors = [
     {
       neighbor_address                = "10.1.1.2"
@@ -52,9 +54,10 @@ resource "iosxr_router_bgp" "example" {
   ]
   neighbor_groups = [
     {
-      name          = "GROUP1"
-      remote_as     = "65001"
-      update_source = "Loopback0"
+      name                 = "GROUP1"
+      remote_as            = "65001"
+      update_source        = "Loopback0"
+      bfd_minimum_interval = 3
     }
   ]
 }
@@ -87,6 +90,8 @@ resource "iosxr_router_bgp" "example" {
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
 - `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
+- `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
 - `segment_routing_srv6_locator` (String) Configure locator name
 
@@ -101,6 +106,8 @@ Optional:
 
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `bfd_minimum_interval` (Number) Hello interval
+  - Range: `3`-`30000`
 - `name` (String) Specify a Neighbor-group
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates

@@ -18,8 +18,12 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"),
 				),
 			},
 		},
@@ -33,9 +37,13 @@ resource "iosxr_router_bgp_neighbor_group" "test" {
 	name = "GROUP1"
 	remote_as = "65001"
 	update_source = "Loopback0"
+	bfd_minimum_interval = 3
+	bfd_fast_detect = true
 	address_families = [{
 		af_name = "ipv4-labeled-unicast"
 		soft_reconfiguration_inbound_always = true
+		next_hop_self_inheritance_disable = true
+		route_reflector_client_inheritance_disable = true
 	}]
 }
 

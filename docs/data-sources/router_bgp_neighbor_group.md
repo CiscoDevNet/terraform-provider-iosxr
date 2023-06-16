@@ -36,6 +36,8 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_minimum_interval` (Number) Hello interval
 - `id` (String) The path of the retrieved object.
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates
@@ -46,4 +48,6 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 Read-Only:
 
 - `af_name` (String) Enter Address Family command mode
+- `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported

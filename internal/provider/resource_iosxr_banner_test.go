@@ -17,7 +17,7 @@ func TestAccIosxrBanner(t *testing.T) {
 				Config: testAccIosxrBannerConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"),
-					resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user  !"),
+					resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user !"),
 				),
 			},
 			{
@@ -33,7 +33,7 @@ func testAccIosxrBannerConfig_minimum() string {
 	return `
 	resource "iosxr_banner" "test" {
 		banner_type = "login"
-		line = " Hello user  !"
+		line = " Hello user !"
 	}
 	`
 }
@@ -42,7 +42,7 @@ func testAccIosxrBannerConfig_all() string {
 	return `
 	resource "iosxr_banner" "test" {
 		banner_type = "login"
-		line = " Hello user  !"
+		line = " Hello user !"
 	}
 	`
 }

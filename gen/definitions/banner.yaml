@@ -1,0 +1,9 @@
+---
+name: Banner
+path: Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]
+doc_category: System
+attributes:
+  - yang_name: banner-type
+    example: login
+  - yang_name: line
+    example: " Hello user !"

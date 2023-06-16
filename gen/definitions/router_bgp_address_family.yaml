@@ -117,7 +117,7 @@ attributes:
 
 
 test_prerequisites:
-- path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
-  attributes:
-    - name: route-policy-name
-      value: ROUTE_POLICY_1
+  - path: Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1

@@ -1,0 +1,32 @@
+---
+name: PCE
+path: Cisco-IOS-XR-um-pce-cfg:/pce
+doc_category: System
+attributes:
+  - yang_name: address/ipv4
+    example: 77.77.77.1
+  - yang_name: address/ipv6
+    example: 1050:0000:0000:0000:0005:0600:300c:326b
+    exclude_test: true
+  - yang_name: state-sync/ipv4s/ipv4
+    tf_name: state_sync_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 100.100.100.11
+  - yang_name: peer-filter/ipv4/access-list
+    example: Accesslist1
+  - yang_name: api/authentication/digest
+    example: true
+  - yang_name: api/sibling/ipv4
+    example: 100.100.100.2
+  - yang_name: api/users/user
+    tf_name: api_users
+    type: List
+    attributes:
+      - yang_name: user-name
+        id: true
+        example: rest-user
+      - yang_name: password/encrypted
+        example: 00141215174C04140B

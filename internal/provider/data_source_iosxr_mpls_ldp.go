@@ -73,6 +73,58 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
+			"capabilities_sac_ipv4_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging IPv4 prefix label bindings",
+				Computed:            true,
+			},
+			"capabilities_sac_ipv6_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging IPv6 prefix label bindings",
+				Computed:            true,
+			},
+			"capabilities_sac_fec128_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging PW FEC128 label bindings",
+				Computed:            true,
+			},
+			"capabilities_sac_fec129_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging PW FEC129 label bindings",
+				Computed:            true,
+			},
+			"mldp_logging_notifications": schema.BoolAttribute{
+				MarkdownDescription: "MLDP logging notifications",
+				Computed:            true,
+			},
+			"mldp_address_families": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure Address Family and its parameters",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Configure Address Family and its parameters",
+							Computed:            true,
+						},
+						"make_before_break_delay": schema.Int64Attribute{
+							MarkdownDescription: "MBB delay",
+							Computed:            true,
+						},
+						"forwarding_recursive": schema.BoolAttribute{
+							MarkdownDescription: "Enable recursive forwarding",
+							Computed:            true,
+						},
+						"forwarding_recursive_route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy",
+							Computed:            true,
+						},
+						"recursive_fec": schema.BoolAttribute{
+							MarkdownDescription: "MLDP Recursive FEC enable",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"session_protection": schema.BoolAttribute{
+				MarkdownDescription: "Configure session protection parameters",
+				Computed:            true,
+			},
 		},
 	}
 }

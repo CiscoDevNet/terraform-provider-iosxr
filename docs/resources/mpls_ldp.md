@@ -25,6 +25,18 @@ resource "iosxr_mpls_ldp" "example" {
       interface_name = "GigabitEthernet0/0/0/1"
     }
   ]
+  capabilities_sac_ipv4_disable = true
+  mldp_logging_notifications    = true
+  mldp_address_families = [
+    {
+      name                              = "ipv4"
+      make_before_break_delay           = 30
+      forwarding_recursive              = true
+      forwarding_recursive_route_policy = "ROUTE_POLICY_1"
+      recursive_fec                     = true
+    }
+  ]
+  session_protection = true
 }
 ```
 
@@ -34,9 +46,16 @@ resource "iosxr_mpls_ldp" "example" {
 ### Optional
 
 - `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `capabilities_sac_fec128_disable` (Boolean) Disable exchanging PW FEC128 label bindings
+- `capabilities_sac_fec129_disable` (Boolean) Disable exchanging PW FEC129 label bindings
+- `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
+- `capabilities_sac_ipv6_disable` (Boolean) Disable exchanging IPv6 prefix label bindings
 - `device` (String) A device name from the provider configuration.
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
+- `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
+- `mldp_logging_notifications` (Boolean) MLDP logging notifications
 - `router_id` (String) Configure router Id
+- `session_protection` (Boolean) Configure session protection parameters
 
 ### Read-Only
 
@@ -57,6 +76,23 @@ Optional:
 Optional:
 
 - `interface_name` (String) Enable LDP on an interface and enter interface submode
+
+
+<a id="nestedatt--mldp_address_families"></a>
+### Nested Schema for `mldp_address_families`
+
+Required:
+
+- `make_before_break_delay` (Number) MBB delay
+  - Range: `0`-`600`
+
+Optional:
+
+- `forwarding_recursive` (Boolean) Enable recursive forwarding
+- `forwarding_recursive_route_policy` (String) Route policy
+- `name` (String) Configure Address Family and its parameters
+  - Choices: `ipv4`
+- `recursive_fec` (Boolean) MLDP Recursive FEC enable
 
 ## Import
 

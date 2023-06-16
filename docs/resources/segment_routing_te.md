@@ -14,8 +14,24 @@ This resource can manage the Segment Routing TE configuration.
 
 ```terraform
 resource "iosxr_segment_routing_te" "example" {
+  logging_pcep_peer_status = true
+  logging_policy_status    = true
+  pcc_report_all           = true
+  pcc_source_address       = "88.88.88.8"
+  pcc_delegation_timeout   = 10
+  pcc_dead_timer           = 60
+  pcc_initiated_state      = 15
+  pcc_initiated_orphan     = 10
+  pce_peers = [
+    {
+      pce_address = "66.66.66.6"
+      precedence  = 122
+    }
+  ]
   on_demand_colors = [
     {
+      dynamic_anycast_sid_inclusion       = true
+      dynamic_metric_type                 = "te"
       color                               = 266
       srv6_locator_name                   = "LOC11"
       srv6_locator_behavior               = "ub6-insert-reduced"
@@ -50,7 +66,20 @@ resource "iosxr_segment_routing_te" "example" {
 ### Optional
 
 - `device` (String) A device name from the provider configuration.
+- `logging_pcep_peer_status` (Boolean) Enable logging for pcep peer status
+- `logging_policy_status` (Boolean) Enable logging for policy status
 - `on_demand_colors` (Attributes List) On-demand color configuration (see [below for nested schema](#nestedatt--on_demand_colors))
+- `pcc_dead_timer` (Number) Amount of time after which the peer can declare this session down, if no PCEP message has been received
+  - Range: `1`-`255`
+- `pcc_delegation_timeout` (Number) Maximum time delegated SR-TE policies can remain up without an active connection to a PCE
+  - Range: `0`-`1576800000`
+- `pcc_initiated_orphan` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
+  - Range: `0`-`180`
+- `pcc_initiated_state` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
+  - Range: `0`-`86400`
+- `pcc_report_all` (Boolean) Report all local SR policies to connected PCEP peers
+- `pcc_source_address` (String) Local source IP address to use on PCEP sessions
+- `pce_peers` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers))
 - `policies` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--policies))
 
 ### Read-Only
@@ -74,6 +103,9 @@ Optional:
   - Choices: `protected-only`, `protected-preferred`, `unprotected-only`, `unprotected-preferred`
 - `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs
   - Range: `0`-`255`
+- `dynamic_anycast_sid_inclusion` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
+- `dynamic_metric_type` (String) Metric Type
+  - Choices: `hopcount`, `igp`, `latency`, `te`
 - `effective_metric_enable` (Boolean) True only
 - `effective_metric_type` (String) Metric type, advertised to other protocols
   - Choices: `default`, `hopcount`, `igp`, `latency`, `te`
@@ -85,6 +117,16 @@ Optional:
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
   - Choices: `srv6-dynamic`
 - `srv6_locator_name` (String) SRv6 locator name
+
+
+<a id="nestedatt--pce_peers"></a>
+### Nested Schema for `pce_peers`
+
+Optional:
+
+- `pce_address` (String) Remote PCE address
+- `precedence` (Number) Precedence value of this PCE
+  - Range: `0`-`255`
 
 
 <a id="nestedatt--policies"></a>

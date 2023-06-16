@@ -19,3 +19,45 @@ attributes:
       - yang_name: interface-name
         id: true
         example: GigabitEthernet0/0/0/1
+  
+  - yang_name: capabilities/sac/ipv4-disable
+    example: true
+  - yang_name: capabilities/sac/ipv6-disable
+    example: true
+    exclude_test: true
+  - yang_name: capabilities/sac/fec128-disable
+    example: true
+    exclude_test: true
+  - yang_name: capabilities/sac/fec129-disable
+    example: true
+    exclude_test: true
+  - yang_name: mldp/logging/notifications
+    example: true
+  - yang_name: mldp/address-families/address-family
+    tf_name: mldp_address_families
+    type: List
+    attributes:
+      - yang_name: af-name
+        tf_name: name
+        id: true
+        example: ipv4
+      - yang_name: make-before-break/delay/forwarding-delay
+        tf_name: make_before_break_delay
+        example: 30
+      - yang_name: forwarding/recursive
+        example: true
+      - yang_name: forwarding/recursive/route-policy
+        example: ROUTE_POLICY_1
+      - yang_name: recursive-fec/enable
+        tf_name: recursive_fec
+        example: true
+  - yang_name: session/protection
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"

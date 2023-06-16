@@ -3,12 +3,12 @@
 page_title: "iosxr_extcommunity_opaque_set Data Source - terraform-provider-iosxr"
 subcategory: "Route Policy"
 description: |-
-  This data source can read the Extcommunity opaque Set configuration.
+  This data source can read the Extcommunity Opaque Set configuration.
 ---
 
 # iosxr_extcommunity_opaque_set (Data Source)
 
-This data source can read the Extcommunity opaque Set configuration.
+This data source can read the Extcommunity Opaque Set configuration.
 
 ## Example Usage
 

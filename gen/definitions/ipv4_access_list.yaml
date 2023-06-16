@@ -14,6 +14,7 @@ attributes:
         example: 11
       - yang_name: remark
         example: remark for access list
+        exclude_test: true
       - yang_name: permit/protocol
         example: tcp
       - yang_name: permit/eq
@@ -36,6 +37,7 @@ attributes:
         exclude_test: true
       - yang_name: permit/default
         example: true
+        exclude_test: true
       - yang_name: permit/capture
         example: true
         exclude_test: true
@@ -77,8 +79,10 @@ attributes:
         example: 333
         exclude_test: true
       - yang_name: permit/source/port/range/start-value
+        tf_name: permit_source_port_range_start
         example: 100
       - yang_name: permit/source/port/range/end-value
+        tf_name: permit_source_port_range_end
         example: 200
       - yang_name: permit/destination/address
         example: 1.1.1.1
@@ -112,9 +116,11 @@ attributes:
         example: 88
         exclude_test: true
       - yang_name: permit/destination/port/range/start-value
+        tf_name: permit_destination_port_range_start
         example: 100
         exclude_test: true
       - yang_name: permit/destination/port/range/end-value
+        tf_name: permit_destination_port_range_end
         example: 200
         exclude_test: true
       - yang_name: permit/icmp/message-type-name
@@ -127,6 +133,7 @@ attributes:
         example: 255
         exclude_test: true
       - yang_name: permit/dscp/dscp-value
+        tf_name: permit_dscp
         example: cs1
       - yang_name: permit/dscp/eq
         example: 14
@@ -141,9 +148,11 @@ attributes:
         example: 17
         exclude_test: true
       - yang_name: permit/dscp/range/start-value
+        tf_name: permit_dscp_range_start
         example: 300
         exclude_test: true
       - yang_name: permit/dscp/range/end-value
+        tf_name: permit_dscp_range_end
         example: 400
         exclude_test: true
       - yang_name: permit/packet-length/eq
@@ -159,9 +168,11 @@ attributes:
         example: 25
         exclude_test: true
       - yang_name: permit/packet-length/range/start-value
+        tf_name: permit_packet_length_range_start
         example: 100
         exclude_test: true
       - yang_name: permit/packet-length/range/end-value
+        tf_name: permit_packet_length_range_end
         example: 200
         exclude_test: true
       - yang_name: permit/ttl/eq
@@ -176,9 +187,11 @@ attributes:
         example: 32
         exclude_test: true
       - yang_name: permit/ttl/range/start-value
+        tf_name: permit_ttl_range_start
         example: 100
         exclude_test: true
       - yang_name: permit/ttl/range/end-value
+        tf_name: permit_ttl_range_end
         example: 200
         exclude_test: true
       - yang_name: permit/fragment-offset/eq
@@ -194,9 +207,11 @@ attributes:
         example: 44
         exclude_test: true
       - yang_name: permit/fragment-offset/range/start-value
+        tf_name: permit_fragment_offset_range_start
         example: 100
         exclude_test: true
       - yang_name: permit/fragment-offset/range/end-value
+        tf_name: permit_fragment_offset_range_end
         example: 200
         exclude_test: true
       - yang_name: permit/police/value
@@ -291,9 +306,11 @@ attributes:
         example: 156
         exclude_test: true
       - yang_name: deny/source/port/range/start-value
+        tf_name: deny_source_port_range_start
         example: 300
         exclude_test: true
       - yang_name: deny/source/port/range/end-value
+        tf_name: deny_source_port_range_end
         example: 400
         exclude_test: true
       - yang_name: deny/destination/address
@@ -330,9 +347,11 @@ attributes:
         example: 666
         exclude_test: true
       - yang_name: deny/destination/port/range/start-value
+        tf_name: deny_destination_port_range_start
         example: 100
         exclude_test: true
       - yang_name: deny/destination/port/range/end-value
+        tf_name: deny_destination_port_range_end
         example: 200
         exclude_test: true
       - yang_name: deny/igmp-type
@@ -378,6 +397,7 @@ attributes:
         example: 255
         exclude_test: true
       - yang_name: deny/dscp/dscp-value
+        tf_name: deny_dscp
         example: cs2
         exclude_test: true
       - yang_name: deny/dscp/eq
@@ -393,9 +413,11 @@ attributes:
         example: 188
         exclude_test: true
       - yang_name: deny/dscp/range/start-value
+        tf_name: deny_dscp_range_start
         example: 100
         exclude_test: true
       - yang_name: deny/dscp/range/end-value
+        tf_name: deny_dscp_range_end
         example: 200
         exclude_test: true
       - yang_name: deny/packet-length/eq
@@ -411,9 +433,11 @@ attributes:
         example: 182
         exclude_test: true
       - yang_name: deny/packet-length/range/start-value
+        tf_name: deny_packet_length_range_start
         example: 190
         exclude_test: true
       - yang_name: deny/packet-length/range/end-value
+        tf_name: deny_packet_length_range_end
         example: 192
         exclude_test: true
       - yang_name: deny/ttl/eq
@@ -429,9 +453,11 @@ attributes:
         example: 180
         exclude_test: true
       - yang_name: deny/ttl/range/start-value
+        tf_name: deny_ttl_range_start
         example: 188
         exclude_test: true
       - yang_name: deny/ttl/range/end-value
+        tf_name: deny_ttl_range_end
         example: 190
         exclude_test: true
       - yang_name: deny/fragment-offset/eq
@@ -447,9 +473,11 @@ attributes:
         example: 40
         exclude_test: true
       - yang_name: deny/fragment-offset/range/start-value
+        tf_name: deny_fragment_offset_range_start
         example: 40
         exclude_test: true
       - yang_name: deny/fragment-offset/range/end-value
+        tf_name: deny_fragment_offset_range_end
         example: 100
         exclude_test: true
       - yang_name: deny/police/value

@@ -185,11 +185,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given port").String,
 							Optional:            true,
 						},
-						"permit_source_port_range_start_value": schema.StringAttribute{
+						"permit_source_port_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
-						"permit_source_port_range_end_value": schema.StringAttribute{
+						"permit_source_port_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
@@ -259,11 +259,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given port").String,
 							Optional:            true,
 						},
-						"permit_destination_port_range_start_value": schema.StringAttribute{
+						"permit_destination_port_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
-						"permit_destination_port_range_end_value": schema.StringAttribute{
+						"permit_destination_port_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
@@ -288,7 +288,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
-						"permit_dscp_dscp_value": schema.StringAttribute{
+						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("").String,
 							Optional:            true,
 						},
@@ -308,11 +308,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given DSCP value").String,
 							Optional:            true,
 						},
-						"permit_dscp_range_start_value": schema.StringAttribute{
+						"permit_dscp_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
-						"permit_dscp_range_end_value": schema.StringAttribute{
+						"permit_dscp_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
@@ -344,14 +344,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 65535),
 							},
 						},
-						"permit_packet_length_range_start_value": schema.Int64Attribute{
+						"permit_packet_length_range_start": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Packet length start").AddIntegerRangeDescription(0, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"permit_packet_length_range_end_value": schema.Int64Attribute{
+						"permit_packet_length_range_end": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Packet length end").AddIntegerRangeDescription(0, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -386,14 +386,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
-						"permit_ttl_range_start_value": schema.Int64Attribute{
+						"permit_ttl_range_start": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ttl range lower value").AddIntegerRangeDescription(0, 255).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
 						},
-						"permit_ttl_range_end_value": schema.Int64Attribute{
+						"permit_ttl_range_end": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ttl range higher value").AddIntegerRangeDescription(0, 255).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -635,11 +635,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given port").String,
 							Optional:            true,
 						},
-						"deny_source_port_range_start_value": schema.StringAttribute{
+						"deny_source_port_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
-						"deny_source_port_range_end_value": schema.StringAttribute{
+						"deny_source_port_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
@@ -709,11 +709,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given port").String,
 							Optional:            true,
 						},
-						"deny_destination_port_range_start_value": schema.StringAttribute{
+						"deny_destination_port_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
-						"deny_destination_port_range_end_value": schema.StringAttribute{
+						"deny_destination_port_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Port number").String,
 							Optional:            true,
 						},
@@ -738,7 +738,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
-						"deny_dscp_dscp_value": schema.StringAttribute{
+						"deny_dscp": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("").String,
 							Optional:            true,
 						},
@@ -758,11 +758,11 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Match only packets not on a given DSCP value").String,
 							Optional:            true,
 						},
-						"deny_dscp_range_start_value": schema.StringAttribute{
+						"deny_dscp_range_start": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
-						"deny_dscp_range_end_value": schema.StringAttribute{
+						"deny_dscp_range_end": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
@@ -794,14 +794,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 65535),
 							},
 						},
-						"deny_packet_length_range_start_value": schema.Int64Attribute{
+						"deny_packet_length_range_start": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Packet length start").AddIntegerRangeDescription(0, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"deny_packet_length_range_end_value": schema.Int64Attribute{
+						"deny_packet_length_range_end": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Packet length end").AddIntegerRangeDescription(0, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -836,14 +836,14 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 								int64validator.Between(0, 255),
 							},
 						},
-						"deny_ttl_range_start_value": schema.Int64Attribute{
+						"deny_ttl_range_start": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ttl range lower value").AddIntegerRangeDescription(0, 255).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
 							},
 						},
-						"deny_ttl_range_end_value": schema.Int64Attribute{
+						"deny_ttl_range_end": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ttl range higher value").AddIntegerRangeDescription(0, 255).String,
 							Optional:            true,
 							Validators: []validator.Int64{

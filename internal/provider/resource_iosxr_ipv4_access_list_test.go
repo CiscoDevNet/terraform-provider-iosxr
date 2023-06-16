@@ -18,16 +18,14 @@ func TestAccIosxrIPv4AccessList(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "access_list_name", "ACCESS1"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.sequence_number", "11"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.remark", "remark for access list"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_protocol", "tcp"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_default", "true"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_address", "18.0.0.0"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_wildcard_mask", "0.255.255.255"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_start_value", "100"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_end_value", "200"),
+					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_start", "100"),
+					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_end", "200"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_host", "11.1.1.1"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_port_eq", "300"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_dscp_dscp_value", "cs1"),
+					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_dscp", "cs1"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_ttl_eq", "10"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop1_ipv4", "1.2.3.4"),
 					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop2_ipv4", "3.4.5.6"),
@@ -57,16 +55,14 @@ func testAccIosxrIPv4AccessListConfig_all() string {
 		access_list_name = "ACCESS1"
 		sequences = [{
 			sequence_number = 11
-			remark = "remark for access list"
 			permit_protocol = "tcp"
-			permit_default = true
 			permit_source_address = "18.0.0.0"
 			permit_source_wildcard_mask = "0.255.255.255"
-			permit_source_port_range_start_value = "100"
-			permit_source_port_range_end_value = "200"
+			permit_source_port_range_start = "100"
+			permit_source_port_range_end = "200"
 			permit_destination_host = "11.1.1.1"
 			permit_destination_port_eq = "300"
-			permit_dscp_dscp_value = "cs1"
+			permit_dscp = "cs1"
 			permit_ttl_eq = 10
 			permit_nexthop1_ipv4 = "1.2.3.4"
 			permit_nexthop2_ipv4 = "3.4.5.6"

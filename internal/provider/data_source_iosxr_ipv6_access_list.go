@@ -138,11 +138,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given port",
 							Computed:            true,
 						},
-						"permit_source_port_range_start_value": schema.StringAttribute{
+						"permit_source_port_range_start": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
-						"permit_source_port_range_end_value": schema.StringAttribute{
+						"permit_source_port_range_end": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
@@ -190,11 +190,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given port",
 							Computed:            true,
 						},
-						"permit_destination_port_range_start_value": schema.StringAttribute{
+						"permit_destination_port_range_start": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
-						"permit_destination_port_range_end_value": schema.StringAttribute{
+						"permit_destination_port_range_end": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
@@ -210,7 +210,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "ICMP message code",
 							Computed:            true,
 						},
-						"permit_dscp_dscp_value": schema.StringAttribute{
+						"permit_dscp": schema.StringAttribute{
 							MarkdownDescription: "",
 							Computed:            true,
 						},
@@ -230,11 +230,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given DSCP value",
 							Computed:            true,
 						},
-						"permit_dscp_range_start_value": schema.StringAttribute{
+						"permit_dscp_range_start": schema.StringAttribute{
 							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
-						"permit_dscp_range_end_value": schema.StringAttribute{
+						"permit_dscp_range_end": schema.StringAttribute{
 							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
@@ -254,11 +254,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given value",
 							Computed:            true,
 						},
-						"permit_packet_length_range_start_value": schema.Int64Attribute{
+						"permit_packet_length_range_start": schema.Int64Attribute{
 							MarkdownDescription: "Packet length start",
 							Computed:            true,
 						},
-						"permit_packet_length_range_end_value": schema.Int64Attribute{
+						"permit_packet_length_range_end": schema.Int64Attribute{
 							MarkdownDescription: "Packet length end",
 							Computed:            true,
 						},
@@ -278,11 +278,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given value",
 							Computed:            true,
 						},
-						"permit_ttl_range_start_value": schema.Int64Attribute{
+						"permit_ttl_range_start": schema.Int64Attribute{
 							MarkdownDescription: "ttl range lower value",
 							Computed:            true,
 						},
-						"permit_ttl_range_end_value": schema.Int64Attribute{
+						"permit_ttl_range_end": schema.Int64Attribute{
 							MarkdownDescription: "ttl range higher value",
 							Computed:            true,
 						},
@@ -442,11 +442,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given port",
 							Computed:            true,
 						},
-						"deny_source_port_range_start_value": schema.StringAttribute{
+						"deny_source_port_range_start": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
-						"deny_source_port_range_end_value": schema.StringAttribute{
+						"deny_source_port_range_end": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
@@ -494,11 +494,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given port",
 							Computed:            true,
 						},
-						"deny_destination_port_range_start_value": schema.StringAttribute{
+						"deny_destination_port_range_start": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
-						"deny_destination_port_range_end_value": schema.StringAttribute{
+						"deny_destination_port_range_end": schema.StringAttribute{
 							MarkdownDescription: "Port number",
 							Computed:            true,
 						},
@@ -514,7 +514,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "ICMP message code",
 							Computed:            true,
 						},
-						"deny_dscp_dscp_value": schema.StringAttribute{
+						"deny_dscp": schema.StringAttribute{
 							MarkdownDescription: "",
 							Computed:            true,
 						},
@@ -534,11 +534,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given DSCP value",
 							Computed:            true,
 						},
-						"deny_dscp_range_start_value": schema.StringAttribute{
+						"deny_dscp_range_start": schema.StringAttribute{
 							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
-						"deny_dscp_range_end_value": schema.StringAttribute{
+						"deny_dscp_range_end": schema.StringAttribute{
 							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
@@ -558,11 +558,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given value",
 							Computed:            true,
 						},
-						"deny_packet_length_range_start_value": schema.Int64Attribute{
+						"deny_packet_length_range_start": schema.Int64Attribute{
 							MarkdownDescription: "Packet length start",
 							Computed:            true,
 						},
-						"deny_packet_length_range_end_value": schema.Int64Attribute{
+						"deny_packet_length_range_end": schema.Int64Attribute{
 							MarkdownDescription: "Packet length end",
 							Computed:            true,
 						},
@@ -582,11 +582,11 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							MarkdownDescription: "Match only packets not on a given value",
 							Computed:            true,
 						},
-						"deny_ttl_range_start_value": schema.Int64Attribute{
+						"deny_ttl_range_start": schema.Int64Attribute{
 							MarkdownDescription: "ttl range lower value",
 							Computed:            true,
 						},
-						"deny_ttl_range_end_value": schema.Int64Attribute{
+						"deny_ttl_range_end": schema.Int64Attribute{
 							MarkdownDescription: "ttl range higher value",
 							Computed:            true,
 						},

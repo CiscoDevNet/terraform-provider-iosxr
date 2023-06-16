@@ -20,176 +20,176 @@ type IPv4AccessList struct {
 	Sequences      []IPv4AccessListSequences `tfsdk:"sequences"`
 }
 type IPv4AccessListSequences struct {
-	SequenceNumber                       types.Int64  `tfsdk:"sequence_number"`
-	Remark                               types.String `tfsdk:"remark"`
-	PermitProtocol                       types.String `tfsdk:"permit_protocol"`
-	PermitEq                             types.String `tfsdk:"permit_eq"`
-	PermitIgmpType                       types.String `tfsdk:"permit_igmp_type"`
-	PermitPrecedence                     types.String `tfsdk:"permit_precedence"`
-	PermitFragmentType                   types.String `tfsdk:"permit_fragment_type"`
-	PermitFragments                      types.Bool   `tfsdk:"permit_fragments"`
-	PermitCounter                        types.String `tfsdk:"permit_counter"`
-	PermitDefault                        types.Bool   `tfsdk:"permit_default"`
-	PermitCapture                        types.Bool   `tfsdk:"permit_capture"`
-	PermitRangeStartProtocol             types.String `tfsdk:"permit_range_start_protocol"`
-	PermitRangeEndProtocol               types.String `tfsdk:"permit_range_end_protocol"`
-	PermitSourceAddress                  types.String `tfsdk:"permit_source_address"`
-	PermitSourceWildcardMask             types.String `tfsdk:"permit_source_wildcard_mask"`
-	PermitSourcePrefixLength             types.Int64  `tfsdk:"permit_source_prefix_length"`
-	PermitSourceAny                      types.Bool   `tfsdk:"permit_source_any"`
-	PermitSourceHost                     types.String `tfsdk:"permit_source_host"`
-	PermitSourceNetGroup                 types.String `tfsdk:"permit_source_net_group"`
-	PermitSourcePortGroup                types.String `tfsdk:"permit_source_port_group"`
-	PermitSourcePortEq                   types.String `tfsdk:"permit_source_port_eq"`
-	PermitSourcePortGt                   types.String `tfsdk:"permit_source_port_gt"`
-	PermitSourcePortLt                   types.String `tfsdk:"permit_source_port_lt"`
-	PermitSourcePortNeq                  types.String `tfsdk:"permit_source_port_neq"`
-	PermitSourcePortRangeStartValue      types.String `tfsdk:"permit_source_port_range_start_value"`
-	PermitSourcePortRangeEndValue        types.String `tfsdk:"permit_source_port_range_end_value"`
-	PermitDestinationAddress             types.String `tfsdk:"permit_destination_address"`
-	PermitDestinationWildcardMask        types.String `tfsdk:"permit_destination_wildcard_mask"`
-	PermitDestinationPrefixLength        types.Int64  `tfsdk:"permit_destination_prefix_length"`
-	PermitDestinationAny                 types.Bool   `tfsdk:"permit_destination_any"`
-	PermitDestinationHost                types.String `tfsdk:"permit_destination_host"`
-	PermitDestinationNetGroup            types.String `tfsdk:"permit_destination_net_group"`
-	PermitDestinationPortGroup           types.String `tfsdk:"permit_destination_port_group"`
-	PermitDestinationPortEq              types.String `tfsdk:"permit_destination_port_eq"`
-	PermitDestinationPortGt              types.String `tfsdk:"permit_destination_port_gt"`
-	PermitDestinationPortLt              types.String `tfsdk:"permit_destination_port_lt"`
-	PermitDestinationPortNeq             types.String `tfsdk:"permit_destination_port_neq"`
-	PermitDestinationPortRangeStartValue types.String `tfsdk:"permit_destination_port_range_start_value"`
-	PermitDestinationPortRangeEndValue   types.String `tfsdk:"permit_destination_port_range_end_value"`
-	PermitIcmpMessageTypeName            types.String `tfsdk:"permit_icmp_message_type_name"`
-	PermitIcmpMessageType                types.Int64  `tfsdk:"permit_icmp_message_type"`
-	PermitIcmpMessageCode                types.Int64  `tfsdk:"permit_icmp_message_code"`
-	PermitDscpDscpValue                  types.String `tfsdk:"permit_dscp_dscp_value"`
-	PermitDscpEq                         types.String `tfsdk:"permit_dscp_eq"`
-	PermitDscpGt                         types.String `tfsdk:"permit_dscp_gt"`
-	PermitDscpLt                         types.String `tfsdk:"permit_dscp_lt"`
-	PermitDscpNeq                        types.String `tfsdk:"permit_dscp_neq"`
-	PermitDscpRangeStartValue            types.String `tfsdk:"permit_dscp_range_start_value"`
-	PermitDscpRangeEndValue              types.String `tfsdk:"permit_dscp_range_end_value"`
-	PermitPacketLengthEq                 types.Int64  `tfsdk:"permit_packet_length_eq"`
-	PermitPacketLengthGt                 types.Int64  `tfsdk:"permit_packet_length_gt"`
-	PermitPacketLengthLt                 types.Int64  `tfsdk:"permit_packet_length_lt"`
-	PermitPacketLengthNeq                types.Int64  `tfsdk:"permit_packet_length_neq"`
-	PermitPacketLengthRangeStartValue    types.Int64  `tfsdk:"permit_packet_length_range_start_value"`
-	PermitPacketLengthRangeEndValue      types.Int64  `tfsdk:"permit_packet_length_range_end_value"`
-	PermitTtlEq                          types.Int64  `tfsdk:"permit_ttl_eq"`
-	PermitTtlGt                          types.Int64  `tfsdk:"permit_ttl_gt"`
-	PermitTtlLt                          types.Int64  `tfsdk:"permit_ttl_lt"`
-	PermitTtlNeq                         types.Int64  `tfsdk:"permit_ttl_neq"`
-	PermitTtlRangeStartValue             types.Int64  `tfsdk:"permit_ttl_range_start_value"`
-	PermitTtlRangeEndValue               types.Int64  `tfsdk:"permit_ttl_range_end_value"`
-	PermitFragmentOffsetEq               types.Int64  `tfsdk:"permit_fragment_offset_eq"`
-	PermitFragmentOffsetGt               types.Int64  `tfsdk:"permit_fragment_offset_gt"`
-	PermitFragmentOffsetLt               types.Int64  `tfsdk:"permit_fragment_offset_lt"`
-	PermitFragmentOffsetNeq              types.Int64  `tfsdk:"permit_fragment_offset_neq"`
-	PermitFragmentOffsetRangeStartValue  types.Int64  `tfsdk:"permit_fragment_offset_range_start_value"`
-	PermitFragmentOffsetRangeEndValue    types.Int64  `tfsdk:"permit_fragment_offset_range_end_value"`
-	PermitPoliceValue                    types.Int64  `tfsdk:"permit_police_value"`
-	PermitPoliceUnit                     types.String `tfsdk:"permit_police_unit"`
-	PermitPolicePeakRate                 types.Int64  `tfsdk:"permit_police_peak_rate"`
-	PermitPolicePeakUnit                 types.String `tfsdk:"permit_police_peak_unit"`
-	PermitPolicePriority                 types.String `tfsdk:"permit_police_priority"`
-	PermitNexthop1Ipv4                   types.String `tfsdk:"permit_nexthop1_ipv4"`
-	PermitNexthop1Track                  types.String `tfsdk:"permit_nexthop1_track"`
-	PermitNexthop1Vrf                    types.String `tfsdk:"permit_nexthop1_vrf"`
-	PermitNexthop2Ipv4                   types.String `tfsdk:"permit_nexthop2_ipv4"`
-	PermitNexthop2Track                  types.String `tfsdk:"permit_nexthop2_track"`
-	PermitNexthop2Vrf                    types.String `tfsdk:"permit_nexthop2_vrf"`
-	PermitNexthop3Ipv4                   types.String `tfsdk:"permit_nexthop3_ipv4"`
-	PermitNexthop3Track                  types.String `tfsdk:"permit_nexthop3_track"`
-	PermitNexthop3Vrf                    types.String `tfsdk:"permit_nexthop3_vrf"`
-	PermitLog                            types.Bool   `tfsdk:"permit_log"`
-	PermitLogInput                       types.Bool   `tfsdk:"permit_log_input"`
-	PermitSetQosGroup                    types.Int64  `tfsdk:"permit_set_qos_group"`
-	PermitSetTtl                         types.Int64  `tfsdk:"permit_set_ttl"`
-	DenyEq                               types.String `tfsdk:"deny_eq"`
-	DenyProtocol                         types.String `tfsdk:"deny_protocol"`
-	DenySourceAddress                    types.String `tfsdk:"deny_source_address"`
-	DenySourceWildcardMask               types.String `tfsdk:"deny_source_wildcard_mask"`
-	DenySourcePrefixLength               types.Int64  `tfsdk:"deny_source_prefix_length"`
-	DenySourceAny                        types.Bool   `tfsdk:"deny_source_any"`
-	DenySourceHost                       types.String `tfsdk:"deny_source_host"`
-	DenySourceNetGroup                   types.String `tfsdk:"deny_source_net_group"`
-	DenySourcePortGroup                  types.String `tfsdk:"deny_source_port_group"`
-	DenySourcePortEq                     types.String `tfsdk:"deny_source_port_eq"`
-	DenySourcePortGt                     types.String `tfsdk:"deny_source_port_gt"`
-	DenySourcePortLt                     types.String `tfsdk:"deny_source_port_lt"`
-	DenySourcePortNeq                    types.String `tfsdk:"deny_source_port_neq"`
-	DenySourcePortRangeStartValue        types.String `tfsdk:"deny_source_port_range_start_value"`
-	DenySourcePortRangeEndValue          types.String `tfsdk:"deny_source_port_range_end_value"`
-	DenyDestinationAddress               types.String `tfsdk:"deny_destination_address"`
-	DenyDestinationWildcardMask          types.String `tfsdk:"deny_destination_wildcard_mask"`
-	DenyDestinationPrefixLength          types.Int64  `tfsdk:"deny_destination_prefix_length"`
-	DenyDestinationAny                   types.Bool   `tfsdk:"deny_destination_any"`
-	DenyDestinationHost                  types.String `tfsdk:"deny_destination_host"`
-	DenyDestinationNetGroup              types.String `tfsdk:"deny_destination_net_group"`
-	DenyDestinationPortGroup             types.String `tfsdk:"deny_destination_port_group"`
-	DenyDestinationPortEq                types.String `tfsdk:"deny_destination_port_eq"`
-	DenyDestinationPortGt                types.String `tfsdk:"deny_destination_port_gt"`
-	DenyDestinationPortLt                types.String `tfsdk:"deny_destination_port_lt"`
-	DenyDestinationPortNeq               types.String `tfsdk:"deny_destination_port_neq"`
-	DenyDestinationPortRangeStartValue   types.String `tfsdk:"deny_destination_port_range_start_value"`
-	DenyDestinationPortRangeEndValue     types.String `tfsdk:"deny_destination_port_range_end_value"`
-	DenyIgmpType                         types.String `tfsdk:"deny_igmp_type"`
-	DenyPrecedence                       types.String `tfsdk:"deny_precedence"`
-	DenyFragmentType                     types.String `tfsdk:"deny_fragment_type"`
-	DenyFragments                        types.Bool   `tfsdk:"deny_fragments"`
-	DenyCounter                          types.String `tfsdk:"deny_counter"`
-	DenyDefault                          types.Bool   `tfsdk:"deny_default"`
-	DenyCapture                          types.Bool   `tfsdk:"deny_capture"`
-	DenyIcmpOff                          types.Bool   `tfsdk:"deny_icmp_off"`
-	DenyIcmpOn                           types.Bool   `tfsdk:"deny_icmp_on"`
-	DenyRangeStartProtocol               types.String `tfsdk:"deny_range_start_protocol"`
-	DenyRangeEndProtocol                 types.String `tfsdk:"deny_range_end_protocol"`
-	DenyIcmpMessageTypeName              types.String `tfsdk:"deny_icmp_message_type_name"`
-	DenyIcmpMessageType                  types.Int64  `tfsdk:"deny_icmp_message_type"`
-	DenyIcmpMessageCode                  types.Int64  `tfsdk:"deny_icmp_message_code"`
-	DenyDscpDscpValue                    types.String `tfsdk:"deny_dscp_dscp_value"`
-	DenyDscpEq                           types.String `tfsdk:"deny_dscp_eq"`
-	DenyDscpGt                           types.String `tfsdk:"deny_dscp_gt"`
-	DenyDscpLt                           types.String `tfsdk:"deny_dscp_lt"`
-	DenyDscpNeq                          types.String `tfsdk:"deny_dscp_neq"`
-	DenyDscpRangeStartValue              types.String `tfsdk:"deny_dscp_range_start_value"`
-	DenyDscpRangeEndValue                types.String `tfsdk:"deny_dscp_range_end_value"`
-	DenyPacketLengthEq                   types.Int64  `tfsdk:"deny_packet_length_eq"`
-	DenyPacketLengthGt                   types.Int64  `tfsdk:"deny_packet_length_gt"`
-	DenyPacketLengthLt                   types.Int64  `tfsdk:"deny_packet_length_lt"`
-	DenyPacketLengthNeq                  types.Int64  `tfsdk:"deny_packet_length_neq"`
-	DenyPacketLengthRangeStartValue      types.Int64  `tfsdk:"deny_packet_length_range_start_value"`
-	DenyPacketLengthRangeEndValue        types.Int64  `tfsdk:"deny_packet_length_range_end_value"`
-	DenyTtlEq                            types.Int64  `tfsdk:"deny_ttl_eq"`
-	DenyTtlGt                            types.Int64  `tfsdk:"deny_ttl_gt"`
-	DenyTtlLt                            types.Int64  `tfsdk:"deny_ttl_lt"`
-	DenyTtlNeq                           types.Int64  `tfsdk:"deny_ttl_neq"`
-	DenyTtlRangeStartValue               types.Int64  `tfsdk:"deny_ttl_range_start_value"`
-	DenyTtlRangeEndValue                 types.Int64  `tfsdk:"deny_ttl_range_end_value"`
-	DenyFragmentOffsetEq                 types.Int64  `tfsdk:"deny_fragment_offset_eq"`
-	DenyFragmentOffsetGt                 types.Int64  `tfsdk:"deny_fragment_offset_gt"`
-	DenyFragmentOffsetLt                 types.Int64  `tfsdk:"deny_fragment_offset_lt"`
-	DenyFragmentOffsetNeq                types.Int64  `tfsdk:"deny_fragment_offset_neq"`
-	DenyFragmentOffsetRangeStartValue    types.Int64  `tfsdk:"deny_fragment_offset_range_start_value"`
-	DenyFragmentOffsetRangeEndValue      types.Int64  `tfsdk:"deny_fragment_offset_range_end_value"`
-	DenyPoliceValue                      types.Int64  `tfsdk:"deny_police_value"`
-	DenyPoliceUnit                       types.String `tfsdk:"deny_police_unit"`
-	DenyPolicePeakRate                   types.Int64  `tfsdk:"deny_police_peak_rate"`
-	DenyPolicePeakUnit                   types.String `tfsdk:"deny_police_peak_unit"`
-	DenyPolicePriority                   types.String `tfsdk:"deny_police_priority"`
-	DenyNexthop1Ipv4                     types.String `tfsdk:"deny_nexthop1_ipv4"`
-	DenyNexthop1Track                    types.String `tfsdk:"deny_nexthop1_track"`
-	DenyNexthop1Vrf                      types.String `tfsdk:"deny_nexthop1_vrf"`
-	DenyNexthop2Ipv4                     types.String `tfsdk:"deny_nexthop2_ipv4"`
-	DenyNexthop2Track                    types.String `tfsdk:"deny_nexthop2_track"`
-	DenyNexthop2Vrf                      types.String `tfsdk:"deny_nexthop2_vrf"`
-	DenyNexthop3Ipv4                     types.String `tfsdk:"deny_nexthop3_ipv4"`
-	DenyNexthop3Track                    types.String `tfsdk:"deny_nexthop3_track"`
-	DenyNexthop3Vrf                      types.String `tfsdk:"deny_nexthop3_vrf"`
-	DenyLog                              types.Bool   `tfsdk:"deny_log"`
-	DenyLogInput                         types.Bool   `tfsdk:"deny_log_input"`
-	DenySetQosGroup                      types.Int64  `tfsdk:"deny_set_qos_group"`
-	DenySetTtl                           types.Int64  `tfsdk:"deny_set_ttl"`
+	SequenceNumber                  types.Int64  `tfsdk:"sequence_number"`
+	Remark                          types.String `tfsdk:"remark"`
+	PermitProtocol                  types.String `tfsdk:"permit_protocol"`
+	PermitEq                        types.String `tfsdk:"permit_eq"`
+	PermitIgmpType                  types.String `tfsdk:"permit_igmp_type"`
+	PermitPrecedence                types.String `tfsdk:"permit_precedence"`
+	PermitFragmentType              types.String `tfsdk:"permit_fragment_type"`
+	PermitFragments                 types.Bool   `tfsdk:"permit_fragments"`
+	PermitCounter                   types.String `tfsdk:"permit_counter"`
+	PermitDefault                   types.Bool   `tfsdk:"permit_default"`
+	PermitCapture                   types.Bool   `tfsdk:"permit_capture"`
+	PermitRangeStartProtocol        types.String `tfsdk:"permit_range_start_protocol"`
+	PermitRangeEndProtocol          types.String `tfsdk:"permit_range_end_protocol"`
+	PermitSourceAddress             types.String `tfsdk:"permit_source_address"`
+	PermitSourceWildcardMask        types.String `tfsdk:"permit_source_wildcard_mask"`
+	PermitSourcePrefixLength        types.Int64  `tfsdk:"permit_source_prefix_length"`
+	PermitSourceAny                 types.Bool   `tfsdk:"permit_source_any"`
+	PermitSourceHost                types.String `tfsdk:"permit_source_host"`
+	PermitSourceNetGroup            types.String `tfsdk:"permit_source_net_group"`
+	PermitSourcePortGroup           types.String `tfsdk:"permit_source_port_group"`
+	PermitSourcePortEq              types.String `tfsdk:"permit_source_port_eq"`
+	PermitSourcePortGt              types.String `tfsdk:"permit_source_port_gt"`
+	PermitSourcePortLt              types.String `tfsdk:"permit_source_port_lt"`
+	PermitSourcePortNeq             types.String `tfsdk:"permit_source_port_neq"`
+	PermitSourcePortRangeStart      types.String `tfsdk:"permit_source_port_range_start"`
+	PermitSourcePortRangeEnd        types.String `tfsdk:"permit_source_port_range_end"`
+	PermitDestinationAddress        types.String `tfsdk:"permit_destination_address"`
+	PermitDestinationWildcardMask   types.String `tfsdk:"permit_destination_wildcard_mask"`
+	PermitDestinationPrefixLength   types.Int64  `tfsdk:"permit_destination_prefix_length"`
+	PermitDestinationAny            types.Bool   `tfsdk:"permit_destination_any"`
+	PermitDestinationHost           types.String `tfsdk:"permit_destination_host"`
+	PermitDestinationNetGroup       types.String `tfsdk:"permit_destination_net_group"`
+	PermitDestinationPortGroup      types.String `tfsdk:"permit_destination_port_group"`
+	PermitDestinationPortEq         types.String `tfsdk:"permit_destination_port_eq"`
+	PermitDestinationPortGt         types.String `tfsdk:"permit_destination_port_gt"`
+	PermitDestinationPortLt         types.String `tfsdk:"permit_destination_port_lt"`
+	PermitDestinationPortNeq        types.String `tfsdk:"permit_destination_port_neq"`
+	PermitDestinationPortRangeStart types.String `tfsdk:"permit_destination_port_range_start"`
+	PermitDestinationPortRangeEnd   types.String `tfsdk:"permit_destination_port_range_end"`
+	PermitIcmpMessageTypeName       types.String `tfsdk:"permit_icmp_message_type_name"`
+	PermitIcmpMessageType           types.Int64  `tfsdk:"permit_icmp_message_type"`
+	PermitIcmpMessageCode           types.Int64  `tfsdk:"permit_icmp_message_code"`
+	PermitDscp                      types.String `tfsdk:"permit_dscp"`
+	PermitDscpEq                    types.String `tfsdk:"permit_dscp_eq"`
+	PermitDscpGt                    types.String `tfsdk:"permit_dscp_gt"`
+	PermitDscpLt                    types.String `tfsdk:"permit_dscp_lt"`
+	PermitDscpNeq                   types.String `tfsdk:"permit_dscp_neq"`
+	PermitDscpRangeStart            types.String `tfsdk:"permit_dscp_range_start"`
+	PermitDscpRangeEnd              types.String `tfsdk:"permit_dscp_range_end"`
+	PermitPacketLengthEq            types.Int64  `tfsdk:"permit_packet_length_eq"`
+	PermitPacketLengthGt            types.Int64  `tfsdk:"permit_packet_length_gt"`
+	PermitPacketLengthLt            types.Int64  `tfsdk:"permit_packet_length_lt"`
+	PermitPacketLengthNeq           types.Int64  `tfsdk:"permit_packet_length_neq"`
+	PermitPacketLengthRangeStart    types.Int64  `tfsdk:"permit_packet_length_range_start"`
+	PermitPacketLengthRangeEnd      types.Int64  `tfsdk:"permit_packet_length_range_end"`
+	PermitTtlEq                     types.Int64  `tfsdk:"permit_ttl_eq"`
+	PermitTtlGt                     types.Int64  `tfsdk:"permit_ttl_gt"`
+	PermitTtlLt                     types.Int64  `tfsdk:"permit_ttl_lt"`
+	PermitTtlNeq                    types.Int64  `tfsdk:"permit_ttl_neq"`
+	PermitTtlRangeStart             types.Int64  `tfsdk:"permit_ttl_range_start"`
+	PermitTtlRangeEnd               types.Int64  `tfsdk:"permit_ttl_range_end"`
+	PermitFragmentOffsetEq          types.Int64  `tfsdk:"permit_fragment_offset_eq"`
+	PermitFragmentOffsetGt          types.Int64  `tfsdk:"permit_fragment_offset_gt"`
+	PermitFragmentOffsetLt          types.Int64  `tfsdk:"permit_fragment_offset_lt"`
+	PermitFragmentOffsetNeq         types.Int64  `tfsdk:"permit_fragment_offset_neq"`
+	PermitFragmentOffsetRangeStart  types.Int64  `tfsdk:"permit_fragment_offset_range_start"`
+	PermitFragmentOffsetRangeEnd    types.Int64  `tfsdk:"permit_fragment_offset_range_end"`
+	PermitPoliceValue               types.Int64  `tfsdk:"permit_police_value"`
+	PermitPoliceUnit                types.String `tfsdk:"permit_police_unit"`
+	PermitPolicePeakRate            types.Int64  `tfsdk:"permit_police_peak_rate"`
+	PermitPolicePeakUnit            types.String `tfsdk:"permit_police_peak_unit"`
+	PermitPolicePriority            types.String `tfsdk:"permit_police_priority"`
+	PermitNexthop1Ipv4              types.String `tfsdk:"permit_nexthop1_ipv4"`
+	PermitNexthop1Track             types.String `tfsdk:"permit_nexthop1_track"`
+	PermitNexthop1Vrf               types.String `tfsdk:"permit_nexthop1_vrf"`
+	PermitNexthop2Ipv4              types.String `tfsdk:"permit_nexthop2_ipv4"`
+	PermitNexthop2Track             types.String `tfsdk:"permit_nexthop2_track"`
+	PermitNexthop2Vrf               types.String `tfsdk:"permit_nexthop2_vrf"`
+	PermitNexthop3Ipv4              types.String `tfsdk:"permit_nexthop3_ipv4"`
+	PermitNexthop3Track             types.String `tfsdk:"permit_nexthop3_track"`
+	PermitNexthop3Vrf               types.String `tfsdk:"permit_nexthop3_vrf"`
+	PermitLog                       types.Bool   `tfsdk:"permit_log"`
+	PermitLogInput                  types.Bool   `tfsdk:"permit_log_input"`
+	PermitSetQosGroup               types.Int64  `tfsdk:"permit_set_qos_group"`
+	PermitSetTtl                    types.Int64  `tfsdk:"permit_set_ttl"`
+	DenyEq                          types.String `tfsdk:"deny_eq"`
+	DenyProtocol                    types.String `tfsdk:"deny_protocol"`
+	DenySourceAddress               types.String `tfsdk:"deny_source_address"`
+	DenySourceWildcardMask          types.String `tfsdk:"deny_source_wildcard_mask"`
+	DenySourcePrefixLength          types.Int64  `tfsdk:"deny_source_prefix_length"`
+	DenySourceAny                   types.Bool   `tfsdk:"deny_source_any"`
+	DenySourceHost                  types.String `tfsdk:"deny_source_host"`
+	DenySourceNetGroup              types.String `tfsdk:"deny_source_net_group"`
+	DenySourcePortGroup             types.String `tfsdk:"deny_source_port_group"`
+	DenySourcePortEq                types.String `tfsdk:"deny_source_port_eq"`
+	DenySourcePortGt                types.String `tfsdk:"deny_source_port_gt"`
+	DenySourcePortLt                types.String `tfsdk:"deny_source_port_lt"`
+	DenySourcePortNeq               types.String `tfsdk:"deny_source_port_neq"`
+	DenySourcePortRangeStart        types.String `tfsdk:"deny_source_port_range_start"`
+	DenySourcePortRangeEnd          types.String `tfsdk:"deny_source_port_range_end"`
+	DenyDestinationAddress          types.String `tfsdk:"deny_destination_address"`
+	DenyDestinationWildcardMask     types.String `tfsdk:"deny_destination_wildcard_mask"`
+	DenyDestinationPrefixLength     types.Int64  `tfsdk:"deny_destination_prefix_length"`
+	DenyDestinationAny              types.Bool   `tfsdk:"deny_destination_any"`
+	DenyDestinationHost             types.String `tfsdk:"deny_destination_host"`
+	DenyDestinationNetGroup         types.String `tfsdk:"deny_destination_net_group"`
+	DenyDestinationPortGroup        types.String `tfsdk:"deny_destination_port_group"`
+	DenyDestinationPortEq           types.String `tfsdk:"deny_destination_port_eq"`
+	DenyDestinationPortGt           types.String `tfsdk:"deny_destination_port_gt"`
+	DenyDestinationPortLt           types.String `tfsdk:"deny_destination_port_lt"`
+	DenyDestinationPortNeq          types.String `tfsdk:"deny_destination_port_neq"`
+	DenyDestinationPortRangeStart   types.String `tfsdk:"deny_destination_port_range_start"`
+	DenyDestinationPortRangeEnd     types.String `tfsdk:"deny_destination_port_range_end"`
+	DenyIgmpType                    types.String `tfsdk:"deny_igmp_type"`
+	DenyPrecedence                  types.String `tfsdk:"deny_precedence"`
+	DenyFragmentType                types.String `tfsdk:"deny_fragment_type"`
+	DenyFragments                   types.Bool   `tfsdk:"deny_fragments"`
+	DenyCounter                     types.String `tfsdk:"deny_counter"`
+	DenyDefault                     types.Bool   `tfsdk:"deny_default"`
+	DenyCapture                     types.Bool   `tfsdk:"deny_capture"`
+	DenyIcmpOff                     types.Bool   `tfsdk:"deny_icmp_off"`
+	DenyIcmpOn                      types.Bool   `tfsdk:"deny_icmp_on"`
+	DenyRangeStartProtocol          types.String `tfsdk:"deny_range_start_protocol"`
+	DenyRangeEndProtocol            types.String `tfsdk:"deny_range_end_protocol"`
+	DenyIcmpMessageTypeName         types.String `tfsdk:"deny_icmp_message_type_name"`
+	DenyIcmpMessageType             types.Int64  `tfsdk:"deny_icmp_message_type"`
+	DenyIcmpMessageCode             types.Int64  `tfsdk:"deny_icmp_message_code"`
+	DenyDscp                        types.String `tfsdk:"deny_dscp"`
+	DenyDscpEq                      types.String `tfsdk:"deny_dscp_eq"`
+	DenyDscpGt                      types.String `tfsdk:"deny_dscp_gt"`
+	DenyDscpLt                      types.String `tfsdk:"deny_dscp_lt"`
+	DenyDscpNeq                     types.String `tfsdk:"deny_dscp_neq"`
+	DenyDscpRangeStart              types.String `tfsdk:"deny_dscp_range_start"`
+	DenyDscpRangeEnd                types.String `tfsdk:"deny_dscp_range_end"`
+	DenyPacketLengthEq              types.Int64  `tfsdk:"deny_packet_length_eq"`
+	DenyPacketLengthGt              types.Int64  `tfsdk:"deny_packet_length_gt"`
+	DenyPacketLengthLt              types.Int64  `tfsdk:"deny_packet_length_lt"`
+	DenyPacketLengthNeq             types.Int64  `tfsdk:"deny_packet_length_neq"`
+	DenyPacketLengthRangeStart      types.Int64  `tfsdk:"deny_packet_length_range_start"`
+	DenyPacketLengthRangeEnd        types.Int64  `tfsdk:"deny_packet_length_range_end"`
+	DenyTtlEq                       types.Int64  `tfsdk:"deny_ttl_eq"`
+	DenyTtlGt                       types.Int64  `tfsdk:"deny_ttl_gt"`
+	DenyTtlLt                       types.Int64  `tfsdk:"deny_ttl_lt"`
+	DenyTtlNeq                      types.Int64  `tfsdk:"deny_ttl_neq"`
+	DenyTtlRangeStart               types.Int64  `tfsdk:"deny_ttl_range_start"`
+	DenyTtlRangeEnd                 types.Int64  `tfsdk:"deny_ttl_range_end"`
+	DenyFragmentOffsetEq            types.Int64  `tfsdk:"deny_fragment_offset_eq"`
+	DenyFragmentOffsetGt            types.Int64  `tfsdk:"deny_fragment_offset_gt"`
+	DenyFragmentOffsetLt            types.Int64  `tfsdk:"deny_fragment_offset_lt"`
+	DenyFragmentOffsetNeq           types.Int64  `tfsdk:"deny_fragment_offset_neq"`
+	DenyFragmentOffsetRangeStart    types.Int64  `tfsdk:"deny_fragment_offset_range_start"`
+	DenyFragmentOffsetRangeEnd      types.Int64  `tfsdk:"deny_fragment_offset_range_end"`
+	DenyPoliceValue                 types.Int64  `tfsdk:"deny_police_value"`
+	DenyPoliceUnit                  types.String `tfsdk:"deny_police_unit"`
+	DenyPolicePeakRate              types.Int64  `tfsdk:"deny_police_peak_rate"`
+	DenyPolicePeakUnit              types.String `tfsdk:"deny_police_peak_unit"`
+	DenyPolicePriority              types.String `tfsdk:"deny_police_priority"`
+	DenyNexthop1Ipv4                types.String `tfsdk:"deny_nexthop1_ipv4"`
+	DenyNexthop1Track               types.String `tfsdk:"deny_nexthop1_track"`
+	DenyNexthop1Vrf                 types.String `tfsdk:"deny_nexthop1_vrf"`
+	DenyNexthop2Ipv4                types.String `tfsdk:"deny_nexthop2_ipv4"`
+	DenyNexthop2Track               types.String `tfsdk:"deny_nexthop2_track"`
+	DenyNexthop2Vrf                 types.String `tfsdk:"deny_nexthop2_vrf"`
+	DenyNexthop3Ipv4                types.String `tfsdk:"deny_nexthop3_ipv4"`
+	DenyNexthop3Track               types.String `tfsdk:"deny_nexthop3_track"`
+	DenyNexthop3Vrf                 types.String `tfsdk:"deny_nexthop3_vrf"`
+	DenyLog                         types.Bool   `tfsdk:"deny_log"`
+	DenyLogInput                    types.Bool   `tfsdk:"deny_log_input"`
+	DenySetQosGroup                 types.Int64  `tfsdk:"deny_set_qos_group"`
+	DenySetTtl                      types.Int64  `tfsdk:"deny_set_ttl"`
 }
 
 func (data IPv4AccessList) getPath() string {
@@ -284,11 +284,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitSourcePortNeq.IsNull() && !item.PermitSourcePortNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.port.neq", item.PermitSourcePortNeq.ValueString())
 			}
-			if !item.PermitSourcePortRangeStartValue.IsNull() && !item.PermitSourcePortRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.port.range.start-value", item.PermitSourcePortRangeStartValue.ValueString())
+			if !item.PermitSourcePortRangeStart.IsNull() && !item.PermitSourcePortRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.port.range.start-value", item.PermitSourcePortRangeStart.ValueString())
 			}
-			if !item.PermitSourcePortRangeEndValue.IsNull() && !item.PermitSourcePortRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.port.range.end-value", item.PermitSourcePortRangeEndValue.ValueString())
+			if !item.PermitSourcePortRangeEnd.IsNull() && !item.PermitSourcePortRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.source.port.range.end-value", item.PermitSourcePortRangeEnd.ValueString())
 			}
 			if !item.PermitDestinationAddress.IsNull() && !item.PermitDestinationAddress.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.address", item.PermitDestinationAddress.ValueString())
@@ -325,11 +325,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitDestinationPortNeq.IsNull() && !item.PermitDestinationPortNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.port.neq", item.PermitDestinationPortNeq.ValueString())
 			}
-			if !item.PermitDestinationPortRangeStartValue.IsNull() && !item.PermitDestinationPortRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.port.range.start-value", item.PermitDestinationPortRangeStartValue.ValueString())
+			if !item.PermitDestinationPortRangeStart.IsNull() && !item.PermitDestinationPortRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.port.range.start-value", item.PermitDestinationPortRangeStart.ValueString())
 			}
-			if !item.PermitDestinationPortRangeEndValue.IsNull() && !item.PermitDestinationPortRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.port.range.end-value", item.PermitDestinationPortRangeEndValue.ValueString())
+			if !item.PermitDestinationPortRangeEnd.IsNull() && !item.PermitDestinationPortRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.destination.port.range.end-value", item.PermitDestinationPortRangeEnd.ValueString())
 			}
 			if !item.PermitIcmpMessageTypeName.IsNull() && !item.PermitIcmpMessageTypeName.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.icmp.message-type-name", item.PermitIcmpMessageTypeName.ValueString())
@@ -340,8 +340,8 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitIcmpMessageCode.IsNull() && !item.PermitIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.icmp.message-code", strconv.FormatInt(item.PermitIcmpMessageCode.ValueInt64(), 10))
 			}
-			if !item.PermitDscpDscpValue.IsNull() && !item.PermitDscpDscpValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.dscp-value", item.PermitDscpDscpValue.ValueString())
+			if !item.PermitDscp.IsNull() && !item.PermitDscp.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.dscp-value", item.PermitDscp.ValueString())
 			}
 			if !item.PermitDscpEq.IsNull() && !item.PermitDscpEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.eq", item.PermitDscpEq.ValueString())
@@ -355,11 +355,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitDscpNeq.IsNull() && !item.PermitDscpNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.neq", item.PermitDscpNeq.ValueString())
 			}
-			if !item.PermitDscpRangeStartValue.IsNull() && !item.PermitDscpRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.range.start-value", item.PermitDscpRangeStartValue.ValueString())
+			if !item.PermitDscpRangeStart.IsNull() && !item.PermitDscpRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.range.start-value", item.PermitDscpRangeStart.ValueString())
 			}
-			if !item.PermitDscpRangeEndValue.IsNull() && !item.PermitDscpRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.range.end-value", item.PermitDscpRangeEndValue.ValueString())
+			if !item.PermitDscpRangeEnd.IsNull() && !item.PermitDscpRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.dscp.range.end-value", item.PermitDscpRangeEnd.ValueString())
 			}
 			if !item.PermitPacketLengthEq.IsNull() && !item.PermitPacketLengthEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.eq", strconv.FormatInt(item.PermitPacketLengthEq.ValueInt64(), 10))
@@ -373,11 +373,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitPacketLengthNeq.IsNull() && !item.PermitPacketLengthNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.neq", strconv.FormatInt(item.PermitPacketLengthNeq.ValueInt64(), 10))
 			}
-			if !item.PermitPacketLengthRangeStartValue.IsNull() && !item.PermitPacketLengthRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.range.start-value", strconv.FormatInt(item.PermitPacketLengthRangeStartValue.ValueInt64(), 10))
+			if !item.PermitPacketLengthRangeStart.IsNull() && !item.PermitPacketLengthRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.range.start-value", strconv.FormatInt(item.PermitPacketLengthRangeStart.ValueInt64(), 10))
 			}
-			if !item.PermitPacketLengthRangeEndValue.IsNull() && !item.PermitPacketLengthRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.range.end-value", strconv.FormatInt(item.PermitPacketLengthRangeEndValue.ValueInt64(), 10))
+			if !item.PermitPacketLengthRangeEnd.IsNull() && !item.PermitPacketLengthRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.packet-length.range.end-value", strconv.FormatInt(item.PermitPacketLengthRangeEnd.ValueInt64(), 10))
 			}
 			if !item.PermitTtlEq.IsNull() && !item.PermitTtlEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.eq", strconv.FormatInt(item.PermitTtlEq.ValueInt64(), 10))
@@ -391,11 +391,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitTtlNeq.IsNull() && !item.PermitTtlNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.neq", strconv.FormatInt(item.PermitTtlNeq.ValueInt64(), 10))
 			}
-			if !item.PermitTtlRangeStartValue.IsNull() && !item.PermitTtlRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.range.start-value", strconv.FormatInt(item.PermitTtlRangeStartValue.ValueInt64(), 10))
+			if !item.PermitTtlRangeStart.IsNull() && !item.PermitTtlRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.range.start-value", strconv.FormatInt(item.PermitTtlRangeStart.ValueInt64(), 10))
 			}
-			if !item.PermitTtlRangeEndValue.IsNull() && !item.PermitTtlRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.range.end-value", strconv.FormatInt(item.PermitTtlRangeEndValue.ValueInt64(), 10))
+			if !item.PermitTtlRangeEnd.IsNull() && !item.PermitTtlRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.ttl.range.end-value", strconv.FormatInt(item.PermitTtlRangeEnd.ValueInt64(), 10))
 			}
 			if !item.PermitFragmentOffsetEq.IsNull() && !item.PermitFragmentOffsetEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.eq", strconv.FormatInt(item.PermitFragmentOffsetEq.ValueInt64(), 10))
@@ -409,11 +409,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.PermitFragmentOffsetNeq.IsNull() && !item.PermitFragmentOffsetNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.neq", strconv.FormatInt(item.PermitFragmentOffsetNeq.ValueInt64(), 10))
 			}
-			if !item.PermitFragmentOffsetRangeStartValue.IsNull() && !item.PermitFragmentOffsetRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.range.start-value", strconv.FormatInt(item.PermitFragmentOffsetRangeStartValue.ValueInt64(), 10))
+			if !item.PermitFragmentOffsetRangeStart.IsNull() && !item.PermitFragmentOffsetRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.range.start-value", strconv.FormatInt(item.PermitFragmentOffsetRangeStart.ValueInt64(), 10))
 			}
-			if !item.PermitFragmentOffsetRangeEndValue.IsNull() && !item.PermitFragmentOffsetRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.range.end-value", strconv.FormatInt(item.PermitFragmentOffsetRangeEndValue.ValueInt64(), 10))
+			if !item.PermitFragmentOffsetRangeEnd.IsNull() && !item.PermitFragmentOffsetRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.fragment-offset.range.end-value", strconv.FormatInt(item.PermitFragmentOffsetRangeEnd.ValueInt64(), 10))
 			}
 			if !item.PermitPoliceValue.IsNull() && !item.PermitPoliceValue.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"permit.police.value", strconv.FormatInt(item.PermitPoliceValue.ValueInt64(), 10))
@@ -514,11 +514,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenySourcePortNeq.IsNull() && !item.DenySourcePortNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.port.neq", item.DenySourcePortNeq.ValueString())
 			}
-			if !item.DenySourcePortRangeStartValue.IsNull() && !item.DenySourcePortRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.port.range.start-value", item.DenySourcePortRangeStartValue.ValueString())
+			if !item.DenySourcePortRangeStart.IsNull() && !item.DenySourcePortRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.port.range.start-value", item.DenySourcePortRangeStart.ValueString())
 			}
-			if !item.DenySourcePortRangeEndValue.IsNull() && !item.DenySourcePortRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.port.range.end-value", item.DenySourcePortRangeEndValue.ValueString())
+			if !item.DenySourcePortRangeEnd.IsNull() && !item.DenySourcePortRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.source.port.range.end-value", item.DenySourcePortRangeEnd.ValueString())
 			}
 			if !item.DenyDestinationAddress.IsNull() && !item.DenyDestinationAddress.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.address", item.DenyDestinationAddress.ValueString())
@@ -555,11 +555,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyDestinationPortNeq.IsNull() && !item.DenyDestinationPortNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.neq", item.DenyDestinationPortNeq.ValueString())
 			}
-			if !item.DenyDestinationPortRangeStartValue.IsNull() && !item.DenyDestinationPortRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.range.start-value", item.DenyDestinationPortRangeStartValue.ValueString())
+			if !item.DenyDestinationPortRangeStart.IsNull() && !item.DenyDestinationPortRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.range.start-value", item.DenyDestinationPortRangeStart.ValueString())
 			}
-			if !item.DenyDestinationPortRangeEndValue.IsNull() && !item.DenyDestinationPortRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.range.end-value", item.DenyDestinationPortRangeEndValue.ValueString())
+			if !item.DenyDestinationPortRangeEnd.IsNull() && !item.DenyDestinationPortRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.destination.port.range.end-value", item.DenyDestinationPortRangeEnd.ValueString())
 			}
 			if !item.DenyIgmpType.IsNull() && !item.DenyIgmpType.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.igmp-type", item.DenyIgmpType.ValueString())
@@ -613,8 +613,8 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyIcmpMessageCode.IsNull() && !item.DenyIcmpMessageCode.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.icmp.message-code", strconv.FormatInt(item.DenyIcmpMessageCode.ValueInt64(), 10))
 			}
-			if !item.DenyDscpDscpValue.IsNull() && !item.DenyDscpDscpValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.dscp-value", item.DenyDscpDscpValue.ValueString())
+			if !item.DenyDscp.IsNull() && !item.DenyDscp.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.dscp-value", item.DenyDscp.ValueString())
 			}
 			if !item.DenyDscpEq.IsNull() && !item.DenyDscpEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.eq", item.DenyDscpEq.ValueString())
@@ -628,11 +628,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyDscpNeq.IsNull() && !item.DenyDscpNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.neq", item.DenyDscpNeq.ValueString())
 			}
-			if !item.DenyDscpRangeStartValue.IsNull() && !item.DenyDscpRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.range.start-value", item.DenyDscpRangeStartValue.ValueString())
+			if !item.DenyDscpRangeStart.IsNull() && !item.DenyDscpRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.range.start-value", item.DenyDscpRangeStart.ValueString())
 			}
-			if !item.DenyDscpRangeEndValue.IsNull() && !item.DenyDscpRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.range.end-value", item.DenyDscpRangeEndValue.ValueString())
+			if !item.DenyDscpRangeEnd.IsNull() && !item.DenyDscpRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.dscp.range.end-value", item.DenyDscpRangeEnd.ValueString())
 			}
 			if !item.DenyPacketLengthEq.IsNull() && !item.DenyPacketLengthEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.eq", strconv.FormatInt(item.DenyPacketLengthEq.ValueInt64(), 10))
@@ -646,11 +646,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyPacketLengthNeq.IsNull() && !item.DenyPacketLengthNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.neq", strconv.FormatInt(item.DenyPacketLengthNeq.ValueInt64(), 10))
 			}
-			if !item.DenyPacketLengthRangeStartValue.IsNull() && !item.DenyPacketLengthRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.range.start-value", strconv.FormatInt(item.DenyPacketLengthRangeStartValue.ValueInt64(), 10))
+			if !item.DenyPacketLengthRangeStart.IsNull() && !item.DenyPacketLengthRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.range.start-value", strconv.FormatInt(item.DenyPacketLengthRangeStart.ValueInt64(), 10))
 			}
-			if !item.DenyPacketLengthRangeEndValue.IsNull() && !item.DenyPacketLengthRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.range.end-value", strconv.FormatInt(item.DenyPacketLengthRangeEndValue.ValueInt64(), 10))
+			if !item.DenyPacketLengthRangeEnd.IsNull() && !item.DenyPacketLengthRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.packet-length.range.end-value", strconv.FormatInt(item.DenyPacketLengthRangeEnd.ValueInt64(), 10))
 			}
 			if !item.DenyTtlEq.IsNull() && !item.DenyTtlEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.eq", strconv.FormatInt(item.DenyTtlEq.ValueInt64(), 10))
@@ -664,11 +664,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyTtlNeq.IsNull() && !item.DenyTtlNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.neq", strconv.FormatInt(item.DenyTtlNeq.ValueInt64(), 10))
 			}
-			if !item.DenyTtlRangeStartValue.IsNull() && !item.DenyTtlRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.range.start-value", strconv.FormatInt(item.DenyTtlRangeStartValue.ValueInt64(), 10))
+			if !item.DenyTtlRangeStart.IsNull() && !item.DenyTtlRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.range.start-value", strconv.FormatInt(item.DenyTtlRangeStart.ValueInt64(), 10))
 			}
-			if !item.DenyTtlRangeEndValue.IsNull() && !item.DenyTtlRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.range.end-value", strconv.FormatInt(item.DenyTtlRangeEndValue.ValueInt64(), 10))
+			if !item.DenyTtlRangeEnd.IsNull() && !item.DenyTtlRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.ttl.range.end-value", strconv.FormatInt(item.DenyTtlRangeEnd.ValueInt64(), 10))
 			}
 			if !item.DenyFragmentOffsetEq.IsNull() && !item.DenyFragmentOffsetEq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.eq", strconv.FormatInt(item.DenyFragmentOffsetEq.ValueInt64(), 10))
@@ -682,11 +682,11 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 			if !item.DenyFragmentOffsetNeq.IsNull() && !item.DenyFragmentOffsetNeq.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.neq", strconv.FormatInt(item.DenyFragmentOffsetNeq.ValueInt64(), 10))
 			}
-			if !item.DenyFragmentOffsetRangeStartValue.IsNull() && !item.DenyFragmentOffsetRangeStartValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.range.start-value", strconv.FormatInt(item.DenyFragmentOffsetRangeStartValue.ValueInt64(), 10))
+			if !item.DenyFragmentOffsetRangeStart.IsNull() && !item.DenyFragmentOffsetRangeStart.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.range.start-value", strconv.FormatInt(item.DenyFragmentOffsetRangeStart.ValueInt64(), 10))
 			}
-			if !item.DenyFragmentOffsetRangeEndValue.IsNull() && !item.DenyFragmentOffsetRangeEndValue.IsUnknown() {
-				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.range.end-value", strconv.FormatInt(item.DenyFragmentOffsetRangeEndValue.ValueInt64(), 10))
+			if !item.DenyFragmentOffsetRangeEnd.IsNull() && !item.DenyFragmentOffsetRangeEnd.IsUnknown() {
+				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.fragment-offset.range.end-value", strconv.FormatInt(item.DenyFragmentOffsetRangeEnd.ValueInt64(), 10))
 			}
 			if !item.DenyPoliceValue.IsNull() && !item.DenyPoliceValue.IsUnknown() {
 				body, _ = sjson.Set(body, "sequences.sequence"+"."+strconv.Itoa(index)+"."+"deny.police.value", strconv.FormatInt(item.DenyPoliceValue.ValueInt64(), 10))
@@ -911,15 +911,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitSourcePortNeq = types.StringNull()
 		}
-		if value := r.Get("permit.source.port.range.start-value"); value.Exists() && !data.Sequences[i].PermitSourcePortRangeStartValue.IsNull() {
-			data.Sequences[i].PermitSourcePortRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("permit.source.port.range.start-value"); value.Exists() && !data.Sequences[i].PermitSourcePortRangeStart.IsNull() {
+			data.Sequences[i].PermitSourcePortRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitSourcePortRangeStartValue = types.StringNull()
+			data.Sequences[i].PermitSourcePortRangeStart = types.StringNull()
 		}
-		if value := r.Get("permit.source.port.range.end-value"); value.Exists() && !data.Sequences[i].PermitSourcePortRangeEndValue.IsNull() {
-			data.Sequences[i].PermitSourcePortRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("permit.source.port.range.end-value"); value.Exists() && !data.Sequences[i].PermitSourcePortRangeEnd.IsNull() {
+			data.Sequences[i].PermitSourcePortRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitSourcePortRangeEndValue = types.StringNull()
+			data.Sequences[i].PermitSourcePortRangeEnd = types.StringNull()
 		}
 		if value := r.Get("permit.destination.address"); value.Exists() && !data.Sequences[i].PermitDestinationAddress.IsNull() {
 			data.Sequences[i].PermitDestinationAddress = types.StringValue(value.String())
@@ -980,15 +980,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitDestinationPortNeq = types.StringNull()
 		}
-		if value := r.Get("permit.destination.port.range.start-value"); value.Exists() && !data.Sequences[i].PermitDestinationPortRangeStartValue.IsNull() {
-			data.Sequences[i].PermitDestinationPortRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("permit.destination.port.range.start-value"); value.Exists() && !data.Sequences[i].PermitDestinationPortRangeStart.IsNull() {
+			data.Sequences[i].PermitDestinationPortRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitDestinationPortRangeStartValue = types.StringNull()
+			data.Sequences[i].PermitDestinationPortRangeStart = types.StringNull()
 		}
-		if value := r.Get("permit.destination.port.range.end-value"); value.Exists() && !data.Sequences[i].PermitDestinationPortRangeEndValue.IsNull() {
-			data.Sequences[i].PermitDestinationPortRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("permit.destination.port.range.end-value"); value.Exists() && !data.Sequences[i].PermitDestinationPortRangeEnd.IsNull() {
+			data.Sequences[i].PermitDestinationPortRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitDestinationPortRangeEndValue = types.StringNull()
+			data.Sequences[i].PermitDestinationPortRangeEnd = types.StringNull()
 		}
 		if value := r.Get("permit.icmp.message-type-name"); value.Exists() && !data.Sequences[i].PermitIcmpMessageTypeName.IsNull() {
 			data.Sequences[i].PermitIcmpMessageTypeName = types.StringValue(value.String())
@@ -1005,10 +1005,10 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitIcmpMessageCode = types.Int64Null()
 		}
-		if value := r.Get("permit.dscp.dscp-value"); value.Exists() && !data.Sequences[i].PermitDscpDscpValue.IsNull() {
-			data.Sequences[i].PermitDscpDscpValue = types.StringValue(value.String())
+		if value := r.Get("permit.dscp.dscp-value"); value.Exists() && !data.Sequences[i].PermitDscp.IsNull() {
+			data.Sequences[i].PermitDscp = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitDscpDscpValue = types.StringNull()
+			data.Sequences[i].PermitDscp = types.StringNull()
 		}
 		if value := r.Get("permit.dscp.eq"); value.Exists() && !data.Sequences[i].PermitDscpEq.IsNull() {
 			data.Sequences[i].PermitDscpEq = types.StringValue(value.String())
@@ -1030,15 +1030,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitDscpNeq = types.StringNull()
 		}
-		if value := r.Get("permit.dscp.range.start-value"); value.Exists() && !data.Sequences[i].PermitDscpRangeStartValue.IsNull() {
-			data.Sequences[i].PermitDscpRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("permit.dscp.range.start-value"); value.Exists() && !data.Sequences[i].PermitDscpRangeStart.IsNull() {
+			data.Sequences[i].PermitDscpRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitDscpRangeStartValue = types.StringNull()
+			data.Sequences[i].PermitDscpRangeStart = types.StringNull()
 		}
-		if value := r.Get("permit.dscp.range.end-value"); value.Exists() && !data.Sequences[i].PermitDscpRangeEndValue.IsNull() {
-			data.Sequences[i].PermitDscpRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("permit.dscp.range.end-value"); value.Exists() && !data.Sequences[i].PermitDscpRangeEnd.IsNull() {
+			data.Sequences[i].PermitDscpRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].PermitDscpRangeEndValue = types.StringNull()
+			data.Sequences[i].PermitDscpRangeEnd = types.StringNull()
 		}
 		if value := r.Get("permit.packet-length.eq"); value.Exists() && !data.Sequences[i].PermitPacketLengthEq.IsNull() {
 			data.Sequences[i].PermitPacketLengthEq = types.Int64Value(value.Int())
@@ -1060,15 +1060,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitPacketLengthNeq = types.Int64Null()
 		}
-		if value := r.Get("permit.packet-length.range.start-value"); value.Exists() && !data.Sequences[i].PermitPacketLengthRangeStartValue.IsNull() {
-			data.Sequences[i].PermitPacketLengthRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.packet-length.range.start-value"); value.Exists() && !data.Sequences[i].PermitPacketLengthRangeStart.IsNull() {
+			data.Sequences[i].PermitPacketLengthRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitPacketLengthRangeStartValue = types.Int64Null()
+			data.Sequences[i].PermitPacketLengthRangeStart = types.Int64Null()
 		}
-		if value := r.Get("permit.packet-length.range.end-value"); value.Exists() && !data.Sequences[i].PermitPacketLengthRangeEndValue.IsNull() {
-			data.Sequences[i].PermitPacketLengthRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.packet-length.range.end-value"); value.Exists() && !data.Sequences[i].PermitPacketLengthRangeEnd.IsNull() {
+			data.Sequences[i].PermitPacketLengthRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitPacketLengthRangeEndValue = types.Int64Null()
+			data.Sequences[i].PermitPacketLengthRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("permit.ttl.eq"); value.Exists() && !data.Sequences[i].PermitTtlEq.IsNull() {
 			data.Sequences[i].PermitTtlEq = types.Int64Value(value.Int())
@@ -1090,15 +1090,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitTtlNeq = types.Int64Null()
 		}
-		if value := r.Get("permit.ttl.range.start-value"); value.Exists() && !data.Sequences[i].PermitTtlRangeStartValue.IsNull() {
-			data.Sequences[i].PermitTtlRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.ttl.range.start-value"); value.Exists() && !data.Sequences[i].PermitTtlRangeStart.IsNull() {
+			data.Sequences[i].PermitTtlRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitTtlRangeStartValue = types.Int64Null()
+			data.Sequences[i].PermitTtlRangeStart = types.Int64Null()
 		}
-		if value := r.Get("permit.ttl.range.end-value"); value.Exists() && !data.Sequences[i].PermitTtlRangeEndValue.IsNull() {
-			data.Sequences[i].PermitTtlRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.ttl.range.end-value"); value.Exists() && !data.Sequences[i].PermitTtlRangeEnd.IsNull() {
+			data.Sequences[i].PermitTtlRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitTtlRangeEndValue = types.Int64Null()
+			data.Sequences[i].PermitTtlRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("permit.fragment-offset.eq"); value.Exists() && !data.Sequences[i].PermitFragmentOffsetEq.IsNull() {
 			data.Sequences[i].PermitFragmentOffsetEq = types.Int64Value(value.Int())
@@ -1120,15 +1120,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].PermitFragmentOffsetNeq = types.Int64Null()
 		}
-		if value := r.Get("permit.fragment-offset.range.start-value"); value.Exists() && !data.Sequences[i].PermitFragmentOffsetRangeStartValue.IsNull() {
-			data.Sequences[i].PermitFragmentOffsetRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.fragment-offset.range.start-value"); value.Exists() && !data.Sequences[i].PermitFragmentOffsetRangeStart.IsNull() {
+			data.Sequences[i].PermitFragmentOffsetRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitFragmentOffsetRangeStartValue = types.Int64Null()
+			data.Sequences[i].PermitFragmentOffsetRangeStart = types.Int64Null()
 		}
-		if value := r.Get("permit.fragment-offset.range.end-value"); value.Exists() && !data.Sequences[i].PermitFragmentOffsetRangeEndValue.IsNull() {
-			data.Sequences[i].PermitFragmentOffsetRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("permit.fragment-offset.range.end-value"); value.Exists() && !data.Sequences[i].PermitFragmentOffsetRangeEnd.IsNull() {
+			data.Sequences[i].PermitFragmentOffsetRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].PermitFragmentOffsetRangeEndValue = types.Int64Null()
+			data.Sequences[i].PermitFragmentOffsetRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("permit.police.value"); value.Exists() && !data.Sequences[i].PermitPoliceValue.IsNull() {
 			data.Sequences[i].PermitPoliceValue = types.Int64Value(value.Int())
@@ -1297,15 +1297,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenySourcePortNeq = types.StringNull()
 		}
-		if value := r.Get("deny.source.port.range.start-value"); value.Exists() && !data.Sequences[i].DenySourcePortRangeStartValue.IsNull() {
-			data.Sequences[i].DenySourcePortRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("deny.source.port.range.start-value"); value.Exists() && !data.Sequences[i].DenySourcePortRangeStart.IsNull() {
+			data.Sequences[i].DenySourcePortRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenySourcePortRangeStartValue = types.StringNull()
+			data.Sequences[i].DenySourcePortRangeStart = types.StringNull()
 		}
-		if value := r.Get("deny.source.port.range.end-value"); value.Exists() && !data.Sequences[i].DenySourcePortRangeEndValue.IsNull() {
-			data.Sequences[i].DenySourcePortRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("deny.source.port.range.end-value"); value.Exists() && !data.Sequences[i].DenySourcePortRangeEnd.IsNull() {
+			data.Sequences[i].DenySourcePortRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenySourcePortRangeEndValue = types.StringNull()
+			data.Sequences[i].DenySourcePortRangeEnd = types.StringNull()
 		}
 		if value := r.Get("deny.destination.address"); value.Exists() && !data.Sequences[i].DenyDestinationAddress.IsNull() {
 			data.Sequences[i].DenyDestinationAddress = types.StringValue(value.String())
@@ -1366,15 +1366,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyDestinationPortNeq = types.StringNull()
 		}
-		if value := r.Get("deny.destination.port.range.start-value"); value.Exists() && !data.Sequences[i].DenyDestinationPortRangeStartValue.IsNull() {
-			data.Sequences[i].DenyDestinationPortRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("deny.destination.port.range.start-value"); value.Exists() && !data.Sequences[i].DenyDestinationPortRangeStart.IsNull() {
+			data.Sequences[i].DenyDestinationPortRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyDestinationPortRangeStartValue = types.StringNull()
+			data.Sequences[i].DenyDestinationPortRangeStart = types.StringNull()
 		}
-		if value := r.Get("deny.destination.port.range.end-value"); value.Exists() && !data.Sequences[i].DenyDestinationPortRangeEndValue.IsNull() {
-			data.Sequences[i].DenyDestinationPortRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("deny.destination.port.range.end-value"); value.Exists() && !data.Sequences[i].DenyDestinationPortRangeEnd.IsNull() {
+			data.Sequences[i].DenyDestinationPortRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyDestinationPortRangeEndValue = types.StringNull()
+			data.Sequences[i].DenyDestinationPortRangeEnd = types.StringNull()
 		}
 		if value := r.Get("deny.igmp-type"); value.Exists() && !data.Sequences[i].DenyIgmpType.IsNull() {
 			data.Sequences[i].DenyIgmpType = types.StringValue(value.String())
@@ -1466,10 +1466,10 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyIcmpMessageCode = types.Int64Null()
 		}
-		if value := r.Get("deny.dscp.dscp-value"); value.Exists() && !data.Sequences[i].DenyDscpDscpValue.IsNull() {
-			data.Sequences[i].DenyDscpDscpValue = types.StringValue(value.String())
+		if value := r.Get("deny.dscp.dscp-value"); value.Exists() && !data.Sequences[i].DenyDscp.IsNull() {
+			data.Sequences[i].DenyDscp = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyDscpDscpValue = types.StringNull()
+			data.Sequences[i].DenyDscp = types.StringNull()
 		}
 		if value := r.Get("deny.dscp.eq"); value.Exists() && !data.Sequences[i].DenyDscpEq.IsNull() {
 			data.Sequences[i].DenyDscpEq = types.StringValue(value.String())
@@ -1491,15 +1491,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyDscpNeq = types.StringNull()
 		}
-		if value := r.Get("deny.dscp.range.start-value"); value.Exists() && !data.Sequences[i].DenyDscpRangeStartValue.IsNull() {
-			data.Sequences[i].DenyDscpRangeStartValue = types.StringValue(value.String())
+		if value := r.Get("deny.dscp.range.start-value"); value.Exists() && !data.Sequences[i].DenyDscpRangeStart.IsNull() {
+			data.Sequences[i].DenyDscpRangeStart = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyDscpRangeStartValue = types.StringNull()
+			data.Sequences[i].DenyDscpRangeStart = types.StringNull()
 		}
-		if value := r.Get("deny.dscp.range.end-value"); value.Exists() && !data.Sequences[i].DenyDscpRangeEndValue.IsNull() {
-			data.Sequences[i].DenyDscpRangeEndValue = types.StringValue(value.String())
+		if value := r.Get("deny.dscp.range.end-value"); value.Exists() && !data.Sequences[i].DenyDscpRangeEnd.IsNull() {
+			data.Sequences[i].DenyDscpRangeEnd = types.StringValue(value.String())
 		} else {
-			data.Sequences[i].DenyDscpRangeEndValue = types.StringNull()
+			data.Sequences[i].DenyDscpRangeEnd = types.StringNull()
 		}
 		if value := r.Get("deny.packet-length.eq"); value.Exists() && !data.Sequences[i].DenyPacketLengthEq.IsNull() {
 			data.Sequences[i].DenyPacketLengthEq = types.Int64Value(value.Int())
@@ -1521,15 +1521,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyPacketLengthNeq = types.Int64Null()
 		}
-		if value := r.Get("deny.packet-length.range.start-value"); value.Exists() && !data.Sequences[i].DenyPacketLengthRangeStartValue.IsNull() {
-			data.Sequences[i].DenyPacketLengthRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.packet-length.range.start-value"); value.Exists() && !data.Sequences[i].DenyPacketLengthRangeStart.IsNull() {
+			data.Sequences[i].DenyPacketLengthRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyPacketLengthRangeStartValue = types.Int64Null()
+			data.Sequences[i].DenyPacketLengthRangeStart = types.Int64Null()
 		}
-		if value := r.Get("deny.packet-length.range.end-value"); value.Exists() && !data.Sequences[i].DenyPacketLengthRangeEndValue.IsNull() {
-			data.Sequences[i].DenyPacketLengthRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.packet-length.range.end-value"); value.Exists() && !data.Sequences[i].DenyPacketLengthRangeEnd.IsNull() {
+			data.Sequences[i].DenyPacketLengthRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyPacketLengthRangeEndValue = types.Int64Null()
+			data.Sequences[i].DenyPacketLengthRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("deny.ttl.eq"); value.Exists() && !data.Sequences[i].DenyTtlEq.IsNull() {
 			data.Sequences[i].DenyTtlEq = types.Int64Value(value.Int())
@@ -1551,15 +1551,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyTtlNeq = types.Int64Null()
 		}
-		if value := r.Get("deny.ttl.range.start-value"); value.Exists() && !data.Sequences[i].DenyTtlRangeStartValue.IsNull() {
-			data.Sequences[i].DenyTtlRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.ttl.range.start-value"); value.Exists() && !data.Sequences[i].DenyTtlRangeStart.IsNull() {
+			data.Sequences[i].DenyTtlRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyTtlRangeStartValue = types.Int64Null()
+			data.Sequences[i].DenyTtlRangeStart = types.Int64Null()
 		}
-		if value := r.Get("deny.ttl.range.end-value"); value.Exists() && !data.Sequences[i].DenyTtlRangeEndValue.IsNull() {
-			data.Sequences[i].DenyTtlRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.ttl.range.end-value"); value.Exists() && !data.Sequences[i].DenyTtlRangeEnd.IsNull() {
+			data.Sequences[i].DenyTtlRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyTtlRangeEndValue = types.Int64Null()
+			data.Sequences[i].DenyTtlRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("deny.fragment-offset.eq"); value.Exists() && !data.Sequences[i].DenyFragmentOffsetEq.IsNull() {
 			data.Sequences[i].DenyFragmentOffsetEq = types.Int64Value(value.Int())
@@ -1581,15 +1581,15 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Sequences[i].DenyFragmentOffsetNeq = types.Int64Null()
 		}
-		if value := r.Get("deny.fragment-offset.range.start-value"); value.Exists() && !data.Sequences[i].DenyFragmentOffsetRangeStartValue.IsNull() {
-			data.Sequences[i].DenyFragmentOffsetRangeStartValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.fragment-offset.range.start-value"); value.Exists() && !data.Sequences[i].DenyFragmentOffsetRangeStart.IsNull() {
+			data.Sequences[i].DenyFragmentOffsetRangeStart = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyFragmentOffsetRangeStartValue = types.Int64Null()
+			data.Sequences[i].DenyFragmentOffsetRangeStart = types.Int64Null()
 		}
-		if value := r.Get("deny.fragment-offset.range.end-value"); value.Exists() && !data.Sequences[i].DenyFragmentOffsetRangeEndValue.IsNull() {
-			data.Sequences[i].DenyFragmentOffsetRangeEndValue = types.Int64Value(value.Int())
+		if value := r.Get("deny.fragment-offset.range.end-value"); value.Exists() && !data.Sequences[i].DenyFragmentOffsetRangeEnd.IsNull() {
+			data.Sequences[i].DenyFragmentOffsetRangeEnd = types.Int64Value(value.Int())
 		} else {
-			data.Sequences[i].DenyFragmentOffsetRangeEndValue = types.Int64Null()
+			data.Sequences[i].DenyFragmentOffsetRangeEnd = types.Int64Null()
 		}
 		if value := r.Get("deny.police.value"); value.Exists() && !data.Sequences[i].DenyPoliceValue.IsNull() {
 			data.Sequences[i].DenyPoliceValue = types.Int64Value(value.Int())
@@ -1778,10 +1778,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitSourcePortNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.source.port.range.start-value"); cValue.Exists() {
-				item.PermitSourcePortRangeStartValue = types.StringValue(cValue.String())
+				item.PermitSourcePortRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.source.port.range.end-value"); cValue.Exists() {
-				item.PermitSourcePortRangeEndValue = types.StringValue(cValue.String())
+				item.PermitSourcePortRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.destination.address"); cValue.Exists() {
 				item.PermitDestinationAddress = types.StringValue(cValue.String())
@@ -1819,10 +1819,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitDestinationPortNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.destination.port.range.start-value"); cValue.Exists() {
-				item.PermitDestinationPortRangeStartValue = types.StringValue(cValue.String())
+				item.PermitDestinationPortRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.destination.port.range.end-value"); cValue.Exists() {
-				item.PermitDestinationPortRangeEndValue = types.StringValue(cValue.String())
+				item.PermitDestinationPortRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.icmp.message-type-name"); cValue.Exists() {
 				item.PermitIcmpMessageTypeName = types.StringValue(cValue.String())
@@ -1834,7 +1834,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
-				item.PermitDscpDscpValue = types.StringValue(cValue.String())
+				item.PermitDscp = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.dscp.eq"); cValue.Exists() {
 				item.PermitDscpEq = types.StringValue(cValue.String())
@@ -1849,10 +1849,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitDscpNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.dscp.range.start-value"); cValue.Exists() {
-				item.PermitDscpRangeStartValue = types.StringValue(cValue.String())
+				item.PermitDscpRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.dscp.range.end-value"); cValue.Exists() {
-				item.PermitDscpRangeEndValue = types.StringValue(cValue.String())
+				item.PermitDscpRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("permit.packet-length.eq"); cValue.Exists() {
 				item.PermitPacketLengthEq = types.Int64Value(cValue.Int())
@@ -1867,10 +1867,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitPacketLengthNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.packet-length.range.start-value"); cValue.Exists() {
-				item.PermitPacketLengthRangeStartValue = types.Int64Value(cValue.Int())
+				item.PermitPacketLengthRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.packet-length.range.end-value"); cValue.Exists() {
-				item.PermitPacketLengthRangeEndValue = types.Int64Value(cValue.Int())
+				item.PermitPacketLengthRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.ttl.eq"); cValue.Exists() {
 				item.PermitTtlEq = types.Int64Value(cValue.Int())
@@ -1885,10 +1885,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitTtlNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.ttl.range.start-value"); cValue.Exists() {
-				item.PermitTtlRangeStartValue = types.Int64Value(cValue.Int())
+				item.PermitTtlRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.ttl.range.end-value"); cValue.Exists() {
-				item.PermitTtlRangeEndValue = types.Int64Value(cValue.Int())
+				item.PermitTtlRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.fragment-offset.eq"); cValue.Exists() {
 				item.PermitFragmentOffsetEq = types.Int64Value(cValue.Int())
@@ -1903,10 +1903,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.PermitFragmentOffsetNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.fragment-offset.range.start-value"); cValue.Exists() {
-				item.PermitFragmentOffsetRangeStartValue = types.Int64Value(cValue.Int())
+				item.PermitFragmentOffsetRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.fragment-offset.range.end-value"); cValue.Exists() {
-				item.PermitFragmentOffsetRangeEndValue = types.Int64Value(cValue.Int())
+				item.PermitFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("permit.police.value"); cValue.Exists() {
 				item.PermitPoliceValue = types.Int64Value(cValue.Int())
@@ -2008,10 +2008,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenySourcePortNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.source.port.range.start-value"); cValue.Exists() {
-				item.DenySourcePortRangeStartValue = types.StringValue(cValue.String())
+				item.DenySourcePortRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.source.port.range.end-value"); cValue.Exists() {
-				item.DenySourcePortRangeEndValue = types.StringValue(cValue.String())
+				item.DenySourcePortRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.destination.address"); cValue.Exists() {
 				item.DenyDestinationAddress = types.StringValue(cValue.String())
@@ -2049,10 +2049,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyDestinationPortNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.destination.port.range.start-value"); cValue.Exists() {
-				item.DenyDestinationPortRangeStartValue = types.StringValue(cValue.String())
+				item.DenyDestinationPortRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.destination.port.range.end-value"); cValue.Exists() {
-				item.DenyDestinationPortRangeEndValue = types.StringValue(cValue.String())
+				item.DenyDestinationPortRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.igmp-type"); cValue.Exists() {
 				item.DenyIgmpType = types.StringValue(cValue.String())
@@ -2107,7 +2107,7 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
-				item.DenyDscpDscpValue = types.StringValue(cValue.String())
+				item.DenyDscp = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.eq"); cValue.Exists() {
 				item.DenyDscpEq = types.StringValue(cValue.String())
@@ -2122,10 +2122,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyDscpNeq = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.range.start-value"); cValue.Exists() {
-				item.DenyDscpRangeStartValue = types.StringValue(cValue.String())
+				item.DenyDscpRangeStart = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.dscp.range.end-value"); cValue.Exists() {
-				item.DenyDscpRangeEndValue = types.StringValue(cValue.String())
+				item.DenyDscpRangeEnd = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("deny.packet-length.eq"); cValue.Exists() {
 				item.DenyPacketLengthEq = types.Int64Value(cValue.Int())
@@ -2140,10 +2140,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyPacketLengthNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.packet-length.range.start-value"); cValue.Exists() {
-				item.DenyPacketLengthRangeStartValue = types.Int64Value(cValue.Int())
+				item.DenyPacketLengthRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.packet-length.range.end-value"); cValue.Exists() {
-				item.DenyPacketLengthRangeEndValue = types.Int64Value(cValue.Int())
+				item.DenyPacketLengthRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.ttl.eq"); cValue.Exists() {
 				item.DenyTtlEq = types.Int64Value(cValue.Int())
@@ -2158,10 +2158,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyTtlNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.ttl.range.start-value"); cValue.Exists() {
-				item.DenyTtlRangeStartValue = types.Int64Value(cValue.Int())
+				item.DenyTtlRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.ttl.range.end-value"); cValue.Exists() {
-				item.DenyTtlRangeEndValue = types.Int64Value(cValue.Int())
+				item.DenyTtlRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.fragment-offset.eq"); cValue.Exists() {
 				item.DenyFragmentOffsetEq = types.Int64Value(cValue.Int())
@@ -2176,10 +2176,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 				item.DenyFragmentOffsetNeq = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.fragment-offset.range.start-value"); cValue.Exists() {
-				item.DenyFragmentOffsetRangeStartValue = types.Int64Value(cValue.Int())
+				item.DenyFragmentOffsetRangeStart = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.fragment-offset.range.end-value"); cValue.Exists() {
-				item.DenyFragmentOffsetRangeEndValue = types.Int64Value(cValue.Int())
+				item.DenyFragmentOffsetRangeEnd = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("deny.police.value"); cValue.Exists() {
 				item.DenyPoliceValue = types.Int64Value(cValue.Int())

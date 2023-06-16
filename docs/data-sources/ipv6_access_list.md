@@ -50,17 +50,17 @@ Read-Only:
 - `deny_destination_port_gt` (String) Match only packet with a greater port number
 - `deny_destination_port_lt` (String) Match only packets with a lower port number
 - `deny_destination_port_neq` (String) Match only packets not on a given port
-- `deny_destination_port_range_end_value` (String) Port number
-- `deny_destination_port_range_start_value` (String) Port number
+- `deny_destination_port_range_end` (String) Port number
+- `deny_destination_port_range_start` (String) Port number
 - `deny_destination_prefix_length` (Number) Destination IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `deny_destination_wildcard_mask` (String) Destination IP address mask. Either wildcard-mask or prefix-length is supported along with address.
-- `deny_dscp_dscp_value` (String)
+- `deny_dscp` (String)
 - `deny_dscp_eq` (String) Match only packets on a given DSCP value
 - `deny_dscp_gt` (String) Match only packet with a greater DSCP value
 - `deny_dscp_lt` (String) Match only packets with a lower DSCP value
 - `deny_dscp_neq` (String) Match only packets not on a given DSCP value
-- `deny_dscp_range_end_value` (String) DSCP value
-- `deny_dscp_range_start_value` (String) DSCP value
+- `deny_dscp_range_end` (String) DSCP value
+- `deny_dscp_range_start` (String) DSCP value
 - `deny_eq` (String) Match only packets with exact protocol numbers
 - `deny_fragment_type` (String) Fragment type for a packet
 - `deny_icmp_message_code` (Number) ICMP message code
@@ -74,8 +74,8 @@ Read-Only:
 - `deny_packet_length_gt` (Number) Match only packet with a greater value
 - `deny_packet_length_lt` (Number) Match only packets with a lower value
 - `deny_packet_length_neq` (Number) Match only packets not on a given value
-- `deny_packet_length_range_end_value` (Number) Packet length end
-- `deny_packet_length_range_start_value` (Number) Packet length start
+- `deny_packet_length_range_end` (Number) Packet length end
+- `deny_packet_length_range_start` (Number) Packet length start
 - `deny_police_peak_rate` (Number) Police peak-rate value on this entry
 - `deny_police_peak_unit` (String) Unit for peak-rate value. Currently only pps (packets per second) is supported
 - `deny_police_priority` (String) Set Priority option on this entry
@@ -96,16 +96,16 @@ Read-Only:
 - `deny_source_port_gt` (String) Match only packet with a greater port number
 - `deny_source_port_lt` (String) Match only packets with a lower port number
 - `deny_source_port_neq` (String) Match only packets not on a given port
-- `deny_source_port_range_end_value` (String) Port number
-- `deny_source_port_range_start_value` (String) Port number
+- `deny_source_port_range_end` (String) Port number
+- `deny_source_port_range_start` (String) Port number
 - `deny_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `deny_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
 - `deny_ttl_eq` (Number) Match only packets with a given value
 - `deny_ttl_gt` (Number) Match only packet with a greater value
 - `deny_ttl_lt` (Number) Match only packets with a lower value
 - `deny_ttl_neq` (Number) Match only packets not on a given value
-- `deny_ttl_range_end_value` (Number) ttl range higher value
-- `deny_ttl_range_start_value` (Number) ttl range lower value
+- `deny_ttl_range_end` (Number) ttl range higher value
+- `deny_ttl_range_start` (Number) ttl range lower value
 - `permit_capture` (Boolean) Capture matched packet
 - `permit_counter` (String) counter for this ACE
 - `permit_destination_address` (String) Destination IP address
@@ -117,17 +117,17 @@ Read-Only:
 - `permit_destination_port_gt` (String) Match only packet with a greater port number
 - `permit_destination_port_lt` (String) Match only packets with a lower port number
 - `permit_destination_port_neq` (String) Match only packets not on a given port
-- `permit_destination_port_range_end_value` (String) Port number
-- `permit_destination_port_range_start_value` (String) Port number
+- `permit_destination_port_range_end` (String) Port number
+- `permit_destination_port_range_start` (String) Port number
 - `permit_destination_prefix_length` (Number) Destination IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `permit_destination_wildcard_mask` (String) Destination IP address mask. Either wildcard-mask or prefix-length is supported along with address.
-- `permit_dscp_dscp_value` (String)
+- `permit_dscp` (String)
 - `permit_dscp_eq` (String) Match only packets on a given DSCP value
 - `permit_dscp_gt` (String) Match only packet with a greater DSCP value
 - `permit_dscp_lt` (String) Match only packets with a lower DSCP value
 - `permit_dscp_neq` (String) Match only packets not on a given DSCP value
-- `permit_dscp_range_end_value` (String) DSCP value
-- `permit_dscp_range_start_value` (String) DSCP value
+- `permit_dscp_range_end` (String) DSCP value
+- `permit_dscp_range_start` (String) DSCP value
 - `permit_eq` (String) Match only packets with exact protocol numbers
 - `permit_fragment_type` (String) Fragment type for a packet
 - `permit_icmp_message_code` (Number) ICMP message code
@@ -148,8 +148,8 @@ Read-Only:
 - `permit_packet_length_gt` (Number) Match only packet with a greater value
 - `permit_packet_length_lt` (Number) Match only packets with a lower value
 - `permit_packet_length_neq` (Number) Match only packets not on a given value
-- `permit_packet_length_range_end_value` (Number) Packet length end
-- `permit_packet_length_range_start_value` (Number) Packet length start
+- `permit_packet_length_range_end` (Number) Packet length end
+- `permit_packet_length_range_start` (Number) Packet length start
 - `permit_police_peak_rate` (Number) Police peak-rate value on this entry
 - `permit_police_peak_unit` (String) Unit for peak-rate value. Currently only pps (packets per second) is supported
 - `permit_police_priority` (String) Set Priority option on this entry
@@ -170,15 +170,15 @@ Read-Only:
 - `permit_source_port_gt` (String) Match only packet with a greater port number
 - `permit_source_port_lt` (String) Match only packets with a lower port number
 - `permit_source_port_neq` (String) Match only packets not on a given port
-- `permit_source_port_range_end_value` (String) Port number
-- `permit_source_port_range_start_value` (String) Port number
+- `permit_source_port_range_end` (String) Port number
+- `permit_source_port_range_start` (String) Port number
 - `permit_source_prefix_length` (Number) Source IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
 - `permit_source_wildcard_mask` (String) Source IP address mask. Either wildcard-mask or prefix-length is supported along with address.
 - `permit_ttl_eq` (Number) Match only packets with a given value
 - `permit_ttl_gt` (Number) Match only packet with a greater value
 - `permit_ttl_lt` (Number) Match only packets with a lower value
 - `permit_ttl_neq` (Number) Match only packets not on a given value
-- `permit_ttl_range_end_value` (Number) ttl range higher value
-- `permit_ttl_range_start_value` (Number) ttl range lower value
+- `permit_ttl_range_end` (Number) ttl range higher value
+- `permit_ttl_range_start` (Number) ttl range lower value
 - `remark` (String) Comment for access list
 - `sequence_number` (Number) Sequence number for this entry

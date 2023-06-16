@@ -8,32 +8,32 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceIosxrQOSClassMap(t *testing.T) {
+func TestAccDataSourceIosxrQoSClassMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrQOSClassMapConfig,
+				Config: testAccDataSourceIosxrQoSClassMapConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "match_any", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "description", "description1"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "match_dscp_value", "46"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "match_mpls_experimental_topmost_label", "5"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "match_dscp", "46"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_class_map.test", "match_mpls_experimental_topmost", "5"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrQOSClassMapConfig = `
+const testAccDataSourceIosxrQoSClassMapConfig = `
 
 resource "iosxr_qos_class_map" "test" {
 	class_map_name = "TEST"
 	match_any = true
 	description = "description1"
-	match_dscp_value = "46"
-	match_mpls_experimental_topmost_label = 5
+	match_dscp = "46"
+	match_mpls_experimental_topmost = 5
 }
 
 data "iosxr_qos_class_map" "test" {

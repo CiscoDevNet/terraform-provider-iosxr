@@ -1,24 +1,23 @@
 ---
-name: QOS Policy Map
-path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]
+name: QoS Policy Map
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]/class[name=%s][type=%s]
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    id: true
     example: core-ingress-classifier
-  - yang_name: class/name
+  - yang_name: name
     example: class-default
-  - yang_name: class/type
+  - yang_name: type
     example: qos
-  - yang_name: class/set/mpls/experimental/topmost
+  - yang_name: set/mpls/experimental/topmost
     example: 0
-  - yang_name: class/set/dscp
+  - yang_name: set/dscp
     example: 0
-  - yang_name: class/priority/level
+  - yang_name: priority/level
     example: 2
     exclude_test: true
-  - yang_name: class/queue-limits/queue-limit
-    tf_name: class_queue_limits
+  - yang_name: queue-limits/queue-limit
+    tf_name: queue_limits
     type: List
     exclude_test: true
     attributes:
@@ -29,24 +28,24 @@ attributes:
         id: true
         example: us
 
-  - yang_name: class/service-policy/name
+  - yang_name: service-policy/name
     example: SERVICEPOLICY
     exclude_test: true
-  - yang_name: class/police/rate/value
+  - yang_name: police/rate/value
     example: 5
     exclude_test: true
-  - yang_name: class/police/rate/unit
+  - yang_name: police/rate/unit
     example: gbps
     exclude_test: true
-  - yang_name: class/shape/average/rate/value
+  - yang_name: shape/average/rate/value
     example: 100
     exclude_test: true
-  - yang_name: class/shape/average/rate/unit
+  - yang_name: shape/average/rate/unit
     example: gbps
     exclude_test: true
-  - yang_name: class/bandwidth-remaining/unit
+  - yang_name: bandwidth-remaining/unit
     example: percent
     exclude_test: true
-  - yang_name: class/bandwidth-remaining/value
+  - yang_name: bandwidth-remaining/value
     example: 1
     exclude_test: true

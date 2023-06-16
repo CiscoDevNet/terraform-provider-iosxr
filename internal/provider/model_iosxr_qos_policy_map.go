@@ -13,120 +13,107 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type QOSPolicyMap struct {
-	Device                          types.String                   `tfsdk:"device"`
-	Id                              types.String                   `tfsdk:"id"`
-	PolicyMapName                   types.String                   `tfsdk:"policy_map_name"`
-	ClassName                       types.String                   `tfsdk:"class_name"`
-	ClassType                       types.String                   `tfsdk:"class_type"`
-	ClassSetMplsExperimentalTopmost types.Int64                    `tfsdk:"class_set_mpls_experimental_topmost"`
-	ClassSetDscp                    types.String                   `tfsdk:"class_set_dscp"`
-	ClassPriorityLevel              types.Int64                    `tfsdk:"class_priority_level"`
-	ClassQueueLimits                []QOSPolicyMapClassQueueLimits `tfsdk:"class_queue_limits"`
-	ClassServicePolicyName          types.String                   `tfsdk:"class_service_policy_name"`
-	ClassPoliceRateValue            types.String                   `tfsdk:"class_police_rate_value"`
-	ClassPoliceRateUnit             types.String                   `tfsdk:"class_police_rate_unit"`
-	ClassShapeAverageRateValue      types.String                   `tfsdk:"class_shape_average_rate_value"`
-	ClassShapeAverageRateUnit       types.String                   `tfsdk:"class_shape_average_rate_unit"`
-	ClassBandwidthRemainingUnit     types.String                   `tfsdk:"class_bandwidth_remaining_unit"`
-	ClassBandwidthRemainingValue    types.String                   `tfsdk:"class_bandwidth_remaining_value"`
+type QoSPolicyMap struct {
+	Device                     types.String              `tfsdk:"device"`
+	Id                         types.String              `tfsdk:"id"`
+	PolicyMapName              types.String              `tfsdk:"policy_map_name"`
+	Name                       types.String              `tfsdk:"name"`
+	Type                       types.String              `tfsdk:"type"`
+	SetMplsExperimentalTopmost types.Int64               `tfsdk:"set_mpls_experimental_topmost"`
+	SetDscp                    types.String              `tfsdk:"set_dscp"`
+	PriorityLevel              types.Int64               `tfsdk:"priority_level"`
+	QueueLimits                []QoSPolicyMapQueueLimits `tfsdk:"queue_limits"`
+	ServicePolicyName          types.String              `tfsdk:"service_policy_name"`
+	PoliceRateValue            types.String              `tfsdk:"police_rate_value"`
+	PoliceRateUnit             types.String              `tfsdk:"police_rate_unit"`
+	ShapeAverageRateValue      types.String              `tfsdk:"shape_average_rate_value"`
+	ShapeAverageRateUnit       types.String              `tfsdk:"shape_average_rate_unit"`
+	BandwidthRemainingUnit     types.String              `tfsdk:"bandwidth_remaining_unit"`
+	BandwidthRemainingValue    types.String              `tfsdk:"bandwidth_remaining_value"`
 }
-type QOSPolicyMapClassQueueLimits struct {
+type QoSPolicyMapQueueLimits struct {
 	Value types.String `tfsdk:"value"`
 	Unit  types.String `tfsdk:"unit"`
 }
 
-func (data QOSPolicyMap) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]", data.PolicyMapName.ValueString())
+func (data QoSPolicyMap) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]/class[name=%s][type=%s]", data.PolicyMapName.ValueString(), data.Name.ValueString(), data.Type.ValueString())
 }
 
-func (data QOSPolicyMap) toBody(ctx context.Context) string {
+func (data QoSPolicyMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.PolicyMapName.IsNull() && !data.PolicyMapName.IsUnknown() {
-		body, _ = sjson.Set(body, "policy-map-name", data.PolicyMapName.ValueString())
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "name", data.Name.ValueString())
 	}
-	if !data.ClassName.IsNull() && !data.ClassName.IsUnknown() {
-		body, _ = sjson.Set(body, "class.name", data.ClassName.ValueString())
+	if !data.Type.IsNull() && !data.Type.IsUnknown() {
+		body, _ = sjson.Set(body, "type", data.Type.ValueString())
 	}
-	if !data.ClassType.IsNull() && !data.ClassType.IsUnknown() {
-		body, _ = sjson.Set(body, "class.type", data.ClassType.ValueString())
+	if !data.SetMplsExperimentalTopmost.IsNull() && !data.SetMplsExperimentalTopmost.IsUnknown() {
+		body, _ = sjson.Set(body, "set.mpls.experimental.topmost", strconv.FormatInt(data.SetMplsExperimentalTopmost.ValueInt64(), 10))
 	}
-	if !data.ClassSetMplsExperimentalTopmost.IsNull() && !data.ClassSetMplsExperimentalTopmost.IsUnknown() {
-		body, _ = sjson.Set(body, "class.set.mpls.experimental.topmost", strconv.FormatInt(data.ClassSetMplsExperimentalTopmost.ValueInt64(), 10))
+	if !data.SetDscp.IsNull() && !data.SetDscp.IsUnknown() {
+		body, _ = sjson.Set(body, "set.dscp", data.SetDscp.ValueString())
 	}
-	if !data.ClassSetDscp.IsNull() && !data.ClassSetDscp.IsUnknown() {
-		body, _ = sjson.Set(body, "class.set.dscp", data.ClassSetDscp.ValueString())
+	if !data.PriorityLevel.IsNull() && !data.PriorityLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "priority.level", strconv.FormatInt(data.PriorityLevel.ValueInt64(), 10))
 	}
-	if !data.ClassPriorityLevel.IsNull() && !data.ClassPriorityLevel.IsUnknown() {
-		body, _ = sjson.Set(body, "class.priority.level", strconv.FormatInt(data.ClassPriorityLevel.ValueInt64(), 10))
+	if !data.ServicePolicyName.IsNull() && !data.ServicePolicyName.IsUnknown() {
+		body, _ = sjson.Set(body, "service-policy.name", data.ServicePolicyName.ValueString())
 	}
-	if !data.ClassServicePolicyName.IsNull() && !data.ClassServicePolicyName.IsUnknown() {
-		body, _ = sjson.Set(body, "class.service-policy.name", data.ClassServicePolicyName.ValueString())
+	if !data.PoliceRateValue.IsNull() && !data.PoliceRateValue.IsUnknown() {
+		body, _ = sjson.Set(body, "police.rate.value", data.PoliceRateValue.ValueString())
 	}
-	if !data.ClassPoliceRateValue.IsNull() && !data.ClassPoliceRateValue.IsUnknown() {
-		body, _ = sjson.Set(body, "class.police.rate.value", data.ClassPoliceRateValue.ValueString())
+	if !data.PoliceRateUnit.IsNull() && !data.PoliceRateUnit.IsUnknown() {
+		body, _ = sjson.Set(body, "police.rate.unit", data.PoliceRateUnit.ValueString())
 	}
-	if !data.ClassPoliceRateUnit.IsNull() && !data.ClassPoliceRateUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "class.police.rate.unit", data.ClassPoliceRateUnit.ValueString())
+	if !data.ShapeAverageRateValue.IsNull() && !data.ShapeAverageRateValue.IsUnknown() {
+		body, _ = sjson.Set(body, "shape.average.rate.value", data.ShapeAverageRateValue.ValueString())
 	}
-	if !data.ClassShapeAverageRateValue.IsNull() && !data.ClassShapeAverageRateValue.IsUnknown() {
-		body, _ = sjson.Set(body, "class.shape.average.rate.value", data.ClassShapeAverageRateValue.ValueString())
+	if !data.ShapeAverageRateUnit.IsNull() && !data.ShapeAverageRateUnit.IsUnknown() {
+		body, _ = sjson.Set(body, "shape.average.rate.unit", data.ShapeAverageRateUnit.ValueString())
 	}
-	if !data.ClassShapeAverageRateUnit.IsNull() && !data.ClassShapeAverageRateUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "class.shape.average.rate.unit", data.ClassShapeAverageRateUnit.ValueString())
+	if !data.BandwidthRemainingUnit.IsNull() && !data.BandwidthRemainingUnit.IsUnknown() {
+		body, _ = sjson.Set(body, "bandwidth-remaining.unit", data.BandwidthRemainingUnit.ValueString())
 	}
-	if !data.ClassBandwidthRemainingUnit.IsNull() && !data.ClassBandwidthRemainingUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "class.bandwidth-remaining.unit", data.ClassBandwidthRemainingUnit.ValueString())
+	if !data.BandwidthRemainingValue.IsNull() && !data.BandwidthRemainingValue.IsUnknown() {
+		body, _ = sjson.Set(body, "bandwidth-remaining.value", data.BandwidthRemainingValue.ValueString())
 	}
-	if !data.ClassBandwidthRemainingValue.IsNull() && !data.ClassBandwidthRemainingValue.IsUnknown() {
-		body, _ = sjson.Set(body, "class.bandwidth-remaining.value", data.ClassBandwidthRemainingValue.ValueString())
-	}
-	if len(data.ClassQueueLimits) > 0 {
-		body, _ = sjson.Set(body, "class.queue-limits.queue-limit", []interface{}{})
-		for index, item := range data.ClassQueueLimits {
+	if len(data.QueueLimits) > 0 {
+		body, _ = sjson.Set(body, "queue-limits.queue-limit", []interface{}{})
+		for index, item := range data.QueueLimits {
 			if !item.Value.IsNull() && !item.Value.IsUnknown() {
-				body, _ = sjson.Set(body, "class.queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"value", item.Value.ValueString())
+				body, _ = sjson.Set(body, "queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"value", item.Value.ValueString())
 			}
 			if !item.Unit.IsNull() && !item.Unit.IsUnknown() {
-				body, _ = sjson.Set(body, "class.queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"unit", item.Unit.ValueString())
+				body, _ = sjson.Set(body, "queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"unit", item.Unit.ValueString())
 			}
 		}
 	}
 	return body
 }
 
-func (data *QOSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "class.name"); value.Exists() && !data.ClassName.IsNull() {
-		data.ClassName = types.StringValue(value.String())
+func (data *QoSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "set.mpls.experimental.topmost"); value.Exists() && !data.SetMplsExperimentalTopmost.IsNull() {
+		data.SetMplsExperimentalTopmost = types.Int64Value(value.Int())
 	} else {
-		data.ClassName = types.StringNull()
+		data.SetMplsExperimentalTopmost = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "class.type"); value.Exists() && !data.ClassType.IsNull() {
-		data.ClassType = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "set.dscp"); value.Exists() && !data.SetDscp.IsNull() {
+		data.SetDscp = types.StringValue(value.String())
 	} else {
-		data.ClassType = types.StringNull()
+		data.SetDscp = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.set.mpls.experimental.topmost"); value.Exists() && !data.ClassSetMplsExperimentalTopmost.IsNull() {
-		data.ClassSetMplsExperimentalTopmost = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "priority.level"); value.Exists() && !data.PriorityLevel.IsNull() {
+		data.PriorityLevel = types.Int64Value(value.Int())
 	} else {
-		data.ClassSetMplsExperimentalTopmost = types.Int64Null()
+		data.PriorityLevel = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "class.set.dscp"); value.Exists() && !data.ClassSetDscp.IsNull() {
-		data.ClassSetDscp = types.StringValue(value.String())
-	} else {
-		data.ClassSetDscp = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "class.priority.level"); value.Exists() && !data.ClassPriorityLevel.IsNull() {
-		data.ClassPriorityLevel = types.Int64Value(value.Int())
-	} else {
-		data.ClassPriorityLevel = types.Int64Null()
-	}
-	for i := range data.ClassQueueLimits {
+	for i := range data.QueueLimits {
 		keys := [...]string{"value", "unit"}
-		keyValues := [...]string{data.ClassQueueLimits[i].Value.ValueString(), data.ClassQueueLimits[i].Unit.ValueString()}
+		keyValues := [...]string{data.QueueLimits[i].Value.ValueString(), data.QueueLimits[i].Unit.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "class.queue-limits.queue-limit").ForEach(
+		gjson.GetBytes(res, "queue-limits.queue-limit").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -144,118 +131,112 @@ func (data *QOSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("value"); value.Exists() && !data.ClassQueueLimits[i].Value.IsNull() {
-			data.ClassQueueLimits[i].Value = types.StringValue(value.String())
+		if value := r.Get("value"); value.Exists() && !data.QueueLimits[i].Value.IsNull() {
+			data.QueueLimits[i].Value = types.StringValue(value.String())
 		} else {
-			data.ClassQueueLimits[i].Value = types.StringNull()
+			data.QueueLimits[i].Value = types.StringNull()
 		}
-		if value := r.Get("unit"); value.Exists() && !data.ClassQueueLimits[i].Unit.IsNull() {
-			data.ClassQueueLimits[i].Unit = types.StringValue(value.String())
+		if value := r.Get("unit"); value.Exists() && !data.QueueLimits[i].Unit.IsNull() {
+			data.QueueLimits[i].Unit = types.StringValue(value.String())
 		} else {
-			data.ClassQueueLimits[i].Unit = types.StringNull()
+			data.QueueLimits[i].Unit = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "class.service-policy.name"); value.Exists() && !data.ClassServicePolicyName.IsNull() {
-		data.ClassServicePolicyName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "service-policy.name"); value.Exists() && !data.ServicePolicyName.IsNull() {
+		data.ServicePolicyName = types.StringValue(value.String())
 	} else {
-		data.ClassServicePolicyName = types.StringNull()
+		data.ServicePolicyName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.police.rate.value"); value.Exists() && !data.ClassPoliceRateValue.IsNull() {
-		data.ClassPoliceRateValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "police.rate.value"); value.Exists() && !data.PoliceRateValue.IsNull() {
+		data.PoliceRateValue = types.StringValue(value.String())
 	} else {
-		data.ClassPoliceRateValue = types.StringNull()
+		data.PoliceRateValue = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.police.rate.unit"); value.Exists() && !data.ClassPoliceRateUnit.IsNull() {
-		data.ClassPoliceRateUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "police.rate.unit"); value.Exists() && !data.PoliceRateUnit.IsNull() {
+		data.PoliceRateUnit = types.StringValue(value.String())
 	} else {
-		data.ClassPoliceRateUnit = types.StringNull()
+		data.PoliceRateUnit = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.shape.average.rate.value"); value.Exists() && !data.ClassShapeAverageRateValue.IsNull() {
-		data.ClassShapeAverageRateValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "shape.average.rate.value"); value.Exists() && !data.ShapeAverageRateValue.IsNull() {
+		data.ShapeAverageRateValue = types.StringValue(value.String())
 	} else {
-		data.ClassShapeAverageRateValue = types.StringNull()
+		data.ShapeAverageRateValue = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.shape.average.rate.unit"); value.Exists() && !data.ClassShapeAverageRateUnit.IsNull() {
-		data.ClassShapeAverageRateUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "shape.average.rate.unit"); value.Exists() && !data.ShapeAverageRateUnit.IsNull() {
+		data.ShapeAverageRateUnit = types.StringValue(value.String())
 	} else {
-		data.ClassShapeAverageRateUnit = types.StringNull()
+		data.ShapeAverageRateUnit = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.bandwidth-remaining.unit"); value.Exists() && !data.ClassBandwidthRemainingUnit.IsNull() {
-		data.ClassBandwidthRemainingUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "bandwidth-remaining.unit"); value.Exists() && !data.BandwidthRemainingUnit.IsNull() {
+		data.BandwidthRemainingUnit = types.StringValue(value.String())
 	} else {
-		data.ClassBandwidthRemainingUnit = types.StringNull()
+		data.BandwidthRemainingUnit = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "class.bandwidth-remaining.value"); value.Exists() && !data.ClassBandwidthRemainingValue.IsNull() {
-		data.ClassBandwidthRemainingValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "bandwidth-remaining.value"); value.Exists() && !data.BandwidthRemainingValue.IsNull() {
+		data.BandwidthRemainingValue = types.StringValue(value.String())
 	} else {
-		data.ClassBandwidthRemainingValue = types.StringNull()
+		data.BandwidthRemainingValue = types.StringNull()
 	}
 }
 
-func (data *QOSPolicyMap) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "class.name"); value.Exists() {
-		data.ClassName = types.StringValue(value.String())
+func (data *QoSPolicyMap) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "set.mpls.experimental.topmost"); value.Exists() {
+		data.SetMplsExperimentalTopmost = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "class.type"); value.Exists() {
-		data.ClassType = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "set.dscp"); value.Exists() {
+		data.SetDscp = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.set.mpls.experimental.topmost"); value.Exists() {
-		data.ClassSetMplsExperimentalTopmost = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "priority.level"); value.Exists() {
+		data.PriorityLevel = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "class.set.dscp"); value.Exists() {
-		data.ClassSetDscp = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "class.priority.level"); value.Exists() {
-		data.ClassPriorityLevel = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "class.queue-limits.queue-limit"); value.Exists() {
-		data.ClassQueueLimits = make([]QOSPolicyMapClassQueueLimits, 0)
+	if value := gjson.GetBytes(res, "queue-limits.queue-limit"); value.Exists() {
+		data.QueueLimits = make([]QoSPolicyMapQueueLimits, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := QOSPolicyMapClassQueueLimits{}
+			item := QoSPolicyMapQueueLimits{}
 			if cValue := v.Get("value"); cValue.Exists() {
 				item.Value = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("unit"); cValue.Exists() {
 				item.Unit = types.StringValue(cValue.String())
 			}
-			data.ClassQueueLimits = append(data.ClassQueueLimits, item)
+			data.QueueLimits = append(data.QueueLimits, item)
 			return true
 		})
 	}
-	if value := gjson.GetBytes(res, "class.service-policy.name"); value.Exists() {
-		data.ClassServicePolicyName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "service-policy.name"); value.Exists() {
+		data.ServicePolicyName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.police.rate.value"); value.Exists() {
-		data.ClassPoliceRateValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "police.rate.value"); value.Exists() {
+		data.PoliceRateValue = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.police.rate.unit"); value.Exists() {
-		data.ClassPoliceRateUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "police.rate.unit"); value.Exists() {
+		data.PoliceRateUnit = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.shape.average.rate.value"); value.Exists() {
-		data.ClassShapeAverageRateValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "shape.average.rate.value"); value.Exists() {
+		data.ShapeAverageRateValue = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.shape.average.rate.unit"); value.Exists() {
-		data.ClassShapeAverageRateUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "shape.average.rate.unit"); value.Exists() {
+		data.ShapeAverageRateUnit = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.bandwidth-remaining.unit"); value.Exists() {
-		data.ClassBandwidthRemainingUnit = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "bandwidth-remaining.unit"); value.Exists() {
+		data.BandwidthRemainingUnit = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "class.bandwidth-remaining.value"); value.Exists() {
-		data.ClassBandwidthRemainingValue = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "bandwidth-remaining.value"); value.Exists() {
+		data.BandwidthRemainingValue = types.StringValue(value.String())
 	}
 }
 
-func (data *QOSPolicyMap) getDeletedListItems(ctx context.Context, state QOSPolicyMap) []string {
+func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPolicyMap) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.ClassQueueLimits {
+	for i := range state.QueueLimits {
 		keys := [...]string{"value", "unit"}
-		stateKeyValues := [...]string{state.ClassQueueLimits[i].Value.ValueString(), state.ClassQueueLimits[i].Unit.ValueString()}
+		stateKeyValues := [...]string{state.QueueLimits[i].Value.ValueString(), state.QueueLimits[i].Unit.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.ClassQueueLimits[i].Value.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.QueueLimits[i].Value.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.ClassQueueLimits[i].Unit.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.QueueLimits[i].Unit.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -263,12 +244,12 @@ func (data *QOSPolicyMap) getDeletedListItems(ctx context.Context, state QOSPoli
 		}
 
 		found := false
-		for j := range data.ClassQueueLimits {
+		for j := range data.QueueLimits {
 			found = true
-			if state.ClassQueueLimits[i].Value.ValueString() != data.ClassQueueLimits[j].Value.ValueString() {
+			if state.QueueLimits[i].Value.ValueString() != data.QueueLimits[j].Value.ValueString() {
 				found = false
 			}
-			if state.ClassQueueLimits[i].Unit.ValueString() != data.ClassQueueLimits[j].Unit.ValueString() {
+			if state.QueueLimits[i].Unit.ValueString() != data.QueueLimits[j].Unit.ValueString() {
 				found = false
 			}
 			if found {
@@ -280,13 +261,13 @@ func (data *QOSPolicyMap) getDeletedListItems(ctx context.Context, state QOSPoli
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/class/queue-limits/queue-limit%v", state.getPath(), keyString))
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/queue-limits/queue-limit%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems
 }
 
-func (data *QOSPolicyMap) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *QoSPolicyMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 
 	return emptyLeafsDelete

@@ -32,8 +32,8 @@ data "iosxr_pce" "example" {
 - `api_sibling_ipv4` (String) IPv4 address of the PCE sibling
 - `api_users` (Attributes List) Northbound API username (see [below for nested schema](#nestedatt--api_users))
 - `id` (String) The path of the retrieved object.
-- `ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ipv4s))
 - `peer_filter_ipv4_access_list` (String) Access-list for IPv4 peer filtering
+- `state_sync_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--state_sync_ipv4s))
 
 <a id="nestedatt--api_users"></a>
 ### Nested Schema for `api_users`
@@ -44,8 +44,8 @@ Read-Only:
 - `user_name` (String) Northbound API username
 
 
-<a id="nestedatt--ipv4s"></a>
-### Nested Schema for `ipv4s`
+<a id="nestedatt--state_sync_ipv4s"></a>
+### Nested Schema for `state_sync_ipv4s`
 
 Read-Only:
 

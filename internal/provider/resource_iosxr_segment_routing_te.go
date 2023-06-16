@@ -75,21 +75,21 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					int64validator.Between(0, 1576800000),
 				},
 			},
-			"pcc_dead_timer_interval": schema.Int64Attribute{
+			"pcc_dead_timer": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Amount of time after which the peer can declare this session down, if no PCEP message has been received").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"pcc_initiated_state_interval": schema.Int64Attribute{
+			"pcc_initiated_state": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up").AddIntegerRangeDescription(0, 86400).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 86400),
 				},
 			},
-			"pcc_initiated_orphan_interval": schema.Int64Attribute{
+			"pcc_initiated_orphan": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Amount of time that PCE initiated policy remains delegated to a peer that has gone down").AddIntegerRangeDescription(0, 180).String,
 				Optional:            true,
 				Validators: []validator.Int64{
@@ -120,11 +120,11 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast": schema.BoolAttribute{
+						"dynamic_anycast_sid_inclusion": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies").String,
 							Optional:            true,
 						},
-						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type": schema.StringAttribute{
+						"dynamic_metric_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Metric Type").AddStringEnumDescription("hopcount", "igp", "latency", "te").String,
 							Optional:            true,
 							Validators: []validator.String{

@@ -21,11 +21,12 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"),
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"),
-					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.af_name", "ipv4"),
-					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay_forwarding_delay", "30"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive", "true"),
 					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection_for_for_access_list", "true"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec", "true"),
+					resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection", "true"),
 				),
 			},
 			{
@@ -51,7 +52,6 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrMPLSLDPConfig_minimum() string {
 	return `
 	resource "iosxr_mpls_ldp" "test" {
-		session_protection_for_for_access_list = "true"
   		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
@@ -70,12 +70,13 @@ func testAccIosxrMPLSLDPConfig_all() string {
 		capabilities_sac_ipv4_disable = true
 		mldp_logging_notifications = true
 		mldp_address_families = [{
-			af_name = "ipv4"
-			make_before_break_delay_forwarding_delay = 30
+			name = "ipv4"
+			make_before_break_delay = 30
+			forwarding_recursive = true
 			forwarding_recursive_route_policy = "ROUTE_POLICY_1"
-			recursive_fec_enable = true
+			recursive_fec = true
 		}]
-		session_protection_for_for_access_list = "true"
+		session_protection = true
   		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`

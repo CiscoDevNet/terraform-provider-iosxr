@@ -53,7 +53,7 @@ func (d *PCEDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "IPv6 address",
 				Computed:            true,
 			},
-			"ipv4s": schema.ListNestedAttribute{
+			"state_sync_ipv4s": schema.ListNestedAttribute{
 				MarkdownDescription: "IPv4 address",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

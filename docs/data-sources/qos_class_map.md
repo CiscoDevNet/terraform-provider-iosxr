@@ -3,12 +3,12 @@
 page_title: "iosxr_qos_class_map Data Source - terraform-provider-iosxr"
 subcategory: "QoS"
 description: |-
-  This data source can read the QOS Class Map configuration.
+  This data source can read the QoS Class Map configuration.
 ---
 
 # iosxr_qos_class_map (Data Source)
 
-This data source can read the QOS Class Map configuration.
+This data source can read the QoS Class Map configuration.
 
 ## Example Usage
 
@@ -34,7 +34,7 @@ data "iosxr_qos_class_map" "example" {
 - `description` (String) Set description for this class-map
 - `id` (String) The path of the retrieved object.
 - `match_any` (Boolean) Match any match criteria (default)
-- `match_dscp_value` (String) DSCP value
-- `match_mpls_experimental_topmost_label` (Number) MPLS experimental label
-- `match_qos_group_id` (String) QoS Group Id
-- `match_traffic_class_id` (String) Traffic Class Id
+- `match_dscp` (String) DSCP value
+- `match_mpls_experimental_topmost` (Number) MPLS experimental label
+- `match_qos_group` (String) QoS Group Id
+- `match_traffic_class` (String) Traffic Class Id

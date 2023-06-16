@@ -8,19 +8,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccIosxrQOSClassMap(t *testing.T) {
+func TestAccIosxrQoSClassMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrQOSClassMapConfig_all(),
+				Config: testAccIosxrQoSClassMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "class_map_name", "TEST"),
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_any", "true"),
 					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "description", "description1"),
-					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_dscp_value", "46"),
-					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_mpls_experimental_topmost_label", "5"),
+					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_dscp", "46"),
+					resource.TestCheckResourceAttr("iosxr_qos_class_map.test", "match_mpls_experimental_topmost", "5"),
 				),
 			},
 			{
@@ -32,7 +32,7 @@ func TestAccIosxrQOSClassMap(t *testing.T) {
 	})
 }
 
-func testAccIosxrQOSClassMapConfig_minimum() string {
+func testAccIosxrQoSClassMapConfig_minimum() string {
 	return `
 	resource "iosxr_qos_class_map" "test" {
 		class_map_name = "TEST"
@@ -40,14 +40,14 @@ func testAccIosxrQOSClassMapConfig_minimum() string {
 	`
 }
 
-func testAccIosxrQOSClassMapConfig_all() string {
+func testAccIosxrQoSClassMapConfig_all() string {
 	return `
 	resource "iosxr_qos_class_map" "test" {
 		class_map_name = "TEST"
 		match_any = true
 		description = "description1"
-		match_dscp_value = "46"
-		match_mpls_experimental_topmost_label = 5
+		match_dscp = "46"
+		match_mpls_experimental_topmost = 5
 	}
 	`
 }

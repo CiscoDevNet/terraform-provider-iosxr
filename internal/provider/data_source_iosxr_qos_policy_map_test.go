@@ -8,36 +8,36 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccDataSourceIosxrQOSPolicyMap(t *testing.T) {
+func TestAccDataSourceIosxrQoSPolicyMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrQOSPolicyMapConfig,
+				Config: testAccDataSourceIosxrQoSPolicyMapConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_name", "class-default"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_type", "qos"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_set_mpls_experimental_topmost", "0"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "class_set_dscp", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "set_mpls_experimental_topmost", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "set_dscp", "0"),
 				),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrQOSPolicyMapConfig = `
+const testAccDataSourceIosxrQoSPolicyMapConfig = `
 
 resource "iosxr_qos_policy_map" "test" {
 	policy_map_name = "core-ingress-classifier"
-	class_name = "class-default"
-	class_type = "qos"
-	class_set_mpls_experimental_topmost = 0
-	class_set_dscp = "0"
+	name = "class-default"
+	type = "qos"
+	set_mpls_experimental_topmost = 0
+	set_dscp = "0"
 }
 
 data "iosxr_qos_policy_map" "test" {
 	policy_map_name = "core-ingress-classifier"
+	name = "class-default"
+	type = "qos"
 	depends_on = [iosxr_qos_policy_map.test]
 }
 `

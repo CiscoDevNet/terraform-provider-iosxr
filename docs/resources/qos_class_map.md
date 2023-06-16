@@ -3,22 +3,22 @@
 page_title: "iosxr_qos_class_map Resource - terraform-provider-iosxr"
 subcategory: "QoS"
 description: |-
-  This resource can manage the QOS Class Map configuration.
+  This resource can manage the QoS Class Map configuration.
 ---
 
 # iosxr_qos_class_map (Resource)
 
-This resource can manage the QOS Class Map configuration.
+This resource can manage the QoS Class Map configuration.
 
 ## Example Usage
 
 ```terraform
 resource "iosxr_qos_class_map" "example" {
-  class_map_name                        = "TEST"
-  match_any                             = true
-  description                           = "description1"
-  match_dscp_value                      = "46"
-  match_mpls_experimental_topmost_label = 5
+  class_map_name                  = "TEST"
+  match_any                       = true
+  description                     = "description1"
+  match_dscp                      = "46"
+  match_mpls_experimental_topmost = 5
 }
 ```
 
@@ -34,11 +34,11 @@ resource "iosxr_qos_class_map" "example" {
 - `description` (String) Set description for this class-map
 - `device` (String) A device name from the provider configuration.
 - `match_any` (Boolean) Match any match criteria (default)
-- `match_dscp_value` (String) DSCP value
-- `match_mpls_experimental_topmost_label` (Number) MPLS experimental label
+- `match_dscp` (String) DSCP value
+- `match_mpls_experimental_topmost` (Number) MPLS experimental label
   - Range: `0`-`7`
-- `match_qos_group_id` (String) QoS Group Id
-- `match_traffic_class_id` (String) Traffic Class Id
+- `match_qos_group` (String) QoS Group Id
+- `match_traffic_class` (String) Traffic Class Id
 
 ### Read-Only
 

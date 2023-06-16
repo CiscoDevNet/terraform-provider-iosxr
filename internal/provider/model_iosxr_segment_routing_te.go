@@ -14,39 +14,39 @@ import (
 )
 
 type SegmentRoutingTE struct {
-	Device                     types.String                     `tfsdk:"device"`
-	Id                         types.String                     `tfsdk:"id"`
-	LoggingPcepPeerStatus      types.Bool                       `tfsdk:"logging_pcep_peer_status"`
-	LoggingPolicyStatus        types.Bool                       `tfsdk:"logging_policy_status"`
-	PccReportAll               types.Bool                       `tfsdk:"pcc_report_all"`
-	PccSourceAddress           types.String                     `tfsdk:"pcc_source_address"`
-	PccDelegationTimeout       types.Int64                      `tfsdk:"pcc_delegation_timeout"`
-	PccDeadTimerInterval       types.Int64                      `tfsdk:"pcc_dead_timer_interval"`
-	PccInitiatedStateInterval  types.Int64                      `tfsdk:"pcc_initiated_state_interval"`
-	PccInitiatedOrphanInterval types.Int64                      `tfsdk:"pcc_initiated_orphan_interval"`
-	PcePeers                   []SegmentRoutingTEPcePeers       `tfsdk:"pce_peers"`
-	OnDemandColors             []SegmentRoutingTEOnDemandColors `tfsdk:"on_demand_colors"`
-	Policies                   []SegmentRoutingTEPolicies       `tfsdk:"policies"`
+	Device                types.String                     `tfsdk:"device"`
+	Id                    types.String                     `tfsdk:"id"`
+	LoggingPcepPeerStatus types.Bool                       `tfsdk:"logging_pcep_peer_status"`
+	LoggingPolicyStatus   types.Bool                       `tfsdk:"logging_policy_status"`
+	PccReportAll          types.Bool                       `tfsdk:"pcc_report_all"`
+	PccSourceAddress      types.String                     `tfsdk:"pcc_source_address"`
+	PccDelegationTimeout  types.Int64                      `tfsdk:"pcc_delegation_timeout"`
+	PccDeadTimer          types.Int64                      `tfsdk:"pcc_dead_timer"`
+	PccInitiatedState     types.Int64                      `tfsdk:"pcc_initiated_state"`
+	PccInitiatedOrphan    types.Int64                      `tfsdk:"pcc_initiated_orphan"`
+	PcePeers              []SegmentRoutingTEPcePeers       `tfsdk:"pce_peers"`
+	OnDemandColors        []SegmentRoutingTEOnDemandColors `tfsdk:"on_demand_colors"`
+	Policies              []SegmentRoutingTEPolicies       `tfsdk:"policies"`
 }
 type SegmentRoutingTEPcePeers struct {
 	PceAddress types.String `tfsdk:"pce_address"`
 	Precedence types.Int64  `tfsdk:"precedence"`
 }
 type SegmentRoutingTEOnDemandColors struct {
-	OnDemandColorDynMplsOnDemandColorDynMplsAnycast          types.Bool   `tfsdk:"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast"`
-	OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType types.String `tfsdk:"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type"`
-	Color                                                    types.Int64  `tfsdk:"color"`
-	Srv6Enable                                               types.Bool   `tfsdk:"srv6_enable"`
-	Srv6LocatorName                                          types.String `tfsdk:"srv6_locator_name"`
-	Srv6LocatorBehavior                                      types.String `tfsdk:"srv6_locator_behavior"`
-	Srv6LocatorBindingSidType                                types.String `tfsdk:"srv6_locator_binding_sid_type"`
-	SourceAddress                                            types.String `tfsdk:"source_address"`
-	SourceAddressType                                        types.String `tfsdk:"source_address_type"`
-	EffectiveMetricEnable                                    types.Bool   `tfsdk:"effective_metric_enable"`
-	EffectiveMetricValue                                     types.Int64  `tfsdk:"effective_metric_value"`
-	EffectiveMetricType                                      types.String `tfsdk:"effective_metric_type"`
-	ConstraintSegmentsProtectionType                         types.String `tfsdk:"constraint_segments_protection_type"`
-	ConstraintSegmentsSidAlgorithm                           types.Int64  `tfsdk:"constraint_segments_sid_algorithm"`
+	DynamicAnycastSidInclusion       types.Bool   `tfsdk:"dynamic_anycast_sid_inclusion"`
+	DynamicMetricType                types.String `tfsdk:"dynamic_metric_type"`
+	Color                            types.Int64  `tfsdk:"color"`
+	Srv6Enable                       types.Bool   `tfsdk:"srv6_enable"`
+	Srv6LocatorName                  types.String `tfsdk:"srv6_locator_name"`
+	Srv6LocatorBehavior              types.String `tfsdk:"srv6_locator_behavior"`
+	Srv6LocatorBindingSidType        types.String `tfsdk:"srv6_locator_binding_sid_type"`
+	SourceAddress                    types.String `tfsdk:"source_address"`
+	SourceAddressType                types.String `tfsdk:"source_address_type"`
+	EffectiveMetricEnable            types.Bool   `tfsdk:"effective_metric_enable"`
+	EffectiveMetricValue             types.Int64  `tfsdk:"effective_metric_value"`
+	EffectiveMetricType              types.String `tfsdk:"effective_metric_type"`
+	ConstraintSegmentsProtectionType types.String `tfsdk:"constraint_segments_protection_type"`
+	ConstraintSegmentsSidAlgorithm   types.Int64  `tfsdk:"constraint_segments_sid_algorithm"`
 }
 type SegmentRoutingTEPolicies struct {
 	PolicyName                 types.String `tfsdk:"policy_name"`
@@ -88,14 +88,14 @@ func (data SegmentRoutingTE) toBody(ctx context.Context) string {
 	if !data.PccDelegationTimeout.IsNull() && !data.PccDelegationTimeout.IsUnknown() {
 		body, _ = sjson.Set(body, "pcc.delegation-timeout", strconv.FormatInt(data.PccDelegationTimeout.ValueInt64(), 10))
 	}
-	if !data.PccDeadTimerInterval.IsNull() && !data.PccDeadTimerInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "pcc.dead-timer-interval", strconv.FormatInt(data.PccDeadTimerInterval.ValueInt64(), 10))
+	if !data.PccDeadTimer.IsNull() && !data.PccDeadTimer.IsUnknown() {
+		body, _ = sjson.Set(body, "pcc.dead-timer-interval", strconv.FormatInt(data.PccDeadTimer.ValueInt64(), 10))
 	}
-	if !data.PccInitiatedStateInterval.IsNull() && !data.PccInitiatedStateInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "pcc.initiated-state-interval", strconv.FormatInt(data.PccInitiatedStateInterval.ValueInt64(), 10))
+	if !data.PccInitiatedState.IsNull() && !data.PccInitiatedState.IsUnknown() {
+		body, _ = sjson.Set(body, "pcc.initiated-state-interval", strconv.FormatInt(data.PccInitiatedState.ValueInt64(), 10))
 	}
-	if !data.PccInitiatedOrphanInterval.IsNull() && !data.PccInitiatedOrphanInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "pcc.initiated-orphan-interval", strconv.FormatInt(data.PccInitiatedOrphanInterval.ValueInt64(), 10))
+	if !data.PccInitiatedOrphan.IsNull() && !data.PccInitiatedOrphan.IsUnknown() {
+		body, _ = sjson.Set(body, "pcc.initiated-orphan-interval", strconv.FormatInt(data.PccInitiatedOrphan.ValueInt64(), 10))
 	}
 	if len(data.PcePeers) > 0 {
 		body, _ = sjson.Set(body, "pcc.pce-peers.pce-peer", []interface{}{})
@@ -111,13 +111,13 @@ func (data SegmentRoutingTE) toBody(ctx context.Context) string {
 	if len(data.OnDemandColors) > 0 {
 		body, _ = sjson.Set(body, "on-demand-colors.on-demand-color", []interface{}{})
 		for index, item := range data.OnDemandColors {
-			if !item.OnDemandColorDynMplsOnDemandColorDynMplsAnycast.IsNull() && !item.OnDemandColorDynMplsOnDemandColorDynMplsAnycast.IsUnknown() {
-				if item.OnDemandColorDynMplsOnDemandColorDynMplsAnycast.ValueBool() {
+			if !item.DynamicAnycastSidInclusion.IsNull() && !item.DynamicAnycastSidInclusion.IsUnknown() {
+				if item.DynamicAnycastSidInclusion.ValueBool() {
 					body, _ = sjson.Set(body, "on-demand-colors.on-demand-color"+"."+strconv.Itoa(index)+"."+"on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast", map[string]string{})
 				}
 			}
-			if !item.OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType.IsNull() && !item.OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType.IsUnknown() {
-				body, _ = sjson.Set(body, "on-demand-colors.on-demand-color"+"."+strconv.Itoa(index)+"."+"on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type", item.OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType.ValueString())
+			if !item.DynamicMetricType.IsNull() && !item.DynamicMetricType.IsUnknown() {
+				body, _ = sjson.Set(body, "on-demand-colors.on-demand-color"+"."+strconv.Itoa(index)+"."+"on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type", item.DynamicMetricType.ValueString())
 			}
 			if !item.Color.IsNull() && !item.Color.IsUnknown() {
 				body, _ = sjson.Set(body, "on-demand-colors.on-demand-color"+"."+strconv.Itoa(index)+"."+"color", strconv.FormatInt(item.Color.ValueInt64(), 10))
@@ -239,20 +239,20 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.PccDelegationTimeout = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.dead-timer-interval"); value.Exists() && !data.PccDeadTimerInterval.IsNull() {
-		data.PccDeadTimerInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "pcc.dead-timer-interval"); value.Exists() && !data.PccDeadTimer.IsNull() {
+		data.PccDeadTimer = types.Int64Value(value.Int())
 	} else {
-		data.PccDeadTimerInterval = types.Int64Null()
+		data.PccDeadTimer = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.initiated-state-interval"); value.Exists() && !data.PccInitiatedStateInterval.IsNull() {
-		data.PccInitiatedStateInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "pcc.initiated-state-interval"); value.Exists() && !data.PccInitiatedState.IsNull() {
+		data.PccInitiatedState = types.Int64Value(value.Int())
 	} else {
-		data.PccInitiatedStateInterval = types.Int64Null()
+		data.PccInitiatedState = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "pcc.initiated-orphan-interval"); value.Exists() && !data.PccInitiatedOrphanInterval.IsNull() {
-		data.PccInitiatedOrphanInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "pcc.initiated-orphan-interval"); value.Exists() && !data.PccInitiatedOrphan.IsNull() {
+		data.PccInitiatedOrphan = types.Int64Value(value.Int())
 	} else {
-		data.PccInitiatedOrphanInterval = types.Int64Null()
+		data.PccInitiatedOrphan = types.Int64Null()
 	}
 	for i := range data.PcePeers {
 		keys := [...]string{"pce-address"}
@@ -311,19 +311,19 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); !data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast.IsNull() {
+		if value := r.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); !data.OnDemandColors[i].DynamicAnycastSidInclusion.IsNull() {
 			if value.Exists() {
-				data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast = types.BoolValue(true)
+				data.OnDemandColors[i].DynamicAnycastSidInclusion = types.BoolValue(true)
 			} else {
-				data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast = types.BoolValue(false)
+				data.OnDemandColors[i].DynamicAnycastSidInclusion = types.BoolValue(false)
 			}
 		} else {
-			data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast = types.BoolNull()
+			data.OnDemandColors[i].DynamicAnycastSidInclusion = types.BoolNull()
 		}
-		if value := r.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && !data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType.IsNull() {
-			data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType = types.StringValue(value.String())
+		if value := r.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); value.Exists() && !data.OnDemandColors[i].DynamicMetricType.IsNull() {
+			data.OnDemandColors[i].DynamicMetricType = types.StringValue(value.String())
 		} else {
-			data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType = types.StringNull()
+			data.OnDemandColors[i].DynamicMetricType = types.StringNull()
 		}
 		if value := r.Get("color"); value.Exists() && !data.OnDemandColors[i].Color.IsNull() {
 			data.OnDemandColors[i].Color = types.Int64Value(value.Int())
@@ -497,13 +497,13 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
 		data.PccDelegationTimeout = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "pcc.dead-timer-interval"); value.Exists() {
-		data.PccDeadTimerInterval = types.Int64Value(value.Int())
+		data.PccDeadTimer = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "pcc.initiated-state-interval"); value.Exists() {
-		data.PccInitiatedStateInterval = types.Int64Value(value.Int())
+		data.PccInitiatedState = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "pcc.initiated-orphan-interval"); value.Exists() {
-		data.PccInitiatedOrphanInterval = types.Int64Value(value.Int())
+		data.PccInitiatedOrphan = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "pcc.pce-peers.pce-peer"); value.Exists() {
 		data.PcePeers = make([]SegmentRoutingTEPcePeers, 0)
@@ -524,12 +524,12 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := SegmentRoutingTEOnDemandColors{}
 			if cValue := v.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); cValue.Exists() {
-				item.OnDemandColorDynMplsOnDemandColorDynMplsAnycast = types.BoolValue(true)
+				item.DynamicAnycastSidInclusion = types.BoolValue(true)
 			} else {
-				item.OnDemandColorDynMplsOnDemandColorDynMplsAnycast = types.BoolValue(false)
+				item.DynamicAnycastSidInclusion = types.BoolValue(false)
 			}
 			if cValue := v.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); cValue.Exists() {
-				item.OnDemandColorDynMplsOnDemandColorDynMplsMetricMetricType = types.StringValue(cValue.String())
+				item.DynamicMetricType = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("color"); cValue.Exists() {
 				item.Color = types.Int64Value(cValue.Int())
@@ -731,7 +731,7 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string 
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast.IsNull() && !data.OnDemandColors[i].OnDemandColorDynMplsOnDemandColorDynMplsAnycast.ValueBool() {
+		if !data.OnDemandColors[i].DynamicAnycastSidInclusion.IsNull() && !data.OnDemandColors[i].DynamicAnycastSidInclusion.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast", data.getPath(), keyString))
 		}
 		if !data.OnDemandColors[i].Srv6Enable.IsNull() && !data.OnDemandColors[i].Srv6Enable.ValueBool() {

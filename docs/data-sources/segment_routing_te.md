@@ -30,10 +30,10 @@ data "iosxr_segment_routing_te" "example" {
 - `logging_pcep_peer_status` (Boolean) Enable logging for pcep peer status
 - `logging_policy_status` (Boolean) Enable logging for policy status
 - `on_demand_colors` (Attributes List) On-demand color configuration (see [below for nested schema](#nestedatt--on_demand_colors))
-- `pcc_dead_timer_interval` (Number) Amount of time after which the peer can declare this session down, if no PCEP message has been received
+- `pcc_dead_timer` (Number) Amount of time after which the peer can declare this session down, if no PCEP message has been received
 - `pcc_delegation_timeout` (Number) Maximum time delegated SR-TE policies can remain up without an active connection to a PCE
-- `pcc_initiated_orphan_interval` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
-- `pcc_initiated_state_interval` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
+- `pcc_initiated_orphan` (Number) Amount of time that PCE initiated policy remains delegated to a peer that has gone down
+- `pcc_initiated_state` (Number) Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up
 - `pcc_report_all` (Boolean) Report all local SR policies to connected PCEP peers
 - `pcc_source_address` (String) Local source IP address to use on PCEP sessions
 - `pce_peers` (Attributes List) PCE peer (see [below for nested schema](#nestedatt--pce_peers))
@@ -47,11 +47,11 @@ Read-Only:
 - `color` (Number) Color
 - `constraint_segments_protection_type` (String) Protection Type
 - `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs
+- `dynamic_anycast_sid_inclusion` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
+- `dynamic_metric_type` (String) Metric Type
 - `effective_metric_enable` (Boolean) True only
 - `effective_metric_type` (String) Metric type, advertised to other protocols
 - `effective_metric_value` (Number) Integer value of metric
-- `on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
-- `on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type` (String) Metric Type
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
 - `srv6_enable` (Boolean) True only

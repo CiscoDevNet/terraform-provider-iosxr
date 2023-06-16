@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &QOSClassMapDataSource{}
-	_ datasource.DataSourceWithConfigure = &QOSClassMapDataSource{}
+	_ datasource.DataSource              = &QoSClassMapDataSource{}
+	_ datasource.DataSourceWithConfigure = &QoSClassMapDataSource{}
 )
 
-func NewQOSClassMapDataSource() datasource.DataSource {
-	return &QOSClassMapDataSource{}
+func NewQoSClassMapDataSource() datasource.DataSource {
+	return &QoSClassMapDataSource{}
 }
 
-type QOSClassMapDataSource struct {
+type QoSClassMapDataSource struct {
 	client *client.Client
 }
 
-func (d *QOSClassMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *QoSClassMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_qos_class_map"
 }
 
-func (d *QOSClassMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *QoSClassMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the QOS Class Map configuration.",
+		MarkdownDescription: "This data source can read the QoS Class Map configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -57,19 +57,19 @@ func (d *QOSClassMapDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "Set description for this class-map",
 				Computed:            true,
 			},
-			"match_dscp_value": schema.StringAttribute{
+			"match_dscp": schema.StringAttribute{
 				MarkdownDescription: "DSCP value",
 				Computed:            true,
 			},
-			"match_mpls_experimental_topmost_label": schema.Int64Attribute{
+			"match_mpls_experimental_topmost": schema.Int64Attribute{
 				MarkdownDescription: "MPLS experimental label",
 				Computed:            true,
 			},
-			"match_qos_group_id": schema.StringAttribute{
+			"match_qos_group": schema.StringAttribute{
 				MarkdownDescription: "QoS Group Id",
 				Computed:            true,
 			},
-			"match_traffic_class_id": schema.StringAttribute{
+			"match_traffic_class": schema.StringAttribute{
 				MarkdownDescription: "Traffic Class Id",
 				Computed:            true,
 			},
@@ -77,7 +77,7 @@ func (d *QOSClassMapDataSource) Schema(ctx context.Context, req datasource.Schem
 	}
 }
 
-func (d *QOSClassMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *QoSClassMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -85,8 +85,8 @@ func (d *QOSClassMapDataSource) Configure(_ context.Context, req datasource.Conf
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *QOSClassMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config QOSClassMap
+func (d *QoSClassMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config QoSClassMap
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

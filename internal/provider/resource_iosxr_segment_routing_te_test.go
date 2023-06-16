@@ -21,13 +21,13 @@ func TestAccIosxrSegmentRoutingTE(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_report_all", "true"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_source_address", "88.88.88.8"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_delegation_timeout", "10"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_dead_timer_interval", "60"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_initiated_state_interval", "15"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_initiated_orphan_interval", "10"),
+					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_dead_timer", "60"),
+					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_initiated_state", "15"),
+					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_initiated_orphan", "10"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers.0.pce_address", "66.66.66.6"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers.0.precedence", "122"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast", "true"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type", "te"),
+					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_anycast_sid_inclusion", "true"),
+					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_metric_type", "te"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.color", "266"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_name", "LOC11"),
 					resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_behavior", "ub6-insert-reduced"),
@@ -73,16 +73,16 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 		pcc_report_all = true
 		pcc_source_address = "88.88.88.8"
 		pcc_delegation_timeout = 10
-		pcc_dead_timer_interval = 60
-		pcc_initiated_state_interval = 15
-		pcc_initiated_orphan_interval = 10
+		pcc_dead_timer = 60
+		pcc_initiated_state = 15
+		pcc_initiated_orphan = 10
 		pce_peers = [{
 			pce_address = "66.66.66.6"
 			precedence = 122
 		}]
 		on_demand_colors = [{
-			on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast = true
-			on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type = "te"
+			dynamic_anycast_sid_inclusion = true
+			dynamic_metric_type = "te"
 			color = 266
 			srv6_locator_name = "LOC11"
 			srv6_locator_behavior = "ub6-insert-reduced"

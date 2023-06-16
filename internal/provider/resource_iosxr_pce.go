@@ -68,7 +68,7 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 				},
 			},
-			"ipv4s": schema.ListNestedAttribute{
+			"state_sync_ipv4s": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

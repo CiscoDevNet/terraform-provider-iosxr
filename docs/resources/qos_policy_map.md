@@ -3,22 +3,22 @@
 page_title: "iosxr_qos_policy_map Resource - terraform-provider-iosxr"
 subcategory: "QoS"
 description: |-
-  This resource can manage the QOS Policy Map configuration.
+  This resource can manage the QoS Policy Map configuration.
 ---
 
 # iosxr_qos_policy_map (Resource)
 
-This resource can manage the QOS Policy Map configuration.
+This resource can manage the QoS Policy Map configuration.
 
 ## Example Usage
 
 ```terraform
 resource "iosxr_qos_policy_map" "example" {
-  policy_map_name                     = "core-ingress-classifier"
-  class_name                          = "class-default"
-  class_type                          = "qos"
-  class_set_mpls_experimental_topmost = 0
-  class_set_dscp                      = "0"
+  policy_map_name               = "core-ingress-classifier"
+  name                          = "class-default"
+  type                          = "qos"
+  set_mpls_experimental_topmost = 0
+  set_dscp                      = "0"
 }
 ```
 
@@ -27,37 +27,37 @@ resource "iosxr_qos_policy_map" "example" {
 
 ### Required
 
+- `name` (String) Name of the class-map
 - `policy_map_name` (String) Name of the policymap
+- `type` (String) The type of class-map
+  - Choices: `qos`, `traffic`
 
 ### Optional
 
-- `class_bandwidth_remaining_unit` (String) Bandwidth value unit
+- `bandwidth_remaining_unit` (String) Bandwidth value unit
   - Choices: `percent`, `ratio`
-- `class_bandwidth_remaining_value` (String) Bandwidth value
-- `class_name` (String) Name of the class-map
-- `class_police_rate_unit` (String) Rate unit
-  - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`, `pps`
-- `class_police_rate_value` (String) Committed Information Rate
-- `class_priority_level` (Number) Configure a priority level
-  - Range: `1`-`7`
-- `class_queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--class_queue_limits))
-- `class_service_policy_name` (String) Name of the child service policy
-- `class_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
-- `class_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
-  - Range: `0`-`7`
-- `class_shape_average_rate_unit` (String) Shape rate unit
-  - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`
-- `class_shape_average_rate_value` (String)
-- `class_type` (String) The type of class-map
-  - Choices: `qos`, `traffic`
+- `bandwidth_remaining_value` (String) Bandwidth value
 - `device` (String) A device name from the provider configuration.
+- `police_rate_unit` (String) Rate unit
+  - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`, `pps`
+- `police_rate_value` (String) Committed Information Rate
+- `priority_level` (Number) Configure a priority level
+  - Range: `1`-`7`
+- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--queue_limits))
+- `service_policy_name` (String) Name of the child service policy
+- `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+  - Range: `0`-`7`
+- `shape_average_rate_unit` (String) Shape rate unit
+  - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`
+- `shape_average_rate_value` (String)
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--class_queue_limits"></a>
-### Nested Schema for `class_queue_limits`
+<a id="nestedatt--queue_limits"></a>
+### Nested Schema for `queue_limits`
 
 Optional:
 
@@ -70,5 +70,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]"
+terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]/class[name=class-default][type=qos]"
 ```

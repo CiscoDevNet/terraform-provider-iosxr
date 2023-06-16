@@ -77,6 +77,18 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				MarkdownDescription: "Disable exchanging IPv4 prefix label bindings",
 				Computed:            true,
 			},
+			"capabilities_sac_ipv6_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging IPv6 prefix label bindings",
+				Computed:            true,
+			},
+			"capabilities_sac_fec128_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging PW FEC128 label bindings",
+				Computed:            true,
+			},
+			"capabilities_sac_fec129_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable exchanging PW FEC129 label bindings",
+				Computed:            true,
+			},
 			"mldp_logging_notifications": schema.BoolAttribute{
 				MarkdownDescription: "MLDP logging notifications",
 				Computed:            true,
@@ -86,27 +98,31 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"af_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Configure Address Family and its parameters",
 							Computed:            true,
 						},
-						"make_before_break_delay_forwarding_delay": schema.Int64Attribute{
+						"make_before_break_delay": schema.Int64Attribute{
 							MarkdownDescription: "MBB delay",
+							Computed:            true,
+						},
+						"forwarding_recursive": schema.BoolAttribute{
+							MarkdownDescription: "Enable recursive forwarding",
 							Computed:            true,
 						},
 						"forwarding_recursive_route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route policy",
 							Computed:            true,
 						},
-						"recursive_fec_enable": schema.BoolAttribute{
+						"recursive_fec": schema.BoolAttribute{
 							MarkdownDescription: "MLDP Recursive FEC enable",
 							Computed:            true,
 						},
 					},
 				},
 			},
-			"session_protection_for_for_access_list": schema.StringAttribute{
-				MarkdownDescription: "IP Access list to specify LDP Peers",
+			"session_protection": schema.BoolAttribute{
+				MarkdownDescription: "Configure session protection parameters",
 				Computed:            true,
 			},
 		},

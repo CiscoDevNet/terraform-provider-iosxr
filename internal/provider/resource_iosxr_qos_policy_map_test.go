@@ -8,46 +8,47 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 )
 
-func TestAccIosxrQOSPolicyMap(t *testing.T) {
+func TestAccIosxrQoSPolicyMap(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrQOSPolicyMapConfig_all(),
+				Config: testAccIosxrQoSPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "policy_map_name", "core-ingress-classifier"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "class_name", "class-default"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "class_type", "qos"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "class_set_mpls_experimental_topmost", "0"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "class_set_dscp", "0"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "name", "class-default"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "type", "qos"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "set_mpls_experimental_topmost", "0"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "set_dscp", "0"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_qos_policy_map.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]",
+				ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]/class[name=class-default][type=qos]",
 			},
 		},
 	})
 }
 
-func testAccIosxrQOSPolicyMapConfig_minimum() string {
+func testAccIosxrQoSPolicyMapConfig_minimum() string {
 	return `
 	resource "iosxr_qos_policy_map" "test" {
 		policy_map_name = "core-ingress-classifier"
+		name = "class-default"
+		type = "qos"
 	}
 	`
 }
 
-func testAccIosxrQOSPolicyMapConfig_all() string {
+func testAccIosxrQoSPolicyMapConfig_all() string {
 	return `
 	resource "iosxr_qos_policy_map" "test" {
 		policy_map_name = "core-ingress-classifier"
-		class_name = "class-default"
-		class_type = "qos"
-		class_set_mpls_experimental_topmost = 0
-		class_set_dscp = "0"
+		name = "class-default"
+		type = "qos"
+		set_mpls_experimental_topmost = 0
+		set_dscp = "0"
 	}
 	`
 }

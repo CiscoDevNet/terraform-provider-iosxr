@@ -21,24 +21,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*QOSPolicyMapResource)(nil)
+var _ resource.Resource = (*QoSPolicyMapResource)(nil)
 
-func NewQOSPolicyMapResource() resource.Resource {
-	return &QOSPolicyMapResource{}
+func NewQoSPolicyMapResource() resource.Resource {
+	return &QoSPolicyMapResource{}
 }
 
-type QOSPolicyMapResource struct {
+type QoSPolicyMapResource struct {
 	client *client.Client
 }
 
-func (r *QOSPolicyMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *QoSPolicyMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_qos_policy_map"
 }
 
-func (r *QOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *QoSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the QOS Policy Map configuration.",
+		MarkdownDescription: "This resource can manage the QoS Policy Map configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -59,39 +59,45 @@ func (r *QOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"class_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the class-map").String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
 				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
-			"class_type": schema.StringAttribute{
+			"type": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The type of class-map").AddStringEnumDescription("qos", "traffic").String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("qos", "traffic"),
 				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
 			},
-			"class_set_mpls_experimental_topmost": schema.Int64Attribute{
+			"set_mpls_experimental_topmost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
-			"class_set_dscp": schema.StringAttribute{
+			"set_dscp": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
 				Optional:            true,
 			},
-			"class_priority_level": schema.Int64Attribute{
+			"priority_level": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure a priority level").AddIntegerRangeDescription(1, 7).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 7),
 				},
 			},
-			"class_queue_limits": schema.ListNestedAttribute{
+			"queue_limits": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure queue-limit (taildrop threshold) for this class").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -110,43 +116,43 @@ func (r *QOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 					},
 				},
 			},
-			"class_service_policy_name": schema.StringAttribute{
+			"service_policy_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the child service policy").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
 				},
 			},
-			"class_police_rate_value": schema.StringAttribute{
+			"police_rate_value": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Committed Information Rate").String,
 				Optional:            true,
 			},
-			"class_police_rate_unit": schema.StringAttribute{
+			"police_rate_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
 				},
 			},
-			"class_shape_average_rate_value": schema.StringAttribute{
+			"shape_average_rate_value": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("").String,
 				Optional:            true,
 			},
-			"class_shape_average_rate_unit": schema.StringAttribute{
+			"shape_average_rate_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Shape rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
 				},
 			},
-			"class_bandwidth_remaining_unit": schema.StringAttribute{
+			"bandwidth_remaining_unit": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("percent", "ratio"),
 				},
 			},
-			"class_bandwidth_remaining_value": schema.StringAttribute{
+			"bandwidth_remaining_value": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value").String,
 				Optional:            true,
 			},
@@ -154,7 +160,7 @@ func (r *QOSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *QOSPolicyMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *QoSPolicyMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -162,8 +168,8 @@ func (r *QOSPolicyMapResource) Configure(ctx context.Context, req resource.Confi
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *QOSPolicyMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan QOSPolicyMap
+func (r *QoSPolicyMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan QoSPolicyMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -201,8 +207,8 @@ func (r *QOSPolicyMapResource) Create(ctx context.Context, req resource.CreateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSPolicyMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state QOSPolicyMap
+func (r *QoSPolicyMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state QoSPolicyMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -227,8 +233,8 @@ func (r *QOSPolicyMapResource) Read(ctx context.Context, req resource.ReadReques
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state QOSPolicyMap
+func (r *QoSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state QoSPolicyMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -278,8 +284,8 @@ func (r *QOSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state QOSPolicyMap
+func (r *QoSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state QoSPolicyMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -301,6 +307,6 @@ func (r *QOSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRe
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *QOSPolicyMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *QoSPolicyMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

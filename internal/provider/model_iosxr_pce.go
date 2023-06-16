@@ -14,17 +14,17 @@ import (
 )
 
 type PCE struct {
-	Device                   types.String  `tfsdk:"device"`
-	Id                       types.String  `tfsdk:"id"`
-	AddressIpv4              types.String  `tfsdk:"address_ipv4"`
-	AddressIpv6              types.String  `tfsdk:"address_ipv6"`
-	Ipv4s                    []PCEIpv4s    `tfsdk:"ipv4s"`
-	PeerFilterIpv4AccessList types.String  `tfsdk:"peer_filter_ipv4_access_list"`
-	ApiAuthenticationDigest  types.Bool    `tfsdk:"api_authentication_digest"`
-	ApiSiblingIpv4           types.String  `tfsdk:"api_sibling_ipv4"`
-	ApiUsers                 []PCEApiUsers `tfsdk:"api_users"`
+	Device                   types.String        `tfsdk:"device"`
+	Id                       types.String        `tfsdk:"id"`
+	AddressIpv4              types.String        `tfsdk:"address_ipv4"`
+	AddressIpv6              types.String        `tfsdk:"address_ipv6"`
+	StateSyncIpv4s           []PCEStateSyncIpv4s `tfsdk:"state_sync_ipv4s"`
+	PeerFilterIpv4AccessList types.String        `tfsdk:"peer_filter_ipv4_access_list"`
+	ApiAuthenticationDigest  types.Bool          `tfsdk:"api_authentication_digest"`
+	ApiSiblingIpv4           types.String        `tfsdk:"api_sibling_ipv4"`
+	ApiUsers                 []PCEApiUsers       `tfsdk:"api_users"`
 }
-type PCEIpv4s struct {
+type PCEStateSyncIpv4s struct {
 	Address types.String `tfsdk:"address"`
 }
 type PCEApiUsers struct {
@@ -55,9 +55,9 @@ func (data PCE) toBody(ctx context.Context) string {
 	if !data.ApiSiblingIpv4.IsNull() && !data.ApiSiblingIpv4.IsUnknown() {
 		body, _ = sjson.Set(body, "api.sibling.ipv4", data.ApiSiblingIpv4.ValueString())
 	}
-	if len(data.Ipv4s) > 0 {
+	if len(data.StateSyncIpv4s) > 0 {
 		body, _ = sjson.Set(body, "state-sync.ipv4s.ipv4", []interface{}{})
-		for index, item := range data.Ipv4s {
+		for index, item := range data.StateSyncIpv4s {
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body, _ = sjson.Set(body, "state-sync.ipv4s.ipv4"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
@@ -88,9 +88,9 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AddressIpv6 = types.StringNull()
 	}
-	for i := range data.Ipv4s {
+	for i := range data.StateSyncIpv4s {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.Ipv4s[i].Address.ValueString()}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "state-sync.ipv4s.ipv4").ForEach(
@@ -111,10 +111,10 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.Ipv4s[i].Address.IsNull() {
-			data.Ipv4s[i].Address = types.StringValue(value.String())
+		if value := r.Get("address"); value.Exists() && !data.StateSyncIpv4s[i].Address.IsNull() {
+			data.StateSyncIpv4s[i].Address = types.StringValue(value.String())
 		} else {
-			data.Ipv4s[i].Address = types.StringNull()
+			data.StateSyncIpv4s[i].Address = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "peer-filter.ipv4.access-list"); value.Exists() && !data.PeerFilterIpv4AccessList.IsNull() {
@@ -180,13 +180,13 @@ func (data *PCE) fromBody(ctx context.Context, res []byte) {
 		data.AddressIpv6 = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "state-sync.ipv4s.ipv4"); value.Exists() {
-		data.Ipv4s = make([]PCEIpv4s, 0)
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := PCEIpv4s{}
+			item := PCEStateSyncIpv4s{}
 			if cValue := v.Get("address"); cValue.Exists() {
 				item.Address = types.StringValue(cValue.String())
 			}
-			data.Ipv4s = append(data.Ipv4s, item)
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
 			return true
 		})
 	}
@@ -219,12 +219,12 @@ func (data *PCE) fromBody(ctx context.Context, res []byte) {
 
 func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.Ipv4s {
+	for i := range state.StateSyncIpv4s {
 		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.Ipv4s[i].Address.ValueString()}
+		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Ipv4s[i].Address.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -232,9 +232,9 @@ func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 		}
 
 		found := false
-		for j := range data.Ipv4s {
+		for j := range data.StateSyncIpv4s {
 			found = true
-			if state.Ipv4s[i].Address.ValueString() != data.Ipv4s[j].Address.ValueString() {
+			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
 				found = false
 			}
 			if found {

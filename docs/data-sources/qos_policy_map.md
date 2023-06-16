@@ -3,18 +3,20 @@
 page_title: "iosxr_qos_policy_map Data Source - terraform-provider-iosxr"
 subcategory: "QoS"
 description: |-
-  This data source can read the QOS Policy Map configuration.
+  This data source can read the QoS Policy Map configuration.
 ---
 
 # iosxr_qos_policy_map (Data Source)
 
-This data source can read the QOS Policy Map configuration.
+This data source can read the QoS Policy Map configuration.
 
 ## Example Usage
 
 ```terraform
 data "iosxr_qos_policy_map" "example" {
   policy_map_name = "core-ingress-classifier"
+  name            = "class-default"
+  type            = "qos"
 }
 ```
 
@@ -23,7 +25,9 @@ data "iosxr_qos_policy_map" "example" {
 
 ### Required
 
+- `name` (String) Name of the class-map
 - `policy_map_name` (String) Name of the policymap
+- `type` (String) The type of class-map
 
 ### Optional
 
@@ -31,23 +35,21 @@ data "iosxr_qos_policy_map" "example" {
 
 ### Read-Only
 
-- `class_bandwidth_remaining_unit` (String) Bandwidth value unit
-- `class_bandwidth_remaining_value` (String) Bandwidth value
-- `class_name` (String) Name of the class-map
-- `class_police_rate_unit` (String) Rate unit
-- `class_police_rate_value` (String) Committed Information Rate
-- `class_priority_level` (Number) Configure a priority level
-- `class_queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--class_queue_limits))
-- `class_service_policy_name` (String) Name of the child service policy
-- `class_set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
-- `class_set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
-- `class_shape_average_rate_unit` (String) Shape rate unit
-- `class_shape_average_rate_value` (String)
-- `class_type` (String) The type of class-map
+- `bandwidth_remaining_unit` (String) Bandwidth value unit
+- `bandwidth_remaining_value` (String) Bandwidth value
 - `id` (String) The path of the retrieved object.
+- `police_rate_unit` (String) Rate unit
+- `police_rate_value` (String) Committed Information Rate
+- `priority_level` (Number) Configure a priority level
+- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--queue_limits))
+- `service_policy_name` (String) Name of the child service policy
+- `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
+- `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
+- `shape_average_rate_unit` (String) Shape rate unit
+- `shape_average_rate_value` (String)
 
-<a id="nestedatt--class_queue_limits"></a>
-### Nested Schema for `class_queue_limits`
+<a id="nestedatt--queue_limits"></a>
+### Nested Schema for `queue_limits`
 
 Read-Only:
 

@@ -21,24 +21,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*QOSClassMapResource)(nil)
+var _ resource.Resource = (*QoSClassMapResource)(nil)
 
-func NewQOSClassMapResource() resource.Resource {
-	return &QOSClassMapResource{}
+func NewQoSClassMapResource() resource.Resource {
+	return &QoSClassMapResource{}
 }
 
-type QOSClassMapResource struct {
+type QoSClassMapResource struct {
 	client *client.Client
 }
 
-func (r *QOSClassMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+func (r *QoSClassMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_qos_class_map"
 }
 
-func (r *QOSClassMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *QoSClassMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the QOS Class Map configuration.",
+		MarkdownDescription: "This resource can manage the QoS Class Map configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -70,22 +70,22 @@ func (r *QOSClassMapResource) Schema(ctx context.Context, req resource.SchemaReq
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this class-map").String,
 				Optional:            true,
 			},
-			"match_dscp_value": schema.StringAttribute{
+			"match_dscp": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 				Optional:            true,
 			},
-			"match_mpls_experimental_topmost_label": schema.Int64Attribute{
+			"match_mpls_experimental_topmost": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MPLS experimental label").AddIntegerRangeDescription(0, 7).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 7),
 				},
 			},
-			"match_qos_group_id": schema.StringAttribute{
+			"match_qos_group": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("QoS Group Id").String,
 				Optional:            true,
 			},
-			"match_traffic_class_id": schema.StringAttribute{
+			"match_traffic_class": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Traffic Class Id").String,
 				Optional:            true,
 			},
@@ -93,7 +93,7 @@ func (r *QOSClassMapResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *QOSClassMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *QoSClassMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -101,8 +101,8 @@ func (r *QOSClassMapResource) Configure(ctx context.Context, req resource.Config
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *QOSClassMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan QOSClassMap
+func (r *QoSClassMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan QoSClassMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -140,8 +140,8 @@ func (r *QOSClassMapResource) Create(ctx context.Context, req resource.CreateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSClassMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state QOSClassMap
+func (r *QoSClassMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state QoSClassMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -166,8 +166,8 @@ func (r *QOSClassMapResource) Read(ctx context.Context, req resource.ReadRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSClassMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state QOSClassMap
+func (r *QoSClassMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state QoSClassMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -217,8 +217,8 @@ func (r *QOSClassMapResource) Update(ctx context.Context, req resource.UpdateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QOSClassMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state QOSClassMap
+func (r *QoSClassMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state QoSClassMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -240,6 +240,6 @@ func (r *QOSClassMapResource) Delete(ctx context.Context, req resource.DeleteReq
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *QOSClassMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *QoSClassMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

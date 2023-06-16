@@ -15,7 +15,7 @@ This resource can manage the PCE configuration.
 ```terraform
 resource "iosxr_pce" "example" {
   address_ipv4 = "77.77.77.1"
-  ipv4s = [
+  state_sync_ipv4s = [
     {
       address = "100.100.100.11"
     }
@@ -43,8 +43,8 @@ resource "iosxr_pce" "example" {
 - `api_sibling_ipv4` (String) IPv4 address of the PCE sibling
 - `api_users` (Attributes List) Northbound API username (see [below for nested schema](#nestedatt--api_users))
 - `device` (String) A device name from the provider configuration.
-- `ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--ipv4s))
 - `peer_filter_ipv4_access_list` (String) Access-list for IPv4 peer filtering
+- `state_sync_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--state_sync_ipv4s))
 
 ### Read-Only
 
@@ -59,8 +59,8 @@ Optional:
 - `user_name` (String) Northbound API username
 
 
-<a id="nestedatt--ipv4s"></a>
-### Nested Schema for `ipv4s`
+<a id="nestedatt--state_sync_ipv4s"></a>
+### Nested Schema for `state_sync_ipv4s`
 
 Optional:
 

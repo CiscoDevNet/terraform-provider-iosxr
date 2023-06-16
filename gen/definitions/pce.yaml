@@ -9,7 +9,7 @@ attributes:
     example: 1050:0000:0000:0000:0005:0600:300c:326b
     exclude_test: true
   - yang_name: state-sync/ipv4s/ipv4
-    tf_name: ipv4s
+    tf_name: state_sync_ipv4s
     type: List
     attributes:
       - yang_name: address

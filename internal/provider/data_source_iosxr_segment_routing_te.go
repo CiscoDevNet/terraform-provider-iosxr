@@ -65,15 +65,15 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				MarkdownDescription: "Maximum time delegated SR-TE policies can remain up without an active connection to a PCE",
 				Computed:            true,
 			},
-			"pcc_dead_timer_interval": schema.Int64Attribute{
+			"pcc_dead_timer": schema.Int64Attribute{
 				MarkdownDescription: "Amount of time after which the peer can declare this session down, if no PCEP message has been received",
 				Computed:            true,
 			},
-			"pcc_initiated_state_interval": schema.Int64Attribute{
+			"pcc_initiated_state": schema.Int64Attribute{
 				MarkdownDescription: "Amount of time that PCE initiated policy can exist as an orphan before it is cleaned up",
 				Computed:            true,
 			},
-			"pcc_initiated_orphan_interval": schema.Int64Attribute{
+			"pcc_initiated_orphan": schema.Int64Attribute{
 				MarkdownDescription: "Amount of time that PCE initiated policy remains delegated to a peer that has gone down",
 				Computed:            true,
 			},
@@ -98,11 +98,11 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_anycast": schema.BoolAttribute{
+						"dynamic_anycast_sid_inclusion": schema.BoolAttribute{
 							MarkdownDescription: "Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies",
 							Computed:            true,
 						},
-						"on_demand_color_dyn_mpls_on_demand_color_dyn_mpls_metric_metric_type": schema.StringAttribute{
+						"dynamic_metric_type": schema.StringAttribute{
 							MarkdownDescription: "Metric Type",
 							Computed:            true,
 						},

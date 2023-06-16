@@ -14,10 +14,13 @@ attributes:
   - yang_name: pcc/delegation-timeout
     example: 10
   - yang_name: pcc/dead-timer-interval
+    tf_name: pcc_dead_timer
     example: 60
   - yang_name: pcc/initiated-state-interval
+    tf_name: pcc_initiated_state
     example: 15
   - yang_name: pcc/initiated-orphan-interval
+    tf_name: pcc_initiated_orphan
     example: 10
   - yang_name: pcc/pce-peers/pce-peer
     tf_name: pce_peers
@@ -33,9 +36,11 @@ attributes:
     tf_name: on_demand_colors
     type: List
     attributes: 
-      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast  
+      - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast
+        tf_name: dynamic_anycast_sid_inclusion  
         example: true
       - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type
+        tf_name: dynamic_metric_type
         example: te
       - yang_name: color
         id: true

@@ -1,6 +1,6 @@
 resource "iosxr_pce" "example" {
   address_ipv4 = "77.77.77.1"
-  ipv4s = [
+  state_sync_ipv4s = [
     {
       address = "100.100.100.11"
     }

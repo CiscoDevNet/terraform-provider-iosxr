@@ -17,7 +17,7 @@ func TestAccIosxrPCE(t *testing.T) {
 				Config: testAccIosxrPCEConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_pce.test", "address_ipv4", "77.77.77.1"),
-					resource.TestCheckResourceAttr("iosxr_pce.test", "ipv4s.0.address", "100.100.100.11"),
+					resource.TestCheckResourceAttr("iosxr_pce.test", "state_sync_ipv4s.0.address", "100.100.100.11"),
 					resource.TestCheckResourceAttr("iosxr_pce.test", "peer_filter_ipv4_access_list", "Accesslist1"),
 					resource.TestCheckResourceAttr("iosxr_pce.test", "api_authentication_digest", "true"),
 					resource.TestCheckResourceAttr("iosxr_pce.test", "api_sibling_ipv4", "100.100.100.2"),
@@ -45,7 +45,7 @@ func testAccIosxrPCEConfig_all() string {
 	return `
 	resource "iosxr_pce" "test" {
 		address_ipv4 = "77.77.77.1"
-		ipv4s = [{
+		state_sync_ipv4s = [{
 			address = "100.100.100.11"
 		}]
 		peer_filter_ipv4_access_list = "Accesslist1"

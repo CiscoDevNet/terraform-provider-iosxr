@@ -3,6 +3,7 @@ resource "iosxr_ipv4_access_list" "example" {
   sequences = [
     {
       sequence_number                      = 11
+      remark                               = "remark for access list"
       permit_protocol                      = "tcp"
       permit_default                       = true
       permit_source_address                = "18.0.0.0"

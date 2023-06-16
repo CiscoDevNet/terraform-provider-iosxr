@@ -18,6 +18,7 @@ func TestAccIosxrIPv6AccessList(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "access_list_name", "TEST1"),
 					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.sequence_number", "22"),
+					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.remark", "remark for access list"),
 					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_protocol", "tcp"),
 					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_address", "1::1"),
 					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_prefix_length", "64"),
@@ -53,6 +54,7 @@ func testAccIosxrIPv6AccessListConfig_all() string {
 		access_list_name = "TEST1"
 		sequences = [{
 			sequence_number = 22
+			remark = "remark for access list"
 			permit_protocol = "tcp"
 			permit_source_address = "1::1"
 			permit_source_prefix_length = 64

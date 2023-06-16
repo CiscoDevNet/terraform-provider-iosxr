@@ -3,6 +3,7 @@ resource "iosxr_ipv6_access_list" "example" {
   sequences = [
     {
       sequence_number                      = 22
+      remark                               = "remark for access list"
       permit_protocol                      = "tcp"
       permit_source_address                = "1::1"
       permit_source_prefix_length          = 64

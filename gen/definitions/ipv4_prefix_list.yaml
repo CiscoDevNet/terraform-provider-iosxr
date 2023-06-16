@@ -1,0 +1,29 @@
+---
+name: IPv4 Prefix List
+path: Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]
+doc_category: System
+attributes:
+  - yang_name: prefix-list-name
+    id: true
+    example: LIST1
+  - yang_name: sequences/sequence
+    tf_name: sequences
+    type: List
+    attributes:
+      - yang_name: sequence-number
+        id: true
+        example: 4096
+      - yang_name: remark
+        example: REMARK
+      - yang_name: permission
+        example: deny
+      - yang_name: prefix
+        example: 10.1.1.1
+      - yang_name: mask
+        example: 255.255.0.0
+      - yang_name: match-prefix-length/eq
+        example: 12
+      - yang_name: match-prefix-length/ge
+        example: 22
+      - yang_name: match-prefix-length/le
+        example: 32

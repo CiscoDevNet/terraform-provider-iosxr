@@ -19,18 +19,15 @@ attributes:
       - yang_name: interface-name
         id: true
         example: GigabitEthernet0/0/0/1
-  
+
   - yang_name: capabilities/sac/ipv4-disable
     example: true
   - yang_name: capabilities/sac/ipv6-disable
     example: true
-    exclude_test: true
   - yang_name: capabilities/sac/fec128-disable
     example: true
-    exclude_test: true
   - yang_name: capabilities/sac/fec129-disable
     example: true
-    exclude_test: true
   - yang_name: mldp/logging/notifications
     example: true
   - yang_name: mldp/address-families/address-family

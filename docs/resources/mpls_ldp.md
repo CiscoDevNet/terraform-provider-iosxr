@@ -25,8 +25,11 @@ resource "iosxr_mpls_ldp" "example" {
       interface_name = "GigabitEthernet0/0/0/1"
     }
   ]
-  capabilities_sac_ipv4_disable = true
-  mldp_logging_notifications    = true
+  capabilities_sac_ipv4_disable   = true
+  capabilities_sac_ipv6_disable   = true
+  capabilities_sac_fec128_disable = true
+  capabilities_sac_fec129_disable = true
+  mldp_logging_notifications      = true
   mldp_address_families = [
     {
       name                              = "ipv4"

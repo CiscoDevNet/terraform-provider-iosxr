@@ -20,6 +20,9 @@ func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"),
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv6_disable", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec128_disable", "true"),
+					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec129_disable", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"),
 					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"),
@@ -55,6 +58,9 @@ resource "iosxr_mpls_ldp" "test" {
 		interface_name = "GigabitEthernet0/0/0/1"
 	}]
 	capabilities_sac_ipv4_disable = true
+	capabilities_sac_ipv6_disable = true
+	capabilities_sac_fec128_disable = true
+	capabilities_sac_fec129_disable = true
 	mldp_logging_notifications = true
 	mldp_address_families = [{
 		name = "ipv4"

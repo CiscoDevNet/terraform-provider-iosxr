@@ -15,7 +15,7 @@ This resource can manage the Banner configuration.
 ```terraform
 resource "iosxr_banner" "example" {
   banner_type = "login"
-  line        = " Hello user  !"
+  line        = " Hello user !"
 }
 ```
 

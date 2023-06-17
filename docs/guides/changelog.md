@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.1.10 (unreleased)
+## 0.1.10
 
 - Add `iosxr_banner` resource and data source
 - Add `iosxr_cdp` resource and data source

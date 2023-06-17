@@ -44,7 +44,7 @@ type {{$name}}{{toGoName .TfName}} struct {
 
 func (data {{camelCase .Name}}) getPath() string {
 {{- if hasId .Attributes}}
-	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or (eq .Id true) (eq .Reference true)}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
+	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
 {{- else}}
 	return "{{.Path}}"
 {{- end}}
@@ -53,7 +53,7 @@ func (data {{camelCase .Name}}) getPath() string {
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	body := "{}"
 	{{- range .Attributes}}
-	{{- if and (ne .Reference true) (ne .Type "List")}}
+	{{- if and (not .Reference) (ne .Type "List")}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.IsUnknown() {
 		{{- if eq .Type "Int64"}}
 		body, _ = sjson.Set(body, "{{toJsonPath .YangName .XPath}}", strconv.FormatInt(data.{{toGoName .TfName}}.ValueInt64(), 10))
@@ -115,7 +115,7 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 
 func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
-	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
+	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
@@ -161,8 +161,8 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- $listPath := (toJsonPath .YangName .XPath)}}
 	{{- $yangKey := ""}}
 	for i := range data.{{$list}} {
-		keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
-		keyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
 		var r gjson.Result
 		gjson.GetBytes(res, "{{$listPath}}").ForEach(
@@ -185,7 +185,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		)
 
 		{{- range .Attributes}}
-		{{- if ne .WriteOnly true}}
+		{{- if not .WriteOnly}}
 		{{- if eq .Type "Int64"}}
 		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.Int64Value(value.Int())
@@ -238,7 +238,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 
 func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
-	{{- if and (ne .Reference true) (ne .Id true) (ne .WriteOnly true)}}
+	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
 	{{- if eq .Type "Int64"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
 		data.{{toGoName .TfName}} = types.Int64Value(value.Int())
@@ -275,7 +275,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := {{$name}}{{toGoName .TfName}}{}
 			{{- range .Attributes}}
-			{{- if ne .WriteOnly true}}
+			{{- if not .WriteOnly}}
 			{{- if eq .Type "Int64"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
 				item.{{toGoName .TfName}} = types.Int64Value(cValue.Int())
@@ -324,18 +324,18 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 	{{- if eq .Type "List"}}
 	{{- $goKey := ""}}
 	{{- range .Attributes}}
-	{{- if eq .Id true}}
+	{{- if .Id}}
 	{{- $goKey = (toGoName .TfName)}}
 	{{- end}}
 	{{- end}}
 	for i := range state.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
-		keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
-		stateKeyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+		stateKeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 		
 		emptyKeys := true
 		{{- range .Attributes}}
-		{{- if eq .Id true}}
+		{{- if .Id}}
 		if !reflect.ValueOf(state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}()).IsZero() {
 			emptyKeys = false
 		}
@@ -349,7 +349,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 		for j := range data.{{toGoName .TfName}} {
 			found = true
 			{{- range .Attributes}}
-			{{- if eq .Id true}}
+			{{- if .Id}}
 			if state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}() != data.{{$list}}[j].{{toGoName .TfName}}.Value{{.Type}}() {
 				found = false
 			} 
@@ -387,8 +387,8 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 	{{- $yangName := .YangName}}
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
-		keys := [...]string{ {{range .Attributes}}{{if eq .Id true}}"{{.YangName}}", {{end}}{{end}} }
-		keyValues := [...]string{ {{range .Attributes}}{{if eq .Id true}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 		keyString := ""
 		for ki := range keys {
 			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"

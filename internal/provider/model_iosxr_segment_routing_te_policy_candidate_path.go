@@ -29,7 +29,7 @@ type SegmentRoutingTEPolicyCandidatePathPathInfos struct {
 }
 
 func (data SegmentRoutingTEPolicyCandidatePath) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/policies/policy[policy-name=%s]/candidate-paths/preferences/preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
+	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
 }
 
 func (data SegmentRoutingTEPolicyCandidatePath) toBody(ctx context.Context) string {

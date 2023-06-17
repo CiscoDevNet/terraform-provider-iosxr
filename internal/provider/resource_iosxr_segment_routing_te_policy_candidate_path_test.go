@@ -27,7 +27,7 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 			{
 				ResourceName:  "iosxr_segment_routing_te_policy_candidate_path.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/policies/policy[policy-name=POLICY1]/candidate-paths/preferences/preference[path-index=%!d(string=100)]",
+				ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%!d(string=100)]",
 			},
 		},
 	})

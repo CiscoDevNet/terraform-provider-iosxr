@@ -20,24 +20,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*QoSClassMapResource)(nil)
+var _ resource.Resource = (*ClassMapQoSResource)(nil)
 
-func NewQoSClassMapResource() resource.Resource {
-	return &QoSClassMapResource{}
+func NewClassMapQoSResource() resource.Resource {
+	return &ClassMapQoSResource{}
 }
 
-type QoSClassMapResource struct {
+type ClassMapQoSResource struct {
 	client *client.Client
 }
 
-func (r *QoSClassMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_qos_class_map"
+func (r *ClassMapQoSResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_class_map_qos"
 }
 
-func (r *QoSClassMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the QoS Class Map configuration.",
+		MarkdownDescription: "This resource can manage the Class Map QoS configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -93,7 +93,7 @@ func (r *QoSClassMapResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *QoSClassMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *ClassMapQoSResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -101,8 +101,8 @@ func (r *QoSClassMapResource) Configure(ctx context.Context, req resource.Config
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *QoSClassMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan QoSClassMap
+func (r *ClassMapQoSResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan ClassMapQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -140,8 +140,8 @@ func (r *QoSClassMapResource) Create(ctx context.Context, req resource.CreateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSClassMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state QoSClassMap
+func (r *ClassMapQoSResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state ClassMapQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -166,8 +166,8 @@ func (r *QoSClassMapResource) Read(ctx context.Context, req resource.ReadRequest
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSClassMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state QoSClassMap
+func (r *ClassMapQoSResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state ClassMapQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -217,8 +217,8 @@ func (r *QoSClassMapResource) Update(ctx context.Context, req resource.UpdateReq
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSClassMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state QoSClassMap
+func (r *ClassMapQoSResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state ClassMapQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -240,6 +240,6 @@ func (r *QoSClassMapResource) Delete(ctx context.Context, req resource.DeleteReq
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *QoSClassMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *ClassMapQoSResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

@@ -1,5 +1,5 @@
 ---
-name: QoS Class Map
+name: Class Map QoS
 path: Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]
 doc_category: QoS
 attributes:

@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &QoSClassMapDataSource{}
-	_ datasource.DataSourceWithConfigure = &QoSClassMapDataSource{}
+	_ datasource.DataSource              = &ClassMapQoSDataSource{}
+	_ datasource.DataSourceWithConfigure = &ClassMapQoSDataSource{}
 )
 
-func NewQoSClassMapDataSource() datasource.DataSource {
-	return &QoSClassMapDataSource{}
+func NewClassMapQoSDataSource() datasource.DataSource {
+	return &ClassMapQoSDataSource{}
 }
 
-type QoSClassMapDataSource struct {
+type ClassMapQoSDataSource struct {
 	client *client.Client
 }
 
-func (d *QoSClassMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_qos_class_map"
+func (d *ClassMapQoSDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_class_map_qos"
 }
 
-func (d *QoSClassMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *ClassMapQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the QoS Class Map configuration.",
+		MarkdownDescription: "This data source can read the Class Map QoS configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -81,7 +81,7 @@ func (d *QoSClassMapDataSource) Schema(ctx context.Context, req datasource.Schem
 	}
 }
 
-func (d *QoSClassMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *ClassMapQoSDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -89,8 +89,8 @@ func (d *QoSClassMapDataSource) Configure(_ context.Context, req datasource.Conf
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *QoSClassMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config QoSClassMap
+func (d *ClassMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config ClassMapQoS
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

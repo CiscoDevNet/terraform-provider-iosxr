@@ -1,4 +1,4 @@
-resource "iosxr_qos_policy_map" "example" {
+resource "iosxr_policy_map_qos" "example" {
   policy_map_name = "PM1"
   description     = "My description"
   classes = [

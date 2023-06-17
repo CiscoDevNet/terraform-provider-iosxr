@@ -13,20 +13,20 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type QoSPolicyMap struct {
+type PolicyMapQoS struct {
 	Device        types.String          `tfsdk:"device"`
 	Id            types.String          `tfsdk:"id"`
 	PolicyMapName types.String          `tfsdk:"policy_map_name"`
 	Description   types.String          `tfsdk:"description"`
-	Classes       []QoSPolicyMapClasses `tfsdk:"classes"`
+	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
 }
-type QoSPolicyMapClasses struct {
+type PolicyMapQoSClasses struct {
 	Name                       types.String                     `tfsdk:"name"`
 	Type                       types.String                     `tfsdk:"type"`
 	SetMplsExperimentalTopmost types.Int64                      `tfsdk:"set_mpls_experimental_topmost"`
 	SetDscp                    types.String                     `tfsdk:"set_dscp"`
 	PriorityLevel              types.Int64                      `tfsdk:"priority_level"`
-	QueueLimits                []QoSPolicyMapClassesQueueLimits `tfsdk:"queue_limits"`
+	QueueLimits                []PolicyMapQoSClassesQueueLimits `tfsdk:"queue_limits"`
 	ServicePolicyName          types.String                     `tfsdk:"service_policy_name"`
 	PoliceRateValue            types.String                     `tfsdk:"police_rate_value"`
 	PoliceRateUnit             types.String                     `tfsdk:"police_rate_unit"`
@@ -35,16 +35,16 @@ type QoSPolicyMapClasses struct {
 	BandwidthRemainingUnit     types.String                     `tfsdk:"bandwidth_remaining_unit"`
 	BandwidthRemainingValue    types.String                     `tfsdk:"bandwidth_remaining_value"`
 }
-type QoSPolicyMapClassesQueueLimits struct {
+type PolicyMapQoSClassesQueueLimits struct {
 	Value types.String `tfsdk:"value"`
 	Unit  types.String `tfsdk:"unit"`
 }
 
-func (data QoSPolicyMap) getPath() string {
+func (data PolicyMapQoS) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]", data.PolicyMapName.ValueString())
 }
 
-func (data QoSPolicyMap) toBody(ctx context.Context) string {
+func (data PolicyMapQoS) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.PolicyMapName.IsNull() && !data.PolicyMapName.IsUnknown() {
 		body, _ = sjson.Set(body, "policy-map-name", data.PolicyMapName.ValueString())
@@ -107,7 +107,7 @@ func (data QoSPolicyMap) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *QoSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
+func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
 		data.Description = types.StringValue(value.String())
 	} else {
@@ -233,14 +233,14 @@ func (data *QoSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *QoSPolicyMap) fromBody(ctx context.Context, res []byte) {
+func (data *PolicyMapQoS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "class"); value.Exists() {
-		data.Classes = make([]QoSPolicyMapClasses, 0)
+		data.Classes = make([]PolicyMapQoSClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := QoSPolicyMapClasses{}
+			item := PolicyMapQoSClasses{}
 			if cValue := v.Get("name"); cValue.Exists() {
 				item.Name = types.StringValue(cValue.String())
 			}
@@ -257,9 +257,9 @@ func (data *QoSPolicyMap) fromBody(ctx context.Context, res []byte) {
 				item.PriorityLevel = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("queue-limits.queue-limit"); cValue.Exists() {
-				item.QueueLimits = make([]QoSPolicyMapClassesQueueLimits, 0)
+				item.QueueLimits = make([]PolicyMapQoSClassesQueueLimits, 0)
 				cValue.ForEach(func(ck, cv gjson.Result) bool {
-					cItem := QoSPolicyMapClassesQueueLimits{}
+					cItem := PolicyMapQoSClassesQueueLimits{}
 					if ccValue := cv.Get("value"); ccValue.Exists() {
 						cItem.Value = types.StringValue(ccValue.String())
 					}
@@ -297,7 +297,7 @@ func (data *QoSPolicyMap) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPolicyMap) []string {
+func (data *PolicyMapQoS) getDeletedListItems(ctx context.Context, state PolicyMapQoS) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Classes {
 		keys := [...]string{"name", "type"}
@@ -378,7 +378,7 @@ func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPoli
 	return deletedListItems
 }
 
-func (data *QoSPolicyMap) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Classes {
 		keys := [...]string{"name", "type"}

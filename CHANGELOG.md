@@ -17,8 +17,8 @@
 - Add `bfd_minimum_interval`, `next_hop_self_inheritance_disable`, `route_reflector_client_inheritance_disable`, `bfd_fast_detect` attribute to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `iosxr_segment_routing` resource and data source
 - Add `iosxr_pce` resource and data source
-- Add `iosxr_qos_class_map` resource and data source
-- Add `iosxr_qos_policy_map` resource and data source
+- Add `iosxr_class_map_qos` resource and data source
+- Add `iosxr_policy_map_qos` resource and data source
 - Add `iosxr_ipv4_access_list` resource and data source
 - Add `iosxr_ipv4_access_list_options` resource and data source
 - Add `iosxr_ipv4_prefix_list` resource and data source

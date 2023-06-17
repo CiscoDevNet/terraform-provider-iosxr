@@ -1,4 +1,4 @@
-resource "iosxr_qos_class_map" "example" {
+resource "iosxr_class_map_qos" "example" {
   class_map_name                  = "TEST"
   match_any                       = true
   description                     = "description1"

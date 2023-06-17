@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &QoSPolicyMapDataSource{}
-	_ datasource.DataSourceWithConfigure = &QoSPolicyMapDataSource{}
+	_ datasource.DataSource              = &PolicyMapQoSDataSource{}
+	_ datasource.DataSourceWithConfigure = &PolicyMapQoSDataSource{}
 )
 
-func NewQoSPolicyMapDataSource() datasource.DataSource {
-	return &QoSPolicyMapDataSource{}
+func NewPolicyMapQoSDataSource() datasource.DataSource {
+	return &PolicyMapQoSDataSource{}
 }
 
-type QoSPolicyMapDataSource struct {
+type PolicyMapQoSDataSource struct {
 	client *client.Client
 }
 
-func (d *QoSPolicyMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_qos_policy_map"
+func (d *PolicyMapQoSDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_policy_map_qos"
 }
 
-func (d *QoSPolicyMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the QoS Policy Map configuration.",
+		MarkdownDescription: "This data source can read the Policy Map QoS configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -129,7 +129,7 @@ func (d *QoSPolicyMapDataSource) Schema(ctx context.Context, req datasource.Sche
 	}
 }
 
-func (d *QoSPolicyMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *PolicyMapQoSDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -137,8 +137,8 @@ func (d *QoSPolicyMapDataSource) Configure(_ context.Context, req datasource.Con
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *QoSPolicyMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config QoSPolicyMap
+func (d *PolicyMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config PolicyMapQoS
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -21,24 +21,24 @@ import (
 	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
-var _ resource.Resource = (*QoSPolicyMapResource)(nil)
+var _ resource.Resource = (*PolicyMapQoSResource)(nil)
 
-func NewQoSPolicyMapResource() resource.Resource {
-	return &QoSPolicyMapResource{}
+func NewPolicyMapQoSResource() resource.Resource {
+	return &PolicyMapQoSResource{}
 }
 
-type QoSPolicyMapResource struct {
+type PolicyMapQoSResource struct {
 	client *client.Client
 }
 
-func (r *QoSPolicyMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_qos_policy_map"
+func (r *PolicyMapQoSResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_policy_map_qos"
 }
 
-func (r *QoSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the QoS Policy Map configuration.",
+		MarkdownDescription: "This resource can manage the Policy Map QoS configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -166,7 +166,7 @@ func (r *QoSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *QoSPolicyMapResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *PolicyMapQoSResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -174,8 +174,8 @@ func (r *QoSPolicyMapResource) Configure(ctx context.Context, req resource.Confi
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *QoSPolicyMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan QoSPolicyMap
+func (r *PolicyMapQoSResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan PolicyMapQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -213,8 +213,8 @@ func (r *QoSPolicyMapResource) Create(ctx context.Context, req resource.CreateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSPolicyMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state QoSPolicyMap
+func (r *PolicyMapQoSResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state PolicyMapQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -239,8 +239,8 @@ func (r *QoSPolicyMapResource) Read(ctx context.Context, req resource.ReadReques
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state QoSPolicyMap
+func (r *PolicyMapQoSResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state PolicyMapQoS
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -290,8 +290,8 @@ func (r *QoSPolicyMapResource) Update(ctx context.Context, req resource.UpdateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *QoSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state QoSPolicyMap
+func (r *PolicyMapQoSResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state PolicyMapQoS
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -313,6 +313,6 @@ func (r *QoSPolicyMapResource) Delete(ctx context.Context, req resource.DeleteRe
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *QoSPolicyMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *PolicyMapQoSResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

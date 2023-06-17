@@ -12,7 +12,7 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type QoSClassMap struct {
+type ClassMapQoS struct {
 	Device                       types.String `tfsdk:"device"`
 	Id                           types.String `tfsdk:"id"`
 	ClassMapName                 types.String `tfsdk:"class_map_name"`
@@ -24,11 +24,11 @@ type QoSClassMap struct {
 	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
 }
 
-func (data QoSClassMap) getPath() string {
+func (data ClassMapQoS) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
 }
 
-func (data QoSClassMap) toBody(ctx context.Context) string {
+func (data ClassMapQoS) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.ClassMapName.IsNull() && !data.ClassMapName.IsUnknown() {
 		body, _ = sjson.Set(body, "class-map-name", data.ClassMapName.ValueString())
@@ -64,7 +64,7 @@ func (data QoSClassMap) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *QoSClassMap) updateFromBody(ctx context.Context, res []byte) {
+func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); !data.MatchAny.IsNull() {
 		if value.Exists() {
 			data.MatchAny = types.BoolValue(true)
@@ -101,7 +101,7 @@ func (data *QoSClassMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *QoSClassMap) fromBody(ctx context.Context, res []byte) {
+func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
@@ -132,12 +132,12 @@ func (data *QoSClassMap) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *QoSClassMap) getDeletedListItems(ctx context.Context, state QoSClassMap) []string {
+func (data *ClassMapQoS) getDeletedListItems(ctx context.Context, state ClassMapQoS) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *QoSClassMap) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MatchAny.IsNull() && !data.MatchAny.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match-any", data.getPath()))

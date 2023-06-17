@@ -154,11 +154,11 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"masklength": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 128),
 							},
@@ -185,11 +185,11 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"masklength": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 128),
 							},
@@ -204,7 +204,7 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					Attributes: map[string]schema.Attribute{
 						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -255,7 +255,7 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					Attributes: map[string]schema.Attribute{
 						"router_tag": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

@@ -182,7 +182,8 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedListItems(ctx context
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -195,7 +196,6 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedListItems(ctx context
 
 func (data *SegmentRoutingTEPolicyCandidatePath) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.PathInfos {
 		keys := [...]string{"type", "hop-type", "segment-list-name"}
 		keyValues := [...]string{data.PathInfos[i].Type.ValueString(), data.PathInfos[i].HopType.ValueString(), data.PathInfos[i].SegmentListName.ValueString()}

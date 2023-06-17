@@ -930,7 +930,8 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -960,7 +961,8 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -990,7 +992,8 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1020,7 +1023,8 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1050,7 +1054,8 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1072,7 +1077,6 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
 	}
-
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-id"}
 		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelId.ValueInt64(), 10)}
@@ -1135,6 +1139,37 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/level-2-only", data.getPath()))
 	}
-
+	for i := range data.SpfPrefixPriorities {
+		keys := [...]string{"priority"}
+		keyValues := [...]string{data.SpfPrefixPriorities[i].Priority.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-id"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

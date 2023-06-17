@@ -71,7 +71,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- else if eq .Type "Int64List"}}
 				ElementType:         types.Int64Type,
 				{{- end}}
-				{{- if or (eq .Id true) (eq .Reference true) (eq .Mandatory true)}}
+				{{- if or .Id .Reference .Mandatory}}
 				Required:            true,
 				{{- else}}
 				Optional:            true,
@@ -97,9 +97,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or (len .DefaultValue) (eq .Id true) (eq .Reference true) (eq .RequiresReplace true)}}
+				{{- if or (len .DefaultValue) .Id .Reference .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
-					{{- if or (eq .Id true) (eq .Reference true) (eq .RequiresReplace true)}}
+					{{- if or .Id .Reference .RequiresReplace}}
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
 					{{- else if eq .Type "Int64"}}
 					helpers.IntegerDefaultModifier({{.DefaultValue}}),
@@ -114,7 +114,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						{{- range  .Attributes}}
-						"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
+						"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
 								{{- if len .EnumValues -}}
 								.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
@@ -131,7 +131,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							{{- else if eq .Type "Int64List"}}
 							ElementType:         types.Int64Type,
 							{{- end}}
-							{{- if eq .Mandatory true}}
+							{{- if or .Id .Mandatory}}
 							Required:            true,
 							{{- else}}
 							Optional:            true,
@@ -166,6 +166,69 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								{{- else if eq .Type "String"}}
 								helpers.StringDefaultModifier("{{.DefaultValue}}"),
 								{{- end}}
+							},
+							{{- end}}
+							{{- if eq .Type "List"}}
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									{{- range  .Attributes}}
+									"{{.TfName}}": schema.{{if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
+											{{- if len .EnumValues -}}
+											.AddStringEnumDescription({{range .EnumValues}}"{{.}}", {{end}})
+											{{- end -}}
+											{{- if or (ne .MinInt 0) (ne .MaxInt 0) -}}
+											.AddIntegerRangeDescription({{.MinInt}}, {{.MaxInt}})
+											{{- end -}}
+											{{- if len .DefaultValue -}}
+											.AddDefaultValueDescription("{{.DefaultValue}}")
+											{{- end -}}
+											.String,
+										{{- if eq .Type "StringList"}}
+										ElementType:         types.StringType,
+										{{- else if eq .Type "Int64List"}}
+										ElementType:         types.Int64Type,
+										{{- end}}
+										{{- if or .Id .Mandatory}}
+										Required:            true,
+										{{- else}}
+										Optional:            true,
+										{{- end}}
+										{{- if len .DefaultValue}}
+										Computed:            true,
+										{{- end}}
+										{{- if len .EnumValues}}
+										Validators: []validator.String{
+											stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
+										},
+										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}
+										Validators: []validator.String{
+											{{- if or (ne .StringMinLength 0) (ne .StringMaxLength 0)}}
+											stringvalidator.LengthBetween({{.StringMinLength}}, {{.StringMaxLength}}),
+											{{- end}}
+											{{- range .StringPatterns}}
+											stringvalidator.RegexMatches(regexp.MustCompile(`{{.}}`), ""),
+											{{- end}}
+										},
+										{{- else if or (ne .MinInt 0) (ne .MaxInt 0)}}
+										Validators: []validator.Int64{
+											int64validator.Between({{.MinInt}}, {{.MaxInt}}),
+										},
+										{{- end}}
+										{{- if len .DefaultValue}}
+										PlanModifiers: []planmodifier.{{.Type}}{
+											{{- if eq .Type "Int64"}}
+											helpers.IntegerDefaultModifier({{.DefaultValue}}),
+											{{- else if eq .Type "Bool"}}
+											helpers.BooleanDefaultModifier({{.DefaultValue}}),
+											{{- else if eq .Type "String"}}
+											helpers.StringDefaultModifier("{{.DefaultValue}}"),
+											{{- end}}
+										},
+										{{- end}}
+									},
+									{{- end}}
+								},
 							},
 							{{- end}}
 						},

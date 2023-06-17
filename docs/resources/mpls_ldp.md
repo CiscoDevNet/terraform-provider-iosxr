@@ -67,7 +67,7 @@ resource "iosxr_mpls_ldp" "example" {
 <a id="nestedatt--address_families"></a>
 ### Nested Schema for `address_families`
 
-Optional:
+Required:
 
 - `af_name` (String) Configure Address Family and its parameters
   - Choices: `ipv4`, `ipv6`
@@ -76,7 +76,7 @@ Optional:
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
 
-Optional:
+Required:
 
 - `interface_name` (String) Enable LDP on an interface and enter interface submode
 
@@ -88,13 +88,13 @@ Required:
 
 - `make_before_break_delay` (Number) MBB delay
   - Range: `0`-`600`
+- `name` (String) Configure Address Family and its parameters
+  - Choices: `ipv4`
 
 Optional:
 
 - `forwarding_recursive` (Boolean) Enable recursive forwarding
 - `forwarding_recursive_route_policy` (String) Route policy
-- `name` (String) Configure Address Family and its parameters
-  - Choices: `ipv4`
 - `recursive_fec` (Boolean) MLDP Recursive FEC enable
 
 ## Import

@@ -70,7 +70,7 @@ func (r *IPv4PrefixListResource) Schema(ctx context.Context, req resource.Schema
 					Attributes: map[string]schema.Attribute{
 						"sequence_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Sequence number").AddIntegerRangeDescription(1, 2147483646).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2147483646),
 							},

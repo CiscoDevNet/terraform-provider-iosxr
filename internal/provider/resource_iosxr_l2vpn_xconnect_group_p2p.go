@@ -88,7 +88,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify (sub-)interface name to cross connect").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -103,7 +103,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -111,7 +111,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						},
 						"pw_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},
@@ -134,7 +134,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
@@ -143,7 +143,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 						},
 						"pw_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the pseudowire id").AddIntegerRangeDescription(1, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},
@@ -166,21 +166,21 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
 							},
 						},
 						"remote_ac_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify remote attachment circuit identifier").AddIntegerRangeDescription(1, 4294967294).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967294),
 							},
 						},
 						"source": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify source attachment circuit identifier").AddIntegerRangeDescription(1, 4294967294).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967294),
 							},
@@ -203,14 +203,14 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
 							},
 						},
 						"service_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").AddIntegerRangeDescription(1, 4294967294).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967294),
 							},
@@ -233,14 +233,14 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN Identifier").AddIntegerRangeDescription(1, 65534).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
 							},
 						},
 						"service_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify service ID (used as local and remote ac-id)").AddIntegerRangeDescription(1, 4294967294).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967294),
 							},

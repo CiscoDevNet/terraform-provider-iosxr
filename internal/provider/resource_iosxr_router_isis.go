@@ -76,7 +76,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"level_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set overload-bit for one level only").AddIntegerRangeDescription(1, 2).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
@@ -214,7 +214,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Affinity map configuration").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
@@ -237,7 +237,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"algorithm_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").AddIntegerRangeDescription(128, 255).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(128, 255),
 							},
@@ -260,7 +260,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"net_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("A Network Entity Title (NET) for this process").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -275,7 +275,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enter the IS-IS interface configuration submode").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},

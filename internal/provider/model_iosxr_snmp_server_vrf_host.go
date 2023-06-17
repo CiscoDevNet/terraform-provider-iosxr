@@ -138,7 +138,8 @@ func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SN
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -151,6 +152,13 @@ func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SN
 
 func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
+	for i := range data.UnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

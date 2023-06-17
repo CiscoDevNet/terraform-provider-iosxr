@@ -67,12 +67,8 @@ func (r *LoggingSourceInterfaceResource) Schema(ctx context.Context, req resourc
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").AddDefaultValueDescription("default").String,
-							Optional:            true,
-							Computed:            true,
-							PlanModifiers: []planmodifier.String{
-								helpers.StringDefaultModifier("default"),
-							},
+							MarkdownDescription: helpers.NewAttributeDescription("Set VRF option").String,
+							Required:            true,
 						},
 					},
 				},

@@ -154,9 +154,12 @@ resource "iosxr_snmp_server" "example" {
 <a id="nestedatt--groups"></a>
 ### Nested Schema for `groups`
 
-Optional:
+Required:
 
 - `group_name` (String) Name of the group
+
+Optional:
+
 - `v3_context` (String) Attach a SNMP context
 - `v3_ipv4` (String) Type of Access-list
 - `v3_ipv6` (String) Type of Access-list
@@ -172,10 +175,10 @@ Optional:
 Required:
 
 - `group_name` (String) Group to which the user belongs
+- `user_name` (String) Name of the user
 
 Optional:
 
-- `user_name` (String) Name of the user
 - `v3_auth_md5_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
 - `v3_auth_md5_encryption_default` (String) Specifies an default ENCRYPTED authentication password
 

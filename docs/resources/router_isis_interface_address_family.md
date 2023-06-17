@@ -63,10 +63,13 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 <a id="nestedatt--fast_reroute_per_prefix_levels"></a>
 ### Nested Schema for `fast_reroute_per_prefix_levels`
 
-Optional:
+Required:
 
 - `level_id` (Number) Enable EPCFRR LFA for one level only
   - Range: `1`-`2`
+
+Optional:
+
 - `ti_lfa` (Boolean) Enable TI LFA computation
 
 ## Import

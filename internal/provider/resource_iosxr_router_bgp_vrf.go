@@ -154,7 +154,7 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 					Attributes: map[string]schema.Attribute{
 						"neighbor_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,

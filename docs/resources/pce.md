@@ -53,16 +53,19 @@ resource "iosxr_pce" "example" {
 <a id="nestedatt--api_users"></a>
 ### Nested Schema for `api_users`
 
+Required:
+
+- `user_name` (String) Northbound API username
+
 Optional:
 
 - `password_encrypted` (String) Specify unencrypted password
-- `user_name` (String) Northbound API username
 
 
 <a id="nestedatt--state_sync_ipv4s"></a>
 ### Nested Schema for `state_sync_ipv4s`
 
-Optional:
+Required:
 
 - `address` (String) IPv4 address
 

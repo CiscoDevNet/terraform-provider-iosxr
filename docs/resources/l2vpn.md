@@ -41,7 +41,7 @@ resource "iosxr_l2vpn" "example" {
 <a id="nestedatt--xconnect_groups"></a>
 ### Nested Schema for `xconnect_groups`
 
-Optional:
+Required:
 
 - `group_name` (String) Specify the group the cross connects belong to
 

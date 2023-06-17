@@ -25,7 +25,16 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 					{{- $list := .TfName }}
 					{{- range  .Attributes}}
 					{{- if and (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					{{- if eq .Type "List"}}
+					{{- $clist := .TfName }}
+					{{- range  .Attributes}}
+					{{- if and (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					resource.TestCheckResourceAttr("iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- else}}
 					resource.TestCheckResourceAttr("iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"),
+					{{- end}}
 					{{- end}}
 					{{- end}}
 					{{- else}}
@@ -93,7 +102,17 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 		{{.TfName}} = [{
 			{{- range  .Attributes}}
 			{{- if ne .ExcludeTest true}}
+			{{- if eq .Type "List"}}
+				{{.TfName}} = [{
+					{{- range  .Attributes}}
+					{{- if ne .ExcludeTest true}}
+					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+					{{- end}}
+					{{- end}}
+				}]
+			{{- else}}
 			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		}]
@@ -118,7 +137,17 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 		{{.TfName}} = [{
 			{{- range  .Attributes}}
 			{{- if ne .ExcludeTest true}}
+			{{- if eq .Type "List"}}
+				{{.TfName}} = [{
+					{{- range  .Attributes}}
+					{{- if ne .ExcludeTest true}}
+					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+					{{- end}}
+					{{- end}}
+				}]
+			{{- else}}
 			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+			{{- end}}
 			{{- end}}
 			{{- end}}
 		}]

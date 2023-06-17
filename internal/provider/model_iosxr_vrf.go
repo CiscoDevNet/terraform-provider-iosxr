@@ -1297,7 +1297,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1339,7 +1340,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1381,7 +1383,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1423,7 +1426,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1465,7 +1469,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1507,7 +1512,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1549,7 +1555,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1591,7 +1598,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1633,7 +1641,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1675,7 +1684,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1717,7 +1727,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1759,7 +1770,8 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1790,6 +1802,101 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.AddressFamilyIpv6Flowspec.IsNull() && !data.AddressFamilyIpv6Flowspec.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-family/ipv6/flowspec", data.getPath()))
 	}
-
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

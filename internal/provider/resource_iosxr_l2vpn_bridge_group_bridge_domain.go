@@ -81,7 +81,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier").AddIntegerRangeDescription(1, 65534).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
 							},
@@ -96,7 +96,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					Attributes: map[string]schema.Attribute{
 						"vni_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("VxLAN VPN identifier").AddIntegerRangeDescription(1, 16777215).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 16777215),
 							},
@@ -160,7 +160,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
@@ -179,7 +179,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					Attributes: map[string]schema.Attribute{
 						"vpn_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").AddIntegerRangeDescription(1, 65534).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65534),
 							},

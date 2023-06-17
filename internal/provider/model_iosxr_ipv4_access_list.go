@@ -2269,7 +2269,8 @@ func (data *IPv4AccessList) getDeletedListItems(ctx context.Context, state IPv4A
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -2282,7 +2283,6 @@ func (data *IPv4AccessList) getDeletedListItems(ctx context.Context, state IPv4A
 
 func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.Sequences {
 		keys := [...]string{"sequence-number"}
 		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}

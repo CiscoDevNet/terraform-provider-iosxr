@@ -103,7 +103,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					Attributes: map[string]schema.Attribute{
 						"pce_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Remote PCE address").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"precedence": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Precedence value of this PCE").AddIntegerRangeDescription(0, 255).String,
@@ -133,7 +133,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 						},
 						"color": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Color").AddIntegerRangeDescription(1, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 4294967295),
 							},
@@ -217,7 +217,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 					Attributes: map[string]schema.Attribute{
 						"policy_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Policy name").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 59),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

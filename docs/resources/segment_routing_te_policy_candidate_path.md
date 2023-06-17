@@ -49,16 +49,19 @@ resource "iosxr_segment_routing_te_policy_candidate_path" "example" {
 <a id="nestedatt--path_infos"></a>
 ### Nested Schema for `path_infos`
 
-Optional:
+Required:
 
 - `hop_type` (String) Type of dynamic path to be computed
   - Choices: `mpls`, `srv6`
-- `metric_type` (String) Metric type
-  - Choices: `hopcount`, `igp`, `latency`, `te`
-- `pcep` (Boolean) Path Computation Element Protocol
 - `segment_list_name` (String) Segment-list name
 - `type` (String) Path-option type
   - Choices: `dynamic`, `explicit`
+
+Optional:
+
+- `metric_type` (String) Metric type
+  - Choices: `hopcount`, `igp`, `latency`, `te`
+- `pcep` (Boolean) Path Computation Element Protocol
 
 ## Import
 

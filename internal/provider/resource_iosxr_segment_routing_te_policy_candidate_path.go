@@ -81,7 +81,7 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Schema(ctx context.Context
 					Attributes: map[string]schema.Attribute{
 						"type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Path-option type").AddStringEnumDescription("dynamic", "explicit").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("dynamic", "explicit"),
 							},
@@ -99,14 +99,14 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Schema(ctx context.Context
 						},
 						"hop_type": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Type of dynamic path to be computed").AddStringEnumDescription("mpls", "srv6").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("mpls", "srv6"),
 							},
 						},
 						"segment_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Segment-list name").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

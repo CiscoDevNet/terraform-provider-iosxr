@@ -59,7 +59,7 @@ resource "iosxr_qos_policy_map" "example" {
 <a id="nestedatt--queue_limits"></a>
 ### Nested Schema for `queue_limits`
 
-Optional:
+Required:
 
 - `unit` (String) queue-limit unit
   - Choices: `bytes`, `kbytes`, `mbytes`, `ms`, `packets`, `percent`, `us`

@@ -13,5 +13,4 @@ attributes:
       - yang_name: vrf-name
         tf_name: name
         id: true
-        default_value: default
         example: VRF1

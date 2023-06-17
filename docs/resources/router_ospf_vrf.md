@@ -126,7 +126,7 @@ resource "iosxr_router_ospf_vrf" "example" {
 <a id="nestedatt--areas"></a>
 ### Nested Schema for `areas`
 
-Optional:
+Required:
 
 - `area_id` (String) Enter the OSPF area configuration submode
 
@@ -134,9 +134,12 @@ Optional:
 <a id="nestedatt--redistribute_bgp"></a>
 ### Nested Schema for `redistribute_bgp`
 
-Optional:
+Required:
 
 - `as_number` (String) bgp as-number
+
+Optional:
+
 - `metric_type` (String) OSPF exterior metric type for redistributed routes
   - Choices: `1`, `2`
 - `tag` (Number) Set tag for routes redistributed into OSPF
@@ -146,9 +149,12 @@ Optional:
 <a id="nestedatt--redistribute_isis"></a>
 ### Nested Schema for `redistribute_isis`
 
-Optional:
+Required:
 
 - `instance_name` (String) ISO IS-IS
+
+Optional:
+
 - `level_1` (Boolean) IS-IS level-1 routes only
 - `level_1_2` (Boolean) IS-IS level-1 and level-2 routes
 - `level_2` (Boolean) IS-IS level-2 routes only
@@ -161,9 +167,12 @@ Optional:
 <a id="nestedatt--redistribute_ospf"></a>
 ### Nested Schema for `redistribute_ospf`
 
-Optional:
+Required:
 
 - `instance_name` (String) Open Shortest Path First (OSPF)
+
+Optional:
+
 - `match_external` (Boolean) Redistribute OSPF external routes
 - `match_internal` (Boolean) Redistribute OSPF internal routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes

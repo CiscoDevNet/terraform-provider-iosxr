@@ -90,7 +90,7 @@ resource "iosxr_evpn_evi" "example" {
 <a id="nestedatt--bgp_route_target_export_four_byte_as_format"></a>
 ### Nested Schema for `bgp_route_target_export_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -101,7 +101,7 @@ Optional:
 <a id="nestedatt--bgp_route_target_export_ipv4_address_format"></a>
 ### Nested Schema for `bgp_route_target_export_ipv4_address_format`
 
-Optional:
+Required:
 
 - `assigned_number` (Number) IP-address:nn (hex or decimal format)
   - Range: `0`-`65535`
@@ -111,7 +111,7 @@ Optional:
 <a id="nestedatt--bgp_route_target_export_two_byte_as_format"></a>
 ### Nested Schema for `bgp_route_target_export_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`
@@ -122,7 +122,7 @@ Optional:
 <a id="nestedatt--bgp_route_target_import_four_byte_as_format"></a>
 ### Nested Schema for `bgp_route_target_import_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -133,7 +133,7 @@ Optional:
 <a id="nestedatt--bgp_route_target_import_ipv4_address_format"></a>
 ### Nested Schema for `bgp_route_target_import_ipv4_address_format`
 
-Optional:
+Required:
 
 - `assigned_number` (Number) IP-address:nn (hex or decimal format)
   - Range: `0`-`65535`
@@ -143,7 +143,7 @@ Optional:
 <a id="nestedatt--bgp_route_target_import_two_byte_as_format"></a>
 ### Nested Schema for `bgp_route_target_import_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`

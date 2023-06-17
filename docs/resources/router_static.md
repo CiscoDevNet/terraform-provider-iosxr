@@ -67,9 +67,12 @@ resource "iosxr_router_static" "example" {
 <a id="nestedatt--nexthop_addresses"></a>
 ### Nested Schema for `nexthop_addresses`
 
-Optional:
+Required:
 
 - `address` (String) Forwarding router's address
+
+Optional:
+
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
@@ -80,13 +83,16 @@ Optional:
 <a id="nestedatt--nexthop_interface_addresses"></a>
 ### Nested Schema for `nexthop_interface_addresses`
 
-Optional:
+Required:
 
 - `address` (String) Forwarding router's address
+- `interface_name` (String) Forwarding interface
+
+Optional:
+
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
-- `interface_name` (String) Forwarding interface
 - `tag` (Number) Set tag for this route
   - Range: `1`-`4294967295`
 
@@ -94,12 +100,15 @@ Optional:
 <a id="nestedatt--nexthop_interfaces"></a>
 ### Nested Schema for `nexthop_interfaces`
 
+Required:
+
+- `interface_name` (String) Forwarding interface
+
 Optional:
 
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
-- `interface_name` (String) Forwarding interface
 - `tag` (Number) Set tag for this route
   - Range: `1`-`4294967295`
 

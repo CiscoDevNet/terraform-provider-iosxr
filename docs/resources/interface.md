@@ -104,12 +104,12 @@ resource "iosxr_interface" "example" {
 
 Required:
 
+- `address` (String) IPv6 name or address
 - `prefix_length` (Number) Prefix length in bits
   - Range: `0`-`128`
 
 Optional:
 
-- `address` (String) IPv6 name or address
 - `zone` (String) IPv6 address zone
   - Default value: `0`
 
@@ -117,7 +117,7 @@ Optional:
 <a id="nestedatt--service_policy_input"></a>
 ### Nested Schema for `service_policy_input`
 
-Optional:
+Required:
 
 - `name` (String) Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces
 
@@ -125,7 +125,7 @@ Optional:
 <a id="nestedatt--service_policy_output"></a>
 ### Nested Schema for `service_policy_output`
 
-Optional:
+Required:
 
 - `name` (String) Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces
 

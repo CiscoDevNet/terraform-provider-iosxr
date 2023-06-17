@@ -47,11 +47,11 @@ resource "iosxr_snmp_server_vrf_host" "example" {
 
 Required:
 
+- `community_string` (String) The UNENCRYPTED (cleartext) community string
 - `version_v3_security_level` (String) - Choices: `auth`, `noauth`, `priv`
 
 Optional:
 
-- `community_string` (String) The UNENCRYPTED (cleartext) community string
 - `udp_port` (String) udp port to which notifications should be sent
   - Default value: `default`
 

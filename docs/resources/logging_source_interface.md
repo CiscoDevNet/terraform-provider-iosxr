@@ -42,10 +42,9 @@ resource "iosxr_logging_source_interface" "example" {
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`
 
-Optional:
+Required:
 
 - `name` (String) Set VRF option
-  - Default value: `default`
 
 ## Import
 

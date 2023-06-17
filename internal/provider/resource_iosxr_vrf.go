@@ -173,21 +173,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -199,21 +199,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -225,7 +225,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"ip_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -233,14 +233,14 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -252,21 +252,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -278,21 +278,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -304,7 +304,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"ip_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -312,14 +312,14 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -331,21 +331,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -357,21 +357,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -383,7 +383,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"ip_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -391,14 +391,14 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -410,21 +410,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -436,21 +436,21 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -462,7 +462,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"ip_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
@@ -470,14 +470,14 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						},
 						"index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"stitching": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},

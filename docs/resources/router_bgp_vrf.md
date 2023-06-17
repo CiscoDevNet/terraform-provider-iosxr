@@ -93,6 +93,7 @@ Required:
 
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
+- `neighbor_address` (String) Neighbor address
 - `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_keepalive_interval` (Number) BGP timers
   - Range: `0`-`65535`
@@ -109,7 +110,6 @@ Optional:
 - `local_as_dual_as` (Boolean) Dual-AS mode
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
 - `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
-- `neighbor_address` (String) Neighbor address
 - `password` (String) Specifies an ENCRYPTED password will follow
 - `remote_as` (String) bgp as-number
 - `shutdown` (Boolean) Administratively shut down this neighbor

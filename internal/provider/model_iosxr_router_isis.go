@@ -845,7 +845,8 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -875,7 +876,8 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -905,7 +907,8 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -935,7 +938,8 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -965,7 +969,8 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -978,7 +983,6 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}
 		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
@@ -1011,7 +1015,14 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
 	}
-
+	for i := range data.AffinityMaps {
+		keys := [...]string{"affinity-map-name"}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.FlexAlgos {
 		keys := [...]string{"algorithm-number"}
 		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
@@ -1026,7 +1037,14 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algos/flex-algo%v/metric-type/delay", data.getPath(), keyString))
 		}
 	}
-
+	for i := range data.Nets {
+		keys := [...]string{"net-id"}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}

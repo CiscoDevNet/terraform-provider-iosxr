@@ -729,7 +729,8 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -759,7 +760,8 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -796,7 +798,6 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.NexthopValidationColorExtcommDisable.IsNull() && !data.NexthopValidationColorExtcommDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nexthop/validation/color-extcomm/disable", data.getPath()))
 	}
-
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
@@ -823,7 +824,6 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", data.getPath(), keyString))
 		}
 	}
-
 	for i := range data.NeighborGroups {
 		keys := [...]string{"neighbor-group-name"}
 		keyValues := [...]string{data.NeighborGroups[i].Name.ValueString()}

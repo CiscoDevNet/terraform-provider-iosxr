@@ -146,7 +146,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"neighbor_address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
@@ -250,7 +250,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 900),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

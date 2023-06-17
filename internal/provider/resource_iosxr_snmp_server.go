@@ -358,7 +358,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"user_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the user").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 							},
@@ -396,7 +396,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"group_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the group").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

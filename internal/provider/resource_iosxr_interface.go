@@ -92,7 +92,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'input' for 'service-ipsec and 'service-gre' interfaces").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9._@$%+#:=<>\\-]{0,62}`), ""),
 							},
@@ -107,7 +107,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Name of the service policy. Set 'output' for 'service-ipsec and 'service-gre' interfaces").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9._@$%+#:=<>\\-]{0,62}`), ""),
 							},
@@ -229,7 +229,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv6 name or address").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"prefix_length": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix length in bits").AddIntegerRangeDescription(0, 128).String,

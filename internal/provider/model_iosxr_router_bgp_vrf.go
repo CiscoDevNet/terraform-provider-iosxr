@@ -526,7 +526,8 @@ func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterB
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -545,7 +546,6 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate", data.getPath()))
 	}
-
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}

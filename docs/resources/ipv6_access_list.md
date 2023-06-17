@@ -52,6 +52,11 @@ resource "iosxr_ipv6_access_list" "example" {
 <a id="nestedatt--sequences"></a>
 ### Nested Schema for `sequences`
 
+Required:
+
+- `sequence_number` (Number) Sequence number for this entry
+  - Range: `1`-`2147483643`
+
 Optional:
 
 - `deny_capture` (Boolean) Capture matched packet
@@ -242,8 +247,6 @@ Optional:
 - `permit_ttl_range_start` (Number) ttl range lower value
   - Range: `0`-`255`
 - `remark` (String) Comment for access list
-- `sequence_number` (Number) Sequence number for this entry
-  - Range: `1`-`2147483643`
 
 ## Import
 

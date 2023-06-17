@@ -197,7 +197,8 @@ func (data *SegmentRoutingV6) getDeletedListItems(ctx context.Context, state Seg
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -213,7 +214,6 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
 	}
-
 	for i := range data.Locators {
 		keys := [...]string{"name"}
 		keyValues := [...]string{data.Locators[i].Name.ValueString()}

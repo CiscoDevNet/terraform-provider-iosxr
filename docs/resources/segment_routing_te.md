@@ -91,14 +91,14 @@ resource "iosxr_segment_routing_te" "example" {
 
 Required:
 
+- `color` (Number) Color
+  - Range: `1`-`4294967295`
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
   - Choices: `end-point-type-ipv4`, `end-point-type-ipv6`
 
 Optional:
 
-- `color` (Number) Color
-  - Range: `1`-`4294967295`
 - `constraint_segments_protection_type` (String) Protection Type
   - Choices: `protected-only`, `protected-preferred`, `unprotected-only`, `unprotected-preferred`
 - `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs
@@ -122,9 +122,12 @@ Optional:
 <a id="nestedatt--pce_peers"></a>
 ### Nested Schema for `pce_peers`
 
-Optional:
+Required:
 
 - `pce_address` (String) Remote PCE address
+
+Optional:
+
 - `precedence` (Number) Precedence value of this PCE
   - Range: `0`-`255`
 
@@ -139,13 +142,13 @@ Required:
   - Range: `1`-`4294967295`
 - `policy_color_endpoint_type` (String) End point type
   - Choices: `end-point-type-ipv4`, `end-point-type-ipv6`
+- `policy_name` (String) Policy name
 - `source_address` (String) Source address
 - `source_address_type` (String) IP address type
   - Choices: `end-point-type-ipv4`, `end-point-type-ipv6`
 
 Optional:
 
-- `policy_name` (String) Policy name
 - `srv6_enable` (Boolean) True only
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
   - Choices: `ub6-insert-reduced`

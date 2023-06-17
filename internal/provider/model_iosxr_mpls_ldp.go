@@ -409,7 +409,8 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -439,7 +440,8 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -469,7 +471,8 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -482,7 +485,22 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 
 func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	if !data.CapabilitiesSacIpv4Disable.IsNull() && !data.CapabilitiesSacIpv4Disable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
 	}
@@ -498,7 +516,6 @@ func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.MldpLoggingNotifications.IsNull() && !data.MldpLoggingNotifications.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
 	}
-
 	for i := range data.MldpAddressFamilies {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.MldpAddressFamilies[i].Name.ValueString()}

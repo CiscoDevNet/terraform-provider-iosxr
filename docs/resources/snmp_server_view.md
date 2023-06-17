@@ -43,11 +43,14 @@ resource "iosxr_snmp_server_view" "example" {
 <a id="nestedatt--mib_view_families"></a>
 ### Nested Schema for `mib_view_families`
 
+Required:
+
+- `name` (String) MIB view family name
+
 Optional:
 
 - `excluded` (Boolean) MIB family is excluded from the view
 - `included` (Boolean) MIB family is included in the view
-- `name` (String) MIB view family name
 
 ## Import
 

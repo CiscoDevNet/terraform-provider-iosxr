@@ -896,7 +896,8 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -932,7 +933,8 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -962,7 +964,8 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -992,7 +995,8 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1032,7 +1036,6 @@ func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context) []s
 	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/static", data.getPath()))
 	}
-
 	for i := range data.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
 		keyValues := [...]string{data.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(data.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
@@ -1050,7 +1053,14 @@ func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context) []s
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/summary-only", data.getPath(), keyString))
 		}
 	}
-
+	for i := range data.Networks {
+		keys := [...]string{"address", "masklength"}
+		keyValues := [...]string{data.Networks[i].Address.ValueString(), strconv.FormatInt(data.Networks[i].Masklength.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.RedistributeIsis {
 		keys := [...]string{"instance-name"}
 		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
@@ -1080,7 +1090,6 @@ func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context) []s
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level/one-inter-area", data.getPath(), keyString))
 		}
 	}
-
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"router-tag"}
 		keyValues := [...]string{data.RedistributeOspf[i].RouterTag.ValueString()}

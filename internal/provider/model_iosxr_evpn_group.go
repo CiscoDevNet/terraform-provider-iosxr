@@ -113,7 +113,8 @@ func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup)
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -126,6 +127,13 @@ func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup)
 
 func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
+	for i := range data.CoreInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.CoreInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

@@ -50,9 +50,12 @@ resource "iosxr_logging_vrf" "example" {
 <a id="nestedatt--host_ipv4_addresses"></a>
 ### Nested Schema for `host_ipv4_addresses`
 
-Optional:
+Required:
 
 - `ipv4_address` (String) IPV4 address of the logging host
+
+Optional:
+
 - `severity` (String) Set severity of  messages for particular remote host/vrf
   - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
 
@@ -60,9 +63,12 @@ Optional:
 <a id="nestedatt--host_ipv6_addresses"></a>
 ### Nested Schema for `host_ipv6_addresses`
 
-Optional:
+Required:
 
 - `ipv6_address` (String) IPV6 address of the logging host
+
+Optional:
+
 - `severity` (String) Set severity of  messages for particular remote host/vrf
   - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
 

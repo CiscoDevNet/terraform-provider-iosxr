@@ -58,21 +58,23 @@ resource "iosxr_l2vpn_xconnect_group_p2p" "example" {
 <a id="nestedatt--evpn_service_neighbors"></a>
 ### Nested Schema for `evpn_service_neighbors`
 
-Optional:
+Required:
 
-- `pw_class` (String) PW class template name to use
 - `service_id` (Number) Specify service ID (used as local and remote ac-id)
   - Range: `1`-`4294967294`
 - `vpn_id` (Number) Ethernet VPN Identifier
   - Range: `1`-`65534`
 
+Optional:
+
+- `pw_class` (String) PW class template name to use
+
 
 <a id="nestedatt--evpn_target_neighbors"></a>
 ### Nested Schema for `evpn_target_neighbors`
 
-Optional:
+Required:
 
-- `pw_class` (String) PW class template name to use
 - `remote_ac_id` (Number) Specify remote attachment circuit identifier
   - Range: `1`-`4294967294`
 - `source` (Number) Specify source attachment circuit identifier
@@ -80,11 +82,15 @@ Optional:
 - `vpn_id` (Number) Ethernet VPN Identifier
   - Range: `1`-`65534`
 
+Optional:
+
+- `pw_class` (String) PW class template name to use
+
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
 
-Optional:
+Required:
 
 - `interface_name` (String) Specify (sub-)interface name to cross connect
 
@@ -92,35 +98,44 @@ Optional:
 <a id="nestedatt--ipv4_neighbors"></a>
 ### Nested Schema for `ipv4_neighbors`
 
-Optional:
+Required:
 
 - `address` (String) IPv4
-- `pw_class` (String) PW class template name to use for this XC
 - `pw_id` (Number) Specify the pseudowire id
   - Range: `1`-`4294967295`
+
+Optional:
+
+- `pw_class` (String) PW class template name to use for this XC
 
 
 <a id="nestedatt--ipv6_neighbors"></a>
 ### Nested Schema for `ipv6_neighbors`
 
-Optional:
+Required:
 
 - `address` (String) IPv6
-- `pw_class` (String) PW class template name to use for this XC
 - `pw_id` (Number) Specify the pseudowire id
   - Range: `1`-`4294967295`
+
+Optional:
+
+- `pw_class` (String) PW class template name to use for this XC
 
 
 <a id="nestedatt--neighbor_evpn_evi_segment_routing_services"></a>
 ### Nested Schema for `neighbor_evpn_evi_segment_routing_services`
 
-Optional:
+Required:
 
-- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
 - `service_id` (Number) Specify service ID (used as local and remote ac-id)
   - Range: `1`-`4294967294`
 - `vpn_id` (Number) Ethernet VPN Identifier
   - Range: `1`-`65534`
+
+Optional:
+
+- `segment_routing_srv6_locator` (String) PW locator to use for EVPN SID allocation
 
 ## Import
 

@@ -133,7 +133,8 @@ func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []strin
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -146,6 +147,13 @@ func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []strin
 
 func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
+	for i := range data.XconnectGroups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

@@ -949,7 +949,8 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -979,7 +980,8 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1055,7 +1057,14 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.BgpBgp4MibUpdown.IsNull() && !data.BgpBgp4MibUpdown.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown", data.getPath()))
 	}
-
+	for i := range data.Users {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.Users[i].UserName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Groups {
 		keys := [...]string{"group-name"}
 		keyValues := [...]string{data.Groups[i].GroupName.ValueString()}

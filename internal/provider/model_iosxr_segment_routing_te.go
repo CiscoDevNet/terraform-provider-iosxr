@@ -641,7 +641,8 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -671,7 +672,8 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -701,7 +703,8 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -723,7 +726,14 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string 
 	if !data.PccReportAll.IsNull() && !data.PccReportAll.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/pcc/report-all", data.getPath()))
 	}
-
+	for i := range data.PcePeers {
+		keys := [...]string{"pce-address"}
+		keyValues := [...]string{data.PcePeers[i].PceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.OnDemandColors {
 		keys := [...]string{"color"}
 		keyValues := [...]string{strconv.FormatInt(data.OnDemandColors[i].Color.ValueInt64(), 10)}
@@ -741,7 +751,6 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string 
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/effective-metric/enable", data.getPath(), keyString))
 		}
 	}
-
 	for i := range data.Policies {
 		keys := [...]string{"policy-name"}
 		keyValues := [...]string{data.Policies[i].PolicyName.ValueString()}

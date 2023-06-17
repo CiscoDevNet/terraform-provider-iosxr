@@ -256,7 +256,8 @@ func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPoli
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -269,6 +270,13 @@ func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPoli
 
 func (data *QoSPolicyMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
+	for i := range data.QueueLimits {
+		keys := [...]string{"value", "unit"}
+		keyValues := [...]string{data.QueueLimits[i].Value.ValueString(), data.QueueLimits[i].Unit.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	return emptyLeafsDelete
 }

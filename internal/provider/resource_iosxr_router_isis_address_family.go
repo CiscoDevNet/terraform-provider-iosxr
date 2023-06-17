@@ -101,7 +101,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					Attributes: map[string]schema.Attribute{
 						"level_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set metric-style for one level only").AddIntegerRangeDescription(1, 2).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
@@ -242,7 +242,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					Attributes: map[string]schema.Attribute{
 						"priority": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("critical", "high", "medium"),
 							},
@@ -282,7 +282,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					Attributes: map[string]schema.Attribute{
 						"level_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set maximum redistributed prefixes for one level only").AddIntegerRangeDescription(1, 2).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
@@ -304,7 +304,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					Attributes: map[string]schema.Attribute{
 						"instance_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -326,7 +326,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					Attributes: map[string]schema.Attribute{
 						"locator_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enter SRv6 Locator submode").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 59),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

@@ -793,7 +793,8 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -823,7 +824,8 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -853,7 +855,8 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -883,7 +886,8 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -926,7 +930,22 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.DefaultInformationOriginateAlways.IsNull() && !data.DefaultInformationOriginateAlways.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate/always", data.getPath()))
 	}
-
+	for i := range data.Areas {
+		keys := [...]string{"area-id"}
+		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.RedistributeIsis {
 		keys := [...]string{"instance-name"}
 		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
@@ -944,7 +963,6 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis%v/level-1-2", data.getPath(), keyString))
 		}
 	}
-
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"instance-name"}
 		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}

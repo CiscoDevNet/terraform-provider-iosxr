@@ -99,7 +99,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					Attributes: map[string]schema.Attribute{
 						"level_id": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").AddIntegerRangeDescription(1, 2).String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},

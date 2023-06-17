@@ -219,7 +219,8 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Co
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -232,7 +233,6 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Co
 
 func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
 		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}

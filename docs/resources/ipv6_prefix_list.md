@@ -49,6 +49,11 @@ resource "iosxr_ipv6_prefix_list" "example" {
 <a id="nestedatt--sequences"></a>
 ### Nested Schema for `sequences`
 
+Required:
+
+- `sequence_number` (Number) Sequence number
+  - Range: `1`-`2147483646`
+
 Optional:
 
 - `mask` (Number) Mask length of IPv6 address
@@ -63,8 +68,6 @@ Optional:
   - Choices: `deny`, `permit`
 - `prefix` (String) IPv6 address prefix
 - `remark` (String) Comments for prefix list
-- `sequence_number` (Number) Sequence number
-  - Range: `1`-`2147483646`
 
 ## Import
 

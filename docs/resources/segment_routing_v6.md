@@ -45,12 +45,15 @@ resource "iosxr_segment_routing_v6" "example" {
 <a id="nestedatt--locators"></a>
 ### Nested Schema for `locators`
 
+Required:
+
+- `name` (String) Locator name
+
 Optional:
 
 - `locator_enable` (Boolean) Enable a SRv6 locator
 - `micro_segment_behavior` (String) Specify Locator's behavior
   - Choices: `unode-psp-usd`, `unode-shift-only`
-- `name` (String) Locator name
 - `prefix` (String) IPv6 Prefix
 - `prefix_length` (Number) Prefix length
   - Range: `32`-`112`

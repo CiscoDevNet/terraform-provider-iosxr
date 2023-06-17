@@ -66,7 +66,7 @@ resource "iosxr_l2vpn_bridge_group_bridge_domain" "example" {
 <a id="nestedatt--evis"></a>
 ### Nested Schema for `evis`
 
-Optional:
+Required:
 
 - `vpn_id` (Number) Ethernet VPN identifier
   - Range: `1`-`65534`
@@ -75,16 +75,19 @@ Optional:
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
 
-Optional:
+Required:
 
 - `interface_name` (String) Specify interface name
+
+Optional:
+
 - `split_horizon_group` (Boolean) Configure split-horizon group
 
 
 <a id="nestedatt--segment_routing_srv6_evis"></a>
 ### Nested Schema for `segment_routing_srv6_evis`
 
-Optional:
+Required:
 
 - `vpn_id` (Number) Ethernet VPN identifier for srv6
   - Range: `1`-`65534`
@@ -93,7 +96,7 @@ Optional:
 <a id="nestedatt--vnis"></a>
 ### Nested Schema for `vnis`
 
-Optional:
+Required:
 
 - `vni_id` (Number) VxLAN VPN identifier
   - Range: `1`-`16777215`

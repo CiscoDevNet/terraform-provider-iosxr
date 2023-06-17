@@ -70,7 +70,7 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 					Attributes: map[string]schema.Attribute{
 						"key_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Configure a Key").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 800),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

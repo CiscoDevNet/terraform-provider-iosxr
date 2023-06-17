@@ -43,7 +43,7 @@ resource "iosxr_evpn_group" "example" {
 <a id="nestedatt--core_interfaces"></a>
 ### Nested Schema for `core_interfaces`
 
-Optional:
+Required:
 
 - `interface_name` (String) configure EVPN group core interface
 

@@ -69,7 +69,7 @@ func (r *SNMPServerViewResource) Schema(ctx context.Context, req resource.Schema
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("MIB view family name").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},

@@ -50,7 +50,7 @@ resource "iosxr_ssh" "example" {
 <a id="nestedatt--server_vrfs"></a>
 ### Nested Schema for `server_vrfs`
 
-Optional:
+Required:
 
 - `vrf_name` (String) Cisco sshd VRF name
 

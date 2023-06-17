@@ -321,7 +321,8 @@ func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) [
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -334,7 +335,6 @@ func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) [
 
 func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.Keys {
 		keys := [...]string{"key-name"}
 		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}

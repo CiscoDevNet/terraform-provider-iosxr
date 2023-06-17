@@ -153,7 +153,8 @@ func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPS
 				break
 			}
 		}
-		if !found {
+		if found {
+		} else {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -166,7 +167,6 @@ func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPS
 
 func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-
 	for i := range data.MibViewFamilies {
 		keys := [...]string{"mib-view-family-name"}
 		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}

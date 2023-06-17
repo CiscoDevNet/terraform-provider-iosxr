@@ -97,7 +97,7 @@ resource "iosxr_vrf" "example" {
 <a id="nestedatt--address_family_ipv4_unicast_export_route_target_four_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_export_route_target_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -109,7 +109,7 @@ Optional:
 <a id="nestedatt--address_family_ipv4_unicast_export_route_target_ip_address_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_export_route_target_ip_address_format`
 
-Optional:
+Required:
 
 - `index` (Number) IPv4Address:index (hex or decimal format)
   - Range: `0`-`65535`
@@ -120,7 +120,7 @@ Optional:
 <a id="nestedatt--address_family_ipv4_unicast_export_route_target_two_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_export_route_target_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`
@@ -132,7 +132,7 @@ Optional:
 <a id="nestedatt--address_family_ipv4_unicast_import_route_target_four_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_import_route_target_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -144,7 +144,7 @@ Optional:
 <a id="nestedatt--address_family_ipv4_unicast_import_route_target_ip_address_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_import_route_target_ip_address_format`
 
-Optional:
+Required:
 
 - `index` (Number) IPv4Address:index (hex or decimal format)
   - Range: `0`-`65535`
@@ -155,7 +155,7 @@ Optional:
 <a id="nestedatt--address_family_ipv4_unicast_import_route_target_two_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv4_unicast_import_route_target_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`
@@ -167,7 +167,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_export_route_target_four_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_export_route_target_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -179,7 +179,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_export_route_target_ip_address_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_export_route_target_ip_address_format`
 
-Optional:
+Required:
 
 - `index` (Number) IPv4Address:index (hex or decimal format)
   - Range: `0`-`65535`
@@ -190,7 +190,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_export_route_target_two_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_export_route_target_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`
@@ -202,7 +202,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_import_route_target_four_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_import_route_target_four_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Four Byte AS number
   - Range: `65536`-`4294967295`
@@ -214,7 +214,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_import_route_target_ip_address_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_import_route_target_ip_address_format`
 
-Optional:
+Required:
 
 - `index` (Number) IPv4Address:index (hex or decimal format)
   - Range: `0`-`65535`
@@ -225,7 +225,7 @@ Optional:
 <a id="nestedatt--address_family_ipv6_unicast_import_route_target_two_byte_as_format"></a>
 ### Nested Schema for `address_family_ipv6_unicast_import_route_target_two_byte_as_format`
 
-Optional:
+Required:
 
 - `as_number` (Number) Two Byte AS Number
   - Range: `1`-`65535`

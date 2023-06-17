@@ -86,7 +86,7 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					Attributes: map[string]schema.Attribute{
 						"vrf_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd VRF name").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},

@@ -97,20 +97,23 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 <a id="nestedatt--aggregate_addresses"></a>
 ### Nested Schema for `aggregate_addresses`
 
-Optional:
+Required:
 
 - `address` (String) IPv6 Aggregate address and mask or masklength
-- `as_confed_set` (Boolean) Generate AS confed set path information
-- `as_set` (Boolean) Generate AS set path information
 - `masklength` (Number) Network in prefix/length format (prefix part)
   - Range: `0`-`128`
+
+Optional:
+
+- `as_confed_set` (Boolean) Generate AS confed set path information
+- `as_set` (Boolean) Generate AS set path information
 - `summary_only` (Boolean) Filter more specific routes from updates
 
 
 <a id="nestedatt--networks"></a>
 ### Nested Schema for `networks`
 
-Optional:
+Required:
 
 - `address` (String) IPv6 network and mask or masklength
 - `masklength` (Number) Network in prefix/length format (prefix part)
@@ -119,6 +122,10 @@ Optional:
 
 <a id="nestedatt--redistribute_ospf"></a>
 ### Nested Schema for `redistribute_ospf`
+
+Required:
+
+- `router_tag` (String) Open Shortest Path First (OSPF)
 
 Optional:
 
@@ -130,7 +137,6 @@ Optional:
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
-- `router_tag` (String) Open Shortest Path First (OSPF)
 
 ## Import
 

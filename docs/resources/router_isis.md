@@ -130,25 +130,29 @@ Required:
 
 - `bit_position` (Number) Bit position for affinity attribute value
   - Range: `0`-`255`
-
-Optional:
-
 - `name` (String) Affinity map configuration
 
 
 <a id="nestedatt--flex_algos"></a>
 ### Nested Schema for `flex_algos`
 
+Required:
+
+- `algorithm_number` (Number) Flex Algorithm definition
+  - Range: `128`-`255`
+
 Optional:
 
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
-- `algorithm_number` (Number) Flex Algorithm definition
-  - Range: `128`-`255`
 - `metric_type_delay` (Boolean) Use delay as metric
 
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_name` (String) Enter the IS-IS interface configuration submode
 
 Optional:
 
@@ -156,7 +160,6 @@ Optional:
   - Choices: `level-1`, `level-1-2`, `level-2-only`
 - `hello_padding_disable` (Boolean) Disable hello-padding
 - `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
-- `interface_name` (String) Enter the IS-IS interface configuration submode
 - `passive` (Boolean) Do not establish adjacencies over this interface
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
@@ -168,7 +171,7 @@ Optional:
 <a id="nestedatt--nets"></a>
 ### Nested Schema for `nets`
 
-Optional:
+Required:
 
 - `net_id` (String) A Network Entity Title (NET) for this process
 
@@ -178,6 +181,8 @@ Optional:
 
 Required:
 
+- `level_id` (Number) Set overload-bit for one level only
+  - Range: `1`-`2`
 - `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 
@@ -185,8 +190,6 @@ Optional:
 
 - `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
-- `level_id` (Number) Set overload-bit for one level only
-  - Range: `1`-`2`
 - `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 

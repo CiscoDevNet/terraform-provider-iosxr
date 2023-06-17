@@ -104,11 +104,11 @@ func (r *QoSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 					Attributes: map[string]schema.Attribute{
 						"value": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("queue-limit value").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"unit": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("queue-limit unit").AddStringEnumDescription("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us"),
 							},

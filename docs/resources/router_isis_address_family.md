@@ -137,22 +137,22 @@ resource "iosxr_router_isis_address_family" "example" {
 
 Required:
 
-- `maximum_prefixes` (Number) Maximum number of redistributed prefixes
-  - Range: `1`-`28000`
-
-Optional:
-
 - `level_id` (Number) Set maximum redistributed prefixes for one level only
   - Range: `1`-`2`
+- `maximum_prefixes` (Number) Maximum number of redistributed prefixes
+  - Range: `1`-`28000`
 
 
 <a id="nestedatt--metric_style_levels"></a>
 ### Nested Schema for `metric_style_levels`
 
-Optional:
+Required:
 
 - `level_id` (Number) Set metric-style for one level only
   - Range: `1`-`2`
+
+Optional:
+
 - `narrow` (Boolean) Use old style of TLVs with narrow metric
 - `transition` (Boolean) Send and accept both styles of TLVs during transition
 - `wide` (Boolean) Use new style of TLVs to carry wider metric
@@ -161,30 +161,39 @@ Optional:
 <a id="nestedatt--redistribute_isis"></a>
 ### Nested Schema for `redistribute_isis`
 
-Optional:
+Required:
 
 - `instance_id` (String) IS-IS
+
+Optional:
+
 - `route_policy` (String) Route policy reference
 
 
 <a id="nestedatt--segment_routing_srv6_locators"></a>
 ### Nested Schema for `segment_routing_srv6_locators`
 
+Required:
+
+- `locator_name` (String) Enter SRv6 Locator submode
+
 Optional:
 
 - `level` (Number) Advertise the locator only in the specified level
   - Range: `1`-`2`
-- `locator_name` (String) Enter SRv6 Locator submode
 
 
 <a id="nestedatt--spf_prefix_priorities"></a>
 ### Nested Schema for `spf_prefix_priorities`
 
+Required:
+
+- `priority` (String) prefix priority
+  - Choices: `critical`, `high`, `medium`
+
 Optional:
 
 - `access_list_name` (String) Access-list name
-- `priority` (String) prefix priority
-  - Choices: `critical`, `high`, `medium`
 - `tag` (Number) Specify a tag to indicate priority
   - Range: `1`-`4294967295`
 

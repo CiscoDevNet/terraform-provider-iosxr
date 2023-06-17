@@ -73,7 +73,7 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					Attributes: map[string]schema.Attribute{
 						"group_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),

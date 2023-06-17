@@ -188,7 +188,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"area_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
-							Optional:            true,
+							Required:            true,
 						},
 					},
 				},
@@ -200,7 +200,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"as_number": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
-							Optional:            true,
+							Required:            true,
 						},
 						"tag": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set tag for routes redistributed into OSPF").AddIntegerRangeDescription(0, 4294967295).String,
@@ -226,7 +226,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
@@ -267,7 +267,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					Attributes: map[string]schema.Attribute{
 						"instance_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
-							Optional:            true,
+							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},

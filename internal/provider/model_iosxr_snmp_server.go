@@ -949,8 +949,7 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -980,8 +979,7 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

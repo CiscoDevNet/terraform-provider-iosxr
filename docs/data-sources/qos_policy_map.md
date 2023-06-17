@@ -14,9 +14,7 @@ This data source can read the QoS Policy Map configuration.
 
 ```terraform
 data "iosxr_qos_policy_map" "example" {
-  policy_map_name = "core-ingress-classifier"
-  name            = "class-default"
-  type            = "qos"
+  policy_map_name = "PM1"
 }
 ```
 
@@ -25,9 +23,7 @@ data "iosxr_qos_policy_map" "example" {
 
 ### Required
 
-- `name` (String) Name of the class-map
 - `policy_map_name` (String) Name of the policymap
-- `type` (String) The type of class-map
 
 ### Optional
 
@@ -35,21 +31,31 @@ data "iosxr_qos_policy_map" "example" {
 
 ### Read-Only
 
+- `classes` (Attributes List) (see [below for nested schema](#nestedatt--classes))
+- `description` (String) Set description for this policy-map
+- `id` (String) The path of the retrieved object.
+
+<a id="nestedatt--classes"></a>
+### Nested Schema for `classes`
+
+Read-Only:
+
 - `bandwidth_remaining_unit` (String) Bandwidth value unit
 - `bandwidth_remaining_value` (String) Bandwidth value
-- `id` (String) The path of the retrieved object.
+- `name` (String) Name of the class-map
 - `police_rate_unit` (String) Rate unit
 - `police_rate_value` (String) Committed Information Rate
 - `priority_level` (Number) Configure a priority level
-- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--queue_limits))
+- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))
 - `service_policy_name` (String) Name of the child service policy
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `shape_average_rate_unit` (String) Shape rate unit
 - `shape_average_rate_value` (String)
+- `type` (String) The type of class-map
 
-<a id="nestedatt--queue_limits"></a>
-### Nested Schema for `queue_limits`
+<a id="nestedatt--classes--queue_limits"></a>
+### Nested Schema for `classes.queue_limits`
 
 Read-Only:
 

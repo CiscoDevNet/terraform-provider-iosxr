@@ -49,69 +49,81 @@ func (d *QoSPolicyMapDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Name of the policymap",
 				Required:            true,
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: "Name of the class-map",
-				Required:            true,
-			},
-			"type": schema.StringAttribute{
-				MarkdownDescription: "The type of class-map",
-				Required:            true,
-			},
-			"set_mpls_experimental_topmost": schema.Int64Attribute{
-				MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
+			"description": schema.StringAttribute{
+				MarkdownDescription: "Set description for this policy-map",
 				Computed:            true,
 			},
-			"set_dscp": schema.StringAttribute{
-				MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
-				Computed:            true,
-			},
-			"priority_level": schema.Int64Attribute{
-				MarkdownDescription: "Configure a priority level",
-				Computed:            true,
-			},
-			"queue_limits": schema.ListNestedAttribute{
-				MarkdownDescription: "Configure queue-limit (taildrop threshold) for this class",
+			"classes": schema.ListNestedAttribute{
+				MarkdownDescription: "",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"value": schema.StringAttribute{
-							MarkdownDescription: "queue-limit value",
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Name of the class-map",
 							Computed:            true,
 						},
-						"unit": schema.StringAttribute{
-							MarkdownDescription: "queue-limit unit",
+						"type": schema.StringAttribute{
+							MarkdownDescription: "The type of class-map",
+							Computed:            true,
+						},
+						"set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: "Sets the experimental value of the MPLS packet top-most labels.",
+							Computed:            true,
+						},
+						"set_dscp": schema.StringAttribute{
+							MarkdownDescription: "Set IP DSCP (DiffServ CodePoint)",
+							Computed:            true,
+						},
+						"priority_level": schema.Int64Attribute{
+							MarkdownDescription: "Configure a priority level",
+							Computed:            true,
+						},
+						"queue_limits": schema.ListNestedAttribute{
+							MarkdownDescription: "Configure queue-limit (taildrop threshold) for this class",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"value": schema.StringAttribute{
+										MarkdownDescription: "queue-limit value",
+										Computed:            true,
+									},
+									"unit": schema.StringAttribute{
+										MarkdownDescription: "queue-limit unit",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"service_policy_name": schema.StringAttribute{
+							MarkdownDescription: "Name of the child service policy",
+							Computed:            true,
+						},
+						"police_rate_value": schema.StringAttribute{
+							MarkdownDescription: "Committed Information Rate",
+							Computed:            true,
+						},
+						"police_rate_unit": schema.StringAttribute{
+							MarkdownDescription: "Rate unit",
+							Computed:            true,
+						},
+						"shape_average_rate_value": schema.StringAttribute{
+							MarkdownDescription: "",
+							Computed:            true,
+						},
+						"shape_average_rate_unit": schema.StringAttribute{
+							MarkdownDescription: "Shape rate unit",
+							Computed:            true,
+						},
+						"bandwidth_remaining_unit": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth value unit",
+							Computed:            true,
+						},
+						"bandwidth_remaining_value": schema.StringAttribute{
+							MarkdownDescription: "Bandwidth value",
 							Computed:            true,
 						},
 					},
 				},
-			},
-			"service_policy_name": schema.StringAttribute{
-				MarkdownDescription: "Name of the child service policy",
-				Computed:            true,
-			},
-			"police_rate_value": schema.StringAttribute{
-				MarkdownDescription: "Committed Information Rate",
-				Computed:            true,
-			},
-			"police_rate_unit": schema.StringAttribute{
-				MarkdownDescription: "Rate unit",
-				Computed:            true,
-			},
-			"shape_average_rate_value": schema.StringAttribute{
-				MarkdownDescription: "",
-				Computed:            true,
-			},
-			"shape_average_rate_unit": schema.StringAttribute{
-				MarkdownDescription: "Shape rate unit",
-				Computed:            true,
-			},
-			"bandwidth_remaining_unit": schema.StringAttribute{
-				MarkdownDescription: "Bandwidth value unit",
-				Computed:            true,
-			},
-			"bandwidth_remaining_value": schema.StringAttribute{
-				MarkdownDescription: "Bandwidth value",
-				Computed:            true,
 			},
 		},
 	}

@@ -2269,8 +2269,7 @@ func (data *IPv4AccessList) getDeletedListItems(ctx context.Context, state IPv4A
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

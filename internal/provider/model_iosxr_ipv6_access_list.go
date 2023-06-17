@@ -1913,8 +1913,7 @@ func (data *IPv6AccessList) getDeletedListItems(ctx context.Context, state IPv6A
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

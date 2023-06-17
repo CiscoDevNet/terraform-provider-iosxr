@@ -321,8 +321,7 @@ func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) [
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

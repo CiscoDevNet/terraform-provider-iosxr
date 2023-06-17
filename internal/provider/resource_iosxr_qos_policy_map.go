@@ -59,102 +59,108 @@ func (r *QoSPolicyMapResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Name of the class-map").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"type": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The type of class-map").AddStringEnumDescription("qos", "traffic").String,
-				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("qos", "traffic"),
-				},
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.RequiresReplace(),
-				},
-			},
-			"set_mpls_experimental_topmost": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 7),
-				},
-			},
-			"set_dscp": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+			"description": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set description for this policy-map").String,
 				Optional:            true,
 			},
-			"priority_level": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure a priority level").AddIntegerRangeDescription(1, 7).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(1, 7),
-				},
-			},
-			"queue_limits": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure queue-limit (taildrop threshold) for this class").String,
+			"classes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"value": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("queue-limit value").String,
-							Required:            true,
-						},
-						"unit": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("queue-limit unit").AddStringEnumDescription("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us").String,
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the class-map").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us"),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
 							},
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The type of class-map").AddStringEnumDescription("qos", "traffic").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("qos", "traffic"),
+							},
+						},
+						"set_mpls_experimental_topmost": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Sets the experimental value of the MPLS packet top-most labels.").AddIntegerRangeDescription(0, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 7),
+							},
+						},
+						"set_dscp": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set IP DSCP (DiffServ CodePoint)").String,
+							Optional:            true,
+						},
+						"priority_level": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure a priority level").AddIntegerRangeDescription(1, 7).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 7),
+							},
+						},
+						"queue_limits": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure queue-limit (taildrop threshold) for this class").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"value": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("queue-limit value").String,
+										Required:            true,
+									},
+									"unit": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("queue-limit unit").AddStringEnumDescription("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("bytes", "kbytes", "mbytes", "ms", "packets", "percent", "us"),
+										},
+									},
+								},
+							},
+						},
+						"service_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the child service policy").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
+							},
+						},
+						"police_rate_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Committed Information Rate").String,
+							Optional:            true,
+						},
+						"police_rate_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
+							},
+						},
+						"shape_average_rate_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("").String,
+							Optional:            true,
+						},
+						"shape_average_rate_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Shape rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
+							},
+						},
+						"bandwidth_remaining_unit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("percent", "ratio"),
+							},
+						},
+						"bandwidth_remaining_value": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value").String,
+							Optional:            true,
 						},
 					},
 				},
-			},
-			"service_policy_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Name of the child service policy").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9][a-zA-Z0-9\._@$%+#:=<>\-]{0,62}`), ""),
-				},
-			},
-			"police_rate_value": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Committed Information Rate").String,
-				Optional:            true,
-			},
-			"police_rate_unit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
-				},
-			},
-			"shape_average_rate_value": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").String,
-				Optional:            true,
-			},
-			"shape_average_rate_unit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Shape rate unit").AddStringEnumDescription("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent"),
-				},
-			},
-			"bandwidth_remaining_unit": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value unit").AddStringEnumDescription("percent", "ratio").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("percent", "ratio"),
-				},
-			},
-			"bandwidth_remaining_value": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Bandwidth value").String,
-				Optional:            true,
 			},
 		},
 	}

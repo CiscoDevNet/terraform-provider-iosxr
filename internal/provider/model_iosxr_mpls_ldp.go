@@ -409,8 +409,7 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -440,8 +439,7 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -471,8 +469,7 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -1,51 +1,57 @@
 ---
 name: QoS Policy Map
-path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]/class[name=%s][type=%s]
+path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]
 doc_category: QoS
 attributes:
   - yang_name: policy-map-name
-    example: core-ingress-classifier
-  - yang_name: name
-    example: class-default
-  - yang_name: type
-    example: qos
-  - yang_name: set/mpls/experimental/topmost
-    example: 0
-  - yang_name: set/dscp
-    example: 0
-  - yang_name: priority/level
-    example: 2
-    exclude_test: true
-  - yang_name: queue-limits/queue-limit
-    tf_name: queue_limits
+    example: PM1
+  - yang_name: description
+    example: My description
+  - yang_name: class
+    tf_name: classes
     type: List
-    exclude_test: true
     attributes:
-      - yang_name: value
+      - yang_name: name
         id: true
+        example: class-default
+      - yang_name: type
+        id: true
+        example: qos
+      - yang_name: set/mpls/experimental/topmost
+        example: 0
+      - yang_name: set/dscp
+        example: 0
+      - yang_name: priority/level
+        example: 2
+        exclude_test: true
+      - yang_name: queue-limits/queue-limit
+        tf_name: queue_limits
+        type: List
+        attributes:
+          - yang_name: value
+            id: true
+            example: 100
+          - yang_name: unit
+            id: true
+            example: us
+      - yang_name: service-policy/name
+        example: SERVICEPOLICY
+        exclude_test: true
+      - yang_name: police/rate/value
+        example: 5
+        exclude_test: true
+      - yang_name: police/rate/unit
+        example: gbps
+        exclude_test: true
+      - yang_name: shape/average/rate/value
         example: 100
-      - yang_name: unit
-        id: true
-        example: us
-
-  - yang_name: service-policy/name
-    example: SERVICEPOLICY
-    exclude_test: true
-  - yang_name: police/rate/value
-    example: 5
-    exclude_test: true
-  - yang_name: police/rate/unit
-    example: gbps
-    exclude_test: true
-  - yang_name: shape/average/rate/value
-    example: 100
-    exclude_test: true
-  - yang_name: shape/average/rate/unit
-    example: gbps
-    exclude_test: true
-  - yang_name: bandwidth-remaining/unit
-    example: percent
-    exclude_test: true
-  - yang_name: bandwidth-remaining/value
-    example: 1
-    exclude_test: true
+        exclude_test: true
+      - yang_name: shape/average/rate/unit
+        example: gbps
+        exclude_test: true
+      - yang_name: bandwidth-remaining/unit
+        example: percent
+        exclude_test: true
+      - yang_name: bandwidth-remaining/value
+        example: 1
+        exclude_test: true

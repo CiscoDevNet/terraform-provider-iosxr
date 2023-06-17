@@ -518,8 +518,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -555,8 +554,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -592,8 +590,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -635,8 +632,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -672,8 +668,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -709,8 +704,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

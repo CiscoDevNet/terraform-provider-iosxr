@@ -197,8 +197,7 @@ func (data *IPv6PrefixList) getDeletedListItems(ctx context.Context, state IPv6P
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

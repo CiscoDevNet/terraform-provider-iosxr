@@ -16,16 +16,20 @@ func TestAccIosxrQoSPolicyMap(t *testing.T) {
 			{
 				Config: testAccIosxrQoSPolicyMapConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "name", "class-default"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "type", "qos"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "set_mpls_experimental_topmost", "0"),
-					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "set_dscp", "0"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "policy_map_name", "PM1"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "description", "My description"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.name", "class-default"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.type", "qos"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.set_mpls_experimental_topmost", "0"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.set_dscp", "0"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.queue_limits.0.value", "100"),
+					resource.TestCheckResourceAttr("iosxr_qos_policy_map.test", "classes.0.queue_limits.0.unit", "us"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_qos_policy_map.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]/class[name=class-default][type=qos]",
+				ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]",
 			},
 		},
 	})
@@ -34,9 +38,7 @@ func TestAccIosxrQoSPolicyMap(t *testing.T) {
 func testAccIosxrQoSPolicyMapConfig_minimum() string {
 	return `
 	resource "iosxr_qos_policy_map" "test" {
-		policy_map_name = "core-ingress-classifier"
-		name = "class-default"
-		type = "qos"
+		policy_map_name = "PM1"
 	}
 	`
 }
@@ -44,11 +46,18 @@ func testAccIosxrQoSPolicyMapConfig_minimum() string {
 func testAccIosxrQoSPolicyMapConfig_all() string {
 	return `
 	resource "iosxr_qos_policy_map" "test" {
-		policy_map_name = "core-ingress-classifier"
-		name = "class-default"
-		type = "qos"
-		set_mpls_experimental_topmost = 0
-		set_dscp = "0"
+		policy_map_name = "PM1"
+		description = "My description"
+		classes = [{
+			name = "class-default"
+			type = "qos"
+			set_mpls_experimental_topmost = 0
+			set_dscp = "0"
+				queue_limits = [{
+					value = "100"
+					unit = "us"
+				}]
+		}]
 	}
 	`
 }

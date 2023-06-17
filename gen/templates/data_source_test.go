@@ -25,7 +25,16 @@ func TestAccDataSourceIosxr{{camelCase .Name}}(t *testing.T) {
 					{{- $list := .TfName }}
 					{{- range  .Attributes}}
 					{{- if and (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					{{- if eq .Type "List"}}
+					{{- $clist := .TfName }}
+					{{- range  .Attributes}}
+					{{- if and (ne .WriteOnly true) (ne .ExcludeTest true)}}
+					resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{$clist}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"),
+					{{- end}}
+					{{- end}}
+					{{- else}}
 					resource.TestCheckResourceAttr("data.iosxr_{{snakeCase $name}}.test", "{{$list}}.0.{{.TfName}}{{if or (eq .Type "StringList") (eq .Type "Int64List")}}.0{{end}}", "{{.Example}}"),
+					{{- end}}
 					{{- end}}
 					{{- end}}
 					{{- else}}

@@ -16,8 +16,13 @@ func TestAccDataSourceIosxrQoSPolicyMap(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrQoSPolicyMapConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "set_mpls_experimental_topmost", "0"),
-					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "set_dscp", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "description", "My description"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.name", "class-default"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.type", "qos"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.set_mpls_experimental_topmost", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.set_dscp", "0"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.queue_limits.0.value", "100"),
+					resource.TestCheckResourceAttr("data.iosxr_qos_policy_map.test", "classes.0.queue_limits.0.unit", "us"),
 				),
 			},
 		},
@@ -27,17 +32,22 @@ func TestAccDataSourceIosxrQoSPolicyMap(t *testing.T) {
 const testAccDataSourceIosxrQoSPolicyMapConfig = `
 
 resource "iosxr_qos_policy_map" "test" {
-	policy_map_name = "core-ingress-classifier"
-	name = "class-default"
-	type = "qos"
-	set_mpls_experimental_topmost = 0
-	set_dscp = "0"
+	policy_map_name = "PM1"
+	description = "My description"
+	classes = [{
+		name = "class-default"
+		type = "qos"
+		set_mpls_experimental_topmost = 0
+		set_dscp = "0"
+		queue_limits = [{
+			value = "100"
+			unit = "us"
+		}]
+	}]
 }
 
 data "iosxr_qos_policy_map" "test" {
-	policy_map_name = "core-ingress-classifier"
-	name = "class-default"
-	type = "qos"
+	policy_map_name = "PM1"
 	depends_on = [iosxr_qos_policy_map.test]
 }
 `

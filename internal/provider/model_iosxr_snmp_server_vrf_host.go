@@ -138,8 +138,7 @@ func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SN
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

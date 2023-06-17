@@ -241,8 +241,7 @@ func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -272,8 +271,7 @@ func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

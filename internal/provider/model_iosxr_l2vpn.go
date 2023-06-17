@@ -133,8 +133,7 @@ func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []strin
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

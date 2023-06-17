@@ -290,7 +290,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 			keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 
 			var cr gjson.Result
-			gjson.GetBytes(r, "{{$clistPath}}").ForEach(
+			r.Get("{{$clistPath}}").ForEach(
 				func(_, v gjson.Result) bool {
 					found := false
 					for ik := range keys {
@@ -529,60 +529,63 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 			{{- end}}
 			{{- end}}
 			if found {
+				{{- range .Attributes}}
+				{{- if eq .Type "List"}}
+				{{- $cgoKey := ""}}
+				{{- range .Attributes}}
+				{{- if .Id}}
+				{{- $cgoKey = (toGoName .TfName)}}
+				{{- end}}
+				{{- end}}
+				for ci := range state.{{$list}}[i].{{toGoName .TfName}} {
+					{{- $clist := (toGoName .TfName)}}
+					ckeys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+					cstateKeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+					
+					cemptyKeys := true
+					{{- range .Attributes}}
+					{{- if .Id}}
+					if !reflect.ValueOf(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}()).IsZero() {
+						cemptyKeys = false
+					}
+					{{- end}}
+					{{- end}}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.{{$list}}[j].{{toGoName .TfName}} {
+						found = true
+						{{- range .Attributes}}
+						{{- if .Id}}
+						if state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}() != data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.Value{{.Type}}() {
+							found = false
+						} 
+						{{- end}}
+						{{- end}}
+						if found {
+							break
+						}
+					}
+					if !found {
+						keyString := ""
+						for ki := range keys {
+							keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+						}
+						ckeyString := ""
+						for cki := range ckeys {
+							ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+						}
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{.YangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				{{- end}}
+				{{- end}}
 				break
 			}
 		}
-		if found {
-			{{- range .Attributes}}
-			{{- if eq .Type "List"}}
-			{{- $cgoKey := ""}}
-			{{- range .Attributes}}
-			{{- if .Id}}
-			{{- $cgoKey = (toGoName .TfName)}}
-			{{- end}}
-			{{- end}}
-			for ci := range state.{{$list}}[i].{{toGoName .TfName}} {
-				{{- $clist := (toGoName .TfName)}}
-				ckeys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
-				cstateKeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
-				
-				cemptyKeys := true
-				{{- range .Attributes}}
-				{{- if .Id}}
-				if !reflect.ValueOf(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}()).IsZero() {
-					cemptyKeys = false
-				}
-				{{- end}}
-				{{- end}}
-				if cemptyKeys {
-					continue
-				}
-
-				found := false
-				for cj := range data.{{$list}}[j].{{toGoName .TfName}} {
-					found = true
-					{{- range .Attributes}}
-					{{- if .Id}}
-					if state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}() != data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.Value{{.Type}}() {
-						found = false
-					} 
-					{{- end}}
-					{{- end}}
-					if found {
-						break
-					}
-				}
-				if !found {
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
-					}
-					deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{.YangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
-				}
-			}
-			{{- end}}
-			{{- end}}
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
@@ -624,7 +627,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 		for ci := range data.{{$list}}[i].{{toGoName .TfName}} {
 			{{- $clist := (toGoName .TfName)}}
 			ckeys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
-			ckeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+			ckeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
 			ckeyString := ""
 			for cki := range ckeys {
 				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"

@@ -930,8 +930,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -961,8 +960,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -992,8 +990,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1023,8 +1020,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1054,8 +1050,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

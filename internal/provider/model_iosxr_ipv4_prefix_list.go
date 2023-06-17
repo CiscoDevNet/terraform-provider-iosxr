@@ -197,8 +197,7 @@ func (data *IPv4PrefixList) getDeletedListItems(ctx context.Context, state IPv4P
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -403,7 +403,19 @@ func augmentConfig(config *YamlConfig, modelPaths []string) {
 		if config.Attributes[ia].Type == "List" {
 			el := resolvePath(e, config.Attributes[ia].YangName)
 			for iaa := range config.Attributes[ia].Attributes {
+				if config.Attributes[ia].Attributes[iaa].NoAugmentConfig {
+					continue
+				}
 				parseAttribute(el, &config.Attributes[ia].Attributes[iaa])
+				if config.Attributes[ia].Attributes[iaa].Type == "List" {
+					ell := resolvePath(el, config.Attributes[ia].Attributes[iaa].YangName)
+					for iaaa := range config.Attributes[ia].Attributes[iaa].Attributes {
+						if config.Attributes[ia].Attributes[iaa].Attributes[iaaa].NoAugmentConfig {
+							continue
+						}
+						parseAttribute(ell, &config.Attributes[ia].Attributes[iaa].Attributes[iaaa])
+					}
+				}
 			}
 		}
 	}

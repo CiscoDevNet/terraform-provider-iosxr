@@ -729,8 +729,7 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -760,8 +759,7 @@ func (data *RouterBGP) getDeletedListItems(ctx context.Context, state RouterBGP)
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -14,11 +14,22 @@ This resource can manage the QoS Policy Map configuration.
 
 ```terraform
 resource "iosxr_qos_policy_map" "example" {
-  policy_map_name               = "core-ingress-classifier"
-  name                          = "class-default"
-  type                          = "qos"
-  set_mpls_experimental_topmost = 0
-  set_dscp                      = "0"
+  policy_map_name = "PM1"
+  description     = "My description"
+  classes = [
+    {
+      name                          = "class-default"
+      type                          = "qos"
+      set_mpls_experimental_topmost = 0
+      set_dscp                      = "0"
+      queue_limits = [
+        {
+          value = "100"
+          unit  = "us"
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -27,23 +38,38 @@ resource "iosxr_qos_policy_map" "example" {
 
 ### Required
 
-- `name` (String) Name of the class-map
 - `policy_map_name` (String) Name of the policymap
+
+### Optional
+
+- `classes` (Attributes List) (see [below for nested schema](#nestedatt--classes))
+- `description` (String) Set description for this policy-map
+- `device` (String) A device name from the provider configuration.
+
+### Read-Only
+
+- `id` (String) The path of the object.
+
+<a id="nestedatt--classes"></a>
+### Nested Schema for `classes`
+
+Required:
+
+- `name` (String) Name of the class-map
 - `type` (String) The type of class-map
   - Choices: `qos`, `traffic`
 
-### Optional
+Optional:
 
 - `bandwidth_remaining_unit` (String) Bandwidth value unit
   - Choices: `percent`, `ratio`
 - `bandwidth_remaining_value` (String) Bandwidth value
-- `device` (String) A device name from the provider configuration.
 - `police_rate_unit` (String) Rate unit
   - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`, `pps`
 - `police_rate_value` (String) Committed Information Rate
 - `priority_level` (Number) Configure a priority level
   - Range: `1`-`7`
-- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--queue_limits))
+- `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))
 - `service_policy_name` (String) Name of the child service policy
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
@@ -52,12 +78,8 @@ resource "iosxr_qos_policy_map" "example" {
   - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`
 - `shape_average_rate_value` (String)
 
-### Read-Only
-
-- `id` (String) The path of the object.
-
-<a id="nestedatt--queue_limits"></a>
-### Nested Schema for `queue_limits`
+<a id="nestedatt--classes--queue_limits"></a>
+### Nested Schema for `classes.queue_limits`
 
 Required:
 
@@ -70,5 +92,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=core-ingress-classifier]/class[name=class-default][type=qos]"
+terraform import iosxr_qos_policy_map.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]"
 ```

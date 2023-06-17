@@ -185,8 +185,7 @@ func (data *SSH) getDeletedListItems(ctx context.Context, state SSH) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -495,8 +495,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -532,8 +531,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -569,8 +567,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -606,8 +603,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -643,8 +639,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -680,8 +675,7 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedListItems(ctx context.Context, 
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

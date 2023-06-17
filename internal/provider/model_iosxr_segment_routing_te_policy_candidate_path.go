@@ -182,8 +182,7 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedListItems(ctx context
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

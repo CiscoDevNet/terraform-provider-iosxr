@@ -14,78 +14,93 @@ import (
 )
 
 type QoSPolicyMap struct {
-	Device                     types.String              `tfsdk:"device"`
-	Id                         types.String              `tfsdk:"id"`
-	PolicyMapName              types.String              `tfsdk:"policy_map_name"`
-	Name                       types.String              `tfsdk:"name"`
-	Type                       types.String              `tfsdk:"type"`
-	SetMplsExperimentalTopmost types.Int64               `tfsdk:"set_mpls_experimental_topmost"`
-	SetDscp                    types.String              `tfsdk:"set_dscp"`
-	PriorityLevel              types.Int64               `tfsdk:"priority_level"`
-	QueueLimits                []QoSPolicyMapQueueLimits `tfsdk:"queue_limits"`
-	ServicePolicyName          types.String              `tfsdk:"service_policy_name"`
-	PoliceRateValue            types.String              `tfsdk:"police_rate_value"`
-	PoliceRateUnit             types.String              `tfsdk:"police_rate_unit"`
-	ShapeAverageRateValue      types.String              `tfsdk:"shape_average_rate_value"`
-	ShapeAverageRateUnit       types.String              `tfsdk:"shape_average_rate_unit"`
-	BandwidthRemainingUnit     types.String              `tfsdk:"bandwidth_remaining_unit"`
-	BandwidthRemainingValue    types.String              `tfsdk:"bandwidth_remaining_value"`
+	Device        types.String          `tfsdk:"device"`
+	Id            types.String          `tfsdk:"id"`
+	PolicyMapName types.String          `tfsdk:"policy_map_name"`
+	Description   types.String          `tfsdk:"description"`
+	Classes       []QoSPolicyMapClasses `tfsdk:"classes"`
 }
-type QoSPolicyMapQueueLimits struct {
+type QoSPolicyMapClasses struct {
+	Name                       types.String                     `tfsdk:"name"`
+	Type                       types.String                     `tfsdk:"type"`
+	SetMplsExperimentalTopmost types.Int64                      `tfsdk:"set_mpls_experimental_topmost"`
+	SetDscp                    types.String                     `tfsdk:"set_dscp"`
+	PriorityLevel              types.Int64                      `tfsdk:"priority_level"`
+	QueueLimits                []QoSPolicyMapClassesQueueLimits `tfsdk:"queue_limits"`
+	ServicePolicyName          types.String                     `tfsdk:"service_policy_name"`
+	PoliceRateValue            types.String                     `tfsdk:"police_rate_value"`
+	PoliceRateUnit             types.String                     `tfsdk:"police_rate_unit"`
+	ShapeAverageRateValue      types.String                     `tfsdk:"shape_average_rate_value"`
+	ShapeAverageRateUnit       types.String                     `tfsdk:"shape_average_rate_unit"`
+	BandwidthRemainingUnit     types.String                     `tfsdk:"bandwidth_remaining_unit"`
+	BandwidthRemainingValue    types.String                     `tfsdk:"bandwidth_remaining_value"`
+}
+type QoSPolicyMapClassesQueueLimits struct {
 	Value types.String `tfsdk:"value"`
 	Unit  types.String `tfsdk:"unit"`
 }
 
 func (data QoSPolicyMap) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]/class[name=%s][type=%s]", data.PolicyMapName.ValueString(), data.Name.ValueString(), data.Type.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]", data.PolicyMapName.ValueString())
 }
 
 func (data QoSPolicyMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.Name.IsNull() && !data.Name.IsUnknown() {
-		body, _ = sjson.Set(body, "name", data.Name.ValueString())
+	if !data.PolicyMapName.IsNull() && !data.PolicyMapName.IsUnknown() {
+		body, _ = sjson.Set(body, "policy-map-name", data.PolicyMapName.ValueString())
 	}
-	if !data.Type.IsNull() && !data.Type.IsUnknown() {
-		body, _ = sjson.Set(body, "type", data.Type.ValueString())
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
-	if !data.SetMplsExperimentalTopmost.IsNull() && !data.SetMplsExperimentalTopmost.IsUnknown() {
-		body, _ = sjson.Set(body, "set.mpls.experimental.topmost", strconv.FormatInt(data.SetMplsExperimentalTopmost.ValueInt64(), 10))
-	}
-	if !data.SetDscp.IsNull() && !data.SetDscp.IsUnknown() {
-		body, _ = sjson.Set(body, "set.dscp", data.SetDscp.ValueString())
-	}
-	if !data.PriorityLevel.IsNull() && !data.PriorityLevel.IsUnknown() {
-		body, _ = sjson.Set(body, "priority.level", strconv.FormatInt(data.PriorityLevel.ValueInt64(), 10))
-	}
-	if !data.ServicePolicyName.IsNull() && !data.ServicePolicyName.IsUnknown() {
-		body, _ = sjson.Set(body, "service-policy.name", data.ServicePolicyName.ValueString())
-	}
-	if !data.PoliceRateValue.IsNull() && !data.PoliceRateValue.IsUnknown() {
-		body, _ = sjson.Set(body, "police.rate.value", data.PoliceRateValue.ValueString())
-	}
-	if !data.PoliceRateUnit.IsNull() && !data.PoliceRateUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "police.rate.unit", data.PoliceRateUnit.ValueString())
-	}
-	if !data.ShapeAverageRateValue.IsNull() && !data.ShapeAverageRateValue.IsUnknown() {
-		body, _ = sjson.Set(body, "shape.average.rate.value", data.ShapeAverageRateValue.ValueString())
-	}
-	if !data.ShapeAverageRateUnit.IsNull() && !data.ShapeAverageRateUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "shape.average.rate.unit", data.ShapeAverageRateUnit.ValueString())
-	}
-	if !data.BandwidthRemainingUnit.IsNull() && !data.BandwidthRemainingUnit.IsUnknown() {
-		body, _ = sjson.Set(body, "bandwidth-remaining.unit", data.BandwidthRemainingUnit.ValueString())
-	}
-	if !data.BandwidthRemainingValue.IsNull() && !data.BandwidthRemainingValue.IsUnknown() {
-		body, _ = sjson.Set(body, "bandwidth-remaining.value", data.BandwidthRemainingValue.ValueString())
-	}
-	if len(data.QueueLimits) > 0 {
-		body, _ = sjson.Set(body, "queue-limits.queue-limit", []interface{}{})
-		for index, item := range data.QueueLimits {
-			if !item.Value.IsNull() && !item.Value.IsUnknown() {
-				body, _ = sjson.Set(body, "queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"value", item.Value.ValueString())
+	if len(data.Classes) > 0 {
+		body, _ = sjson.Set(body, "class", []interface{}{})
+		for index, item := range data.Classes {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"name", item.Name.ValueString())
 			}
-			if !item.Unit.IsNull() && !item.Unit.IsUnknown() {
-				body, _ = sjson.Set(body, "queue-limits.queue-limit"+"."+strconv.Itoa(index)+"."+"unit", item.Unit.ValueString())
+			if !item.Type.IsNull() && !item.Type.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"type", item.Type.ValueString())
+			}
+			if !item.SetMplsExperimentalTopmost.IsNull() && !item.SetMplsExperimentalTopmost.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"set.mpls.experimental.topmost", strconv.FormatInt(item.SetMplsExperimentalTopmost.ValueInt64(), 10))
+			}
+			if !item.SetDscp.IsNull() && !item.SetDscp.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"set.dscp", item.SetDscp.ValueString())
+			}
+			if !item.PriorityLevel.IsNull() && !item.PriorityLevel.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"priority.level", strconv.FormatInt(item.PriorityLevel.ValueInt64(), 10))
+			}
+			if !item.ServicePolicyName.IsNull() && !item.ServicePolicyName.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"service-policy.name", item.ServicePolicyName.ValueString())
+			}
+			if !item.PoliceRateValue.IsNull() && !item.PoliceRateValue.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"police.rate.value", item.PoliceRateValue.ValueString())
+			}
+			if !item.PoliceRateUnit.IsNull() && !item.PoliceRateUnit.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"police.rate.unit", item.PoliceRateUnit.ValueString())
+			}
+			if !item.ShapeAverageRateValue.IsNull() && !item.ShapeAverageRateValue.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"shape.average.rate.value", item.ShapeAverageRateValue.ValueString())
+			}
+			if !item.ShapeAverageRateUnit.IsNull() && !item.ShapeAverageRateUnit.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"shape.average.rate.unit", item.ShapeAverageRateUnit.ValueString())
+			}
+			if !item.BandwidthRemainingUnit.IsNull() && !item.BandwidthRemainingUnit.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"bandwidth-remaining.unit", item.BandwidthRemainingUnit.ValueString())
+			}
+			if !item.BandwidthRemainingValue.IsNull() && !item.BandwidthRemainingValue.IsUnknown() {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"bandwidth-remaining.value", item.BandwidthRemainingValue.ValueString())
+			}
+			if len(item.QueueLimits) > 0 {
+				body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit", []interface{}{})
+				for cindex, citem := range item.QueueLimits {
+					if !citem.Value.IsNull() && !citem.Value.IsUnknown() {
+						body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit"+"."+strconv.Itoa(cindex)+"."+"value", citem.Value.ValueString())
+					}
+					if !citem.Unit.IsNull() && !citem.Unit.IsUnknown() {
+						body, _ = sjson.Set(body, "class"+"."+strconv.Itoa(index)+"."+"queue-limits.queue-limit"+"."+strconv.Itoa(cindex)+"."+"unit", citem.Unit.ValueString())
+					}
+				}
 			}
 		}
 	}
@@ -93,27 +108,17 @@ func (data QoSPolicyMap) toBody(ctx context.Context) string {
 }
 
 func (data *QoSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "set.mpls.experimental.topmost"); value.Exists() && !data.SetMplsExperimentalTopmost.IsNull() {
-		data.SetMplsExperimentalTopmost = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+		data.Description = types.StringValue(value.String())
 	} else {
-		data.SetMplsExperimentalTopmost = types.Int64Null()
+		data.Description = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "set.dscp"); value.Exists() && !data.SetDscp.IsNull() {
-		data.SetDscp = types.StringValue(value.String())
-	} else {
-		data.SetDscp = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "priority.level"); value.Exists() && !data.PriorityLevel.IsNull() {
-		data.PriorityLevel = types.Int64Value(value.Int())
-	} else {
-		data.PriorityLevel = types.Int64Null()
-	}
-	for i := range data.QueueLimits {
-		keys := [...]string{"value", "unit"}
-		keyValues := [...]string{data.QueueLimits[i].Value.ValueString(), data.QueueLimits[i].Unit.ValueString()}
+	for i := range data.Classes {
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 
 		var r gjson.Result
-		gjson.GetBytes(res, "queue-limits.queue-limit").ForEach(
+		gjson.GetBytes(res, "class").ForEach(
 			func(_, v gjson.Result) bool {
 				found := false
 				for ik := range keys {
@@ -131,112 +136,178 @@ func (data *QoSPolicyMap) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("value"); value.Exists() && !data.QueueLimits[i].Value.IsNull() {
-			data.QueueLimits[i].Value = types.StringValue(value.String())
+		if value := r.Get("name"); value.Exists() && !data.Classes[i].Name.IsNull() {
+			data.Classes[i].Name = types.StringValue(value.String())
 		} else {
-			data.QueueLimits[i].Value = types.StringNull()
+			data.Classes[i].Name = types.StringNull()
 		}
-		if value := r.Get("unit"); value.Exists() && !data.QueueLimits[i].Unit.IsNull() {
-			data.QueueLimits[i].Unit = types.StringValue(value.String())
+		if value := r.Get("type"); value.Exists() && !data.Classes[i].Type.IsNull() {
+			data.Classes[i].Type = types.StringValue(value.String())
 		} else {
-			data.QueueLimits[i].Unit = types.StringNull()
+			data.Classes[i].Type = types.StringNull()
 		}
-	}
-	if value := gjson.GetBytes(res, "service-policy.name"); value.Exists() && !data.ServicePolicyName.IsNull() {
-		data.ServicePolicyName = types.StringValue(value.String())
-	} else {
-		data.ServicePolicyName = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "police.rate.value"); value.Exists() && !data.PoliceRateValue.IsNull() {
-		data.PoliceRateValue = types.StringValue(value.String())
-	} else {
-		data.PoliceRateValue = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "police.rate.unit"); value.Exists() && !data.PoliceRateUnit.IsNull() {
-		data.PoliceRateUnit = types.StringValue(value.String())
-	} else {
-		data.PoliceRateUnit = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "shape.average.rate.value"); value.Exists() && !data.ShapeAverageRateValue.IsNull() {
-		data.ShapeAverageRateValue = types.StringValue(value.String())
-	} else {
-		data.ShapeAverageRateValue = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "shape.average.rate.unit"); value.Exists() && !data.ShapeAverageRateUnit.IsNull() {
-		data.ShapeAverageRateUnit = types.StringValue(value.String())
-	} else {
-		data.ShapeAverageRateUnit = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "bandwidth-remaining.unit"); value.Exists() && !data.BandwidthRemainingUnit.IsNull() {
-		data.BandwidthRemainingUnit = types.StringValue(value.String())
-	} else {
-		data.BandwidthRemainingUnit = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "bandwidth-remaining.value"); value.Exists() && !data.BandwidthRemainingValue.IsNull() {
-		data.BandwidthRemainingValue = types.StringValue(value.String())
-	} else {
-		data.BandwidthRemainingValue = types.StringNull()
+		if value := r.Get("set.mpls.experimental.topmost"); value.Exists() && !data.Classes[i].SetMplsExperimentalTopmost.IsNull() {
+			data.Classes[i].SetMplsExperimentalTopmost = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].SetMplsExperimentalTopmost = types.Int64Null()
+		}
+		if value := r.Get("set.dscp"); value.Exists() && !data.Classes[i].SetDscp.IsNull() {
+			data.Classes[i].SetDscp = types.StringValue(value.String())
+		} else {
+			data.Classes[i].SetDscp = types.StringNull()
+		}
+		if value := r.Get("priority.level"); value.Exists() && !data.Classes[i].PriorityLevel.IsNull() {
+			data.Classes[i].PriorityLevel = types.Int64Value(value.Int())
+		} else {
+			data.Classes[i].PriorityLevel = types.Int64Null()
+		}
+		for ci := range data.Classes[i].QueueLimits {
+			keys := [...]string{"value", "unit"}
+			keyValues := [...]string{data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString()}
+
+			var cr gjson.Result
+			r.Get("queue-limits.queue-limit").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("value"); value.Exists() && !data.Classes[i].QueueLimits[ci].Value.IsNull() {
+				data.Classes[i].QueueLimits[ci].Value = types.StringValue(value.String())
+			} else {
+				data.Classes[i].QueueLimits[ci].Value = types.StringNull()
+			}
+			if value := cr.Get("unit"); value.Exists() && !data.Classes[i].QueueLimits[ci].Unit.IsNull() {
+				data.Classes[i].QueueLimits[ci].Unit = types.StringValue(value.String())
+			} else {
+				data.Classes[i].QueueLimits[ci].Unit = types.StringNull()
+			}
+		}
+		if value := r.Get("service-policy.name"); value.Exists() && !data.Classes[i].ServicePolicyName.IsNull() {
+			data.Classes[i].ServicePolicyName = types.StringValue(value.String())
+		} else {
+			data.Classes[i].ServicePolicyName = types.StringNull()
+		}
+		if value := r.Get("police.rate.value"); value.Exists() && !data.Classes[i].PoliceRateValue.IsNull() {
+			data.Classes[i].PoliceRateValue = types.StringValue(value.String())
+		} else {
+			data.Classes[i].PoliceRateValue = types.StringNull()
+		}
+		if value := r.Get("police.rate.unit"); value.Exists() && !data.Classes[i].PoliceRateUnit.IsNull() {
+			data.Classes[i].PoliceRateUnit = types.StringValue(value.String())
+		} else {
+			data.Classes[i].PoliceRateUnit = types.StringNull()
+		}
+		if value := r.Get("shape.average.rate.value"); value.Exists() && !data.Classes[i].ShapeAverageRateValue.IsNull() {
+			data.Classes[i].ShapeAverageRateValue = types.StringValue(value.String())
+		} else {
+			data.Classes[i].ShapeAverageRateValue = types.StringNull()
+		}
+		if value := r.Get("shape.average.rate.unit"); value.Exists() && !data.Classes[i].ShapeAverageRateUnit.IsNull() {
+			data.Classes[i].ShapeAverageRateUnit = types.StringValue(value.String())
+		} else {
+			data.Classes[i].ShapeAverageRateUnit = types.StringNull()
+		}
+		if value := r.Get("bandwidth-remaining.unit"); value.Exists() && !data.Classes[i].BandwidthRemainingUnit.IsNull() {
+			data.Classes[i].BandwidthRemainingUnit = types.StringValue(value.String())
+		} else {
+			data.Classes[i].BandwidthRemainingUnit = types.StringNull()
+		}
+		if value := r.Get("bandwidth-remaining.value"); value.Exists() && !data.Classes[i].BandwidthRemainingValue.IsNull() {
+			data.Classes[i].BandwidthRemainingValue = types.StringValue(value.String())
+		} else {
+			data.Classes[i].BandwidthRemainingValue = types.StringNull()
+		}
 	}
 }
 
 func (data *QoSPolicyMap) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "set.mpls.experimental.topmost"); value.Exists() {
-		data.SetMplsExperimentalTopmost = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "set.dscp"); value.Exists() {
-		data.SetDscp = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "priority.level"); value.Exists() {
-		data.PriorityLevel = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "queue-limits.queue-limit"); value.Exists() {
-		data.QueueLimits = make([]QoSPolicyMapQueueLimits, 0)
+	if value := gjson.GetBytes(res, "class"); value.Exists() {
+		data.Classes = make([]QoSPolicyMapClasses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := QoSPolicyMapQueueLimits{}
-			if cValue := v.Get("value"); cValue.Exists() {
-				item.Value = types.StringValue(cValue.String())
+			item := QoSPolicyMapClasses{}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("unit"); cValue.Exists() {
-				item.Unit = types.StringValue(cValue.String())
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
 			}
-			data.QueueLimits = append(data.QueueLimits, item)
+			if cValue := v.Get("set.mpls.experimental.topmost"); cValue.Exists() {
+				item.SetMplsExperimentalTopmost = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("set.dscp"); cValue.Exists() {
+				item.SetDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority.level"); cValue.Exists() {
+				item.PriorityLevel = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("queue-limits.queue-limit"); cValue.Exists() {
+				item.QueueLimits = make([]QoSPolicyMapClassesQueueLimits, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := QoSPolicyMapClassesQueueLimits{}
+					if ccValue := cv.Get("value"); ccValue.Exists() {
+						cItem.Value = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("unit"); ccValue.Exists() {
+						cItem.Unit = types.StringValue(ccValue.String())
+					}
+					item.QueueLimits = append(item.QueueLimits, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("service-policy.name"); cValue.Exists() {
+				item.ServicePolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.value"); cValue.Exists() {
+				item.PoliceRateValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.unit"); cValue.Exists() {
+				item.PoliceRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shape.average.rate.value"); cValue.Exists() {
+				item.ShapeAverageRateValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shape.average.rate.unit"); cValue.Exists() {
+				item.ShapeAverageRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-remaining.unit"); cValue.Exists() {
+				item.BandwidthRemainingUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-remaining.value"); cValue.Exists() {
+				item.BandwidthRemainingValue = types.StringValue(cValue.String())
+			}
+			data.Classes = append(data.Classes, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "service-policy.name"); value.Exists() {
-		data.ServicePolicyName = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "police.rate.value"); value.Exists() {
-		data.PoliceRateValue = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "police.rate.unit"); value.Exists() {
-		data.PoliceRateUnit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "shape.average.rate.value"); value.Exists() {
-		data.ShapeAverageRateValue = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "shape.average.rate.unit"); value.Exists() {
-		data.ShapeAverageRateUnit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "bandwidth-remaining.unit"); value.Exists() {
-		data.BandwidthRemainingUnit = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "bandwidth-remaining.value"); value.Exists() {
-		data.BandwidthRemainingValue = types.StringValue(value.String())
 	}
 }
 
 func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPolicyMap) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.QueueLimits {
-		keys := [...]string{"value", "unit"}
-		stateKeyValues := [...]string{state.QueueLimits[i].Value.ValueString(), state.QueueLimits[i].Unit.ValueString()}
+	for i := range state.Classes {
+		keys := [...]string{"name", "type"}
+		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.QueueLimits[i].Value.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Classes[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
-		if !reflect.ValueOf(state.QueueLimits[i].Unit.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Classes[i].Type.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -244,25 +315,64 @@ func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPoli
 		}
 
 		found := false
-		for j := range data.QueueLimits {
+		for j := range data.Classes {
 			found = true
-			if state.QueueLimits[i].Value.ValueString() != data.QueueLimits[j].Value.ValueString() {
+			if state.Classes[i].Name.ValueString() != data.Classes[j].Name.ValueString() {
 				found = false
 			}
-			if state.QueueLimits[i].Unit.ValueString() != data.QueueLimits[j].Unit.ValueString() {
+			if state.Classes[i].Type.ValueString() != data.Classes[j].Type.ValueString() {
 				found = false
 			}
 			if found {
+				for ci := range state.Classes[i].QueueLimits {
+					ckeys := [...]string{"value", "unit"}
+					cstateKeyValues := [...]string{state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString()}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Classes[i].QueueLimits[ci].Value.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if !reflect.ValueOf(state.Classes[i].QueueLimits[ci].Unit.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Classes[j].QueueLimits {
+						found = true
+						if state.Classes[i].QueueLimits[ci].Value.ValueString() != data.Classes[j].QueueLimits[cj].Value.ValueString() {
+							found = false
+						}
+						if state.Classes[i].QueueLimits[ci].Unit.ValueString() != data.Classes[j].QueueLimits[cj].Unit.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						keyString := ""
+						for ki := range keys {
+							keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+						}
+						ckeyString := ""
+						for cki := range ckeys {
+							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+						}
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/queue-limits/queue-limit%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
+					}
+				}
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/queue-limits/queue-limit%v", state.getPath(), keyString))
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/class%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems
@@ -270,12 +380,20 @@ func (data *QoSPolicyMap) getDeletedListItems(ctx context.Context, state QoSPoli
 
 func (data *QoSPolicyMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.QueueLimits {
-		keys := [...]string{"value", "unit"}
-		keyValues := [...]string{data.QueueLimits[i].Value.ValueString(), data.QueueLimits[i].Unit.ValueString()}
+	for i := range data.Classes {
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.Classes[i].QueueLimits {
+			ckeys := [...]string{"value", "unit"}
+			ckeyValues := [...]string{data.Classes[i].QueueLimits[ci].Value.ValueString(), data.Classes[i].QueueLimits[ci].Unit.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
 		}
 	}
 	return emptyLeafsDelete

@@ -262,8 +262,7 @@ func (data *RouterBGPNeighborGroup) getDeletedListItems(ctx context.Context, sta
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

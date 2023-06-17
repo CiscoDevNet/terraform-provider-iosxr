@@ -374,8 +374,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -405,8 +404,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -436,8 +434,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -467,8 +464,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -113,8 +113,7 @@ func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup)
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

@@ -793,8 +793,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -824,8 +823,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -855,8 +853,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -886,8 +883,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

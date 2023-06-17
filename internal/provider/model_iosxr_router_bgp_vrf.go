@@ -526,8 +526,7 @@ func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterB
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

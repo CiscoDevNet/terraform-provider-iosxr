@@ -1297,8 +1297,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1340,8 +1339,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1383,8 +1381,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1426,8 +1423,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1469,8 +1465,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1512,8 +1507,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1555,8 +1549,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1598,8 +1591,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1641,8 +1633,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1684,8 +1675,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1727,8 +1717,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -1770,8 +1759,7 @@ func (data *VRF) getDeletedListItems(ctx context.Context, state VRF) []string {
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

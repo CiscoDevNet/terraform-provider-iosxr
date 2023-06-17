@@ -341,8 +341,7 @@ func (data *RouterStatic) getDeletedListItems(ctx context.Context, state RouterS
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -378,8 +377,7 @@ func (data *RouterStatic) getDeletedListItems(ctx context.Context, state RouterS
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
@@ -409,8 +407,7 @@ func (data *RouterStatic) getDeletedListItems(ctx context.Context, state RouterS
 				break
 			}
 		}
-		if found {
-		} else {
+		if !found {
 			keyString := ""
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"

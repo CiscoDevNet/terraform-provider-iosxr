@@ -1,4 +1,4 @@
-## 0.1.11 (unreleased)
+## 0.1.11
 
 - Migrate provider to `CiscoDevNet` namespace
 

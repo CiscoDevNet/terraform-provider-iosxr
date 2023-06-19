@@ -1,3 +1,7 @@
+## 0.1.11 (unreleased)
+
+- Migrate provider to `CiscoDevNet` namespace
+
 ## 0.1.10
 
 - Add `iosxr_banner` resource and data source

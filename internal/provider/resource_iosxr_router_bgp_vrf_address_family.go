@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -17,8 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
 
 var _ resource.Resource = (*RouterBGPVRFAddressFamilyResource)(nil)

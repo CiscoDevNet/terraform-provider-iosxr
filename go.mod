@@ -1,4 +1,4 @@
-module github.com/netascode/terraform-provider-iosxr
+module github.com/CiscoDevNet/terraform-provider-iosxr
 
 go 1.19
 

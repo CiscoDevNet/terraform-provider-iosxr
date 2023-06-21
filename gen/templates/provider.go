@@ -14,7 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 )
 
 func New() provider.Provider {

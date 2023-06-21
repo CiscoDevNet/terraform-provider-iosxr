@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.

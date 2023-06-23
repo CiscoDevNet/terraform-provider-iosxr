@@ -15,26 +15,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &RouterStaticDataSource{}
-	_ datasource.DataSourceWithConfigure = &RouterStaticDataSource{}
+	_ datasource.DataSource              = &RouterStaticIPv4UnicastDataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterStaticIPv4UnicastDataSource{}
 )
 
-func NewRouterStaticDataSource() datasource.DataSource {
-	return &RouterStaticDataSource{}
+func NewRouterStaticIPv4UnicastDataSource() datasource.DataSource {
+	return &RouterStaticIPv4UnicastDataSource{}
 }
 
-type RouterStaticDataSource struct {
+type RouterStaticIPv4UnicastDataSource struct {
 	client *client.Client
 }
 
-func (d *RouterStaticDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_static"
+func (d *RouterStaticIPv4UnicastDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_static_ipv4_unicast"
 }
 
-func (d *RouterStaticDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Router Static configuration.",
+		MarkdownDescription: "This data source can read the Router Static IPv4 Unicast configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -133,7 +133,7 @@ func (d *RouterStaticDataSource) Schema(ctx context.Context, req datasource.Sche
 	}
 }
 
-func (d *RouterStaticDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *RouterStaticIPv4UnicastDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -141,8 +141,8 @@ func (d *RouterStaticDataSource) Configure(_ context.Context, req datasource.Con
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *RouterStaticDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterStaticData
+func (d *RouterStaticIPv4UnicastDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config RouterStaticIPv4UnicastData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

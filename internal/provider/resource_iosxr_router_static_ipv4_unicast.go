@@ -22,24 +22,24 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterStaticResource)(nil)
+var _ resource.Resource = (*RouterStaticIPv4UnicastResource)(nil)
 
-func NewRouterStaticResource() resource.Resource {
-	return &RouterStaticResource{}
+func NewRouterStaticIPv4UnicastResource() resource.Resource {
+	return &RouterStaticIPv4UnicastResource{}
 }
 
-type RouterStaticResource struct {
+type RouterStaticIPv4UnicastResource struct {
 	client *client.Client
 }
 
-func (r *RouterStaticResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_static"
+func (r *RouterStaticIPv4UnicastResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_static_ipv4_unicast"
 }
 
-func (r *RouterStaticResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterStaticIPv4UnicastResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Router Static configuration.",
+		MarkdownDescription: "This resource can manage the Router Static IPv4 Unicast configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -202,7 +202,7 @@ func (r *RouterStaticResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *RouterStaticResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterStaticIPv4UnicastResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -210,8 +210,8 @@ func (r *RouterStaticResource) Configure(ctx context.Context, req resource.Confi
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *RouterStaticResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RouterStatic
+func (r *RouterStaticIPv4UnicastResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterStaticIPv4Unicast
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -249,8 +249,8 @@ func (r *RouterStaticResource) Create(ctx context.Context, req resource.CreateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterStaticResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouterStatic
+func (r *RouterStaticIPv4UnicastResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterStaticIPv4Unicast
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -275,8 +275,8 @@ func (r *RouterStaticResource) Read(ctx context.Context, req resource.ReadReques
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterStaticResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouterStatic
+func (r *RouterStaticIPv4UnicastResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterStaticIPv4Unicast
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -326,8 +326,8 @@ func (r *RouterStaticResource) Update(ctx context.Context, req resource.UpdateRe
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterStaticResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouterStatic
+func (r *RouterStaticIPv4UnicastResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterStaticIPv4Unicast
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -367,6 +367,6 @@ func (r *RouterStaticResource) Delete(ctx context.Context, req resource.DeleteRe
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouterStaticResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterStaticIPv4UnicastResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

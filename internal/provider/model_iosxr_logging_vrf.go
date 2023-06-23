@@ -16,6 +16,14 @@ import (
 type LoggingVRF struct {
 	Device            types.String                  `tfsdk:"device"`
 	Id                types.String                  `tfsdk:"id"`
+	DeleteMode        types.String                  `tfsdk:"delete_mode"`
+	VrfName           types.String                  `tfsdk:"vrf_name"`
+	HostIpv4Addresses []LoggingVRFHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
+	HostIpv6Addresses []LoggingVRFHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
+}
+type LoggingVRFData struct {
+	Device            types.String                  `tfsdk:"device"`
+	Id                types.String                  `tfsdk:"id"`
 	VrfName           types.String                  `tfsdk:"vrf_name"`
 	HostIpv4Addresses []LoggingVRFHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
 	HostIpv6Addresses []LoggingVRFHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
@@ -30,6 +38,10 @@ type LoggingVRFHostIpv6Addresses struct {
 }
 
 func (data LoggingVRF) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+}
+
+func (data LoggingVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
@@ -134,7 +146,7 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
+func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -249,4 +261,29 @@ func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *LoggingVRF) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.HostIpv4Addresses {
+		keys := [...]string{"ipv4-address"}
+		keyValues := [...]string{data.HostIpv4Addresses[i].Ipv4Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv4-addresses/host-ipv4-address%v", data.getPath(), keyString))
+	}
+	for i := range data.HostIpv6Addresses {
+		keys := [...]string{"ipv6-address"}
+		keyValues := [...]string{data.HostIpv6Addresses[i].Ipv6Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/host-ipv6-addresses/host-ipv6-address%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

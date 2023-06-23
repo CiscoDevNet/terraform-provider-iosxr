@@ -1,3 +1,7 @@
+## 0.2.0 (unreleased)
+
+- Introduce more fine grained controls around resource delete operations (`delete_mode`)
+
 ## 0.1.11
 
 - Migrate provider to `CiscoDevNet` namespace

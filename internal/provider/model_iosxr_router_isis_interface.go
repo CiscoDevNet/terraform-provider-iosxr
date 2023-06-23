@@ -15,6 +15,25 @@ import (
 type RouterISISInterface struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
+	DeleteMode            types.String `tfsdk:"delete_mode"`
+	ProcessId             types.String `tfsdk:"process_id"`
+	InterfaceName         types.String `tfsdk:"interface_name"`
+	CircuitType           types.String `tfsdk:"circuit_type"`
+	HelloPaddingDisable   types.Bool   `tfsdk:"hello_padding_disable"`
+	HelloPaddingSometimes types.Bool   `tfsdk:"hello_padding_sometimes"`
+	Priority              types.Int64  `tfsdk:"priority"`
+	PointToPoint          types.Bool   `tfsdk:"point_to_point"`
+	Passive               types.Bool   `tfsdk:"passive"`
+	Suppressed            types.Bool   `tfsdk:"suppressed"`
+	Shutdown              types.Bool   `tfsdk:"shutdown"`
+	HelloPasswordText     types.String `tfsdk:"hello_password_text"`
+	HelloPasswordHmacMd5  types.String `tfsdk:"hello_password_hmac_md5"`
+	HelloPasswordKeychain types.String `tfsdk:"hello_password_keychain"`
+	BfdFastDetectIpv6     types.Bool   `tfsdk:"bfd_fast_detect_ipv6"`
+}
+type RouterISISInterfaceData struct {
+	Device                types.String `tfsdk:"device"`
+	Id                    types.String `tfsdk:"id"`
 	ProcessId             types.String `tfsdk:"process_id"`
 	InterfaceName         types.String `tfsdk:"interface_name"`
 	CircuitType           types.String `tfsdk:"circuit_type"`
@@ -32,6 +51,10 @@ type RouterISISInterface struct {
 }
 
 func (data RouterISISInterface) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString())
+}
+
+func (data RouterISISInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString())
 }
 
@@ -184,7 +207,7 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
-func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
+func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())
 	}
@@ -266,4 +289,36 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/ipv6", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.CircuitType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/circuit-type", data.getPath()))
+	}
+	if !data.HelloPaddingDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding/disable", data.getPath()))
+	}
+	if !data.HelloPaddingSometimes.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-padding/sometimes", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority/priority-value", data.getPath()))
+	}
+	if !data.PointToPoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/point-to-point", data.getPath()))
+	}
+	if !data.Passive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive", data.getPath()))
+	}
+	if !data.Suppressed.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppressed", data.getPath()))
+	}
+	if !data.Shutdown.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/shutdown", data.getPath()))
+	}
+	if !data.BfdFastDetectIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/ipv6", data.getPath()))
+	}
+	return deletePaths
 }

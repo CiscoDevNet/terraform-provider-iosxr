@@ -20,6 +20,13 @@ type PolicyMapQoS struct {
 	Description   types.String          `tfsdk:"description"`
 	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
 }
+type PolicyMapQoSData struct {
+	Device        types.String          `tfsdk:"device"`
+	Id            types.String          `tfsdk:"id"`
+	PolicyMapName types.String          `tfsdk:"policy_map_name"`
+	Description   types.String          `tfsdk:"description"`
+	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
+}
 type PolicyMapQoSClasses struct {
 	Name                       types.String                     `tfsdk:"name"`
 	Type                       types.String                     `tfsdk:"type"`
@@ -41,6 +48,10 @@ type PolicyMapQoSClassesQueueLimits struct {
 }
 
 func (data PolicyMapQoS) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]", data.PolicyMapName.ValueString())
+}
+
+func (data PolicyMapQoSData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=%s]", data.PolicyMapName.ValueString())
 }
 
@@ -233,7 +244,7 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PolicyMapQoS) fromBody(ctx context.Context, res []byte) {
+func (data *PolicyMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -397,4 +408,22 @@ func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *PolicyMapQoS) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	for i := range data.Classes {
+		keys := [...]string{"name", "type"}
+		keyValues := [...]string{data.Classes[i].Name.ValueString(), data.Classes[i].Type.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/class%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

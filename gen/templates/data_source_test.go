@@ -91,6 +91,9 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 const testAccDataSourceIosxr{{camelCase .Name}}Config = `
 
 resource "iosxr_{{snakeCase $name}}" "test" {
+	{{- if and (not .NoDelete) (not .NoDeleteAttributes) (not .DefaultDeleteAttributes)}}
+	delete_mode = "attributes"
+	{{- end}}
 	{{- range  .Attributes}}
 	{{- if ne .ExcludeTest true}}
 	{{- if eq .Type "List"}}

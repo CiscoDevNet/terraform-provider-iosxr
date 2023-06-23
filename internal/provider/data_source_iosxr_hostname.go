@@ -62,7 +62,7 @@ func (d *HostnameDataSource) Configure(_ context.Context, req datasource.Configu
 }
 
 func (d *HostnameDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Hostname
+	var config HostnameData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

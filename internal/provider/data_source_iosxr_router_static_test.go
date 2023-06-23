@@ -38,6 +38,7 @@ func TestAccDataSourceIosxrRouterStatic(t *testing.T) {
 const testAccDataSourceIosxrRouterStaticConfig = `
 
 resource "iosxr_router_static" "test" {
+	delete_mode = "attributes"
 	prefix_address = "100.0.1.0"
 	prefix_length = 24
 	nexthop_interfaces = [{

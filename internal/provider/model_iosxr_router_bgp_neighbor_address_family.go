@@ -14,6 +14,19 @@ import (
 type RouterBGPNeighborAddressFamily struct {
 	Device                                             types.String `tfsdk:"device"`
 	Id                                                 types.String `tfsdk:"id"`
+	DeleteMode                                         types.String `tfsdk:"delete_mode"`
+	AsNumber                                           types.String `tfsdk:"as_number"`
+	NeighborAddress                                    types.String `tfsdk:"neighbor_address"`
+	AfName                                             types.String `tfsdk:"af_name"`
+	ImportStitchingRtReOriginateStitchingRt            types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	RouteReflectorClientInheritanceDisable             types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
+	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
+}
+type RouterBGPNeighborAddressFamilyData struct {
+	Device                                             types.String `tfsdk:"device"`
+	Id                                                 types.String `tfsdk:"id"`
 	AsNumber                                           types.String `tfsdk:"as_number"`
 	NeighborAddress                                    types.String `tfsdk:"neighbor_address"`
 	AfName                                             types.String `tfsdk:"af_name"`
@@ -25,6 +38,10 @@ type RouterBGPNeighborAddressFamily struct {
 }
 
 func (data RouterBGPNeighborAddressFamily) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.NeighborAddress.ValueString(), data.AfName.ValueString())
+}
+
+func (data RouterBGPNeighborAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.NeighborAddress.ValueString(), data.AfName.ValueString())
 }
 
@@ -109,7 +126,7 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	}
 }
 
-func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
 		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
 	} else {
@@ -160,4 +177,24 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation-type/srv6", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate/stitching-rt", data.getPath()))
+	}
+	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.EncapsulationTypeSrv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation-type/srv6", data.getPath()))
+	}
+	return deletePaths
 }

@@ -24,6 +24,7 @@ func TestAccDataSourceIosxrL2VPNBridgeGroup(t *testing.T) {
 const testAccDataSourceIosxrL2VPNBridgeGroupConfig = `
 
 resource "iosxr_l2vpn_bridge_group" "test" {
+	delete_mode = "attributes"
 	group_name = "BG123"
 }
 

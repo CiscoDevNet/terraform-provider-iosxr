@@ -14,7 +14,7 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrRouterISISAddressFamilyConfig_all(),
+				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv6"),
 					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"),
@@ -64,12 +64,24 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterISISAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+  attributes = {
+      "route-policy-name" = "ROUTE_POLICY_1"
+      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+  }
+}
+
+`
+
 func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 	return `
 	resource "iosxr_router_isis_address_family" "test" {
 		process_id = "P1"
 		af_name = "ipv6"
 		saf_name = "unicast"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -125,6 +137,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 			locator_name = "AlgoLocator"
 			level = 1
 		}]
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

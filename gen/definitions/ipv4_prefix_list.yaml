@@ -1,6 +1,7 @@
 ---
 name: IPv4 Prefix List
 path: Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]
+no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: prefix-list-name

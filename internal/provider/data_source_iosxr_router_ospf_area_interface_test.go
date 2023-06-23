@@ -33,6 +33,7 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig = `
 
 resource "iosxr_router_ospf_area_interface" "test" {
+	delete_mode = "attributes"
 	process_name = "OSPF1"
 	area_id = "0"
 	interface_name = "GigabitEthernet0/0/0/1"

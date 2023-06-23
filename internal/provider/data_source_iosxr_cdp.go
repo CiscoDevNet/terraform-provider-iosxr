@@ -78,7 +78,7 @@ func (d *CDPDataSource) Configure(_ context.Context, req datasource.ConfigureReq
 }
 
 func (d *CDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config CDP
+	var config CDPData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

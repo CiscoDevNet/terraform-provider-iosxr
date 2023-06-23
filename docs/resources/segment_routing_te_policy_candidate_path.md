@@ -39,6 +39,8 @@ resource "iosxr_segment_routing_te_policy_candidate_path" "example" {
 
 ### Optional
 
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `path_infos` (Attributes List) Policy configuration (see [below for nested schema](#nestedatt--path_infos))
 

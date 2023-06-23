@@ -74,7 +74,7 @@ func (d *OCSystemConfigDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *OCSystemConfigDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config OCSystemConfig
+	var config OCSystemConfigData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

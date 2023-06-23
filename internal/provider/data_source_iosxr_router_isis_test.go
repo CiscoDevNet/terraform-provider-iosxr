@@ -61,6 +61,7 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 const testAccDataSourceIosxrRouterISISConfig = `
 
 resource "iosxr_router_isis" "test" {
+	delete_mode = "attributes"
 	process_id = "P1"
 	is_type = "level-1"
 	set_overload_bit_levels = [{

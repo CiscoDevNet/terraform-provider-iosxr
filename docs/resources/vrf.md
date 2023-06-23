@@ -77,6 +77,8 @@ resource "iosxr_vrf" "example" {
 - `address_family_ipv6_unicast_import_route_target_four_byte_as_format` (Attributes List) Four Byte AS number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_four_byte_as_format))
 - `address_family_ipv6_unicast_import_route_target_ip_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_ip_address_format))
 - `address_family_ipv6_unicast_import_route_target_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--address_family_ipv6_unicast_import_route_target_two_byte_as_format))
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `description` (String) A description for the VRF
 - `device` (String) A device name from the provider configuration.
 - `rd_four_byte_as_as_number` (String) 4-byte AS number

@@ -53,6 +53,7 @@ resource "iosxr_gnmi" "PreReq0" {
 const testAccDataSourceIosxrEVPNEVIConfig = `
 
 resource "iosxr_evpn_evi" "test" {
+	delete_mode = "attributes"
 	vpn_id = 1234
 	description = "My Description"
 	load_balancing = true

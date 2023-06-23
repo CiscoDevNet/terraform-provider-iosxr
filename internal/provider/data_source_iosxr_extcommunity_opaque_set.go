@@ -66,7 +66,7 @@ func (d *ExtcommunityOpaqueSetDataSource) Configure(_ context.Context, req datas
 }
 
 func (d *ExtcommunityOpaqueSetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ExtcommunityOpaqueSet
+	var config ExtcommunityOpaqueSetData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

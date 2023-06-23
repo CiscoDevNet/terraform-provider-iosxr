@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrMPLSTrafficEng(t *testing.T) {
 const testAccDataSourceIosxrMPLSTrafficEngConfig = `
 
 resource "iosxr_mpls_traffic_eng" "test" {
+	delete_mode = "attributes"
 	traffic_eng = true
 }
 

@@ -15,6 +15,16 @@ import (
 type CDP struct {
 	Device              types.String `tfsdk:"device"`
 	Id                  types.String `tfsdk:"id"`
+	DeleteMode          types.String `tfsdk:"delete_mode"`
+	Enable              types.Bool   `tfsdk:"enable"`
+	Holdtime            types.Int64  `tfsdk:"holdtime"`
+	Timer               types.Int64  `tfsdk:"timer"`
+	AdvertiseV1         types.Bool   `tfsdk:"advertise_v1"`
+	LogAdjacencyChanges types.Bool   `tfsdk:"log_adjacency_changes"`
+}
+type CDPData struct {
+	Device              types.String `tfsdk:"device"`
+	Id                  types.String `tfsdk:"id"`
 	Enable              types.Bool   `tfsdk:"enable"`
 	Holdtime            types.Int64  `tfsdk:"holdtime"`
 	Timer               types.Int64  `tfsdk:"timer"`
@@ -23,6 +33,10 @@ type CDP struct {
 }
 
 func (data CDP) getPath() string {
+	return "Cisco-IOS-XR-um-cdp-cfg:/cdp"
+}
+
+func (data CDPData) getPath() string {
 	return "Cisco-IOS-XR-um-cdp-cfg:/cdp"
 }
 
@@ -92,7 +106,7 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *CDP) fromBody(ctx context.Context, res []byte) {
+func (data *CDPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
@@ -133,4 +147,24 @@ func (data *CDP) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *CDP) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
+	}
+	if !data.Holdtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/holdtime", data.getPath()))
+	}
+	if !data.Timer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer", data.getPath()))
+	}
+	if !data.AdvertiseV1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/v1", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	}
+	return deletePaths
 }

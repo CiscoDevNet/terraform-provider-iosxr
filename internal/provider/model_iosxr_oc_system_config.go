@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -18,8 +19,20 @@ type OCSystemConfig struct {
 	LoginBanner types.String `tfsdk:"login_banner"`
 	MotdBanner  types.String `tfsdk:"motd_banner"`
 }
+type OCSystemConfigData struct {
+	Device      types.String `tfsdk:"device"`
+	Id          types.String `tfsdk:"id"`
+	Hostname    types.String `tfsdk:"hostname"`
+	DomainName  types.String `tfsdk:"domain_name"`
+	LoginBanner types.String `tfsdk:"login_banner"`
+	MotdBanner  types.String `tfsdk:"motd_banner"`
+}
 
 func (data OCSystemConfig) getPath() string {
+	return "openconfig-system:/system/config"
+}
+
+func (data OCSystemConfigData) getPath() string {
 	return "openconfig-system:/system/config"
 }
 
@@ -63,7 +76,7 @@ func (data *OCSystemConfig) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *OCSystemConfig) fromBody(ctx context.Context, res []byte) {
+func (data *OCSystemConfigData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hostname"); value.Exists() {
 		data.Hostname = types.StringValue(value.String())
 	}
@@ -86,4 +99,21 @@ func (data *OCSystemConfig) getDeletedListItems(ctx context.Context, state OCSys
 func (data *OCSystemConfig) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *OCSystemConfig) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Hostname.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hostname", data.getPath()))
+	}
+	if !data.DomainName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/domain-name", data.getPath()))
+	}
+	if !data.LoginBanner.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/login-banner", data.getPath()))
+	}
+	if !data.MotdBanner.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/motd-banner", data.getPath()))
+	}
+	return deletePaths
 }

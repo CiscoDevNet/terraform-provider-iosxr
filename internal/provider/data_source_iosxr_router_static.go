@@ -142,7 +142,7 @@ func (d *RouterStaticDataSource) Configure(_ context.Context, req datasource.Con
 }
 
 func (d *RouterStaticDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterStatic
+	var config RouterStaticData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

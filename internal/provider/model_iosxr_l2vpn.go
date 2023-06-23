@@ -16,6 +16,14 @@ import (
 type L2VPN struct {
 	Device         types.String          `tfsdk:"device"`
 	Id             types.String          `tfsdk:"id"`
+	DeleteMode     types.String          `tfsdk:"delete_mode"`
+	Description    types.String          `tfsdk:"description"`
+	RouterId       types.String          `tfsdk:"router_id"`
+	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
+}
+type L2VPNData struct {
+	Device         types.String          `tfsdk:"device"`
+	Id             types.String          `tfsdk:"id"`
 	Description    types.String          `tfsdk:"description"`
 	RouterId       types.String          `tfsdk:"router_id"`
 	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
@@ -25,6 +33,10 @@ type L2VPNXconnectGroups struct {
 }
 
 func (data L2VPN) getPath() string {
+	return "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+}
+
+func (data L2VPNData) getPath() string {
 	return "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
 }
 
@@ -89,7 +101,7 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
+func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -155,4 +167,25 @@ func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	for i := range data.XconnectGroups {
+		keys := [...]string{"group-name"}
+		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/xconnect/groups/group%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

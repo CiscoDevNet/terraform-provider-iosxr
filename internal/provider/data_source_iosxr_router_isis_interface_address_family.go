@@ -114,7 +114,7 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Configure(_ context.Context
 }
 
 func (d *RouterISISInterfaceAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterISISInterfaceAddressFamily
+	var config RouterISISInterfaceAddressFamilyData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

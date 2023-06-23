@@ -16,6 +16,16 @@ import (
 type RouterStatic struct {
 	Device                    types.String                            `tfsdk:"device"`
 	Id                        types.String                            `tfsdk:"id"`
+	DeleteMode                types.String                            `tfsdk:"delete_mode"`
+	PrefixAddress             types.String                            `tfsdk:"prefix_address"`
+	PrefixLength              types.Int64                             `tfsdk:"prefix_length"`
+	NexthopInterfaces         []RouterStaticNexthopInterfaces         `tfsdk:"nexthop_interfaces"`
+	NexthopInterfaceAddresses []RouterStaticNexthopInterfaceAddresses `tfsdk:"nexthop_interface_addresses"`
+	NexthopAddresses          []RouterStaticNexthopAddresses          `tfsdk:"nexthop_addresses"`
+}
+type RouterStaticData struct {
+	Device                    types.String                            `tfsdk:"device"`
+	Id                        types.String                            `tfsdk:"id"`
 	PrefixAddress             types.String                            `tfsdk:"prefix_address"`
 	PrefixLength              types.Int64                             `tfsdk:"prefix_length"`
 	NexthopInterfaces         []RouterStaticNexthopInterfaces         `tfsdk:"nexthop_interfaces"`
@@ -43,6 +53,10 @@ type RouterStaticNexthopAddresses struct {
 }
 
 func (data RouterStatic) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
+}
+
+func (data RouterStaticData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
 }
 
@@ -251,7 +265,7 @@ func (data *RouterStatic) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterStatic) fromBody(ctx context.Context, res []byte) {
+func (data *RouterStaticData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticNexthopInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -445,4 +459,39 @@ func (data *RouterStatic) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterStatic) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.NexthopInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.NexthopInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v", data.getPath(), keyString))
+	}
+	for i := range data.NexthopInterfaceAddresses {
+		keys := [...]string{"interface-name", "address"}
+		keyValues := [...]string{data.NexthopInterfaceAddresses[i].InterfaceName.ValueString(), data.NexthopInterfaceAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v", data.getPath(), keyString))
+	}
+	for i := range data.NexthopAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.NexthopAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

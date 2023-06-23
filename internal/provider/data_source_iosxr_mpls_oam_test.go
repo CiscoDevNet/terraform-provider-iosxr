@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrMPLSOAM(t *testing.T) {
 const testAccDataSourceIosxrMPLSOAMConfig = `
 
 resource "iosxr_mpls_oam" "test" {
+	delete_mode = "attributes"
 	oam = true
 	oam_echo_disable_vendor_extension = false
 	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false

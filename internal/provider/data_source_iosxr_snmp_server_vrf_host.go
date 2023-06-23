@@ -86,7 +86,7 @@ func (d *SNMPServerVRFHostDataSource) Configure(_ context.Context, req datasourc
 }
 
 func (d *SNMPServerVRFHostDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPServerVRFHost
+	var config SNMPServerVRFHostData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

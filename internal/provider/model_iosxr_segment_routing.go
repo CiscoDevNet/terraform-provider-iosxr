@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -14,6 +15,15 @@ import (
 type SegmentRouting struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
+	DeleteMode            types.String `tfsdk:"delete_mode"`
+	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
+	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
+	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
+	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
+}
+type SegmentRoutingData struct {
+	Device                types.String `tfsdk:"device"`
+	Id                    types.String `tfsdk:"id"`
 	GlobalBlockLowerBound types.Int64  `tfsdk:"global_block_lower_bound"`
 	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
@@ -21,6 +31,10 @@ type SegmentRouting struct {
 }
 
 func (data SegmentRouting) getPath() string {
+	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+}
+
+func (data SegmentRoutingData) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 }
 
@@ -64,7 +78,7 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
 	}
@@ -87,4 +101,21 @@ func (data *SegmentRouting) getDeletedListItems(ctx context.Context, state Segme
 func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.GlobalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
+	}
+	if !data.GlobalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
+	}
+	if !data.LocalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	}
+	if !data.LocalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	}
+	return deletePaths
 }

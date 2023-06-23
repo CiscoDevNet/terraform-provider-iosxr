@@ -94,7 +94,7 @@ func (d *SegmentRoutingV6DataSource) Configure(_ context.Context, req datasource
 }
 
 func (d *SegmentRoutingV6DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SegmentRoutingV6
+	var config SegmentRoutingV6Data
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -19,6 +19,12 @@ type IPv4AccessList struct {
 	AccessListName types.String              `tfsdk:"access_list_name"`
 	Sequences      []IPv4AccessListSequences `tfsdk:"sequences"`
 }
+type IPv4AccessListData struct {
+	Device         types.String              `tfsdk:"device"`
+	Id             types.String              `tfsdk:"id"`
+	AccessListName types.String              `tfsdk:"access_list_name"`
+	Sequences      []IPv4AccessListSequences `tfsdk:"sequences"`
+}
 type IPv4AccessListSequences struct {
 	SequenceNumber                  types.Int64  `tfsdk:"sequence_number"`
 	Remark                          types.String `tfsdk:"remark"`
@@ -193,6 +199,10 @@ type IPv4AccessListSequences struct {
 }
 
 func (data IPv4AccessList) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=%s]", data.AccessListName.ValueString())
+}
+
+func (data IPv4AccessListData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=%s]", data.AccessListName.ValueString())
 }
 
@@ -1692,7 +1702,7 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
+func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4AccessListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -2339,4 +2349,19 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *IPv4AccessList) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.Sequences {
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

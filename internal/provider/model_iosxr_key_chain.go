@@ -19,6 +19,12 @@ type KeyChain struct {
 	Name   types.String   `tfsdk:"name"`
 	Keys   []KeyChainKeys `tfsdk:"keys"`
 }
+type KeyChainData struct {
+	Device types.String   `tfsdk:"device"`
+	Id     types.String   `tfsdk:"id"`
+	Name   types.String   `tfsdk:"name"`
+	Keys   []KeyChainKeys `tfsdk:"keys"`
+}
 type KeyChainKeys struct {
 	KeyName                           types.String `tfsdk:"key_name"`
 	KeyStringPassword                 types.String `tfsdk:"key_string_password"`
@@ -40,6 +46,10 @@ type KeyChainKeys struct {
 }
 
 func (data KeyChain) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]", data.Name.ValueString())
+}
+
+func (data KeyChainData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]", data.Name.ValueString())
 }
 
@@ -231,7 +241,7 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *KeyChain) fromBody(ctx context.Context, res []byte) {
+func (data *KeyChainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "keys.key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -349,4 +359,19 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *KeyChain) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.Keys {
+		keys := [...]string{"key-name"}
+		keyValues := [...]string{data.Keys[i].KeyName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/keys/key%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

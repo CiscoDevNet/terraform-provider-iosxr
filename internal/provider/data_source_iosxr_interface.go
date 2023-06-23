@@ -202,7 +202,7 @@ func (d *InterfaceDataSource) Configure(_ context.Context, req datasource.Config
 }
 
 func (d *InterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Interface
+	var config InterfaceData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

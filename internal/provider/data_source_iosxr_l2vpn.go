@@ -78,7 +78,7 @@ func (d *L2VPNDataSource) Configure(_ context.Context, req datasource.ConfigureR
 }
 
 func (d *L2VPNDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config L2VPN
+	var config L2VPNData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

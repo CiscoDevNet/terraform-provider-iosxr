@@ -53,6 +53,15 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
+			{{- end}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
@@ -377,14 +386,38 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
-{{ if not .NoDelete}}
+	var ops []client.SetOperation
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	{{- if or .DefaultDeleteAttributes .NoDelete}}
+    deleteMode := "attributes"
+	{{- else}}
+	deleteMode := "all"
+	{{- end}}
+	{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+	if state.DeleteMode.ValueString() == "all" {
+		deleteMode = "all"
+	} else if state.DeleteMode.ValueString() == "attributes" {
+		deleteMode = "attributes"
+	}
+	{{- end}}
+
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-{{ end}}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)

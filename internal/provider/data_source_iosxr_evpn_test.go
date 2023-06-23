@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 const testAccDataSourceIosxrEVPNConfig = `
 
 resource "iosxr_evpn" "test" {
+	delete_mode = "attributes"
 	source_interface = "Loopback0"
 }
 

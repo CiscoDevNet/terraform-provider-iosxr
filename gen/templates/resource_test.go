@@ -131,6 +131,9 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 func testAccIosxr{{camelCase .Name}}Config_all() string {
 	return `
 	resource "iosxr_{{snakeCase $name}}" "test" {
+	{{- if and (not .NoDelete) (not .NoDeleteAttributes) .DefaultDeleteAttributes}}
+		delete_mode = "all"
+	{{- end}}
 	{{- range  .Attributes}}
 	{{- if ne .ExcludeTest true}}
 	{{- if eq .Type "List"}}

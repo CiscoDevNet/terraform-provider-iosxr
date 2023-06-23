@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 const testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig = `
 
 resource "iosxr_l2vpn_xconnect_group_p2p" "test" {
+	delete_mode = "attributes"
 	group_name = "P2P"
 	p2p_xconnect_name = "XC"
 	description = "My P2P Description"

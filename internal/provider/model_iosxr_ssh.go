@@ -16,6 +16,17 @@ import (
 type SSH struct {
 	Device             types.String    `tfsdk:"device"`
 	Id                 types.String    `tfsdk:"id"`
+	DeleteMode         types.String    `tfsdk:"delete_mode"`
+	ServerDscp         types.Int64     `tfsdk:"server_dscp"`
+	ServerLogging      types.Bool      `tfsdk:"server_logging"`
+	ServerRateLimit    types.Int64     `tfsdk:"server_rate_limit"`
+	ServerSessionLimit types.Int64     `tfsdk:"server_session_limit"`
+	ServerV2           types.Bool      `tfsdk:"server_v2"`
+	ServerVrfs         []SSHServerVrfs `tfsdk:"server_vrfs"`
+}
+type SSHData struct {
+	Device             types.String    `tfsdk:"device"`
+	Id                 types.String    `tfsdk:"id"`
 	ServerDscp         types.Int64     `tfsdk:"server_dscp"`
 	ServerLogging      types.Bool      `tfsdk:"server_logging"`
 	ServerRateLimit    types.Int64     `tfsdk:"server_rate_limit"`
@@ -28,6 +39,10 @@ type SSHServerVrfs struct {
 }
 
 func (data SSH) getPath() string {
+	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
+}
+
+func (data SSHData) getPath() string {
 	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 }
 
@@ -128,7 +143,7 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SSH) fromBody(ctx context.Context, res []byte) {
+func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
 	}
@@ -213,4 +228,34 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SSH) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.ServerDscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/dscp", data.getPath()))
+	}
+	if !data.ServerLogging.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/logging", data.getPath()))
+	}
+	if !data.ServerRateLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/rate-limit", data.getPath()))
+	}
+	if !data.ServerSessionLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/session-limit", data.getPath()))
+	}
+	if !data.ServerV2.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/v2", data.getPath()))
+	}
+	for i := range data.ServerVrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

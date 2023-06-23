@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -15,8 +16,17 @@ type Hostname struct {
 	Id                types.String `tfsdk:"id"`
 	SystemNetworkName types.String `tfsdk:"system_network_name"`
 }
+type HostnameData struct {
+	Device            types.String `tfsdk:"device"`
+	Id                types.String `tfsdk:"id"`
+	SystemNetworkName types.String `tfsdk:"system_network_name"`
+}
 
 func (data Hostname) getPath() string {
+	return "Cisco-IOS-XR-um-hostname-cfg:/hostname"
+}
+
+func (data HostnameData) getPath() string {
 	return "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 }
 
@@ -36,7 +46,7 @@ func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Hostname) fromBody(ctx context.Context, res []byte) {
+func (data *HostnameData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())
 	}
@@ -50,4 +60,12 @@ func (data *Hostname) getDeletedListItems(ctx context.Context, state Hostname) [
 func (data *Hostname) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *Hostname) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.SystemNetworkName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/system-network-name", data.getPath()))
+	}
+	return deletePaths
 }

@@ -106,7 +106,7 @@ func (d *PCEDataSource) Configure(_ context.Context, req datasource.ConfigureReq
 }
 
 func (d *PCEDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config PCE
+	var config PCEData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

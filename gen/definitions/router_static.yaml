@@ -22,7 +22,7 @@ attributes:
         example: 122
   - yang_name: nexthop-interface-addresses/nexthop-interface-address
     tf_name: nexthop_interface_addresses
-    type: List 
+    type: List
     attributes:
       - yang_name: interface-name
         id: true

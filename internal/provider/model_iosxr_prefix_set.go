@@ -17,8 +17,18 @@ type PrefixSet struct {
 	SetName types.String `tfsdk:"set_name"`
 	Rpl     types.String `tfsdk:"rpl"`
 }
+type PrefixSetData struct {
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
+}
 
 func (data PrefixSet) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=%s]", data.SetName.ValueString())
+}
+
+func (data PrefixSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=%s]", data.SetName.ValueString())
 }
 
@@ -41,7 +51,7 @@ func (data *PrefixSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PrefixSet) fromBody(ctx context.Context, res []byte) {
+func (data *PrefixSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-prefix-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -55,4 +65,12 @@ func (data *PrefixSet) getDeletedListItems(ctx context.Context, state PrefixSet)
 func (data *PrefixSet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *PrefixSet) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Rpl.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-prefix-set", data.getPath()))
+	}
+	return deletePaths
 }

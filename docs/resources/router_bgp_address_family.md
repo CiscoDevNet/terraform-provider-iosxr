@@ -88,6 +88,8 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
 - `allocate_label_all` (Boolean) Allocate labels for all prefixes
 - `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode

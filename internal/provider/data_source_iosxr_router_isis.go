@@ -254,7 +254,7 @@ func (d *RouterISISDataSource) Configure(_ context.Context, req datasource.Confi
 }
 
 func (d *RouterISISDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterISIS
+	var config RouterISISData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

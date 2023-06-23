@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
 const testAccDataSourceIosxrEVPNInterfaceConfig = `
 
 resource "iosxr_evpn_interface" "test" {
+	delete_mode = "attributes"
 	interface_name = "Bundle-Ether12"
 	core_isolation_group = 11
 	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"

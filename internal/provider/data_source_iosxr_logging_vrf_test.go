@@ -29,6 +29,7 @@ func TestAccDataSourceIosxrLoggingVRF(t *testing.T) {
 const testAccDataSourceIosxrLoggingVRFConfig = `
 
 resource "iosxr_logging_vrf" "test" {
+	delete_mode = "attributes"
 	vrf_name = "VRF1"
 	host_ipv4_addresses = [{
 		ipv4_address = "1.1.1.1"

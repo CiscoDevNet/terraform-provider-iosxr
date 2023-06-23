@@ -286,7 +286,7 @@ func (d *SNMPServerDataSource) Configure(_ context.Context, req datasource.Confi
 }
 
 func (d *SNMPServerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPServer
+	var config SNMPServerData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

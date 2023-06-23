@@ -19,6 +19,12 @@ type IPv4PrefixList struct {
 	PrefixListName types.String              `tfsdk:"prefix_list_name"`
 	Sequences      []IPv4PrefixListSequences `tfsdk:"sequences"`
 }
+type IPv4PrefixListData struct {
+	Device         types.String              `tfsdk:"device"`
+	Id             types.String              `tfsdk:"id"`
+	PrefixListName types.String              `tfsdk:"prefix_list_name"`
+	Sequences      []IPv4PrefixListSequences `tfsdk:"sequences"`
+}
 type IPv4PrefixListSequences struct {
 	SequenceNumber      types.Int64  `tfsdk:"sequence_number"`
 	Remark              types.String `tfsdk:"remark"`
@@ -31,6 +37,10 @@ type IPv4PrefixListSequences struct {
 }
 
 func (data IPv4PrefixList) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]", data.PrefixListName.ValueString())
+}
+
+func (data IPv4PrefixListData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]", data.PrefixListName.ValueString())
 }
 
@@ -138,7 +148,7 @@ func (data *IPv4PrefixList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *IPv4PrefixList) fromBody(ctx context.Context, res []byte) {
+func (data *IPv4PrefixListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4PrefixListSequences, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -219,4 +229,19 @@ func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.Sequences {
+		keys := [...]string{"sequence-number"}
+		keyValues := [...]string{strconv.FormatInt(data.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sequences/sequence%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

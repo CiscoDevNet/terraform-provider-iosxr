@@ -16,6 +16,37 @@ import (
 type RouterOSPF struct {
 	Device                                types.String                 `tfsdk:"device"`
 	Id                                    types.String                 `tfsdk:"id"`
+	DeleteMode                            types.String                 `tfsdk:"delete_mode"`
+	ProcessName                           types.String                 `tfsdk:"process_name"`
+	MplsLdpSync                           types.Bool                   `tfsdk:"mpls_ldp_sync"`
+	HelloInterval                         types.Int64                  `tfsdk:"hello_interval"`
+	DeadInterval                          types.Int64                  `tfsdk:"dead_interval"`
+	Priority                              types.Int64                  `tfsdk:"priority"`
+	MtuIgnoreEnable                       types.Bool                   `tfsdk:"mtu_ignore_enable"`
+	MtuIgnoreDisable                      types.Bool                   `tfsdk:"mtu_ignore_disable"`
+	PassiveEnable                         types.Bool                   `tfsdk:"passive_enable"`
+	PassiveDisable                        types.Bool                   `tfsdk:"passive_disable"`
+	RouterId                              types.String                 `tfsdk:"router_id"`
+	RedistributeConnected                 types.Bool                   `tfsdk:"redistribute_connected"`
+	RedistributeConnectedTag              types.Int64                  `tfsdk:"redistribute_connected_tag"`
+	RedistributeConnectedMetricType       types.String                 `tfsdk:"redistribute_connected_metric_type"`
+	RedistributeStatic                    types.Bool                   `tfsdk:"redistribute_static"`
+	RedistributeStaticTag                 types.Int64                  `tfsdk:"redistribute_static_tag"`
+	RedistributeStaticMetricType          types.String                 `tfsdk:"redistribute_static_metric_type"`
+	BfdFastDetect                         types.Bool                   `tfsdk:"bfd_fast_detect"`
+	BfdMinimumInterval                    types.Int64                  `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                         types.Int64                  `tfsdk:"bfd_multiplier"`
+	DefaultInformationOriginate           types.Bool                   `tfsdk:"default_information_originate"`
+	DefaultInformationOriginateAlways     types.Bool                   `tfsdk:"default_information_originate_always"`
+	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
+	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
+	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
+	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
+	RedistributeOspf                      []RouterOSPFRedistributeOspf `tfsdk:"redistribute_ospf"`
+}
+type RouterOSPFData struct {
+	Device                                types.String                 `tfsdk:"device"`
+	Id                                    types.String                 `tfsdk:"id"`
 	ProcessName                           types.String                 `tfsdk:"process_name"`
 	MplsLdpSync                           types.Bool                   `tfsdk:"mpls_ldp_sync"`
 	HelloInterval                         types.Int64                  `tfsdk:"hello_interval"`
@@ -69,6 +100,10 @@ type RouterOSPFRedistributeOspf struct {
 }
 
 func (data RouterOSPF) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
+}
+
+func (data RouterOSPFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
 }
 
@@ -591,7 +626,7 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
+func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
 	} else {
@@ -977,4 +1012,112 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.MplsLdpSync.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/sync", data.getPath()))
+	}
+	if !data.HelloInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-interval", data.getPath()))
+	}
+	if !data.DeadInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dead-interval", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.MtuIgnoreEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mtu-ignore/enable", data.getPath()))
+	}
+	if !data.MtuIgnoreDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mtu-ignore/disable", data.getPath()))
+	}
+	if !data.PassiveEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive/enable", data.getPath()))
+	}
+	if !data.PassiveDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive/disable", data.getPath()))
+	}
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.RedistributeConnectedTag.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/tag", data.getPath()))
+	}
+	if !data.RedistributeConnectedMetricType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric-type", data.getPath()))
+	}
+	if !data.RedistributeStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.RedistributeStaticTag.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/tag", data.getPath()))
+	}
+	if !data.RedistributeStaticMetricType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric-type", data.getPath()))
+	}
+	if !data.BfdFastDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.DefaultInformationOriginateAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate/always", data.getPath()))
+	}
+	if !data.DefaultInformationOriginateMetricType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate/metric-type", data.getPath()))
+	}
+	for i := range data.Areas {
+		keys := [...]string{"area-id"}
+		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/areas/area%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeBgp {
+		keys := [...]string{"as-number"}
+		keyValues := [...]string{data.RedistributeBgp[i].AsNumber.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/bgp/as%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"instance-name"}
+		keyValues := [...]string{data.RedistributeOspf[i].InstanceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospf%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

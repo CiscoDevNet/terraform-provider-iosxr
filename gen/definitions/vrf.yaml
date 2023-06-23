@@ -35,24 +35,30 @@ attributes:
     example: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/as-number
     optional: true
+    delete_parent: true
     example: 123
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/index
     optional: true
+    delete_parent: true
     example: 123
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/as-number
     optional: true
+    delete_parent: true
     example: 65001
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/index
     optional: true
+    delete_parent: true
     example: 1
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/ipv4-address
     optional: true
+    delete_parent: true
     example: 1.2.3.4
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/index
     optional: true
+    delete_parent: true
     example: 1
     exclude_test: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt

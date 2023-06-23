@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrCDP(t *testing.T) {
 const testAccDataSourceIosxrCDPConfig = `
 
 resource "iosxr_cdp" "test" {
+	delete_mode = "attributes"
 	enable = true
 	holdtime = 12
 	timer = 34

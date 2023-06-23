@@ -16,6 +16,20 @@ import (
 type L2VPNXconnectGroupP2P struct {
 	Device                                types.String                                                 `tfsdk:"device"`
 	Id                                    types.String                                                 `tfsdk:"id"`
+	DeleteMode                            types.String                                                 `tfsdk:"delete_mode"`
+	GroupName                             types.String                                                 `tfsdk:"group_name"`
+	P2pXconnectName                       types.String                                                 `tfsdk:"p2p_xconnect_name"`
+	Description                           types.String                                                 `tfsdk:"description"`
+	Interfaces                            []L2VPNXconnectGroupP2PInterfaces                            `tfsdk:"interfaces"`
+	Ipv4Neighbors                         []L2VPNXconnectGroupP2PIpv4Neighbors                         `tfsdk:"ipv4_neighbors"`
+	Ipv6Neighbors                         []L2VPNXconnectGroupP2PIpv6Neighbors                         `tfsdk:"ipv6_neighbors"`
+	EvpnTargetNeighbors                   []L2VPNXconnectGroupP2PEvpnTargetNeighbors                   `tfsdk:"evpn_target_neighbors"`
+	EvpnServiceNeighbors                  []L2VPNXconnectGroupP2PEvpnServiceNeighbors                  `tfsdk:"evpn_service_neighbors"`
+	NeighborEvpnEviSegmentRoutingServices []L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices `tfsdk:"neighbor_evpn_evi_segment_routing_services"`
+}
+type L2VPNXconnectGroupP2PData struct {
+	Device                                types.String                                                 `tfsdk:"device"`
+	Id                                    types.String                                                 `tfsdk:"id"`
 	GroupName                             types.String                                                 `tfsdk:"group_name"`
 	P2pXconnectName                       types.String                                                 `tfsdk:"p2p_xconnect_name"`
 	Description                           types.String                                                 `tfsdk:"description"`
@@ -57,6 +71,10 @@ type L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices struct {
 }
 
 func (data L2VPNXconnectGroupP2P) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
+}
+
+func (data L2VPNXconnectGroupP2PData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
 }
 
@@ -389,7 +407,7 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
-func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
+func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -766,4 +784,72 @@ func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []st
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *L2VPNXconnectGroupP2P) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv4Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6Neighbors {
+		keys := [...]string{"address", "pw-id"}
+		keyValues := [...]string{data.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(data.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", data.getPath(), keyString))
+	}
+	for i := range data.EvpnTargetNeighbors {
+		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(data.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", data.getPath(), keyString))
+	}
+	for i := range data.EvpnServiceNeighbors {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", data.getPath(), keyString))
+	}
+	for i := range data.NeighborEvpnEviSegmentRoutingServices {
+		keys := [...]string{"vpn-id", "service-id"}
+		keyValues := [...]string{strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(data.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

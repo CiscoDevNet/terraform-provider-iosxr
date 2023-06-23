@@ -90,7 +90,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Configure(_ context.Context, 
 }
 
 func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterBGPNeighborAddressFamily
+	var config RouterBGPNeighborAddressFamilyData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

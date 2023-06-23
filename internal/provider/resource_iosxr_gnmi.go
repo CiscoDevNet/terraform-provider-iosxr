@@ -58,6 +58,7 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 			"delete": schema.BoolAttribute{
 				MarkdownDescription: "Delete object during destroy operation. Default value is `true`.",
 				Optional:            true,
+				Computed:            true,
 				PlanModifiers: []planmodifier.Bool{
 					helpers.BooleanDefaultModifier(true),
 				},

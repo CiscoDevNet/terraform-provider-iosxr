@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrEVPNGroup(t *testing.T) {
 const testAccDataSourceIosxrEVPNGroupConfig = `
 
 resource "iosxr_evpn_group" "test" {
+	delete_mode = "attributes"
 	group_id = 1
 	core_interfaces = [{
 		interface_name = "Bundle-Ether111"

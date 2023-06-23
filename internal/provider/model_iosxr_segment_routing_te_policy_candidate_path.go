@@ -16,6 +16,14 @@ import (
 type SegmentRoutingTEPolicyCandidatePath struct {
 	Device     types.String                                   `tfsdk:"device"`
 	Id         types.String                                   `tfsdk:"id"`
+	DeleteMode types.String                                   `tfsdk:"delete_mode"`
+	PolicyName types.String                                   `tfsdk:"policy_name"`
+	PathIndex  types.Int64                                    `tfsdk:"path_index"`
+	PathInfos  []SegmentRoutingTEPolicyCandidatePathPathInfos `tfsdk:"path_infos"`
+}
+type SegmentRoutingTEPolicyCandidatePathData struct {
+	Device     types.String                                   `tfsdk:"device"`
+	Id         types.String                                   `tfsdk:"id"`
 	PolicyName types.String                                   `tfsdk:"policy_name"`
 	PathIndex  types.Int64                                    `tfsdk:"path_index"`
 	PathInfos  []SegmentRoutingTEPolicyCandidatePathPathInfos `tfsdk:"path_infos"`
@@ -29,6 +37,10 @@ type SegmentRoutingTEPolicyCandidatePathPathInfos struct {
 }
 
 func (data SegmentRoutingTEPolicyCandidatePath) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
+}
+
+func (data SegmentRoutingTEPolicyCandidatePathData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
 }
 
@@ -118,7 +130,7 @@ func (data *SegmentRoutingTEPolicyCandidatePath) updateFromBody(ctx context.Cont
 	}
 }
 
-func (data *SegmentRoutingTEPolicyCandidatePath) fromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingTEPolicyCandidatePathData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
 		data.PathInfos = make([]SegmentRoutingTEPolicyCandidatePathPathInfos, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -207,4 +219,19 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getEmptyLeafsDelete(ctx context
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SegmentRoutingTEPolicyCandidatePath) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.PathInfos {
+		keys := [...]string{"type", "hop-type", "segment-list-name"}
+		keyValues := [...]string{data.PathInfos[i].Type.ValueString(), data.PathInfos[i].HopType.ValueString(), data.PathInfos[i].SegmentListName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/path-infos/path-info%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

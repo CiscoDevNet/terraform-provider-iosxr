@@ -43,6 +43,8 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent

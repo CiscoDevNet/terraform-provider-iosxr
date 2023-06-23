@@ -52,6 +52,13 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
 			"bridge_group_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify the group the bridge belongs to").String,
 				Required:            true,
@@ -326,8 +333,26 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Delete(ctx context.Context, req r
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "all"
+	if state.DeleteMode.ValueString() == "all" {
+		deleteMode = "all"
+	} else if state.DeleteMode.ValueString() == "attributes" {
+		deleteMode = "attributes"
+	}
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

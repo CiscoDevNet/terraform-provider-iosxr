@@ -750,7 +750,7 @@ func (d *IPv4AccessListDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *IPv4AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv4AccessList
+	var config IPv4AccessListData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -62,6 +62,7 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 const testAccDataSourceIosxrRouterBGPConfig = `
 
 resource "iosxr_router_bgp" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	default_information_originate = true
 	default_metric = 125

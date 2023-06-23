@@ -138,7 +138,7 @@ func (d *MPLSLDPDataSource) Configure(_ context.Context, req datasource.Configur
 }
 
 func (d *MPLSLDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config MPLSLDP
+	var config MPLSLDPData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

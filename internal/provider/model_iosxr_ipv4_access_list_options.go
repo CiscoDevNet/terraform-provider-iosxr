@@ -15,12 +15,24 @@ import (
 type IPv4AccessListOptions struct {
 	Device             types.String `tfsdk:"device"`
 	Id                 types.String `tfsdk:"id"`
+	DeleteMode         types.String `tfsdk:"delete_mode"`
+	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
+	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
+	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
+}
+type IPv4AccessListOptionsData struct {
+	Device             types.String `tfsdk:"device"`
+	Id                 types.String `tfsdk:"id"`
 	LogUpdateThreshold types.Int64  `tfsdk:"log_update_threshold"`
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
 
 func (data IPv4AccessListOptions) getPath() string {
+	return "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options"
+}
+
+func (data IPv4AccessListOptionsData) getPath() string {
 	return "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options"
 }
 
@@ -62,7 +74,7 @@ func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
-func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res []byte) {
+func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())
 	}
@@ -87,4 +99,18 @@ func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context) []st
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/icmp-off", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.LogUpdateThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/threshold", data.getPath()))
+	}
+	if !data.LogUpdateRate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/rate", data.getPath()))
+	}
+	if !data.IcmpOff.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
+	}
+	return deletePaths
 }

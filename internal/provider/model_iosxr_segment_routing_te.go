@@ -16,6 +16,22 @@ import (
 type SegmentRoutingTE struct {
 	Device                types.String                     `tfsdk:"device"`
 	Id                    types.String                     `tfsdk:"id"`
+	DeleteMode            types.String                     `tfsdk:"delete_mode"`
+	LoggingPcepPeerStatus types.Bool                       `tfsdk:"logging_pcep_peer_status"`
+	LoggingPolicyStatus   types.Bool                       `tfsdk:"logging_policy_status"`
+	PccReportAll          types.Bool                       `tfsdk:"pcc_report_all"`
+	PccSourceAddress      types.String                     `tfsdk:"pcc_source_address"`
+	PccDelegationTimeout  types.Int64                      `tfsdk:"pcc_delegation_timeout"`
+	PccDeadTimer          types.Int64                      `tfsdk:"pcc_dead_timer"`
+	PccInitiatedState     types.Int64                      `tfsdk:"pcc_initiated_state"`
+	PccInitiatedOrphan    types.Int64                      `tfsdk:"pcc_initiated_orphan"`
+	PcePeers              []SegmentRoutingTEPcePeers       `tfsdk:"pce_peers"`
+	OnDemandColors        []SegmentRoutingTEOnDemandColors `tfsdk:"on_demand_colors"`
+	Policies              []SegmentRoutingTEPolicies       `tfsdk:"policies"`
+}
+type SegmentRoutingTEData struct {
+	Device                types.String                     `tfsdk:"device"`
+	Id                    types.String                     `tfsdk:"id"`
 	LoggingPcepPeerStatus types.Bool                       `tfsdk:"logging_pcep_peer_status"`
 	LoggingPolicyStatus   types.Bool                       `tfsdk:"logging_policy_status"`
 	PccReportAll          types.Bool                       `tfsdk:"pcc_report_all"`
@@ -62,6 +78,10 @@ type SegmentRoutingTEPolicies struct {
 }
 
 func (data SegmentRoutingTE) getPath() string {
+	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
+}
+
+func (data SegmentRoutingTEData) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
 }
 
@@ -474,7 +494,7 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
 		data.LoggingPcepPeerStatus = types.BoolValue(true)
 	} else {
@@ -760,4 +780,63 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string 
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.LoggingPcepPeerStatus.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/pcep-peer-status", data.getPath()))
+	}
+	if !data.LoggingPolicyStatus.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/logging/policy-status", data.getPath()))
+	}
+	if !data.PccReportAll.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/report-all", data.getPath()))
+	}
+	if !data.PccSourceAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/source-address", data.getPath()))
+	}
+	if !data.PccDelegationTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/delegation-timeout", data.getPath()))
+	}
+	if !data.PccDeadTimer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/dead-timer-interval", data.getPath()))
+	}
+	if !data.PccInitiatedState.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/initiated-state-interval", data.getPath()))
+	}
+	if !data.PccInitiatedOrphan.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/initiated-orphan-interval", data.getPath()))
+	}
+	for i := range data.PcePeers {
+		keys := [...]string{"pce-address"}
+		keyValues := [...]string{data.PcePeers[i].PceAddress.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/pcc/pce-peers/pce-peer%v", data.getPath(), keyString))
+	}
+	for i := range data.OnDemandColors {
+		keys := [...]string{"color"}
+		keyValues := [...]string{strconv.FormatInt(data.OnDemandColors[i].Color.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v", data.getPath(), keyString))
+	}
+	for i := range data.Policies {
+		keys := [...]string{"policy-name"}
+		keyValues := [...]string{data.Policies[i].PolicyName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/policies/policy%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

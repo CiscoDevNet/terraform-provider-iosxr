@@ -44,6 +44,8 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 ### Optional
 
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
 - `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID

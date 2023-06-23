@@ -16,6 +16,21 @@ import (
 type MPLSLDP struct {
 	Device                       types.String                 `tfsdk:"device"`
 	Id                           types.String                 `tfsdk:"id"`
+	DeleteMode                   types.String                 `tfsdk:"delete_mode"`
+	RouterId                     types.String                 `tfsdk:"router_id"`
+	AddressFamilies              []MPLSLDPAddressFamilies     `tfsdk:"address_families"`
+	Interfaces                   []MPLSLDPInterfaces          `tfsdk:"interfaces"`
+	CapabilitiesSacIpv4Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv4_disable"`
+	CapabilitiesSacIpv6Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv6_disable"`
+	CapabilitiesSacFec128Disable types.Bool                   `tfsdk:"capabilities_sac_fec128_disable"`
+	CapabilitiesSacFec129Disable types.Bool                   `tfsdk:"capabilities_sac_fec129_disable"`
+	MldpLoggingNotifications     types.Bool                   `tfsdk:"mldp_logging_notifications"`
+	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
+	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
+}
+type MPLSLDPData struct {
+	Device                       types.String                 `tfsdk:"device"`
+	Id                           types.String                 `tfsdk:"id"`
 	RouterId                     types.String                 `tfsdk:"router_id"`
 	AddressFamilies              []MPLSLDPAddressFamilies     `tfsdk:"address_families"`
 	Interfaces                   []MPLSLDPInterfaces          `tfsdk:"interfaces"`
@@ -42,6 +57,10 @@ type MPLSLDPMldpAddressFamilies struct {
 }
 
 func (data MPLSLDP) getPath() string {
+	return "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
+}
+
+func (data MPLSLDPData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp"
 }
 
@@ -300,7 +319,7 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
+func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
 	}
@@ -531,4 +550,60 @@ func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session/protection", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *MPLSLDP) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	if !data.CapabilitiesSacIpv4Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacIpv6Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec128Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec128-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec129Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
+	}
+	if !data.MldpLoggingNotifications.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
+	}
+	for i := range data.MldpAddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MldpAddressFamilies[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/address-families/address-family%v", data.getPath(), keyString))
+	}
+	if !data.SessionProtection.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/protection", data.getPath()))
+	}
+	return deletePaths
 }

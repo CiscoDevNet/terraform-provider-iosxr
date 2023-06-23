@@ -16,6 +16,34 @@ import (
 type RouterISIS struct {
 	Device                        types.String                     `tfsdk:"device"`
 	Id                            types.String                     `tfsdk:"id"`
+	DeleteMode                    types.String                     `tfsdk:"delete_mode"`
+	ProcessId                     types.String                     `tfsdk:"process_id"`
+	IsType                        types.String                     `tfsdk:"is_type"`
+	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                           types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                      types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                       types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                   types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer             types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires           types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges           types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait     types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait     types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait   types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval            types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordKeychain           types.String                     `tfsdk:"lsp_password_keychain"`
+	DistributeLinkStateInstanceId types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle   types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel      types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                  []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                     []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                          []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
+}
+type RouterISISData struct {
+	Device                        types.String                     `tfsdk:"device"`
+	Id                            types.String                     `tfsdk:"id"`
 	ProcessId                     types.String                     `tfsdk:"process_id"`
 	IsType                        types.String                     `tfsdk:"is_type"`
 	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
@@ -73,6 +101,10 @@ type RouterISISInterfaces struct {
 }
 
 func (data RouterISIS) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
+}
+
+func (data RouterISISData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
 
@@ -632,7 +664,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
+func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
 	}
@@ -1067,4 +1099,107 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.IsType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/is-type", data.getPath()))
+	}
+	for i := range data.SetOverloadBitLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit-levels/level%v", data.getPath(), keyString))
+	}
+	if !data.Nsr.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
+	}
+	if !data.NsfCisco.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/cisco", data.getPath()))
+	}
+	if !data.NsfIetf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/ietf", data.getPath()))
+	}
+	if !data.NsfLifetime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
+	}
+	if !data.NsfInterfaceTimer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-timer", data.getPath()))
+	}
+	if !data.NsfInterfaceExpires.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-expires", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	}
+	if !data.LspGenIntervalMaximumWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", data.getPath()))
+	}
+	if !data.LspGenIntervalInitialWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", data.getPath()))
+	}
+	if !data.LspGenIntervalSecondaryWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", data.getPath()))
+	}
+	if !data.LspRefreshInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-refresh-interval/lsp-refresh-interval-time", data.getPath()))
+	}
+	if !data.MaxLspLifetime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-lsp-lifetime/max-lsp-lifetime", data.getPath()))
+	}
+	if !data.DistributeLinkStateInstanceId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))
+	}
+	if !data.DistributeLinkStateThrottle.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/throttle", data.getPath()))
+	}
+	if !data.DistributeLinkStateLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/level", data.getPath()))
+	}
+	for i := range data.AffinityMaps {
+		keys := [...]string{"affinity-map-name"}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity-maps/affinity-map%v", data.getPath(), keyString))
+	}
+	for i := range data.FlexAlgos {
+		keys := [...]string{"algorithm-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/flex-algos/flex-algo%v", data.getPath(), keyString))
+	}
+	for i := range data.Nets {
+		keys := [...]string{"net-id"}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nets/net%v", data.getPath(), keyString))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

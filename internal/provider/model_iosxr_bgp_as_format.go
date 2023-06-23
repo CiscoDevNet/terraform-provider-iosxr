@@ -17,8 +17,18 @@ type BGPASFormat struct {
 	Asdot   types.Bool   `tfsdk:"asdot"`
 	Asplain types.Bool   `tfsdk:"asplain"`
 }
+type BGPASFormatData struct {
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	Asdot   types.Bool   `tfsdk:"asdot"`
+	Asplain types.Bool   `tfsdk:"asplain"`
+}
 
 func (data BGPASFormat) getPath() string {
+	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
+}
+
+func (data BGPASFormatData) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
 
@@ -58,7 +68,7 @@ func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
+func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
 		data.Asdot = types.BoolValue(true)
 	} else {
@@ -85,4 +95,15 @@ func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/asplain", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Asdot.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/asdot", data.getPath()))
+	}
+	if !data.Asplain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/asplain", data.getPath()))
+	}
+	return deletePaths
 }

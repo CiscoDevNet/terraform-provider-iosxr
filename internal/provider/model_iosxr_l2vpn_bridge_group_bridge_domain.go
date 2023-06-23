@@ -16,6 +16,24 @@ import (
 type L2VPNBridgeGroupBridgeDomain struct {
 	Device                         types.String                                         `tfsdk:"device"`
 	Id                             types.String                                         `tfsdk:"id"`
+	DeleteMode                     types.String                                         `tfsdk:"delete_mode"`
+	BridgeGroupName                types.String                                         `tfsdk:"bridge_group_name"`
+	BridgeDomainName               types.String                                         `tfsdk:"bridge_domain_name"`
+	Evis                           []L2VPNBridgeGroupBridgeDomainEvis                   `tfsdk:"evis"`
+	Vnis                           []L2VPNBridgeGroupBridgeDomainVnis                   `tfsdk:"vnis"`
+	Mtu                            types.Int64                                          `tfsdk:"mtu"`
+	StormControlBroadcastPps       types.Int64                                          `tfsdk:"storm_control_broadcast_pps"`
+	StormControlBroadcastKbps      types.Int64                                          `tfsdk:"storm_control_broadcast_kbps"`
+	StormControlMulticastPps       types.Int64                                          `tfsdk:"storm_control_multicast_pps"`
+	StormControlMulticastKbps      types.Int64                                          `tfsdk:"storm_control_multicast_kbps"`
+	StormControlUnknownUnicastPps  types.Int64                                          `tfsdk:"storm_control_unknown_unicast_pps"`
+	StormControlUnknownUnicastKbps types.Int64                                          `tfsdk:"storm_control_unknown_unicast_kbps"`
+	Interfaces                     []L2VPNBridgeGroupBridgeDomainInterfaces             `tfsdk:"interfaces"`
+	SegmentRoutingSrv6Evis         []L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis `tfsdk:"segment_routing_srv6_evis"`
+}
+type L2VPNBridgeGroupBridgeDomainData struct {
+	Device                         types.String                                         `tfsdk:"device"`
+	Id                             types.String                                         `tfsdk:"id"`
 	BridgeGroupName                types.String                                         `tfsdk:"bridge_group_name"`
 	BridgeDomainName               types.String                                         `tfsdk:"bridge_domain_name"`
 	Evis                           []L2VPNBridgeGroupBridgeDomainEvis                   `tfsdk:"evis"`
@@ -45,6 +63,10 @@ type L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis struct {
 }
 
 func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
+}
+
+func (data L2VPNBridgeGroupBridgeDomainData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
 }
 
@@ -277,7 +299,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 	}
 }
 
-func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []byte) {
+func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -513,4 +535,70 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Evis[i].VpnId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/evis/evi%v", data.getPath(), keyString))
+	}
+	for i := range data.Vnis {
+		keys := [...]string{"vni-id"}
+		keyValues := [...]string{strconv.FormatInt(data.Vnis[i].VniId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vnis/vni%v", data.getPath(), keyString))
+	}
+	if !data.Mtu.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mtu", data.getPath()))
+	}
+	if !data.StormControlBroadcastPps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/broadcast/pps", data.getPath()))
+	}
+	if !data.StormControlBroadcastKbps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/broadcast/kbps", data.getPath()))
+	}
+	if !data.StormControlMulticastPps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/multicast/pps", data.getPath()))
+	}
+	if !data.StormControlMulticastKbps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/multicast/kbps", data.getPath()))
+	}
+	if !data.StormControlUnknownUnicastPps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/unknown-unicast/pps", data.getPath()))
+	}
+	if !data.StormControlUnknownUnicastKbps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/storm-control/unknown-unicast/kbps", data.getPath()))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	for i := range data.SegmentRoutingSrv6Evis {
+		keys := [...]string{"vpn-id"}
+		keyValues := [...]string{strconv.FormatInt(data.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

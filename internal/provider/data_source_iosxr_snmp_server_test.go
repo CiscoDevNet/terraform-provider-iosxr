@@ -59,6 +59,7 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerConfig = `
 
 resource "iosxr_snmp_server" "test" {
+	delete_mode = "attributes"
 	rf = true
 	bfd = true
 	ntp = true

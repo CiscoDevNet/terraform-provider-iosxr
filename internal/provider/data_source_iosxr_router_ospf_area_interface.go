@@ -102,7 +102,7 @@ func (d *RouterOSPFAreaInterfaceDataSource) Configure(_ context.Context, req dat
 }
 
 func (d *RouterOSPFAreaInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterOSPFAreaInterface
+	var config RouterOSPFAreaInterfaceData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

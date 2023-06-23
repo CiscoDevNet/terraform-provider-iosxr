@@ -42,6 +42,8 @@ resource "iosxr_pce" "example" {
 - `api_authentication_digest` (Boolean) Use HTTP Digest authentication (MD5)
 - `api_sibling_ipv4` (String) IPv4 address of the PCE sibling
 - `api_users` (Attributes List) Northbound API username (see [below for nested schema](#nestedatt--api_users))
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `peer_filter_ipv4_access_list` (String) Access-list for IPv4 peer filtering
 - `state_sync_ipv4s` (Attributes List) IPv4 address (see [below for nested schema](#nestedatt--state_sync_ipv4s))

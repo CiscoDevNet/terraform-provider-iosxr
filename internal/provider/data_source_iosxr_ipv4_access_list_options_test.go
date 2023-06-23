@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrIPv4AccessListOptions(t *testing.T) {
 const testAccDataSourceIosxrIPv4AccessListOptionsConfig = `
 
 resource "iosxr_ipv4_access_list_options" "test" {
+	delete_mode = "attributes"
 	log_update_threshold = 214748
 	log_update_rate = 1000
 }

@@ -114,7 +114,7 @@ func (d *RouterISISInterfaceDataSource) Configure(_ context.Context, req datasou
 }
 
 func (d *RouterISISInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterISISInterface
+	var config RouterISISInterfaceData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

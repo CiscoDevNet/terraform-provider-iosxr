@@ -16,6 +16,47 @@ import (
 type RouterISISAddressFamily struct {
 	Device                                    types.String                                                `tfsdk:"device"`
 	Id                                        types.String                                                `tfsdk:"id"`
+	DeleteMode                                types.String                                                `tfsdk:"delete_mode"`
+	ProcessId                                 types.String                                                `tfsdk:"process_id"`
+	AfName                                    types.String                                                `tfsdk:"af_name"`
+	SafName                                   types.String                                                `tfsdk:"saf_name"`
+	MetricStyleNarrow                         types.Bool                                                  `tfsdk:"metric_style_narrow"`
+	MetricStyleWide                           types.Bool                                                  `tfsdk:"metric_style_wide"`
+	MetricStyleTransition                     types.Bool                                                  `tfsdk:"metric_style_transition"`
+	MetricStyleLevels                         []RouterISISAddressFamilyMetricStyleLevels                  `tfsdk:"metric_style_levels"`
+	RouterIdInterfaceName                     types.String                                                `tfsdk:"router_id_interface_name"`
+	RouterIdIpAddress                         types.String                                                `tfsdk:"router_id_ip_address"`
+	DefaultInformationOriginate               types.Bool                                                  `tfsdk:"default_information_originate"`
+	FastRerouteDelayInterval                  types.Int64                                                 `tfsdk:"fast_reroute_delay_interval"`
+	FastReroutePerLinkPriorityLimitCritical   types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_critical"`
+	FastReroutePerLinkPriorityLimitHigh       types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_high"`
+	FastReroutePerLinkPriorityLimitMedium     types.Bool                                                  `tfsdk:"fast_reroute_per_link_priority_limit_medium"`
+	FastReroutePerPrefixPriorityLimitCritical types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_critical"`
+	FastReroutePerPrefixPriorityLimitHigh     types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_high"`
+	FastReroutePerPrefixPriorityLimitMedium   types.Bool                                                  `tfsdk:"fast_reroute_per_prefix_priority_limit_medium"`
+	MicroloopAvoidanceProtected               types.Bool                                                  `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRouting          types.Bool                                                  `tfsdk:"microloop_avoidance_segment_routing"`
+	AdvertisePassiveOnly                      types.Bool                                                  `tfsdk:"advertise_passive_only"`
+	AdvertiseLinkAttributes                   types.Bool                                                  `tfsdk:"advertise_link_attributes"`
+	MplsLdpAutoConfig                         types.Bool                                                  `tfsdk:"mpls_ldp_auto_config"`
+	MplsTrafficEngRouterIdIpAddress           types.String                                                `tfsdk:"mpls_traffic_eng_router_id_ip_address"`
+	MplsTrafficEngRouterIdInterface           types.String                                                `tfsdk:"mpls_traffic_eng_router_id_interface"`
+	MplsTrafficEngLevel12                     types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_1_2"`
+	MplsTrafficEngLevel1                      types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_1"`
+	MplsTrafficEngLevel2Only                  types.Bool                                                  `tfsdk:"mpls_traffic_eng_level_2_only"`
+	SpfIntervalMaximumWait                    types.Int64                                                 `tfsdk:"spf_interval_maximum_wait"`
+	SpfIntervalInitialWait                    types.Int64                                                 `tfsdk:"spf_interval_initial_wait"`
+	SpfIntervalSecondaryWait                  types.Int64                                                 `tfsdk:"spf_interval_secondary_wait"`
+	SpfPrefixPriorities                       []RouterISISAddressFamilySpfPrefixPriorities                `tfsdk:"spf_prefix_priorities"`
+	SegmentRoutingMplsSrPrefer                types.Bool                                                  `tfsdk:"segment_routing_mpls_sr_prefer"`
+	MaximumRedistributedPrefixes              types.Int64                                                 `tfsdk:"maximum_redistributed_prefixes"`
+	MaximumRedistributedPrefixesLevels        []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels `tfsdk:"maximum_redistributed_prefixes_levels"`
+	RedistributeIsis                          []RouterISISAddressFamilyRedistributeIsis                   `tfsdk:"redistribute_isis"`
+	SegmentRoutingSrv6Locators                []RouterISISAddressFamilySegmentRoutingSrv6Locators         `tfsdk:"segment_routing_srv6_locators"`
+}
+type RouterISISAddressFamilyData struct {
+	Device                                    types.String                                                `tfsdk:"device"`
+	Id                                        types.String                                                `tfsdk:"id"`
 	ProcessId                                 types.String                                                `tfsdk:"process_id"`
 	AfName                                    types.String                                                `tfsdk:"af_name"`
 	SafName                                   types.String                                                `tfsdk:"saf_name"`
@@ -78,6 +119,10 @@ type RouterISISAddressFamilySegmentRoutingSrv6Locators struct {
 }
 
 func (data RouterISISAddressFamily) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
+}
+
+func (data RouterISISAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
@@ -696,7 +741,7 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	}
 }
 
-func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)
 	} else {
@@ -1167,4 +1212,143 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.MetricStyleNarrow.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
+	}
+	if !data.MetricStyleWide.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide", data.getPath()))
+	}
+	if !data.MetricStyleTransition.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
+	}
+	for i := range data.MetricStyleLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricStyleLevels[i].LevelId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/levels/level%v", data.getPath(), keyString))
+	}
+	if !data.RouterIdInterfaceName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/interface-name", data.getPath()))
+	}
+	if !data.RouterIdIpAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ip-address", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.FastRerouteDelayInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/delay-interval", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitCritical.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/critical", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitHigh.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/high", data.getPath()))
+	}
+	if !data.FastReroutePerLinkPriorityLimitMedium.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/priority-limit/medium", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitCritical.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/critical", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitHigh.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/high", data.getPath()))
+	}
+	if !data.FastReroutePerPrefixPriorityLimitMedium.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/priority-limit/medium", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceProtected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/protected", data.getPath()))
+	}
+	if !data.MicroloopAvoidanceSegmentRouting.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/segment-routing", data.getPath()))
+	}
+	if !data.AdvertisePassiveOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/passive-only", data.getPath()))
+	}
+	if !data.AdvertiseLinkAttributes.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/link/attributes", data.getPath()))
+	}
+	if !data.MplsLdpAutoConfig.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
+	}
+	if !data.MplsTrafficEngRouterIdIpAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ip-address", data.getPath()))
+	}
+	if !data.MplsTrafficEngRouterIdInterface.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/interface", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel12.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/level-1-2", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/level-1", data.getPath()))
+	}
+	if !data.MplsTrafficEngLevel2Only.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/level-2-only", data.getPath()))
+	}
+	if !data.SpfIntervalMaximumWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/maximum-wait/maximum-wait-time", data.getPath()))
+	}
+	if !data.SpfIntervalInitialWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/initial-wait/initial-wait-time", data.getPath()))
+	}
+	if !data.SpfIntervalSecondaryWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/secondary-wait/secondary-wait-time", data.getPath()))
+	}
+	for i := range data.SpfPrefixPriorities {
+		keys := [...]string{"priority"}
+		keyValues := [...]string{data.SpfPrefixPriorities[i].Priority.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/prefix-priority%v", data.getPath(), keyString))
+	}
+	if !data.SegmentRoutingMplsSrPrefer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls/sr-prefer", data.getPath()))
+	}
+	if !data.MaximumRedistributedPrefixes.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes/maximum-prefixes", data.getPath()))
+	}
+	for i := range data.MaximumRedistributedPrefixesLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MaximumRedistributedPrefixesLevels[i].LevelId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeIsis {
+		keys := [...]string{"instance-id"}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/isis%v", data.getPath(), keyString))
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

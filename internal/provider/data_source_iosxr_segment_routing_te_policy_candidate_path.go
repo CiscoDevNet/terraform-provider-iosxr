@@ -94,7 +94,7 @@ func (d *SegmentRoutingTEPolicyCandidatePathDataSource) Configure(_ context.Cont
 }
 
 func (d *SegmentRoutingTEPolicyCandidatePathDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SegmentRoutingTEPolicyCandidatePath
+	var config SegmentRoutingTEPolicyCandidatePathData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

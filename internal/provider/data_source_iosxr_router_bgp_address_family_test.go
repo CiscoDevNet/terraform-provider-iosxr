@@ -59,9 +59,17 @@ func TestAccDataSourceIosxrRouterBGPAddressFamily(t *testing.T) {
 
 const testAccDataSourceIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
 	}
 }
 
@@ -70,6 +78,7 @@ resource "iosxr_gnmi" "PreReq0" {
 const testAccDataSourceIosxrRouterBGPAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_address_family" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	af_name = "ipv4-unicast"
 	additional_paths_send = true
@@ -115,7 +124,7 @@ resource "iosxr_router_bgp_address_family" "test" {
 		match_nssa_external = false
 		metric = 100
 	}]
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 }
 
 data "iosxr_router_bgp_address_family" "test" {

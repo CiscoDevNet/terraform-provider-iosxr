@@ -17,8 +17,18 @@ type ExtcommunityOpaqueSet struct {
 	SetName types.String `tfsdk:"set_name"`
 	Rpl     types.String `tfsdk:"rpl"`
 }
+type ExtcommunityOpaqueSetData struct {
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
+}
 
 func (data ExtcommunityOpaqueSet) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=%s]", data.SetName.ValueString())
+}
+
+func (data ExtcommunityOpaqueSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=%s]", data.SetName.ValueString())
 }
 
@@ -41,7 +51,7 @@ func (data *ExtcommunityOpaqueSet) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
-func (data *ExtcommunityOpaqueSet) fromBody(ctx context.Context, res []byte) {
+func (data *ExtcommunityOpaqueSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -55,4 +65,12 @@ func (data *ExtcommunityOpaqueSet) getDeletedListItems(ctx context.Context, stat
 func (data *ExtcommunityOpaqueSet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *ExtcommunityOpaqueSet) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Rpl.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-extended-community-opaque-set", data.getPath()))
+	}
+	return deletePaths
 }

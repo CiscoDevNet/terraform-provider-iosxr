@@ -106,7 +106,7 @@ func (d *EVPNInterfaceDataSource) Configure(_ context.Context, req datasource.Co
 }
 
 func (d *EVPNInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config EVPNInterface
+	var config EVPNInterfaceData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

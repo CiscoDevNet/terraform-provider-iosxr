@@ -16,8 +16,10 @@ attributes:
   - yang_name: segment-routing/srv6/locator
     example: locator11
   - yang_name: timers/bgp/keepalive-interval
+    delete_parent: true
     example: 5
   - yang_name: timers/bgp/holdtime
+    delete_parent: true
     example: 20
   - yang_name: bgp/router-id
     example: 22.22.22.22
@@ -32,9 +34,9 @@ attributes:
   - yang_name: bfd/multiplier
     example: 4
   - yang_name: nexthop/validation/color-extcomm/sr-policy
-    example : true
+    example: true
   - yang_name: nexthop/validation/color-extcomm/disable
-    example : true
+    example: true
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List

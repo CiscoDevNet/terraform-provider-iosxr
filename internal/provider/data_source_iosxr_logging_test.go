@@ -36,6 +36,7 @@ func TestAccDataSourceIosxrLogging(t *testing.T) {
 const testAccDataSourceIosxrLoggingConfig = `
 
 resource "iosxr_logging" "test" {
+	delete_mode = "attributes"
 	ipv4_dscp = "cs6"
 	trap = "informational"
 	events_display_location = true

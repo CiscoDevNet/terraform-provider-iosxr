@@ -218,7 +218,7 @@ func (d *SegmentRoutingTEDataSource) Configure(_ context.Context, req datasource
 }
 
 func (d *SegmentRoutingTEDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SegmentRoutingTE
+	var config SegmentRoutingTEData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

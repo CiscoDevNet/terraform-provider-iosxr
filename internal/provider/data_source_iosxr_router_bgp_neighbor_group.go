@@ -114,7 +114,7 @@ func (d *RouterBGPNeighborGroupDataSource) Configure(_ context.Context, req data
 }
 
 func (d *RouterBGPNeighborGroupDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterBGPNeighborGroup
+	var config RouterBGPNeighborGroupData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

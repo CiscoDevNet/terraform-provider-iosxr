@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrIPv6AccessListOptions(t *testing.T) {
 const testAccDataSourceIosxrIPv6AccessListOptionsConfig = `
 
 resource "iosxr_ipv6_access_list_options" "test" {
+	delete_mode = "attributes"
 	log_update_threshold = 214748
 	log_update_rate = 1000
 }

@@ -16,6 +16,42 @@ import (
 type VRF struct {
 	Device                                                    types.String                                                   `tfsdk:"device"`
 	Id                                                        types.String                                                   `tfsdk:"id"`
+	DeleteMode                                                types.String                                                   `tfsdk:"delete_mode"`
+	VrfName                                                   types.String                                                   `tfsdk:"vrf_name"`
+	Description                                               types.String                                                   `tfsdk:"description"`
+	VpnId                                                     types.String                                                   `tfsdk:"vpn_id"`
+	AddressFamilyIpv4Unicast                                  types.Bool                                                     `tfsdk:"address_family_ipv4_unicast"`
+	AddressFamilyIpv4UnicastImportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv4_unicast_import_route_policy"`
+	AddressFamilyIpv4UnicastExportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv4_unicast_export_route_policy"`
+	AddressFamilyIpv4Multicast                                types.Bool                                                     `tfsdk:"address_family_ipv4_multicast"`
+	AddressFamilyIpv4Flowspec                                 types.Bool                                                     `tfsdk:"address_family_ipv4_flowspec"`
+	AddressFamilyIpv6Unicast                                  types.Bool                                                     `tfsdk:"address_family_ipv6_unicast"`
+	AddressFamilyIpv6UnicastImportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv6_unicast_import_route_policy"`
+	AddressFamilyIpv6UnicastExportRoutePolicy                 types.String                                                   `tfsdk:"address_family_ipv6_unicast_export_route_policy"`
+	AddressFamilyIpv6Multicast                                types.Bool                                                     `tfsdk:"address_family_ipv6_multicast"`
+	AddressFamilyIpv6Flowspec                                 types.Bool                                                     `tfsdk:"address_family_ipv6_flowspec"`
+	RdTwoByteAsAsNumber                                       types.String                                                   `tfsdk:"rd_two_byte_as_as_number"`
+	RdTwoByteAsIndex                                          types.Int64                                                    `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsAsNumber                                      types.String                                                   `tfsdk:"rd_four_byte_as_as_number"`
+	RdFourByteAsIndex                                         types.Int64                                                    `tfsdk:"rd_four_byte_as_index"`
+	RdIpAddressIpv4Address                                    types.String                                                   `tfsdk:"rd_ip_address_ipv4_address"`
+	RdIpAddressIndex                                          types.Int64                                                    `tfsdk:"rd_ip_address_index"`
+	AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat  []VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"address_family_ipv4_unicast_import_route_target_two_byte_as_format"`
+	AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat []VRFAddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat `tfsdk:"address_family_ipv4_unicast_import_route_target_four_byte_as_format"`
+	AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat  []VRFAddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat  `tfsdk:"address_family_ipv4_unicast_import_route_target_ip_address_format"`
+	AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat  []VRFAddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"address_family_ipv4_unicast_export_route_target_two_byte_as_format"`
+	AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat []VRFAddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat `tfsdk:"address_family_ipv4_unicast_export_route_target_four_byte_as_format"`
+	AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat  []VRFAddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat  `tfsdk:"address_family_ipv4_unicast_export_route_target_ip_address_format"`
+	AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat  []VRFAddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat  `tfsdk:"address_family_ipv6_unicast_import_route_target_two_byte_as_format"`
+	AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat []VRFAddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat `tfsdk:"address_family_ipv6_unicast_import_route_target_four_byte_as_format"`
+	AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat  []VRFAddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat  `tfsdk:"address_family_ipv6_unicast_import_route_target_ip_address_format"`
+	AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat  []VRFAddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat  `tfsdk:"address_family_ipv6_unicast_export_route_target_two_byte_as_format"`
+	AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat []VRFAddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat `tfsdk:"address_family_ipv6_unicast_export_route_target_four_byte_as_format"`
+	AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat  []VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat  `tfsdk:"address_family_ipv6_unicast_export_route_target_ip_address_format"`
+}
+type VRFData struct {
+	Device                                                    types.String                                                   `tfsdk:"device"`
+	Id                                                        types.String                                                   `tfsdk:"id"`
 	VrfName                                                   types.String                                                   `tfsdk:"vrf_name"`
 	Description                                               types.String                                                   `tfsdk:"description"`
 	VpnId                                                     types.String                                                   `tfsdk:"vpn_id"`
@@ -110,6 +146,10 @@ type VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat struct {
 }
 
 func (data VRF) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+}
+
+func (data VRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
@@ -964,7 +1004,7 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *VRF) fromBody(ctx context.Context, res []byte) {
+func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -1887,4 +1927,183 @@ func (data *VRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *VRF) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.VpnId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vpn/id", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4Unicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4UnicastImportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4UnicastExportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4Multicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/multicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv4Flowspec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/flowspec", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Unicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6UnicastImportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6UnicastExportRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Multicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/multicast", data.getPath()))
+	}
+	if !data.AddressFamilyIpv6Flowspec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/flowspec", data.getPath()))
+	}
+	if !data.RdTwoByteAsAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as", data.getPath()))
+	}
+	if !data.RdTwoByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as", data.getPath()))
+	}
+	if !data.RdFourByteAsAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as", data.getPath()))
+	}
+	if !data.RdFourByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as", data.getPath()))
+	}
+	if !data.RdIpAddressIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address", data.getPath()))
+	}
+	if !data.RdIpAddressIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address", data.getPath()))
+	}
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat {
+		keys := [...]string{"as-number", "index", "stitching"}
+		keyValues := [...]string{strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat {
+		keys := [...]string{"ip-address", "index", "stitching"}
+		keyValues := [...]string{data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].IpAddress.ValueString(), strconv.FormatInt(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Index.ValueInt64(), 10), strconv.FormatBool(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat[i].Stitching.ValueBool())}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

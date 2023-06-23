@@ -17,6 +17,24 @@ import (
 type {{camelCase .Name}} struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
+{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+	DeleteMode types.String `tfsdk:"delete_mode"`
+{{- end}}
+{{- range .Attributes}}
+{{- if eq .Type "List"}}
+	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
+{{- else if or (eq .Type "StringList") (eq .Type "Int64List")}}
+	{{toGoName .TfName}} types.List `tfsdk:"{{.TfName}}"`
+{{- else}}
+	{{toGoName .TfName}} types.{{.Type}} `tfsdk:"{{.TfName}}"`
+{{- end}}
+{{- end}}
+}
+
+{{- $name := camelCase .Name}}
+type {{camelCase .Name}}Data struct {
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
 {{- range .Attributes}}
 {{- if eq .Type "List"}}
 	{{toGoName .TfName}} []{{$name}}{{toGoName .TfName}} `tfsdk:"{{.TfName}}"`
@@ -71,6 +89,14 @@ func (data {{camelCase .Name}}) getPath() string {
 	return "{{.Path}}"
 {{- end}}
 }
+
+func (data {{camelCase .Name}}Data) getPath() string {
+	{{- if hasId .Attributes}}
+		return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
+	{{- else}}
+		return "{{.Path}}"
+	{{- end}}
+	}
 
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	body := "{}"
@@ -364,7 +390,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- end}}
 }
 
-func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
+func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
 	{{- if and (not .Reference) (not .Id) (not .WriteOnly)}}
@@ -646,4 +672,33 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 	{{- end}}
 	{{- end}}
 	return emptyLeafsDelete
+}
+
+func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	{{- range .Attributes}}
+	{{- if and (not .Reference) (not .Id) (ne .Type "List") (not .NoDelete)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		{{- if .DeleteParent}}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{removeLastPathElement .YangName}}", data.getPath()))
+		{{- else}}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{.YangName}}", data.getPath()))
+		{{- end}}
+	}
+	{{- else if eq .Type "List"}}
+	{{- $yangName := .YangName}}
+	for i := range data.{{toGoName .TfName}} {
+		{{- $list := (toGoName .TfName)}}
+		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
+		keyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(data.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(data.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}data.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{.YangName}}%v", data.getPath(), keyString))
+	}
+	{{- end}}
+	{{- end}}
+	return deletePaths
 }

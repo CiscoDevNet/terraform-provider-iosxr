@@ -14,6 +14,23 @@ import (
 type RouterBGPVRFNeighborAddressFamily struct {
 	Device                              types.String `tfsdk:"device"`
 	Id                                  types.String `tfsdk:"id"`
+	DeleteMode                          types.String `tfsdk:"delete_mode"`
+	AsNumber                            types.String `tfsdk:"as_number"`
+	VrfName                             types.String `tfsdk:"vrf_name"`
+	NeighborAddress                     types.String `tfsdk:"neighbor_address"`
+	AfName                              types.String `tfsdk:"af_name"`
+	RoutePolicyIn                       types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                      types.String `tfsdk:"route_policy_out"`
+	DefaultOriginateRoutePolicy         types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable  types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	NextHopSelfInheritanceDisable       types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	SoftReconfigurationInboundAlways    types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	SendCommunityEbgpInheritanceDisable types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	RemovePrivateAsInheritanceDisable   types.Bool   `tfsdk:"remove_private_as_inheritance_disable"`
+}
+type RouterBGPVRFNeighborAddressFamilyData struct {
+	Device                              types.String `tfsdk:"device"`
+	Id                                  types.String `tfsdk:"id"`
 	AsNumber                            types.String `tfsdk:"as_number"`
 	VrfName                             types.String `tfsdk:"vrf_name"`
 	NeighborAddress                     types.String `tfsdk:"neighbor_address"`
@@ -29,6 +46,10 @@ type RouterBGPVRFNeighborAddressFamily struct {
 }
 
 func (data RouterBGPVRFNeighborAddressFamily) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.NeighborAddress.ValueString(), data.AfName.ValueString())
+}
+
+func (data RouterBGPVRFNeighborAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.NeighborAddress.ValueString(), data.AfName.ValueString())
 }
 
@@ -137,7 +158,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	}
 }
 
-func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
 		data.RoutePolicyIn = types.StringValue(value.String())
 	}
@@ -197,4 +218,33 @@ func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.C
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inheritance-disable", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.RoutePolicyIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
+	}
+	if !data.RoutePolicyOut.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/route-policy", data.getPath()))
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inheritance-disable", data.getPath()))
+	}
+	return deletePaths
 }

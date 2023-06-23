@@ -86,6 +86,7 @@ resource "iosxr_gnmi" "PreReq0" {
 const testAccDataSourceIosxrVRFConfig = `
 
 resource "iosxr_vrf" "test" {
+	delete_mode = "attributes"
 	vrf_name = "VRF3"
 	description = "My VRF Description"
 	vpn_id = "1000:1000"

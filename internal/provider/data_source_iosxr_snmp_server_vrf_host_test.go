@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerVRFHostConfig = `
 
 resource "iosxr_snmp_server_vrf_host" "test" {
+	delete_mode = "attributes"
 	vrf_name = "VRF1"
 	address = "11.11.11.11"
 	unencrypted_strings = [{

@@ -90,7 +90,7 @@ func (d *SSHDataSource) Configure(_ context.Context, req datasource.ConfigureReq
 }
 
 func (d *SSHDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SSH
+	var config SSHData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

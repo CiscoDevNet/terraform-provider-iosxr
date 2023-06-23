@@ -16,6 +16,35 @@ import (
 type EVPNEVI struct {
 	Device                                types.String                                   `tfsdk:"device"`
 	Id                                    types.String                                   `tfsdk:"id"`
+	DeleteMode                            types.String                                   `tfsdk:"delete_mode"`
+	VpnId                                 types.Int64                                    `tfsdk:"vpn_id"`
+	Description                           types.String                                   `tfsdk:"description"`
+	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
+	LoadBalancingFlowLabelStatic          types.Bool                                     `tfsdk:"load_balancing_flow_label_static"`
+	BgpRdTwoByteAsNumber                  types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_number"`
+	BgpRdTwoByteAsAssignedNumber          types.Int64                                    `tfsdk:"bgp_rd_two_byte_as_assigned_number"`
+	BgpRdFourByteAsNumber                 types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_number"`
+	BgpRdFourByteAsAssignedNumber         types.Int64                                    `tfsdk:"bgp_rd_four_byte_as_assigned_number"`
+	BgpRdIpv4Address                      types.String                                   `tfsdk:"bgp_rd_ipv4_address"`
+	BgpRdIpv4AddressAssignedNumber        types.Int64                                    `tfsdk:"bgp_rd_ipv4_address_assigned_number"`
+	BgpRouteTargetImportTwoByteAsFormat   []EVPNEVIBgpRouteTargetImportTwoByteAsFormat   `tfsdk:"bgp_route_target_import_two_byte_as_format"`
+	BgpRouteTargetImportFourByteAsFormat  []EVPNEVIBgpRouteTargetImportFourByteAsFormat  `tfsdk:"bgp_route_target_import_four_byte_as_format"`
+	BgpRouteTargetImportIpv4AddressFormat []EVPNEVIBgpRouteTargetImportIpv4AddressFormat `tfsdk:"bgp_route_target_import_ipv4_address_format"`
+	BgpRouteTargetExportTwoByteAsFormat   []EVPNEVIBgpRouteTargetExportTwoByteAsFormat   `tfsdk:"bgp_route_target_export_two_byte_as_format"`
+	BgpRouteTargetExportFourByteAsFormat  []EVPNEVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
+	BgpRouteTargetExportIpv4AddressFormat []EVPNEVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
+	BgpRoutePolicyImport                  types.String                                   `tfsdk:"bgp_route_policy_import"`
+	BgpRoutePolicyExport                  types.String                                   `tfsdk:"bgp_route_policy_export"`
+	AdvertiseMac                          types.Bool                                     `tfsdk:"advertise_mac"`
+	UnknownUnicastSuppression             types.Bool                                     `tfsdk:"unknown_unicast_suppression"`
+	ControlWordDisable                    types.Bool                                     `tfsdk:"control_word_disable"`
+	Etree                                 types.Bool                                     `tfsdk:"etree"`
+	EtreeLeaf                             types.Bool                                     `tfsdk:"etree_leaf"`
+	EtreeRtLeaf                           types.Bool                                     `tfsdk:"etree_rt_leaf"`
+}
+type EVPNEVIData struct {
+	Device                                types.String                                   `tfsdk:"device"`
+	Id                                    types.String                                   `tfsdk:"id"`
 	VpnId                                 types.Int64                                    `tfsdk:"vpn_id"`
 	Description                           types.String                                   `tfsdk:"description"`
 	LoadBalancing                         types.Bool                                     `tfsdk:"load_balancing"`
@@ -67,6 +96,10 @@ type EVPNEVIBgpRouteTargetExportIpv4AddressFormat struct {
 }
 
 func (data EVPNEVI) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
+}
+
+func (data EVPNEVIData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
 
@@ -535,7 +568,7 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
+func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
 	}
@@ -985,4 +1018,120 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.LoadBalancing.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing", data.getPath()))
+	}
+	if !data.LoadBalancingFlowLabelStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow-label/static", data.getPath()))
+	}
+	if !data.BgpRdTwoByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-number", data.getPath()))
+	}
+	if !data.BgpRdTwoByteAsAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/two-byte-as-assigned-number", data.getPath()))
+	}
+	if !data.BgpRdFourByteAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-number", data.getPath()))
+	}
+	if !data.BgpRdFourByteAsAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/four-byte-as-assigned-number", data.getPath()))
+	}
+	if !data.BgpRdIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address", data.getPath()))
+	}
+	if !data.BgpRdIpv4AddressAssignedNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/rd/ipv4-address-assigned-number", data.getPath()))
+	}
+	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetImportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetImportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetExportTwoByteAsFormat {
+		keys := [...]string{"two-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetExportFourByteAsFormat {
+		keys := [...]string{"four-byte-as-number", "assigned-number"}
+		keyValues := [...]string{strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(data.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", data.getPath(), keyString))
+	}
+	for i := range data.BgpRouteTargetExportIpv4AddressFormat {
+		keys := [...]string{"ipv4-address", "assigned-number"}
+		keyValues := [...]string{data.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(data.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", data.getPath(), keyString))
+	}
+	if !data.BgpRoutePolicyImport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/import", data.getPath()))
+	}
+	if !data.BgpRoutePolicyExport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/route-policy/export", data.getPath()))
+	}
+	if !data.AdvertiseMac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	if !data.UnknownUnicastSuppression.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/unknown-unicast-suppression", data.getPath()))
+	}
+	if !data.ControlWordDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/control-word-disable", data.getPath()))
+	}
+	if !data.Etree.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree", data.getPath()))
+	}
+	if !data.EtreeLeaf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree/leaf", data.getPath()))
+	}
+	if !data.EtreeRtLeaf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/etree/rt-leaf", data.getPath()))
+	}
+	return deletePaths
 }

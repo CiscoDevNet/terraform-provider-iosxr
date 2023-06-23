@@ -14,7 +14,7 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccIosxrRouterBGPVRFConfig_all(),
+				Config: testAccIosxrRouterBGPVRFPrerequisitesConfig + testAccIosxrRouterBGPVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "vrf_name", "VRF2"),
 					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_auto", "false"),
@@ -54,6 +54,16 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterBGPVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+  attributes = {
+      "as-number" = "65001"
+  }
+}
+
+`
+
 func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	return `
 	resource "iosxr_router_bgp_vrf" "test" {
@@ -61,6 +71,7 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 		vrf_name = "VRF2"
 		timers_bgp_keepalive_interval = 5
 		timers_bgp_holdtime = "20"
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -98,6 +109,7 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 			update_source = "GigabitEthernet0/0/0/1"
 			ttl_security = false
 		}]
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

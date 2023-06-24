@@ -14,6 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -92,9 +93,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 							MarkdownDescription: helpers.NewAttributeDescription("udp port to which notifications should be sent").AddDefaultValueDescription("default").String,
 							Optional:            true,
 							Computed:            true,
-							PlanModifiers: []planmodifier.String{
-								helpers.StringDefaultModifier("default"),
-							},
+							Default:             stringdefault.StaticString("default"),
 						},
 						"version_v3_security_level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,

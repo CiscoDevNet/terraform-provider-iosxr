@@ -20,6 +20,9 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 )
 
 var _ resource.Resource = (*{{camelCase .Name}}Resource)(nil)
@@ -106,18 +109,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or (len .DefaultValue) .Id .Reference .RequiresReplace}}
+				{{- if or .Id .Reference .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
-					{{- if or .Id .Reference .RequiresReplace}}
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
-					{{- else if eq .Type "Int64"}}
-					helpers.IntegerDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "Bool"}}
-					helpers.BooleanDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "String"}}
-					helpers.StringDefaultModifier("{{.DefaultValue}}"),
-					{{- end}}
 				},
+				{{- end}}
+				{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+				Default:             int64default.StaticInt64({{.DefaultValue}}),
+				{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+				Default:             booldefault.StaticBool({{.DefaultValue}}),
+				{{- else if and (len .DefaultValue) (eq .Type "String")}}
+				Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 				{{- end}}
 				{{- if eq .Type "List"}}
 				NestedObject: schema.NestedAttributeObject{
@@ -166,16 +168,12 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if len .DefaultValue}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{- if eq .Type "Int64"}}
-								helpers.IntegerDefaultModifier({{.DefaultValue}}),
-								{{- else if eq .Type "Bool"}}
-								helpers.BooleanDefaultModifier({{.DefaultValue}}),
-								{{- else if eq .Type "String"}}
-								helpers.StringDefaultModifier("{{.DefaultValue}}"),
-								{{- end}}
-							},
+							{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+							Default:             int64default.StaticInt64({{.DefaultValue}}),
+							{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+							Default:             booldefault.StaticBool({{.DefaultValue}}),
+							{{- else if and (len .DefaultValue) (eq .Type "String")}}
+							Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 							{{- end}}
 							{{- if eq .Type "List"}}
 							NestedObject: schema.NestedAttributeObject{
@@ -224,16 +222,12 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 											int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 										},
 										{{- end}}
-										{{- if len .DefaultValue}}
-										PlanModifiers: []planmodifier.{{.Type}}{
-											{{- if eq .Type "Int64"}}
-											helpers.IntegerDefaultModifier({{.DefaultValue}}),
-											{{- else if eq .Type "Bool"}}
-											helpers.BooleanDefaultModifier({{.DefaultValue}}),
-											{{- else if eq .Type "String"}}
-											helpers.StringDefaultModifier("{{.DefaultValue}}"),
-											{{- end}}
-										},
+										{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+										Default:             int64default.StaticInt64({{.DefaultValue}}),
+										{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+										Default:             booldefault.StaticBool({{.DefaultValue}}),
+										{{- else if and (len .DefaultValue) (eq .Type "String")}}
+										Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 										{{- end}}
 									},
 									{{- end}}

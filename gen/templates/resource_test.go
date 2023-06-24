@@ -97,15 +97,15 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	return `
 	resource "iosxr_{{snakeCase $name}}" "test" {
 	{{- range  .Attributes}}
-	{{- if or (eq .Reference true) (eq .Id true) (eq .Mandatory true)}}
+	{{- if or .Reference .Id .Mandatory}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
 			{{- range  .Attributes}}
-			{{- if ne .ExcludeTest true}}
+			{{- if not .ExcludeTest}}
 			{{- if eq .Type "List"}}
 				{{.TfName}} = [{
 					{{- range  .Attributes}}
-					{{- if ne .ExcludeTest true}}
+					{{- if not .ExcludeTest}}
 					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
 					{{- end}}
 					{{- end}}
@@ -135,7 +135,7 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 		delete_mode = "all"
 	{{- end}}
 	{{- range  .Attributes}}
-	{{- if ne .ExcludeTest true}}
+	{{- if not .ExcludeTest}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
 			{{- range  .Attributes}}

@@ -249,19 +249,19 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/core-isolation-group", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/bytes-1", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/bytes-23", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/bytes-45", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/bytes-67", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/bytes-89", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/esi", data.getPath()))

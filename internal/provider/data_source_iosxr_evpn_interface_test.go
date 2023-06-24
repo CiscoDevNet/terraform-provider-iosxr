@@ -17,7 +17,11 @@ func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
 				Config: testAccDataSourceIosxrEVPNInterfaceConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "core_isolation_group", "11"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_esi", "01.00.01.01.00.00.00.01.1"),
+					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_1", "01"),
+					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_23", "0100"),
+					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_45", "0100"),
+					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_67", "0100"),
+					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_89", "0100"),
 					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_all_active", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_active", "true"),
@@ -34,7 +38,11 @@ resource "iosxr_evpn_interface" "test" {
 	delete_mode = "attributes"
 	interface_name = "Bundle-Ether12"
 	core_isolation_group = 11
-	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"
+	ethernet_segment_identifier_type_zero_bytes_1 = "01"
+	ethernet_segment_identifier_type_zero_bytes_23 = "0100"
+	ethernet_segment_identifier_type_zero_bytes_45 = "0100"
+	ethernet_segment_identifier_type_zero_bytes_67 = "0100"
+	ethernet_segment_identifier_type_zero_bytes_89 = "0100"
 	ethernet_segment_load_balancing_mode_all_active = false
 	ethernet_segment_load_balancing_mode_port_active = false
 	ethernet_segment_load_balancing_mode_single_active = true

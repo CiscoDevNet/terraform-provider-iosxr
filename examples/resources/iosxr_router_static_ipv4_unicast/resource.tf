@@ -7,6 +7,8 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "interface-description"
       tag             = 100
       distance_metric = 122
+      permanent       = true
+      metric          = 10
     }
   ]
   nexthop_interface_addresses = [
@@ -16,6 +18,8 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "interface-description"
       tag             = 103
       distance_metric = 144
+      permanent       = true
+      metric          = 10
     }
   ]
   nexthop_addresses = [
@@ -24,6 +28,44 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "ip-description"
       tag             = 104
       distance_metric = 155
+      track           = "TRACK1"
+      metric          = 10
+    }
+  ]
+  vrfs = [
+    {
+      vrf_name = "VRF1"
+      nexthop_interfaces = [
+        {
+          interface_name  = "GigabitEthernet0/0/0/3"
+          description     = "interface-description"
+          tag             = 100
+          distance_metric = 122
+          permanent       = true
+          metric          = 10
+        }
+      ]
+      nexthop_interface_addresses = [
+        {
+          interface_name  = "GigabitEthernet0/0/0/4"
+          address         = "11.11.11.1"
+          description     = "interface-description"
+          tag             = 103
+          distance_metric = 144
+          permanent       = true
+          metric          = 10
+        }
+      ]
+      nexthop_addresses = [
+        {
+          address         = "100.0.2.0"
+          description     = "ip-description"
+          tag             = 104
+          distance_metric = 155
+          track           = "TRACK1"
+          metric          = 10
+        }
+      ]
     }
   ]
 }

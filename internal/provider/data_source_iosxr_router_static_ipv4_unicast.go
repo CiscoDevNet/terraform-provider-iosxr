@@ -74,6 +74,18 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Distance metric for this route",
 							Computed:            true,
 						},
+						"permanent": schema.BoolAttribute{
+							MarkdownDescription: "Permanent route",
+							Computed:            true,
+						},
+						"track": schema.StringAttribute{
+							MarkdownDescription: "Enable object tracking for static route",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for this route",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -102,6 +114,18 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Distance metric for this route",
 							Computed:            true,
 						},
+						"permanent": schema.BoolAttribute{
+							MarkdownDescription: "Permanent route",
+							Computed:            true,
+						},
+						"track": schema.StringAttribute{
+							MarkdownDescription: "Enable object tracking for static route",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for this route",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -125,6 +149,142 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 						"distance_metric": schema.Int64Attribute{
 							MarkdownDescription: "Distance metric for this route",
 							Computed:            true,
+						},
+						"permanent": schema.BoolAttribute{
+							MarkdownDescription: "Permanent route",
+							Computed:            true,
+						},
+						"track": schema.StringAttribute{
+							MarkdownDescription: "Enable object tracking for static route",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for this route",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Destination VRF",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Destination VRF",
+							Computed:            true,
+						},
+						"nexthop_interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Forwarding interface",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Forwarding interface",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "description of the static route",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Set tag for this route",
+										Computed:            true,
+									},
+									"distance_metric": schema.Int64Attribute{
+										MarkdownDescription: "Distance metric for this route",
+										Computed:            true,
+									},
+									"permanent": schema.BoolAttribute{
+										MarkdownDescription: "Permanent route",
+										Computed:            true,
+									},
+									"track": schema.StringAttribute{
+										MarkdownDescription: "Enable object tracking for static route",
+										Computed:            true,
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: "Set metric for this route",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"nexthop_interface_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Forwarding interface",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Forwarding interface",
+										Computed:            true,
+									},
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Forwarding router's address",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "description of the static route",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Set tag for this route",
+										Computed:            true,
+									},
+									"distance_metric": schema.Int64Attribute{
+										MarkdownDescription: "Distance metric for this route",
+										Computed:            true,
+									},
+									"permanent": schema.BoolAttribute{
+										MarkdownDescription: "Permanent route",
+										Computed:            true,
+									},
+									"track": schema.StringAttribute{
+										MarkdownDescription: "Enable object tracking for static route",
+										Computed:            true,
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: "Set metric for this route",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"nexthop_addresses": schema.ListNestedAttribute{
+							MarkdownDescription: "Forwarding router's address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Forwarding router's address",
+										Computed:            true,
+									},
+									"description": schema.StringAttribute{
+										MarkdownDescription: "description of the static route",
+										Computed:            true,
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: "Set tag for this route",
+										Computed:            true,
+									},
+									"distance_metric": schema.Int64Attribute{
+										MarkdownDescription: "Distance metric for this route",
+										Computed:            true,
+									},
+									"permanent": schema.BoolAttribute{
+										MarkdownDescription: "Permanent route",
+										Computed:            true,
+									},
+									"track": schema.StringAttribute{
+										MarkdownDescription: "Enable object tracking for static route",
+										Computed:            true,
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: "Set metric for this route",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},

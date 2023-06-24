@@ -22,6 +22,8 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "interface-description"
       tag             = 100
       distance_metric = 122
+      permanent       = true
+      metric          = 10
     }
   ]
   nexthop_interface_addresses = [
@@ -31,6 +33,8 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "interface-description"
       tag             = 103
       distance_metric = 144
+      permanent       = true
+      metric          = 10
     }
   ]
   nexthop_addresses = [
@@ -39,6 +43,44 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       description     = "ip-description"
       tag             = 104
       distance_metric = 155
+      track           = "TRACK1"
+      metric          = 10
+    }
+  ]
+  vrfs = [
+    {
+      vrf_name = "VRF1"
+      nexthop_interfaces = [
+        {
+          interface_name  = "GigabitEthernet0/0/0/3"
+          description     = "interface-description"
+          tag             = 100
+          distance_metric = 122
+          permanent       = true
+          metric          = 10
+        }
+      ]
+      nexthop_interface_addresses = [
+        {
+          interface_name  = "GigabitEthernet0/0/0/4"
+          address         = "11.11.11.1"
+          description     = "interface-description"
+          tag             = 103
+          distance_metric = 144
+          permanent       = true
+          metric          = 10
+        }
+      ]
+      nexthop_addresses = [
+        {
+          address         = "100.0.2.0"
+          description     = "ip-description"
+          tag             = 104
+          distance_metric = 155
+          track           = "TRACK1"
+          metric          = 10
+        }
+      ]
     }
   ]
 }
@@ -61,6 +103,7 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
 - `nexthop_addresses` (Attributes List) Forwarding router's address (see [below for nested schema](#nestedatt--nexthop_addresses))
 - `nexthop_interface_addresses` (Attributes List) Forwarding interface (see [below for nested schema](#nestedatt--nexthop_interface_addresses))
 - `nexthop_interfaces` (Attributes List) Forwarding interface (see [below for nested schema](#nestedatt--nexthop_interfaces))
+- `vrfs` (Attributes List) Destination VRF (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -78,8 +121,12 @@ Optional:
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
 - `tag` (Number) Set tag for this route
   - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
 
 
 <a id="nestedatt--nexthop_interface_addresses"></a>
@@ -95,8 +142,12 @@ Optional:
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
 - `tag` (Number) Set tag for this route
   - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
 
 
 <a id="nestedatt--nexthop_interfaces"></a>
@@ -111,8 +162,86 @@ Optional:
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
 - `tag` (Number) Set tag for this route
   - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
+
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Required:
+
+- `vrf_name` (String) Destination VRF
+
+Optional:
+
+- `nexthop_addresses` (Attributes List) Forwarding router's address (see [below for nested schema](#nestedatt--vrfs--nexthop_addresses))
+- `nexthop_interface_addresses` (Attributes List) Forwarding interface (see [below for nested schema](#nestedatt--vrfs--nexthop_interface_addresses))
+- `nexthop_interfaces` (Attributes List) Forwarding interface (see [below for nested schema](#nestedatt--vrfs--nexthop_interfaces))
+
+<a id="nestedatt--vrfs--nexthop_addresses"></a>
+### Nested Schema for `vrfs.nexthop_addresses`
+
+Required:
+
+- `address` (String) Forwarding router's address
+
+Optional:
+
+- `description` (String) description of the static route
+- `distance_metric` (Number) Distance metric for this route
+  - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
+- `tag` (Number) Set tag for this route
+  - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
+
+
+<a id="nestedatt--vrfs--nexthop_interface_addresses"></a>
+### Nested Schema for `vrfs.nexthop_interface_addresses`
+
+Required:
+
+- `address` (String) Forwarding router's address
+- `interface_name` (String) Forwarding interface
+
+Optional:
+
+- `description` (String) description of the static route
+- `distance_metric` (Number) Distance metric for this route
+  - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
+- `tag` (Number) Set tag for this route
+  - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
+
+
+<a id="nestedatt--vrfs--nexthop_interfaces"></a>
+### Nested Schema for `vrfs.nexthop_interfaces`
+
+Required:
+
+- `interface_name` (String) Forwarding interface
+
+Optional:
+
+- `description` (String) description of the static route
+- `distance_metric` (Number) Distance metric for this route
+  - Range: `1`-`254`
+- `metric` (Number) Set metric for this route
+  - Range: `1`-`16777214`
+- `permanent` (Boolean) Permanent route
+- `tag` (Number) Set tag for this route
+  - Range: `1`-`4294967295`
+- `track` (String) Enable object tracking for static route
 
 ## Import
 

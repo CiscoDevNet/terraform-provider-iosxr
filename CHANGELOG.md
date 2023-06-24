@@ -7,6 +7,7 @@
 - Add `vrfs`, `permanent`, `track` and `metric` attributes to `iosxr_router_static_ipv4_unicast` resource and data source
 - Add `iosxr_router_static_ipv4_multicast` resource and data source
 - Add `iosxr_router_static_ipv6_unicast` resource and data source
+- Add `iosxr_router_static_ipv6_multicast` resource and data source
 
 ## 0.1.11
 

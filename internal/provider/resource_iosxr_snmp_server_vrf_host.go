@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*SNMPServerVRFHostResource)(nil)
-
 func NewSNMPServerVRFHostResource() resource.Resource {
 	return &SNMPServerVRFHostResource{}
 }
@@ -109,7 +107,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 	}
 }
 
-func (r *SNMPServerVRFHostResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPServerVRFHostResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

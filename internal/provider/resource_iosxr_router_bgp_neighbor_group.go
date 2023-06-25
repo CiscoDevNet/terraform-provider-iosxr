@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterBGPNeighborGroupResource)(nil)
-
 func NewRouterBGPNeighborGroupResource() resource.Resource {
 	return &RouterBGPNeighborGroupResource{}
 }
@@ -141,7 +139,7 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 	}
 }
 
-func (r *RouterBGPNeighborGroupResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPNeighborGroupResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

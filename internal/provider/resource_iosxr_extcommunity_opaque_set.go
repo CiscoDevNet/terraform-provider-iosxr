@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*ExtcommunityOpaqueSetResource)(nil)
-
 func NewExtcommunityOpaqueSetResource() resource.Resource {
 	return &ExtcommunityOpaqueSetResource{}
 }
@@ -69,7 +67,7 @@ func (r *ExtcommunityOpaqueSetResource) Schema(ctx context.Context, req resource
 	}
 }
 
-func (r *ExtcommunityOpaqueSetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *ExtcommunityOpaqueSetResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

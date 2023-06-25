@@ -23,6 +23,7 @@ type ClassMapQoS struct {
 	MatchQosGroup                types.List   `tfsdk:"match_qos_group"`
 	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
 }
+
 type ClassMapQoSData struct {
 	Device                       types.String `tfsdk:"device"`
 	Id                           types.String `tfsdk:"id"`

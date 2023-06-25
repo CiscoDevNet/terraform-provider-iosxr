@@ -21,6 +21,7 @@ type SegmentRoutingV6 struct {
 	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
 	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
 }
+
 type SegmentRoutingV6Data struct {
 	Device                     types.String               `tfsdk:"device"`
 	Id                         types.String               `tfsdk:"id"`

@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*L2VPNXconnectGroupP2PResource)(nil)
-
 func NewL2VPNXconnectGroupP2PResource() resource.Resource {
 	return &L2VPNXconnectGroupP2PResource{}
 }
@@ -268,7 +266,7 @@ func (r *L2VPNXconnectGroupP2PResource) Schema(ctx context.Context, req resource
 	}
 }
 
-func (r *L2VPNXconnectGroupP2PResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *L2VPNXconnectGroupP2PResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

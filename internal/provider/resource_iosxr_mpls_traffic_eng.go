@@ -19,8 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*MPLSTrafficEngResource)(nil)
-
 func NewMPLSTrafficEngResource() resource.Resource {
 	return &MPLSTrafficEngResource{}
 }
@@ -65,7 +63,7 @@ func (r *MPLSTrafficEngResource) Schema(ctx context.Context, req resource.Schema
 	}
 }
 
-func (r *MPLSTrafficEngResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *MPLSTrafficEngResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

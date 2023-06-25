@@ -27,6 +27,7 @@ type EVPNSegmentRoutingSRv6EVI struct {
 	AdvertiseMac                          types.Bool                                                       `tfsdk:"advertise_mac"`
 	Locator                               types.String                                                     `tfsdk:"locator"`
 }
+
 type EVPNSegmentRoutingSRv6EVIData struct {
 	Device                                types.String                                                     `tfsdk:"device"`
 	Id                                    types.String                                                     `tfsdk:"id"`

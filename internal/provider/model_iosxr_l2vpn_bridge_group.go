@@ -16,6 +16,7 @@ type L2VPNBridgeGroup struct {
 	DeleteMode types.String `tfsdk:"delete_mode"`
 	GroupName  types.String `tfsdk:"group_name"`
 }
+
 type L2VPNBridgeGroupData struct {
 	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`

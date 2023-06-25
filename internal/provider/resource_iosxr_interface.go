@@ -22,8 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*InterfaceResource)(nil)
-
 func NewInterfaceResource() resource.Resource {
 	return &InterfaceResource{}
 }
@@ -250,7 +248,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 	}
 }
 
-func (r *InterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *InterfaceResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

@@ -29,6 +29,7 @@ type SegmentRoutingTE struct {
 	OnDemandColors        []SegmentRoutingTEOnDemandColors `tfsdk:"on_demand_colors"`
 	Policies              []SegmentRoutingTEPolicies       `tfsdk:"policies"`
 }
+
 type SegmentRoutingTEData struct {
 	Device                types.String                     `tfsdk:"device"`
 	Id                    types.String                     `tfsdk:"id"`

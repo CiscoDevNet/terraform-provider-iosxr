@@ -66,11 +66,11 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 
 const testAccIosxrRouterISISAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-  attributes = {
-      "route-policy-name" = "ROUTE_POLICY_1"
-      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-  }
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
 }
 
 `
@@ -81,7 +81,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 		process_id = "P1"
 		af_name = "ipv6"
 		saf_name = "unicast"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

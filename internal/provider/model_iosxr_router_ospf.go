@@ -44,6 +44,7 @@ type RouterOSPF struct {
 	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
 	RedistributeOspf                      []RouterOSPFRedistributeOspf `tfsdk:"redistribute_ospf"`
 }
+
 type RouterOSPFData struct {
 	Device                                types.String                 `tfsdk:"device"`
 	Id                                    types.String                 `tfsdk:"id"`

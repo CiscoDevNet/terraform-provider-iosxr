@@ -16,6 +16,7 @@ type Hostname struct {
 	Id                types.String `tfsdk:"id"`
 	SystemNetworkName types.String `tfsdk:"system_network_name"`
 }
+
 type HostnameData struct {
 	Device            types.String `tfsdk:"device"`
 	Id                types.String `tfsdk:"id"`

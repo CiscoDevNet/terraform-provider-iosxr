@@ -53,10 +53,10 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 			type = "qos"
 			set_mpls_experimental_topmost = 0
 			set_dscp = "0"
-				queue_limits = [{
-					value = "100"
-					unit = "us"
-				}]
+			queue_limits = [{
+				value = "100"
+				unit = "us"
+			}]
 		}]
 	}
 	`

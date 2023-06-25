@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*PCEResource)(nil)
-
 func NewPCEResource() resource.Resource {
 	return &PCEResource{}
 }
@@ -138,7 +136,7 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 	}
 }
 
-func (r *PCEResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *PCEResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

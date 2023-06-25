@@ -42,6 +42,7 @@ type EVPNEVI struct {
 	EtreeLeaf                             types.Bool                                     `tfsdk:"etree_leaf"`
 	EtreeRtLeaf                           types.Bool                                     `tfsdk:"etree_rt_leaf"`
 }
+
 type EVPNEVIData struct {
 	Device                                types.String                                   `tfsdk:"device"`
 	Id                                    types.String                                   `tfsdk:"id"`

@@ -17,6 +17,7 @@ type EVPN struct {
 	DeleteMode      types.String `tfsdk:"delete_mode"`
 	SourceInterface types.String `tfsdk:"source_interface"`
 }
+
 type EVPNData struct {
 	Device          types.String `tfsdk:"device"`
 	Id              types.String `tfsdk:"id"`

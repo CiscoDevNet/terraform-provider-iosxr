@@ -19,6 +19,7 @@ type LoggingSourceInterface struct {
 	Name   types.String                 `tfsdk:"name"`
 	Vrfs   []LoggingSourceInterfaceVrfs `tfsdk:"vrfs"`
 }
+
 type LoggingSourceInterfaceData struct {
 	Device types.String                 `tfsdk:"device"`
 	Id     types.String                 `tfsdk:"id"`

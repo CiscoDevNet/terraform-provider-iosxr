@@ -25,8 +25,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 )
 
-var _ resource.Resource = (*{{camelCase .Name}}Resource)(nil)
-
 func New{{camelCase .Name}}Resource() resource.Resource {
 	return &{{camelCase .Name}}Resource{}
 }
@@ -245,7 +243,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 	}
 }
 
-func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *{{camelCase .Name}}Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

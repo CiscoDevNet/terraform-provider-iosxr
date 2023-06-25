@@ -56,10 +56,10 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 
 const testAccIosxrRouterBGPVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-  attributes = {
-      "as-number" = "65001"
-  }
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
 }
 
 `
@@ -71,7 +71,7 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 		vrf_name = "VRF2"
 		timers_bgp_keepalive_interval = 5
 		timers_bgp_holdtime = "20"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

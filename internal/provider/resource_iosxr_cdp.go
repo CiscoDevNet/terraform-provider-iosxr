@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*CDPResource)(nil)
-
 func NewCDPResource() resource.Resource {
 	return &CDPResource{}
 }
@@ -88,7 +86,7 @@ func (r *CDPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 	}
 }
 
-func (r *CDPResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *CDPResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

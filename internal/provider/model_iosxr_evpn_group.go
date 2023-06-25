@@ -20,6 +20,7 @@ type EVPNGroup struct {
 	GroupId        types.Int64               `tfsdk:"group_id"`
 	CoreInterfaces []EVPNGroupCoreInterfaces `tfsdk:"core_interfaces"`
 }
+
 type EVPNGroupData struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`

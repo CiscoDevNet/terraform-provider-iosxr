@@ -29,6 +29,7 @@ type EVPNInterface struct {
 	EthernetSegmentLoadBalancingModeSingleActive     types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_active"`
 	EthernetSegmentLoadBalancingModeSingleFlowActive types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
 }
+
 type EVPNInterfaceData struct {
 	Device                                           types.String `tfsdk:"device"`
 	Id                                               types.String `tfsdk:"id"`

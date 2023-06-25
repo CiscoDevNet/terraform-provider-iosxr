@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RoutePolicyResource)(nil)
-
 func NewRoutePolicyResource() resource.Resource {
 	return &RoutePolicyResource{}
 }
@@ -69,7 +67,7 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *RoutePolicyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RoutePolicyResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

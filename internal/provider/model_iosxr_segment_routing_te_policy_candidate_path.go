@@ -21,6 +21,7 @@ type SegmentRoutingTEPolicyCandidatePath struct {
 	PathIndex  types.Int64                                    `tfsdk:"path_index"`
 	PathInfos  []SegmentRoutingTEPolicyCandidatePathPathInfos `tfsdk:"path_infos"`
 }
+
 type SegmentRoutingTEPolicyCandidatePathData struct {
 	Device     types.String                                   `tfsdk:"device"`
 	Id         types.String                                   `tfsdk:"id"`

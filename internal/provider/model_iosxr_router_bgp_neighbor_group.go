@@ -27,6 +27,7 @@ type RouterBGPNeighborGroup struct {
 	BfdFastDetect             types.Bool                              `tfsdk:"bfd_fast_detect"`
 	AddressFamilies           []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
+
 type RouterBGPNeighborGroupData struct {
 	Device                    types.String                            `tfsdk:"device"`
 	Id                        types.String                            `tfsdk:"id"`

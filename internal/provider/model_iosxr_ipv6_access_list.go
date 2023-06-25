@@ -19,6 +19,7 @@ type IPv6AccessList struct {
 	AccessListName types.String              `tfsdk:"access_list_name"`
 	Sequences      []IPv6AccessListSequences `tfsdk:"sequences"`
 }
+
 type IPv6AccessListData struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`

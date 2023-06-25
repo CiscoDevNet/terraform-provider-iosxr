@@ -31,6 +31,7 @@ type L2VPNBridgeGroupBridgeDomain struct {
 	Interfaces                     []L2VPNBridgeGroupBridgeDomainInterfaces             `tfsdk:"interfaces"`
 	SegmentRoutingSrv6Evis         []L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis `tfsdk:"segment_routing_srv6_evis"`
 }
+
 type L2VPNBridgeGroupBridgeDomainData struct {
 	Device                         types.String                                         `tfsdk:"device"`
 	Id                             types.String                                         `tfsdk:"id"`

@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*HostnameResource)(nil)
-
 func NewHostnameResource() resource.Resource {
 	return &HostnameResource{}
 }
@@ -64,7 +62,7 @@ func (r *HostnameResource) Schema(ctx context.Context, req resource.SchemaReques
 	}
 }
 
-func (r *HostnameResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *HostnameResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

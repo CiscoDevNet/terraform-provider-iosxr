@@ -38,10 +38,10 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 
 const testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-  attributes = {
-      "as-number" = "65001"
-  }
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
 }
 
 `
@@ -51,7 +51,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	resource "iosxr_router_bgp_neighbor_group" "test" {
 		as_number = "65001"
 		name = "GROUP1"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

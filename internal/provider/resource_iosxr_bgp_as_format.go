@@ -17,8 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*BGPASFormatResource)(nil)
-
 func NewBGPASFormatResource() resource.Resource {
 	return &BGPASFormatResource{}
 }
@@ -60,7 +58,7 @@ func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *BGPASFormatResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *BGPASFormatResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

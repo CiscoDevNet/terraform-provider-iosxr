@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*IPv6AccessListOptionsResource)(nil)
-
 func NewIPv6AccessListOptionsResource() resource.Resource {
 	return &IPv6AccessListOptionsResource{}
 }
@@ -80,7 +78,7 @@ func (r *IPv6AccessListOptionsResource) Schema(ctx context.Context, req resource
 	}
 }
 
-func (r *IPv6AccessListOptionsResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *IPv6AccessListOptionsResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

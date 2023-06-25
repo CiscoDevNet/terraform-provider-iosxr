@@ -39,6 +39,7 @@ type RouterBGPAddressFamily struct {
 	RedistributeIsis                    []RouterBGPAddressFamilyRedistributeIsis   `tfsdk:"redistribute_isis"`
 	RedistributeOspf                    []RouterBGPAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
 }
+
 type RouterBGPAddressFamilyData struct {
 	Device                              types.String                               `tfsdk:"device"`
 	Id                                  types.String                               `tfsdk:"id"`

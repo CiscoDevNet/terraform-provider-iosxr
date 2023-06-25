@@ -21,6 +21,7 @@ type SNMPServerVRFHost struct {
 	Address            types.String                          `tfsdk:"address"`
 	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
 }
+
 type SNMPServerVRFHostData struct {
 	Device             types.String                          `tfsdk:"device"`
 	Id                 types.String                          `tfsdk:"id"`

@@ -20,6 +20,7 @@ type SNMPServerView struct {
 	ViewName        types.String                    `tfsdk:"view_name"`
 	MibViewFamilies []SNMPServerViewMibViewFamilies `tfsdk:"mib_view_families"`
 }
+
 type SNMPServerViewData struct {
 	Device          types.String                    `tfsdk:"device"`
 	Id              types.String                    `tfsdk:"id"`

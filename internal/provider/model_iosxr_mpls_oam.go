@@ -22,6 +22,7 @@ type MPLSOAM struct {
 	OamDpmPps                                     types.Int64  `tfsdk:"oam_dpm_pps"`
 	OamDpmInterval                                types.Int64  `tfsdk:"oam_dpm_interval"`
 }
+
 type MPLSOAMData struct {
 	Device                                        types.String `tfsdk:"device"`
 	Id                                            types.String `tfsdk:"id"`

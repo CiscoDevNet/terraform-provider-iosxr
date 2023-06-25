@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*LoggingVRFResource)(nil)
-
 func NewLoggingVRFResource() resource.Resource {
 	return &LoggingVRFResource{}
 }
@@ -116,7 +114,7 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 	}
 }
 
-func (r *LoggingVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *LoggingVRFResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

@@ -19,6 +19,7 @@ type KeyChain struct {
 	Name   types.String   `tfsdk:"name"`
 	Keys   []KeyChainKeys `tfsdk:"keys"`
 }
+
 type KeyChainData struct {
 	Device types.String   `tfsdk:"device"`
 	Id     types.String   `tfsdk:"id"`

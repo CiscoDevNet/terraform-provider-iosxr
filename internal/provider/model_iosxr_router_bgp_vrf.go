@@ -34,6 +34,7 @@ type RouterBGPVRF struct {
 	BfdMultiplier               types.Int64             `tfsdk:"bfd_multiplier"`
 	Neighbors                   []RouterBGPVRFNeighbors `tfsdk:"neighbors"`
 }
+
 type RouterBGPVRFData struct {
 	Device                      types.String            `tfsdk:"device"`
 	Id                          types.String            `tfsdk:"id"`

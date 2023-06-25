@@ -54,6 +54,7 @@ type RouterISISAddressFamily struct {
 	RedistributeIsis                          []RouterISISAddressFamilyRedistributeIsis                   `tfsdk:"redistribute_isis"`
 	SegmentRoutingSrv6Locators                []RouterISISAddressFamilySegmentRoutingSrv6Locators         `tfsdk:"segment_routing_srv6_locators"`
 }
+
 type RouterISISAddressFamilyData struct {
 	Device                                    types.String                                                `tfsdk:"device"`
 	Id                                        types.String                                                `tfsdk:"id"`

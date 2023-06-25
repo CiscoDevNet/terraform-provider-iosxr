@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*KeyChainResource)(nil)
-
 func NewKeyChainResource() resource.Resource {
 	return &KeyChainResource{}
 }
@@ -190,7 +188,7 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 	}
 }
 
-func (r *KeyChainResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *KeyChainResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

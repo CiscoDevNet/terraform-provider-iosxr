@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*L2VPNResource)(nil)
-
 func NewL2VPNResource() resource.Resource {
 	return &L2VPNResource{}
 }
@@ -93,7 +91,7 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 	}
 }
 
-func (r *L2VPNResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *L2VPNResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

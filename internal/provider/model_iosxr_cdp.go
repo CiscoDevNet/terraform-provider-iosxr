@@ -22,6 +22,7 @@ type CDP struct {
 	AdvertiseV1         types.Bool   `tfsdk:"advertise_v1"`
 	LogAdjacencyChanges types.Bool   `tfsdk:"log_adjacency_changes"`
 }
+
 type CDPData struct {
 	Device              types.String `tfsdk:"device"`
 	Id                  types.String `tfsdk:"id"`

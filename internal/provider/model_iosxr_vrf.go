@@ -49,6 +49,7 @@ type VRF struct {
 	AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat []VRFAddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat `tfsdk:"address_family_ipv6_unicast_export_route_target_four_byte_as_format"`
 	AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat  []VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat  `tfsdk:"address_family_ipv6_unicast_export_route_target_ip_address_format"`
 }
+
 type VRFData struct {
 	Device                                                    types.String                                                   `tfsdk:"device"`
 	Id                                                        types.String                                                   `tfsdk:"id"`

@@ -41,6 +41,7 @@ type RouterISIS struct {
 	Nets                          []RouterISISNets                 `tfsdk:"nets"`
 	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
+
 type RouterISISData struct {
 	Device                        types.String                     `tfsdk:"device"`
 	Id                            types.String                     `tfsdk:"id"`

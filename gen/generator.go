@@ -381,7 +381,18 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		attr.Description = strings.ReplaceAll(leaf.Description, "\n", " ")
 	}
 	if !attr.Mandatory && attr.DefaultValue == "" && !attr.Optional {
-		attr.Mandatory = leaf.Mandatory.Value()
+		foundChoice := false
+		parent := leaf.Parent
+		for parent != nil {
+			if parent.IsChoice() {
+				foundChoice = true
+				break
+			}
+			parent = parent.Parent
+		}
+		if !foundChoice {
+			attr.Mandatory = leaf.Mandatory.Value()
+		}
 	}
 }
 

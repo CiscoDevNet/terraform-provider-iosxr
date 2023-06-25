@@ -21,6 +21,7 @@ type SegmentRouting struct {
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
 	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
 }
+
 type SegmentRoutingData struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`

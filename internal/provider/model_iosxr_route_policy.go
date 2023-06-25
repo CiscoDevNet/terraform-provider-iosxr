@@ -17,6 +17,7 @@ type RoutePolicy struct {
 	RoutePolicyName types.String `tfsdk:"route_policy_name"`
 	Rpl             types.String `tfsdk:"rpl"`
 }
+
 type RoutePolicyData struct {
 	Device          types.String `tfsdk:"device"`
 	Id              types.String `tfsdk:"id"`

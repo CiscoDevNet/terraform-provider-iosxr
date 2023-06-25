@@ -22,8 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*EVPNGroupResource)(nil)
-
 func NewEVPNGroupResource() resource.Resource {
 	return &EVPNGroupResource{}
 }
@@ -89,7 +87,7 @@ func (r *EVPNGroupResource) Schema(ctx context.Context, req resource.SchemaReque
 	}
 }
 
-func (r *EVPNGroupResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *EVPNGroupResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

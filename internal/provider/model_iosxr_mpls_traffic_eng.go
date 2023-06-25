@@ -17,6 +17,7 @@ type MPLSTrafficEng struct {
 	DeleteMode types.String `tfsdk:"delete_mode"`
 	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
+
 type MPLSTrafficEngData struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`

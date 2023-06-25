@@ -45,6 +45,7 @@ type Interface struct {
 	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
 	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
 }
+
 type InterfaceData struct {
 	Device                                   types.String                   `tfsdk:"device"`
 	Id                                       types.String                   `tfsdk:"id"`

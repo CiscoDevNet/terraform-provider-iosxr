@@ -57,37 +57,37 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 const testAccIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
 resource "iosxr_gnmi" "PreReq{{$index}}" {
-  path = "{{.Path}}"
-  {{- if .NoDelete}}
-  delete = false
-  {{- end}}
-  attributes = {
-    {{- range  .Attributes}}
-      "{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
-    {{- end}}
-  }
-  {{- if .Lists}}
-  lists = [
-  {{- range .Lists}}
-    {
-      name = "{{.Name}}"
-	  key = "{{.Key}}"
-      items = [
-        {{- range .Items}}
-          {
-			{{- range .Attributes}}
-			"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
-			{{- end}}
-          },
-        {{- end}}
-      ] 
-    },
-  {{- end}}
-  ]
-  {{- end}}
-  {{- if .Dependencies}}
-  depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
-  {{- end}}
+	path = "{{.Path}}"
+	{{- if .NoDelete}}
+	delete = false
+	{{- end}}
+	attributes = {
+		{{- range  .Attributes}}
+		"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+		{{- end}}
+	}
+	{{- if .Lists}}
+	lists = [
+		{{- range .Lists}}
+		{
+			name = "{{.Name}}"
+			key = "{{.Key}}"
+			items = [
+				{{- range .Items}}
+				{
+					{{- range .Attributes}}
+					"{{.Name}}" = {{if .Reference}}{{.Reference}}{{else}}"{{.Value}}"{{end}}
+					{{- end}}
+				},
+				{{- end}}
+			] 
+		},
+		{{- end}}
+	]
+	{{- end}}
+	{{- if .Dependencies}}
+	depends_on = [{{range .Dependencies}}iosxr_gnmi.PreReq{{.}}, {{end}}]
+	{{- end}}
 }
 {{ end}}
 `
@@ -100,21 +100,21 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- if or .Reference .Id .Mandatory}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
-			{{- range  .Attributes}}
-			{{- if not .ExcludeTest}}
-			{{- if eq .Type "List"}}
-				{{.TfName}} = [{
-					{{- range  .Attributes}}
-					{{- if not .ExcludeTest}}
-					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
-					{{- end}}
-					{{- end}}
-				}]
-			{{- else}}
+		{{- range  .Attributes}}
+		{{- if not .ExcludeTest}}
+		{{- if eq .Type "List"}}
+			{{.TfName}} = [{
+				{{- range  .Attributes}}
+				{{- if not .ExcludeTest}}
+				{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+				{{- end}}
+				{{- end}}
+			}]
+		{{- else}}
 			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
-			{{- end}}
-			{{- end}}
-			{{- end}}
+		{{- end}}
+		{{- end}}
+		{{- end}}
 		}]
 	{{- else}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
@@ -122,7 +122,7 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- end}}
 	{{- end}}
 	{{- if .TestPrerequisites}}
-  		depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]
+		depends_on = [{{range $index, $item := .TestPrerequisites}}iosxr_gnmi.PreReq{{$index}}, {{end}}]
 	{{- end}}
 	}
 	`
@@ -138,21 +138,21 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	{{- if not .ExcludeTest}}
 	{{- if eq .Type "List"}}
 		{{.TfName}} = [{
-			{{- range  .Attributes}}
-			{{- if not .ExcludeTest}}
-			{{- if eq .Type "List"}}
-				{{.TfName}} = [{
-					{{- range  .Attributes}}
-					{{- if not .ExcludeTest}}
-					{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
-					{{- end}}
-					{{- end}}
-				}]
-			{{- else}}
+		{{- range  .Attributes}}
+		{{- if not .ExcludeTest}}
+		{{- if eq .Type "List"}}
+			{{.TfName}} = [{
+				{{- range  .Attributes}}
+				{{- if not .ExcludeTest}}
+				{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
+				{{- end}}
+				{{- end}}
+			}]
+		{{- else}}
 			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}
-			{{- end}}
-			{{- end}}
-			{{- end}}
+		{{- end}}
+		{{- end}}
+		{{- end}}
 		}]
 	{{- else}}
 		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}

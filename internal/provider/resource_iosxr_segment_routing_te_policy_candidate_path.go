@@ -22,8 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*SegmentRoutingTEPolicyCandidatePathResource)(nil)
-
 func NewSegmentRoutingTEPolicyCandidatePathResource() resource.Resource {
 	return &SegmentRoutingTEPolicyCandidatePathResource{}
 }
@@ -126,7 +124,7 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Schema(ctx context.Context
 	}
 }
 
-func (r *SegmentRoutingTEPolicyCandidatePathResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SegmentRoutingTEPolicyCandidatePathResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

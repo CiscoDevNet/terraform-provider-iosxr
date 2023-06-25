@@ -36,6 +36,7 @@ type RouterBGP struct {
 	Neighbors                             []RouterBGPNeighbors      `tfsdk:"neighbors"`
 	NeighborGroups                        []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
 }
+
 type RouterBGPData struct {
 	Device                                types.String              `tfsdk:"device"`
 	Id                                    types.String              `tfsdk:"id"`

@@ -17,6 +17,7 @@ type Banner struct {
 	BannerType types.String `tfsdk:"banner_type"`
 	Line       types.String `tfsdk:"line"`
 }
+
 type BannerData struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`

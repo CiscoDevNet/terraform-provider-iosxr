@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterISISInterfaceResource)(nil)
-
 func NewRouterISISInterfaceResource() resource.Resource {
 	return &RouterISISInterfaceResource{}
 }
@@ -146,7 +144,7 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 	}
 }
 
-func (r *RouterISISInterfaceResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterISISInterfaceResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

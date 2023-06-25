@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*L2VPNBridgeGroupBridgeDomainResource)(nil)
-
 func NewL2VPNBridgeGroupBridgeDomainResource() resource.Resource {
 	return &L2VPNBridgeGroupBridgeDomainResource{}
 }
@@ -198,7 +196,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 	}
 }
 
-func (r *L2VPNBridgeGroupBridgeDomainResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *L2VPNBridgeGroupBridgeDomainResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

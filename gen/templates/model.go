@@ -31,7 +31,6 @@ type {{camelCase .Name}} struct {
 {{- end}}
 }
 
-{{- $name := camelCase .Name}}
 type {{camelCase .Name}}Data struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
@@ -91,12 +90,12 @@ func (data {{camelCase .Name}}) getPath() string {
 }
 
 func (data {{camelCase .Name}}Data) getPath() string {
-	{{- if hasId .Attributes}}
-		return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
-	{{- else}}
-		return "{{.Path}}"
-	{{- end}}
-	}
+{{- if hasId .Attributes}}
+	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
+{{- else}}
+	return "{{.Path}}"
+{{- end}}
+}
 
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	body := "{}"
@@ -686,7 +685,6 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 		{{- end}}
 	}
 	{{- else if eq .Type "List"}}
-	{{- $yangName := .YangName}}
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
 		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }

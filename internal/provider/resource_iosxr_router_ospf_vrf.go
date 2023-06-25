@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterOSPFVRFResource)(nil)
-
 func NewRouterOSPFVRFResource() resource.Resource {
 	return &RouterOSPFVRFResource{}
 }
@@ -323,7 +321,7 @@ func (r *RouterOSPFVRFResource) Schema(ctx context.Context, req resource.SchemaR
 	}
 }
 
-func (r *RouterOSPFVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterOSPFVRFResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

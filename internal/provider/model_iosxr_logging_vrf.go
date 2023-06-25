@@ -21,6 +21,7 @@ type LoggingVRF struct {
 	HostIpv4Addresses []LoggingVRFHostIpv4Addresses `tfsdk:"host_ipv4_addresses"`
 	HostIpv6Addresses []LoggingVRFHostIpv6Addresses `tfsdk:"host_ipv6_addresses"`
 }
+
 type LoggingVRFData struct {
 	Device            types.String                  `tfsdk:"device"`
 	Id                types.String                  `tfsdk:"id"`

@@ -22,8 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*EVPNSegmentRoutingSRv6EVIResource)(nil)
-
 func NewEVPNSegmentRoutingSRv6EVIResource() resource.Resource {
 	return &EVPNSegmentRoutingSRv6EVIResource{}
 }
@@ -221,7 +219,7 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 	}
 }
 
-func (r *EVPNSegmentRoutingSRv6EVIResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *EVPNSegmentRoutingSRv6EVIResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

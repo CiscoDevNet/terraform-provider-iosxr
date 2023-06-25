@@ -20,6 +20,7 @@ type IPv4AccessListOptions struct {
 	LogUpdateRate      types.Int64  `tfsdk:"log_update_rate"`
 	IcmpOff            types.Bool   `tfsdk:"icmp_off"`
 }
+
 type IPv4AccessListOptionsData struct {
 	Device             types.String `tfsdk:"device"`
 	Id                 types.String `tfsdk:"id"`

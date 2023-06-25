@@ -24,6 +24,7 @@ type RouterBGPNeighborAddressFamily struct {
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
 }
+
 type RouterBGPNeighborAddressFamilyData struct {
 	Device                                             types.String `tfsdk:"device"`
 	Id                                                 types.String `tfsdk:"id"`

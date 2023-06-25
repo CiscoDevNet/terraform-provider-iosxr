@@ -29,6 +29,7 @@ type RouterISISInterfaceAddressFamily struct {
 	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
 	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
 }
+
 type RouterISISInterfaceAddressFamilyData struct {
 	Device                     types.String                                                 `tfsdk:"device"`
 	Id                         types.String                                                 `tfsdk:"id"`

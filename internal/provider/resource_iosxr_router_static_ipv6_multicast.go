@@ -22,8 +22,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterStaticIPv6MulticastResource)(nil)
-
 func NewRouterStaticIPv6MulticastResource() resource.Resource {
 	return &RouterStaticIPv6MulticastResource{}
 }
@@ -454,7 +452,7 @@ func (r *RouterStaticIPv6MulticastResource) Schema(ctx context.Context, req reso
 	}
 }
 
-func (r *RouterStaticIPv6MulticastResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterStaticIPv6MulticastResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

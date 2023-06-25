@@ -28,6 +28,7 @@ type RouterBGPVRFNeighborAddressFamily struct {
 	SendCommunityEbgpInheritanceDisable types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
 	RemovePrivateAsInheritanceDisable   types.Bool   `tfsdk:"remove_private_as_inheritance_disable"`
 }
+
 type RouterBGPVRFNeighborAddressFamilyData struct {
 	Device                              types.String `tfsdk:"device"`
 	Id                                  types.String `tfsdk:"id"`

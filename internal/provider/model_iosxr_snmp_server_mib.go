@@ -18,6 +18,7 @@ type SNMPServerMIB struct {
 	IfmibIfaliasLong types.Bool   `tfsdk:"ifmib_ifalias_long"`
 	IfindexPersist   types.Bool   `tfsdk:"ifindex_persist"`
 }
+
 type SNMPServerMIBData struct {
 	Device           types.String `tfsdk:"device"`
 	Id               types.String `tfsdk:"id"`

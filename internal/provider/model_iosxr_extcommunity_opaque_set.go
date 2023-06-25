@@ -17,6 +17,7 @@ type ExtcommunityOpaqueSet struct {
 	SetName types.String `tfsdk:"set_name"`
 	Rpl     types.String `tfsdk:"rpl"`
 }
+
 type ExtcommunityOpaqueSetData struct {
 	Device  types.String `tfsdk:"device"`
 	Id      types.String `tfsdk:"id"`

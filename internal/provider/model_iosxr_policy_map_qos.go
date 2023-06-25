@@ -20,6 +20,7 @@ type PolicyMapQoS struct {
 	Description   types.String          `tfsdk:"description"`
 	Classes       []PolicyMapQoSClasses `tfsdk:"classes"`
 }
+
 type PolicyMapQoSData struct {
 	Device        types.String          `tfsdk:"device"`
 	Id            types.String          `tfsdk:"id"`

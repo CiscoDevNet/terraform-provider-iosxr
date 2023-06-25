@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterBGPVRFResource)(nil)
-
 func NewRouterBGPVRFResource() resource.Resource {
 	return &RouterBGPVRFResource{}
 }
@@ -255,7 +253,7 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *RouterBGPVRFResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPVRFResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*ClassMapQoSResource)(nil)
-
 func NewClassMapQoSResource() resource.Resource {
 	return &ClassMapQoSResource{}
 }
@@ -93,7 +91,7 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 	}
 }
 
-func (r *ClassMapQoSResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *ClassMapQoSResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

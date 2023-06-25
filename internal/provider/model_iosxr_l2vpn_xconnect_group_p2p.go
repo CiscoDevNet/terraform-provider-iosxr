@@ -27,6 +27,7 @@ type L2VPNXconnectGroupP2P struct {
 	EvpnServiceNeighbors                  []L2VPNXconnectGroupP2PEvpnServiceNeighbors                  `tfsdk:"evpn_service_neighbors"`
 	NeighborEvpnEviSegmentRoutingServices []L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices `tfsdk:"neighbor_evpn_evi_segment_routing_services"`
 }
+
 type L2VPNXconnectGroupP2PData struct {
 	Device                                types.String                                                 `tfsdk:"device"`
 	Id                                    types.String                                                 `tfsdk:"id"`

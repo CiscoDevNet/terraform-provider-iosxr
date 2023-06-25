@@ -19,6 +19,7 @@ type IPv6PrefixList struct {
 	PrefixListName types.String              `tfsdk:"prefix_list_name"`
 	Sequences      []IPv6PrefixListSequences `tfsdk:"sequences"`
 }
+
 type IPv6PrefixListData struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`

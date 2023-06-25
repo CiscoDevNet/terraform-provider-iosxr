@@ -35,29 +35,29 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 
 const testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
-  attributes = {
-      "as-number" = "65001"
-  }
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
-  delete = false
-  attributes = {
-      "af-name" = "vpnv4-unicast"
-  }
-  depends_on = [iosxr_gnmi.PreReq0, ]
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	delete = false
+	attributes = {
+		"af-name" = "vpnv4-unicast"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]"
-  delete = false
-  attributes = {
-      "neighbor-address" = "10.1.1.2"
-      "remote-as" = "65002"
-  }
-  depends_on = [iosxr_gnmi.PreReq0, ]
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]"
+	delete = false
+	attributes = {
+		"neighbor-address" = "10.1.1.2"
+		"remote-as" = "65002"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 `
@@ -68,7 +68,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 		as_number = "65001"
 		neighbor_address = "10.1.1.2"
 		af_name = "vpnv4-unicast"
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 	}
 	`
 }

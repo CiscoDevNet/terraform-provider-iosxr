@@ -24,6 +24,7 @@ type RouterStaticIPv4Multicast struct {
 	NexthopAddresses          []RouterStaticIPv4MulticastNexthopAddresses          `tfsdk:"nexthop_addresses"`
 	Vrfs                      []RouterStaticIPv4MulticastVrfs                      `tfsdk:"vrfs"`
 }
+
 type RouterStaticIPv4MulticastData struct {
 	Device                    types.String                                         `tfsdk:"device"`
 	Id                        types.String                                         `tfsdk:"id"`

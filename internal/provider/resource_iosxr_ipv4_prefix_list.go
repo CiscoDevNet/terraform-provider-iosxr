@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*IPv4PrefixListResource)(nil)
-
 func NewIPv4PrefixListResource() resource.Resource {
 	return &IPv4PrefixListResource{}
 }
@@ -133,7 +131,7 @@ func (r *IPv4PrefixListResource) Schema(ctx context.Context, req resource.Schema
 	}
 }
 
-func (r *IPv4PrefixListResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *IPv4PrefixListResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

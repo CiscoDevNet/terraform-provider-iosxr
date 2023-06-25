@@ -28,6 +28,7 @@ type MPLSLDP struct {
 	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
 	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
 }
+
 type MPLSLDPData struct {
 	Device                       types.String                 `tfsdk:"device"`
 	Id                           types.String                 `tfsdk:"id"`

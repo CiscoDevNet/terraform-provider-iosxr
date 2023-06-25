@@ -19,8 +19,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*SNMPServerMIBResource)(nil)
-
 func NewSNMPServerMIBResource() resource.Resource {
 	return &SNMPServerMIBResource{}
 }
@@ -69,7 +67,7 @@ func (r *SNMPServerMIBResource) Schema(ctx context.Context, req resource.SchemaR
 	}
 }
 
-func (r *SNMPServerMIBResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPServerMIBResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

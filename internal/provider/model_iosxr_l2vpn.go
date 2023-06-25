@@ -21,6 +21,7 @@ type L2VPN struct {
 	RouterId       types.String          `tfsdk:"router_id"`
 	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
 }
+
 type L2VPNData struct {
 	Device         types.String          `tfsdk:"device"`
 	Id             types.String          `tfsdk:"id"`

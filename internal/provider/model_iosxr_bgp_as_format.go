@@ -17,6 +17,7 @@ type BGPASFormat struct {
 	Asdot   types.Bool   `tfsdk:"asdot"`
 	Asplain types.Bool   `tfsdk:"asplain"`
 }
+
 type BGPASFormatData struct {
 	Device  types.String `tfsdk:"device"`
 	Id      types.String `tfsdk:"id"`

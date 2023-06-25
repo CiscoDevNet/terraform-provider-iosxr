@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*PolicyMapQoSResource)(nil)
-
 func NewPolicyMapQoSResource() resource.Resource {
 	return &PolicyMapQoSResource{}
 }
@@ -166,7 +164,7 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *PolicyMapQoSResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *PolicyMapQoSResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

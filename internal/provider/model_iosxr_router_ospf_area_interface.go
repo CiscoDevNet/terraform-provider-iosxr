@@ -28,6 +28,7 @@ type RouterOSPFAreaInterface struct {
 	PassiveEnable            types.Bool   `tfsdk:"passive_enable"`
 	PassiveDisable           types.Bool   `tfsdk:"passive_disable"`
 }
+
 type RouterOSPFAreaInterfaceData struct {
 	Device                   types.String `tfsdk:"device"`
 	Id                       types.String `tfsdk:"id"`

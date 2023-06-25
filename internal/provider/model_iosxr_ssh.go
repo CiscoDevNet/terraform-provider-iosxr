@@ -24,6 +24,7 @@ type SSH struct {
 	ServerV2           types.Bool      `tfsdk:"server_v2"`
 	ServerVrfs         []SSHServerVrfs `tfsdk:"server_vrfs"`
 }
+
 type SSHData struct {
 	Device             types.String    `tfsdk:"device"`
 	Id                 types.String    `tfsdk:"id"`

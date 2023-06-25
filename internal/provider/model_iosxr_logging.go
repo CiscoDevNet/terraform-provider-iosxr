@@ -28,6 +28,7 @@ type Logging struct {
 	Hostnameprefix            types.String `tfsdk:"hostnameprefix"`
 	SuppressDuplicates        types.Bool   `tfsdk:"suppress_duplicates"`
 }
+
 type LoggingData struct {
 	Device                    types.String `tfsdk:"device"`
 	Id                        types.String `tfsdk:"id"`

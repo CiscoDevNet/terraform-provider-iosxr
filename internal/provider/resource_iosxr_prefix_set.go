@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*PrefixSetResource)(nil)
-
 func NewPrefixSetResource() resource.Resource {
 	return &PrefixSetResource{}
 }
@@ -69,7 +67,7 @@ func (r *PrefixSetResource) Schema(ctx context.Context, req resource.SchemaReque
 	}
 }
 
-func (r *PrefixSetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *PrefixSetResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

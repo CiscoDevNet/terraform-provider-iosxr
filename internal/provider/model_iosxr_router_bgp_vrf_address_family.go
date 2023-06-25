@@ -35,6 +35,7 @@ type RouterBGPVRFAddressFamily struct {
 	Networks                          []RouterBGPVRFAddressFamilyNetworks           `tfsdk:"networks"`
 	RedistributeOspf                  []RouterBGPVRFAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
 }
+
 type RouterBGPVRFAddressFamilyData struct {
 	Device                            types.String                                  `tfsdk:"device"`
 	Id                                types.String                                  `tfsdk:"id"`

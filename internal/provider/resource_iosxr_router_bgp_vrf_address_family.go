@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*RouterBGPVRFAddressFamilyResource)(nil)
-
 func NewRouterBGPVRFAddressFamilyResource() resource.Resource {
 	return &RouterBGPVRFAddressFamilyResource{}
 }
@@ -250,7 +248,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 	}
 }
 
-func (r *RouterBGPVRFAddressFamilyResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterBGPVRFAddressFamilyResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

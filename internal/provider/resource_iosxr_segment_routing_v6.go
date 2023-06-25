@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*SegmentRoutingV6Resource)(nil)
-
 func NewSegmentRoutingV6Resource() resource.Resource {
 	return &SegmentRoutingV6Resource{}
 }
@@ -109,7 +107,7 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 	}
 }
 
-func (r *SegmentRoutingV6Resource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SegmentRoutingV6Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}

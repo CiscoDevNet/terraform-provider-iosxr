@@ -31,6 +31,7 @@ type RouterISISInterface struct {
 	HelloPasswordKeychain types.String `tfsdk:"hello_password_keychain"`
 	BfdFastDetectIpv6     types.Bool   `tfsdk:"bfd_fast_detect_ipv6"`
 }
+
 type RouterISISInterfaceData struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`

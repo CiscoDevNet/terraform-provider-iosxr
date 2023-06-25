@@ -61,6 +61,7 @@ type SNMPServer struct {
 	Users                          []SNMPServerUsers  `tfsdk:"users"`
 	Groups                         []SNMPServerGroups `tfsdk:"groups"`
 }
+
 type SNMPServerData struct {
 	Device                         types.String       `tfsdk:"device"`
 	Id                             types.String       `tfsdk:"id"`

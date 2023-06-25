@@ -684,7 +684,7 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{.YangName}}", data.getPath()))
 		{{- end}}
 	}
-	{{- else if eq .Type "List"}}
+	{{- else if and (eq .Type "List") (not .NoDelete)}}
 	for i := range data.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
 		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }

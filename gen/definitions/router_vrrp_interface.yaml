@@ -1,0 +1,17 @@
+---
+name: Router VRRP Interface
+path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]
+doc_category: VRRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: mac-refresh
+    example: 14
+  - yang_name: delay/minimum
+    example: 1234
+  - yang_name: delay/reload
+    example: 4321
+  - yang_name: bfd/minimum-interval
+    example: 255
+  - yang_name: bfd/multiplier
+    example: 33

@@ -74,6 +74,8 @@ resource "iosxr_evpn_evi" "example" {
 - `bgp_route_target_import_ipv4_address_format` (Attributes List) IP address (see [below for nested schema](#nestedatt--bgp_route_target_import_ipv4_address_format))
 - `bgp_route_target_import_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--bgp_route_target_import_two_byte_as_format))
 - `control_word_disable` (Boolean) Disabling control-word
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `description` (String) Description for this EVPN Instance
 - `device` (String) A device name from the provider configuration.
 - `etree` (Boolean) Configure EVPN Instance E-Tree

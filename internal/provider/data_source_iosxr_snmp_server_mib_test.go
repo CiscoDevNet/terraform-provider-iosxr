@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSNMPServerMIB(t *testing.T) {
@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrSNMPServerMIB(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerMIBConfig = `
 
 resource "iosxr_snmp_server_mib" "test" {
+	delete_mode = "attributes"
 	ifmib_ifalias_long = true
 	ifindex_persist = true
 }

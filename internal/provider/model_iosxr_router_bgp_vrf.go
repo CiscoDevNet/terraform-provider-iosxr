@@ -16,6 +16,28 @@ import (
 type RouterBGPVRF struct {
 	Device                      types.String            `tfsdk:"device"`
 	Id                          types.String            `tfsdk:"id"`
+	DeleteMode                  types.String            `tfsdk:"delete_mode"`
+	AsNumber                    types.String            `tfsdk:"as_number"`
+	VrfName                     types.String            `tfsdk:"vrf_name"`
+	RdAuto                      types.Bool              `tfsdk:"rd_auto"`
+	RdTwoByteAsAsNumber         types.String            `tfsdk:"rd_two_byte_as_as_number"`
+	RdTwoByteAsIndex            types.Int64             `tfsdk:"rd_two_byte_as_index"`
+	RdFourByteAsAsNumber        types.String            `tfsdk:"rd_four_byte_as_as_number"`
+	RdFourByteAsIndex           types.Int64             `tfsdk:"rd_four_byte_as_index"`
+	RdIpAddressIpv4Address      types.String            `tfsdk:"rd_ip_address_ipv4_address"`
+	RdIpAddressIndex            types.Int64             `tfsdk:"rd_ip_address_index"`
+	DefaultInformationOriginate types.Bool              `tfsdk:"default_information_originate"`
+	DefaultMetric               types.Int64             `tfsdk:"default_metric"`
+	TimersBgpKeepaliveInterval  types.Int64             `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHoldtime           types.String            `tfsdk:"timers_bgp_holdtime"`
+	BfdMinimumInterval          types.Int64             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier               types.Int64             `tfsdk:"bfd_multiplier"`
+	Neighbors                   []RouterBGPVRFNeighbors `tfsdk:"neighbors"`
+}
+
+type RouterBGPVRFData struct {
+	Device                      types.String            `tfsdk:"device"`
+	Id                          types.String            `tfsdk:"id"`
 	AsNumber                    types.String            `tfsdk:"as_number"`
 	VrfName                     types.String            `tfsdk:"vrf_name"`
 	RdAuto                      types.Bool              `tfsdk:"rd_auto"`
@@ -54,6 +76,10 @@ type RouterBGPVRFNeighbors struct {
 }
 
 func (data RouterBGPVRF) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString())
+}
+
+func (data RouterBGPVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString())
 }
 
@@ -385,7 +411,7 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rd.auto"); value.Exists() {
 		data.RdAuto = types.BoolValue(true)
 	} else {
@@ -572,4 +598,58 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGPVRF) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.RdAuto.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/auto", data.getPath()))
+	}
+	if !data.RdTwoByteAsAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/two-byte-as", data.getPath()))
+	}
+	if !data.RdTwoByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/two-byte-as", data.getPath()))
+	}
+	if !data.RdFourByteAsAsNumber.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/four-byte-as", data.getPath()))
+	}
+	if !data.RdFourByteAsIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/four-byte-as", data.getPath()))
+	}
+	if !data.RdIpAddressIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/ip-address", data.getPath()))
+	}
+	if !data.RdIpAddressIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rd/ip-address", data.getPath()))
+	}
+	if !data.DefaultInformationOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.DefaultMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-metric", data.getPath()))
+	}
+	if !data.TimersBgpKeepaliveInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
+	}
+	if !data.TimersBgpHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
+	}
+	for i := range data.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

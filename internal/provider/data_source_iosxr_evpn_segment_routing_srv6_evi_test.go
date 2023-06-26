@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
@@ -32,7 +32,7 @@ func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig = `
 
 resource "iosxr_evpn_segment_routing_srv6_evi" "test" {
-	vpn_id = 1234
+	vpn_id = 1235
 	description = "My Description"
 	bgp_route_target_import_two_byte_as_format = [{
 		as_number = 1
@@ -47,7 +47,7 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "test" {
 }
 
 data "iosxr_evpn_segment_routing_srv6_evi" "test" {
-	vpn_id = 1234
+	vpn_id = 1235
 	depends_on = [iosxr_evpn_segment_routing_srv6_evi.test]
 }
 `

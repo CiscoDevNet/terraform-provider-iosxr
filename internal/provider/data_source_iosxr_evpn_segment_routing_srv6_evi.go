@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -170,7 +170,7 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Configure(_ context.Context, req d
 }
 
 func (d *EVPNSegmentRoutingSRv6EVIDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config EVPNSegmentRoutingSRv6EVI
+	var config EVPNSegmentRoutingSRv6EVIData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

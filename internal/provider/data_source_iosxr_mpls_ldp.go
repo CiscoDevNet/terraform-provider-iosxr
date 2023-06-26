@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -138,7 +138,7 @@ func (d *MPLSLDPDataSource) Configure(_ context.Context, req datasource.Configur
 }
 
 func (d *MPLSLDPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config MPLSLDP
+	var config MPLSLDPData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

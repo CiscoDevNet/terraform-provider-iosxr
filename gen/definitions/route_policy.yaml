@@ -1,6 +1,7 @@
 ---
 name: Route Policy
 path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=%s]
+no_delete_attributes: true
 doc_category: Route Policy
 attributes:
   - yang_name: route-policy-name

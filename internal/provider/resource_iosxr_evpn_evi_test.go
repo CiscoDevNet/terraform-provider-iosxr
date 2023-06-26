@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrEVPNEVI(t *testing.T) {
@@ -47,11 +47,11 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 
 const testAccIosxrEVPNEVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-  attributes = {
-      "route-policy-name" = "ROUTE_POLICY_1"
-      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-  }
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
 }
 
 `
@@ -60,7 +60,7 @@ func testAccIosxrEVPNEVIConfig_minimum() string {
 	return `
 	resource "iosxr_evpn_evi" "test" {
 		vpn_id = 1234
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

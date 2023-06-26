@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrEVPN(t *testing.T) {
@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 const testAccDataSourceIosxrEVPNConfig = `
 
 resource "iosxr_evpn" "test" {
+	delete_mode = "attributes"
 	source_interface = "Loopback0"
 }
 

@@ -16,6 +16,19 @@ import (
 type PCE struct {
 	Device                   types.String        `tfsdk:"device"`
 	Id                       types.String        `tfsdk:"id"`
+	DeleteMode               types.String        `tfsdk:"delete_mode"`
+	AddressIpv4              types.String        `tfsdk:"address_ipv4"`
+	AddressIpv6              types.String        `tfsdk:"address_ipv6"`
+	StateSyncIpv4s           []PCEStateSyncIpv4s `tfsdk:"state_sync_ipv4s"`
+	PeerFilterIpv4AccessList types.String        `tfsdk:"peer_filter_ipv4_access_list"`
+	ApiAuthenticationDigest  types.Bool          `tfsdk:"api_authentication_digest"`
+	ApiSiblingIpv4           types.String        `tfsdk:"api_sibling_ipv4"`
+	ApiUsers                 []PCEApiUsers       `tfsdk:"api_users"`
+}
+
+type PCEData struct {
+	Device                   types.String        `tfsdk:"device"`
+	Id                       types.String        `tfsdk:"id"`
 	AddressIpv4              types.String        `tfsdk:"address_ipv4"`
 	AddressIpv6              types.String        `tfsdk:"address_ipv6"`
 	StateSyncIpv4s           []PCEStateSyncIpv4s `tfsdk:"state_sync_ipv4s"`
@@ -33,6 +46,10 @@ type PCEApiUsers struct {
 }
 
 func (data PCE) getPath() string {
+	return "Cisco-IOS-XR-um-pce-cfg:/pce"
+}
+
+func (data PCEData) getPath() string {
 	return "Cisco-IOS-XR-um-pce-cfg:/pce"
 }
 
@@ -172,7 +189,7 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PCE) fromBody(ctx context.Context, res []byte) {
+func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() {
 		data.AddressIpv4 = types.StringValue(value.String())
 	}
@@ -304,4 +321,44 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *PCE) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.AddressIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
+	}
+	if !data.AddressIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
+	}
+	for i := range data.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", data.getPath(), keyString))
+	}
+	if !data.PeerFilterIpv4AccessList.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
+	}
+	if !data.ApiAuthenticationDigest.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
+	}
+	if !data.ApiSiblingIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
+	}
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

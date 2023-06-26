@@ -1,6 +1,7 @@
 ---
 name: IPv6 Prefix List
 path: Cisco-IOS-XR-um-ipv6-prefix-list-cfg:/ipv6/prefix-lists/prefix-list[prefix-list-name=%s]
+no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: prefix-list-name

@@ -70,6 +70,8 @@ resource "iosxr_snmp_server" "example" {
 - `bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `config` (Boolean) Enable SNMP config traps
 - `copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `entity` (Boolean) Enable SNMP entity traps
 - `entity_redundancy_all` (Boolean) Enable all CISCO-ENTITY-REDUNDANCY-MIB traps

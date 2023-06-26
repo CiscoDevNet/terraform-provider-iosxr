@@ -14,10 +14,21 @@ import (
 type MPLSTrafficEng struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
+}
+
+type MPLSTrafficEngData struct {
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
 	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
 func (data MPLSTrafficEng) getPath() string {
+	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
+}
+
+func (data MPLSTrafficEngData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
 }
 
@@ -43,7 +54,7 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte) {
+func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
 	} else {
@@ -62,4 +73,12 @@ func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traffic-eng", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.TrafficEng.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traffic-eng", data.getPath()))
+	}
+	return deletePaths
 }

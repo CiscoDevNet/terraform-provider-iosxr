@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -642,7 +642,7 @@ func (d *IPv6AccessListDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *IPv6AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv6AccessList
+	var config IPv6AccessListData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -1,5 +1,5 @@
 resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
-  vpn_id      = 1234
+  vpn_id      = 1235
   description = "My Description"
   bgp_route_target_import_two_byte_as_format = [
     {

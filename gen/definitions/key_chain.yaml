@@ -1,6 +1,7 @@
 ---
 name: Key Chain
 path: Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=%s]
+no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: key-chain-name
@@ -46,6 +47,3 @@ attributes:
         example: 2023
       - yang_name: send-lifetime/infinite
         example: true
-
-
-   

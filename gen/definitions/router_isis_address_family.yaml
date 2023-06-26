@@ -96,7 +96,6 @@ attributes:
   - yang_name: segment-routing/mpls/sr-prefer
     example: true
     exclude_test: true
-
   - yang_name: maximum-redistributed-prefixes/maximum-prefixes
     tf_name: maximum_redistributed_prefixes
     example: 100
@@ -109,7 +108,6 @@ attributes:
         example: 1
       - yang_name: maximum-prefixes
         example: 1000
-
   - yang_name: redistribute/isis
     tf_name: redistribute_isis
     type: List
@@ -119,8 +117,6 @@ attributes:
         example: CORE
       - yang_name: route-policy
         example: ROUTE_POLICY_1
-
-
   - yang_name: segment-routing/srv6/locators/locator
     tf_name: segment_routing_srv6_locators
     type: List
@@ -130,3 +126,11 @@ attributes:
         example: AlgoLocator
       - yang_name: level
         example: 1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"

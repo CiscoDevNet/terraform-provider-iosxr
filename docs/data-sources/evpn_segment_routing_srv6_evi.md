@@ -14,7 +14,7 @@ This data source can read the EVPN Segment Routing SRv6 EVI configuration.
 
 ```terraform
 data "iosxr_evpn_segment_routing_srv6_evi" "example" {
-  vpn_id = 1234
+  vpn_id = 1235
 }
 ```
 

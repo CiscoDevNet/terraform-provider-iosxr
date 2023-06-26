@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrPCE(t *testing.T) {
@@ -32,6 +32,7 @@ func TestAccDataSourceIosxrPCE(t *testing.T) {
 const testAccDataSourceIosxrPCEConfig = `
 
 resource "iosxr_pce" "test" {
+	delete_mode = "attributes"
 	address_ipv4 = "77.77.77.1"
 	state_sync_ipv4s = [{
 		address = "100.100.100.11"

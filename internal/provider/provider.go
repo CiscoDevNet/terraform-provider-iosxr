@@ -7,12 +7,12 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
 func New() provider.Provider {
@@ -332,7 +332,6 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewMPLSLDPResource,
 		NewMPLSOAMResource,
 		NewMPLSTrafficEngResource,
-		NewOCSystemConfigResource,
 		NewPCEResource,
 		NewPolicyMapQoSResource,
 		NewPrefixSetResource,
@@ -352,7 +351,10 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewRouterOSPFAreaInterfaceResource,
 		NewRouterOSPFVRFResource,
 		NewRouterOSPFVRFAreaInterfaceResource,
-		NewRouterStaticResource,
+		NewRouterStaticIPv4MulticastResource,
+		NewRouterStaticIPv4UnicastResource,
+		NewRouterStaticIPv6MulticastResource,
+		NewRouterStaticIPv6UnicastResource,
 		NewSegmentRoutingResource,
 		NewSegmentRoutingTEResource,
 		NewSegmentRoutingTEPolicyCandidatePathResource,
@@ -403,7 +405,6 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewMPLSLDPDataSource,
 		NewMPLSOAMDataSource,
 		NewMPLSTrafficEngDataSource,
-		NewOCSystemConfigDataSource,
 		NewPCEDataSource,
 		NewPolicyMapQoSDataSource,
 		NewPrefixSetDataSource,
@@ -423,7 +424,10 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewRouterOSPFAreaInterfaceDataSource,
 		NewRouterOSPFVRFDataSource,
 		NewRouterOSPFVRFAreaInterfaceDataSource,
-		NewRouterStaticDataSource,
+		NewRouterStaticIPv4MulticastDataSource,
+		NewRouterStaticIPv4UnicastDataSource,
+		NewRouterStaticIPv6MulticastDataSource,
+		NewRouterStaticIPv6UnicastDataSource,
 		NewSegmentRoutingDataSource,
 		NewSegmentRoutingTEDataSource,
 		NewSegmentRoutingTEPolicyCandidatePathDataSource,

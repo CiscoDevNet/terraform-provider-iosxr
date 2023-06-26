@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
@@ -35,11 +35,11 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 
 const testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-  attributes = {
-      "route-policy-name" = "ROUTE_POLICY_1"
-      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-  }
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
 }
 
 `
@@ -51,7 +51,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 		interface_name = "GigabitEthernet0/0/0/1"
 		af_name = "ipv4"
 		saf_name = "unicast"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

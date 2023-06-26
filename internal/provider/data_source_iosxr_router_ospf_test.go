@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
@@ -62,6 +62,7 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 const testAccDataSourceIosxrRouterOSPFConfig = `
 
 resource "iosxr_router_ospf" "test" {
+	delete_mode = "attributes"
 	process_name = "OSPF1"
 	mpls_ldp_sync = false
 	hello_interval = 10

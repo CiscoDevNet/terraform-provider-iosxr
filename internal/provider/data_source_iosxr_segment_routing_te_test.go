@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSegmentRoutingTE(t *testing.T) {
@@ -56,6 +56,7 @@ func TestAccDataSourceIosxrSegmentRoutingTE(t *testing.T) {
 const testAccDataSourceIosxrSegmentRoutingTEConfig = `
 
 resource "iosxr_segment_routing_te" "test" {
+	delete_mode = "attributes"
 	logging_pcep_peer_status = true
 	logging_policy_status = true
 	pcc_report_all = true

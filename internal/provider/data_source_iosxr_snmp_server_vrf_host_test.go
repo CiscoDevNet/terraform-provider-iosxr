@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerVRFHostConfig = `
 
 resource "iosxr_snmp_server_vrf_host" "test" {
+	delete_mode = "attributes"
 	vrf_name = "VRF1"
 	address = "11.11.11.11"
 	unencrypted_strings = [{

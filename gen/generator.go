@@ -79,17 +79,19 @@ var templates = []t{
 }
 
 type YamlConfig struct {
-	Name              string                `yaml:"name"`
-	Path              string                `yaml:"path"`
-	AugmentPath       string                `yaml:"augment_path"`
-	NoDelete          bool                  `yaml:"no_delete"`
-	ExcludeTest       bool                  `yaml:"exclude_test"`
-	NoAugmentConfig   bool                  `yaml:"no_augment_config"`
-	DsDescription     string                `yaml:"ds_description"`
-	ResDescription    string                `yaml:"res_description"`
-	DocCategory       string                `yaml:"doc_category"`
-	Attributes        []YamlConfigAttribute `yaml:"attributes"`
-	TestPrerequisites []YamlTest            `yaml:"test_prerequisites"`
+	Name                    string                `yaml:"name"`
+	Path                    string                `yaml:"path"`
+	AugmentPath             string                `yaml:"augment_path"`
+	NoDelete                bool                  `yaml:"no_delete"`
+	NoDeleteAttributes      bool                  `yaml:"no_delete_attributes"`
+	DefaultDeleteAttributes bool                  `yaml:"default_delete_attributes"`
+	ExcludeTest             bool                  `yaml:"exclude_test"`
+	NoAugmentConfig         bool                  `yaml:"no_augment_config"`
+	DsDescription           string                `yaml:"ds_description"`
+	ResDescription          string                `yaml:"res_description"`
+	DocCategory             string                `yaml:"doc_category"`
+	Attributes              []YamlConfigAttribute `yaml:"attributes"`
+	TestPrerequisites       []YamlTest            `yaml:"test_prerequisites"`
 }
 
 type YamlConfigAttribute struct {
@@ -118,6 +120,8 @@ type YamlConfigAttribute struct {
 	DefaultValue    string                `yaml:"default_value"`
 	RequiresReplace bool                  `yaml:"requires_replace"`
 	NoAugmentConfig bool                  `yaml:"no_augment_config"`
+	DeleteParent    bool                  `yaml:"delete_parent"`
+	NoDelete        bool                  `yaml:"no_delete"`
 	Attributes      []YamlConfigAttribute `yaml:"attributes"`
 }
 
@@ -227,6 +231,11 @@ func IsLast(index int, len int) bool {
 	return index+1 == len
 }
 
+// Templating helper function to remove last element of path
+func RemoveLastPathElement(p string) string {
+	return path.Dir(p)
+}
+
 func contains(s []string, str string) bool {
 	for _, v := range s {
 		if v == str {
@@ -238,14 +247,15 @@ func contains(s []string, str string) bool {
 
 // Map of templating functions
 var functions = template.FuncMap{
-	"toGoName":       ToGoName,
-	"toJsonPath":     ToJsonPath,
-	"camelCase":      CamelCase,
-	"snakeCase":      SnakeCase,
-	"hasId":          HasId,
-	"getExamplePath": GetExamplePath,
-	"isLast":         IsLast,
-	"sprintf":        fmt.Sprintf,
+	"toGoName":              ToGoName,
+	"toJsonPath":            ToJsonPath,
+	"camelCase":             CamelCase,
+	"snakeCase":             SnakeCase,
+	"hasId":                 HasId,
+	"getExamplePath":        GetExamplePath,
+	"isLast":                IsLast,
+	"sprintf":               fmt.Sprintf,
+	"removeLastPathElement": RemoveLastPathElement,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -371,7 +381,18 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		attr.Description = strings.ReplaceAll(leaf.Description, "\n", " ")
 	}
 	if !attr.Mandatory && attr.DefaultValue == "" && !attr.Optional {
-		attr.Mandatory = leaf.Mandatory.Value()
+		foundChoice := false
+		parent := leaf.Parent
+		for parent != nil {
+			if parent.IsChoice() {
+				foundChoice = true
+				break
+			}
+			parent = parent.Parent
+		}
+		if !foundChoice {
+			attr.Mandatory = leaf.Mandatory.Value()
+		}
 	}
 }
 

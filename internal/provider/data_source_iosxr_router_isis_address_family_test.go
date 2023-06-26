@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterISISAddressFamilyConfig,
+				Config: testAccDataSourceIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccDataSourceIosxrRouterISISAddressFamilyConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "metric_style_narrow", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_isis_address_family.test", "metric_style_wide", "true"),
@@ -57,9 +57,21 @@ func TestAccDataSourceIosxrRouterISISAddressFamily(t *testing.T) {
 	})
 }
 
+const testAccDataSourceIosxrRouterISISAddressFamilyPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+`
+
 const testAccDataSourceIosxrRouterISISAddressFamilyConfig = `
 
 resource "iosxr_router_isis_address_family" "test" {
+	delete_mode = "attributes"
 	process_id = "P1"
 	af_name = "ipv6"
 	saf_name = "unicast"
@@ -108,6 +120,7 @@ resource "iosxr_router_isis_address_family" "test" {
 		locator_name = "AlgoLocator"
 		level = 1
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_isis_address_family" "test" {

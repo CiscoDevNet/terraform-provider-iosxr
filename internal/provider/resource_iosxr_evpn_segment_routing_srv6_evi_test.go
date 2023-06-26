@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
@@ -16,7 +16,7 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 			{
 				Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "vpn_id", "1234"),
+					resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "vpn_id", "1235"),
 					resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"),
 					resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"),
 					resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"),
@@ -29,7 +29,7 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 			{
 				ResourceName:  "iosxr_evpn_segment_routing_srv6_evi.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=1234]",
+				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=1235]",
 			},
 		},
 	})
@@ -38,7 +38,7 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	return `
 	resource "iosxr_evpn_segment_routing_srv6_evi" "test" {
-		vpn_id = 1234
+		vpn_id = 1235
 	}
 	`
 }
@@ -46,7 +46,7 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	return `
 	resource "iosxr_evpn_segment_routing_srv6_evi" "test" {
-		vpn_id = 1234
+		vpn_id = 1235
 		description = "My Description"
 		bgp_route_target_import_two_byte_as_format = [{
 			as_number = 1

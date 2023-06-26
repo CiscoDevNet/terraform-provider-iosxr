@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 const testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig = `
 
 resource "iosxr_segment_routing_te_policy_candidate_path" "test" {
+	delete_mode = "attributes"
 	policy_name = "POLICY1"
 	path_index = 100
 	path_infos = [{

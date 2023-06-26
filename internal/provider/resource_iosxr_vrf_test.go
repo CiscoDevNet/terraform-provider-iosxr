@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrVRF(t *testing.T) {
@@ -80,11 +80,11 @@ func TestAccIosxrVRF(t *testing.T) {
 
 const testAccIosxrVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
-  attributes = {
-      "route-policy-name" = "ROUTE_POLICY_1"
-      "rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
-  }
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
 }
 
 `
@@ -93,7 +93,7 @@ func testAccIosxrVRFConfig_minimum() string {
 	return `
 	resource "iosxr_vrf" "test" {
 		vrf_name = "VRF3"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

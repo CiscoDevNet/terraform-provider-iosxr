@@ -16,13 +16,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-framework/path"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64default"
 )
-
-var _ resource.Resource = (*{{camelCase .Name}}Resource)(nil)
 
 func New{{camelCase .Name}}Resource() resource.Resource {
 	return &{{camelCase .Name}}Resource{}
@@ -53,6 +54,15 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
+			{{- end}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else}}{{.Type}}{{end}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")
@@ -97,18 +107,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 				},
 				{{- end}}
-				{{- if or (len .DefaultValue) .Id .Reference .RequiresReplace}}
+				{{- if or .Id .Reference .RequiresReplace}}
 				PlanModifiers: []planmodifier.{{.Type}}{
-					{{- if or .Id .Reference .RequiresReplace}}
 					{{snakeCase .Type}}planmodifier.RequiresReplace(),
-					{{- else if eq .Type "Int64"}}
-					helpers.IntegerDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "Bool"}}
-					helpers.BooleanDefaultModifier({{.DefaultValue}}),
-					{{- else if eq .Type "String"}}
-					helpers.StringDefaultModifier("{{.DefaultValue}}"),
-					{{- end}}
 				},
+				{{- end}}
+				{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+				Default:             int64default.StaticInt64({{.DefaultValue}}),
+				{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+				Default:             booldefault.StaticBool({{.DefaultValue}}),
+				{{- else if and (len .DefaultValue) (eq .Type "String")}}
+				Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 				{{- end}}
 				{{- if eq .Type "List"}}
 				NestedObject: schema.NestedAttributeObject{
@@ -157,16 +166,12 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 								int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 							},
 							{{- end}}
-							{{- if len .DefaultValue}}
-							PlanModifiers: []planmodifier.{{.Type}}{
-								{{- if eq .Type "Int64"}}
-								helpers.IntegerDefaultModifier({{.DefaultValue}}),
-								{{- else if eq .Type "Bool"}}
-								helpers.BooleanDefaultModifier({{.DefaultValue}}),
-								{{- else if eq .Type "String"}}
-								helpers.StringDefaultModifier("{{.DefaultValue}}"),
-								{{- end}}
-							},
+							{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+							Default:             int64default.StaticInt64({{.DefaultValue}}),
+							{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+							Default:             booldefault.StaticBool({{.DefaultValue}}),
+							{{- else if and (len .DefaultValue) (eq .Type "String")}}
+							Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 							{{- end}}
 							{{- if eq .Type "List"}}
 							NestedObject: schema.NestedAttributeObject{
@@ -215,16 +220,12 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 											int64validator.Between({{.MinInt}}, {{.MaxInt}}),
 										},
 										{{- end}}
-										{{- if len .DefaultValue}}
-										PlanModifiers: []planmodifier.{{.Type}}{
-											{{- if eq .Type "Int64"}}
-											helpers.IntegerDefaultModifier({{.DefaultValue}}),
-											{{- else if eq .Type "Bool"}}
-											helpers.BooleanDefaultModifier({{.DefaultValue}}),
-											{{- else if eq .Type "String"}}
-											helpers.StringDefaultModifier("{{.DefaultValue}}"),
-											{{- end}}
-										},
+										{{- if and (len .DefaultValue) (eq .Type "Int64")}}
+										Default:             int64default.StaticInt64({{.DefaultValue}}),
+										{{- else if and (len .DefaultValue) (eq .Type "Bool")}}
+										Default:             booldefault.StaticBool({{.DefaultValue}}),
+										{{- else if and (len .DefaultValue) (eq .Type "String")}}
+										Default:             stringdefault.StaticString("{{.DefaultValue}}"),
 										{{- end}}
 									},
 									{{- end}}
@@ -242,7 +243,7 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 	}
 }
 
-func (r *{{camelCase .Name}}Resource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *{{camelCase .Name}}Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -377,14 +378,38 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
-{{ if not .NoDelete}}
+	var ops []client.SetOperation
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	{{- if or .DefaultDeleteAttributes .NoDelete}}
+    deleteMode := "attributes"
+	{{- else}}
+	deleteMode := "all"
+	{{- end}}
+	{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+	if state.DeleteMode.ValueString() == "all" {
+		deleteMode = "all"
+	} else if state.DeleteMode.ValueString() == "attributes" {
+		deleteMode = "attributes"
+	}
+	{{- end}}
+
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
-{{ end}}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 
 	resp.State.RemoveResource(ctx)

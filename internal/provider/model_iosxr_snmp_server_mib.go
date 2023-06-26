@@ -14,11 +14,23 @@ import (
 type SNMPServerMIB struct {
 	Device           types.String `tfsdk:"device"`
 	Id               types.String `tfsdk:"id"`
+	DeleteMode       types.String `tfsdk:"delete_mode"`
+	IfmibIfaliasLong types.Bool   `tfsdk:"ifmib_ifalias_long"`
+	IfindexPersist   types.Bool   `tfsdk:"ifindex_persist"`
+}
+
+type SNMPServerMIBData struct {
+	Device           types.String `tfsdk:"device"`
+	Id               types.String `tfsdk:"id"`
 	IfmibIfaliasLong types.Bool   `tfsdk:"ifmib_ifalias_long"`
 	IfindexPersist   types.Bool   `tfsdk:"ifindex_persist"`
 }
 
 func (data SNMPServerMIB) getPath() string {
+	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
+}
+
+func (data SNMPServerMIBData) getPath() string {
 	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
 }
 
@@ -58,7 +70,7 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
+func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
 		data.IfmibIfaliasLong = types.BoolValue(true)
 	} else {
@@ -85,4 +97,15 @@ func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.IfmibIfaliasLong.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
+	}
+	if !data.IfindexPersist.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
+	}
+	return deletePaths
 }

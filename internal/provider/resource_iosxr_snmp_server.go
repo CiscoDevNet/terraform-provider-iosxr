@@ -7,20 +7,19 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
-
-var _ resource.Resource = (*SNMPServerResource)(nil)
 
 func NewSNMPServerResource() resource.Resource {
 	return &SNMPServerResource{}
@@ -49,6 +48,13 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
 			"rf": schema.BoolAttribute{
@@ -141,9 +147,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_database_overload": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -152,9 +156,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_manual_address_drops": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -163,9 +165,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_corrupted_lsp_detected": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -174,9 +174,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -185,9 +183,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_id_len_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -196,9 +192,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_max_area_addresses_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -207,9 +201,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_own_lsp_purge": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -218,9 +210,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_sequence_number_skip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -229,9 +219,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_authentication_type_failure": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -240,9 +228,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_authentication_failure": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -251,9 +237,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_version_skew": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -262,9 +246,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_area_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -273,9 +255,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_rejected_adjacency": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -284,9 +264,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_lsp_too_large_to_propagate": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -295,9 +273,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -306,9 +282,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_protocols_supported_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -317,9 +291,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_adjacency_change": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -328,9 +300,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"isis_lsp_error_detected": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
@@ -339,9 +309,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Validators: []validator.String{
 					stringvalidator.OneOf("disable", "enable"),
 				},
-				PlanModifiers: []planmodifier.String{
-					helpers.StringDefaultModifier("disable"),
-				},
+				Default: stringdefault.StaticString("disable"),
 			},
 			"bgp_cbgp2_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
@@ -461,7 +429,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 	}
 }
 
-func (r *SNMPServerResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *SNMPServerResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -596,8 +564,26 @@ func (r *SNMPServerResource) Delete(ctx context.Context, req resource.DeleteRequ
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "all"
+	if state.DeleteMode.ValueString() == "all" {
+		deleteMode = "all"
+	} else if state.DeleteMode.ValueString() == "attributes" {
+		deleteMode = "attributes"
+	}
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

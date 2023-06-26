@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPNeighborGroupConfig,
+				Config: testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccDataSourceIosxrRouterBGPNeighborGroupConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"),
@@ -30,9 +30,20 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	})
 }
 
+const testAccDataSourceIosxrRouterBGPNeighborGroupPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+}
+
+`
+
 const testAccDataSourceIosxrRouterBGPNeighborGroupConfig = `
 
 resource "iosxr_router_bgp_neighbor_group" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	name = "GROUP1"
 	remote_as = "65001"
@@ -45,6 +56,7 @@ resource "iosxr_router_bgp_neighbor_group" "test" {
 		next_hop_self_inheritance_disable = true
 		route_reflector_client_inheritance_disable = true
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_bgp_neighbor_group" "test" {

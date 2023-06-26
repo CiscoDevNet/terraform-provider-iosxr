@@ -16,6 +16,30 @@ import (
 type RouterBGP struct {
 	Device                                types.String              `tfsdk:"device"`
 	Id                                    types.String              `tfsdk:"id"`
+	DeleteMode                            types.String              `tfsdk:"delete_mode"`
+	AsNumber                              types.String              `tfsdk:"as_number"`
+	DefaultInformationOriginate           types.Bool                `tfsdk:"default_information_originate"`
+	DefaultMetric                         types.Int64               `tfsdk:"default_metric"`
+	NsrDisable                            types.Bool                `tfsdk:"nsr_disable"`
+	BgpRedistributeInternal               types.Bool                `tfsdk:"bgp_redistribute_internal"`
+	SegmentRoutingSrv6Locator             types.String              `tfsdk:"segment_routing_srv6_locator"`
+	TimersBgpKeepaliveInterval            types.Int64               `tfsdk:"timers_bgp_keepalive_interval"`
+	TimersBgpHoldtime                     types.String              `tfsdk:"timers_bgp_holdtime"`
+	BgpRouterId                           types.String              `tfsdk:"bgp_router_id"`
+	BgpGracefulRestartGracefulReset       types.Bool                `tfsdk:"bgp_graceful_restart_graceful_reset"`
+	IbgpPolicyOutEnforceModifications     types.Bool                `tfsdk:"ibgp_policy_out_enforce_modifications"`
+	BgpLogNeighborChangesDetail           types.Bool                `tfsdk:"bgp_log_neighbor_changes_detail"`
+	BfdMinimumInterval                    types.Int64               `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                         types.Int64               `tfsdk:"bfd_multiplier"`
+	NexthopValidationColorExtcommSrPolicy types.Bool                `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
+	NexthopValidationColorExtcommDisable  types.Bool                `tfsdk:"nexthop_validation_color_extcomm_disable"`
+	Neighbors                             []RouterBGPNeighbors      `tfsdk:"neighbors"`
+	NeighborGroups                        []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
+}
+
+type RouterBGPData struct {
+	Device                                types.String              `tfsdk:"device"`
+	Id                                    types.String              `tfsdk:"id"`
 	AsNumber                              types.String              `tfsdk:"as_number"`
 	DefaultInformationOriginate           types.Bool                `tfsdk:"default_information_originate"`
 	DefaultMetric                         types.Int64               `tfsdk:"default_metric"`
@@ -65,6 +89,10 @@ type RouterBGPNeighborGroups struct {
 }
 
 func (data RouterBGP) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
+}
+
+func (data RouterBGPData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
 }
 
@@ -539,7 +567,7 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
 	} else {
@@ -834,4 +862,74 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.DefaultInformationOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
+	}
+	if !data.DefaultMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-metric", data.getPath()))
+	}
+	if !data.NsrDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr/disable", data.getPath()))
+	}
+	if !data.BgpRedistributeInternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/redistribute-internal", data.getPath()))
+	}
+	if !data.SegmentRoutingSrv6Locator.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locator", data.getPath()))
+	}
+	if !data.TimersBgpKeepaliveInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
+	}
+	if !data.TimersBgpHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
+	}
+	if !data.BgpRouterId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/router-id", data.getPath()))
+	}
+	if !data.BgpGracefulRestartGracefulReset.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/graceful-restart/graceful-reset", data.getPath()))
+	}
+	if !data.IbgpPolicyOutEnforceModifications.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ibgp/policy/out/enforce-modifications", data.getPath()))
+	}
+	if !data.BgpLogNeighborChangesDetail.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/log/neighbor/changes/detail", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
+	}
+	if !data.NexthopValidationColorExtcommSrPolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/validation/color-extcomm/sr-policy", data.getPath()))
+	}
+	if !data.NexthopValidationColorExtcommDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/validation/color-extcomm/disable", data.getPath()))
+	}
+	for i := range data.Neighbors {
+		keys := [...]string{"neighbor-address"}
+		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbors/neighbor%v", data.getPath(), keyString))
+	}
+	for i := range data.NeighborGroups {
+		keys := [...]string{"neighbor-group-name"}
+		keyValues := [...]string{data.NeighborGroups[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/neighbor-groups/neighbor-group%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

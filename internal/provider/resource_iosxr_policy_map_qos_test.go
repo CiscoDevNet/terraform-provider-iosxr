@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrPolicyMapQoS(t *testing.T) {
@@ -53,10 +53,10 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 			type = "qos"
 			set_mpls_experimental_topmost = 0
 			set_dscp = "0"
-				queue_limits = [{
-					value = "100"
-					unit = "us"
-				}]
+			queue_limits = [{
+				value = "100"
+				unit = "us"
+			}]
 		}]
 	}
 	`

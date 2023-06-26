@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	pf_path "github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/openconfig/gnmi/proto/gnmi"
 	"github.com/openconfig/gnmic/api"
@@ -109,6 +110,11 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 func (c *Client) Set(ctx context.Context, device string, operations ...SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if _, ok := c.Devices[device]; !ok {
+		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
+		return nil, diags
+	}
+
 	target := c.Devices[device].Target
 
 	var ops []api.GNMIOption
@@ -154,6 +160,11 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 
 func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if _, ok := c.Devices[device]; !ok {
+		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
+		return nil, diags
+	}
 
 	target := c.Devices[device].Target
 

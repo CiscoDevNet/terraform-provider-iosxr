@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
@@ -65,10 +65,18 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 
 const testAccIosxrRouterBGPAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-route-policy-cfg:routing-policy/route-policies/route-policy[route-policy-name=%s]"
-  attributes = {
-      "route-policy-name" = "ROUTE_POLICY_1"
-  }
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
 }
 
 `
@@ -78,7 +86,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_minimum() string {
 	resource "iosxr_router_bgp_address_family" "test" {
 		as_number = "65001"
 		af_name = "ipv4-unicast"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`
 }
@@ -131,7 +139,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 			match_nssa_external = false
 			metric = 100
 		}]
-  		depends_on = [iosxr_gnmi.PreReq0, ]
+  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`
 }

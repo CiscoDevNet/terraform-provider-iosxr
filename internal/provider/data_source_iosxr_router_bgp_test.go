@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
@@ -62,6 +62,7 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 const testAccDataSourceIosxrRouterBGPConfig = `
 
 resource "iosxr_router_bgp" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	default_information_originate = true
 	default_metric = 125

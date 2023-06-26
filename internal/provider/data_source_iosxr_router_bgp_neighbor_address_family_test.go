@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
@@ -29,18 +29,29 @@ func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 
 const testAccDataSourceIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
-		"af-name" = "vpnv4-unicast"
+		"as-number" = "65001"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	delete = false
+	attributes = {
+		"af-name" = "vpnv4-unicast"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]"
+	delete = false
 	attributes = {
 		"neighbor-address" = "10.1.1.2"
 		"remote-as" = "65002"
 	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 `
@@ -48,6 +59,7 @@ resource "iosxr_gnmi" "PreReq1" {
 const testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_neighbor_address_family" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	neighbor_address = "10.1.1.2"
 	af_name = "vpnv4-unicast"
@@ -56,7 +68,7 @@ resource "iosxr_router_bgp_neighbor_address_family" "test" {
 	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
 	next_hop_self_inheritance_disable = true
 	encapsulation_type_srv6 = true
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 }
 
 data "iosxr_router_bgp_neighbor_address_family" "test" {

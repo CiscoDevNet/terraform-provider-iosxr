@@ -91,14 +91,6 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		)
 		return diags
 	}
-	err = t.CreateGNMIClient(ctx)
-	if err != nil {
-		diags.AddError(
-			"Unable to create gNMI client",
-			"Unable to create gNMI client:\n\n"+err.Error(),
-		)
-		return diags
-	}
 
 	c.Devices[device] = &Device{}
 	c.Devices[device].Target = t
@@ -138,9 +130,18 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			diags.AddError(
+				"Unable to create gNMI client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return nil, diags
+		}
 		c.Devices[device].SetMutex.Lock()
 		setResp, err = target.Set(ctx, setReq)
 		c.Devices[device].SetMutex.Unlock()
+		target.Close()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))
@@ -178,7 +179,16 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 
 	var getResp *gnmi.GetResponse
 	for attempts := 0; ; attempts++ {
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			diags.AddError(
+				"Unable to create gNMI client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return nil, diags
+		}
 		getResp, err = target.Get(ctx, getReq)
+		target.Close()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Get request failed, got error: %s", err))

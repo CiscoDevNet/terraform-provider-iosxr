@@ -93,13 +93,13 @@ test_prerequisites:
       - name: index
         value: 1
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
-    dependencies: [0]
     attributes:
       - name: as-number
         value: 65001
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
-    no_delete: true
-    dependencies: [1]
-    attributes:
-      - name: af-name
-        value: vpnv4-unicast
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv4-unicast

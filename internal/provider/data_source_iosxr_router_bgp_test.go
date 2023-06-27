@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPConfig,
+				Config: testAccDataSourceIosxrRouterBGPPrerequisitesConfig + testAccDataSourceIosxrRouterBGPConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "default_information_originate", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "default_metric", "125"),
@@ -58,6 +58,16 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterBGPPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+}
+
+`
 
 const testAccDataSourceIosxrRouterBGPConfig = `
 
@@ -105,6 +115,7 @@ resource "iosxr_router_bgp" "test" {
 		update_source = "Loopback0"
 		bfd_minimum_interval = 3
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_bgp" "test" {

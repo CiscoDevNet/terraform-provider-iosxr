@@ -8,6 +8,12 @@
 - Add `iosxr_router_static_ipv4_multicast` resource and data source
 - Add `iosxr_router_static_ipv6_unicast` resource and data source
 - Add `iosxr_router_static_ipv6_multicast` resource and data source
+- Add `iosxr_as_path_set` resource and data source
+- Add `iosxr_esi_set` resource and data source
+- Add `iosxr_ipv6` resource and data source
+- Add `iosxr_router_vrrp_interface` resource and data source
+- Add `iosxr_router_vrrp_interface_address_family_ipv4` resource and data source
+- Add `iosxr_router_vrrp_interface_address_family_ipv6` resource and data source
 
 ## 0.1.11
 

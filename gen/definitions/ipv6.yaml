@@ -1,0 +1,27 @@
+---
+name: IPv6
+path: Cisco-IOS-XR-um-ipv6-cfg:/ipv6
+doc_category: System
+attributes:
+  - yang_name: hop-limit
+    example: 123
+  - yang_name: icmp/error-interval/interval-time
+    example: 2111
+  - yang_name: icmp/error-interval/bucket-size
+    example: 123
+  - yang_name: source-route
+    example: true
+  - yang_name: assembler/timeout
+    example: 50
+  - yang_name: assembler/max-packets
+    example: 40
+  - yang_name: assembler/reassembler-drop/enable
+    example: true
+  - yang_name: assembler/frag-hdr-incomplete/enable
+    example: true
+  - yang_name: assembler/overlap-frag-drop/enable
+    example: true
+  - yang_name: path-mtu/enable
+    example: true
+  - yang_name: path-mtu/timeout
+    example: 10

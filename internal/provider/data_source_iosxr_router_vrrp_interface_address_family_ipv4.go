@@ -85,11 +85,11 @@ func (d *RouterVRRPInterfaceAddressFamilyIPv4DataSource) Schema(ctx context.Cont
 					},
 				},
 			},
-			"timer_advertisement_time_in_seconds": schema.Int64Attribute{
+			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Advertisement time in seconds",
 				Computed:            true,
 			},
-			"timer_advertisement_time_in_milliseconds": schema.Int64Attribute{
+			"timer_advertisement_milliseconds": schema.Int64Attribute{
 				MarkdownDescription: "Configure in milliseconds",
 				Computed:            true,
 			},

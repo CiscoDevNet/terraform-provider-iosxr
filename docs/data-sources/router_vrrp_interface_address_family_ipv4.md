@@ -45,8 +45,8 @@ data "iosxr_router_vrrp_interface_address_family_ipv4" "example" {
 - `priority` (Number) Set priority level
 - `secondary_addresses` (Attributes List) VRRP IPv4 address (see [below for nested schema](#nestedatt--secondary_addresses))
 - `text_authentication` (String) Set plain text authentication string
-- `timer_advertisement_time_in_milliseconds` (Number) Configure in milliseconds
-- `timer_advertisement_time_in_seconds` (Number) Advertisement time in seconds
+- `timer_advertisement_milliseconds` (Number) Configure in milliseconds
+- `timer_advertisement_seconds` (Number) Advertisement time in seconds
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object Tracking (see [below for nested schema](#nestedatt--track_objects))

@@ -50,6 +50,13 @@ func (r *LACPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"delete_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("all", "attributes"),
+				},
+			},
 			"mac": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The system ID to use in LACP negotiations.").String,
 				Optional:            true,
@@ -205,6 +212,11 @@ func (r *LACPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 	var ops []client.SetOperation
 	deleteMode := "all"
+	if state.DeleteMode.ValueString() == "all" {
+		deleteMode = "all"
+	} else if state.DeleteMode.ValueString() == "attributes" {
+		deleteMode = "attributes"
+	}
 
 	if deleteMode == "all" {
 		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})

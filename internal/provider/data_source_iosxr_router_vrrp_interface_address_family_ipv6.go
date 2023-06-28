@@ -53,11 +53,11 @@ func (d *RouterVRRPInterfaceAddressFamilyIPv6DataSource) Schema(ctx context.Cont
 				MarkdownDescription: "VRRP configuration",
 				Required:            true,
 			},
-			"global_address": schema.StringAttribute{
+			"global_addresses": schema.StringAttribute{
 				MarkdownDescription: "Set Global VRRP IPv6 address",
 				Computed:            true,
 			},
-			"address_linklocal_linklocal_address": schema.StringAttribute{
+			"address_linklocal": schema.StringAttribute{
 				MarkdownDescription: "VRRP IPv6 linklocal address",
 				Computed:            true,
 			},
@@ -73,11 +73,11 @@ func (d *RouterVRRPInterfaceAddressFamilyIPv6DataSource) Schema(ctx context.Cont
 				MarkdownDescription: "Configure VRRP Session name",
 				Computed:            true,
 			},
-			"timer_advertisement_time_in_seconds": schema.Int64Attribute{
+			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Advertisement time in seconds",
 				Computed:            true,
 			},
-			"timer_advertisement_time_in_milliseconds": schema.Int64Attribute{
+			"timer_advertisement_milliseconds": schema.Int64Attribute{
 				MarkdownDescription: "Configure in milliseconds",
 				Computed:            true,
 			},

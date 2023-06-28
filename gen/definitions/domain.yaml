@@ -1,7 +1,6 @@
 ---
 name: Domain
 path: Cisco-IOS-XR-um-domain-cfg:/domain
-no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: list/domain
@@ -9,9 +8,10 @@ attributes:
     type: List
     attributes:
       - yang_name: domain-name
-        id : true
+        id: true
         example: DOMAIN1
       - yang_name: order
+        id: true
         example: 0
   - yang_name: lookup/disable
     example: true
@@ -24,7 +24,7 @@ attributes:
     type: List
     attributes:
       - yang_name: host-name
-        id : true
+        id: true
         example: HOST_NAME
       - yang_name: ip-address
         example: 10.0.0.0
@@ -33,16 +33,17 @@ attributes:
     type: List
     attributes:
       - yang_name: address
-        id : true
+        id: true
         example: 10.0.0.1
       - yang_name: order
+        id: true
         example: 345
   - yang_name: ipv6/host/host
     tf_name: ipv6_hosts
     type: List
     attributes:
       - yang_name: host-name
-        id : true
+        id: true
         example: HOST_NAME_IPV6
       - yang_name: ipv6-address
         example: 10::10
@@ -50,5 +51,3 @@ attributes:
     example: DOMAIN1_ACC
   - yang_name: default-flows/disable
     example: true
-  
-      

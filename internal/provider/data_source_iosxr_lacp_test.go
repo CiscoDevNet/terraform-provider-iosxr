@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrLACP(t *testing.T) {
 const testAccDataSourceIosxrLACPConfig = `
 
 resource "iosxr_lacp" "test" {
+	delete_mode = "attributes"
 	mac = "00:11:00:11:00:11"
 	priority = 1
 }

@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrASPathSet(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrASPathSetConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_as_path_set.test", "rplas_path_set", "as-path-set TEST1\n  length ge 10\nend-set\n"),
+					resource.TestCheckResourceAttr("data.iosxr_as_path_set.test", "rpl", "as-path-set TEST1\n  length ge 10\nend-set\n"),
 				),
 			},
 		},
@@ -26,9 +26,8 @@ func TestAccDataSourceIosxrASPathSet(t *testing.T) {
 const testAccDataSourceIosxrASPathSetConfig = `
 
 resource "iosxr_as_path_set" "test" {
-	delete_mode = "attributes"
 	set_name = "TEST1"
-	rplas_path_set = "as-path-set TEST1\n  length ge 10\nend-set\n"
+	rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"
 }
 
 data "iosxr_as_path_set" "test" {

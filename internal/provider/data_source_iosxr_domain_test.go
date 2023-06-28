@@ -38,6 +38,7 @@ func TestAccDataSourceIosxrDomain(t *testing.T) {
 const testAccDataSourceIosxrDomainConfig = `
 
 resource "iosxr_domain" "test" {
+	delete_mode = "attributes"
 	domains = [{
 		domain_name = "DOMAIN1"
 		order = 0

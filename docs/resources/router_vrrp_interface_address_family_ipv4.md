@@ -14,18 +14,18 @@ This resource can manage the Router VRRP Interface Address Family IPv4 configura
 
 ```terraform
 resource "iosxr_router_vrrp_interface_address_family_ipv4" "example" {
-  interface_name                      = "GigabitEthernet0/0/0/1"
-  vrrp_id                             = 123
-  version                             = 2
-  address                             = "1.1.1.1"
-  priority                            = 250
-  name                                = "TEST"
-  text_authentication                 = "7"
-  timer_advertisement_time_in_seconds = 123
-  timer_force                         = false
-  preempt_disable                     = false
-  preempt_delay                       = 255
-  accept_mode_disable                 = false
+  interface_name              = "GigabitEthernet0/0/0/1"
+  vrrp_id                     = 123
+  version                     = 2
+  address                     = "1.1.1.1"
+  priority                    = 250
+  name                        = "TEST"
+  text_authentication         = "7"
+  timer_advertisement_seconds = 123
+  timer_force                 = false
+  preempt_disable             = false
+  preempt_delay               = 255
+  accept_mode_disable         = false
   track_interfaces = [
     {
       interface_name     = "GigabitEthernet0/0/0/1"
@@ -69,9 +69,9 @@ resource "iosxr_router_vrrp_interface_address_family_ipv4" "example" {
   - Range: `1`-`254`
 - `secondary_addresses` (Attributes List) VRRP IPv4 address (see [below for nested schema](#nestedatt--secondary_addresses))
 - `text_authentication` (String) Set plain text authentication string
-- `timer_advertisement_time_in_milliseconds` (Number) Configure in milliseconds
+- `timer_advertisement_milliseconds` (Number) Configure in milliseconds
   - Range: `100`-`40950`
-- `timer_advertisement_time_in_seconds` (Number) Advertisement time in seconds
+- `timer_advertisement_seconds` (Number) Advertisement time in seconds
   - Range: `1`-`255`
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))

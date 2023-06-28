@@ -59,7 +59,7 @@ func (r *CommunitySetResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"rpl_community_set": schema.StringAttribute{
+			"rpl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Community Set").String,
 				Required:            true,
 			},

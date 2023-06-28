@@ -135,14 +135,14 @@ func (r *RouterVRRPInterfaceAddressFamilyIPv4Resource) Schema(ctx context.Contex
 					},
 				},
 			},
-			"timer_advertisement_time_in_seconds": schema.Int64Attribute{
+			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertisement time in seconds").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"timer_advertisement_time_in_milliseconds": schema.Int64Attribute{
+			"timer_advertisement_milliseconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure in milliseconds").AddIntegerRangeDescription(100, 40950).String,
 				Optional:            true,
 				Validators: []validator.Int64{

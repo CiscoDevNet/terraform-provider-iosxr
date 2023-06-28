@@ -1,14 +1,14 @@
 resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
-  interface_name                      = "GigabitEthernet0/0/0/1"
-  vrrp_id                             = 123
-  address_linklocal_autoconfig        = true
-  priority                            = 250
-  name                                = "TEST"
-  timer_advertisement_time_in_seconds = 10
-  timer_force                         = true
-  preempt_disable                     = false
-  preempt_delay                       = 255
-  accept_mode_disable                 = true
+  interface_name               = "GigabitEthernet0/0/0/1"
+  vrrp_id                      = 123
+  address_linklocal_autoconfig = true
+  priority                     = 250
+  name                         = "TEST"
+  timer_advertisement_seconds  = 10
+  timer_force                  = true
+  preempt_disable              = false
+  preempt_delay                = 255
+  accept_mode_disable          = true
   track_interfaces = [
     {
       interface_name     = "GigabitEthernet0/0/0/5"

@@ -32,4 +32,4 @@ data "iosxr_community_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl_community_set` (String) Community Set
+- `rpl` (String) Community Set

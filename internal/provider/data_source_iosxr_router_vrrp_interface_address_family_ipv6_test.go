@@ -19,7 +19,7 @@ func TestAccDataSourceIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "address_linklocal_autoconfig", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "priority", "250"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_advertisement_time_in_seconds", "10"),
+					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_advertisement_seconds", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_force", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "preempt_disable", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "preempt_delay", "255"),
@@ -44,7 +44,7 @@ resource "iosxr_router_vrrp_interface_address_family_ipv6" "test" {
 	address_linklocal_autoconfig = true
 	priority = 250
 	name = "TEST"
-	timer_advertisement_time_in_seconds = 10
+	timer_advertisement_seconds = 10
 	timer_force = true
 	preempt_disable = false
 	preempt_delay = 255

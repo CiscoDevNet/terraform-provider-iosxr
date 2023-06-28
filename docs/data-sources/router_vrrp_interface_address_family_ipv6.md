@@ -34,17 +34,17 @@ data "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
 ### Read-Only
 
 - `accept_mode_disable` (Boolean) Disable accept mode
+- `address_linklocal` (String) VRRP IPv6 linklocal address
 - `address_linklocal_autoconfig` (Boolean) Autoconfigure the VRRP IPv6 linklocal address
-- `address_linklocal_linklocal_address` (String) VRRP IPv6 linklocal address
 - `bfd_fast_detect_peer_ipv6` (String) VRRP BFD remote interface IP address
-- `global_address` (String) Set Global VRRP IPv6 address
+- `global_addresses` (String) Set Global VRRP IPv6 address
 - `id` (String) The path of the retrieved object.
 - `name` (String) Configure VRRP Session name
 - `preempt_delay` (Number) Wait before preempting
 - `preempt_disable` (Boolean) Disable preemption
 - `priority` (Number) Set priority level
-- `timer_advertisement_time_in_milliseconds` (Number) Configure in milliseconds
-- `timer_advertisement_time_in_seconds` (Number) Advertisement time in seconds
+- `timer_advertisement_milliseconds` (Number) Configure in milliseconds
+- `timer_advertisement_seconds` (Number) Advertisement time in seconds
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object Tracking (see [below for nested schema](#nestedatt--track_objects))

@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrESISet(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrESISetConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_esi_set.test", "esi_set_as_text", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"),
+					resource.TestCheckResourceAttr("data.iosxr_esi_set.test", "rpl", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"),
 				),
 			},
 		},
@@ -26,9 +26,8 @@ func TestAccDataSourceIosxrESISet(t *testing.T) {
 const testAccDataSourceIosxrESISetConfig = `
 
 resource "iosxr_esi_set" "test" {
-	delete_mode = "attributes"
 	set_name = "POLICYSET"
-	esi_set_as_text = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
+	rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
 }
 
 data "iosxr_esi_set" "test" {

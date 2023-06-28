@@ -17,7 +17,7 @@ func TestAccIosxrESISet(t *testing.T) {
 				Config: testAccIosxrESISetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_esi_set.test", "set_name", "POLICYSET"),
-					resource.TestCheckResourceAttr("iosxr_esi_set.test", "esi_set_as_text", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"),
+					resource.TestCheckResourceAttr("iosxr_esi_set.test", "rpl", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"),
 				),
 			},
 			{
@@ -33,7 +33,7 @@ func testAccIosxrESISetConfig_minimum() string {
 	return `
 	resource "iosxr_esi_set" "test" {
 		set_name = "POLICYSET"
-		esi_set_as_text = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
+		rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
 	}
 	`
 }
@@ -42,7 +42,7 @@ func testAccIosxrESISetConfig_all() string {
 	return `
 	resource "iosxr_esi_set" "test" {
 		set_name = "POLICYSET"
-		esi_set_as_text = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
+		rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
 	}
 	`
 }

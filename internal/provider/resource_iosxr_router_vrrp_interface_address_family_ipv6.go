@@ -78,7 +78,7 @@ func (r *RouterVRRPInterfaceAddressFamilyIPv6Resource) Schema(ctx context.Contex
 					int64planmodifier.RequiresReplace(),
 				},
 			},
-			"global_address": schema.StringAttribute{
+			"global_addresses": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set Global VRRP IPv6 address").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -87,7 +87,7 @@ func (r *RouterVRRPInterfaceAddressFamilyIPv6Resource) Schema(ctx context.Contex
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 				},
 			},
-			"address_linklocal_linklocal_address": schema.StringAttribute{
+			"address_linklocal": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("VRRP IPv6 linklocal address").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -115,14 +115,14 @@ func (r *RouterVRRPInterfaceAddressFamilyIPv6Resource) Schema(ctx context.Contex
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
 				},
 			},
-			"timer_advertisement_time_in_seconds": schema.Int64Attribute{
+			"timer_advertisement_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertisement time in seconds").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"timer_advertisement_time_in_milliseconds": schema.Int64Attribute{
+			"timer_advertisement_milliseconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure in milliseconds").AddIntegerRangeDescription(100, 40950).String,
 				Optional:            true,
 				Validators: []validator.Int64{

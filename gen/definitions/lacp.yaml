@@ -1,7 +1,6 @@
 ---
-name : LACP
-path : Cisco-IOS-XR-um-lacp-cfg:/lacp/system
-no_delete_attributes: true
+name: LACP
+path: Cisco-IOS-XR-um-lacp-cfg:/lacp/system
 doc_category: System
 attributes:
   - yang_name: mac

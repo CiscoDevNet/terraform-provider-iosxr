@@ -12,18 +12,17 @@ import (
 )
 
 type ESISet struct {
-	Device       types.String `tfsdk:"device"`
-	Id           types.String `tfsdk:"id"`
-	DeleteMode   types.String `tfsdk:"delete_mode"`
-	SetName      types.String `tfsdk:"set_name"`
-	EsiSetAsText types.String `tfsdk:"esi_set_as_text"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type ESISetData struct {
-	Device       types.String `tfsdk:"device"`
-	Id           types.String `tfsdk:"id"`
-	SetName      types.String `tfsdk:"set_name"`
-	EsiSetAsText types.String `tfsdk:"esi_set_as_text"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 func (data ESISet) getPath() string {
@@ -39,23 +38,23 @@ func (data ESISet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.EsiSetAsText.IsNull() && !data.EsiSetAsText.IsUnknown() {
-		body, _ = sjson.Set(body, "esi-set-as-text", data.EsiSetAsText.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body, _ = sjson.Set(body, "esi-set-as-text", data.Rpl.ValueString())
 	}
 	return body
 }
 
 func (data *ESISet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "esi-set-as-text"); value.Exists() && !data.EsiSetAsText.IsNull() {
-		data.EsiSetAsText = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "esi-set-as-text"); value.Exists() && !data.Rpl.IsNull() {
+		data.Rpl = types.StringValue(value.String())
 	} else {
-		data.EsiSetAsText = types.StringNull()
+		data.Rpl = types.StringNull()
 	}
 }
 
 func (data *ESISetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "esi-set-as-text"); value.Exists() {
-		data.EsiSetAsText = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -71,7 +70,7 @@ func (data *ESISet) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *ESISet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.EsiSetAsText.IsNull() {
+	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/esi-set-as-text", data.getPath()))
 	}
 	return deletePaths

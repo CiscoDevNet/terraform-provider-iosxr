@@ -17,7 +17,6 @@ attributes:
     example: TEST
   - yang_name: text-authentication
     example: 7
-
   - yang_name: secondary-addresses/secondary-address
     tf_name: secondary_addresses
     type: List
@@ -26,10 +25,11 @@ attributes:
       - yang_name: address
         id: true
         example: 2.2.2.2
-
   - yang_name: timer/advertisement-time-in-seconds
+    tf_name: timer_advertisement_seconds
     example: 123
   - yang_name: timer/advertisement-time-in-milliseconds
+    tf_name: timer_advertisement_milliseconds
     example: 100
     exclude_test: true
   - yang_name: timer/force

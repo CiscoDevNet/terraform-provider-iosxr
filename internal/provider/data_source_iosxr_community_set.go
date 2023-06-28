@@ -49,7 +49,7 @@ func (d *CommunitySetDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Set name",
 				Required:            true,
 			},
-			"rpl_community_set": schema.StringAttribute{
+			"rpl": schema.StringAttribute{
 				MarkdownDescription: "Community Set",
 				Computed:            true,
 			},

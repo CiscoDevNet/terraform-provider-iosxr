@@ -52,6 +52,8 @@ resource "iosxr_domain" "example" {
 ### Optional
 
 - `default_flows_disable` (Boolean) disables default flows programming
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `domains` (Attributes List) A domain name (see [below for nested schema](#nestedatt--domains))
 - `ipv4_hosts` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv4_hosts))
@@ -72,9 +74,6 @@ resource "iosxr_domain" "example" {
 Required:
 
 - `domain_name` (String) A domain name
-
-Optional:
-
 - `order` (Number) This is used to sort the servers in the order of precedence
   - Range: `0`-`4294967295`
 
@@ -109,9 +108,6 @@ Optional:
 Required:
 
 - `address` (String) Specify address of name server to use
-
-Optional:
-
 - `order` (Number) This is used to sort the servers in the order of precedence
   - Range: `0`-`4294967295`
 

@@ -12,18 +12,17 @@ import (
 )
 
 type ASPathSet struct {
-	Device       types.String `tfsdk:"device"`
-	Id           types.String `tfsdk:"id"`
-	DeleteMode   types.String `tfsdk:"delete_mode"`
-	SetName      types.String `tfsdk:"set_name"`
-	RplasPathSet types.String `tfsdk:"rplas_path_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type ASPathSetData struct {
-	Device       types.String `tfsdk:"device"`
-	Id           types.String `tfsdk:"id"`
-	SetName      types.String `tfsdk:"set_name"`
-	RplasPathSet types.String `tfsdk:"rplas_path_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 func (data ASPathSet) getPath() string {
@@ -39,23 +38,23 @@ func (data ASPathSet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.RplasPathSet.IsNull() && !data.RplasPathSet.IsUnknown() {
-		body, _ = sjson.Set(body, "rplas-path-set", data.RplasPathSet.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body, _ = sjson.Set(body, "rplas-path-set", data.Rpl.ValueString())
 	}
 	return body
 }
 
 func (data *ASPathSet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rplas-path-set"); value.Exists() && !data.RplasPathSet.IsNull() {
-		data.RplasPathSet = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "rplas-path-set"); value.Exists() && !data.Rpl.IsNull() {
+		data.Rpl = types.StringValue(value.String())
 	} else {
-		data.RplasPathSet = types.StringNull()
+		data.Rpl = types.StringNull()
 	}
 }
 
 func (data *ASPathSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rplas-path-set"); value.Exists() {
-		data.RplasPathSet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -71,7 +70,7 @@ func (data *ASPathSet) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *ASPathSet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.RplasPathSet.IsNull() {
+	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rplas-path-set", data.getPath()))
 	}
 	return deletePaths

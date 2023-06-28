@@ -49,7 +49,7 @@ func (d *ESISetDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Set name",
 				Required:            true,
 			},
-			"esi_set_as_text": schema.StringAttribute{
+			"rpl": schema.StringAttribute{
 				MarkdownDescription: "Esi Set",
 				Computed:            true,
 			},

@@ -14,48 +14,48 @@ import (
 )
 
 type RouterVRRPInterfaceAddressFamilyIPv4 struct {
-	Device                               types.String                                             `tfsdk:"device"`
-	Id                                   types.String                                             `tfsdk:"id"`
-	DeleteMode                           types.String                                             `tfsdk:"delete_mode"`
-	InterfaceName                        types.String                                             `tfsdk:"interface_name"`
-	VrrpId                               types.Int64                                              `tfsdk:"vrrp_id"`
-	Version                              types.Int64                                              `tfsdk:"version"`
-	Address                              types.String                                             `tfsdk:"address"`
-	Priority                             types.Int64                                              `tfsdk:"priority"`
-	Name                                 types.String                                             `tfsdk:"name"`
-	TextAuthentication                   types.String                                             `tfsdk:"text_authentication"`
-	SecondaryAddresses                   []RouterVRRPInterfaceAddressFamilyIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
-	TimerAdvertisementTimeInSeconds      types.Int64                                              `tfsdk:"timer_advertisement_time_in_seconds"`
-	TimerAdvertisementTimeInMilliseconds types.Int64                                              `tfsdk:"timer_advertisement_time_in_milliseconds"`
-	TimerForce                           types.Bool                                               `tfsdk:"timer_force"`
-	PreemptDisable                       types.Bool                                               `tfsdk:"preempt_disable"`
-	PreemptDelay                         types.Int64                                              `tfsdk:"preempt_delay"`
-	AcceptModeDisable                    types.Bool                                               `tfsdk:"accept_mode_disable"`
-	TrackInterfaces                      []RouterVRRPInterfaceAddressFamilyIPv4TrackInterfaces    `tfsdk:"track_interfaces"`
-	TrackObjects                         []RouterVRRPInterfaceAddressFamilyIPv4TrackObjects       `tfsdk:"track_objects"`
-	BfdFastDetectPeerIpv4                types.String                                             `tfsdk:"bfd_fast_detect_peer_ipv4"`
+	Device                         types.String                                             `tfsdk:"device"`
+	Id                             types.String                                             `tfsdk:"id"`
+	DeleteMode                     types.String                                             `tfsdk:"delete_mode"`
+	InterfaceName                  types.String                                             `tfsdk:"interface_name"`
+	VrrpId                         types.Int64                                              `tfsdk:"vrrp_id"`
+	Version                        types.Int64                                              `tfsdk:"version"`
+	Address                        types.String                                             `tfsdk:"address"`
+	Priority                       types.Int64                                              `tfsdk:"priority"`
+	Name                           types.String                                             `tfsdk:"name"`
+	TextAuthentication             types.String                                             `tfsdk:"text_authentication"`
+	SecondaryAddresses             []RouterVRRPInterfaceAddressFamilyIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
+	TimerAdvertisementSeconds      types.Int64                                              `tfsdk:"timer_advertisement_seconds"`
+	TimerAdvertisementMilliseconds types.Int64                                              `tfsdk:"timer_advertisement_milliseconds"`
+	TimerForce                     types.Bool                                               `tfsdk:"timer_force"`
+	PreemptDisable                 types.Bool                                               `tfsdk:"preempt_disable"`
+	PreemptDelay                   types.Int64                                              `tfsdk:"preempt_delay"`
+	AcceptModeDisable              types.Bool                                               `tfsdk:"accept_mode_disable"`
+	TrackInterfaces                []RouterVRRPInterfaceAddressFamilyIPv4TrackInterfaces    `tfsdk:"track_interfaces"`
+	TrackObjects                   []RouterVRRPInterfaceAddressFamilyIPv4TrackObjects       `tfsdk:"track_objects"`
+	BfdFastDetectPeerIpv4          types.String                                             `tfsdk:"bfd_fast_detect_peer_ipv4"`
 }
 
 type RouterVRRPInterfaceAddressFamilyIPv4Data struct {
-	Device                               types.String                                             `tfsdk:"device"`
-	Id                                   types.String                                             `tfsdk:"id"`
-	InterfaceName                        types.String                                             `tfsdk:"interface_name"`
-	VrrpId                               types.Int64                                              `tfsdk:"vrrp_id"`
-	Version                              types.Int64                                              `tfsdk:"version"`
-	Address                              types.String                                             `tfsdk:"address"`
-	Priority                             types.Int64                                              `tfsdk:"priority"`
-	Name                                 types.String                                             `tfsdk:"name"`
-	TextAuthentication                   types.String                                             `tfsdk:"text_authentication"`
-	SecondaryAddresses                   []RouterVRRPInterfaceAddressFamilyIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
-	TimerAdvertisementTimeInSeconds      types.Int64                                              `tfsdk:"timer_advertisement_time_in_seconds"`
-	TimerAdvertisementTimeInMilliseconds types.Int64                                              `tfsdk:"timer_advertisement_time_in_milliseconds"`
-	TimerForce                           types.Bool                                               `tfsdk:"timer_force"`
-	PreemptDisable                       types.Bool                                               `tfsdk:"preempt_disable"`
-	PreemptDelay                         types.Int64                                              `tfsdk:"preempt_delay"`
-	AcceptModeDisable                    types.Bool                                               `tfsdk:"accept_mode_disable"`
-	TrackInterfaces                      []RouterVRRPInterfaceAddressFamilyIPv4TrackInterfaces    `tfsdk:"track_interfaces"`
-	TrackObjects                         []RouterVRRPInterfaceAddressFamilyIPv4TrackObjects       `tfsdk:"track_objects"`
-	BfdFastDetectPeerIpv4                types.String                                             `tfsdk:"bfd_fast_detect_peer_ipv4"`
+	Device                         types.String                                             `tfsdk:"device"`
+	Id                             types.String                                             `tfsdk:"id"`
+	InterfaceName                  types.String                                             `tfsdk:"interface_name"`
+	VrrpId                         types.Int64                                              `tfsdk:"vrrp_id"`
+	Version                        types.Int64                                              `tfsdk:"version"`
+	Address                        types.String                                             `tfsdk:"address"`
+	Priority                       types.Int64                                              `tfsdk:"priority"`
+	Name                           types.String                                             `tfsdk:"name"`
+	TextAuthentication             types.String                                             `tfsdk:"text_authentication"`
+	SecondaryAddresses             []RouterVRRPInterfaceAddressFamilyIPv4SecondaryAddresses `tfsdk:"secondary_addresses"`
+	TimerAdvertisementSeconds      types.Int64                                              `tfsdk:"timer_advertisement_seconds"`
+	TimerAdvertisementMilliseconds types.Int64                                              `tfsdk:"timer_advertisement_milliseconds"`
+	TimerForce                     types.Bool                                               `tfsdk:"timer_force"`
+	PreemptDisable                 types.Bool                                               `tfsdk:"preempt_disable"`
+	PreemptDelay                   types.Int64                                              `tfsdk:"preempt_delay"`
+	AcceptModeDisable              types.Bool                                               `tfsdk:"accept_mode_disable"`
+	TrackInterfaces                []RouterVRRPInterfaceAddressFamilyIPv4TrackInterfaces    `tfsdk:"track_interfaces"`
+	TrackObjects                   []RouterVRRPInterfaceAddressFamilyIPv4TrackObjects       `tfsdk:"track_objects"`
+	BfdFastDetectPeerIpv4          types.String                                             `tfsdk:"bfd_fast_detect_peer_ipv4"`
 }
 type RouterVRRPInterfaceAddressFamilyIPv4SecondaryAddresses struct {
 	Address types.String `tfsdk:"address"`
@@ -97,11 +97,11 @@ func (data RouterVRRPInterfaceAddressFamilyIPv4) toBody(ctx context.Context) str
 	if !data.TextAuthentication.IsNull() && !data.TextAuthentication.IsUnknown() {
 		body, _ = sjson.Set(body, "text-authentication", data.TextAuthentication.ValueString())
 	}
-	if !data.TimerAdvertisementTimeInSeconds.IsNull() && !data.TimerAdvertisementTimeInSeconds.IsUnknown() {
-		body, _ = sjson.Set(body, "timer.advertisement-time-in-seconds", strconv.FormatInt(data.TimerAdvertisementTimeInSeconds.ValueInt64(), 10))
+	if !data.TimerAdvertisementSeconds.IsNull() && !data.TimerAdvertisementSeconds.IsUnknown() {
+		body, _ = sjson.Set(body, "timer.advertisement-time-in-seconds", strconv.FormatInt(data.TimerAdvertisementSeconds.ValueInt64(), 10))
 	}
-	if !data.TimerAdvertisementTimeInMilliseconds.IsNull() && !data.TimerAdvertisementTimeInMilliseconds.IsUnknown() {
-		body, _ = sjson.Set(body, "timer.advertisement-time-in-milliseconds", strconv.FormatInt(data.TimerAdvertisementTimeInMilliseconds.ValueInt64(), 10))
+	if !data.TimerAdvertisementMilliseconds.IsNull() && !data.TimerAdvertisementMilliseconds.IsUnknown() {
+		body, _ = sjson.Set(body, "timer.advertisement-time-in-milliseconds", strconv.FormatInt(data.TimerAdvertisementMilliseconds.ValueInt64(), 10))
 	}
 	if !data.TimerForce.IsNull() && !data.TimerForce.IsUnknown() {
 		if data.TimerForce.ValueBool() {
@@ -207,15 +207,15 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4) updateFromBody(ctx context.Con
 			data.SecondaryAddresses[i].Address = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementTimeInSeconds.IsNull() {
-		data.TimerAdvertisementTimeInSeconds = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() && !data.TimerAdvertisementSeconds.IsNull() {
+		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	} else {
-		data.TimerAdvertisementTimeInSeconds = types.Int64Null()
+		data.TimerAdvertisementSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementTimeInMilliseconds.IsNull() {
-		data.TimerAdvertisementTimeInMilliseconds = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() && !data.TimerAdvertisementMilliseconds.IsNull() {
+		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	} else {
-		data.TimerAdvertisementTimeInMilliseconds = types.Int64Null()
+		data.TimerAdvertisementMilliseconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "timer.force"); !data.TimerForce.IsNull() {
 		if value.Exists() {
@@ -349,10 +349,10 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4Data) fromBody(ctx context.Conte
 		})
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() {
-		data.TimerAdvertisementTimeInSeconds = types.Int64Value(value.Int())
+		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() {
-		data.TimerAdvertisementTimeInMilliseconds = types.Int64Value(value.Int())
+		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "timer.force"); value.Exists() {
 		data.TimerForce = types.BoolValue(true)
@@ -562,10 +562,10 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletePaths(ctx context.Con
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", data.getPath(), keyString))
 	}
-	if !data.TimerAdvertisementTimeInSeconds.IsNull() {
+	if !data.TimerAdvertisementSeconds.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
 	}
-	if !data.TimerAdvertisementTimeInMilliseconds.IsNull() {
+	if !data.TimerAdvertisementMilliseconds.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", data.getPath()))
 	}
 	if !data.TimerForce.IsNull() {

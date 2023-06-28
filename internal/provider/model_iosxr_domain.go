@@ -17,6 +17,7 @@ import (
 type Domain struct {
 	Device                types.String        `tfsdk:"device"`
 	Id                    types.String        `tfsdk:"id"`
+	DeleteMode            types.String        `tfsdk:"delete_mode"`
 	Domains               []DomainDomains     `tfsdk:"domains"`
 	LookupDisable         types.Bool          `tfsdk:"lookup_disable"`
 	LookupSourceInterface types.String        `tfsdk:"lookup_source_interface"`
@@ -140,8 +141,8 @@ func (data Domain) toBody(ctx context.Context) string {
 
 func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "list.domain").ForEach(
@@ -227,8 +228,8 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 		}
 	}
 	for i := range data.NameServers {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "name-servers.name-server").ForEach(
@@ -395,11 +396,14 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.Domains {
-		keys := [...]string{"domain-name"}
-		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString()}
+		keys := [...]string{"domain-name", "order"}
+		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString(), strconv.FormatInt(state.Domains[i].Order.ValueInt64(), 10)}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.Domains[i].Order.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -410,6 +414,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		for j := range data.Domains {
 			found = true
 			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
+				found = false
+			}
+			if state.Domains[i].Order.ValueInt64() != data.Domains[j].Order.ValueInt64() {
 				found = false
 			}
 			if found {
@@ -455,11 +462,14 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		}
 	}
 	for i := range state.NameServers {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.NameServers[i].Address.ValueString()}
+		keys := [...]string{"address", "order"}
+		stateKeyValues := [...]string{state.NameServers[i].Address.ValueString(), strconv.FormatInt(state.NameServers[i].Order.ValueInt64(), 10)}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.NameServers[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.NameServers[i].Order.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -470,6 +480,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		for j := range data.NameServers {
 			found = true
 			if state.NameServers[i].Address.ValueString() != data.NameServers[j].Address.ValueString() {
+				found = false
+			}
+			if state.NameServers[i].Order.ValueInt64() != data.NameServers[j].Order.ValueInt64() {
 				found = false
 			}
 			if found {
@@ -520,8 +533,8 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -539,8 +552,8 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	for i := range data.NameServers {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -563,8 +576,8 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 func (data *Domain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Domains {
-		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
+		keys := [...]string{"domain-name", "order"}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString(), strconv.FormatInt(data.Domains[i].Order.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {
@@ -592,8 +605,8 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyString))
 	}
 	for i := range data.NameServers {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
+		keys := [...]string{"address", "order"}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString(), strconv.FormatInt(data.NameServers[i].Order.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {

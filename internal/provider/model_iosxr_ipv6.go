@@ -256,10 +256,10 @@ func (data *IPv6) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hop-limit", data.getPath()))
 	}
 	if !data.IcmpErrorIntervalIntervalTime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp/error-interval/interval-time", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp/error-interval", data.getPath()))
 	}
 	if !data.IcmpErrorIntervalBucketSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp/error-interval/bucket-size", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp/error-interval", data.getPath()))
 	}
 	if !data.SourceRoute.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source-route", data.getPath()))

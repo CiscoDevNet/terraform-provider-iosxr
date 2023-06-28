@@ -17,7 +17,7 @@ func TestAccIosxrASPathSet(t *testing.T) {
 				Config: testAccIosxrASPathSetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_as_path_set.test", "set_name", "TEST1"),
-					resource.TestCheckResourceAttr("iosxr_as_path_set.test", "rplas_path_set", "as-path-set TEST1\n  length ge 10\nend-set\n"),
+					resource.TestCheckResourceAttr("iosxr_as_path_set.test", "rpl", "as-path-set TEST1\n  length ge 10\nend-set\n"),
 				),
 			},
 			{
@@ -33,7 +33,7 @@ func testAccIosxrASPathSetConfig_minimum() string {
 	return `
 	resource "iosxr_as_path_set" "test" {
 		set_name = "TEST1"
-		rplas_path_set = "as-path-set TEST1\n  length ge 10\nend-set\n"
+		rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"
 	}
 	`
 }
@@ -42,7 +42,7 @@ func testAccIosxrASPathSetConfig_all() string {
 	return `
 	resource "iosxr_as_path_set" "test" {
 		set_name = "TEST1"
-		rplas_path_set = "as-path-set TEST1\n  length ge 10\nend-set\n"
+		rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"
 	}
 	`
 }

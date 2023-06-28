@@ -14,8 +14,8 @@ This resource can manage the ESI Set configuration.
 
 ```terraform
 resource "iosxr_esi_set" "example" {
-  set_name        = "POLICYSET"
-  esi_set_as_text = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
+  set_name = "POLICYSET"
+  rpl      = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
 }
 ```
 
@@ -24,13 +24,11 @@ resource "iosxr_esi_set" "example" {
 
 ### Required
 
-- `esi_set_as_text` (String) Esi Set
+- `rpl` (String) Esi Set
 - `set_name` (String) Set name
 
 ### Optional
 
-- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
-  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

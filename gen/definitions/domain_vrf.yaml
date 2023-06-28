@@ -1,7 +1,6 @@
 ---
-name : Domain VRF
+name: Domain VRF
 path: Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=%s]
-no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: vrf-name
@@ -11,9 +10,10 @@ attributes:
     type: List
     attributes:
       - yang_name: domain-name
-        id : true
+        id: true
         example: DOMAIN11
       - yang_name: order
+        id: true
         example: 12345
   - yang_name: lookup/disable
     example: true
@@ -26,7 +26,7 @@ attributes:
     type: List
     attributes:
       - yang_name: host-name
-        id : true
+        id: true
         example: HOST-AGC
       - yang_name: ip-address
         example: 10.0.0.0
@@ -35,16 +35,17 @@ attributes:
     type: List
     attributes:
       - yang_name: address
-        id : true
+        id: true
         example: 10.0.0.1
       - yang_name: order
+        id: true
         example: 0
   - yang_name: ipv6/host/host
     tf_name: ipv6_hosts
     type: List
     attributes:
       - yang_name: host-name
-        id : true
+        id: true
         example: HOST-ACC
       - yang_name: ipv6-address
         example: 10::10

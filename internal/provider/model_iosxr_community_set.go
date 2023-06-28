@@ -12,17 +12,17 @@ import (
 )
 
 type CommunitySet struct {
-	Device          types.String `tfsdk:"device"`
-	Id              types.String `tfsdk:"id"`
-	SetName         types.String `tfsdk:"set_name"`
-	RplCommunitySet types.String `tfsdk:"rpl_community_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type CommunitySetData struct {
-	Device          types.String `tfsdk:"device"`
-	Id              types.String `tfsdk:"id"`
-	SetName         types.String `tfsdk:"set_name"`
-	RplCommunitySet types.String `tfsdk:"rpl_community_set"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 func (data CommunitySet) getPath() string {
@@ -38,23 +38,23 @@ func (data CommunitySet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.RplCommunitySet.IsNull() && !data.RplCommunitySet.IsUnknown() {
-		body, _ = sjson.Set(body, "rpl-community-set", data.RplCommunitySet.ValueString())
+	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
+		body, _ = sjson.Set(body, "rpl-community-set", data.Rpl.ValueString())
 	}
 	return body
 }
 
 func (data *CommunitySet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() && !data.RplCommunitySet.IsNull() {
-		data.RplCommunitySet = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() && !data.Rpl.IsNull() {
+		data.Rpl = types.StringValue(value.String())
 	} else {
-		data.RplCommunitySet = types.StringNull()
+		data.Rpl = types.StringNull()
 	}
 }
 
 func (data *CommunitySetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() {
-		data.RplCommunitySet = types.StringValue(value.String())
+		data.Rpl = types.StringValue(value.String())
 	}
 }
 
@@ -70,7 +70,7 @@ func (data *CommunitySet) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *CommunitySet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.RplCommunitySet.IsNull() {
+	if !data.Rpl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-community-set", data.getPath()))
 	}
 	return deletePaths

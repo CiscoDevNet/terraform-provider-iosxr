@@ -13,10 +13,11 @@ import (
 )
 
 type LACP struct {
-	Device   types.String `tfsdk:"device"`
-	Id       types.String `tfsdk:"id"`
-	Mac      types.String `tfsdk:"mac"`
-	Priority types.Int64  `tfsdk:"priority"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	Mac        types.String `tfsdk:"mac"`
+	Priority   types.Int64  `tfsdk:"priority"`
 }
 
 type LACPData struct {

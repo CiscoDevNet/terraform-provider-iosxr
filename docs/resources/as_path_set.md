@@ -14,8 +14,8 @@ This resource can manage the AS Path Set configuration.
 
 ```terraform
 resource "iosxr_as_path_set" "example" {
-  set_name       = "TEST1"
-  rplas_path_set = "as-path-set TEST1\n  length ge 10\nend-set\n"
+  set_name = "TEST1"
+  rpl      = "as-path-set TEST1\n  length ge 10\nend-set\n"
 }
 ```
 
@@ -24,13 +24,11 @@ resource "iosxr_as_path_set" "example" {
 
 ### Required
 
-- `rplas_path_set` (String) ASPath Set
+- `rpl` (String) ASPath Set
 - `set_name` (String) Set name
 
 ### Optional
 
-- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
-  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

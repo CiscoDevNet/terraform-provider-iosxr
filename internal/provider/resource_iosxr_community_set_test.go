@@ -17,7 +17,7 @@ func TestAccIosxrCommunitySet(t *testing.T) {
 				Config: testAccIosxrCommunitySetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_community_set.test", "set_name", "TEST11"),
-					resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl_community_set", "community-set TEST11\nend-set\n"),
+					resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl", "community-set TEST11\nend-set\n"),
 				),
 			},
 			{
@@ -33,7 +33,7 @@ func testAccIosxrCommunitySetConfig_minimum() string {
 	return `
 	resource "iosxr_community_set" "test" {
 		set_name = "TEST11"
-		rpl_community_set = "community-set TEST11\nend-set\n"
+		rpl = "community-set TEST11\nend-set\n"
 	}
 	`
 }
@@ -42,7 +42,7 @@ func testAccIosxrCommunitySetConfig_all() string {
 	return `
 	resource "iosxr_community_set" "test" {
 		set_name = "TEST11"
-		rpl_community_set = "community-set TEST11\nend-set\n"
+		rpl = "community-set TEST11\nend-set\n"
 	}
 	`
 }

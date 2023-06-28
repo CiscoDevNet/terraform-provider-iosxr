@@ -32,4 +32,4 @@ data "iosxr_as_path_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rplas_path_set` (String) ASPath Set
+- `rpl` (String) ASPath Set

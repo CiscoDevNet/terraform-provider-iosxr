@@ -1,9 +1,11 @@
 ---
 name: AS Path Set
 path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/as-path-sets/as-path-set[set-name=%s]
+no_delete_attributes: true
 doc_category: Route Policy
 attributes:
   - yang_name: set-name
     example: TEST1
   - yang_name: rplas-path-set
+    tf_name: rpl
     example: "as-path-set TEST1\\n  length ge 10\\nend-set\\n"

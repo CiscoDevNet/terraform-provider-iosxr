@@ -37,6 +37,7 @@ func TestAccDataSourceIosxrDomainVRF(t *testing.T) {
 const testAccDataSourceIosxrDomainVRFConfig = `
 
 resource "iosxr_domain_vrf" "test" {
+	delete_mode = "attributes"
 	vrf_name = "TEST-VRF"
 	domains = [{
 		domain_name = "DOMAIN11"

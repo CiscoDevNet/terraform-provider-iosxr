@@ -22,7 +22,7 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv4(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "priority", "250"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "name", "TEST"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "text_authentication", "7"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_advertisement_time_in_seconds", "123"),
+					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_advertisement_seconds", "123"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_force", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_disable", "false"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_delay", "255"),
@@ -63,7 +63,7 @@ func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_all() string {
 		priority = 250
 		name = "TEST"
 		text_authentication = "7"
-		timer_advertisement_time_in_seconds = 123
+		timer_advertisement_seconds = 123
 		timer_force = false
 		preempt_disable = false
 		preempt_delay = 255

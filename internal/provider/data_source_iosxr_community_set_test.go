@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrCommunitySet(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrCommunitySetConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_community_set.test", "rpl_community_set", "community-set TEST11\nend-set\n"),
+					resource.TestCheckResourceAttr("data.iosxr_community_set.test", "rpl", "community-set TEST11\nend-set\n"),
 				),
 			},
 		},
@@ -27,7 +27,7 @@ const testAccDataSourceIosxrCommunitySetConfig = `
 
 resource "iosxr_community_set" "test" {
 	set_name = "TEST11"
-	rpl_community_set = "community-set TEST11\nend-set\n"
+	rpl = "community-set TEST11\nend-set\n"
 }
 
 data "iosxr_community_set" "test" {

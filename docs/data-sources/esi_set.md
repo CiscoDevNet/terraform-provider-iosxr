@@ -31,5 +31,5 @@ data "iosxr_esi_set" "example" {
 
 ### Read-Only
 
-- `esi_set_as_text` (String) Esi Set
 - `id` (String) The path of the retrieved object.
+- `rpl` (String) Esi Set

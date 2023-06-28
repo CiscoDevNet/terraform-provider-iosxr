@@ -14,16 +14,16 @@ This resource can manage the Router VRRP Interface Address Family IPv6 configura
 
 ```terraform
 resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
-  interface_name                      = "GigabitEthernet0/0/0/1"
-  vrrp_id                             = 123
-  address_linklocal_autoconfig        = true
-  priority                            = 250
-  name                                = "TEST"
-  timer_advertisement_time_in_seconds = 10
-  timer_force                         = true
-  preempt_disable                     = false
-  preempt_delay                       = 255
-  accept_mode_disable                 = true
+  interface_name               = "GigabitEthernet0/0/0/1"
+  vrrp_id                      = 123
+  address_linklocal_autoconfig = true
+  priority                     = 250
+  name                         = "TEST"
+  timer_advertisement_seconds  = 10
+  timer_force                  = true
+  preempt_disable              = false
+  preempt_delay                = 255
+  accept_mode_disable          = true
   track_interfaces = [
     {
       interface_name     = "GigabitEthernet0/0/0/5"
@@ -52,22 +52,22 @@ resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
 ### Optional
 
 - `accept_mode_disable` (Boolean) Disable accept mode
+- `address_linklocal` (String) VRRP IPv6 linklocal address
 - `address_linklocal_autoconfig` (Boolean) Autoconfigure the VRRP IPv6 linklocal address
-- `address_linklocal_linklocal_address` (String) VRRP IPv6 linklocal address
 - `bfd_fast_detect_peer_ipv6` (String) VRRP BFD remote interface IP address
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `global_address` (String) Set Global VRRP IPv6 address
+- `global_addresses` (String) Set Global VRRP IPv6 address
 - `name` (String) Configure VRRP Session name
 - `preempt_delay` (Number) Wait before preempting
   - Range: `1`-`3600`
 - `preempt_disable` (Boolean) Disable preemption
 - `priority` (Number) Set priority level
   - Range: `1`-`254`
-- `timer_advertisement_time_in_milliseconds` (Number) Configure in milliseconds
+- `timer_advertisement_milliseconds` (Number) Configure in milliseconds
   - Range: `100`-`40950`
-- `timer_advertisement_time_in_seconds` (Number) Advertisement time in seconds
+- `timer_advertisement_seconds` (Number) Advertisement time in seconds
   - Range: `1`-`255`
 - `timer_force` (Boolean) Force the configured values to be used
 - `track_interfaces` (Attributes List) Track an interface (see [below for nested schema](#nestedatt--track_interfaces))

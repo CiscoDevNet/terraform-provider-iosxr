@@ -1,0 +1,29 @@
+name: LLDP
+path: Cisco-IOS-XR-um-lldp-cfg:/lldp
+doc_category: System
+attributes:
+  - yang_name: holdtime
+    example: 50
+  - yang_name: timer
+    example: 6
+  - yang_name: reinit
+    example: 3
+  - yang_name: subinterfaces/enable
+    example: true
+  - yang_name: management/enable
+    example: true
+    exclude_test: true
+  - yang_name: priorityaddr/enable
+    example: true
+  - yang_name: extended-show-width/enable
+    example: true
+  - yang_name: tlv-select/management-address/disable
+    example: true
+  - yang_name: tlv-select/port-description/disable
+    example: true
+  - yang_name: tlv-select/system-capabilities/disable
+    example: true
+  - yang_name: tlv-select/system-description/disable
+    example: true
+  - yang_name: tlv-select/system-name/disable
+    example: true

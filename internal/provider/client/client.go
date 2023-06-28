@@ -128,8 +128,6 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
-		c.Devices[device].SetMutex.Lock()
-		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
 		err = target.CreateGNMIClient(ctx)
 		if err != nil {
 			diags.AddError(
@@ -138,10 +136,12 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 			)
 			return nil, diags
 		}
+		c.Devices[device].SetMutex.Lock()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
 		setResp, err = target.Set(ctx, setReq)
+		c.Devices[device].SetMutex.Unlock()
 		target.Close()
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
-		c.Devices[device].SetMutex.Unlock()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))

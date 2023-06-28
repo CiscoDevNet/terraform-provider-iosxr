@@ -9,6 +9,11 @@
 - Add `iosxr_router_static_ipv6_unicast` resource and data source
 - Add `iosxr_router_static_ipv6_multicast` resource and data source
 - Add `iosxr_lldp` resource and data source
+- Add `iosxr_community_set` resource and data source
+- Add `iosxr_domain` resource and data source
+- Add `iosxr_domain_vrf` resource and data source
+- Add `iosxr_service_timestamps` resource and data source
+- Add `iosxr_lacp` resource and data source
 
 ## 0.1.11
 

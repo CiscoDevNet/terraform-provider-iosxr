@@ -45,6 +45,39 @@ type Interface struct {
 	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
 	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
 }
+
+type InterfaceData struct {
+	Device                                   types.String                   `tfsdk:"device"`
+	Id                                       types.String                   `tfsdk:"id"`
+	InterfaceName                            types.String                   `tfsdk:"interface_name"`
+	L2transport                              types.Bool                     `tfsdk:"l2transport"`
+	PointToPoint                             types.Bool                     `tfsdk:"point_to_point"`
+	Multipoint                               types.Bool                     `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue              types.Int64                    `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                         types.Bool                     `tfsdk:"ipv4_point_to_point"`
+	ServicePolicyInput                       []InterfaceServicePolicyInput  `tfsdk:"service_policy_input"`
+	ServicePolicyOutput                      []InterfaceServicePolicyOutput `tfsdk:"service_policy_output"`
+	BfdModeIetf                              types.Bool                     `tfsdk:"bfd_mode_ietf"`
+	EncapsulationDot1qVlanId                 types.Int64                    `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId      types.String                   `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q types.String                   `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                 types.Bool                     `tfsdk:"shutdown"`
+	Mtu                                      types.Int64                    `tfsdk:"mtu"`
+	Bandwidth                                types.Int64                    `tfsdk:"bandwidth"`
+	Description                              types.String                   `tfsdk:"description"`
+	LoadInterval                             types.Int64                    `tfsdk:"load_interval"`
+	Vrf                                      types.String                   `tfsdk:"vrf"`
+	Ipv4Address                              types.String                   `tfsdk:"ipv4_address"`
+	Ipv4Netmask                              types.String                   `tfsdk:"ipv4_netmask"`
+	Unnumbered                               types.String                   `tfsdk:"unnumbered"`
+	Ipv6LinkLocalAddress                     types.String                   `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                        types.String                   `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                           types.Bool                     `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
+}
 type InterfaceServicePolicyInput struct {
 	Name types.String `tfsdk:"name"`
 }
@@ -58,6 +91,10 @@ type InterfaceIpv6Addresses struct {
 }
 
 func (data Interface) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
+}
+
+func (data InterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
 
@@ -451,7 +488,7 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Interface) fromBody(ctx context.Context, res []byte) {
+func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sub-interface-type.l2transport"); value.Exists() {
 		data.L2transport = types.BoolValue(true)
 	} else {
@@ -737,4 +774,111 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *Interface) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.L2transport.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/l2transport", data.getPath()))
+	}
+	if !data.PointToPoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/point-to-point", data.getPath()))
+	}
+	if !data.Multipoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/multipoint", data.getPath()))
+	}
+	if !data.DampeningDecayHalfLifeValue.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening/decay-half-life", data.getPath()))
+	}
+	if !data.Ipv4PointToPoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point", data.getPath()))
+	}
+	for i := range data.ServicePolicyInput {
+		keys := [...]string{"service-policy-name"}
+		keyValues := [...]string{data.ServicePolicyInput[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", data.getPath(), keyString))
+	}
+	for i := range data.ServicePolicyOutput {
+		keys := [...]string{"service-policy-name"}
+		keyValues := [...]string{data.ServicePolicyOutput[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", data.getPath(), keyString))
+	}
+	if !data.BfdModeIetf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf", data.getPath()))
+	}
+	if !data.EncapsulationDot1qVlanId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id", data.getPath()))
+	}
+	if !data.L2transportEncapsulationDot1qVlanId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", data.getPath()))
+	}
+	if !data.L2transportEncapsulationDot1qSecondDot1q.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q", data.getPath()))
+	}
+	if !data.RewriteIngressTagPopOne.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one", data.getPath()))
+	}
+	if !data.RewriteIngressTagPopTwo.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two", data.getPath()))
+	}
+	if !data.Shutdown.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/shutdown", data.getPath()))
+	}
+	if !data.Mtu.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mtu", data.getPath()))
+	}
+	if !data.Bandwidth.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bandwidth", data.getPath()))
+	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.LoadInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-statistics-cfg:load-interval", data.getPath()))
+	}
+	if !data.Vrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-vrf-cfg:vrf", data.getPath()))
+	}
+	if !data.Ipv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address", data.getPath()))
+	}
+	if !data.Ipv4Netmask.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address", data.getPath()))
+	}
+	if !data.Unnumbered.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.getPath()))
+	}
+	if !data.Ipv6LinkLocalAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", data.getPath()))
+	}
+	if !data.Ipv6LinkLocalZone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", data.getPath()))
+	}
+	if !data.Ipv6Autoconfig.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig", data.getPath()))
+	}
+	if !data.Ipv6Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", data.getPath()))
+	}
+	for i := range data.Ipv6Addresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.Ipv6Addresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

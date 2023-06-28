@@ -74,7 +74,7 @@ func (d *LoggingSourceInterfaceDataSource) Configure(_ context.Context, req data
 }
 
 func (d *LoggingSourceInterfaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config LoggingSourceInterface
+	var config LoggingSourceInterfaceData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

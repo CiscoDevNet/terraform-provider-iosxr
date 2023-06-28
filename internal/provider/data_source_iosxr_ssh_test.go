@@ -7,7 +7,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSSH(t *testing.T) {
@@ -33,6 +33,7 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 const testAccDataSourceIosxrSSHConfig = `
 
 resource "iosxr_ssh" "test" {
+	delete_mode = "attributes"
 	server_dscp = 48
 	server_logging = true
 	server_rate_limit = 60

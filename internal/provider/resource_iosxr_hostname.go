@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*HostnameResource)(nil)
-
 func NewHostnameResource() resource.Resource {
 	return &HostnameResource{}
 }
@@ -64,7 +62,7 @@ func (r *HostnameResource) Schema(ctx context.Context, req resource.SchemaReques
 	}
 }
 
-func (r *HostnameResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *HostnameResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -199,6 +197,25 @@ func (r *HostnameResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "attributes"
+
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))
 

@@ -170,7 +170,7 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Configure(_ context.Context, req d
 }
 
 func (d *EVPNSegmentRoutingSRv6EVIDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config EVPNSegmentRoutingSRv6EVI
+	var config EVPNSegmentRoutingSRv6EVIData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -16,6 +16,23 @@ import (
 type RouterISISInterfaceAddressFamily struct {
 	Device                     types.String                                                 `tfsdk:"device"`
 	Id                         types.String                                                 `tfsdk:"id"`
+	DeleteMode                 types.String                                                 `tfsdk:"delete_mode"`
+	ProcessId                  types.String                                                 `tfsdk:"process_id"`
+	InterfaceName              types.String                                                 `tfsdk:"interface_name"`
+	AfName                     types.String                                                 `tfsdk:"af_name"`
+	SafName                    types.String                                                 `tfsdk:"saf_name"`
+	FastReroutePerPrefixLevels []RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels `tfsdk:"fast_reroute_per_prefix_levels"`
+	Tag                        types.Int64                                                  `tfsdk:"tag"`
+	PrefixSidAbsolute          types.Int64                                                  `tfsdk:"prefix_sid_absolute"`
+	PrefixSidNFlagClear        types.Bool                                                   `tfsdk:"prefix_sid_n_flag_clear"`
+	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
+	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
+	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+}
+
+type RouterISISInterfaceAddressFamilyData struct {
+	Device                     types.String                                                 `tfsdk:"device"`
+	Id                         types.String                                                 `tfsdk:"id"`
 	ProcessId                  types.String                                                 `tfsdk:"process_id"`
 	InterfaceName              types.String                                                 `tfsdk:"interface_name"`
 	AfName                     types.String                                                 `tfsdk:"af_name"`
@@ -34,6 +51,10 @@ type RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels struct {
 }
 
 func (data RouterISISInterfaceAddressFamily) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
+}
+
+func (data RouterISISInterfaceAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
 
@@ -156,7 +177,7 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 }
 
-func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level"); value.Exists() {
 		data.FastReroutePerPrefixLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -247,4 +268,37 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-sid/sid/n-flag-clear", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.FastReroutePerPrefixLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v", data.getPath(), keyString))
+	}
+	if !data.Tag.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/tag/interface-tag", data.getPath()))
+	}
+	if !data.PrefixSidAbsolute.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/sid/absolute/sid-value", data.getPath()))
+	}
+	if !data.PrefixSidNFlagClear.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/sid/n-flag-clear", data.getPath()))
+	}
+	if !data.AdvertisePrefixRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/prefix/route-policy", data.getPath()))
+	}
+	if !data.PrefixSidIndex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/sid/index/sid-index", data.getPath()))
+	}
+	if !data.PrefixSidStrictSpfAbsolute.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/strict-spf/absolute/sid-value", data.getPath()))
+	}
+	return deletePaths
 }

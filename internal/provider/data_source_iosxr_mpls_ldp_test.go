@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
@@ -50,6 +50,7 @@ resource "iosxr_gnmi" "PreReq0" {
 const testAccDataSourceIosxrMPLSLDPConfig = `
 
 resource "iosxr_mpls_ldp" "test" {
+	delete_mode = "attributes"
 	router_id = "1.2.3.4"
 	address_families = [{
 		af_name = "ipv4"

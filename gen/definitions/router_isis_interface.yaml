@@ -28,16 +28,18 @@ attributes:
     tf_name: hello_password_text
     optional: true
     exclude_test: true
+    no_delete: true
     example: password123
   - yang_name: hello-password/hmac-md5/encrypted
     tf_name: hello_password_hmac_md5
     optional: true
     exclude_test: true
+    no_delete: true
     example: password123
   - yang_name: hello-password/keychain/keychain-name
     tf_name: hello_password_keychain
     optional: true
+    no_delete: true
     example: KEY_CHAIN_1
-    
   - yang_name: bfd/fast-detect/ipv6
     example: true

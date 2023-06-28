@@ -62,7 +62,7 @@ func (d *L2VPNBridgeGroupDataSource) Configure(_ context.Context, req datasource
 }
 
 func (d *L2VPNBridgeGroupDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config L2VPNBridgeGroup
+	var config L2VPNBridgeGroupData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

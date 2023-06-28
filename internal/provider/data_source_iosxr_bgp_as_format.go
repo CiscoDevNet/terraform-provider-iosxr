@@ -66,7 +66,7 @@ func (d *BGPASFormatDataSource) Configure(_ context.Context, req datasource.Conf
 }
 
 func (d *BGPASFormatDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config BGPASFormat
+	var config BGPASFormatData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

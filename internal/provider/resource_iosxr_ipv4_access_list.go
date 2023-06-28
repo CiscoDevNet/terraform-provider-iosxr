@@ -21,8 +21,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*IPv4AccessListResource)(nil)
-
 func NewIPv4AccessListResource() resource.Resource {
 	return &IPv4AccessListResource{}
 }
@@ -1074,7 +1072,7 @@ func (r *IPv4AccessListResource) Schema(ctx context.Context, req resource.Schema
 	}
 }
 
-func (r *IPv4AccessListResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *IPv4AccessListResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -1209,8 +1207,21 @@ func (r *IPv4AccessListResource) Delete(ctx context.Context, req resource.Delete
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "all"
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

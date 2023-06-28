@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrLogging(t *testing.T) {
@@ -36,6 +36,7 @@ func TestAccDataSourceIosxrLogging(t *testing.T) {
 const testAccDataSourceIosxrLoggingConfig = `
 
 resource "iosxr_logging" "test" {
+	delete_mode = "attributes"
 	ipv4_dscp = "cs6"
 	trap = "informational"
 	events_display_location = true

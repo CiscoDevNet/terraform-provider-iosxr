@@ -10,33 +10,34 @@ attributes:
   - yang_name: ethernet-segment/identifier/type/zero/bytes-1
     description: 1st Byte, used up to version 7.7.x
     example: "01"
-    exclude_test: true
     optional: true
+    delete_parent: true
   - yang_name: ethernet-segment/identifier/type/zero/bytes-23
     description: 2nd and 3rd Bytes, used up to version 7.7.x
     example: "0100"
-    exclude_test: true
     optional: true
+    delete_parent: true
   - yang_name: ethernet-segment/identifier/type/zero/bytes-45
     description: 4th and 5th Bytes, used up to version 7.7.x
     example: "0100"
-    exclude_test: true
     optional: true
+    delete_parent: true
   - yang_name: ethernet-segment/identifier/type/zero/bytes-67
     description: 6th and 7th Bytes, used up to version 7.7.x
     example: "0100"
-    exclude_test: true
     optional: true
+    delete_parent: true
   - yang_name: ethernet-segment/identifier/type/zero/bytes-89
     description: 8th and 9th Bytes, used up to version 7.7.x
     example: "0100"
-    exclude_test: true
     optional: true
+    delete_parent: true
   - yang_name: ethernet-segment/identifier/type/zero/esi
     tf_name: ethernet_segment_identifier_type_zero_esi
     type: String
     no_augment_config: true
     optional: true
+    exclude_test: true
     description: ESI value, used instead of `bytes-x` from version 7.8.1`
     example: 01.00.01.01.00.00.00.01.1
   - yang_name: ethernet-segment/load-balancing-mode/all-active

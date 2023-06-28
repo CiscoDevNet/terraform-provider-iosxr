@@ -234,7 +234,7 @@ func (d *RouterBGPDataSource) Configure(_ context.Context, req datasource.Config
 }
 
 func (d *RouterBGPDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterBGP
+	var config RouterBGPData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

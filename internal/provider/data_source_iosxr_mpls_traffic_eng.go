@@ -62,7 +62,7 @@ func (d *MPLSTrafficEngDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *MPLSTrafficEngDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config MPLSTrafficEng
+	var config MPLSTrafficEngData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

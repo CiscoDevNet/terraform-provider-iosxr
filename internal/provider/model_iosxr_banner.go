@@ -18,7 +18,18 @@ type Banner struct {
 	Line       types.String `tfsdk:"line"`
 }
 
+type BannerData struct {
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	BannerType types.String `tfsdk:"banner_type"`
+	Line       types.String `tfsdk:"line"`
+}
+
 func (data Banner) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]", data.BannerType.ValueString())
+}
+
+func (data BannerData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=%s]", data.BannerType.ValueString())
 }
 
@@ -41,7 +52,7 @@ func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Banner) fromBody(ctx context.Context, res []byte) {
+func (data *BannerData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())
 	}
@@ -55,4 +66,12 @@ func (data *Banner) getDeletedListItems(ctx context.Context, state Banner) []str
 func (data *Banner) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *Banner) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Line.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/line", data.getPath()))
+	}
+	return deletePaths
 }

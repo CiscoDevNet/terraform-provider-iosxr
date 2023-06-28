@@ -15,6 +15,23 @@ import (
 type RouterOSPFAreaInterface struct {
 	Device                   types.String `tfsdk:"device"`
 	Id                       types.String `tfsdk:"id"`
+	DeleteMode               types.String `tfsdk:"delete_mode"`
+	ProcessName              types.String `tfsdk:"process_name"`
+	AreaId                   types.String `tfsdk:"area_id"`
+	InterfaceName            types.String `tfsdk:"interface_name"`
+	NetworkBroadcast         types.Bool   `tfsdk:"network_broadcast"`
+	NetworkNonBroadcast      types.Bool   `tfsdk:"network_non_broadcast"`
+	NetworkPointToPoint      types.Bool   `tfsdk:"network_point_to_point"`
+	NetworkPointToMultipoint types.Bool   `tfsdk:"network_point_to_multipoint"`
+	Cost                     types.Int64  `tfsdk:"cost"`
+	Priority                 types.Int64  `tfsdk:"priority"`
+	PassiveEnable            types.Bool   `tfsdk:"passive_enable"`
+	PassiveDisable           types.Bool   `tfsdk:"passive_disable"`
+}
+
+type RouterOSPFAreaInterfaceData struct {
+	Device                   types.String `tfsdk:"device"`
+	Id                       types.String `tfsdk:"id"`
 	ProcessName              types.String `tfsdk:"process_name"`
 	AreaId                   types.String `tfsdk:"area_id"`
 	InterfaceName            types.String `tfsdk:"interface_name"`
@@ -29,6 +46,10 @@ type RouterOSPFAreaInterface struct {
 }
 
 func (data RouterOSPFAreaInterface) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
+}
+
+func (data RouterOSPFAreaInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
 }
 
@@ -143,7 +164,7 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 	}
 }
 
-func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res []byte) {
+func (data *RouterOSPFAreaInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast = types.BoolValue(true)
 	} else {
@@ -208,4 +229,33 @@ func (data *RouterOSPFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/passive/disable", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterOSPFAreaInterface) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.NetworkBroadcast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/broadcast", data.getPath()))
+	}
+	if !data.NetworkNonBroadcast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/non-broadcast", data.getPath()))
+	}
+	if !data.NetworkPointToPoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/point-to-point", data.getPath()))
+	}
+	if !data.NetworkPointToMultipoint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/network/point-to-multipoint", data.getPath()))
+	}
+	if !data.Cost.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cost", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.PassiveEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive/enable", data.getPath()))
+	}
+	if !data.PassiveDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/passive/disable", data.getPath()))
+	}
+	return deletePaths
 }

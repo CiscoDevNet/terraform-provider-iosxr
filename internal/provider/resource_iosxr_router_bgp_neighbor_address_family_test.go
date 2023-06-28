@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
@@ -35,18 +35,31 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 
 const testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
-  attributes = {
-      "af-name" = "vpnv4-unicast"
-  }
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-  path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]"
-  attributes = {
-      "neighbor-address" = "10.1.1.2"
-      "remote-as" = "65002"
-  }
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			] 
+		},
+		{
+			name = "neighbors/neighbor"
+			key = "neighbor-address"
+			items = [
+				{
+					"neighbor-address" = "10.1.1.2"
+					"remote-as" = "65002"
+				},
+			] 
+		},
+	]
 }
 
 `
@@ -57,7 +70,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 		as_number = "65001"
 		neighbor_address = "10.1.1.2"
 		af_name = "vpnv4-unicast"
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }
@@ -73,7 +86,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 		advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
 		next_hop_self_inheritance_disable = true
 		encapsulation_type_srv6 = true
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+  		depends_on = [iosxr_gnmi.PreReq0, ]
 	}
 	`
 }

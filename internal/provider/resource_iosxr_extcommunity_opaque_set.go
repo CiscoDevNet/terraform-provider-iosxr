@@ -20,8 +20,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = (*ExtcommunityOpaqueSetResource)(nil)
-
 func NewExtcommunityOpaqueSetResource() resource.Resource {
 	return &ExtcommunityOpaqueSetResource{}
 }
@@ -69,7 +67,7 @@ func (r *ExtcommunityOpaqueSetResource) Schema(ctx context.Context, req resource
 	}
 }
 
-func (r *ExtcommunityOpaqueSetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *ExtcommunityOpaqueSetResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -204,8 +202,21 @@ func (r *ExtcommunityOpaqueSetResource) Delete(ctx context.Context, req resource
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "all"
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

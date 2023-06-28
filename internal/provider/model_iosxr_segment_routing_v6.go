@@ -16,6 +16,15 @@ import (
 type SegmentRoutingV6 struct {
 	Device                     types.String               `tfsdk:"device"`
 	Id                         types.String               `tfsdk:"id"`
+	DeleteMode                 types.String               `tfsdk:"delete_mode"`
+	Enable                     types.Bool                 `tfsdk:"enable"`
+	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
+	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
+}
+
+type SegmentRoutingV6Data struct {
+	Device                     types.String               `tfsdk:"device"`
+	Id                         types.String               `tfsdk:"id"`
 	Enable                     types.Bool                 `tfsdk:"enable"`
 	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
 	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
@@ -29,6 +38,10 @@ type SegmentRoutingV6Locators struct {
 }
 
 func (data SegmentRoutingV6) getPath() string {
+	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-cfg:srv6"
+}
+
+func (data SegmentRoutingV6Data) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-cfg:srv6"
 }
 
@@ -137,7 +150,7 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
+func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)
 	} else {
@@ -225,4 +238,25 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
+	}
+	if !data.EncapsulationSourceAddress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/source-address", data.getPath()))
+	}
+	for i := range data.Locators {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Locators[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locators/locator%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

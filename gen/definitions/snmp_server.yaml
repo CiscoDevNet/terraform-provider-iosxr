@@ -44,60 +44,79 @@ attributes:
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure
     default_value: disable
+    delete_parent: true
     example: enable
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
     default_value: disable
+    delete_parent: true
     exclude_test: true
   - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp2-updown
     example: true

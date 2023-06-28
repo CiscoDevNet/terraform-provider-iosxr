@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
@@ -14,7 +14,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterBGPVRFConfig,
+				Config: testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig + testAccDataSourceIosxrRouterBGPVRFConfig,
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_auto", "false"),
 					resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "rd_ip_address_ipv4_address", "14.14.14.14"),
@@ -48,9 +48,20 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	})
 }
 
+const testAccDataSourceIosxrRouterBGPVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
+	attributes = {
+		"as-number" = "65001"
+	}
+}
+
+`
+
 const testAccDataSourceIosxrRouterBGPVRFConfig = `
 
 resource "iosxr_router_bgp_vrf" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	vrf_name = "VRF2"
 	rd_auto = false
@@ -81,6 +92,7 @@ resource "iosxr_router_bgp_vrf" "test" {
 		update_source = "GigabitEthernet0/0/0/1"
 		ttl_security = false
 	}]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_bgp_vrf" "test" {

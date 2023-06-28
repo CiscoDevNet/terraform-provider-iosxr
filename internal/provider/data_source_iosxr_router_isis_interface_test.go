@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
@@ -35,6 +35,7 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 const testAccDataSourceIosxrRouterISISInterfaceConfig = `
 
 resource "iosxr_router_isis_interface" "test" {
+	delete_mode = "attributes"
 	process_id = "P1"
 	interface_name = "GigabitEthernet0/0/0/1"
 	circuit_type = "level-1"

@@ -16,6 +16,14 @@ import (
 type SNMPServerView struct {
 	Device          types.String                    `tfsdk:"device"`
 	Id              types.String                    `tfsdk:"id"`
+	DeleteMode      types.String                    `tfsdk:"delete_mode"`
+	ViewName        types.String                    `tfsdk:"view_name"`
+	MibViewFamilies []SNMPServerViewMibViewFamilies `tfsdk:"mib_view_families"`
+}
+
+type SNMPServerViewData struct {
+	Device          types.String                    `tfsdk:"device"`
+	Id              types.String                    `tfsdk:"id"`
 	ViewName        types.String                    `tfsdk:"view_name"`
 	MibViewFamilies []SNMPServerViewMibViewFamilies `tfsdk:"mib_view_families"`
 }
@@ -26,6 +34,10 @@ type SNMPServerViewMibViewFamilies struct {
 }
 
 func (data SNMPServerView) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
+}
+
+func (data SNMPServerViewData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
 }
 
@@ -105,7 +117,7 @@ func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
+func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -181,4 +193,19 @@ func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SNMPServerView) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.MibViewFamilies {
+		keys := [...]string{"mib-view-family-name"}
+		keyValues := [...]string{data.MibViewFamilies[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mib-view-families/mib-view-family%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

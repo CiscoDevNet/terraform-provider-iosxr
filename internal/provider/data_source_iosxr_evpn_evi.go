@@ -226,7 +226,7 @@ func (d *EVPNEVIDataSource) Configure(_ context.Context, req datasource.Configur
 }
 
 func (d *EVPNEVIDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config EVPNEVI
+	var config EVPNEVIData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

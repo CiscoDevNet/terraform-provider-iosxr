@@ -66,7 +66,7 @@ func (d *SNMPServerMIBDataSource) Configure(_ context.Context, req datasource.Co
 }
 
 func (d *SNMPServerMIBDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPServerMIB
+	var config SNMPServerMIBData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

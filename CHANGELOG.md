@@ -1,3 +1,14 @@
+## 0.2.0 (unreleased)
+
+- Introduce more fine grained controls around resource delete operations (`delete_mode`)
+- BREAKING CHANGE: Rename `iosxr_router_static` resource and data source to `iosxr_router_static_ipv4_unicast`
+- BREAKING CHANGE: Remove `iosxr_oc_system_config` resource and data source
+- Validate if referenced `device` exists in provider configuration
+- Add `vrfs`, `permanent`, `track` and `metric` attributes to `iosxr_router_static_ipv4_unicast` resource and data source
+- Add `iosxr_router_static_ipv4_multicast` resource and data source
+- Add `iosxr_router_static_ipv6_unicast` resource and data source
+- Add `iosxr_router_static_ipv6_multicast` resource and data source
+
 ## 0.1.11
 
 - Migrate provider to `CiscoDevNet` namespace

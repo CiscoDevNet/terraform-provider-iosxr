@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
@@ -57,11 +57,21 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
-		"af-name" = "vpnv4-unicast"
+		"as-number" = "65001"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
 }
 
 `
@@ -69,6 +79,7 @@ resource "iosxr_gnmi" "PreReq1" {
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_vrf_address_family" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	vrf_name = "VRF1"
 	af_name = "ipv4-unicast"

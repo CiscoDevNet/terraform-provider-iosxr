@@ -21,13 +21,22 @@ attributes:
     example: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
-      - name: af-name
-        value: vpnv4-unicast
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]
-    attributes:
-      - name: neighbor-address
-        value: 10.1.1.2
-      - name: remote-as
-        value: 65002
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv4-unicast
+      - name: neighbors/neighbor
+        key: neighbor-address
+        items:
+          - attributes:
+              - name: neighbor-address
+                value: 10.1.1.2
+              - name: remote-as
+                value: 65002

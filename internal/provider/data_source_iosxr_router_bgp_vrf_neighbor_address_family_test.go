@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
@@ -31,27 +31,59 @@ func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 
 const testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
 	attributes = {
-		"af-name" = "vpnv4-unicast"
+		"as-number" = "1"
+		"index" = "1"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/address-families/address-family[af-name=ipv4-unicast]"
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
-		"af-name" = "ipv4-unicast"
+		"as-number" = "65001"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/neighbors/neighbor[neighbor-address=10.1.1.2]"
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
+	delete = false
 	attributes = {
-		"neighbor-address" = "10.1.1.2"
-		"remote-as" = "65002"
+		"vrf-name" = "VRF1"
 	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "ipv4-unicast"
+				},
+			]
+		},
+		{
+			name = "neighbors/neighbor"
+			key = "neighbor-address"
+			items = [
+				{
+					"neighbor-address" = "10.1.1.2"
+					"remote-as" = "65002"
+				},
+			]
+		},
+	]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 }
 
 resource "iosxr_gnmi" "PreReq3" {
@@ -67,6 +99,7 @@ resource "iosxr_gnmi" "PreReq3" {
 const testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig = `
 
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
+	delete_mode = "attributes"
 	as_number = "65001"
 	vrf_name = "VRF1"
 	neighbor_address = "10.1.1.2"

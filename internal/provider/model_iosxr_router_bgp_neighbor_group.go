@@ -16,6 +16,21 @@ import (
 type RouterBGPNeighborGroup struct {
 	Device                    types.String                            `tfsdk:"device"`
 	Id                        types.String                            `tfsdk:"id"`
+	DeleteMode                types.String                            `tfsdk:"delete_mode"`
+	AsNumber                  types.String                            `tfsdk:"as_number"`
+	Name                      types.String                            `tfsdk:"name"`
+	RemoteAs                  types.String                            `tfsdk:"remote_as"`
+	UpdateSource              types.String                            `tfsdk:"update_source"`
+	AoKeyChainName            types.String                            `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval        types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdFastDetect             types.Bool                              `tfsdk:"bfd_fast_detect"`
+	AddressFamilies           []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+}
+
+type RouterBGPNeighborGroupData struct {
+	Device                    types.String                            `tfsdk:"device"`
+	Id                        types.String                            `tfsdk:"id"`
 	AsNumber                  types.String                            `tfsdk:"as_number"`
 	Name                      types.String                            `tfsdk:"name"`
 	RemoteAs                  types.String                            `tfsdk:"remote_as"`
@@ -34,6 +49,10 @@ type RouterBGPNeighborGroupAddressFamilies struct {
 }
 
 func (data RouterBGPNeighborGroup) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]", data.AsNumber.ValueString(), data.Name.ValueString())
+}
+
+func (data RouterBGPNeighborGroupData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]", data.AsNumber.ValueString(), data.Name.ValueString())
 }
 
@@ -187,7 +206,7 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	}
 }
 
-func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
 	}
@@ -299,4 +318,37 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.RemoteAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-as", data.getPath()))
+	}
+	if !data.UpdateSource.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-source", data.getPath()))
+	}
+	if !data.AoKeyChainName.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name", data.getPath()))
+	}
+	if !data.AoIncludeTcpOptionsEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/include-tcp-options/enable", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdFastDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

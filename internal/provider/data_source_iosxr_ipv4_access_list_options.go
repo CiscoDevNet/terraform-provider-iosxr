@@ -70,7 +70,7 @@ func (d *IPv4AccessListOptionsDataSource) Configure(_ context.Context, req datas
 }
 
 func (d *IPv4AccessListOptionsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv4AccessListOptions
+	var config IPv4AccessListOptionsData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -110,7 +110,7 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 }
 
 func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config {{camelCase .Name}}
+	var config {{camelCase .Name}}Data
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

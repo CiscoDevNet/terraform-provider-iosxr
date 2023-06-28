@@ -24,7 +24,23 @@ type ClassMapQoS struct {
 	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
 }
 
+type ClassMapQoSData struct {
+	Device                       types.String `tfsdk:"device"`
+	Id                           types.String `tfsdk:"id"`
+	ClassMapName                 types.String `tfsdk:"class_map_name"`
+	MatchAny                     types.Bool   `tfsdk:"match_any"`
+	Description                  types.String `tfsdk:"description"`
+	MatchDscp                    types.List   `tfsdk:"match_dscp"`
+	MatchMplsExperimentalTopmost types.List   `tfsdk:"match_mpls_experimental_topmost"`
+	MatchQosGroup                types.List   `tfsdk:"match_qos_group"`
+	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
+}
+
 func (data ClassMapQoS) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
+}
+
+func (data ClassMapQoSData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
 }
 
@@ -101,7 +117,7 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
+func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
 	} else {
@@ -143,4 +159,27 @@ func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/match-any", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.MatchAny.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match-any", data.getPath()))
+	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.MatchDscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/dscp/value", data.getPath()))
+	}
+	if !data.MatchMplsExperimentalTopmost.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", data.getPath()))
+	}
+	if !data.MatchQosGroup.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/qos-group/id", data.getPath()))
+	}
+	if !data.MatchTrafficClass.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/traffic-class/id", data.getPath()))
+	}
+	return deletePaths
 }

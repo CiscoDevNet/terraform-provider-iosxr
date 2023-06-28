@@ -66,7 +66,7 @@ func (d *PrefixSetDataSource) Configure(_ context.Context, req datasource.Config
 }
 
 func (d *PrefixSetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config PrefixSet
+	var config PrefixSetData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

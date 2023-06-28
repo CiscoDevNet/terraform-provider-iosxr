@@ -19,11 +19,22 @@ type LoggingSourceInterface struct {
 	Name   types.String                 `tfsdk:"name"`
 	Vrfs   []LoggingSourceInterfaceVrfs `tfsdk:"vrfs"`
 }
+
+type LoggingSourceInterfaceData struct {
+	Device types.String                 `tfsdk:"device"`
+	Id     types.String                 `tfsdk:"id"`
+	Name   types.String                 `tfsdk:"name"`
+	Vrfs   []LoggingSourceInterfaceVrfs `tfsdk:"vrfs"`
+}
 type LoggingSourceInterfaceVrfs struct {
 	Name types.String `tfsdk:"name"`
 }
 
 func (data LoggingSourceInterface) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
+}
+
+func (data LoggingSourceInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
 }
 
@@ -75,7 +86,7 @@ func (data *LoggingSourceInterface) updateFromBody(ctx context.Context, res []by
 	}
 }
 
-func (data *LoggingSourceInterface) fromBody(ctx context.Context, res []byte) {
+func (data *LoggingSourceInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LoggingSourceInterfaceVrfs, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -135,4 +146,19 @@ func (data *LoggingSourceInterface) getEmptyLeafsDelete(ctx context.Context) []s
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *LoggingSourceInterface) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

@@ -374,7 +374,7 @@ func (d *VRFDataSource) Configure(_ context.Context, req datasource.ConfigureReq
 }
 
 func (d *VRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config VRF
+	var config VRFData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

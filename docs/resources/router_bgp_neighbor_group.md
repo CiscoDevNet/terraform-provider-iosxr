@@ -47,6 +47,8 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates

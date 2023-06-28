@@ -16,6 +16,15 @@ import (
 type SNMPServerVRFHost struct {
 	Device             types.String                          `tfsdk:"device"`
 	Id                 types.String                          `tfsdk:"id"`
+	DeleteMode         types.String                          `tfsdk:"delete_mode"`
+	VrfName            types.String                          `tfsdk:"vrf_name"`
+	Address            types.String                          `tfsdk:"address"`
+	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
+}
+
+type SNMPServerVRFHostData struct {
+	Device             types.String                          `tfsdk:"device"`
+	Id                 types.String                          `tfsdk:"id"`
 	VrfName            types.String                          `tfsdk:"vrf_name"`
 	Address            types.String                          `tfsdk:"address"`
 	UnencryptedStrings []SNMPServerVRFHostUnencryptedStrings `tfsdk:"unencrypted_strings"`
@@ -27,6 +36,10 @@ type SNMPServerVRFHostUnencryptedStrings struct {
 }
 
 func (data SNMPServerVRFHost) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
+}
+
+func (data SNMPServerVRFHostData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
 
@@ -94,7 +107,7 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
+func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
 		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -160,4 +173,19 @@ func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *SNMPServerVRFHost) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.UnencryptedStrings {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.UnencryptedStrings[i].CommunityString.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

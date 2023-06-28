@@ -16,6 +16,7 @@ attributes:
     tf_name: multipoint
     example: false
   - yang_name: dampening/decay-half-life/value
+    delete_parent: true
     example: 2
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point
     tf_name: ipv4_point_to_point
@@ -80,10 +81,12 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
     tf_name: ipv4_address
     optional: true
+    delete_parent: true
     example: "1.1.1.1"
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
     tf_name: ipv4_netmask
     optional: true
+    delete_parent: true
     example: "255.255.255.0"
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
     tf_name: unnumbered
@@ -91,10 +94,12 @@ attributes:
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address
     optional: true
+    delete_parent: true
     example: "fe80::1"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
     tf_name: ipv6_link_local_zone
     default_value: "0"
+    delete_parent: true
     example: "0"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
     tf_name: ipv6_autoconfig

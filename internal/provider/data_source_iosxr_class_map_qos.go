@@ -90,7 +90,7 @@ func (d *ClassMapQoSDataSource) Configure(_ context.Context, req datasource.Conf
 }
 
 func (d *ClassMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config ClassMapQoS
+	var config ClassMapQoSData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

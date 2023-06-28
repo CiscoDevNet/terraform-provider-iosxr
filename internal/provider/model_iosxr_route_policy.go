@@ -18,7 +18,18 @@ type RoutePolicy struct {
 	Rpl             types.String `tfsdk:"rpl"`
 }
 
+type RoutePolicyData struct {
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
+	RoutePolicyName types.String `tfsdk:"route_policy_name"`
+	Rpl             types.String `tfsdk:"rpl"`
+}
+
 func (data RoutePolicy) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=%s]", data.RoutePolicyName.ValueString())
+}
+
+func (data RoutePolicyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=%s]", data.RoutePolicyName.ValueString())
 }
 
@@ -41,7 +52,7 @@ func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RoutePolicy) fromBody(ctx context.Context, res []byte) {
+func (data *RoutePolicyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
@@ -55,4 +66,12 @@ func (data *RoutePolicy) getDeletedListItems(ctx context.Context, state RoutePol
 func (data *RoutePolicy) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *RoutePolicy) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Rpl.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-route-policy", data.getPath()))
+	}
+	return deletePaths
 }

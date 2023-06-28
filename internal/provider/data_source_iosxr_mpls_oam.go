@@ -78,7 +78,7 @@ func (d *MPLSOAMDataSource) Configure(_ context.Context, req datasource.Configur
 }
 
 func (d *MPLSOAMDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config MPLSOAM
+	var config MPLSOAMData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

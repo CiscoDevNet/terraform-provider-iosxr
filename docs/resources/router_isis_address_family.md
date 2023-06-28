@@ -91,6 +91,8 @@ resource "iosxr_router_isis_address_family" "example" {
 - `advertise_link_attributes` (Boolean) Advertise additional link attributes
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
 - `default_information_originate` (Boolean) Distribute a default route
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `fast_reroute_delay_interval` (Number) Delay before running FRR computation
   - Range: `100`-`60000`

@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrEVPNGroup(t *testing.T) {
@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrEVPNGroup(t *testing.T) {
 const testAccDataSourceIosxrEVPNGroupConfig = `
 
 resource "iosxr_evpn_group" "test" {
+	delete_mode = "attributes"
 	group_id = 1
 	core_interfaces = [{
 		interface_name = "Bundle-Ether111"

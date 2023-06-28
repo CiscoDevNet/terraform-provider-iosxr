@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 const testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig = `
 
 resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
+	delete_mode = "attributes"
 	bridge_group_name = "BG123"
 	bridge_domain_name = "BD123"
 	evis = [{

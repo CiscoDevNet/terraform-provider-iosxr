@@ -37,3 +37,8 @@ attributes:
       - yang_name: route-reflector-client/inheritance-disable
         example: true
 
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001

@@ -16,6 +16,29 @@ import (
 type RouterBGPVRFAddressFamily struct {
 	Device                            types.String                                  `tfsdk:"device"`
 	Id                                types.String                                  `tfsdk:"id"`
+	DeleteMode                        types.String                                  `tfsdk:"delete_mode"`
+	AsNumber                          types.String                                  `tfsdk:"as_number"`
+	VrfName                           types.String                                  `tfsdk:"vrf_name"`
+	AfName                            types.String                                  `tfsdk:"af_name"`
+	MaximumPathsEbgpMultipath         types.Int64                                   `tfsdk:"maximum_paths_ebgp_multipath"`
+	MaximumPathsEibgpMultipath        types.Int64                                   `tfsdk:"maximum_paths_eibgp_multipath"`
+	MaximumPathsIbgpMultipath         types.Int64                                   `tfsdk:"maximum_paths_ibgp_multipath"`
+	LabelModePerCe                    types.Bool                                    `tfsdk:"label_mode_per_ce"`
+	LabelModePerVrf                   types.Bool                                    `tfsdk:"label_mode_per_vrf"`
+	RedistributeConnected             types.Bool                                    `tfsdk:"redistribute_connected"`
+	RedistributeConnectedMetric       types.Int64                                   `tfsdk:"redistribute_connected_metric"`
+	RedistributeStatic                types.Bool                                    `tfsdk:"redistribute_static"`
+	RedistributeStaticMetric          types.Int64                                   `tfsdk:"redistribute_static_metric"`
+	SegmentRoutingSrv6Locator         types.String                                  `tfsdk:"segment_routing_srv6_locator"`
+	SegmentRoutingSrv6AllocModePerVrf types.Bool                                    `tfsdk:"segment_routing_srv6_alloc_mode_per_vrf"`
+	AggregateAddresses                []RouterBGPVRFAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
+	Networks                          []RouterBGPVRFAddressFamilyNetworks           `tfsdk:"networks"`
+	RedistributeOspf                  []RouterBGPVRFAddressFamilyRedistributeOspf   `tfsdk:"redistribute_ospf"`
+}
+
+type RouterBGPVRFAddressFamilyData struct {
+	Device                            types.String                                  `tfsdk:"device"`
+	Id                                types.String                                  `tfsdk:"id"`
 	AsNumber                          types.String                                  `tfsdk:"as_number"`
 	VrfName                           types.String                                  `tfsdk:"vrf_name"`
 	AfName                            types.String                                  `tfsdk:"af_name"`
@@ -57,6 +80,10 @@ type RouterBGPVRFAddressFamilyRedistributeOspf struct {
 }
 
 func (data RouterBGPVRFAddressFamily) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.AfName.ValueString())
+}
+
+func (data RouterBGPVRFAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.AfName.ValueString())
 }
 
@@ -450,7 +477,7 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 	}
 }
 
-func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte) {
+func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "maximum-paths.ebgp.multipath"); value.Exists() {
 		data.MaximumPathsEbgpMultipath = types.Int64Value(value.Int())
 	}
@@ -759,4 +786,72 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *RouterBGPVRFAddressFamily) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.MaximumPathsEbgpMultipath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ebgp", data.getPath()))
+	}
+	if !data.MaximumPathsEibgpMultipath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/eibgp", data.getPath()))
+	}
+	if !data.MaximumPathsIbgpMultipath.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ibgp", data.getPath()))
+	}
+	if !data.LabelModePerCe.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/mode/per-ce", data.getPath()))
+	}
+	if !data.LabelModePerVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/mode/per-vrf", data.getPath()))
+	}
+	if !data.RedistributeConnected.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected", data.getPath()))
+	}
+	if !data.RedistributeConnectedMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric", data.getPath()))
+	}
+	if !data.RedistributeStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
+	}
+	if !data.RedistributeStaticMetric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric", data.getPath()))
+	}
+	if !data.SegmentRoutingSrv6Locator.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locator", data.getPath()))
+	}
+	if !data.SegmentRoutingSrv6AllocModePerVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/alloc/mode/per-vrf", data.getPath()))
+	}
+	for i := range data.AggregateAddresses {
+		keys := [...]string{"address", "masklength"}
+		keyValues := [...]string{data.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(data.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", data.getPath(), keyString))
+	}
+	for i := range data.Networks {
+		keys := [...]string{"address", "masklength"}
+		keyValues := [...]string{data.Networks[i].Address.ValueString(), strconv.FormatInt(data.Networks[i].Masklength.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/networks/network%v", data.getPath(), keyString))
+	}
+	for i := range data.RedistributeOspf {
+		keys := [...]string{"router-tag"}
+		keyValues := [...]string{data.RedistributeOspf[i].RouterTag.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/ospf%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	pf_path "github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/openconfig/gnmi/proto/gnmi"
 	"github.com/openconfig/gnmic/api"
@@ -21,6 +22,7 @@ const (
 	DefaultBackoffMinDelay    int     = 4
 	DefaultBackoffMaxDelay    int     = 60
 	DefaultBackoffDelayFactor float64 = 3
+	GnmiTimeout                       = 15 * time.Second
 )
 
 type SetOperationType string
@@ -90,14 +92,6 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		)
 		return diags
 	}
-	err = t.CreateGNMIClient(ctx)
-	if err != nil {
-		diags.AddError(
-			"Unable to create gNMI client",
-			"Unable to create gNMI client:\n\n"+err.Error(),
-		)
-		return diags
-	}
 
 	c.Devices[device] = &Device{}
 	c.Devices[device].Target = t
@@ -108,6 +102,11 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 
 func (c *Client) Set(ctx context.Context, device string, operations ...SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if _, ok := c.Devices[device]; !ok {
+		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
+		return nil, diags
+	}
 
 	target := c.Devices[device].Target
 
@@ -128,12 +127,28 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		return nil, diags
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
-
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
 		c.Devices[device].SetMutex.Lock()
-		setResp, err = target.Set(ctx, setReq)
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			if ok := c.Backoff(ctx, attempts); !ok {
+				diags.AddError(
+					"Unable to create gNMI client",
+					"Unable to create gNMI client:\n\n"+err.Error(),
+				)
+				return nil, diags
+			} else {
+				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+				continue
+			}
+		}
+		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		defer cancel()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
+		setResp, err = target.Set(tCtx, setReq)
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
+		target.Close()
 		c.Devices[device].SetMutex.Unlock()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
@@ -147,13 +162,16 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		break
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
-
 	return setResp, nil
 }
 
 func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetResponse, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if _, ok := c.Devices[device]; !ok {
+		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
+		return nil, diags
+	}
 
 	target := c.Devices[device].Target
 
@@ -163,11 +181,27 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		return nil, diags
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
-
 	var getResp *gnmi.GetResponse
 	for attempts := 0; ; attempts++ {
-		getResp, err = target.Get(ctx, getReq)
+		tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			if ok := c.Backoff(ctx, attempts); !ok {
+				diags.AddError(
+					"Unable to create gNMI client",
+					"Unable to create gNMI client:\n\n"+err.Error(),
+				)
+				return nil, diags
+			} else {
+				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+				continue
+			}
+		}
+		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		defer cancel()
+		getResp, err = target.Get(tCtx, getReq)
+		target.Close()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Get request failed, got error: %s", err))
@@ -179,7 +213,6 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		}
 		break
 	}
-	tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 
 	return getResp, nil
 }

@@ -52,6 +52,7 @@ attributes:
     example: 65535
   - yang_name: lsp-password/keychain/keychain-name
     tf_name: lsp_password_keychain
+    no_delete: true
     example: ISIS-KEY
   - yang_name: distribute/link-state/instance-id
     example: 32
@@ -74,7 +75,7 @@ attributes:
   - yang_name: flex-algos/flex-algo
     tf_name: flex_algos
     type: List
-    attributes: 
+    attributes:
       - yang_name: algorithm-number
         id: true
         example: 128

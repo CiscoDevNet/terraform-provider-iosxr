@@ -194,7 +194,7 @@ func (d *RouterBGPVRFDataSource) Configure(_ context.Context, req datasource.Con
 }
 
 func (d *RouterBGPVRFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterBGPVRF
+	var config RouterBGPVRFData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -16,6 +16,14 @@ import (
 type EVPNGroup struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`
+	DeleteMode     types.String              `tfsdk:"delete_mode"`
+	GroupId        types.Int64               `tfsdk:"group_id"`
+	CoreInterfaces []EVPNGroupCoreInterfaces `tfsdk:"core_interfaces"`
+}
+
+type EVPNGroupData struct {
+	Device         types.String              `tfsdk:"device"`
+	Id             types.String              `tfsdk:"id"`
 	GroupId        types.Int64               `tfsdk:"group_id"`
 	CoreInterfaces []EVPNGroupCoreInterfaces `tfsdk:"core_interfaces"`
 }
@@ -24,6 +32,10 @@ type EVPNGroupCoreInterfaces struct {
 }
 
 func (data EVPNGroup) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]", data.GroupId.ValueInt64())
+}
+
+func (data EVPNGroupData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/groups/group[group-name=%v]", data.GroupId.ValueInt64())
 }
 
@@ -75,7 +87,7 @@ func (data *EVPNGroup) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNGroup) fromBody(ctx context.Context, res []byte) {
+func (data *EVPNGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core.interface"); value.Exists() {
 		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -135,4 +147,19 @@ func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *EVPNGroup) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.CoreInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.CoreInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/core/interface%v", data.getPath(), keyString))
+	}
+	return deletePaths
 }

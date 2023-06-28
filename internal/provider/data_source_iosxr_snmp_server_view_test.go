@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSNMPServerView(t *testing.T) {
@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrSNMPServerView(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerViewConfig = `
 
 resource "iosxr_snmp_server_view" "test" {
+	delete_mode = "attributes"
 	view_name = "VIEW12"
 	mib_view_families = [{
 		name = "iso"

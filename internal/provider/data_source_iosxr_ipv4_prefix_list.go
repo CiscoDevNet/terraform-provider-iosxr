@@ -102,7 +102,7 @@ func (d *IPv4PrefixListDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *IPv4PrefixListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv4PrefixList
+	var config IPv4PrefixListData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

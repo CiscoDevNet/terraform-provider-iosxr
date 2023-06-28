@@ -66,7 +66,7 @@ func (d *RoutePolicyDataSource) Configure(_ context.Context, req datasource.Conf
 }
 
 func (d *RoutePolicyDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RoutePolicy
+	var config RoutePolicyData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

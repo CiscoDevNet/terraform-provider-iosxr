@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrMPLSTrafficEng(t *testing.T) {
@@ -26,6 +26,7 @@ func TestAccDataSourceIosxrMPLSTrafficEng(t *testing.T) {
 const testAccDataSourceIosxrMPLSTrafficEngConfig = `
 
 resource "iosxr_mpls_traffic_eng" "test" {
+	delete_mode = "attributes"
 	traffic_eng = true
 }
 

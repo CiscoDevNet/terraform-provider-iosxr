@@ -82,7 +82,7 @@ func (d *SNMPServerViewDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *SNMPServerViewDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SNMPServerView
+	var config SNMPServerViewData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

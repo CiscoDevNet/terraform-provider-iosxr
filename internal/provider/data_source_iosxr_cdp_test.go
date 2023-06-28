@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrCDP(t *testing.T) {
@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrCDP(t *testing.T) {
 const testAccDataSourceIosxrCDPConfig = `
 
 resource "iosxr_cdp" "test" {
+	delete_mode = "attributes"
 	enable = true
 	holdtime = 12
 	timer = 34

@@ -66,7 +66,7 @@ func (d *BannerDataSource) Configure(_ context.Context, req datasource.Configure
 }
 
 func (d *BannerDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Banner
+	var config BannerData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

@@ -242,7 +242,7 @@ func (d *RouterOSPFDataSource) Configure(_ context.Context, req datasource.Confi
 }
 
 func (d *RouterOSPFDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterOSPF
+	var config RouterOSPFData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

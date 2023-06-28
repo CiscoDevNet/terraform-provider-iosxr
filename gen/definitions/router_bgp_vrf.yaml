@@ -10,25 +10,31 @@ attributes:
   - yang_name: rd/auto
     example: false
   - yang_name: rd/two-byte-as/as-number
+    delete_parent: true
     example: 65004
     exclude_test: true
     optional: true
   - yang_name: rd/two-byte-as/index
+    delete_parent: true
     example: 1
     exclude_test: true
     optional: true
   - yang_name: rd/four-byte-as/as-number
+    delete_parent: true
     example: 65005
     exclude_test: true
     optional: true
   - yang_name: rd/four-byte-as/index
+    delete_parent: true
     example: 2
     exclude_test: true
     optional: true
   - yang_name: rd/ip-address/ipv4-address
+    delete_parent: true
     example: 14.14.14.14
     optional: true
   - yang_name: rd/ip-address/index
+    delete_parent: true
     example: 3
     optional: true
   - yang_name: default-information/originate
@@ -36,8 +42,10 @@ attributes:
   - yang_name: default-metric
     example: 125
   - yang_name: timers/bgp/keepalive-interval
+    delete_parent: true
     example: 5
   - yang_name: timers/bgp/holdtime
+    delete_parent: true
     example: 20
   - yang_name: bfd/minimum-interval
     example: 10
@@ -86,3 +94,9 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
+    attributes:
+      - name: as-number
+        value: 65001

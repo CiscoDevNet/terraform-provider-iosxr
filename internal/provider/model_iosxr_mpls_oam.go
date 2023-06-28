@@ -15,6 +15,17 @@ import (
 type MPLSOAM struct {
 	Device                                        types.String `tfsdk:"device"`
 	Id                                            types.String `tfsdk:"id"`
+	DeleteMode                                    types.String `tfsdk:"delete_mode"`
+	Oam                                           types.Bool   `tfsdk:"oam"`
+	OamEchoDisableVendorExtension                 types.Bool   `tfsdk:"oam_echo_disable_vendor_extension"`
+	OamEchoReplyModeControlChannelAllowReverseLsp types.Bool   `tfsdk:"oam_echo_reply_mode_control_channel_allow_reverse_lsp"`
+	OamDpmPps                                     types.Int64  `tfsdk:"oam_dpm_pps"`
+	OamDpmInterval                                types.Int64  `tfsdk:"oam_dpm_interval"`
+}
+
+type MPLSOAMData struct {
+	Device                                        types.String `tfsdk:"device"`
+	Id                                            types.String `tfsdk:"id"`
 	Oam                                           types.Bool   `tfsdk:"oam"`
 	OamEchoDisableVendorExtension                 types.Bool   `tfsdk:"oam_echo_disable_vendor_extension"`
 	OamEchoReplyModeControlChannelAllowReverseLsp types.Bool   `tfsdk:"oam_echo_reply_mode_control_channel_allow_reverse_lsp"`
@@ -23,6 +34,10 @@ type MPLSOAM struct {
 }
 
 func (data MPLSOAM) getPath() string {
+	return "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
+}
+
+func (data MPLSOAMData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls"
 }
 
@@ -92,7 +107,7 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
+func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)
 	} else {
@@ -133,4 +148,24 @@ func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *MPLSOAM) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Oam.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam", data.getPath()))
+	}
+	if !data.OamEchoDisableVendorExtension.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getPath()))
+	}
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+	}
+	if !data.OamDpmPps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/pps", data.getPath()))
+	}
+	if !data.OamDpmInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/interval", data.getPath()))
+	}
+	return deletePaths
 }

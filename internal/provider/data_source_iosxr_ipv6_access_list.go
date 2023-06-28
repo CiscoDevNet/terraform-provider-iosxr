@@ -642,7 +642,7 @@ func (d *IPv6AccessListDataSource) Configure(_ context.Context, req datasource.C
 }
 
 func (d *IPv6AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config IPv6AccessList
+	var config IPv6AccessListData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

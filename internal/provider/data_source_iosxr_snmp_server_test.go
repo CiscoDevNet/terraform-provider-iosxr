@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
@@ -59,6 +59,7 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 const testAccDataSourceIosxrSNMPServerConfig = `
 
 resource "iosxr_snmp_server" "test" {
+	delete_mode = "attributes"
 	rf = true
 	bfd = true
 	ntp = true

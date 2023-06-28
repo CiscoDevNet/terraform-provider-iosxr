@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrInterface(t *testing.T) {
@@ -52,43 +52,43 @@ func TestAccIosxrInterface(t *testing.T) {
 
 const testAccIosxrInterfacePrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-  path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
-  attributes = {
-      "policy-map-name" = "PMAP-IN"
-  }
-  lists = [
-    {
-      name = "class"
-	  key = "name,type"
-      items = [
-          {
-			"name" = "class-default"
-			"type" = "qos"
-			"set/qos-group" = "0"
-          },
-      ] 
-    },
-  ]
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
+	attributes = {
+		"policy-map-name" = "PMAP-IN"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/qos-group" = "0"
+				},
+			] 
+		},
+	]
 }
 
 resource "iosxr_gnmi" "PreReq1" {
-  path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
-  attributes = {
-      "policy-map-name" = "PMAP-OUT"
-  }
-  lists = [
-    {
-      name = "class"
-	  key = "name,type"
-      items = [
-          {
-			"name" = "class-default"
-			"type" = "qos"
-			"set/dscp" = "0"
-          },
-      ] 
-    },
-  ]
+	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-OUT]"
+	attributes = {
+		"policy-map-name" = "PMAP-OUT"
+	}
+	lists = [
+		{
+			name = "class"
+			key = "name,type"
+			items = [
+				{
+					"name" = "class-default"
+					"type" = "qos"
+					"set/dscp" = "0"
+				},
+			] 
+		},
+	]
 }
 
 `
@@ -98,7 +98,7 @@ func testAccIosxrInterfaceConfig_minimum() string {
 	resource "iosxr_interface" "test" {
 		interface_name = "GigabitEthernet0/0/0/1"
 		dampening_decay_half_life_value = 2
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`
 }

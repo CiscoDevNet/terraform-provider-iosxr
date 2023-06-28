@@ -10,13 +10,16 @@ attributes:
   - yang_name: af-name
     example: ipv4-unicast
   - yang_name: maximum-paths/ebgp/multipath
+    delete_parent: true
     example: 10
     optional: true
   - yang_name: maximum-paths/eibgp/multipath
+    delete_parent: true
     example: 10
     optional: true
     exclude_test: true
   - yang_name: maximum-paths/ibgp/multipath
+    delete_parent: true
     optional: true
     example: 10
   - yang_name: label/mode/per-ce
@@ -34,7 +37,7 @@ attributes:
   - yang_name: segment-routing/srv6/locator
     example: LocAlgo11
   - yang_name: segment-routing/srv6/alloc/mode/per-vrf
-    example: true    
+    example: true
   - yang_name: aggregate-addresses/aggregate-address
     tf_name: aggregate_addresses
     type: List
@@ -89,8 +92,14 @@ test_prerequisites:
         value: 1
       - name: index
         value: 1
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]
-    dependencies: [0]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
-      - name: af-name
-        value: vpnv4-unicast
+      - name: as-number
+        value: 65001
+    lists:
+      - name: address-families/address-family
+        key: af-name
+        items:
+          - attributes:
+              - name: af-name
+                value: vpnv4-unicast

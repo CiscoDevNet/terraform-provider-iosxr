@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrIPv4AccessListOptions(t *testing.T) {
@@ -27,6 +27,7 @@ func TestAccDataSourceIosxrIPv4AccessListOptions(t *testing.T) {
 const testAccDataSourceIosxrIPv4AccessListOptionsConfig = `
 
 resource "iosxr_ipv4_access_list_options" "test" {
+	delete_mode = "attributes"
 	log_update_threshold = 214748
 	log_update_rate = 1000
 }

@@ -102,7 +102,7 @@ func (d *LoggingDataSource) Configure(_ context.Context, req datasource.Configur
 }
 
 func (d *LoggingDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config Logging
+	var config LoggingData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

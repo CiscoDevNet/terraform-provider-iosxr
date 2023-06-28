@@ -138,7 +138,7 @@ func (d *PolicyMapQoSDataSource) Configure(_ context.Context, req datasource.Con
 }
 
 func (d *PolicyMapQoSDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config PolicyMapQoS
+	var config PolicyMapQoSData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

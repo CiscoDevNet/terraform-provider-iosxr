@@ -53,6 +53,8 @@ resource "iosxr_mpls_ldp" "example" {
 - `capabilities_sac_fec129_disable` (Boolean) Disable exchanging PW FEC129 label bindings
 - `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
 - `capabilities_sac_ipv6_disable` (Boolean) Disable exchanging IPv6 prefix label bindings
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
 - `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))

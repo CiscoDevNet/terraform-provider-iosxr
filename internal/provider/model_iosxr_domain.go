@@ -15,45 +15,45 @@ import (
 )
 
 type Domain struct {
-	Device                types.String       `tfsdk:"device"`
-	Id                    types.String       `tfsdk:"id"`
-	ListDomain            []DomainListDomain `tfsdk:"list_domain"`
-	LookupDisable         types.Bool         `tfsdk:"lookup_disable"`
-	LookupSourceInterface types.String       `tfsdk:"lookup_source_interface"`
-	Name                  types.String       `tfsdk:"name"`
-	Ipv4Host              []DomainIpv4Host   `tfsdk:"ipv4_host"`
-	NameServer            []DomainNameServer `tfsdk:"name_server"`
-	Ipv6Host              []DomainIpv6Host   `tfsdk:"ipv6_host"`
-	Multicast             types.String       `tfsdk:"multicast"`
-	DefaultFlowsDisable   types.Bool         `tfsdk:"default_flows_disable"`
+	Device                types.String        `tfsdk:"device"`
+	Id                    types.String        `tfsdk:"id"`
+	Domains               []DomainDomains     `tfsdk:"domains"`
+	LookupDisable         types.Bool          `tfsdk:"lookup_disable"`
+	LookupSourceInterface types.String        `tfsdk:"lookup_source_interface"`
+	Name                  types.String        `tfsdk:"name"`
+	Ipv4Hosts             []DomainIpv4Hosts   `tfsdk:"ipv4_hosts"`
+	NameServers           []DomainNameServers `tfsdk:"name_servers"`
+	Ipv6Hosts             []DomainIpv6Hosts   `tfsdk:"ipv6_hosts"`
+	Multicast             types.String        `tfsdk:"multicast"`
+	DefaultFlowsDisable   types.Bool          `tfsdk:"default_flows_disable"`
 }
 
 type DomainData struct {
-	Device                types.String       `tfsdk:"device"`
-	Id                    types.String       `tfsdk:"id"`
-	ListDomain            []DomainListDomain `tfsdk:"list_domain"`
-	LookupDisable         types.Bool         `tfsdk:"lookup_disable"`
-	LookupSourceInterface types.String       `tfsdk:"lookup_source_interface"`
-	Name                  types.String       `tfsdk:"name"`
-	Ipv4Host              []DomainIpv4Host   `tfsdk:"ipv4_host"`
-	NameServer            []DomainNameServer `tfsdk:"name_server"`
-	Ipv6Host              []DomainIpv6Host   `tfsdk:"ipv6_host"`
-	Multicast             types.String       `tfsdk:"multicast"`
-	DefaultFlowsDisable   types.Bool         `tfsdk:"default_flows_disable"`
+	Device                types.String        `tfsdk:"device"`
+	Id                    types.String        `tfsdk:"id"`
+	Domains               []DomainDomains     `tfsdk:"domains"`
+	LookupDisable         types.Bool          `tfsdk:"lookup_disable"`
+	LookupSourceInterface types.String        `tfsdk:"lookup_source_interface"`
+	Name                  types.String        `tfsdk:"name"`
+	Ipv4Hosts             []DomainIpv4Hosts   `tfsdk:"ipv4_hosts"`
+	NameServers           []DomainNameServers `tfsdk:"name_servers"`
+	Ipv6Hosts             []DomainIpv6Hosts   `tfsdk:"ipv6_hosts"`
+	Multicast             types.String        `tfsdk:"multicast"`
+	DefaultFlowsDisable   types.Bool          `tfsdk:"default_flows_disable"`
 }
-type DomainListDomain struct {
+type DomainDomains struct {
 	DomainName types.String `tfsdk:"domain_name"`
 	Order      types.Int64  `tfsdk:"order"`
 }
-type DomainIpv4Host struct {
+type DomainIpv4Hosts struct {
 	HostName  types.String `tfsdk:"host_name"`
 	IpAddress types.List   `tfsdk:"ip_address"`
 }
-type DomainNameServer struct {
+type DomainNameServers struct {
 	Address types.String `tfsdk:"address"`
 	Order   types.Int64  `tfsdk:"order"`
 }
-type DomainIpv6Host struct {
+type DomainIpv6Hosts struct {
 	HostName    types.String `tfsdk:"host_name"`
 	Ipv6Address types.List   `tfsdk:"ipv6_address"`
 }
@@ -87,9 +87,9 @@ func (data Domain) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "default-flows.disable", map[string]string{})
 		}
 	}
-	if len(data.ListDomain) > 0 {
+	if len(data.Domains) > 0 {
 		body, _ = sjson.Set(body, "list.domain", []interface{}{})
-		for index, item := range data.ListDomain {
+		for index, item := range data.Domains {
 			if !item.DomainName.IsNull() && !item.DomainName.IsUnknown() {
 				body, _ = sjson.Set(body, "list.domain"+"."+strconv.Itoa(index)+"."+"domain-name", item.DomainName.ValueString())
 			}
@@ -98,9 +98,9 @@ func (data Domain) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.Ipv4Host) > 0 {
+	if len(data.Ipv4Hosts) > 0 {
 		body, _ = sjson.Set(body, "ipv4.hosts.host", []interface{}{})
-		for index, item := range data.Ipv4Host {
+		for index, item := range data.Ipv4Hosts {
 			if !item.HostName.IsNull() && !item.HostName.IsUnknown() {
 				body, _ = sjson.Set(body, "ipv4.hosts.host"+"."+strconv.Itoa(index)+"."+"host-name", item.HostName.ValueString())
 			}
@@ -111,9 +111,9 @@ func (data Domain) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.NameServer) > 0 {
+	if len(data.NameServers) > 0 {
 		body, _ = sjson.Set(body, "name-servers.name-server", []interface{}{})
-		for index, item := range data.NameServer {
+		for index, item := range data.NameServers {
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body, _ = sjson.Set(body, "name-servers.name-server"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
@@ -122,9 +122,9 @@ func (data Domain) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.Ipv6Host) > 0 {
+	if len(data.Ipv6Hosts) > 0 {
 		body, _ = sjson.Set(body, "ipv6.host.host", []interface{}{})
-		for index, item := range data.Ipv6Host {
+		for index, item := range data.Ipv6Hosts {
 			if !item.HostName.IsNull() && !item.HostName.IsUnknown() {
 				body, _ = sjson.Set(body, "ipv6.host.host"+"."+strconv.Itoa(index)+"."+"host-name", item.HostName.ValueString())
 			}
@@ -139,9 +139,9 @@ func (data Domain) toBody(ctx context.Context) string {
 }
 
 func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
-	for i := range data.ListDomain {
+	for i := range data.Domains {
 		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.ListDomain[i].DomainName.ValueString()}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "list.domain").ForEach(
@@ -162,15 +162,15 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("domain-name"); value.Exists() && !data.ListDomain[i].DomainName.IsNull() {
-			data.ListDomain[i].DomainName = types.StringValue(value.String())
+		if value := r.Get("domain-name"); value.Exists() && !data.Domains[i].DomainName.IsNull() {
+			data.Domains[i].DomainName = types.StringValue(value.String())
 		} else {
-			data.ListDomain[i].DomainName = types.StringNull()
+			data.Domains[i].DomainName = types.StringNull()
 		}
-		if value := r.Get("order"); value.Exists() && !data.ListDomain[i].Order.IsNull() {
-			data.ListDomain[i].Order = types.Int64Value(value.Int())
+		if value := r.Get("order"); value.Exists() && !data.Domains[i].Order.IsNull() {
+			data.Domains[i].Order = types.Int64Value(value.Int())
 		} else {
-			data.ListDomain[i].Order = types.Int64Null()
+			data.Domains[i].Order = types.Int64Null()
 		}
 	}
 	if value := gjson.GetBytes(res, "lookup.disable"); !data.LookupDisable.IsNull() {
@@ -192,9 +192,9 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Name = types.StringNull()
 	}
-	for i := range data.Ipv4Host {
+	for i := range data.Ipv4Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv4Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "ipv4.hosts.host").ForEach(
@@ -215,20 +215,20 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("host-name"); value.Exists() && !data.Ipv4Host[i].HostName.IsNull() {
-			data.Ipv4Host[i].HostName = types.StringValue(value.String())
+		if value := r.Get("host-name"); value.Exists() && !data.Ipv4Hosts[i].HostName.IsNull() {
+			data.Ipv4Hosts[i].HostName = types.StringValue(value.String())
 		} else {
-			data.Ipv4Host[i].HostName = types.StringNull()
+			data.Ipv4Hosts[i].HostName = types.StringNull()
 		}
-		if value := r.Get("ip-address"); value.Exists() && !data.Ipv4Host[i].IpAddress.IsNull() {
-			data.Ipv4Host[i].IpAddress = helpers.GetStringList(value.Array())
+		if value := r.Get("ip-address"); value.Exists() && !data.Ipv4Hosts[i].IpAddress.IsNull() {
+			data.Ipv4Hosts[i].IpAddress = helpers.GetStringList(value.Array())
 		} else {
-			data.Ipv4Host[i].IpAddress = types.ListNull(types.StringType)
+			data.Ipv4Hosts[i].IpAddress = types.ListNull(types.StringType)
 		}
 	}
-	for i := range data.NameServer {
+	for i := range data.NameServers {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServer[i].Address.ValueString()}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "name-servers.name-server").ForEach(
@@ -249,20 +249,20 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.NameServer[i].Address.IsNull() {
-			data.NameServer[i].Address = types.StringValue(value.String())
+		if value := r.Get("address"); value.Exists() && !data.NameServers[i].Address.IsNull() {
+			data.NameServers[i].Address = types.StringValue(value.String())
 		} else {
-			data.NameServer[i].Address = types.StringNull()
+			data.NameServers[i].Address = types.StringNull()
 		}
-		if value := r.Get("order"); value.Exists() && !data.NameServer[i].Order.IsNull() {
-			data.NameServer[i].Order = types.Int64Value(value.Int())
+		if value := r.Get("order"); value.Exists() && !data.NameServers[i].Order.IsNull() {
+			data.NameServers[i].Order = types.Int64Value(value.Int())
 		} else {
-			data.NameServer[i].Order = types.Int64Null()
+			data.NameServers[i].Order = types.Int64Null()
 		}
 	}
-	for i := range data.Ipv6Host {
+	for i := range data.Ipv6Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv6Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "ipv6.host.host").ForEach(
@@ -283,15 +283,15 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("host-name"); value.Exists() && !data.Ipv6Host[i].HostName.IsNull() {
-			data.Ipv6Host[i].HostName = types.StringValue(value.String())
+		if value := r.Get("host-name"); value.Exists() && !data.Ipv6Hosts[i].HostName.IsNull() {
+			data.Ipv6Hosts[i].HostName = types.StringValue(value.String())
 		} else {
-			data.Ipv6Host[i].HostName = types.StringNull()
+			data.Ipv6Hosts[i].HostName = types.StringNull()
 		}
-		if value := r.Get("ipv6-address"); value.Exists() && !data.Ipv6Host[i].Ipv6Address.IsNull() {
-			data.Ipv6Host[i].Ipv6Address = helpers.GetStringList(value.Array())
+		if value := r.Get("ipv6-address"); value.Exists() && !data.Ipv6Hosts[i].Ipv6Address.IsNull() {
+			data.Ipv6Hosts[i].Ipv6Address = helpers.GetStringList(value.Array())
 		} else {
-			data.Ipv6Host[i].Ipv6Address = types.ListNull(types.StringType)
+			data.Ipv6Hosts[i].Ipv6Address = types.ListNull(types.StringType)
 		}
 	}
 	if value := gjson.GetBytes(res, "multicast"); value.Exists() && !data.Multicast.IsNull() {
@@ -312,16 +312,16 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 
 func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
-		data.ListDomain = make([]DomainListDomain, 0)
+		data.Domains = make([]DomainDomains, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainListDomain{}
+			item := DomainDomains{}
 			if cValue := v.Get("domain-name"); cValue.Exists() {
 				item.DomainName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("order"); cValue.Exists() {
 				item.Order = types.Int64Value(cValue.Int())
 			}
-			data.ListDomain = append(data.ListDomain, item)
+			data.Domains = append(data.Domains, item)
 			return true
 		})
 	}
@@ -337,9 +337,9 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 		data.Name = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ipv4.hosts.host"); value.Exists() {
-		data.Ipv4Host = make([]DomainIpv4Host, 0)
+		data.Ipv4Hosts = make([]DomainIpv4Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv4Host{}
+			item := DomainIpv4Hosts{}
 			if cValue := v.Get("host-name"); cValue.Exists() {
 				item.HostName = types.StringValue(cValue.String())
 			}
@@ -348,28 +348,28 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.IpAddress = types.ListNull(types.StringType)
 			}
-			data.Ipv4Host = append(data.Ipv4Host, item)
+			data.Ipv4Hosts = append(data.Ipv4Hosts, item)
 			return true
 		})
 	}
 	if value := gjson.GetBytes(res, "name-servers.name-server"); value.Exists() {
-		data.NameServer = make([]DomainNameServer, 0)
+		data.NameServers = make([]DomainNameServers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainNameServer{}
+			item := DomainNameServers{}
 			if cValue := v.Get("address"); cValue.Exists() {
 				item.Address = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("order"); cValue.Exists() {
 				item.Order = types.Int64Value(cValue.Int())
 			}
-			data.NameServer = append(data.NameServer, item)
+			data.NameServers = append(data.NameServers, item)
 			return true
 		})
 	}
 	if value := gjson.GetBytes(res, "ipv6.host.host"); value.Exists() {
-		data.Ipv6Host = make([]DomainIpv6Host, 0)
+		data.Ipv6Hosts = make([]DomainIpv6Hosts, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := DomainIpv6Host{}
+			item := DomainIpv6Hosts{}
 			if cValue := v.Get("host-name"); cValue.Exists() {
 				item.HostName = types.StringValue(cValue.String())
 			}
@@ -378,7 +378,7 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.Ipv6Address = types.ListNull(types.StringType)
 			}
-			data.Ipv6Host = append(data.Ipv6Host, item)
+			data.Ipv6Hosts = append(data.Ipv6Hosts, item)
 			return true
 		})
 	}
@@ -394,12 +394,12 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.ListDomain {
+	for i := range state.Domains {
 		keys := [...]string{"domain-name"}
-		stateKeyValues := [...]string{state.ListDomain[i].DomainName.ValueString()}
+		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.ListDomain[i].DomainName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Domains[i].DomainName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -407,9 +407,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		}
 
 		found := false
-		for j := range data.ListDomain {
+		for j := range data.Domains {
 			found = true
-			if state.ListDomain[i].DomainName.ValueString() != data.ListDomain[j].DomainName.ValueString() {
+			if state.Domains[i].DomainName.ValueString() != data.Domains[j].DomainName.ValueString() {
 				found = false
 			}
 			if found {
@@ -424,12 +424,12 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/list/domain%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.Ipv4Host {
+	for i := range state.Ipv4Hosts {
 		keys := [...]string{"host-name"}
-		stateKeyValues := [...]string{state.Ipv4Host[i].HostName.ValueString()}
+		stateKeyValues := [...]string{state.Ipv4Hosts[i].HostName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Ipv4Host[i].HostName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Ipv4Hosts[i].HostName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -437,9 +437,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		}
 
 		found := false
-		for j := range data.Ipv4Host {
+		for j := range data.Ipv4Hosts {
 			found = true
-			if state.Ipv4Host[i].HostName.ValueString() != data.Ipv4Host[j].HostName.ValueString() {
+			if state.Ipv4Hosts[i].HostName.ValueString() != data.Ipv4Hosts[j].HostName.ValueString() {
 				found = false
 			}
 			if found {
@@ -454,12 +454,12 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv4/hosts/host%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.NameServer {
+	for i := range state.NameServers {
 		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.NameServer[i].Address.ValueString()}
+		stateKeyValues := [...]string{state.NameServers[i].Address.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.NameServer[i].Address.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.NameServers[i].Address.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -467,9 +467,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		}
 
 		found := false
-		for j := range data.NameServer {
+		for j := range data.NameServers {
 			found = true
-			if state.NameServer[i].Address.ValueString() != data.NameServer[j].Address.ValueString() {
+			if state.NameServers[i].Address.ValueString() != data.NameServers[j].Address.ValueString() {
 				found = false
 			}
 			if found {
@@ -484,12 +484,12 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/name-servers/name-server%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.Ipv6Host {
+	for i := range state.Ipv6Hosts {
 		keys := [...]string{"host-name"}
-		stateKeyValues := [...]string{state.Ipv6Host[i].HostName.ValueString()}
+		stateKeyValues := [...]string{state.Ipv6Hosts[i].HostName.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Ipv6Host[i].HostName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Ipv6Hosts[i].HostName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -497,9 +497,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 		}
 
 		found := false
-		for j := range data.Ipv6Host {
+		for j := range data.Ipv6Hosts {
 			found = true
-			if state.Ipv6Host[i].HostName.ValueString() != data.Ipv6Host[j].HostName.ValueString() {
+			if state.Ipv6Hosts[i].HostName.ValueString() != data.Ipv6Hosts[j].HostName.ValueString() {
 				found = false
 			}
 			if found {
@@ -519,9 +519,9 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 
 func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.ListDomain {
+	for i := range data.Domains {
 		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.ListDomain[i].DomainName.ValueString()}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -530,25 +530,25 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.LookupDisable.IsNull() && !data.LookupDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lookup/disable", data.getPath()))
 	}
-	for i := range data.Ipv4Host {
+	for i := range data.Ipv4Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv4Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.NameServer {
+	for i := range data.NameServers {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServer[i].Address.ValueString()}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.Ipv6Host {
+	for i := range data.Ipv6Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv6Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -562,9 +562,9 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *Domain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.ListDomain {
+	for i := range data.Domains {
 		keys := [...]string{"domain-name"}
-		keyValues := [...]string{data.ListDomain[i].DomainName.ValueString()}
+		keyValues := [...]string{data.Domains[i].DomainName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {
@@ -581,9 +581,9 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 	if !data.Name.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
 	}
-	for i := range data.Ipv4Host {
+	for i := range data.Ipv4Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv4Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv4Hosts[i].HostName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {
@@ -591,9 +591,9 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyString))
 	}
-	for i := range data.NameServer {
+	for i := range data.NameServers {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.NameServer[i].Address.ValueString()}
+		keyValues := [...]string{data.NameServers[i].Address.ValueString()}
 
 		keyString := ""
 		for ki := range keys {
@@ -601,9 +601,9 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server%v", data.getPath(), keyString))
 	}
-	for i := range data.Ipv6Host {
+	for i := range data.Ipv6Hosts {
 		keys := [...]string{"host-name"}
-		keyValues := [...]string{data.Ipv6Host[i].HostName.ValueString()}
+		keyValues := [...]string{data.Ipv6Hosts[i].HostName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

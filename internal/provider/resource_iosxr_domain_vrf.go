@@ -61,7 +61,7 @@ func (r *DomainVRFResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"list_domain": schema.ListNestedAttribute{
+			"domains": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("A domain name").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -103,7 +103,7 @@ func (r *DomainVRFResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
 				},
 			},
-			"ipv4_host": schema.ListNestedAttribute{
+			"ipv4_hosts": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of host").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -123,7 +123,7 @@ func (r *DomainVRFResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 				},
 			},
-			"name_server": schema.ListNestedAttribute{
+			"name_servers": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify address of name server to use").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -142,7 +142,7 @@ func (r *DomainVRFResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 				},
 			},
-			"ipv6_host": schema.ListNestedAttribute{
+			"ipv6_hosts": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of host").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

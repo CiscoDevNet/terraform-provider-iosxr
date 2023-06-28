@@ -5,6 +5,7 @@ no_delete_attributes: true
 doc_category: System
 attributes:
   - yang_name: list/domain
+    tf_name: domains
     type: List
     attributes:
       - yang_name: domain-name
@@ -19,7 +20,7 @@ attributes:
   - yang_name: name
     example: DOMAIN
   - yang_name: ipv4/hosts/host
-    tf_name: ipv4_host
+    tf_name: ipv4_hosts
     type: List
     attributes:
       - yang_name: host-name
@@ -28,7 +29,7 @@ attributes:
       - yang_name: ip-address
         example: 10.0.0.0
   - yang_name: name-servers/name-server
-    tf_name: name_server
+    tf_name: name_servers
     type: List
     attributes:
       - yang_name: address
@@ -37,7 +38,7 @@ attributes:
       - yang_name: order
         example: 345
   - yang_name: ipv6/host/host
-    tf_name: ipv6_host
+    tf_name: ipv6_hosts
     type: List
     attributes:
       - yang_name: host-name

@@ -27,36 +27,18 @@ data "iosxr_domain" "example" {
 ### Read-Only
 
 - `default_flows_disable` (Boolean) disables default flows programming
+- `domains` (Attributes List) A domain name (see [below for nested schema](#nestedatt--domains))
 - `id` (String) The path of the retrieved object.
-- `ipv4_host` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv4_host))
-- `ipv6_host` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv6_host))
-- `list_domain` (Attributes List) A domain name (see [below for nested schema](#nestedatt--list_domain))
+- `ipv4_hosts` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv4_hosts))
+- `ipv6_hosts` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv6_hosts))
 - `lookup_disable` (Boolean) Disable Domain Name System hostname translation
 - `lookup_source_interface` (String) Specify source interface for DNS resolver
 - `multicast` (String) Define the domain name for multicast address lookups
 - `name` (String) Define the default domain name
-- `name_server` (Attributes List) Specify address of name server to use (see [below for nested schema](#nestedatt--name_server))
+- `name_servers` (Attributes List) Specify address of name server to use (see [below for nested schema](#nestedatt--name_servers))
 
-<a id="nestedatt--ipv4_host"></a>
-### Nested Schema for `ipv4_host`
-
-Read-Only:
-
-- `host_name` (String) Name of host
-- `ip_address` (List of String) Host IP address (maximum of 8)
-
-
-<a id="nestedatt--ipv6_host"></a>
-### Nested Schema for `ipv6_host`
-
-Read-Only:
-
-- `host_name` (String) Name of host
-- `ipv6_address` (List of String) IPv6 name or address (maximum four addresses)
-
-
-<a id="nestedatt--list_domain"></a>
-### Nested Schema for `list_domain`
+<a id="nestedatt--domains"></a>
+### Nested Schema for `domains`
 
 Read-Only:
 
@@ -64,8 +46,26 @@ Read-Only:
 - `order` (Number) This is used to sort the servers in the order of precedence
 
 
-<a id="nestedatt--name_server"></a>
-### Nested Schema for `name_server`
+<a id="nestedatt--ipv4_hosts"></a>
+### Nested Schema for `ipv4_hosts`
+
+Read-Only:
+
+- `host_name` (String) Name of host
+- `ip_address` (List of String) Host IP address (maximum of 8)
+
+
+<a id="nestedatt--ipv6_hosts"></a>
+### Nested Schema for `ipv6_hosts`
+
+Read-Only:
+
+- `host_name` (String) Name of host
+- `ipv6_address` (List of String) IPv6 name or address (maximum four addresses)
+
+
+<a id="nestedatt--name_servers"></a>
+### Nested Schema for `name_servers`
 
 Read-Only:
 

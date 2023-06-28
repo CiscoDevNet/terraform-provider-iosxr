@@ -16,17 +16,17 @@ func TestAccIosxrDomain(t *testing.T) {
 			{
 				Config: testAccIosxrDomainConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_domain.test", "list_domain.0.domain_name", "DOMAIN1"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "list_domain.0.order", "0"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "domains.0.domain_name", "DOMAIN1"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "domains.0.order", "0"),
 					resource.TestCheckResourceAttr("iosxr_domain.test", "lookup_disable", "true"),
 					resource.TestCheckResourceAttr("iosxr_domain.test", "lookup_source_interface", "Loopback2147483647"),
 					resource.TestCheckResourceAttr("iosxr_domain.test", "name", "DOMAIN"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_host.0.host_name", "HOST_NAME"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_host.0.ip_address.0", "10.0.0.0"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "name_server.0.address", "10.0.0.1"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "name_server.0.order", "345"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv6_host.0.host_name", "HOST_NAME_IPV6"),
-					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv6_host.0.ipv6_address.0", "10::10"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_hosts.0.host_name", "HOST_NAME"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "name_servers.0.address", "10.0.0.1"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "name_servers.0.order", "345"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"),
+					resource.TestCheckResourceAttr("iosxr_domain.test", "ipv6_hosts.0.ipv6_address.0", "10::10"),
 					resource.TestCheckResourceAttr("iosxr_domain.test", "multicast", "DOMAIN1_ACC"),
 					resource.TestCheckResourceAttr("iosxr_domain.test", "default_flows_disable", "true"),
 				),
@@ -50,22 +50,22 @@ func testAccIosxrDomainConfig_minimum() string {
 func testAccIosxrDomainConfig_all() string {
 	return `
 	resource "iosxr_domain" "test" {
-		list_domain = [{
+		domains = [{
 			domain_name = "DOMAIN1"
 			order = 0
 		}]
 		lookup_disable = true
 		lookup_source_interface = "Loopback2147483647"
 		name = "DOMAIN"
-		ipv4_host = [{
+		ipv4_hosts = [{
 			host_name = "HOST_NAME"
 			ip_address = ["10.0.0.0"]
 		}]
-		name_server = [{
+		name_servers = [{
 			address = "10.0.0.1"
 			order = 345
 		}]
-		ipv6_host = [{
+		ipv6_hosts = [{
 			host_name = "HOST_NAME_IPV6"
 			ipv6_address = ["10::10"]
 		}]

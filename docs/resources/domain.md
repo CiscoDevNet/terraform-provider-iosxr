@@ -14,7 +14,7 @@ This resource can manage the Domain configuration.
 
 ```terraform
 resource "iosxr_domain" "example" {
-  list_domain = [
+  domains = [
     {
       domain_name = "DOMAIN1"
       order       = 0
@@ -23,19 +23,19 @@ resource "iosxr_domain" "example" {
   lookup_disable          = true
   lookup_source_interface = "Loopback2147483647"
   name                    = "DOMAIN"
-  ipv4_host = [
+  ipv4_hosts = [
     {
       host_name  = "HOST_NAME"
       ip_address = ["10.0.0.0"]
     }
   ]
-  name_server = [
+  name_servers = [
     {
       address = "10.0.0.1"
       order   = 345
     }
   ]
-  ipv6_host = [
+  ipv6_hosts = [
     {
       host_name    = "HOST_NAME_IPV6"
       ipv6_address = ["10::10"]
@@ -53,45 +53,21 @@ resource "iosxr_domain" "example" {
 
 - `default_flows_disable` (Boolean) disables default flows programming
 - `device` (String) A device name from the provider configuration.
-- `ipv4_host` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv4_host))
-- `ipv6_host` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv6_host))
-- `list_domain` (Attributes List) A domain name (see [below for nested schema](#nestedatt--list_domain))
+- `domains` (Attributes List) A domain name (see [below for nested schema](#nestedatt--domains))
+- `ipv4_hosts` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv4_hosts))
+- `ipv6_hosts` (Attributes List) Name of host (see [below for nested schema](#nestedatt--ipv6_hosts))
 - `lookup_disable` (Boolean) Disable Domain Name System hostname translation
 - `lookup_source_interface` (String) Specify source interface for DNS resolver
 - `multicast` (String) Define the domain name for multicast address lookups
 - `name` (String) Define the default domain name
-- `name_server` (Attributes List) Specify address of name server to use (see [below for nested schema](#nestedatt--name_server))
+- `name_servers` (Attributes List) Specify address of name server to use (see [below for nested schema](#nestedatt--name_servers))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--ipv4_host"></a>
-### Nested Schema for `ipv4_host`
-
-Required:
-
-- `host_name` (String) Name of host
-
-Optional:
-
-- `ip_address` (List of String) Host IP address (maximum of 8)
-
-
-<a id="nestedatt--ipv6_host"></a>
-### Nested Schema for `ipv6_host`
-
-Required:
-
-- `host_name` (String) Name of host
-
-Optional:
-
-- `ipv6_address` (List of String) IPv6 name or address (maximum four addresses)
-
-
-<a id="nestedatt--list_domain"></a>
-### Nested Schema for `list_domain`
+<a id="nestedatt--domains"></a>
+### Nested Schema for `domains`
 
 Required:
 
@@ -103,8 +79,32 @@ Optional:
   - Range: `0`-`4294967295`
 
 
-<a id="nestedatt--name_server"></a>
-### Nested Schema for `name_server`
+<a id="nestedatt--ipv4_hosts"></a>
+### Nested Schema for `ipv4_hosts`
+
+Required:
+
+- `host_name` (String) Name of host
+
+Optional:
+
+- `ip_address` (List of String) Host IP address (maximum of 8)
+
+
+<a id="nestedatt--ipv6_hosts"></a>
+### Nested Schema for `ipv6_hosts`
+
+Required:
+
+- `host_name` (String) Name of host
+
+Optional:
+
+- `ipv6_address` (List of String) IPv6 name or address (maximum four addresses)
+
+
+<a id="nestedatt--name_servers"></a>
+### Nested Schema for `name_servers`
 
 Required:
 

@@ -45,7 +45,7 @@ func (d *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"list_domain": schema.ListNestedAttribute{
+			"domains": schema.ListNestedAttribute{
 				MarkdownDescription: "A domain name",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -73,7 +73,7 @@ func (d *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 				MarkdownDescription: "Define the default domain name",
 				Computed:            true,
 			},
-			"ipv4_host": schema.ListNestedAttribute{
+			"ipv4_hosts": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of host",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -90,7 +90,7 @@ func (d *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"name_server": schema.ListNestedAttribute{
+			"name_servers": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify address of name server to use",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -106,7 +106,7 @@ func (d *DomainDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 					},
 				},
 			},
-			"ipv6_host": schema.ListNestedAttribute{
+			"ipv6_hosts": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of host",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

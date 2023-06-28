@@ -67,16 +67,17 @@ resource "iosxr_gnmi" "PreReq1" {
 	attributes = {
 		"as-number" = "65001"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
-	delete = false
-	attributes = {
-		"af-name" = "vpnv4-unicast"
-	}
-	depends_on = [iosxr_gnmi.PreReq1, ]
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			] 
+		},
+	]
 }
 
 `
@@ -87,7 +88,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 		as_number = "65001"
 		vrf_name = "VRF1"
 		af_name = "ipv4-unicast"
-		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`
 }
@@ -129,7 +130,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 			match_nssa_external = false
 			metric = 100
 		}]
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`
 }

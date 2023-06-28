@@ -43,37 +43,50 @@ resource "iosxr_gnmi" "PreReq1" {
 	attributes = {
 		"as-number" = "65001"
 	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+	]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
 	delete = false
 	attributes = {
-		"af-name" = "vpnv4-unicast"
+		"vrf-name" = "VRF1"
 	}
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "ipv4-unicast"
+				},
+			]
+		},
+		{
+			name = "neighbors/neighbor"
+			key = "neighbor-address"
+			items = [
+				{
+					"neighbor-address" = "10.1.1.2"
+					"remote-as" = "65002"
+				},
+			]
+		},
+	]
 	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 }
 
 resource "iosxr_gnmi" "PreReq3" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/address-families/address-family[af-name=ipv4-unicast]"
-	delete = false
-	attributes = {
-		"af-name" = "ipv4-unicast"
-	}
-	depends_on = [iosxr_gnmi.PreReq2, ]
-}
-
-resource "iosxr_gnmi" "PreReq4" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/neighbors/neighbor[neighbor-address=10.1.1.2]"
-	delete = false
-	attributes = {
-		"neighbor-address" = "10.1.1.2"
-		"remote-as" = "65002"
-	}
-	depends_on = [iosxr_gnmi.PreReq3, ]
-}
-
-resource "iosxr_gnmi" "PreReq5" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -98,7 +111,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
 	soft_reconfiguration_inbound_always = true
 	send_community_ebgp_inheritance_disable = true
 	remove_private_as_inheritance_disable = true
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, iosxr_gnmi.PreReq5, ]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
 }
 
 data "iosxr_router_bgp_vrf_neighbor_address_family" "test" {

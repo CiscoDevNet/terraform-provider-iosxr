@@ -33,25 +33,27 @@ resource "iosxr_gnmi" "PreReq0" {
 	attributes = {
 		"as-number" = "65001"
 	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=vpnv4-unicast]"
-	delete = false
-	attributes = {
-		"af-name" = "vpnv4-unicast"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
-}
-
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]"
-	delete = false
-	attributes = {
-		"neighbor-address" = "10.1.1.2"
-		"remote-as" = "65002"
-	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	lists = [
+		{
+			name = "address-families/address-family"
+			key = "af-name"
+			items = [
+				{
+					"af-name" = "vpnv4-unicast"
+				},
+			]
+		},
+		{
+			name = "neighbors/neighbor"
+			key = "neighbor-address"
+			items = [
+				{
+					"neighbor-address" = "10.1.1.2"
+					"remote-as" = "65002"
+				},
+			]
+		},
+	]
 }
 
 `
@@ -68,7 +70,7 @@ resource "iosxr_router_bgp_neighbor_address_family" "test" {
 	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
 	next_hop_self_inheritance_disable = true
 	encapsulation_type_srv6 = true
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 data "iosxr_router_bgp_neighbor_address_family" "test" {

@@ -91,14 +91,6 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		)
 		return diags
 	}
-	err = t.CreateGNMIClient(ctx)
-	if err != nil {
-		diags.AddError(
-			"Unable to create gNMI client",
-			"Unable to create gNMI client:\n\n"+err.Error(),
-		)
-		return diags
-	}
 
 	c.Devices[device] = &Device{}
 	c.Devices[device].Target = t
@@ -134,13 +126,22 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		return nil, diags
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
-
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			diags.AddError(
+				"Unable to create gNMI client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return nil, diags
+		}
 		c.Devices[device].SetMutex.Lock()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
 		setResp, err = target.Set(ctx, setReq)
 		c.Devices[device].SetMutex.Unlock()
+		target.Close()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))
@@ -152,8 +153,6 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		}
 		break
 	}
-
-	tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
 
 	return setResp, nil
 }
@@ -174,11 +173,20 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		return nil, diags
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
-
 	var getResp *gnmi.GetResponse
 	for attempts := 0; ; attempts++ {
+		tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
+		err = target.CreateGNMIClient(ctx)
+		if err != nil {
+			diags.AddError(
+				"Unable to create gNMI client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return nil, diags
+		}
 		getResp, err = target.Get(ctx, getReq)
+		target.Close()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Get request failed, got error: %s", err))
@@ -190,7 +198,6 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		}
 		break
 	}
-	tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 
 	return getResp, nil
 }

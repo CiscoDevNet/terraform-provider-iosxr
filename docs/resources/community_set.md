@@ -14,8 +14,8 @@ This resource can manage the Community Set configuration.
 
 ```terraform
 resource "iosxr_community_set" "example" {
-  set_name = "WORD"
-  rpl      = "community-set WORD\nend-set\n"
+  set_name          = "TEST11"
+  rpl_community_set = "community-set TEST11\nend-set\n"
 }
 ```
 
@@ -24,7 +24,7 @@ resource "iosxr_community_set" "example" {
 
 ### Required
 
-- `rpl` (String) Community Set
+- `rpl_community_set` (String) Community Set
 - `set_name` (String) Set name
 
 ### Optional
@@ -40,5 +40,5 @@ resource "iosxr_community_set" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_community_set.example "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=WORD]"
+terraform import iosxr_community_set.example "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=TEST11]"
 ```

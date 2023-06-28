@@ -4,6 +4,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -18,7 +19,18 @@ type LACP struct {
 	Priority types.Int64  `tfsdk:"priority"`
 }
 
+type LACPData struct {
+	Device   types.String `tfsdk:"device"`
+	Id       types.String `tfsdk:"id"`
+	Mac      types.String `tfsdk:"mac"`
+	Priority types.Int64  `tfsdk:"priority"`
+}
+
 func (data LACP) getPath() string {
+	return "Cisco-IOS-XR-um-lacp-cfg:/lacp/system"
+}
+
+func (data LACPData) getPath() string {
 	return "Cisco-IOS-XR-um-lacp-cfg:/lacp/system"
 }
 
@@ -46,7 +58,7 @@ func (data *LACP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LACP) fromBody(ctx context.Context, res []byte) {
+func (data *LACPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())
 	}
@@ -63,4 +75,15 @@ func (data *LACP) getDeletedListItems(ctx context.Context, state LACP) []string 
 func (data *LACP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *LACP) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.Mac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	return deletePaths
 }

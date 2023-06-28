@@ -6,11 +6,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
 )
 
 // Ensure the implementation satisfies the expected interfaces.
@@ -49,7 +49,7 @@ func (d *CommunitySetDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Set name",
 				Required:            true,
 			},
-			"rpl": schema.StringAttribute{
+			"rpl_community_set": schema.StringAttribute{
 				MarkdownDescription: "Community Set",
 				Computed:            true,
 			},
@@ -66,7 +66,7 @@ func (d *CommunitySetDataSource) Configure(_ context.Context, req datasource.Con
 }
 
 func (d *CommunitySetDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config CommunitySet
+	var config CommunitySetData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

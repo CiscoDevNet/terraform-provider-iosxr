@@ -8,13 +8,27 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
 type DomainVRF struct {
+	Device                types.String          `tfsdk:"device"`
+	Id                    types.String          `tfsdk:"id"`
+	VrfName               types.String          `tfsdk:"vrf_name"`
+	ListDomain            []DomainVRFListDomain `tfsdk:"list_domain"`
+	LookupDisable         types.Bool            `tfsdk:"lookup_disable"`
+	LookupSourceInterface types.String          `tfsdk:"lookup_source_interface"`
+	Name                  types.String          `tfsdk:"name"`
+	Ipv4Host              []DomainVRFIpv4Host   `tfsdk:"ipv4_host"`
+	NameServer            []DomainVRFNameServer `tfsdk:"name_server"`
+	Ipv6Host              []DomainVRFIpv6Host   `tfsdk:"ipv6_host"`
+	Multicast             types.String          `tfsdk:"multicast"`
+}
+
+type DomainVRFData struct {
 	Device                types.String          `tfsdk:"device"`
 	Id                    types.String          `tfsdk:"id"`
 	VrfName               types.String          `tfsdk:"vrf_name"`
@@ -45,6 +59,10 @@ type DomainVRFIpv6Host struct {
 }
 
 func (data DomainVRF) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
+}
+
+func (data DomainVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
 
@@ -281,7 +299,7 @@ func (data *DomainVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *DomainVRF) fromBody(ctx context.Context, res []byte) {
+func (data *DomainVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
 		data.ListDomain = make([]DomainVRFListDomain, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -521,4 +539,61 @@ func (data *DomainVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	return emptyLeafsDelete
+}
+
+func (data *DomainVRF) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.ListDomain {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.ListDomain[i].DomainName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/list/domain%v", data.getPath(), keyString))
+	}
+	if !data.LookupDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/disable", data.getPath()))
+	}
+	if !data.LookupSourceInterface.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/source-interface", data.getPath()))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
+	}
+	for i := range data.Ipv4Host {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv4Host[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyString))
+	}
+	for i := range data.NameServer {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.NameServer[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6Host {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv6Host[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/host/host%v", data.getPath(), keyString))
+	}
+	if !data.Multicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
+	}
+	return deletePaths
 }

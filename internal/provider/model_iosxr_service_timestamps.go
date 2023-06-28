@@ -30,7 +30,30 @@ type ServiceTimestamps struct {
 	LogDisable                 types.Bool   `tfsdk:"log_disable"`
 }
 
+type ServiceTimestampsData struct {
+	Device                     types.String `tfsdk:"device"`
+	Id                         types.String `tfsdk:"id"`
+	DebugDatetimeLocaltimeOnly types.Bool   `tfsdk:"debug_datetime_localtime_only"`
+	DebugDatetimeLocaltime     types.Bool   `tfsdk:"debug_datetime_localtime"`
+	DebugDatetimeMsec          types.Bool   `tfsdk:"debug_datetime_msec"`
+	DebugDatetimeShowTimezone  types.Bool   `tfsdk:"debug_datetime_show_timezone"`
+	DebugDatetimeYear          types.Bool   `tfsdk:"debug_datetime_year"`
+	DebugUptime                types.Bool   `tfsdk:"debug_uptime"`
+	DebugDisable               types.Bool   `tfsdk:"debug_disable"`
+	LogDatetimeLocaltimeOnly   types.Bool   `tfsdk:"log_datetime_localtime_only"`
+	LogDatetimeLocaltime       types.Bool   `tfsdk:"log_datetime_localtime"`
+	LogDatetimeMsec            types.Bool   `tfsdk:"log_datetime_msec"`
+	LogDatetimeShowTimezone    types.Bool   `tfsdk:"log_datetime_show_timezone"`
+	LogDatetimeYear            types.Bool   `tfsdk:"log_datetime_year"`
+	LogUptime                  types.Bool   `tfsdk:"log_uptime"`
+	LogDisable                 types.Bool   `tfsdk:"log_disable"`
+}
+
 func (data ServiceTimestamps) getPath() string {
+	return "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+}
+
+func (data ServiceTimestampsData) getPath() string {
 	return "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
 }
 
@@ -238,7 +261,7 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte) {
+func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
 		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
 	} else {
@@ -361,4 +384,51 @@ func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/disable", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *ServiceTimestamps) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.DebugDatetimeLocaltimeOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime-only", data.getPath()))
+	}
+	if !data.DebugDatetimeLocaltime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime", data.getPath()))
+	}
+	if !data.DebugDatetimeMsec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/msec", data.getPath()))
+	}
+	if !data.DebugDatetimeShowTimezone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/show-timezone", data.getPath()))
+	}
+	if !data.DebugDatetimeYear.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/year", data.getPath()))
+	}
+	if !data.DebugUptime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/uptime", data.getPath()))
+	}
+	if !data.DebugDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/disable", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltimeOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime-only", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime", data.getPath()))
+	}
+	if !data.LogDatetimeMsec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/msec", data.getPath()))
+	}
+	if !data.LogDatetimeShowTimezone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/show-timezone", data.getPath()))
+	}
+	if !data.LogDatetimeYear.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/year", data.getPath()))
+	}
+	if !data.LogUptime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/uptime", data.getPath()))
+	}
+	if !data.LogDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/disable", data.getPath()))
+	}
+	return deletePaths
 }

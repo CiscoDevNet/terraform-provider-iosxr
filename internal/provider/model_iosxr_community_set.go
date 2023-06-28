@@ -12,13 +12,24 @@ import (
 )
 
 type CommunitySet struct {
-	Device  types.String `tfsdk:"device"`
-	Id      types.String `tfsdk:"id"`
-	SetName types.String `tfsdk:"set_name"`
-	Rpl     types.String `tfsdk:"rpl"`
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
+	SetName         types.String `tfsdk:"set_name"`
+	RplCommunitySet types.String `tfsdk:"rpl_community_set"`
+}
+
+type CommunitySetData struct {
+	Device          types.String `tfsdk:"device"`
+	Id              types.String `tfsdk:"id"`
+	SetName         types.String `tfsdk:"set_name"`
+	RplCommunitySet types.String `tfsdk:"rpl_community_set"`
 }
 
 func (data CommunitySet) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=%s]", data.SetName.ValueString())
+}
+
+func (data CommunitySetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=%s]", data.SetName.ValueString())
 }
 
@@ -27,23 +38,23 @@ func (data CommunitySet) toBody(ctx context.Context) string {
 	if !data.SetName.IsNull() && !data.SetName.IsUnknown() {
 		body, _ = sjson.Set(body, "set-name", data.SetName.ValueString())
 	}
-	if !data.Rpl.IsNull() && !data.Rpl.IsUnknown() {
-		body, _ = sjson.Set(body, "rpl-community-set", data.Rpl.ValueString())
+	if !data.RplCommunitySet.IsNull() && !data.RplCommunitySet.IsUnknown() {
+		body, _ = sjson.Set(body, "rpl-community-set", data.RplCommunitySet.ValueString())
 	}
 	return body
 }
 
 func (data *CommunitySet) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() && !data.Rpl.IsNull() {
-		data.Rpl = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() && !data.RplCommunitySet.IsNull() {
+		data.RplCommunitySet = types.StringValue(value.String())
 	} else {
-		data.Rpl = types.StringNull()
+		data.RplCommunitySet = types.StringNull()
 	}
 }
 
-func (data *CommunitySet) fromBody(ctx context.Context, res []byte) {
+func (data *CommunitySetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() {
-		data.Rpl = types.StringValue(value.String())
+		data.RplCommunitySet = types.StringValue(value.String())
 	}
 }
 
@@ -55,4 +66,12 @@ func (data *CommunitySet) getDeletedListItems(ctx context.Context, state Communi
 func (data *CommunitySet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
+}
+
+func (data *CommunitySet) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	if !data.RplCommunitySet.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/rpl-community-set", data.getPath()))
+	}
+	return deletePaths
 }

@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,11 +18,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/client"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 )
-
-var _ resource.Resource = (*CommunitySetResource)(nil)
 
 func NewCommunitySetResource() resource.Resource {
 	return &CommunitySetResource{}
@@ -61,7 +59,7 @@ func (r *CommunitySetResource) Schema(ctx context.Context, req resource.SchemaRe
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"rpl": schema.StringAttribute{
+			"rpl_community_set": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Community Set").String,
 				Required:            true,
 			},
@@ -69,7 +67,7 @@ func (r *CommunitySetResource) Schema(ctx context.Context, req resource.SchemaRe
 	}
 }
 
-func (r *CommunitySetResource) Configure(ctx context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *CommunitySetResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -204,8 +202,21 @@ func (r *CommunitySetResource) Delete(ctx context.Context, req resource.DeleteRe
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+	var ops []client.SetOperation
+	deleteMode := "all"
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.getPath(), Body: "", Operation: client.Delete})
+	if deleteMode == "all" {
+		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+	} else {
+		deletePaths := state.getDeletePaths(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+		for _, i := range deletePaths {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+	}
+
+	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return

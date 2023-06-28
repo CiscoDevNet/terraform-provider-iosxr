@@ -8,13 +8,27 @@ import (
 	"reflect"
 	"strconv"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/netascode/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 )
 
 type Domain struct {
+	Device                types.String       `tfsdk:"device"`
+	Id                    types.String       `tfsdk:"id"`
+	ListDomain            []DomainListDomain `tfsdk:"list_domain"`
+	LookupDisable         types.Bool         `tfsdk:"lookup_disable"`
+	LookupSourceInterface types.String       `tfsdk:"lookup_source_interface"`
+	Name                  types.String       `tfsdk:"name"`
+	Ipv4Host              []DomainIpv4Host   `tfsdk:"ipv4_host"`
+	NameServer            []DomainNameServer `tfsdk:"name_server"`
+	Ipv6Host              []DomainIpv6Host   `tfsdk:"ipv6_host"`
+	Multicast             types.String       `tfsdk:"multicast"`
+	DefaultFlowsDisable   types.Bool         `tfsdk:"default_flows_disable"`
+}
+
+type DomainData struct {
 	Device                types.String       `tfsdk:"device"`
 	Id                    types.String       `tfsdk:"id"`
 	ListDomain            []DomainListDomain `tfsdk:"list_domain"`
@@ -45,6 +59,10 @@ type DomainIpv6Host struct {
 }
 
 func (data Domain) getPath() string {
+	return "Cisco-IOS-XR-um-domain-cfg:/domain"
+}
+
+func (data DomainData) getPath() string {
 	return "Cisco-IOS-XR-um-domain-cfg:/domain"
 }
 
@@ -292,7 +310,7 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Domain) fromBody(ctx context.Context, res []byte) {
+func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
 		data.ListDomain = make([]DomainListDomain, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -540,4 +558,64 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-flows/disable", data.getPath()))
 	}
 	return emptyLeafsDelete
+}
+
+func (data *Domain) getDeletePaths(ctx context.Context) []string {
+	var deletePaths []string
+	for i := range data.ListDomain {
+		keys := [...]string{"domain-name"}
+		keyValues := [...]string{data.ListDomain[i].DomainName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/list/domain%v", data.getPath(), keyString))
+	}
+	if !data.LookupDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/disable", data.getPath()))
+	}
+	if !data.LookupSourceInterface.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lookup/source-interface", data.getPath()))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
+	}
+	for i := range data.Ipv4Host {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv4Host[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/hosts/host%v", data.getPath(), keyString))
+	}
+	for i := range data.NameServer {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.NameServer[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name-servers/name-server%v", data.getPath(), keyString))
+	}
+	for i := range data.Ipv6Host {
+		keys := [...]string{"host-name"}
+		keyValues := [...]string{data.Ipv6Host[i].HostName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/host/host%v", data.getPath(), keyString))
+	}
+	if !data.Multicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/multicast", data.getPath()))
+	}
+	if !data.DefaultFlowsDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-flows/disable", data.getPath()))
+	}
+	return deletePaths
 }

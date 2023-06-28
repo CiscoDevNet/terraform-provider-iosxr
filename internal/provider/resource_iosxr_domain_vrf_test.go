@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrDomainVRF(t *testing.T) {
@@ -16,25 +16,25 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 			{
 				Config: testAccIosxrDomainVRFConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "vrf_name", "WORD"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "list_domain.0.domain_name", "WORD"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "list_domain.0.order", "0"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "vrf_name", "TEST-VRF"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "list_domain.0.domain_name", "DOMAIN11"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "list_domain.0.order", "12345"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_disable", "true"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_source_interface", "Loopback2147483647"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "WORD"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_host.0.host_name", "WORD"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "DNAME"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_host.0.host_name", "HOST-AGC"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_host.0.ip_address.0", "10.0.0.0"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_server.0.address", "10.0.0.1"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_server.0.order", "0"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_host.0.host_name", "WORD"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_host.0.host_name", "HOST-ACC"),
 					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_host.0.ipv6_address.0", "10::10"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "WORD"),
+					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "TESTACC"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_domain_vrf.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=WORD]",
+				ImportStateId: "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=TEST-VRF]",
 			},
 		},
 	})
@@ -43,7 +43,7 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 func testAccIosxrDomainVRFConfig_minimum() string {
 	return `
 	resource "iosxr_domain_vrf" "test" {
-		vrf_name = "WORD"
+		vrf_name = "TEST-VRF"
 	}
 	`
 }
@@ -51,16 +51,16 @@ func testAccIosxrDomainVRFConfig_minimum() string {
 func testAccIosxrDomainVRFConfig_all() string {
 	return `
 	resource "iosxr_domain_vrf" "test" {
-		vrf_name = "WORD"
+		vrf_name = "TEST-VRF"
 		list_domain = [{
-			domain_name = "WORD"
-			order = 0
+			domain_name = "DOMAIN11"
+			order = 12345
 		}]
 		lookup_disable = true
 		lookup_source_interface = "Loopback2147483647"
-		name = "WORD"
+		name = "DNAME"
 		ipv4_host = [{
-			host_name = "WORD"
+			host_name = "HOST-AGC"
 			ip_address = ["10.0.0.0"]
 		}]
 		name_server = [{
@@ -68,10 +68,10 @@ func testAccIosxrDomainVRFConfig_all() string {
 			order = 0
 		}]
 		ipv6_host = [{
-			host_name = "WORD"
+			host_name = "HOST-ACC"
 			ipv6_address = ["10::10"]
 		}]
-		multicast = "WORD"
+		multicast = "TESTACC"
 	}
 	`
 }

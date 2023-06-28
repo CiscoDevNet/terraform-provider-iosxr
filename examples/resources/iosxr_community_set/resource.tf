@@ -1,4 +1,4 @@
 resource "iosxr_community_set" "example" {
-  set_name = "WORD"
-  rpl      = "community-set WORD\nend-set\n"
+  set_name          = "TEST11"
+  rpl_community_set = "community-set TEST11\nend-set\n"
 }

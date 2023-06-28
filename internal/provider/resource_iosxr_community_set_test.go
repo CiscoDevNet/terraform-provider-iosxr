@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccIosxrCommunitySet(t *testing.T) {
@@ -16,14 +16,14 @@ func TestAccIosxrCommunitySet(t *testing.T) {
 			{
 				Config: testAccIosxrCommunitySetConfig_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_community_set.test", "set_name", "WORD"),
-					resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl", "community-set WORD\nend-set\n"),
+					resource.TestCheckResourceAttr("iosxr_community_set.test", "set_name", "TEST11"),
+					resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl_community_set", "community-set TEST11\nend-set\n"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_community_set.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=WORD]",
+				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=TEST11]",
 			},
 		},
 	})
@@ -32,8 +32,8 @@ func TestAccIosxrCommunitySet(t *testing.T) {
 func testAccIosxrCommunitySetConfig_minimum() string {
 	return `
 	resource "iosxr_community_set" "test" {
-		set_name = "WORD"
-		rpl = "community-set WORD\nend-set\n"
+		set_name = "TEST11"
+		rpl_community_set = "community-set TEST11\nend-set\n"
 	}
 	`
 }
@@ -41,8 +41,8 @@ func testAccIosxrCommunitySetConfig_minimum() string {
 func testAccIosxrCommunitySetConfig_all() string {
 	return `
 	resource "iosxr_community_set" "test" {
-		set_name = "WORD"
-		rpl = "community-set WORD\nend-set\n"
+		set_name = "TEST11"
+		rpl_community_set = "community-set TEST11\nend-set\n"
 	}
 	`
 }

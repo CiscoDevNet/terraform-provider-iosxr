@@ -14,7 +14,7 @@ This data source can read the Community Set configuration.
 
 ```terraform
 data "iosxr_community_set" "example" {
-  set_name = "WORD"
+  set_name = "TEST11"
 }
 ```
 
@@ -32,4 +32,4 @@ data "iosxr_community_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Community Set
+- `rpl_community_set` (String) Community Set

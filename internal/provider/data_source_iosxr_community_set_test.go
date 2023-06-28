@@ -5,7 +5,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrCommunitySet(t *testing.T) {
@@ -16,7 +16,7 @@ func TestAccDataSourceIosxrCommunitySet(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrCommunitySetConfig,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_community_set.test", "rpl", "community-set WORD\nend-set\n"),
+					resource.TestCheckResourceAttr("data.iosxr_community_set.test", "rpl_community_set", "community-set TEST11\nend-set\n"),
 				),
 			},
 		},
@@ -26,12 +26,12 @@ func TestAccDataSourceIosxrCommunitySet(t *testing.T) {
 const testAccDataSourceIosxrCommunitySetConfig = `
 
 resource "iosxr_community_set" "test" {
-	set_name = "WORD"
-	rpl = "community-set WORD\nend-set\n"
+	set_name = "TEST11"
+	rpl_community_set = "community-set TEST11\nend-set\n"
 }
 
 data "iosxr_community_set" "test" {
-	set_name = "WORD"
+	set_name = "TEST11"
 	depends_on = [iosxr_community_set.test]
 }
 `

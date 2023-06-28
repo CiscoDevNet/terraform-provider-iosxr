@@ -1,3 +1,3 @@
 data "iosxr_community_set" "example" {
-  set_name = "WORD"
+  set_name = "TEST11"
 }

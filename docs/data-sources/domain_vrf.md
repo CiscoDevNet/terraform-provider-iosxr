@@ -14,7 +14,7 @@ This data source can read the Domain VRF configuration.
 
 ```terraform
 data "iosxr_domain_vrf" "example" {
-  vrf_name = "WORD"
+  vrf_name = "TEST-VRF"
 }
 ```
 

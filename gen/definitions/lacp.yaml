@@ -1,0 +1,10 @@
+---
+name : LACP
+path : Cisco-IOS-XR-um-lacp-cfg:/lacp/system
+no_delete_attributes: true
+doc_category: System
+attributes:
+  - yang_name: mac
+    example: 00:11:00:11:00:11
+  - yang_name: priority
+    example: 1

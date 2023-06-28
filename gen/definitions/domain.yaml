@@ -1,0 +1,54 @@
+---
+name: Domain
+path: Cisco-IOS-XR-um-domain-cfg:/domain
+no_delete_attributes: true
+doc_category: System
+attributes:
+  - yang_name: list/domain
+    tf_name: domains
+    type: List
+    attributes:
+      - yang_name: domain-name
+        id : true
+        example: DOMAIN1
+      - yang_name: order
+        example: 0
+  - yang_name: lookup/disable
+    example: true
+  - yang_name: lookup/source-interface
+    example: Loopback2147483647
+  - yang_name: name
+    example: DOMAIN
+  - yang_name: ipv4/hosts/host
+    tf_name: ipv4_hosts
+    type: List
+    attributes:
+      - yang_name: host-name
+        id : true
+        example: HOST_NAME
+      - yang_name: ip-address
+        example: 10.0.0.0
+  - yang_name: name-servers/name-server
+    tf_name: name_servers
+    type: List
+    attributes:
+      - yang_name: address
+        id : true
+        example: 10.0.0.1
+      - yang_name: order
+        example: 345
+  - yang_name: ipv6/host/host
+    tf_name: ipv6_hosts
+    type: List
+    attributes:
+      - yang_name: host-name
+        id : true
+        example: HOST_NAME_IPV6
+      - yang_name: ipv6-address
+        example: 10::10
+  - yang_name: multicast
+    example: DOMAIN1_ACC
+  - yang_name: default-flows/disable
+    example: true
+  
+      

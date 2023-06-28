@@ -1,0 +1,36 @@
+---
+name: Service Timestamps
+path: Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps
+no_delete_attributes: true
+doc_category: System
+attributes:
+  - yang_name: debug/datetime/localtime-only
+    example: true
+    exclude_test: true
+  - yang_name: debug/datetime/localtime
+    example: true
+  - yang_name: debug/datetime/msec
+    example: true
+  - yang_name: debug/datetime/show-timezone
+    example: true
+  - yang_name: debug/datetime/year
+    example: true
+  - yang_name: debug/uptime
+    example: true
+  - yang_name: debug/disable
+    example: true
+  - yang_name: log/datetime/localtime-only
+    example: true
+    exclude_test: true
+  - yang_name: log/datetime/localtime
+    example: true
+  - yang_name: log/datetime/msec
+    example: true
+  - yang_name: log/datetime/show-timezone
+    example: true
+  - yang_name: log/datetime/year
+    example: true
+  - yang_name: log/uptime
+    example: true
+  - yang_name: log/disable
+    example: true

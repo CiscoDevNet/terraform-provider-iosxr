@@ -22,6 +22,7 @@ const (
 	DefaultBackoffMinDelay    int     = 4
 	DefaultBackoffMaxDelay    int     = 60
 	DefaultBackoffDelayFactor float64 = 3
+	GnmiTimeout                       = 15 * time.Second
 )
 
 type SetOperationType string
@@ -131,14 +132,21 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		c.Devices[device].SetMutex.Lock()
 		err = target.CreateGNMIClient(ctx)
 		if err != nil {
-			diags.AddError(
-				"Unable to create gNMI client",
-				"Unable to create gNMI client:\n\n"+err.Error(),
-			)
-			return nil, diags
+			if ok := c.Backoff(ctx, attempts); !ok {
+				diags.AddError(
+					"Unable to create gNMI client",
+					"Unable to create gNMI client:\n\n"+err.Error(),
+				)
+				return nil, diags
+			} else {
+				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+				continue
+			}
 		}
+		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		defer cancel()
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
-		setResp, err = target.Set(ctx, setReq)
+		setResp, err = target.Set(tCtx, setReq)
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
 		target.Close()
 		c.Devices[device].SetMutex.Unlock()
@@ -178,13 +186,20 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
 		err = target.CreateGNMIClient(ctx)
 		if err != nil {
-			diags.AddError(
-				"Unable to create gNMI client",
-				"Unable to create gNMI client:\n\n"+err.Error(),
-			)
-			return nil, diags
+			if ok := c.Backoff(ctx, attempts); !ok {
+				diags.AddError(
+					"Unable to create gNMI client",
+					"Unable to create gNMI client:\n\n"+err.Error(),
+				)
+				return nil, diags
+			} else {
+				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+				continue
+			}
 		}
-		getResp, err = target.Get(ctx, getReq)
+		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		defer cancel()
+		getResp, err = target.Get(tCtx, getReq)
 		target.Close()
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {

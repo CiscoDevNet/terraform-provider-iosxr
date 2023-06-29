@@ -19,7 +19,7 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "vrrp_id", "124"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "address_linklocal_autoconfig", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "priority", "250"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST"),
+					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST2"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_advertisement_seconds", "10"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_force", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "preempt_disable", "false"),
@@ -57,7 +57,7 @@ func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all() string {
 		vrrp_id = 124
 		address_linklocal_autoconfig = true
 		priority = 250
-		name = "TEST"
+		name = "TEST2"
 		timer_advertisement_seconds = 10
 		timer_force = true
 		preempt_disable = false

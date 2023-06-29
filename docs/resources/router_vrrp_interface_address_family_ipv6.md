@@ -18,7 +18,7 @@ resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
   vrrp_id                      = 124
   address_linklocal_autoconfig = true
   priority                     = 250
-  name                         = "TEST"
+  name                         = "TEST2"
   timer_advertisement_seconds  = 10
   timer_force                  = true
   preempt_disable              = false

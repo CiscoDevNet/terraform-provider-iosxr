@@ -18,7 +18,7 @@ func TestAccDataSourceIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "address_linklocal_autoconfig", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "priority", "250"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST"),
+					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST2"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_advertisement_seconds", "10"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "timer_force", "true"),
 					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface_address_family_ipv6.test", "preempt_disable", "false"),
@@ -43,7 +43,7 @@ resource "iosxr_router_vrrp_interface_address_family_ipv6" "test" {
 	vrrp_id = 124
 	address_linklocal_autoconfig = true
 	priority = 250
-	name = "TEST"
+	name = "TEST2"
 	timer_advertisement_seconds = 10
 	timer_force = true
 	preempt_disable = false

@@ -25,7 +25,7 @@ attributes:
   - yang_name: priority
     example: 250
   - yang_name: name
-    example: TEST
+    example: TEST2
   - yang_name: timer/advertisement-time-in-seconds
     tf_name: timer_advertisement_seconds
     example: 10

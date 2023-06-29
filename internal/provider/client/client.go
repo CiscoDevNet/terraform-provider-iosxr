@@ -148,8 +148,8 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
 		setResp, err = target.Set(tCtx, setReq)
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
-		target.Close()
 		c.Devices[device].SetMutex.Unlock()
+		target.Close()
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))

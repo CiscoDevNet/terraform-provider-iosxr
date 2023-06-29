@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0
 
 - Introduce more granular controls around resource delete operations (`delete_mode`)
 - BREAKING CHANGE: Rename `iosxr_router_static` resource and data source to `iosxr_router_static_ipv4_unicast`

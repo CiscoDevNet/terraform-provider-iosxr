@@ -16,7 +16,7 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 			{
 				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "vrrp_id", "123"),
+					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "vrrp_id", "124"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "address_linklocal_autoconfig", "true"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "priority", "250"),
 					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "name", "TEST"),
@@ -35,7 +35,7 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 			{
 				ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv6.test",
 				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=123)]",
+				ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=124)]",
 			},
 		},
 	})
@@ -44,8 +44,8 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum() string {
 	return `
 	resource "iosxr_router_vrrp_interface_address_family_ipv6" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		vrrp_id = 123
+		interface_name = "GigabitEthernet0/0/0/2"
+		vrrp_id = 124
 	}
 	`
 }
@@ -53,8 +53,8 @@ func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum() string {
 func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all() string {
 	return `
 	resource "iosxr_router_vrrp_interface_address_family_ipv6" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		vrrp_id = 123
+		interface_name = "GigabitEthernet0/0/0/2"
+		vrrp_id = 124
 		address_linklocal_autoconfig = true
 		priority = 250
 		name = "TEST"

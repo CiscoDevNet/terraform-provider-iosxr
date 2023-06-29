@@ -14,8 +14,8 @@ This resource can manage the Router VRRP Interface Address Family IPv6 configura
 
 ```terraform
 resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
-  interface_name               = "GigabitEthernet0/0/0/1"
-  vrrp_id                      = 123
+  interface_name               = "GigabitEthernet0/0/0/2"
+  vrrp_id                      = 124
   address_linklocal_autoconfig = true
   priority                     = 250
   name                         = "TEST"
@@ -104,5 +104,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_vrrp_interface_address_family_ipv6.example "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=123)]"
+terraform import iosxr_router_vrrp_interface_address_family_ipv6.example "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=124)]"
 ```

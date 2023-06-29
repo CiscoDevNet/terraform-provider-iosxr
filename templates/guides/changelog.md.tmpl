@@ -9,7 +9,7 @@ description: |-
 
 ## 0.2.0 (unreleased)
 
-- Introduce more fine grained controls around resource delete operations (`delete_mode`)
+- Introduce more granular controls around resource delete operations (`delete_mode`)
 - BREAKING CHANGE: Rename `iosxr_router_static` resource and data source to `iosxr_router_static_ipv4_unicast`
 - BREAKING CHANGE: Remove `iosxr_oc_system_config` resource and data source
 - Validate if referenced `device` exists in provider configuration

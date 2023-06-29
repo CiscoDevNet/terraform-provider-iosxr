@@ -1,6 +1,6 @@
 resource "iosxr_router_vrrp_interface_address_family_ipv6" "example" {
-  interface_name               = "GigabitEthernet0/0/0/1"
-  vrrp_id                      = 123
+  interface_name               = "GigabitEthernet0/0/0/2"
+  vrrp_id                      = 124
   address_linklocal_autoconfig = true
   priority                     = 250
   name                         = "TEST"

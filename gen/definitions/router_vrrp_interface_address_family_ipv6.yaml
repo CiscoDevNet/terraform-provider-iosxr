@@ -4,9 +4,9 @@ path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interfac
 doc_category: VRRP
 attributes:
   - yang_name: interface-name
-    example: GigabitEthernet0/0/0/1
+    example: GigabitEthernet0/0/0/2
   - yang_name: vrrp-id
-    example: 123
+    example: 124
   - yang_name: address/global/global-address/address
     tf_name: global_addresses
     type: List

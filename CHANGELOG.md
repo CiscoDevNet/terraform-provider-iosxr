@@ -1,4 +1,4 @@
-## 0.2.1 (unreleased)
+## 0.2.1
 
 - Add `bundle` attributes to `iosxr_interface` resource and data source
 - Make `dampening_decay_half_life_value` attribute of `iosxr_interface` resource optional

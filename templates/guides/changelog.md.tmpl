@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.2.1 (unreleased)
+
+- Add `bundle` attributes to `iosxr_interface` resource and data source
+
 ## 0.2.0
 
 - Introduce more granular controls around resource delete operations (`delete_mode`)

@@ -34,4 +34,5 @@ resource "iosxr_interface" "example" {
       zone          = "0"
     }
   ]
+  bundle_port_priority = 100
 }

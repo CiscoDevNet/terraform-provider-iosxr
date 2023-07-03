@@ -119,6 +119,34 @@ attributes:
       - yang_name: zone
         default_value: "0"
         example: "0"
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/minimum-active/links
+    exclude_test: true
+    example: 1
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/maximum-active/links/maximum-number
+    tf_name: bundle_maximum_active_links
+    optional: true
+    exclude_test: true
+    example: 8
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/src-ip
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/dst-ip
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/bundle-id
+    tf_name: bundle_id
+    optional: true
+    exclude_test: true
+    example: 1
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/mode
+    optional: true
+    exclude_test: true
+    example: active
+  - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority
+    example: 100
 test_prerequisites:
   - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]
     attributes:

@@ -189,6 +189,38 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 					},
 				},
 			},
+			"bundle_minimum_active_links": schema.Int64Attribute{
+				MarkdownDescription: "Set the number of active links needed to bring up this bundle",
+				Computed:            true,
+			},
+			"bundle_maximum_active_links": schema.Int64Attribute{
+				MarkdownDescription: "Set the maximum number of active links in this bundle",
+				Computed:            true,
+			},
+			"bundle_shutdown": schema.BoolAttribute{
+				MarkdownDescription: "Bring all links in the bundle down to Standby state",
+				Computed:            true,
+			},
+			"bundle_load_balancing_hash_src_ip": schema.BoolAttribute{
+				MarkdownDescription: "Use the source IP as the hash function",
+				Computed:            true,
+			},
+			"bundle_load_balancing_hash_dst_ip": schema.BoolAttribute{
+				MarkdownDescription: "Use the destination IP as the hash function",
+				Computed:            true,
+			},
+			"bundle_id": schema.Int64Attribute{
+				MarkdownDescription: "Add the port to an aggregated interface.",
+				Computed:            true,
+			},
+			"bundle_id_mode": schema.StringAttribute{
+				MarkdownDescription: "Specify the mode of operation.",
+				Computed:            true,
+			},
+			"bundle_port_priority": schema.Int64Attribute{
+				MarkdownDescription: "Priority for this port. Lower value is higher priority.",
+				Computed:            true,
+			},
 		},
 	}
 }

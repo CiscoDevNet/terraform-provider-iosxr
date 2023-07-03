@@ -44,6 +44,14 @@ type Interface struct {
 	Ipv6Autoconfig                           types.Bool                     `tfsdk:"ipv6_autoconfig"`
 	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
 	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                 types.Int64                    `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                 types.Int64                    `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                           types.Bool                     `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                 types.Int64                    `tfsdk:"bundle_id"`
+	BundleIdMode                             types.String                   `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                       types.Int64                    `tfsdk:"bundle_port_priority"`
 }
 
 type InterfaceData struct {
@@ -77,6 +85,14 @@ type InterfaceData struct {
 	Ipv6Autoconfig                           types.Bool                     `tfsdk:"ipv6_autoconfig"`
 	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
 	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                 types.Int64                    `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                 types.Int64                    `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                           types.Bool                     `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                 types.Int64                    `tfsdk:"bundle_id"`
+	BundleIdMode                             types.String                   `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                       types.Int64                    `tfsdk:"bundle_port_priority"`
 }
 type InterfaceServicePolicyInput struct {
 	Name types.String `tfsdk:"name"`
@@ -194,6 +210,36 @@ func (data Interface) toBody(ctx context.Context) string {
 		if data.Ipv6Enable.ValueBool() {
 			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:enable", map[string]string{})
 		}
+	}
+	if !data.BundleMinimumActiveLinks.IsNull() && !data.BundleMinimumActiveLinks.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.minimum-active.links", strconv.FormatInt(data.BundleMinimumActiveLinks.ValueInt64(), 10))
+	}
+	if !data.BundleMaximumActiveLinks.IsNull() && !data.BundleMaximumActiveLinks.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.maximum-active.links.maximum-number", strconv.FormatInt(data.BundleMaximumActiveLinks.ValueInt64(), 10))
+	}
+	if !data.BundleShutdown.IsNull() && !data.BundleShutdown.IsUnknown() {
+		if data.BundleShutdown.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.shutdown", map[string]string{})
+		}
+	}
+	if !data.BundleLoadBalancingHashSrcIp.IsNull() && !data.BundleLoadBalancingHashSrcIp.IsUnknown() {
+		if data.BundleLoadBalancingHashSrcIp.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.src-ip", map[string]string{})
+		}
+	}
+	if !data.BundleLoadBalancingHashDstIp.IsNull() && !data.BundleLoadBalancingHashDstIp.IsUnknown() {
+		if data.BundleLoadBalancingHashDstIp.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.dst-ip", map[string]string{})
+		}
+	}
+	if !data.BundleId.IsNull() && !data.BundleId.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.bundle-id", strconv.FormatInt(data.BundleId.ValueInt64(), 10))
+	}
+	if !data.BundleIdMode.IsNull() && !data.BundleIdMode.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.mode", data.BundleIdMode.ValueString())
+	}
+	if !data.BundlePortPriority.IsNull() && !data.BundlePortPriority.IsUnknown() {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.port-priority", strconv.FormatInt(data.BundlePortPriority.ValueInt64(), 10))
 	}
 	if len(data.ServicePolicyInput) > 0 {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy.input", []interface{}{})
@@ -486,6 +532,58 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 			data.Ipv6Addresses[i].Zone = types.StringNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.minimum-active.links"); value.Exists() && !data.BundleMinimumActiveLinks.IsNull() {
+		data.BundleMinimumActiveLinks = types.Int64Value(value.Int())
+	} else {
+		data.BundleMinimumActiveLinks = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.maximum-active.links.maximum-number"); value.Exists() && !data.BundleMaximumActiveLinks.IsNull() {
+		data.BundleMaximumActiveLinks = types.Int64Value(value.Int())
+	} else {
+		data.BundleMaximumActiveLinks = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.shutdown"); !data.BundleShutdown.IsNull() {
+		if value.Exists() {
+			data.BundleShutdown = types.BoolValue(true)
+		} else {
+			data.BundleShutdown = types.BoolValue(false)
+		}
+	} else {
+		data.BundleShutdown = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.src-ip"); !data.BundleLoadBalancingHashSrcIp.IsNull() {
+		if value.Exists() {
+			data.BundleLoadBalancingHashSrcIp = types.BoolValue(true)
+		} else {
+			data.BundleLoadBalancingHashSrcIp = types.BoolValue(false)
+		}
+	} else {
+		data.BundleLoadBalancingHashSrcIp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.dst-ip"); !data.BundleLoadBalancingHashDstIp.IsNull() {
+		if value.Exists() {
+			data.BundleLoadBalancingHashDstIp = types.BoolValue(true)
+		} else {
+			data.BundleLoadBalancingHashDstIp = types.BoolValue(false)
+		}
+	} else {
+		data.BundleLoadBalancingHashDstIp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.bundle-id"); value.Exists() && !data.BundleId.IsNull() {
+		data.BundleId = types.Int64Value(value.Int())
+	} else {
+		data.BundleId = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.mode"); value.Exists() && !data.BundleIdMode.IsNull() {
+		data.BundleIdMode = types.StringValue(value.String())
+	} else {
+		data.BundleIdMode = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.port-priority"); value.Exists() && !data.BundlePortPriority.IsNull() {
+		data.BundlePortPriority = types.Int64Value(value.Int())
+	} else {
+		data.BundlePortPriority = types.Int64Null()
+	}
 }
 
 func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
@@ -619,6 +717,36 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 			data.Ipv6Addresses = append(data.Ipv6Addresses, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.minimum-active.links"); value.Exists() {
+		data.BundleMinimumActiveLinks = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.maximum-active.links.maximum-number"); value.Exists() {
+		data.BundleMaximumActiveLinks = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.shutdown"); value.Exists() {
+		data.BundleShutdown = types.BoolValue(true)
+	} else {
+		data.BundleShutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.src-ip"); value.Exists() {
+		data.BundleLoadBalancingHashSrcIp = types.BoolValue(true)
+	} else {
+		data.BundleLoadBalancingHashSrcIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.load-balancing.hash.dst-ip"); value.Exists() {
+		data.BundleLoadBalancingHashDstIp = types.BoolValue(true)
+	} else {
+		data.BundleLoadBalancingHashDstIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.bundle-id"); value.Exists() {
+		data.BundleId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.id.mode"); value.Exists() {
+		data.BundleIdMode = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.port-priority"); value.Exists() {
+		data.BundlePortPriority = types.Int64Value(value.Int())
 	}
 }
 
@@ -773,6 +901,15 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	if !data.BundleShutdown.IsNull() && !data.BundleShutdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", data.getPath()))
+	}
+	if !data.BundleLoadBalancingHashSrcIp.IsNull() && !data.BundleLoadBalancingHashSrcIp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/src-ip", data.getPath()))
+	}
+	if !data.BundleLoadBalancingHashDstIp.IsNull() && !data.BundleLoadBalancingHashDstIp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/dst-ip", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -879,6 +1016,30 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", data.getPath(), keyString))
+	}
+	if !data.BundleMinimumActiveLinks.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/minimum-active/links", data.getPath()))
+	}
+	if !data.BundleMaximumActiveLinks.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/maximum-active/links/maximum-number", data.getPath()))
+	}
+	if !data.BundleShutdown.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", data.getPath()))
+	}
+	if !data.BundleLoadBalancingHashSrcIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/src-ip", data.getPath()))
+	}
+	if !data.BundleLoadBalancingHashDstIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/dst-ip", data.getPath()))
+	}
+	if !data.BundleId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/bundle-id", data.getPath()))
+	}
+	if !data.BundleIdMode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/mode", data.getPath()))
+	}
+	if !data.BundlePortPriority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority", data.getPath()))
 	}
 	return deletePaths
 }

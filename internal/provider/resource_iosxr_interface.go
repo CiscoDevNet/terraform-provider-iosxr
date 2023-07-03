@@ -244,6 +244,53 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					},
 				},
 			},
+			"bundle_minimum_active_links": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the number of active links needed to bring up this bundle").AddIntegerRangeDescription(1, 64).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 64),
+				},
+			},
+			"bundle_maximum_active_links": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the maximum number of active links in this bundle").AddIntegerRangeDescription(1, 64).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 64),
+				},
+			},
+			"bundle_shutdown": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Bring all links in the bundle down to Standby state").String,
+				Optional:            true,
+			},
+			"bundle_load_balancing_hash_src_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the source IP as the hash function").String,
+				Optional:            true,
+			},
+			"bundle_load_balancing_hash_dst_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use the destination IP as the hash function").String,
+				Optional:            true,
+			},
+			"bundle_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Add the port to an aggregated interface.").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"bundle_id_mode": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the mode of operation.").AddStringEnumDescription("active", "inherit", "on", "passive").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("active", "inherit", "on", "passive"),
+				},
+			},
+			"bundle_port_priority": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Priority for this port. Lower value is higher priority.").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
 		},
 	}
 }

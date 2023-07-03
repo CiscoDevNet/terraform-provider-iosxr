@@ -49,6 +49,7 @@ resource "iosxr_interface" "example" {
       zone          = "0"
     }
   ]
+  bundle_port_priority = 100
 }
 ```
 
@@ -66,6 +67,19 @@ resource "iosxr_interface" "example" {
 - `bandwidth` (Number) Set the bandwidth of an interface
   - Range: `0`-`9223372036854775807`
 - `bfd_mode_ietf` (Boolean) Use IETF standard for BoB
+- `bundle_id` (Number) Add the port to an aggregated interface.
+  - Range: `1`-`65535`
+- `bundle_id_mode` (String) Specify the mode of operation.
+  - Choices: `active`, `inherit`, `on`, `passive`
+- `bundle_load_balancing_hash_dst_ip` (Boolean) Use the destination IP as the hash function
+- `bundle_load_balancing_hash_src_ip` (Boolean) Use the source IP as the hash function
+- `bundle_maximum_active_links` (Number) Set the maximum number of active links in this bundle
+  - Range: `1`-`64`
+- `bundle_minimum_active_links` (Number) Set the number of active links needed to bring up this bundle
+  - Range: `1`-`64`
+- `bundle_port_priority` (Number) Priority for this port. Lower value is higher priority.
+  - Range: `1`-`65535`
+- `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
 - `description` (String) Set description for this interface
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface

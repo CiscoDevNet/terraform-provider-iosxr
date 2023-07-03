@@ -39,6 +39,7 @@ func TestAccIosxrInterface(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.address", "2001::1"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"),
 					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.zone", "0"),
+					resource.TestCheckResourceAttr("iosxr_interface.test", "bundle_port_priority", "100"),
 				),
 			},
 			{
@@ -135,6 +136,7 @@ func testAccIosxrInterfaceConfig_all() string {
 			prefix_length = 64
 			zone = "0"
 		}]
+		bundle_port_priority = 100
   		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`

@@ -75,7 +75,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"dampening_decay_half_life_value": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Decay half life (in minutes)").AddIntegerRangeDescription(1, 45).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 45),
 				},
@@ -206,10 +206,8 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"ipv6_link_local_zone": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").AddDefaultValueDescription("0").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address zone").String,
 				Optional:            true,
-				Computed:            true,
-				Default:             stringdefault.StaticString("0"),
 			},
 			"ipv6_autoconfig": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable slaac on Mgmt interface").String,

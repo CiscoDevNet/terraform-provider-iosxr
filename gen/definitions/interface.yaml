@@ -17,6 +17,7 @@ attributes:
     example: false
   - yang_name: dampening/decay-half-life/value
     delete_parent: true
+    optional: true
     example: 2
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point
     tf_name: ipv4_point_to_point
@@ -98,7 +99,7 @@ attributes:
     example: "fe80::1"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
     tf_name: ipv6_link_local_zone
-    default_value: "0"
+    optional: true
     delete_parent: true
     example: "0"
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig

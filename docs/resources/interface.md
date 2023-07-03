@@ -58,8 +58,6 @@ resource "iosxr_interface" "example" {
 
 ### Required
 
-- `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
-  - Range: `1`-`45`
 - `interface_name` (String) Interface configuration subcommands
 
 ### Optional
@@ -80,6 +78,8 @@ resource "iosxr_interface" "example" {
 - `bundle_port_priority` (Number) Priority for this port. Lower value is higher priority.
   - Range: `1`-`65535`
 - `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
+- `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
+  - Range: `1`-`45`
 - `description` (String) Set description for this interface
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
@@ -92,7 +92,6 @@ resource "iosxr_interface" "example" {
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
 - `ipv6_link_local_address` (String) IPv6 address
 - `ipv6_link_local_zone` (String) IPv6 address zone
-  - Default value: `0`
 - `l2transport` (Boolean) l2transport sub-interface
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) End of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range

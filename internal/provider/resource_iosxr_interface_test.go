@@ -98,7 +98,6 @@ func testAccIosxrInterfaceConfig_minimum() string {
 	return `
 	resource "iosxr_interface" "test" {
 		interface_name = "GigabitEthernet0/0/0/1"
-		dampening_decay_half_life_value = 2
 		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
 	}
 	`

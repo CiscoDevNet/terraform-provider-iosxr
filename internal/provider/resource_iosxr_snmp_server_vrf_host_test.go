@@ -9,17 +9,17 @@ import (
 )
 
 func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "address", "11.11.11.11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrSNMPServerVRFHostConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "address", "11.11.11.11"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_snmp_server_vrf_host.test",
@@ -31,23 +31,21 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 }
 
 func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
-	return `
-	resource "iosxr_snmp_server_vrf_host" "test" {
-		vrf_name = "VRF1"
-		address = "11.11.11.11"
-	}
-	`
+	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address = "11.11.11.11"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrSNMPServerVRFHostConfig_all() string {
-	return `
-	resource "iosxr_snmp_server_vrf_host" "test" {
-		vrf_name = "VRF1"
-		address = "11.11.11.11"
-		unencrypted_strings = [{
-			community_string = "COMMUNITY1"
-			version_v3_security_level = "auth"
-		}]
-	}
-	`
+	config := `resource "iosxe_snmp_server_vrf_host" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address = "11.11.11.11"` + "\n"
+	config += `	unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

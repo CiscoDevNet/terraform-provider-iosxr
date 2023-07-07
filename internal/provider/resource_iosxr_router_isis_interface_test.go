@@ -9,25 +9,25 @@ import (
 )
 
 func TestAccIosxrRouterISISInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "circuit_type", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_sometimes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "passive", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "suppressed", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_keychain", "KEY_CHAIN_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrRouterISISInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "interface_name", "GigabitEthernet0/0/0/1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "circuit_type", "level-1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_sometimes", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority", "10"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "passive", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "suppressed", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "shutdown", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_keychain", "KEY_CHAIN_1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_isis_interface.test",
@@ -39,29 +39,27 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 }
 
 func testAccIosxrRouterISISInterfaceConfig_minimum() string {
-	return `
-	resource "iosxr_router_isis_interface" "test" {
-		process_id = "P1"
-		interface_name = "GigabitEthernet0/0/0/1"
-	}
-	`
+	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterISISInterfaceConfig_all() string {
-	return `
-	resource "iosxr_router_isis_interface" "test" {
-		process_id = "P1"
-		interface_name = "GigabitEthernet0/0/0/1"
-		circuit_type = "level-1"
-		hello_padding_disable = true
-		hello_padding_sometimes = false
-		priority = 10
-		point_to_point = false
-		passive = false
-		suppressed = false
-		shutdown = false
-		hello_password_keychain = "KEY_CHAIN_1"
-		bfd_fast_detect_ipv6 = true
-	}
-	`
+	config := `resource "iosxe_router_isis_interface" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	circuit_type = "level-1"` + "\n"
+	config += `	hello_padding_disable = true` + "\n"
+	config += `	hello_padding_sometimes = false` + "\n"
+	config += `	priority = 10` + "\n"
+	config += `	point_to_point = false` + "\n"
+	config += `	passive = false` + "\n"
+	config += `	suppressed = false` + "\n"
+	config += `	shutdown = false` + "\n"
+	config += `	hello_password_keychain = "KEY_CHAIN_1"` + "\n"
+	config += `	bfd_fast_detect_ipv6 = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

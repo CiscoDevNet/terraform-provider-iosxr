@@ -9,38 +9,40 @@ import (
 )
 
 func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "mac_refresh", "14"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_minimum", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_reload", "4321"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_minimum_interval", "255"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_multiplier", "33"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterVRRPInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "mac_refresh", "14"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_minimum", "1234"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "delay_reload", "4321"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_minimum_interval", "255"),
-					resource.TestCheckResourceAttr("data.iosxr_router_vrrp_interface.test", "bfd_multiplier", "33"),
-				),
+				Config: testAccDataSourceIosxrRouterVRRPInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrRouterVRRPInterfaceConfig = `
+func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {
+	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	mac_refresh = 14` + "\n"
+	config += `	delay_minimum = 1234` + "\n"
+	config += `	delay_reload = 4321` + "\n"
+	config += `	bfd_minimum_interval = 255` + "\n"
+	config += `	bfd_multiplier = 33` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_router_vrrp_interface" "test" {
-	delete_mode = "attributes"
-	interface_name = "GigabitEthernet0/0/0/1"
-	mac_refresh = 14
-	delay_minimum = 1234
-	delay_reload = 4321
-	bfd_minimum_interval = 255
-	bfd_multiplier = 33
+	config += `
+		data "iosxr_router_vrrp_interface" "test" {
+			interface_name = "GigabitEthernet0/0/0/1"
+			depends_on = [iosxr_router_vrrp_interface.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_router_vrrp_interface" "test" {
-	interface_name = "GigabitEthernet0/0/0/1"
-	depends_on = [iosxr_router_vrrp_interface.test]
-}
-`

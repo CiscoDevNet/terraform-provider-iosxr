@@ -9,26 +9,26 @@ import (
 )
 
 func TestAccIosxrIPv6AccessList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "access_list_name", "TEST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.sequence_number", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_address", "1::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_prefix_length", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_port_range_start", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_port_range_end", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_destination_host", "2::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_destination_port_eq", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop1_ipv6", "3::3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop2_ipv6", "4::4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_log", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrIPv6AccessListConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "access_list_name", "TEST1"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.sequence_number", "22"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_protocol", "tcp"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_address", "1::1"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_prefix_length", "64"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_port_range_start", "100"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_source_port_range_end", "200"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_destination_host", "2::1"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_destination_port_eq", "10"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop1_ipv6", "3::3"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop2_ipv6", "4::4"),
-					resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_log", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_ipv6_access_list.test",
@@ -40,30 +40,28 @@ func TestAccIosxrIPv6AccessList(t *testing.T) {
 }
 
 func testAccIosxrIPv6AccessListConfig_minimum() string {
-	return `
-	resource "iosxr_ipv6_access_list" "test" {
-		access_list_name = "TEST1"
-	}
-	`
+	config := `resource "iosxr_ipv6_access_list" "test" {` + "\n"
+	config += `	access_list_name = "TEST1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrIPv6AccessListConfig_all() string {
-	return `
-	resource "iosxr_ipv6_access_list" "test" {
-		access_list_name = "TEST1"
-		sequences = [{
-			sequence_number = 22
-			permit_protocol = "tcp"
-			permit_source_address = "1::1"
-			permit_source_prefix_length = 64
-			permit_source_port_range_start = "100"
-			permit_source_port_range_end = "200"
-			permit_destination_host = "2::1"
-			permit_destination_port_eq = "10"
-			permit_nexthop1_ipv6 = "3::3"
-			permit_nexthop2_ipv6 = "4::4"
-			permit_log = true
-		}]
-	}
-	`
+	config := `resource "iosxe_ipv6_access_list" "test" {` + "\n"
+	config += `	access_list_name = "TEST1"` + "\n"
+	config += `	sequences = [{` + "\n"
+	config += `		sequence_number = 22` + "\n"
+	config += `		permit_protocol = "tcp"` + "\n"
+	config += `		permit_source_address = "1::1"` + "\n"
+	config += `		permit_source_prefix_length = 64` + "\n"
+	config += `		permit_source_port_range_start = "100"` + "\n"
+	config += `		permit_source_port_range_end = "200"` + "\n"
+	config += `		permit_destination_host = "2::1"` + "\n"
+	config += `		permit_destination_port_eq = "10"` + "\n"
+	config += `		permit_nexthop1_ipv6 = "3::3"` + "\n"
+	config += `		permit_nexthop2_ipv6 = "4::4"` + "\n"
+	config += `		permit_log = true` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

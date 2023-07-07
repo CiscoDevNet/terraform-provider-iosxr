@@ -9,35 +9,37 @@ import (
 )
 
 func TestAccDataSourceIosxrClassMapQoS(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_any", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "description", "description1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_dscp.0", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrClassMapQoSConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_any", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "description", "description1"),
-					resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_dscp.0", "46"),
-					resource.TestCheckResourceAttr("data.iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"),
-				),
+				Config: testAccDataSourceIosxrClassMapQoSConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrClassMapQoSConfig = `
+func testAccDataSourceIosxrClassMapQoSConfig() string {
+	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
+	config += `	class_map_name = "TEST"` + "\n"
+	config += `	match_any = true` + "\n"
+	config += `	description = "description1"` + "\n"
+	config += `	match_dscp = ["46"]` + "\n"
+	config += `	match_mpls_experimental_topmost = [5]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_class_map_qos" "test" {
-	class_map_name = "TEST"
-	match_any = true
-	description = "description1"
-	match_dscp = ["46"]
-	match_mpls_experimental_topmost = [5]
+	config += `
+		data "iosxr_class_map_qos" "test" {
+			class_map_name = "TEST"
+			depends_on = [iosxr_class_map_qos.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_class_map_qos" "test" {
-	class_map_name = "TEST"
-	depends_on = [iosxr_class_map_qos.test]
-}
-`

@@ -9,15 +9,15 @@ import (
 )
 
 func TestAccIosxrHostname(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_hostname.test", "system_network_name", "ROUTER-1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrHostnameConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_hostname.test", "system_network_name", "ROUTER-1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_hostname.test",
@@ -29,16 +29,14 @@ func TestAccIosxrHostname(t *testing.T) {
 }
 
 func testAccIosxrHostnameConfig_minimum() string {
-	return `
-	resource "iosxr_hostname" "test" {
-	}
-	`
+	config := `resource "iosxr_hostname" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrHostnameConfig_all() string {
-	return `
-	resource "iosxr_hostname" "test" {
-		system_network_name = "ROUTER-1"
-	}
-	`
+	config := `resource "iosxe_hostname" "test" {` + "\n"
+	config += `	system_network_name = "ROUTER-1"` + "\n"
+	config += `}` + "\n"
+	return config
 }

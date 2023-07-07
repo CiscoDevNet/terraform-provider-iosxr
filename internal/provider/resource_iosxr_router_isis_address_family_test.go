@@ -9,51 +9,51 @@ import (
 )
 
 func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv6"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_narrow", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_wide", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_transition", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.level_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.narrow", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.wide", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.transition", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "router_id_ip_address", "1050:0000:0000:0000:0005:0600:300c:326b"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "default_information_originate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_delay_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_critical", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_high", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_medium", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_critical", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_high", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_medium", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_protected", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_segment_routing", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_passive_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_link_attributes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_ldp_auto_config", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1_2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_maximum_wait", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_initial_wait", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_secondary_wait", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.priority", "critical"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_isis.0.instance_id", "CORE"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.locator_name", "AlgoLocator"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.level", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv6"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_narrow", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_wide", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_transition", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.level_id", "1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.narrow", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.wide", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.transition", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "router_id_ip_address", "1050:0000:0000:0000:0005:0600:300c:326b"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "default_information_originate", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_delay_interval", "300"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_critical", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_high", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_medium", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_critical", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_high", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_priority_limit_medium", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_protected", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_segment_routing", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_passive_only", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_link_attributes", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_ldp_auto_config", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1_2", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "mpls_traffic_eng_level_1", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_maximum_wait", "5000"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_initial_wait", "50"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_interval_secondary_wait", "200"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.priority", "critical"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "spf_prefix_priorities.0.tag", "100"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes", "100"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.level_id", "1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "maximum_redistributed_prefixes_levels.0.maximum_prefixes", "1000"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_isis.0.instance_id", "CORE"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.locator_name", "AlgoLocator"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.level", "1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_isis_address_family.test",
@@ -76,68 +76,66 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
-	return `
-	resource "iosxr_router_isis_address_family" "test" {
-		process_id = "P1"
-		af_name = "ipv6"
-		saf_name = "unicast"
-		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_isis_address_family" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	af_name = "ipv6"` + "\n"
+	config += `	saf_name = "unicast"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterISISAddressFamilyConfig_all() string {
-	return `
-	resource "iosxr_router_isis_address_family" "test" {
-		process_id = "P1"
-		af_name = "ipv6"
-		saf_name = "unicast"
-		metric_style_narrow = false
-		metric_style_wide = true
-		metric_style_transition = false
-		metric_style_levels = [{
-			level_id = 1
-			narrow = false
-			wide = true
-			transition = false
-		}]
-		router_id_ip_address = "1050:0000:0000:0000:0005:0600:300c:326b"
-		default_information_originate = true
-		fast_reroute_delay_interval = 300
-		fast_reroute_per_link_priority_limit_critical = true
-		fast_reroute_per_link_priority_limit_high = false
-		fast_reroute_per_link_priority_limit_medium = false
-		fast_reroute_per_prefix_priority_limit_critical = true
-		fast_reroute_per_prefix_priority_limit_high = false
-		fast_reroute_per_prefix_priority_limit_medium = false
-		microloop_avoidance_protected = false
-		microloop_avoidance_segment_routing = true
-		advertise_passive_only = true
-		advertise_link_attributes = true
-		mpls_ldp_auto_config = false
-		mpls_traffic_eng_level_1_2 = false
-		mpls_traffic_eng_level_1 = false
-		spf_interval_maximum_wait = 5000
-		spf_interval_initial_wait = 50
-		spf_interval_secondary_wait = 200
-		spf_prefix_priorities = [{
-			priority = "critical"
-			tag = 100
-		}]
-		maximum_redistributed_prefixes = 100
-		maximum_redistributed_prefixes_levels = [{
-			level_id = 1
-			maximum_prefixes = 1000
-		}]
-		redistribute_isis = [{
-			instance_id = "CORE"
-			route_policy = "ROUTE_POLICY_1"
-		}]
-		segment_routing_srv6_locators = [{
-			locator_name = "AlgoLocator"
-			level = 1
-		}]
-  		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxe_router_isis_address_family" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	af_name = "ipv6"` + "\n"
+	config += `	saf_name = "unicast"` + "\n"
+	config += `	metric_style_narrow = false` + "\n"
+	config += `	metric_style_wide = true` + "\n"
+	config += `	metric_style_transition = false` + "\n"
+	config += `	metric_style_levels = [{` + "\n"
+	config += `		level_id = 1` + "\n"
+	config += `		narrow = false` + "\n"
+	config += `		wide = true` + "\n"
+	config += `		transition = false` + "\n"
+	config += `	}]` + "\n"
+	config += `	router_id_ip_address = "1050:0000:0000:0000:0005:0600:300c:326b"` + "\n"
+	config += `	default_information_originate = true` + "\n"
+	config += `	fast_reroute_delay_interval = 300` + "\n"
+	config += `	fast_reroute_per_link_priority_limit_critical = true` + "\n"
+	config += `	fast_reroute_per_link_priority_limit_high = false` + "\n"
+	config += `	fast_reroute_per_link_priority_limit_medium = false` + "\n"
+	config += `	fast_reroute_per_prefix_priority_limit_critical = true` + "\n"
+	config += `	fast_reroute_per_prefix_priority_limit_high = false` + "\n"
+	config += `	fast_reroute_per_prefix_priority_limit_medium = false` + "\n"
+	config += `	microloop_avoidance_protected = false` + "\n"
+	config += `	microloop_avoidance_segment_routing = true` + "\n"
+	config += `	advertise_passive_only = true` + "\n"
+	config += `	advertise_link_attributes = true` + "\n"
+	config += `	mpls_ldp_auto_config = false` + "\n"
+	config += `	mpls_traffic_eng_level_1_2 = false` + "\n"
+	config += `	mpls_traffic_eng_level_1 = false` + "\n"
+	config += `	spf_interval_maximum_wait = 5000` + "\n"
+	config += `	spf_interval_initial_wait = 50` + "\n"
+	config += `	spf_interval_secondary_wait = 200` + "\n"
+	config += `	spf_prefix_priorities = [{` + "\n"
+	config += `		priority = "critical"` + "\n"
+	config += `		tag = 100` + "\n"
+	config += `	}]` + "\n"
+	config += `	maximum_redistributed_prefixes = 100` + "\n"
+	config += `	maximum_redistributed_prefixes_levels = [{` + "\n"
+	config += `		level_id = 1` + "\n"
+	config += `		maximum_prefixes = 1000` + "\n"
+	config += `	}]` + "\n"
+	config += `	redistribute_isis = [{` + "\n"
+	config += `		instance_id = "CORE"` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	segment_routing_srv6_locators = [{` + "\n"
+	config += `		locator_name = "AlgoLocator"` + "\n"
+	config += `		level = 1` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

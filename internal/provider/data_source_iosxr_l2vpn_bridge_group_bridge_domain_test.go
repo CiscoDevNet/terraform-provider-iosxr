@@ -9,38 +9,40 @@ import (
 )
 
 func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "vnis.0.vni_id", "1234"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"),
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_bridge_group_bridge_domain.test", "vnis.0.vni_id", "1234"),
-				),
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig = `
+func testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig() string {
+	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	bridge_group_name = "BG123"` + "\n"
+	config += `	bridge_domain_name = "BD123"` + "\n"
+	config += `	evis = [{` + "\n"
+	config += `		vpn_id = 1234` + "\n"
+	config += `	}]` + "\n"
+	config += `	vnis = [{` + "\n"
+	config += `		vni_id = 1234` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
-	delete_mode = "attributes"
-	bridge_group_name = "BG123"
-	bridge_domain_name = "BD123"
-	evis = [{
-		vpn_id = 1234
-	}]
-	vnis = [{
-		vni_id = 1234
-	}]
+	config += `
+		data "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
+			bridge_group_name = "BG123"
+			bridge_domain_name = "BD123"
+			depends_on = [iosxr_l2vpn_bridge_group_bridge_domain.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_l2vpn_bridge_group_bridge_domain" "test" {
-	bridge_group_name = "BG123"
-	bridge_domain_name = "BD123"
-	depends_on = [iosxr_l2vpn_bridge_group_bridge_domain.test]
-}
-`

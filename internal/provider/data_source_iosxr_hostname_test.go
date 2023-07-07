@@ -9,27 +9,29 @@ import (
 )
 
 func TestAccDataSourceIosxrHostname(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_hostname.test", "system_network_name", "ROUTER-1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrHostnameConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_hostname.test", "system_network_name", "ROUTER-1"),
-				),
+				Config: testAccDataSourceIosxrHostnameConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrHostnameConfig = `
+func testAccDataSourceIosxrHostnameConfig() string {
+	config := `resource "iosxr_hostname" "test" {` + "\n"
+	config += `	system_network_name = "ROUTER-1"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_hostname" "test" {
-	system_network_name = "ROUTER-1"
+	config += `
+		data "iosxr_hostname" "test" {
+			depends_on = [iosxr_hostname.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_hostname" "test" {
-	depends_on = [iosxr_hostname.test]
-}
-`

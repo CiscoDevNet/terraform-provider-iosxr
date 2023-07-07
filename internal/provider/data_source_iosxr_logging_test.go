@@ -9,48 +9,50 @@ import (
 )
 
 func TestAccDataSourceIosxrLogging(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "ipv4_dscp", "cs6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "trap", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_display_location", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_level", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "console", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "monitor", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_logging_buffer_size", "4000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_level", "debugging"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "facility_level", "local7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_duplicates", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrLoggingConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "ipv4_dscp", "cs6"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "trap", "informational"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_display_location", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "events_level", "informational"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "console", "disable"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "monitor", "disable"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_logging_buffer_size", "4000000"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "buffered_level", "debugging"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "facility_level", "local7"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "hostnameprefix", "HOSTNAME01"),
-					resource.TestCheckResourceAttr("data.iosxr_logging.test", "suppress_duplicates", "true"),
-				),
+				Config: testAccDataSourceIosxrLoggingConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrLoggingConfig = `
+func testAccDataSourceIosxrLoggingConfig() string {
+	config := `resource "iosxr_logging" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	ipv4_dscp = "cs6"` + "\n"
+	config += `	trap = "informational"` + "\n"
+	config += `	events_display_location = true` + "\n"
+	config += `	events_level = "informational"` + "\n"
+	config += `	console = "disable"` + "\n"
+	config += `	monitor = "disable"` + "\n"
+	config += `	buffered_logging_buffer_size = 4000000` + "\n"
+	config += `	buffered_level = "debugging"` + "\n"
+	config += `	facility_level = "local7"` + "\n"
+	config += `	hostnameprefix = "HOSTNAME01"` + "\n"
+	config += `	suppress_duplicates = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_logging" "test" {
-	delete_mode = "attributes"
-	ipv4_dscp = "cs6"
-	trap = "informational"
-	events_display_location = true
-	events_level = "informational"
-	console = "disable"
-	monitor = "disable"
-	buffered_logging_buffer_size = 4000000
-	buffered_level = "debugging"
-	facility_level = "local7"
-	hostnameprefix = "HOSTNAME01"
-	suppress_duplicates = true
+	config += `
+		data "iosxr_logging" "test" {
+			depends_on = [iosxr_logging.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_logging" "test" {
-	depends_on = [iosxr_logging.test]
-}
-`

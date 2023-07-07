@@ -9,45 +9,47 @@ import (
 )
 
 func TestAccDataSourceIosxrPolicyMapQoS(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.name", "class-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.type", "qos"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPolicyMapQoSConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "description", "My description"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.name", "class-default"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.type", "qos"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "0"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"),
-					resource.TestCheckResourceAttr("data.iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"),
-				),
+				Config: testAccDataSourceIosxrPolicyMapQoSConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrPolicyMapQoSConfig = `
+func testAccDataSourceIosxrPolicyMapQoSConfig() string {
+	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
+	config += `	policy_map_name = "PM1"` + "\n"
+	config += `	description = "My description"` + "\n"
+	config += `	classes = [{` + "\n"
+	config += `		name = "class-default"` + "\n"
+	config += `		type = "qos"` + "\n"
+	config += `		set_mpls_experimental_topmost = 0` + "\n"
+	config += `		set_dscp = "0"` + "\n"
+	config += `		queue_limits = [{` + "\n"
+	config += `			value = "100"` + "\n"
+	config += `			unit = "us"` + "\n"
+	config += `		}]` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_policy_map_qos" "test" {
-	policy_map_name = "PM1"
-	description = "My description"
-	classes = [{
-		name = "class-default"
-		type = "qos"
-		set_mpls_experimental_topmost = 0
-		set_dscp = "0"
-		queue_limits = [{
-			value = "100"
-			unit = "us"
-		}]
-	}]
+	config += `
+		data "iosxr_policy_map_qos" "test" {
+			policy_map_name = "PM1"
+			depends_on = [iosxr_policy_map_qos.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_policy_map_qos" "test" {
-	policy_map_name = "PM1"
-	depends_on = [iosxr_policy_map_qos.test]
-}
-`

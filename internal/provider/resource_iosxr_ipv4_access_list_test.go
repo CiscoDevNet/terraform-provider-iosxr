@@ -9,28 +9,28 @@ import (
 )
 
 func TestAccIosxrIPv4AccessList(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "access_list_name", "ACCESS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.sequence_number", "11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_address", "18.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_wildcard_mask", "0.255.255.255"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_start", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_end", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_host", "11.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_port_eq", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_dscp", "cs1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_ttl_eq", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop1_ipv4", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop2_ipv4", "3.4.5.6"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_log", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrIPv4AccessListConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "access_list_name", "ACCESS1"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.sequence_number", "11"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_protocol", "tcp"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_address", "18.0.0.0"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_wildcard_mask", "0.255.255.255"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_start", "100"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_source_port_range_end", "200"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_host", "11.1.1.1"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_destination_port_eq", "300"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_dscp", "cs1"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_ttl_eq", "10"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop1_ipv4", "1.2.3.4"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_nexthop2_ipv4", "3.4.5.6"),
-					resource.TestCheckResourceAttr("iosxr_ipv4_access_list.test", "sequences.0.permit_log", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_ipv4_access_list.test",
@@ -42,32 +42,30 @@ func TestAccIosxrIPv4AccessList(t *testing.T) {
 }
 
 func testAccIosxrIPv4AccessListConfig_minimum() string {
-	return `
-	resource "iosxr_ipv4_access_list" "test" {
-		access_list_name = "ACCESS1"
-	}
-	`
+	config := `resource "iosxr_ipv4_access_list" "test" {` + "\n"
+	config += `	access_list_name = "ACCESS1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrIPv4AccessListConfig_all() string {
-	return `
-	resource "iosxr_ipv4_access_list" "test" {
-		access_list_name = "ACCESS1"
-		sequences = [{
-			sequence_number = 11
-			permit_protocol = "tcp"
-			permit_source_address = "18.0.0.0"
-			permit_source_wildcard_mask = "0.255.255.255"
-			permit_source_port_range_start = "100"
-			permit_source_port_range_end = "200"
-			permit_destination_host = "11.1.1.1"
-			permit_destination_port_eq = "300"
-			permit_dscp = "cs1"
-			permit_ttl_eq = 10
-			permit_nexthop1_ipv4 = "1.2.3.4"
-			permit_nexthop2_ipv4 = "3.4.5.6"
-			permit_log = true
-		}]
-	}
-	`
+	config := `resource "iosxe_ipv4_access_list" "test" {` + "\n"
+	config += `	access_list_name = "ACCESS1"` + "\n"
+	config += `	sequences = [{` + "\n"
+	config += `		sequence_number = 11` + "\n"
+	config += `		permit_protocol = "tcp"` + "\n"
+	config += `		permit_source_address = "18.0.0.0"` + "\n"
+	config += `		permit_source_wildcard_mask = "0.255.255.255"` + "\n"
+	config += `		permit_source_port_range_start = "100"` + "\n"
+	config += `		permit_source_port_range_end = "200"` + "\n"
+	config += `		permit_destination_host = "11.1.1.1"` + "\n"
+	config += `		permit_destination_port_eq = "300"` + "\n"
+	config += `		permit_dscp = "cs1"` + "\n"
+	config += `		permit_ttl_eq = 10` + "\n"
+	config += `		permit_nexthop1_ipv4 = "1.2.3.4"` + "\n"
+	config += `		permit_nexthop2_ipv4 = "3.4.5.6"` + "\n"
+	config += `		permit_log = true` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

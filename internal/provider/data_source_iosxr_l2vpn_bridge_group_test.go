@@ -9,27 +9,30 @@ import (
 )
 
 func TestAccDataSourceIosxrL2VPNBridgeGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupConfig,
-				Check:  resource.ComposeTestCheckFunc(),
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrL2VPNBridgeGroupConfig = `
+func testAccDataSourceIosxrL2VPNBridgeGroupConfig() string {
+	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	group_name = "BG123"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_l2vpn_bridge_group" "test" {
-	delete_mode = "attributes"
-	group_name = "BG123"
+	config += `
+		data "iosxr_l2vpn_bridge_group" "test" {
+			group_name = "BG123"
+			depends_on = [iosxr_l2vpn_bridge_group.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_l2vpn_bridge_group" "test" {
-	group_name = "BG123"
-	depends_on = [iosxr_l2vpn_bridge_group.test]
-}
-`

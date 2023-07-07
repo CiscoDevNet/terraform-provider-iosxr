@@ -9,25 +9,25 @@ import (
 )
 
 func TestAccIosxrLLDP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "holdtime", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "timer", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "reinit", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "priorityaddr_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "extended_show_width_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_management_address_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_port_description_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_description_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_name_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrLLDPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "holdtime", "50"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "timer", "6"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "reinit", "3"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "priorityaddr_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "extended_show_width_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_management_address_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_port_description_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_description_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_name_disable", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_lldp.test",
@@ -39,26 +39,24 @@ func TestAccIosxrLLDP(t *testing.T) {
 }
 
 func testAccIosxrLLDPConfig_minimum() string {
-	return `
-	resource "iosxr_lldp" "test" {
-	}
-	`
+	config := `resource "iosxr_lldp" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrLLDPConfig_all() string {
-	return `
-	resource "iosxr_lldp" "test" {
-		holdtime = 50
-		timer = 6
-		reinit = 3
-		subinterfaces_enable = true
-		priorityaddr_enable = true
-		extended_show_width_enable = true
-		tlv_select_management_address_disable = true
-		tlv_select_port_description_disable = true
-		tlv_select_system_capabilities_disable = true
-		tlv_select_system_description_disable = true
-		tlv_select_system_name_disable = true
-	}
-	`
+	config := `resource "iosxe_lldp" "test" {` + "\n"
+	config += `	holdtime = 50` + "\n"
+	config += `	timer = 6` + "\n"
+	config += `	reinit = 3` + "\n"
+	config += `	subinterfaces_enable = true` + "\n"
+	config += `	priorityaddr_enable = true` + "\n"
+	config += `	extended_show_width_enable = true` + "\n"
+	config += `	tlv_select_management_address_disable = true` + "\n"
+	config += `	tlv_select_port_description_disable = true` + "\n"
+	config += `	tlv_select_system_capabilities_disable = true` + "\n"
+	config += `	tlv_select_system_description_disable = true` + "\n"
+	config += `	tlv_select_system_name_disable = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

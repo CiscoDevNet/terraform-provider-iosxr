@@ -9,48 +9,50 @@ import (
 )
 
 func TestAccDataSourceIosxrIPv6(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "hop_limit", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_interval_time", "2111"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_bucket_size", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "source_route", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_timeout", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_max_packets", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_reassembler_drop_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_frag_hdr_incomplete_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_overlap_frag_drop_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "path_mtu_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "path_mtu_timeout", "10"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrIPv6Config,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "hop_limit", "123"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_interval_time", "2111"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_bucket_size", "123"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "source_route", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_timeout", "50"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_max_packets", "40"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_reassembler_drop_enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_frag_hdr_incomplete_enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_overlap_frag_drop_enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "path_mtu_enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "path_mtu_timeout", "10"),
-				),
+				Config: testAccDataSourceIosxrIPv6Config(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrIPv6Config = `
+func testAccDataSourceIosxrIPv6Config() string {
+	config := `resource "iosxr_ipv6" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	hop_limit = 123` + "\n"
+	config += `	icmp_error_interval_interval_time = 2111` + "\n"
+	config += `	icmp_error_interval_bucket_size = 123` + "\n"
+	config += `	source_route = true` + "\n"
+	config += `	assembler_timeout = 50` + "\n"
+	config += `	assembler_max_packets = 40` + "\n"
+	config += `	assembler_reassembler_drop_enable = true` + "\n"
+	config += `	assembler_frag_hdr_incomplete_enable = true` + "\n"
+	config += `	assembler_overlap_frag_drop_enable = true` + "\n"
+	config += `	path_mtu_enable = true` + "\n"
+	config += `	path_mtu_timeout = 10` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_ipv6" "test" {
-	delete_mode = "attributes"
-	hop_limit = 123
-	icmp_error_interval_interval_time = 2111
-	icmp_error_interval_bucket_size = 123
-	source_route = true
-	assembler_timeout = 50
-	assembler_max_packets = 40
-	assembler_reassembler_drop_enable = true
-	assembler_frag_hdr_incomplete_enable = true
-	assembler_overlap_frag_drop_enable = true
-	path_mtu_enable = true
-	path_mtu_timeout = 10
+	config += `
+		data "iosxr_ipv6" "test" {
+			depends_on = [iosxr_ipv6.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_ipv6" "test" {
-	depends_on = [iosxr_ipv6.test]
-}
-`

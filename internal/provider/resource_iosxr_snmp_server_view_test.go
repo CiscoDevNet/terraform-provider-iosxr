@@ -9,17 +9,17 @@ import (
 )
 
 func TestAccIosxrSNMPServerView(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "view_name", "VIEW12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.name", "iso"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrSNMPServerViewConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "view_name", "VIEW12"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.name", "iso"),
-					resource.TestCheckResourceAttr("iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_snmp_server_view.test",
@@ -31,21 +31,19 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 }
 
 func testAccIosxrSNMPServerViewConfig_minimum() string {
-	return `
-	resource "iosxr_snmp_server_view" "test" {
-		view_name = "VIEW12"
-	}
-	`
+	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
+	config += `	view_name = "VIEW12"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrSNMPServerViewConfig_all() string {
-	return `
-	resource "iosxr_snmp_server_view" "test" {
-		view_name = "VIEW12"
-		mib_view_families = [{
-			name = "iso"
-			included = true
-		}]
-	}
-	`
+	config := `resource "iosxe_snmp_server_view" "test" {` + "\n"
+	config += `	view_name = "VIEW12"` + "\n"
+	config += `	mib_view_families = [{` + "\n"
+	config += `		name = "iso"` + "\n"
+	config += `		included = true` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

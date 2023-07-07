@@ -9,38 +9,38 @@ import (
 )
 
 func TestAccIosxrInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "l2transport", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "point_to_point", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "multipoint", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "dampening_decay_half_life_value", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_point_to_point", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_input.0.name", "PMAP-IN"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_output.0.name", "PMAP-OUT"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "shutdown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "mtu", "9000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "bandwidth", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "description", "My Interface Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "load_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_netmask", "255.255.255.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_address", "fe80::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_zone", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_autoconfig", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.zone", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "bundle_port_priority", "100"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrInterfacePrerequisitesConfig + testAccIosxrInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_interface.test", "interface_name", "GigabitEthernet0/0/0/1"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "l2transport", "false"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "point_to_point", "false"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "multipoint", "false"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "dampening_decay_half_life_value", "2"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_point_to_point", "true"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_input.0.name", "PMAP-IN"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "service_policy_output.0.name", "PMAP-OUT"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "shutdown", "true"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "mtu", "9000"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "bandwidth", "100000"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "description", "My Interface Description"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "load_interval", "30"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "vrf", "VRF1"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_address", "1.1.1.1"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_netmask", "255.255.255.0"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_address", "fe80::1"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_link_local_zone", "0"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_autoconfig", "false"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.address", "2001::1"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.zone", "0"),
-					resource.TestCheckResourceAttr("iosxr_interface.test", "bundle_port_priority", "100"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_interface.test",
@@ -95,48 +95,46 @@ resource "iosxr_gnmi" "PreReq1" {
 `
 
 func testAccIosxrInterfaceConfig_minimum() string {
-	return `
-	resource "iosxr_interface" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
-	}
-	`
+	config := `resource "iosxr_interface" "test" {` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrInterfaceConfig_all() string {
-	return `
-	resource "iosxr_interface" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		l2transport = false
-		point_to_point = false
-		multipoint = false
-		dampening_decay_half_life_value = 2
-		ipv4_point_to_point = true
-		service_policy_input = [{
-			name = "PMAP-IN"
-		}]
-		service_policy_output = [{
-			name = "PMAP-OUT"
-		}]
-		shutdown = true
-		mtu = 9000
-		bandwidth = 100000
-		description = "My Interface Description"
-		load_interval = 30
-		vrf = "VRF1"
-		ipv4_address = "1.1.1.1"
-		ipv4_netmask = "255.255.255.0"
-		ipv6_link_local_address = "fe80::1"
-		ipv6_link_local_zone = "0"
-		ipv6_autoconfig = false
-		ipv6_enable = true
-		ipv6_addresses = [{
-			address = "2001::1"
-			prefix_length = 64
-			zone = "0"
-		}]
-		bundle_port_priority = 100
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
-	}
-	`
+	config := `resource "iosxe_interface" "test" {` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	l2transport = false` + "\n"
+	config += `	point_to_point = false` + "\n"
+	config += `	multipoint = false` + "\n"
+	config += `	dampening_decay_half_life_value = 2` + "\n"
+	config += `	ipv4_point_to_point = true` + "\n"
+	config += `	service_policy_input = [{` + "\n"
+	config += `		name = "PMAP-IN"` + "\n"
+	config += `	}]` + "\n"
+	config += `	service_policy_output = [{` + "\n"
+	config += `		name = "PMAP-OUT"` + "\n"
+	config += `	}]` + "\n"
+	config += `	shutdown = true` + "\n"
+	config += `	mtu = 9000` + "\n"
+	config += `	bandwidth = 100000` + "\n"
+	config += `	description = "My Interface Description"` + "\n"
+	config += `	load_interval = 30` + "\n"
+	config += `	vrf = "VRF1"` + "\n"
+	config += `	ipv4_address = "1.1.1.1"` + "\n"
+	config += `	ipv4_netmask = "255.255.255.0"` + "\n"
+	config += `	ipv6_link_local_address = "fe80::1"` + "\n"
+	config += `	ipv6_link_local_zone = "0"` + "\n"
+	config += `	ipv6_autoconfig = false` + "\n"
+	config += `	ipv6_enable = true` + "\n"
+	config += `	ipv6_addresses = [{` + "\n"
+	config += `		address = "2001::1"` + "\n"
+	config += `		prefix_length = 64` + "\n"
+	config += `		zone = "0"` + "\n"
+	config += `	}]` + "\n"
+	config += `	bundle_port_priority = 100` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

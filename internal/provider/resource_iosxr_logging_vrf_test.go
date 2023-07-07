@@ -9,19 +9,19 @@ import (
 )
 
 func TestAccIosxrLoggingVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrLoggingVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "VRF1"),
-					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"),
-					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"),
-					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001::1"),
-					resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_logging_vrf.test",
@@ -33,25 +33,23 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 }
 
 func testAccIosxrLoggingVRFConfig_minimum() string {
-	return `
-	resource "iosxr_logging_vrf" "test" {
-		vrf_name = "VRF1"
-	}
-	`
+	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrLoggingVRFConfig_all() string {
-	return `
-	resource "iosxr_logging_vrf" "test" {
-		vrf_name = "VRF1"
-		host_ipv4_addresses = [{
-			ipv4_address = "1.1.1.1"
-			severity = "info"
-		}]
-		host_ipv6_addresses = [{
-			ipv6_address = "2001::1"
-			severity = "info"
-		}]
-	}
-	`
+	config := `resource "iosxe_logging_vrf" "test" {` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	host_ipv4_addresses = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		severity = "info"` + "\n"
+	config += `	}]` + "\n"
+	config += `	host_ipv6_addresses = [{` + "\n"
+	config += `		ipv6_address = "2001::1"` + "\n"
+	config += `		severity = "info"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

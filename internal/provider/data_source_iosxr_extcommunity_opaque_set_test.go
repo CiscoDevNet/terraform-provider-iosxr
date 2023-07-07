@@ -9,29 +9,31 @@ import (
 )
 
 func TestAccDataSourceIosxrExtcommunityOpaqueSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_extcommunity_opaque_set.test", "rpl", "extcommunity-set opaque BLUE\n  100\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrExtcommunityOpaqueSetConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_extcommunity_opaque_set.test", "rpl", "extcommunity-set opaque BLUE\n  100\nend-set\n"),
-				),
+				Config: testAccDataSourceIosxrExtcommunityOpaqueSetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrExtcommunityOpaqueSetConfig = `
+func testAccDataSourceIosxrExtcommunityOpaqueSetConfig() string {
+	config := `resource "iosxr_extcommunity_opaque_set" "test" {` + "\n"
+	config += `	set_name = "BLUE"` + "\n"
+	config += `	rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_extcommunity_opaque_set" "test" {
-	set_name = "BLUE"
-	rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"
+	config += `
+		data "iosxr_extcommunity_opaque_set" "test" {
+			set_name = "BLUE"
+			depends_on = [iosxr_extcommunity_opaque_set.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_extcommunity_opaque_set" "test" {
-	set_name = "BLUE"
-	depends_on = [iosxr_extcommunity_opaque_set.test]
-}
-`

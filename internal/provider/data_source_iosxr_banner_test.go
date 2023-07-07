@@ -9,29 +9,31 @@ import (
 )
 
 func TestAccDataSourceIosxrBanner(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", " Hello user !"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrBannerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", " Hello user !"),
-				),
+				Config: testAccDataSourceIosxrBannerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrBannerConfig = `
+func testAccDataSourceIosxrBannerConfig() string {
+	config := `resource "iosxr_banner" "test" {` + "\n"
+	config += `	banner_type = "login"` + "\n"
+	config += `	line = " Hello user !"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_banner" "test" {
-	banner_type = "login"
-	line = " Hello user !"
+	config += `
+		data "iosxr_banner" "test" {
+			banner_type = "login"
+			depends_on = [iosxr_banner.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_banner" "test" {
-	banner_type = "login"
-	depends_on = [iosxr_banner.test]
-}
-`

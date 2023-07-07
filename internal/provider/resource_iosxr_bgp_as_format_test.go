@@ -9,16 +9,16 @@ import (
 )
 
 func TestAccIosxrBGPASFormat(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asdot", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asplain", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrBGPASFormatConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asdot", "false"),
-					resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asplain", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_bgp_as_format.test",
@@ -30,17 +30,15 @@ func TestAccIosxrBGPASFormat(t *testing.T) {
 }
 
 func testAccIosxrBGPASFormatConfig_minimum() string {
-	return `
-	resource "iosxr_bgp_as_format" "test" {
-	}
-	`
+	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrBGPASFormatConfig_all() string {
-	return `
-	resource "iosxr_bgp_as_format" "test" {
-		asdot = false
-		asplain = true
-	}
-	`
+	config := `resource "iosxe_bgp_as_format" "test" {` + "\n"
+	config += `	asdot = false` + "\n"
+	config += `	asplain = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

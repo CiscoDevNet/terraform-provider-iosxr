@@ -9,45 +9,47 @@ import (
 )
 
 func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locator", "LOC12"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locator", "LOC12"),
-				),
+				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig = `
+func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
+	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
+	config += `	vpn_id = 1235` + "\n"
+	config += `	description = "My Description"` + "\n"
+	config += `	bgp_route_target_import_two_byte_as_format = [{` + "\n"
+	config += `		as_number = 1` + "\n"
+	config += `		assigned_number = 1` + "\n"
+	config += `	}]` + "\n"
+	config += `	bgp_route_target_export_ipv4_address_format = [{` + "\n"
+	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `		assigned_number = 1` + "\n"
+	config += `	}]` + "\n"
+	config += `	advertise_mac = true` + "\n"
+	config += `	locator = "LOC12"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_evpn_segment_routing_srv6_evi" "test" {
-	vpn_id = 1235
-	description = "My Description"
-	bgp_route_target_import_two_byte_as_format = [{
-		as_number = 1
-		assigned_number = 1
-	}]
-	bgp_route_target_export_ipv4_address_format = [{
-		ipv4_address = "1.1.1.1"
-		assigned_number = 1
-	}]
-	advertise_mac = true
-	locator = "LOC12"
+	config += `
+		data "iosxr_evpn_segment_routing_srv6_evi" "test" {
+			vpn_id = 1235
+			depends_on = [iosxr_evpn_segment_routing_srv6_evi.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_evpn_segment_routing_srv6_evi" "test" {
-	vpn_id = 1235
-	depends_on = [iosxr_evpn_segment_routing_srv6_evi.test]
-}
-`

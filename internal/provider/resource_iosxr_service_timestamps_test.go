@@ -9,26 +9,26 @@ import (
 )
 
 func TestAccIosxrServiceTimestamps(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrServiceTimestampsConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_localtime", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_msec", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_datetime_year", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_uptime", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "debug_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_localtime", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_msec", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_year", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_uptime", "true"),
-					resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_disable", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_service_timestamps.test",
@@ -40,27 +40,25 @@ func TestAccIosxrServiceTimestamps(t *testing.T) {
 }
 
 func testAccIosxrServiceTimestampsConfig_minimum() string {
-	return `
-	resource "iosxr_service_timestamps" "test" {
-	}
-	`
+	config := `resource "iosxr_service_timestamps" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrServiceTimestampsConfig_all() string {
-	return `
-	resource "iosxr_service_timestamps" "test" {
-		debug_datetime_localtime = true
-		debug_datetime_msec = true
-		debug_datetime_show_timezone = true
-		debug_datetime_year = true
-		debug_uptime = true
-		debug_disable = true
-		log_datetime_localtime = true
-		log_datetime_msec = true
-		log_datetime_show_timezone = true
-		log_datetime_year = true
-		log_uptime = true
-		log_disable = true
-	}
-	`
+	config := `resource "iosxe_service_timestamps" "test" {` + "\n"
+	config += `	debug_datetime_localtime = true` + "\n"
+	config += `	debug_datetime_msec = true` + "\n"
+	config += `	debug_datetime_show_timezone = true` + "\n"
+	config += `	debug_datetime_year = true` + "\n"
+	config += `	debug_uptime = true` + "\n"
+	config += `	debug_disable = true` + "\n"
+	config += `	log_datetime_localtime = true` + "\n"
+	config += `	log_datetime_msec = true` + "\n"
+	config += `	log_datetime_show_timezone = true` + "\n"
+	config += `	log_datetime_year = true` + "\n"
+	config += `	log_uptime = true` + "\n"
+	config += `	log_disable = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

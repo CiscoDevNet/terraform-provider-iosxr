@@ -85,7 +85,7 @@ type YamlConfig struct {
 	NoDelete                bool                  `yaml:"no_delete"`
 	NoDeleteAttributes      bool                  `yaml:"no_delete_attributes"`
 	DefaultDeleteAttributes bool                  `yaml:"default_delete_attributes"`
-	ExcludeTest             bool                  `yaml:"exclude_test"`
+	TestTags                []string              `yaml:"test_tags"`
 	NoAugmentConfig         bool                  `yaml:"no_augment_config"`
 	DsDescription           string                `yaml:"ds_description"`
 	ResDescription          string                `yaml:"res_description"`
@@ -122,6 +122,7 @@ type YamlConfigAttribute struct {
 	NoAugmentConfig bool                  `yaml:"no_augment_config"`
 	DeleteParent    bool                  `yaml:"delete_parent"`
 	NoDelete        bool                  `yaml:"no_delete"`
+	TestTags        []string              `yaml:"test_tags"`
 	Attributes      []YamlConfigAttribute `yaml:"attributes"`
 }
 
@@ -338,7 +339,12 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 			attr.Type = "String"
 			if leaf.Type.Length != nil {
 				attr.StringMinLength = int64(leaf.Type.Length[0].Min.Value)
-				attr.StringMaxLength = int64(leaf.Type.Length[0].Max.Value)
+				max := leaf.Type.Length[0].Max.Value
+				// hack to not introduce unsigned types
+				if max > math.MaxInt64 {
+					max = math.MaxInt64
+				}
+				attr.StringMaxLength = int64(max)
 			}
 			if len(leaf.Type.Pattern) > 0 {
 				attr.StringPatterns = leaf.Type.Pattern

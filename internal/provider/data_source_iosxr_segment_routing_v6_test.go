@@ -9,42 +9,44 @@ import (
 )
 
 func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingV6Config,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"),
-				),
+				Config: testAccDataSourceIosxrSegmentRoutingV6Config(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSegmentRoutingV6Config = `
+func testAccDataSourceIosxrSegmentRoutingV6Config() string {
+	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
+	config += `	locators = [{` + "\n"
+	config += `		locator_enable = true` + "\n"
+	config += `		name = "Locator1"` + "\n"
+	config += `		micro_segment_behavior = "unode-psp-usd"` + "\n"
+	config += `		prefix = "fccc:0:214::"` + "\n"
+	config += `		prefix_length = 48` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_segment_routing_v6" "test" {
-	delete_mode = "attributes"
-	enable = true
-	encapsulation_source_address = "fccc:0:214::1"
-	locators = [{
-		locator_enable = true
-		name = "Locator1"
-		micro_segment_behavior = "unode-psp-usd"
-		prefix = "fccc:0:214::"
-		prefix_length = 48
-	}]
+	config += `
+		data "iosxr_segment_routing_v6" "test" {
+			depends_on = [iosxr_segment_routing_v6.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_segment_routing_v6" "test" {
-	depends_on = [iosxr_segment_routing_v6.test]
-}
-`

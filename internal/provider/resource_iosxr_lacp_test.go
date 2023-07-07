@@ -9,16 +9,16 @@ import (
 )
 
 func TestAccIosxrLACP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lacp.test", "mac", "00:11:00:11:00:11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lacp.test", "priority", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrLACPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_lacp.test", "mac", "00:11:00:11:00:11"),
-					resource.TestCheckResourceAttr("iosxr_lacp.test", "priority", "1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_lacp.test",
@@ -30,17 +30,15 @@ func TestAccIosxrLACP(t *testing.T) {
 }
 
 func testAccIosxrLACPConfig_minimum() string {
-	return `
-	resource "iosxr_lacp" "test" {
-	}
-	`
+	config := `resource "iosxr_lacp" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrLACPConfig_all() string {
-	return `
-	resource "iosxr_lacp" "test" {
-		mac = "00:11:00:11:00:11"
-		priority = 1
-	}
-	`
+	config := `resource "iosxe_lacp" "test" {` + "\n"
+	config += `	mac = "00:11:00:11:00:11"` + "\n"
+	config += `	priority = 1` + "\n"
+	config += `}` + "\n"
+	return config
 }

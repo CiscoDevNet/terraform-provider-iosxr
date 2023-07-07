@@ -9,27 +9,27 @@ import (
 )
 
 func TestAccIosxrDomainVRF(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "vrf_name", "TEST-VRF"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.domain_name", "DOMAIN11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.order", "12345"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_source_interface", "Loopback2147483647"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "DNAME"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST-AGC"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.order", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST-ACC"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "TESTACC"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrDomainVRFConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "vrf_name", "TEST-VRF"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.domain_name", "DOMAIN11"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.order", "12345"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_source_interface", "Loopback2147483647"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "DNAME"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST-AGC"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.address", "10.0.0.1"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.order", "0"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST-ACC"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"),
-					resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "TESTACC"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_domain_vrf.test",
@@ -41,37 +41,35 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 }
 
 func testAccIosxrDomainVRFConfig_minimum() string {
-	return `
-	resource "iosxr_domain_vrf" "test" {
-		vrf_name = "TEST-VRF"
-	}
-	`
+	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
+	config += `	vrf_name = "TEST-VRF"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrDomainVRFConfig_all() string {
-	return `
-	resource "iosxr_domain_vrf" "test" {
-		vrf_name = "TEST-VRF"
-		domains = [{
-			domain_name = "DOMAIN11"
-			order = 12345
-		}]
-		lookup_disable = true
-		lookup_source_interface = "Loopback2147483647"
-		name = "DNAME"
-		ipv4_hosts = [{
-			host_name = "HOST-AGC"
-			ip_address = ["10.0.0.0"]
-		}]
-		name_servers = [{
-			address = "10.0.0.1"
-			order = 0
-		}]
-		ipv6_hosts = [{
-			host_name = "HOST-ACC"
-			ipv6_address = ["10::10"]
-		}]
-		multicast = "TESTACC"
-	}
-	`
+	config := `resource "iosxe_domain_vrf" "test" {` + "\n"
+	config += `	vrf_name = "TEST-VRF"` + "\n"
+	config += `	domains = [{` + "\n"
+	config += `		domain_name = "DOMAIN11"` + "\n"
+	config += `		order = 12345` + "\n"
+	config += `	}]` + "\n"
+	config += `	lookup_disable = true` + "\n"
+	config += `	lookup_source_interface = "Loopback2147483647"` + "\n"
+	config += `	name = "DNAME"` + "\n"
+	config += `	ipv4_hosts = [{` + "\n"
+	config += `		host_name = "HOST-AGC"` + "\n"
+	config += `		ip_address = ["10.0.0.0"]` + "\n"
+	config += `	}]` + "\n"
+	config += `	name_servers = [{` + "\n"
+	config += `		address = "10.0.0.1"` + "\n"
+	config += `		order = 0` + "\n"
+	config += `	}]` + "\n"
+	config += `	ipv6_hosts = [{` + "\n"
+	config += `		host_name = "HOST-ACC"` + "\n"
+	config += `		ipv6_address = ["10::10"]` + "\n"
+	config += `	}]` + "\n"
+	config += `	multicast = "TESTACC"` + "\n"
+	config += `}` + "\n"
+	return config
 }

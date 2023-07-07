@@ -9,29 +9,31 @@ import (
 )
 
 func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bgp_as_format.test", "asdot", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bgp_as_format.test", "asplain", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrBGPASFormatConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_bgp_as_format.test", "asdot", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_bgp_as_format.test", "asplain", "true"),
-				),
+				Config: testAccDataSourceIosxrBGPASFormatConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrBGPASFormatConfig = `
+func testAccDataSourceIosxrBGPASFormatConfig() string {
+	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
+	config += `	asdot = false` + "\n"
+	config += `	asplain = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_bgp_as_format" "test" {
-	asdot = false
-	asplain = true
+	config += `
+		data "iosxr_bgp_as_format" "test" {
+			depends_on = [iosxr_bgp_as_format.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_bgp_as_format" "test" {
-	depends_on = [iosxr_bgp_as_format.test]
-}
-`

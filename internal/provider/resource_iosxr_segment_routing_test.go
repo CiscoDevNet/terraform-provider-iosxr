@@ -9,18 +9,18 @@ import (
 )
 
 func TestAccIosxrSegmentRouting(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_lower_bound", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrSegmentRoutingConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_lower_bound", "16000"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_upper_bound", "29999"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_lower_bound", "15000"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_upper_bound", "15999"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_segment_routing.test",
@@ -32,23 +32,21 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 }
 
 func testAccIosxrSegmentRoutingConfig_minimum() string {
-	return `
-	resource "iosxr_segment_routing" "test" {
-		global_block_lower_bound = 16000
-		global_block_upper_bound = 29999
-		local_block_lower_bound = 15000
-		local_block_upper_bound = 15999
-	}
-	`
+	config := `resource "iosxr_segment_routing" "test" {` + "\n"
+	config += `	global_block_lower_bound = 16000` + "\n"
+	config += `	global_block_upper_bound = 29999` + "\n"
+	config += `	local_block_lower_bound = 15000` + "\n"
+	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrSegmentRoutingConfig_all() string {
-	return `
-	resource "iosxr_segment_routing" "test" {
-		global_block_lower_bound = 16000
-		global_block_upper_bound = 29999
-		local_block_lower_bound = 15000
-		local_block_upper_bound = 15999
-	}
-	`
+	config := `resource "iosxe_segment_routing" "test" {` + "\n"
+	config += `	global_block_lower_bound = 16000` + "\n"
+	config += `	global_block_upper_bound = 29999` + "\n"
+	config += `	local_block_lower_bound = 15000` + "\n"
+	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `}` + "\n"
+	return config
 }

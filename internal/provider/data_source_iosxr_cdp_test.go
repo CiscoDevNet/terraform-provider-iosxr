@@ -9,36 +9,38 @@ import (
 )
 
 func TestAccDataSourceIosxrCDP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "holdtime", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "timer", "34"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "advertise_v1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_cdp.test", "log_adjacency_changes", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrCDPConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_cdp.test", "enable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_cdp.test", "holdtime", "12"),
-					resource.TestCheckResourceAttr("data.iosxr_cdp.test", "timer", "34"),
-					resource.TestCheckResourceAttr("data.iosxr_cdp.test", "advertise_v1", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_cdp.test", "log_adjacency_changes", "true"),
-				),
+				Config: testAccDataSourceIosxrCDPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrCDPConfig = `
+func testAccDataSourceIosxrCDPConfig() string {
+	config := `resource "iosxr_cdp" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	holdtime = 12` + "\n"
+	config += `	timer = 34` + "\n"
+	config += `	advertise_v1 = true` + "\n"
+	config += `	log_adjacency_changes = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_cdp" "test" {
-	delete_mode = "attributes"
-	enable = true
-	holdtime = 12
-	timer = 34
-	advertise_v1 = true
-	log_adjacency_changes = true
+	config += `
+		data "iosxr_cdp" "test" {
+			depends_on = [iosxr_cdp.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_cdp" "test" {
-	depends_on = [iosxr_cdp.test]
-}
-`

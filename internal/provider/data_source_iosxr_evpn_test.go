@@ -9,28 +9,30 @@ import (
 )
 
 func TestAccDataSourceIosxrEVPN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "source_interface", "Loopback0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_evpn.test", "source_interface", "Loopback0"),
-				),
+				Config: testAccDataSourceIosxrEVPNConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrEVPNConfig = `
+func testAccDataSourceIosxrEVPNConfig() string {
+	config := `resource "iosxr_evpn" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	source_interface = "Loopback0"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_evpn" "test" {
-	delete_mode = "attributes"
-	source_interface = "Loopback0"
+	config += `
+		data "iosxr_evpn" "test" {
+			depends_on = [iosxr_evpn.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_evpn" "test" {
-	depends_on = [iosxr_evpn.test]
-}
-`

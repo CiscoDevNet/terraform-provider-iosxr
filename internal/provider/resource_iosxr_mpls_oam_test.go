@@ -9,19 +9,19 @@ import (
 )
 
 func TestAccIosxrMPLSOAM(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrMPLSOAMConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam", "true"),
-					resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "false"),
-					resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "false"),
-					resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"),
-					resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_mpls_oam.test",
@@ -33,20 +33,18 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 }
 
 func testAccIosxrMPLSOAMConfig_minimum() string {
-	return `
-	resource "iosxr_mpls_oam" "test" {
-	}
-	`
+	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrMPLSOAMConfig_all() string {
-	return `
-	resource "iosxr_mpls_oam" "test" {
-		oam = true
-		oam_echo_disable_vendor_extension = false
-		oam_echo_reply_mode_control_channel_allow_reverse_lsp = false
-		oam_dpm_pps = 10
-		oam_dpm_interval = 60
-	}
-	`
+	config := `resource "iosxe_mpls_oam" "test" {` + "\n"
+	config += `	oam = true` + "\n"
+	config += `	oam_echo_disable_vendor_extension = false` + "\n"
+	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false` + "\n"
+	config += `	oam_dpm_pps = 10` + "\n"
+	config += `	oam_dpm_interval = 60` + "\n"
+	config += `}` + "\n"
+	return config
 }

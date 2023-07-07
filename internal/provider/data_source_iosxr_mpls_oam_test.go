@@ -9,36 +9,38 @@ import (
 )
 
 func TestAccDataSourceIosxrMPLSOAM(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSOAMConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_pps", "10"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_oam.test", "oam_dpm_interval", "60"),
-				),
+				Config: testAccDataSourceIosxrMPLSOAMConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrMPLSOAMConfig = `
+func testAccDataSourceIosxrMPLSOAMConfig() string {
+	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	oam = true` + "\n"
+	config += `	oam_echo_disable_vendor_extension = false` + "\n"
+	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false` + "\n"
+	config += `	oam_dpm_pps = 10` + "\n"
+	config += `	oam_dpm_interval = 60` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_mpls_oam" "test" {
-	delete_mode = "attributes"
-	oam = true
-	oam_echo_disable_vendor_extension = false
-	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false
-	oam_dpm_pps = 10
-	oam_dpm_interval = 60
+	config += `
+		data "iosxr_mpls_oam" "test" {
+			depends_on = [iosxr_mpls_oam.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_mpls_oam" "test" {
-	depends_on = [iosxr_mpls_oam.test]
-}
-`

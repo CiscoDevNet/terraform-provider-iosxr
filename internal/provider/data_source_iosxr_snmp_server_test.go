@@ -9,98 +9,100 @@ import (
 )
 
 func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "rf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ntp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ethernet_oam_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "copy_complete", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkdown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "power", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "config", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "system", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bridgemib", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity_state_operstatus", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity_redundancy_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source_both", "Loopback10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_vc_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_vc_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "sensor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "fru_ctrl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "isis_authentication_failure", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bgp_cbgp2_updown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bgp_bgp4_mib_updown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.user_name", "USER1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.group_name", "GROUP12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_priv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_read", "VIEW1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_write", "VIEW2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_context", "CONTEXT1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_notify", "VIEW3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv6", "ACL2"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "rf", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bfd", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ntp", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ethernet_oam_events", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "copy_complete", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkup", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "traps_snmp_linkdown", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "power", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "config", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "system", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bridgemib", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity_state_operstatus", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "entity_redundancy_all", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "trap_source_both", "Loopback10"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_all", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_vc_up", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "l2vpn_vc_down", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "sensor", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "fru_ctrl", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "isis_authentication_failure", "enable"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bgp_cbgp2_updown", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bgp_bgp4_mib_updown", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.user_name", "USER1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.group_name", "GROUP1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.group_name", "GROUP12"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_priv", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_read", "VIEW1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_write", "VIEW2"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_context", "CONTEXT1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_notify", "VIEW3"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv4", "ACL1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_ipv6", "ACL2"),
-				),
+				Config: testAccDataSourceIosxrSNMPServerConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSNMPServerConfig = `
+func testAccDataSourceIosxrSNMPServerConfig() string {
+	config := `resource "iosxr_snmp_server" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	rf = true` + "\n"
+	config += `	bfd = true` + "\n"
+	config += `	ntp = true` + "\n"
+	config += `	ethernet_oam_events = true` + "\n"
+	config += `	copy_complete = true` + "\n"
+	config += `	traps_snmp_linkup = true` + "\n"
+	config += `	traps_snmp_linkdown = true` + "\n"
+	config += `	power = true` + "\n"
+	config += `	config = true` + "\n"
+	config += `	entity = true` + "\n"
+	config += `	system = true` + "\n"
+	config += `	bridgemib = true` + "\n"
+	config += `	entity_state_operstatus = true` + "\n"
+	config += `	entity_redundancy_all = true` + "\n"
+	config += `	trap_source_both = "Loopback10"` + "\n"
+	config += `	l2vpn_all = true` + "\n"
+	config += `	l2vpn_vc_up = true` + "\n"
+	config += `	l2vpn_vc_down = true` + "\n"
+	config += `	sensor = true` + "\n"
+	config += `	fru_ctrl = true` + "\n"
+	config += `	isis_authentication_failure = "enable"` + "\n"
+	config += `	bgp_cbgp2_updown = true` + "\n"
+	config += `	bgp_bgp4_mib_updown = true` + "\n"
+	config += `	users = [{` + "\n"
+	config += `		user_name = "USER1"` + "\n"
+	config += `		group_name = "GROUP1"` + "\n"
+	config += `		v3_auth_md5_encryption_aes = "073C05626E2A4841141D"` + "\n"
+	config += `	}]` + "\n"
+	config += `	groups = [{` + "\n"
+	config += `		group_name = "GROUP12"` + "\n"
+	config += `		v3_priv = true` + "\n"
+	config += `		v3_read = "VIEW1"` + "\n"
+	config += `		v3_write = "VIEW2"` + "\n"
+	config += `		v3_context = "CONTEXT1"` + "\n"
+	config += `		v3_notify = "VIEW3"` + "\n"
+	config += `		v3_ipv4 = "ACL1"` + "\n"
+	config += `		v3_ipv6 = "ACL2"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_snmp_server" "test" {
-	delete_mode = "attributes"
-	rf = true
-	bfd = true
-	ntp = true
-	ethernet_oam_events = true
-	copy_complete = true
-	traps_snmp_linkup = true
-	traps_snmp_linkdown = true
-	power = true
-	config = true
-	entity = true
-	system = true
-	bridgemib = true
-	entity_state_operstatus = true
-	entity_redundancy_all = true
-	trap_source_both = "Loopback10"
-	l2vpn_all = true
-	l2vpn_vc_up = true
-	l2vpn_vc_down = true
-	sensor = true
-	fru_ctrl = true
-	isis_authentication_failure = "enable"
-	bgp_cbgp2_updown = true
-	bgp_bgp4_mib_updown = true
-	users = [{
-		user_name = "USER1"
-		group_name = "GROUP1"
-		v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
-	}]
-	groups = [{
-		group_name = "GROUP12"
-		v3_priv = true
-		v3_read = "VIEW1"
-		v3_write = "VIEW2"
-		v3_context = "CONTEXT1"
-		v3_notify = "VIEW3"
-		v3_ipv4 = "ACL1"
-		v3_ipv6 = "ACL2"
-	}]
+	config += `
+		data "iosxr_snmp_server" "test" {
+			depends_on = [iosxr_snmp_server.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_snmp_server" "test" {
-	depends_on = [iosxr_snmp_server.test]
-}
-`

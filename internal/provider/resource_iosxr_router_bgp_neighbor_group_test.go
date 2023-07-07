@@ -9,23 +9,23 @@ import (
 )
 
 func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "name", "GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccIosxrRouterBGPNeighborGroupConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "name", "GROUP1"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_bgp_neighbor_group.test",
@@ -47,31 +47,29 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
-	return `
-	resource "iosxr_router_bgp_neighbor_group" "test" {
-		as_number = "65001"
-		name = "GROUP1"
-		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	name = "GROUP1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
-	return `
-	resource "iosxr_router_bgp_neighbor_group" "test" {
-		as_number = "65001"
-		name = "GROUP1"
-		remote_as = "65001"
-		update_source = "Loopback0"
-		bfd_minimum_interval = 3
-		bfd_fast_detect = true
-		address_families = [{
-			af_name = "ipv4-labeled-unicast"
-			soft_reconfiguration_inbound_always = true
-			next_hop_self_inheritance_disable = true
-			route_reflector_client_inheritance_disable = true
-		}]
-  		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxe_router_bgp_neighbor_group" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	name = "GROUP1"` + "\n"
+	config += `	remote_as = "65001"` + "\n"
+	config += `	update_source = "Loopback0"` + "\n"
+	config += `	bfd_minimum_interval = 3` + "\n"
+	config += `	bfd_fast_detect = true` + "\n"
+	config += `	address_families = [{` + "\n"
+	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
+	config += `		soft_reconfiguration_inbound_always = true` + "\n"
+	config += `		next_hop_self_inheritance_disable = true` + "\n"
+	config += `		route_reflector_client_inheritance_disable = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

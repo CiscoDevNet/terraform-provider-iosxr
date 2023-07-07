@@ -9,15 +9,15 @@ import (
 )
 
 func TestAccIosxrMPLSTrafficEng(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "traffic_eng", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrMPLSTrafficEngConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "traffic_eng", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_mpls_traffic_eng.test",
@@ -29,16 +29,14 @@ func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 }
 
 func testAccIosxrMPLSTrafficEngConfig_minimum() string {
-	return `
-	resource "iosxr_mpls_traffic_eng" "test" {
-	}
-	`
+	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrMPLSTrafficEngConfig_all() string {
-	return `
-	resource "iosxr_mpls_traffic_eng" "test" {
-		traffic_eng = true
-	}
-	`
+	config := `resource "iosxe_mpls_traffic_eng" "test" {` + "\n"
+	config += `	traffic_eng = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

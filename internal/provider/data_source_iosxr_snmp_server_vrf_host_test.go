@@ -9,36 +9,38 @@ import (
 )
 
 func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerVRFHostConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.community_string", "COMMUNITY1"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_vrf_host.test", "unencrypted_strings.0.version_v3_security_level", "auth"),
-				),
+				Config: testAccDataSourceIosxrSNMPServerVRFHostConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSNMPServerVRFHostConfig = `
+func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
+	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	address = "11.11.11.11"` + "\n"
+	config += `	unencrypted_strings = [{` + "\n"
+	config += `		community_string = "COMMUNITY1"` + "\n"
+	config += `		version_v3_security_level = "auth"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_snmp_server_vrf_host" "test" {
-	delete_mode = "attributes"
-	vrf_name = "VRF1"
-	address = "11.11.11.11"
-	unencrypted_strings = [{
-		community_string = "COMMUNITY1"
-		version_v3_security_level = "auth"
-	}]
+	config += `
+		data "iosxr_snmp_server_vrf_host" "test" {
+			vrf_name = "VRF1"
+			address = "11.11.11.11"
+			depends_on = [iosxr_snmp_server_vrf_host.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_snmp_server_vrf_host" "test" {
-	vrf_name = "VRF1"
-	address = "11.11.11.11"
-	depends_on = [iosxr_snmp_server_vrf_host.test]
-}
-`

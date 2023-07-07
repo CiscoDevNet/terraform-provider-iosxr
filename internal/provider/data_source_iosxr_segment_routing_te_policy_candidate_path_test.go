@@ -9,42 +9,44 @@ import (
 )
 
 func TestAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.type", "dynamic"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.pcep", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.metric_type", "igp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.hop_type", "mpls"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.segment_list_name", "dynamic"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.type", "dynamic"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.pcep", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.metric_type", "igp"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.hop_type", "mpls"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.segment_list_name", "dynamic"),
-				),
+				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig = `
+func testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig() string {
+	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	policy_name = "POLICY1"` + "\n"
+	config += `	path_index = 100` + "\n"
+	config += `	path_infos = [{` + "\n"
+	config += `		type = "dynamic"` + "\n"
+	config += `		pcep = true` + "\n"
+	config += `		metric_type = "igp"` + "\n"
+	config += `		hop_type = "mpls"` + "\n"
+	config += `		segment_list_name = "dynamic"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_segment_routing_te_policy_candidate_path" "test" {
-	delete_mode = "attributes"
-	policy_name = "POLICY1"
-	path_index = 100
-	path_infos = [{
-		type = "dynamic"
-		pcep = true
-		metric_type = "igp"
-		hop_type = "mpls"
-		segment_list_name = "dynamic"
-	}]
+	config += `
+		data "iosxr_segment_routing_te_policy_candidate_path" "test" {
+			policy_name = "POLICY1"
+			path_index = 100
+			depends_on = [iosxr_segment_routing_te_policy_candidate_path.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_segment_routing_te_policy_candidate_path" "test" {
-	policy_name = "POLICY1"
-	path_index = 100
-	depends_on = [iosxr_segment_routing_te_policy_candidate_path.test]
-}
-`

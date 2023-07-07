@@ -9,16 +9,16 @@ import (
 )
 
 func TestAccIosxrCommunitySet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_community_set.test", "set_name", "TEST11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl", "community-set TEST11\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrCommunitySetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_community_set.test", "set_name", "TEST11"),
-					resource.TestCheckResourceAttr("iosxr_community_set.test", "rpl", "community-set TEST11\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_community_set.test",
@@ -30,19 +30,17 @@ func TestAccIosxrCommunitySet(t *testing.T) {
 }
 
 func testAccIosxrCommunitySetConfig_minimum() string {
-	return `
-	resource "iosxr_community_set" "test" {
-		set_name = "TEST11"
-		rpl = "community-set TEST11\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_community_set" "test" {` + "\n"
+	config += `	set_name = "TEST11"` + "\n"
+	config += `	rpl = "community-set TEST11\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrCommunitySetConfig_all() string {
-	return `
-	resource "iosxr_community_set" "test" {
-		set_name = "TEST11"
-		rpl = "community-set TEST11\nend-set\n"
-	}
-	`
+	config := `resource "iosxe_community_set" "test" {` + "\n"
+	config += `	set_name = "TEST11"` + "\n"
+	config += `	rpl = "community-set TEST11\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

@@ -9,15 +9,15 @@ import (
 )
 
 func TestAccIosxrEVPN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "source_interface", "Loopback0"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
 				Config: testAccIosxrEVPNConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_evpn.test", "source_interface", "Loopback0"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_evpn.test",
@@ -29,16 +29,14 @@ func TestAccIosxrEVPN(t *testing.T) {
 }
 
 func testAccIosxrEVPNConfig_minimum() string {
-	return `
-	resource "iosxr_evpn" "test" {
-	}
-	`
+	config := `resource "iosxr_evpn" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrEVPNConfig_all() string {
-	return `
-	resource "iosxr_evpn" "test" {
-		source_interface = "Loopback0"
-	}
-	`
+	config := `resource "iosxe_evpn" "test" {` + "\n"
+	config += `	source_interface = "Loopback0"` + "\n"
+	config += `}` + "\n"
+	return config
 }

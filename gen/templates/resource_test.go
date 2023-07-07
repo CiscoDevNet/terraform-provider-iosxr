@@ -122,11 +122,11 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- if eq .Type "List"}}
 	config += `	{{.TfName}} = [{` + "\n"
 		{{- range  .Attributes}}
-		{{- if not .ExcludeTest}}
+		{{- if or .Id .Mandatory}}
 		{{- if eq .Type "List"}}
 	config += `		{{.TfName}} = [{` + "\n"
 			{{- range  .Attributes}}
-			{{- if not .ExcludeTest}}
+			{{- if or .Id .Mandatory}}
 			{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"

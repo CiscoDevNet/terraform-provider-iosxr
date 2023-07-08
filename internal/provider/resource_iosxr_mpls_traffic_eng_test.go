@@ -16,6 +16,9 @@ func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrMPLSTrafficEngConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrMPLSTrafficEngConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -35,7 +38,7 @@ func testAccIosxrMPLSTrafficEngConfig_minimum() string {
 }
 
 func testAccIosxrMPLSTrafficEngConfig_all() string {
-	config := `resource "iosxe_mpls_traffic_eng" "test" {` + "\n"
+	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
 	config += `	traffic_eng = true` + "\n"
 	config += `}` + "\n"
 	return config

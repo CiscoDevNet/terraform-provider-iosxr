@@ -17,6 +17,9 @@ func TestAccIosxrBanner(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrBannerConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrBannerConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrBannerConfig_minimum() string {
 }
 
 func testAccIosxrBannerConfig_all() string {
-	config := `resource "iosxe_banner" "test" {` + "\n"
+	config := `resource "iosxr_banner" "test" {` + "\n"
 	config += `	banner_type = "login"` + "\n"
 	config += `	line = " Hello user !"` + "\n"
 	config += `}` + "\n"

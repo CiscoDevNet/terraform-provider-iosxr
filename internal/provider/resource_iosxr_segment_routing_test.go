@@ -19,6 +19,9 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSegmentRoutingConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSegmentRoutingConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -42,7 +45,7 @@ func testAccIosxrSegmentRoutingConfig_minimum() string {
 }
 
 func testAccIosxrSegmentRoutingConfig_all() string {
-	config := `resource "iosxe_segment_routing" "test" {` + "\n"
+	config := `resource "iosxr_segment_routing" "test" {` + "\n"
 	config += `	global_block_lower_bound = 16000` + "\n"
 	config += `	global_block_upper_bound = 29999` + "\n"
 	config += `	local_block_lower_bound = 15000` + "\n"

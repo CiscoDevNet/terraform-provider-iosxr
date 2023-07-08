@@ -17,6 +17,9 @@ func TestAccIosxrRoutePolicy(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRoutePolicyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRoutePolicyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrRoutePolicyConfig_minimum() string {
 }
 
 func testAccIosxrRoutePolicyConfig_all() string {
-	config := `resource "iosxe_route_policy" "test" {` + "\n"
+	config := `resource "iosxr_route_policy" "test" {` + "\n"
 	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
 	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
 	config += `}` + "\n"

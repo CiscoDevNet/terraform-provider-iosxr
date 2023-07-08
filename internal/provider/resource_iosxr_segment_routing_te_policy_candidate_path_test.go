@@ -21,6 +21,9 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -42,7 +45,7 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum() string {
 }
 
 func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
-	config := `resource "iosxe_segment_routing_te_policy_candidate_path" "test" {` + "\n"
+	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
 	config += `	path_index = 100` + "\n"
 	config += `	path_infos = [{` + "\n"

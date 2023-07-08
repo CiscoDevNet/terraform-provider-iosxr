@@ -33,6 +33,9 @@ func TestAccIosxrKeyChain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrKeyChainConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrKeyChainConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -53,7 +56,7 @@ func testAccIosxrKeyChainConfig_minimum() string {
 }
 
 func testAccIosxrKeyChainConfig_all() string {
-	config := `resource "iosxe_key_chain" "test" {` + "\n"
+	config := `resource "iosxr_key_chain" "test" {` + "\n"
 	config += `	name = "KEY11"` + "\n"
 	config += `	keys = [{` + "\n"
 	config += `		key_name = "1"` + "\n"

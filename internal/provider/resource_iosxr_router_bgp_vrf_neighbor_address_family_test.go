@@ -23,6 +23,9 @@ func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -114,7 +117,7 @@ func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum() string {
 }
 
 func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
-	config := `resource "iosxe_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	neighbor_address = "10.1.1.2"` + "\n"

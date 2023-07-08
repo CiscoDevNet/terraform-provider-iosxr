@@ -18,6 +18,9 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSNMPServerVRFHostConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSNMPServerVRFHostConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -39,7 +42,7 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 }
 
 func testAccIosxrSNMPServerVRFHostConfig_all() string {
-	config := `resource "iosxe_snmp_server_vrf_host" "test" {` + "\n"
+	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
 	config += `	unencrypted_strings = [{` + "\n"

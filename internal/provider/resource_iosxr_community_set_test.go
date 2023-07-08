@@ -17,6 +17,9 @@ func TestAccIosxrCommunitySet(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrCommunitySetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrCommunitySetConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrCommunitySetConfig_minimum() string {
 }
 
 func testAccIosxrCommunitySetConfig_all() string {
-	config := `resource "iosxe_community_set" "test" {` + "\n"
+	config := `resource "iosxr_community_set" "test" {` + "\n"
 	config += `	set_name = "TEST11"` + "\n"
 	config += `	rpl = "community-set TEST11\nend-set\n"` + "\n"
 	config += `}` + "\n"

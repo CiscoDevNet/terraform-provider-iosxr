@@ -33,6 +33,9 @@ func TestAccIosxrEVPNEVI(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrEVPNEVIPrerequisitesConfig + testAccIosxrEVPNEVIConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrEVPNEVIPrerequisitesConfig + testAccIosxrEVPNEVIConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -65,7 +68,7 @@ func testAccIosxrEVPNEVIConfig_minimum() string {
 }
 
 func testAccIosxrEVPNEVIConfig_all() string {
-	config := `resource "iosxe_evpn_evi" "test" {` + "\n"
+	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
 	config += `	vpn_id = 1234` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	load_balancing = true` + "\n"

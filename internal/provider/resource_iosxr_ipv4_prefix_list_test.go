@@ -24,6 +24,9 @@ func TestAccIosxrIPv4PrefixList(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrIPv4PrefixListConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrIPv4PrefixListConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -44,7 +47,7 @@ func testAccIosxrIPv4PrefixListConfig_minimum() string {
 }
 
 func testAccIosxrIPv4PrefixListConfig_all() string {
-	config := `resource "iosxe_ipv4_prefix_list" "test" {` + "\n"
+	config := `resource "iosxr_ipv4_prefix_list" "test" {` + "\n"
 	config += `	prefix_list_name = "LIST1"` + "\n"
 	config += `	sequences = [{` + "\n"
 	config += `		sequence_number = 4096` + "\n"

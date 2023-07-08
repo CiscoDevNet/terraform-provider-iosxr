@@ -93,14 +93,14 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
 			"timers_bgp_holdtime": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"bgp_router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Router-id").String,

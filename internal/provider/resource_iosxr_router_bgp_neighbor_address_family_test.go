@@ -21,6 +21,9 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborAddressFamilyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -75,7 +78,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 }
 
 func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
-	config := `resource "iosxe_router_bgp_neighbor_address_family" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp_neighbor_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	neighbor_address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"

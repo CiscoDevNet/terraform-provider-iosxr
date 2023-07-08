@@ -22,6 +22,9 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSegmentRoutingV6Config_minimum(),
+			},
+			{
 				Config: testAccIosxrSegmentRoutingV6Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -41,7 +44,7 @@ func testAccIosxrSegmentRoutingV6Config_minimum() string {
 }
 
 func testAccIosxrSegmentRoutingV6Config_all() string {
-	config := `resource "iosxe_segment_routing_v6" "test" {` + "\n"
+	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
 	config += `	enable = true` + "\n"
 	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
 	config += `	locators = [{` + "\n"

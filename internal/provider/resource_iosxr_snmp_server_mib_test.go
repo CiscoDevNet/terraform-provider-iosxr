@@ -17,6 +17,9 @@ func TestAccIosxrSNMPServerMIB(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSNMPServerMIBConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSNMPServerMIBConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -36,7 +39,7 @@ func testAccIosxrSNMPServerMIBConfig_minimum() string {
 }
 
 func testAccIosxrSNMPServerMIBConfig_all() string {
-	config := `resource "iosxe_snmp_server_mib" "test" {` + "\n"
+	config := `resource "iosxr_snmp_server_mib" "test" {` + "\n"
 	config += `	ifmib_ifalias_long = true` + "\n"
 	config += `	ifindex_persist = true` + "\n"
 	config += `}` + "\n"

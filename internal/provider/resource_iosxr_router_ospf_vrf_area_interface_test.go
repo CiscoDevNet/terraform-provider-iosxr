@@ -24,6 +24,9 @@ func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterOSPFVRFAreaInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -47,7 +50,7 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all() string {
-	config := `resource "iosxe_router_ospf_vrf_area_interface" "test" {` + "\n"
+	config := `resource "iosxr_router_ospf_vrf_area_interface" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	area_id = "0"` + "\n"

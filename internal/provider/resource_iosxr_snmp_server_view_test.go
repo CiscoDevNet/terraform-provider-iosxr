@@ -18,6 +18,9 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSNMPServerViewConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSNMPServerViewConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrSNMPServerViewConfig_minimum() string {
 }
 
 func testAccIosxrSNMPServerViewConfig_all() string {
-	config := `resource "iosxe_snmp_server_view" "test" {` + "\n"
+	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
 	config += `	view_name = "VIEW12"` + "\n"
 	config += `	mib_view_families = [{` + "\n"
 	config += `		name = "iso"` + "\n"

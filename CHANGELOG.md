@@ -1,3 +1,13 @@
+## 0.2.2 (unreleased)
+
+- Make `icmp_error_interval_interval_time` attribute of `iosxr_ipv6` resource optional
+- Make `timers_bgp_keepalive_interval` attribute of `iosxr_router_bgp_vrf` resource optional
+- Make `timers_bgp_holdtime` attribute of `iosxr_router_bgp_vrf` resource optional
+- Make `timers_bgp_keepalive_interval` attribute of `iosxr_router_bgp` resource optional
+- Make `timers_bgp_holdtime` attribute of `iosxr_router_bgp` resource optional
+- Make `lsp_password_keychain` attribute of `iosxr_router_isis` resource optional
+- BREAKING CHANGE: Rename `icmp_error_interval_interval_time` attribute of `iosxr_ipv6` resource and data source to `icmp_error_interval`
+
 ## 0.2.1
 
 - Add `bundle` attributes to `iosxr_interface` resource and data source

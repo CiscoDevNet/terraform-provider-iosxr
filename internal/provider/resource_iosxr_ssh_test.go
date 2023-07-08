@@ -25,6 +25,9 @@ func TestAccIosxrSSH(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSSHConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSSHConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -44,7 +47,7 @@ func testAccIosxrSSHConfig_minimum() string {
 }
 
 func testAccIosxrSSHConfig_all() string {
-	config := `resource "iosxe_ssh" "test" {` + "\n"
+	config := `resource "iosxr_ssh" "test" {` + "\n"
 	config += `	server_dscp = 48` + "\n"
 	config += `	server_logging = true` + "\n"
 	config += `	server_rate_limit = 60` + "\n"

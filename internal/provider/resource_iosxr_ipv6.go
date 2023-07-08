@@ -63,9 +63,9 @@ func (r *IPv6Resource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					int64validator.Between(1, 255),
 				},
 			},
-			"icmp_error_interval_interval_time": schema.Int64Attribute{
+			"icmp_error_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Interval between ICMP error messages").AddIntegerRangeDescription(0, 2147483647).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},

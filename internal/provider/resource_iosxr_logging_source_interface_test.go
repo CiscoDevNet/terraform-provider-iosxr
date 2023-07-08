@@ -17,6 +17,9 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLoggingSourceInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLoggingSourceInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -37,7 +40,7 @@ func testAccIosxrLoggingSourceInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrLoggingSourceInterfaceConfig_all() string {
-	config := `resource "iosxe_logging_source_interface" "test" {` + "\n"
+	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
 	config += `	name = "Loopback0"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"

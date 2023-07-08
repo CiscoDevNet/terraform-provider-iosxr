@@ -56,6 +56,9 @@ func TestAccIosxrRouterStaticIPv6Unicast(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterStaticIPv6UnicastConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterStaticIPv6UnicastConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -77,7 +80,7 @@ func testAccIosxrRouterStaticIPv6UnicastConfig_minimum() string {
 }
 
 func testAccIosxrRouterStaticIPv6UnicastConfig_all() string {
-	config := `resource "iosxe_router_static_ipv6_unicast" "test" {` + "\n"
+	config := `resource "iosxr_router_static_ipv6_unicast" "test" {` + "\n"
 	config += `	prefix_address = "1::"` + "\n"
 	config += `	prefix_length = 64` + "\n"
 	config += `	nexthop_interfaces = [{` + "\n"

@@ -69,9 +69,6 @@ resource "iosxr_router_bgp" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_bgp_keepalive_interval` (Number) BGP timers
-  - Range: `0`-`65535`
 
 ### Optional
 
@@ -96,6 +93,9 @@ resource "iosxr_router_bgp" "example" {
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
 - `segment_routing_srv6_locator` (String) Configure locator name
+- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_bgp_keepalive_interval` (Number) BGP timers
+  - Range: `0`-`65535`
 
 ### Read-Only
 

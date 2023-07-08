@@ -16,6 +16,9 @@ func TestAccIosxrEVPN(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrEVPNConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrEVPNConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -35,7 +38,7 @@ func testAccIosxrEVPNConfig_minimum() string {
 }
 
 func testAccIosxrEVPNConfig_all() string {
-	config := `resource "iosxe_evpn" "test" {` + "\n"
+	config := `resource "iosxr_evpn" "test" {` + "\n"
 	config += `	source_interface = "Loopback0"` + "\n"
 	config += `}` + "\n"
 	return config

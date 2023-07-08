@@ -1,6 +1,6 @@
 resource "iosxr_ipv6" "example" {
   hop_limit                            = 123
-  icmp_error_interval_interval_time    = 2111
+  icmp_error_interval                  = 2111
   icmp_error_interval_bucket_size      = 123
   source_route                         = true
   assembler_timeout                    = 50

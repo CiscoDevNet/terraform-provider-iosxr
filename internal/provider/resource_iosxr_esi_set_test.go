@@ -17,6 +17,9 @@ func TestAccIosxrESISet(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrESISetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrESISetConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrESISetConfig_minimum() string {
 }
 
 func testAccIosxrESISetConfig_all() string {
-	config := `resource "iosxe_esi_set" "test" {` + "\n"
+	config := `resource "iosxr_esi_set" "test" {` + "\n"
 	config += `	set_name = "POLICYSET"` + "\n"
 	config += `	rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"` + "\n"
 	config += `}` + "\n"

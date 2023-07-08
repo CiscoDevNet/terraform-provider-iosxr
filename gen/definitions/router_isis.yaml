@@ -52,6 +52,7 @@ attributes:
     example: 65535
   - yang_name: lsp-password/keychain/keychain-name
     tf_name: lsp_password_keychain
+    optional: true
     no_delete: true
     example: ISIS-KEY
   - yang_name: distribute/link-state/instance-id

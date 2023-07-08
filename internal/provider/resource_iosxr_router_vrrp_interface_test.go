@@ -21,6 +21,9 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterVRRPInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterVRRPInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -41,7 +44,7 @@ func testAccIosxrRouterVRRPInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrRouterVRRPInterfaceConfig_all() string {
-	config := `resource "iosxe_router_vrrp_interface" "test" {` + "\n"
+	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	mac_refresh = 14` + "\n"
 	config += `	delay_minimum = 1234` + "\n"

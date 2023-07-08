@@ -20,6 +20,9 @@ func TestAccIosxrCDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrCDPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrCDPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -39,7 +42,7 @@ func testAccIosxrCDPConfig_minimum() string {
 }
 
 func testAccIosxrCDPConfig_all() string {
-	config := `resource "iosxe_cdp" "test" {` + "\n"
+	config := `resource "iosxr_cdp" "test" {` + "\n"
 	config += `	enable = true` + "\n"
 	config += `	holdtime = 12` + "\n"
 	config += `	timer = 34` + "\n"

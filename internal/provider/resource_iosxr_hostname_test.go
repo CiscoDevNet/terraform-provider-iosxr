@@ -16,6 +16,9 @@ func TestAccIosxrHostname(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrHostnameConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrHostnameConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -35,7 +38,7 @@ func testAccIosxrHostnameConfig_minimum() string {
 }
 
 func testAccIosxrHostnameConfig_all() string {
-	config := `resource "iosxe_hostname" "test" {` + "\n"
+	config := `resource "iosxr_hostname" "test" {` + "\n"
 	config += `	system_network_name = "ROUTER-1"` + "\n"
 	config += `}` + "\n"
 	return config

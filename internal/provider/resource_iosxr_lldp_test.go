@@ -26,6 +26,9 @@ func TestAccIosxrLLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLLDPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLLDPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -45,7 +48,7 @@ func testAccIosxrLLDPConfig_minimum() string {
 }
 
 func testAccIosxrLLDPConfig_all() string {
-	config := `resource "iosxe_lldp" "test" {` + "\n"
+	config := `resource "iosxr_lldp" "test" {` + "\n"
 	config += `	holdtime = 50` + "\n"
 	config += `	timer = 6` + "\n"
 	config += `	reinit = 3` + "\n"

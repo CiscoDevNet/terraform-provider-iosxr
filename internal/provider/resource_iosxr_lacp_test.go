@@ -17,6 +17,9 @@ func TestAccIosxrLACP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLACPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLACPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -36,7 +39,7 @@ func testAccIosxrLACPConfig_minimum() string {
 }
 
 func testAccIosxrLACPConfig_all() string {
-	config := `resource "iosxe_lacp" "test" {` + "\n"
+	config := `resource "iosxr_lacp" "test" {` + "\n"
 	config += `	mac = "00:11:00:11:00:11"` + "\n"
 	config += `	priority = 1` + "\n"
 	config += `}` + "\n"

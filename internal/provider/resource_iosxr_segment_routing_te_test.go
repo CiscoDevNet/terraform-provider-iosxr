@@ -46,6 +46,9 @@ func TestAccIosxrSegmentRoutingTE(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSegmentRoutingTEConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSegmentRoutingTEConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -65,7 +68,7 @@ func testAccIosxrSegmentRoutingTEConfig_minimum() string {
 }
 
 func testAccIosxrSegmentRoutingTEConfig_all() string {
-	config := `resource "iosxe_segment_routing_te" "test" {` + "\n"
+	config := `resource "iosxr_segment_routing_te" "test" {` + "\n"
 	config += `	logging_pcep_peer_status = true` + "\n"
 	config += `	logging_policy_status = true` + "\n"
 	config += `	pcc_report_all = true` + "\n"

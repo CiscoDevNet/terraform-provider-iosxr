@@ -17,6 +17,9 @@ func TestAccIosxrPrefixSet(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrPrefixSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrPrefixSetConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrPrefixSetConfig_minimum() string {
 }
 
 func testAccIosxrPrefixSetConfig_all() string {
-	config := `resource "iosxe_prefix_set" "test" {` + "\n"
+	config := `resource "iosxr_prefix_set" "test" {` + "\n"
 	config += `	set_name = "PREFIX_SET_1"` + "\n"
 	config += `	rpl = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"` + "\n"
 	config += `}` + "\n"

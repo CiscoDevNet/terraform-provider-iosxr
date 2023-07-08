@@ -26,6 +26,9 @@ func TestAccIosxrLogging(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLoggingConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLoggingConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -45,7 +48,7 @@ func testAccIosxrLoggingConfig_minimum() string {
 }
 
 func testAccIosxrLoggingConfig_all() string {
-	config := `resource "iosxe_logging" "test" {` + "\n"
+	config := `resource "iosxr_logging" "test" {` + "\n"
 	config += `	ipv4_dscp = "cs6"` + "\n"
 	config += `	trap = "informational"` + "\n"
 	config += `	events_display_location = true` + "\n"

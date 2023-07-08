@@ -63,6 +63,9 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_minimum(),
+			},
+			{
 				Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_all(),
 				Check: resource.ComposeTestCheckFunc(checks...),
 			},
@@ -168,7 +171,7 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 }
 
 func testAccIosxr{{camelCase .Name}}Config_all() string {
-	config := `resource "iosxe_{{snakeCase $name}}" "test" {` + "\n"
+	config := `resource "iosxr_{{snakeCase $name}}" "test" {` + "\n"
 	{{- if and (not .NoDelete) (not .NoDeleteAttributes) .DefaultDeleteAttributes}}
 	config += `	delete_mode = "all"` + "\n"
 	{{- end}}

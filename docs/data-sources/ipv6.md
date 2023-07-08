@@ -32,8 +32,8 @@ data "iosxr_ipv6" "example" {
 - `assembler_reassembler_drop_enable` (Boolean) Enable dropping of reassembled ND packet
 - `assembler_timeout` (Number) Number of seconds an assembly queue will hold before timeout
 - `hop_limit` (Number) Configure hop count limit
+- `icmp_error_interval` (Number) Interval between ICMP error messages
 - `icmp_error_interval_bucket_size` (Number) Bucket size
-- `icmp_error_interval_interval_time` (Number) Interval between ICMP error messages
 - `id` (String) The path of the retrieved object.
 - `path_mtu_enable` (Boolean) Enable ipv6 path-mtu feature
 - `path_mtu_timeout` (Number) Configure path-mtu timeout value

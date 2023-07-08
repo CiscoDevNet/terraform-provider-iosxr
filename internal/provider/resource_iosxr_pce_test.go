@@ -22,6 +22,9 @@ func TestAccIosxrPCE(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrPCEConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrPCEConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -41,7 +44,7 @@ func testAccIosxrPCEConfig_minimum() string {
 }
 
 func testAccIosxrPCEConfig_all() string {
-	config := `resource "iosxe_pce" "test" {` + "\n"
+	config := `resource "iosxr_pce" "test" {` + "\n"
 	config += `	address_ipv4 = "77.77.77.1"` + "\n"
 	config += `	state_sync_ipv4s = [{` + "\n"
 	config += `		address = "100.100.100.11"` + "\n"

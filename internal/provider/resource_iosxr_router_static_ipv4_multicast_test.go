@@ -56,6 +56,9 @@ func TestAccIosxrRouterStaticIPv4Multicast(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterStaticIPv4MulticastConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterStaticIPv4MulticastConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -77,7 +80,7 @@ func testAccIosxrRouterStaticIPv4MulticastConfig_minimum() string {
 }
 
 func testAccIosxrRouterStaticIPv4MulticastConfig_all() string {
-	config := `resource "iosxe_router_static_ipv4_multicast" "test" {` + "\n"
+	config := `resource "iosxr_router_static_ipv4_multicast" "test" {` + "\n"
 	config += `	prefix_address = "100.0.1.0"` + "\n"
 	config += `	prefix_length = 24` + "\n"
 	config += `	nexthop_interfaces = [{` + "\n"

@@ -24,6 +24,9 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterOSPFAreaInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterOSPFAreaInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -46,7 +49,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
-	config := `resource "iosxe_router_ospf_area_interface" "test" {` + "\n"
+	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"

@@ -17,6 +17,9 @@ func TestAccIosxrASPathSet(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrASPathSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrASPathSetConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrASPathSetConfig_minimum() string {
 }
 
 func testAccIosxrASPathSetConfig_all() string {
-	config := `resource "iosxe_as_path_set" "test" {` + "\n"
+	config := `resource "iosxr_as_path_set" "test" {` + "\n"
 	config += `	set_name = "TEST1"` + "\n"
 	config += `	rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"` + "\n"
 	config += `}` + "\n"

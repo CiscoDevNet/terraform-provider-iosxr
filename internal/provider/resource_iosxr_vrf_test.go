@@ -66,6 +66,9 @@ func TestAccIosxrVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrVRFPrerequisitesConfig + testAccIosxrVRFConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrVRFPrerequisitesConfig + testAccIosxrVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -98,7 +101,7 @@ func testAccIosxrVRFConfig_minimum() string {
 }
 
 func testAccIosxrVRFConfig_all() string {
-	config := `resource "iosxe_vrf" "test" {` + "\n"
+	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF3"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"

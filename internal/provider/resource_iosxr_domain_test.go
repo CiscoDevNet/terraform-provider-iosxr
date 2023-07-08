@@ -28,6 +28,9 @@ func TestAccIosxrDomain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrDomainConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrDomainConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -47,7 +50,7 @@ func testAccIosxrDomainConfig_minimum() string {
 }
 
 func testAccIosxrDomainConfig_all() string {
-	config := `resource "iosxe_domain" "test" {` + "\n"
+	config := `resource "iosxr_domain" "test" {` + "\n"
 	config += `	domains = [{` + "\n"
 	config += `		domain_name = "DOMAIN1"` + "\n"
 	config += `		order = 0` + "\n"

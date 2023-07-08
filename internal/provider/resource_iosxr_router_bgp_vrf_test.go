@@ -42,6 +42,9 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPVRFPrerequisitesConfig + testAccIosxrRouterBGPVRFConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPVRFPrerequisitesConfig + testAccIosxrRouterBGPVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -68,15 +71,13 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
-	config += `	timers_bgp_keepalive_interval = 5` + "\n"
-	config += `	timers_bgp_holdtime = "20"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrRouterBGPVRFConfig_all() string {
-	config := `resource "iosxe_router_bgp_vrf" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	rd_auto = false` + "\n"

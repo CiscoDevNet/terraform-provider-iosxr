@@ -17,6 +17,9 @@ func TestAccIosxrBGPASFormat(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrBGPASFormatConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrBGPASFormatConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -36,7 +39,7 @@ func testAccIosxrBGPASFormatConfig_minimum() string {
 }
 
 func testAccIosxrBGPASFormatConfig_all() string {
-	config := `resource "iosxe_bgp_as_format" "test" {` + "\n"
+	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
 	config += `	asdot = false` + "\n"
 	config += `	asplain = true` + "\n"
 	config += `}` + "\n"

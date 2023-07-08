@@ -41,6 +41,9 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFAddressFamilyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -93,7 +96,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_minimum() string {
 }
 
 func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
-	config := `resource "iosxe_router_bgp_vrf_address_family" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp_vrf_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"

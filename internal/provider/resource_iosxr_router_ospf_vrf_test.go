@@ -53,6 +53,9 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterOSPFVRFConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterOSPFVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -74,7 +77,7 @@ func testAccIosxrRouterOSPFVRFConfig_minimum() string {
 }
 
 func testAccIosxrRouterOSPFVRFConfig_all() string {
-	config := `resource "iosxe_router_ospf_vrf" "test" {` + "\n"
+	config := `resource "iosxr_router_ospf_vrf" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	mpls_ldp_sync = false` + "\n"

@@ -29,6 +29,9 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -60,7 +63,7 @@ func testAccIosxrMPLSLDPConfig_minimum() string {
 }
 
 func testAccIosxrMPLSLDPConfig_all() string {
-	config := `resource "iosxe_mpls_ldp" "test" {` + "\n"
+	config := `resource "iosxr_mpls_ldp" "test" {` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"

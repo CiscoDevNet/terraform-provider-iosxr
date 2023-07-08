@@ -16,9 +16,11 @@ attributes:
   - yang_name: segment-routing/srv6/locator
     example: locator11
   - yang_name: timers/bgp/keepalive-interval
+    optional: true
     delete_parent: true
     example: 5
   - yang_name: timers/bgp/holdtime
+    optional: true
     delete_parent: true
     example: 20
   - yang_name: bgp/router-id

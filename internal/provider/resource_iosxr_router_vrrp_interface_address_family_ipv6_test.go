@@ -29,6 +29,9 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -50,7 +53,7 @@ func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum() string {
 }
 
 func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all() string {
-	config := `resource "iosxe_router_vrrp_interface_address_family_ipv6" "test" {` + "\n"
+	config := `resource "iosxr_router_vrrp_interface_address_family_ipv6" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	vrrp_id = 124` + "\n"
 	config += `	address_linklocal_autoconfig = true` + "\n"

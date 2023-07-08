@@ -20,6 +20,9 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrMPLSOAMConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrMPLSOAMConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -39,7 +42,7 @@ func testAccIosxrMPLSOAMConfig_minimum() string {
 }
 
 func testAccIosxrMPLSOAMConfig_all() string {
-	config := `resource "iosxe_mpls_oam" "test" {` + "\n"
+	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
 	config += `	oam = true` + "\n"
 	config += `	oam_echo_disable_vendor_extension = false` + "\n"
 	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false` + "\n"

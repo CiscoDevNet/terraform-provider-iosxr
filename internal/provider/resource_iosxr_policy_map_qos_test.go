@@ -23,6 +23,9 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrPolicyMapQoSConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrPolicyMapQoSConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -43,7 +46,7 @@ func testAccIosxrPolicyMapQoSConfig_minimum() string {
 }
 
 func testAccIosxrPolicyMapQoSConfig_all() string {
-	config := `resource "iosxe_policy_map_qos" "test" {` + "\n"
+	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
 	config += `	policy_map_name = "PM1"` + "\n"
 	config += `	description = "My description"` + "\n"
 	config += `	classes = [{` + "\n"

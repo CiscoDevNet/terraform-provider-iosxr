@@ -21,6 +21,9 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -56,7 +59,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 }
 
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
-	config := `resource "iosxe_router_isis_interface_address_family" "test" {` + "\n"
+	config := `resource "iosxr_router_isis_interface_address_family" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"

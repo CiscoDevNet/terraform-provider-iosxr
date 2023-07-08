@@ -11,7 +11,7 @@ import (
 func TestAccDataSourceIosxrIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "hop_limit", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_interval_time", "2111"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval", "2111"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "icmp_error_interval_bucket_size", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "source_route", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6.test", "assembler_timeout", "50"))
@@ -37,7 +37,7 @@ func testAccDataSourceIosxrIPv6Config() string {
 	config := `resource "iosxr_ipv6" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	hop_limit = 123` + "\n"
-	config += `	icmp_error_interval_interval_time = 2111` + "\n"
+	config += `	icmp_error_interval = 2111` + "\n"
 	config += `	icmp_error_interval_bucket_size = 123` + "\n"
 	config += `	source_route = true` + "\n"
 	config += `	assembler_timeout = 50` + "\n"

@@ -20,6 +20,9 @@ func TestAccIosxrClassMapQoS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrClassMapQoSConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrClassMapQoSConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -40,7 +43,7 @@ func testAccIosxrClassMapQoSConfig_minimum() string {
 }
 
 func testAccIosxrClassMapQoSConfig_all() string {
-	config := `resource "iosxe_class_map_qos" "test" {` + "\n"
+	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
 	config += `	class_map_name = "TEST"` + "\n"
 	config += `	match_any = true` + "\n"
 	config += `	description = "description1"` + "\n"

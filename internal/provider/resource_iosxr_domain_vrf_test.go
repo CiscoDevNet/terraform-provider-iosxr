@@ -28,6 +28,9 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrDomainVRFConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrDomainVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -48,7 +51,7 @@ func testAccIosxrDomainVRFConfig_minimum() string {
 }
 
 func testAccIosxrDomainVRFConfig_all() string {
-	config := `resource "iosxe_domain_vrf" "test" {` + "\n"
+	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
 	config += `	vrf_name = "TEST-VRF"` + "\n"
 	config += `	domains = [{` + "\n"
 	config += `		domain_name = "DOMAIN11"` + "\n"

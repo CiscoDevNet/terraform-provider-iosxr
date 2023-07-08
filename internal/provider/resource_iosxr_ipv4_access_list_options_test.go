@@ -17,6 +17,9 @@ func TestAccIosxrIPv4AccessListOptions(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrIPv4AccessListOptionsConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrIPv4AccessListOptionsConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -36,7 +39,7 @@ func testAccIosxrIPv4AccessListOptionsConfig_minimum() string {
 }
 
 func testAccIosxrIPv4AccessListOptionsConfig_all() string {
-	config := `resource "iosxe_ipv4_access_list_options" "test" {` + "\n"
+	config := `resource "iosxr_ipv4_access_list_options" "test" {` + "\n"
 	config += `	log_update_threshold = 214748` + "\n"
 	config += `	log_update_rate = 1000` + "\n"
 	config += `}` + "\n"

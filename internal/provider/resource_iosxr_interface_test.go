@@ -39,6 +39,9 @@ func TestAccIosxrInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrInterfacePrerequisitesConfig + testAccIosxrInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrInterfacePrerequisitesConfig + testAccIosxrInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -103,7 +106,7 @@ func testAccIosxrInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrInterfaceConfig_all() string {
-	config := `resource "iosxe_interface" "test" {` + "\n"
+	config := `resource "iosxr_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"

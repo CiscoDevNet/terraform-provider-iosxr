@@ -52,6 +52,9 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -86,7 +89,7 @@ func testAccIosxrRouterISISAddressFamilyConfig_minimum() string {
 }
 
 func testAccIosxrRouterISISAddressFamilyConfig_all() string {
-	config := `resource "iosxe_router_isis_address_family" "test" {` + "\n"
+	config := `resource "iosxr_router_isis_address_family" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	af_name = "ipv6"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"

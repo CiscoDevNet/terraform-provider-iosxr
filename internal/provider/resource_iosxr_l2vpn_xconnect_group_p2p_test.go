@@ -21,6 +21,9 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrL2VPNXconnectGroupP2PConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrL2VPNXconnectGroupP2PConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -42,7 +45,7 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_minimum() string {
 }
 
 func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
-	config := `resource "iosxe_l2vpn_xconnect_group_p2p" "test" {` + "\n"
+	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
 	config += `	group_name = "P2P"` + "\n"
 	config += `	p2p_xconnect_name = "XC"` + "\n"
 	config += `	description = "My P2P Description"` + "\n"

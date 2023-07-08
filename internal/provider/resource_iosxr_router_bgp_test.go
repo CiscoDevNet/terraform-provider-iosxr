@@ -53,6 +53,9 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -78,15 +81,13 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrRouterBGPConfig_minimum() string {
 	config := `resource "iosxr_router_bgp" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	timers_bgp_keepalive_interval = 5` + "\n"
-	config += `	timers_bgp_holdtime = "20"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrRouterBGPConfig_all() string {
-	config := `resource "iosxe_router_bgp" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	default_information_originate = true` + "\n"
 	config += `	default_metric = 125` + "\n"

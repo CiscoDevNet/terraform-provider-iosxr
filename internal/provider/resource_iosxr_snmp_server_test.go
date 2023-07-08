@@ -49,6 +49,9 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSNMPServerConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrSNMPServerConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -68,7 +71,7 @@ func testAccIosxrSNMPServerConfig_minimum() string {
 }
 
 func testAccIosxrSNMPServerConfig_all() string {
-	config := `resource "iosxe_snmp_server" "test" {` + "\n"
+	config := `resource "iosxr_snmp_server" "test" {` + "\n"
 	config += `	rf = true` + "\n"
 	config += `	bfd = true` + "\n"
 	config += `	ntp = true` + "\n"

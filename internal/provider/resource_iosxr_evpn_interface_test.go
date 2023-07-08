@@ -26,6 +26,9 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrEVPNInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrEVPNInterfaceConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -46,7 +49,7 @@ func testAccIosxrEVPNInterfaceConfig_minimum() string {
 }
 
 func testAccIosxrEVPNInterfaceConfig_all() string {
-	config := `resource "iosxe_evpn_interface" "test" {` + "\n"
+	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
 	config += `	core_isolation_group = 11` + "\n"
 	config += `	ethernet_segment_identifier_type_zero_bytes_1 = "01"` + "\n"

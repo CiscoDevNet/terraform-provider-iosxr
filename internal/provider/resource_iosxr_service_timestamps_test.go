@@ -27,6 +27,9 @@ func TestAccIosxrServiceTimestamps(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrServiceTimestampsConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrServiceTimestampsConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -46,7 +49,7 @@ func testAccIosxrServiceTimestampsConfig_minimum() string {
 }
 
 func testAccIosxrServiceTimestampsConfig_all() string {
-	config := `resource "iosxe_service_timestamps" "test" {` + "\n"
+	config := `resource "iosxr_service_timestamps" "test" {` + "\n"
 	config += `	debug_datetime_localtime = true` + "\n"
 	config += `	debug_datetime_msec = true` + "\n"
 	config += `	debug_datetime_show_timezone = true` + "\n"

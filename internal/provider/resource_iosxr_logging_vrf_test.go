@@ -20,6 +20,9 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLoggingVRFConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLoggingVRFConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -40,7 +43,7 @@ func testAccIosxrLoggingVRFConfig_minimum() string {
 }
 
 func testAccIosxrLoggingVRFConfig_all() string {
-	config := `resource "iosxe_logging_vrf" "test" {` + "\n"
+	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"

@@ -18,6 +18,9 @@ func TestAccIosxrL2VPN(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrL2VPNConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrL2VPNConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -37,7 +40,7 @@ func testAccIosxrL2VPNConfig_minimum() string {
 }
 
 func testAccIosxrL2VPNConfig_all() string {
-	config := `resource "iosxe_l2vpn" "test" {` + "\n"
+	config := `resource "iosxr_l2vpn" "test" {` + "\n"
 	config += `	description = "My L2VPN Description"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	xconnect_groups = [{` + "\n"

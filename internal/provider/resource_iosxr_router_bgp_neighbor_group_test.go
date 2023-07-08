@@ -24,6 +24,9 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccIosxrRouterBGPNeighborGroupConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig + testAccIosxrRouterBGPNeighborGroupConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -56,7 +59,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 }
 
 func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
-	config := `resource "iosxe_router_bgp_neighbor_group" "test" {` + "\n"
+	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"

@@ -17,6 +17,9 @@ func TestAccIosxrExtcommunityOpaqueSet(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrExtcommunityOpaqueSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrExtcommunityOpaqueSetConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -38,7 +41,7 @@ func testAccIosxrExtcommunityOpaqueSetConfig_minimum() string {
 }
 
 func testAccIosxrExtcommunityOpaqueSetConfig_all() string {
-	config := `resource "iosxe_extcommunity_opaque_set" "test" {` + "\n"
+	config := `resource "iosxr_extcommunity_opaque_set" "test" {` + "\n"
 	config += `	set_name = "BLUE"` + "\n"
 	config += `	rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"` + "\n"
 	config += `}` + "\n"

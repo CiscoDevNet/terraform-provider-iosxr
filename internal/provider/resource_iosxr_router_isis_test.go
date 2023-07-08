@@ -52,6 +52,9 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterISISConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterISISConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -67,13 +70,12 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 func testAccIosxrRouterISISConfig_minimum() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
-	config += `	lsp_password_keychain = "ISIS-KEY"` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrRouterISISConfig_all() string {
-	config := `resource "iosxe_router_isis" "test" {` + "\n"
+	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	is_type = "level-1"` + "\n"
 	config += `	set_overload_bit_levels = [{` + "\n"

@@ -23,6 +23,9 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -43,7 +46,7 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 }
 
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
-	config := `resource "iosxe_evpn_segment_routing_srv6_evi" "test" {` + "\n"
+	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
 	config += `	vpn_id = 1235` + "\n"
 	config += `	description = "My Description"` + "\n"
 	config += `	bgp_route_target_import_two_byte_as_format = [{` + "\n"

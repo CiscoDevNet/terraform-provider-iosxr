@@ -16,6 +16,9 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrL2VPNBridgeGroupConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrL2VPNBridgeGroupConfig_all(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
@@ -36,7 +39,7 @@ func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
 }
 
 func testAccIosxrL2VPNBridgeGroupConfig_all() string {
-	config := `resource "iosxe_l2vpn_bridge_group" "test" {` + "\n"
+	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	group_name = "BG123"` + "\n"
 	config += `}` + "\n"
 	return config

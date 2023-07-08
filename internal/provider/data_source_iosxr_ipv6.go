@@ -49,7 +49,7 @@ func (d *IPv6DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Configure hop count limit",
 				Computed:            true,
 			},
-			"icmp_error_interval_interval_time": schema.Int64Attribute{
+			"icmp_error_interval": schema.Int64Attribute{
 				MarkdownDescription: "Interval between ICMP error messages",
 				Computed:            true,
 			},

@@ -307,6 +307,7 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewCommunitySetResource,
 		NewDomainResource,
 		NewDomainVRFResource,
+		NewErrorDisableRecoveryResource,
 		NewESISetResource,
 		NewEVPNResource,
 		NewEVPNEVIResource,
@@ -375,6 +376,8 @@ func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resourc
 		NewSNMPServerViewResource,
 		NewSNMPServerVRFHostResource,
 		NewSSHResource,
+		NewTagSetResource,
+		NewTelnetResource,
 		NewVRFResource,
 	}
 }
@@ -390,6 +393,7 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewCommunitySetDataSource,
 		NewDomainDataSource,
 		NewDomainVRFDataSource,
+		NewErrorDisableRecoveryDataSource,
 		NewESISetDataSource,
 		NewEVPNDataSource,
 		NewEVPNEVIDataSource,
@@ -458,6 +462,8 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewSNMPServerViewDataSource,
 		NewSNMPServerVRFHostDataSource,
 		NewSSHDataSource,
+		NewTagSetDataSource,
+		NewTelnetDataSource,
 		NewVRFDataSource,
 	}
 }

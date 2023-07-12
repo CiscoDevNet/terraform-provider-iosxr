@@ -1,0 +1,11 @@
+---
+name: Extcommunity Cost Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-cost-sets/extended-community-cost-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: COST2
+  - yang_name: rpl-extended-community-cost-set
+    tf_name: rpl
+    example: "extcommunity-set cost COST2\\nend-set\\n"

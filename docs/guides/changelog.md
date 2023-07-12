@@ -16,6 +16,9 @@ description: |-
 - Make `timers_bgp_holdtime` attribute of `iosxr_router_bgp` resource optional
 - Make `lsp_password_keychain` attribute of `iosxr_router_isis` resource optional
 - BREAKING CHANGE: Rename `icmp_error_interval_interval_time` attribute of `iosxr_ipv6` resource and data source to `icmp_error_interval`
+- Add `iosxr_telnet` resource and data source
+- Add `iosxr_tag_set` resource and data source
+- Add `iosxr_error_disable_recovery` resource and data source
 
 ## 0.2.1
 

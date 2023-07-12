@@ -19,6 +19,9 @@ description: |-
 - Add `iosxr_telnet` resource and data source
 - Add `iosxr_tag_set` resource and data source
 - Add `iosxr_error_disable_recovery` resource and data source
+- Add `iosxr_extcommunity_rt_set` resource and data source
+- Add `iosxr_extcommunity_soo_set` resource and data source
+- Add `iosxr_fpd` resource and data source
 
 ## 0.2.1
 

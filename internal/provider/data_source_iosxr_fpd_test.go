@@ -3,39 +3,46 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrFPD(t *testing.T) {
+	if os.Getenv("FPD") == "" {
+		t.Skip("skipping test, set environment variable FPD")
+	}
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_disable", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrFPDConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_enable", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_disable", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_enable", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_disable", "false"),
-				),
+				Config: testAccDataSourceIosxrFPDConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrFPDConfig = `
+func testAccDataSourceIosxrFPDConfig() string {
+	config := `resource "iosxr_fpd" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	auto_upgrade_enable = false` + "\n"
+	config += `	auto_upgrade_disable = false` + "\n"
+	config += `	auto_reload_enable = false` + "\n"
+	config += `	auto_reload_disable = false` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_fpd" "test" {
-	auto_upgrade_enable = false
-	auto_upgrade_disable = false
-	auto_reload_enable = false
-	auto_reload_disable = false
+	config += `
+		data "iosxr_fpd" "test" {
+			depends_on = [iosxr_fpd.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_fpd" "test" {
-	depends_on = [iosxr_fpd.test]
-}
-`

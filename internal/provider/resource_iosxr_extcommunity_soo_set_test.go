@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrExtcommunitySOOSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_soo_set.test", "set_name", "SITE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_soo_set.test", "rpl", "extcommunity-set soo SITE1\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrExtcommunitySOOSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrExtcommunitySOOSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_extcommunity_soo_set.test", "set_name", "SITE1"),
-					resource.TestCheckResourceAttr("iosxr_extcommunity_soo_set.test", "rpl", "extcommunity-set soo SITE1\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_extcommunity_soo_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrExtcommunitySOOSet(t *testing.T) {
 }
 
 func testAccIosxrExtcommunitySOOSetConfig_minimum() string {
-	return `
-	resource "iosxr_extcommunity_soo_set" "test" {
-		set_name = "SITE1"
-		rpl = "extcommunity-set soo SITE1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_soo_set" "test" {` + "\n"
+	config += `	set_name = "SITE1"` + "\n"
+	config += `	rpl = "extcommunity-set soo SITE1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrExtcommunitySOOSetConfig_all() string {
-	return `
-	resource "iosxr_extcommunity_soo_set" "test" {
-		set_name = "SITE1"
-		rpl = "extcommunity-set soo SITE1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_soo_set" "test" {` + "\n"
+	config += `	set_name = "SITE1"` + "\n"
+	config += `	rpl = "extcommunity-set soo SITE1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

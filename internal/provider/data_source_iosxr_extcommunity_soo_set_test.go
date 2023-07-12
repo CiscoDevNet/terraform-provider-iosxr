@@ -9,29 +9,31 @@ import (
 )
 
 func TestAccDataSourceIosxrExtcommunitySOOSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_extcommunity_soo_set.test", "rpl", "extcommunity-set soo SITE1\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrExtcommunitySOOSetConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_extcommunity_soo_set.test", "rpl", "extcommunity-set soo SITE1\nend-set\n"),
-				),
+				Config: testAccDataSourceIosxrExtcommunitySOOSetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrExtcommunitySOOSetConfig = `
+func testAccDataSourceIosxrExtcommunitySOOSetConfig() string {
+	config := `resource "iosxr_extcommunity_soo_set" "test" {` + "\n"
+	config += `	set_name = "SITE1"` + "\n"
+	config += `	rpl = "extcommunity-set soo SITE1\nend-set\n"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_extcommunity_soo_set" "test" {
-	set_name = "SITE1"
-	rpl = "extcommunity-set soo SITE1\nend-set\n"
+	config += `
+		data "iosxr_extcommunity_soo_set" "test" {
+			set_name = "SITE1"
+			depends_on = [iosxr_extcommunity_soo_set.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_extcommunity_soo_set" "test" {
-	set_name = "SITE1"
-	depends_on = [iosxr_extcommunity_soo_set.test]
-}
-`

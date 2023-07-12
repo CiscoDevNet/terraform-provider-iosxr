@@ -14,6 +14,7 @@ import (
 type FPD struct {
 	Device             types.String `tfsdk:"device"`
 	Id                 types.String `tfsdk:"id"`
+	DeleteMode         types.String `tfsdk:"delete_mode"`
 	AutoUpgradeEnable  types.Bool   `tfsdk:"auto_upgrade_enable"`
 	AutoUpgradeDisable types.Bool   `tfsdk:"auto_upgrade_disable"`
 	AutoReloadEnable   types.Bool   `tfsdk:"auto_reload_enable"`

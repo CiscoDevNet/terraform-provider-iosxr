@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrExtcommunityRTSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_rt_set.test", "set_name", "ROUTE1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_rt_set.test", "rpl", "extcommunity-set rt ROUTE1\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrExtcommunityRTSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrExtcommunityRTSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_extcommunity_rt_set.test", "set_name", "ROUTE1"),
-					resource.TestCheckResourceAttr("iosxr_extcommunity_rt_set.test", "rpl", "extcommunity-set rt ROUTE1\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_extcommunity_rt_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrExtcommunityRTSet(t *testing.T) {
 }
 
 func testAccIosxrExtcommunityRTSetConfig_minimum() string {
-	return `
-	resource "iosxr_extcommunity_rt_set" "test" {
-		set_name = "ROUTE1"
-		rpl = "extcommunity-set rt ROUTE1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_rt_set" "test" {` + "\n"
+	config += `	set_name = "ROUTE1"` + "\n"
+	config += `	rpl = "extcommunity-set rt ROUTE1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrExtcommunityRTSetConfig_all() string {
-	return `
-	resource "iosxr_extcommunity_rt_set" "test" {
-		set_name = "ROUTE1"
-		rpl = "extcommunity-set rt ROUTE1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_rt_set" "test" {` + "\n"
+	config += `	set_name = "ROUTE1"` + "\n"
+	config += `	rpl = "extcommunity-set rt ROUTE1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

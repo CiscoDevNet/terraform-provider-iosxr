@@ -1,7 +1,7 @@
 ---
-name : FPD
+name: FPD
 path: Cisco-IOS-XR-um-fpd-cfg:/fpd
-no_delete_attributes: true
+test_tags: [FPD]
 doc_category: System
 attributes:
   - yang_name: auto-upgrade/enable

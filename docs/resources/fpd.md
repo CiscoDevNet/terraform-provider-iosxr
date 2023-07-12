@@ -30,6 +30,8 @@ resource "iosxr_fpd" "example" {
 - `auto_reload_enable` (Boolean) Enable fpd auto reload`
 - `auto_upgrade_disable` (Boolean) Disable fpd auto upgrade
 - `auto_upgrade_enable` (Boolean) Enable fpd auto upgrade
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 
 ### Read-Only

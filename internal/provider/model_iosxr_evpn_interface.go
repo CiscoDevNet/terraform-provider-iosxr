@@ -265,7 +265,7 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero/esi", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", data.getPath()))

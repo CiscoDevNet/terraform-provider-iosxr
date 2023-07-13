@@ -42,6 +42,7 @@ attributes:
     type: String
     no_augment_config: true
     optional: true
+    delete_parent: true
     test_tags: [IOSXR_VERSION_7_9_1]
     description: ESI value, used instead of `bytes-x` from version 7.8.1`
     example: 01.00.01.01.00.00.00.01.1

@@ -80,6 +80,8 @@ resource "iosxr_interface" "example" {
 - `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
 - `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
   - Range: `1`-`45`
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `description` (String) Set description for this interface
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface

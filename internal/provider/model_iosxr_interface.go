@@ -16,6 +16,7 @@ import (
 type Interface struct {
 	Device                                   types.String                   `tfsdk:"device"`
 	Id                                       types.String                   `tfsdk:"id"`
+	DeleteMode                               types.String                   `tfsdk:"delete_mode"`
 	InterfaceName                            types.String                   `tfsdk:"interface_name"`
 	L2transport                              types.Bool                     `tfsdk:"l2transport"`
 	PointToPoint                             types.Bool                     `tfsdk:"point_to_point"`

@@ -90,6 +90,7 @@ resource "iosxr_gnmi" "PreReq1" {
 
 func testAccDataSourceIosxrInterfaceConfig() string {
 	config := `resource "iosxr_interface" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"

@@ -1,4 +1,6 @@
 resource "iosxr_snmp_server" "example" {
+  location                    = "My location"
+  contact                     = "My contact"
   rf                          = true
   bfd                         = true
   ntp                         = true

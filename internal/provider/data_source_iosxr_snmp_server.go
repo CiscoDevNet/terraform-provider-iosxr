@@ -45,6 +45,14 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
+			"location": schema.StringAttribute{
+				MarkdownDescription: "Text for mib Object sysLocation",
+				Computed:            true,
+			},
+			"contact": schema.StringAttribute{
+				MarkdownDescription: "Text for mib Object sysContact",
+				Computed:            true,
+			},
 			"rf": schema.BoolAttribute{
 				MarkdownDescription: "Enable SNMP RF-MIB traps",
 				Computed:            true,

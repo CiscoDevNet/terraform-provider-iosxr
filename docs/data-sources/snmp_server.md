@@ -31,6 +31,7 @@ data "iosxr_snmp_server" "example" {
 - `bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `config` (Boolean) Enable SNMP config traps
+- `contact` (String) Text for mib Object sysContact
 - `copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
 - `entity` (Boolean) Enable SNMP entity traps
 - `entity_redundancy_all` (Boolean) Enable all CISCO-ENTITY-REDUNDANCY-MIB traps
@@ -61,6 +62,7 @@ data "iosxr_snmp_server" "example" {
 - `l2vpn_all` (Boolean) Enable all L2VPN traps
 - `l2vpn_vc_down` (Boolean) Enable VC down traps
 - `l2vpn_vc_up` (Boolean) Enable VC up traps
+- `location` (String) Text for mib Object sysLocation
 - `ntp` (Boolean) Enable SNMP Cisco Ntp traps
 - `power` (Boolean) Enable SNMP entity power traps
 - `rf` (Boolean) Enable SNMP RF-MIB traps

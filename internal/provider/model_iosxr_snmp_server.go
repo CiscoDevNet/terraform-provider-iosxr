@@ -17,6 +17,8 @@ type SNMPServer struct {
 	Device                         types.String       `tfsdk:"device"`
 	Id                             types.String       `tfsdk:"id"`
 	DeleteMode                     types.String       `tfsdk:"delete_mode"`
+	Location                       types.String       `tfsdk:"location"`
+	Contact                        types.String       `tfsdk:"contact"`
 	Rf                             types.Bool         `tfsdk:"rf"`
 	Bfd                            types.Bool         `tfsdk:"bfd"`
 	Ntp                            types.Bool         `tfsdk:"ntp"`
@@ -65,6 +67,8 @@ type SNMPServer struct {
 type SNMPServerData struct {
 	Device                         types.String       `tfsdk:"device"`
 	Id                             types.String       `tfsdk:"id"`
+	Location                       types.String       `tfsdk:"location"`
+	Contact                        types.String       `tfsdk:"contact"`
 	Rf                             types.Bool         `tfsdk:"rf"`
 	Bfd                            types.Bool         `tfsdk:"bfd"`
 	Ntp                            types.Bool         `tfsdk:"ntp"`
@@ -136,6 +140,12 @@ func (data SNMPServerData) getPath() string {
 
 func (data SNMPServer) toBody(ctx context.Context) string {
 	body := "{}"
+	if !data.Location.IsNull() && !data.Location.IsUnknown() {
+		body, _ = sjson.Set(body, "location", data.Location.ValueString())
+	}
+	if !data.Contact.IsNull() && !data.Contact.IsUnknown() {
+		body, _ = sjson.Set(body, "contact", data.Contact.ValueString())
+	}
 	if !data.Rf.IsNull() && !data.Rf.IsUnknown() {
 		if data.Rf.ValueBool() {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf", map[string]string{})
@@ -353,6 +363,16 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 }
 
 func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "location"); value.Exists() && !data.Location.IsNull() {
+		data.Location = types.StringValue(value.String())
+	} else {
+		data.Location = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "contact"); value.Exists() && !data.Contact.IsNull() {
+		data.Contact = types.StringValue(value.String())
+	} else {
+		data.Contact = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); !data.Rf.IsNull() {
 		if value.Exists() {
 			data.Rf = types.BoolValue(true)
@@ -757,6 +777,12 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 }
 
 func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "location"); value.Exists() {
+		data.Location = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "contact"); value.Exists() {
+		data.Contact = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-mibs-rfmib-cfg:rf"); value.Exists() {
 		data.Rf = types.BoolValue(true)
 	} else {
@@ -1132,6 +1158,12 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.Location.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/location", data.getPath()))
+	}
+	if !data.Contact.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/contact", data.getPath()))
+	}
 	if !data.Rf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf", data.getPath()))
 	}

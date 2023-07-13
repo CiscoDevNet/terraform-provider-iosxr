@@ -57,6 +57,20 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("all", "attributes"),
 				},
 			},
+			"location": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Text for mib Object sysLocation").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"contact": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Text for mib Object sysContact").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
 			"rf": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RF-MIB traps").String,
 				Optional:            true,

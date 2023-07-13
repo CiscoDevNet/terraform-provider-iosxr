@@ -14,6 +14,8 @@ This resource can manage the SNMP Server configuration.
 
 ```terraform
 resource "iosxr_snmp_server" "example" {
+  location                    = "My location"
+  contact                     = "My contact"
   rf                          = true
   bfd                         = true
   ntp                         = true
@@ -69,6 +71,7 @@ resource "iosxr_snmp_server" "example" {
 - `bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `config` (Boolean) Enable SNMP config traps
+- `contact` (String) Text for mib Object sysContact
 - `copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
@@ -139,6 +142,7 @@ resource "iosxr_snmp_server" "example" {
 - `l2vpn_all` (Boolean) Enable all L2VPN traps
 - `l2vpn_vc_down` (Boolean) Enable VC down traps
 - `l2vpn_vc_up` (Boolean) Enable VC up traps
+- `location` (String) Text for mib Object sysLocation
 - `ntp` (Boolean) Enable SNMP Cisco Ntp traps
 - `power` (Boolean) Enable SNMP entity power traps
 - `rf` (Boolean) Enable SNMP RF-MIB traps

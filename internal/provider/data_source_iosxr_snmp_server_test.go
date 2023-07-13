@@ -10,6 +10,8 @@ import (
 
 func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "location", "My location"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "contact", "My contact"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "rf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "bfd", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "ntp", "true"))
@@ -59,6 +61,8 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 func testAccDataSourceIosxrSNMPServerConfig() string {
 	config := `resource "iosxr_snmp_server" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
+	config += `	location = "My location"` + "\n"
+	config += `	contact = "My contact"` + "\n"
 	config += `	rf = true` + "\n"
 	config += `	bfd = true` + "\n"
 	config += `	ntp = true` + "\n"

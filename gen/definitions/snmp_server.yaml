@@ -2,6 +2,10 @@ name: SNMP Server
 path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server
 doc_category: Management
 attributes:
+  - yang_name: location
+    example: My location
+  - yang_name: contact
+    example: My contact
   - yang_name: traps/Cisco-IOS-XR-um-mibs-rfmib-cfg:rf
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-bfd-sbfd-cfg:bfd

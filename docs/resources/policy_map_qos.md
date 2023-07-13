@@ -64,9 +64,15 @@ Optional:
 - `bandwidth_remaining_unit` (String) Bandwidth value unit
   - Choices: `percent`, `ratio`
 - `bandwidth_remaining_value` (String) Bandwidth value
+- `police_conform_action_drop` (Boolean) Drop packet
+- `police_conform_action_transmit` (Boolean) Transmit packet
+- `police_exceed_action_drop` (Boolean) Drop packet
+- `police_exceed_action_transmit` (Boolean) Transmit packet
 - `police_rate_unit` (String) Rate unit
   - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`, `pps`
 - `police_rate_value` (String) Committed Information Rate
+- `police_violate_action_drop` (Boolean) Drop packet
+- `police_violate_action_transmit` (Boolean) Transmit packet
 - `priority_level` (Number) Configure a priority level
   - Range: `1`-`7`
 - `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))

@@ -43,8 +43,14 @@ Read-Only:
 - `bandwidth_remaining_unit` (String) Bandwidth value unit
 - `bandwidth_remaining_value` (String) Bandwidth value
 - `name` (String) Name of the class-map
+- `police_conform_action_drop` (Boolean) Drop packet
+- `police_conform_action_transmit` (Boolean) Transmit packet
+- `police_exceed_action_drop` (Boolean) Drop packet
+- `police_exceed_action_transmit` (Boolean) Transmit packet
 - `police_rate_unit` (String) Rate unit
 - `police_rate_value` (String) Committed Information Rate
+- `police_violate_action_drop` (Boolean) Drop packet
+- `police_violate_action_transmit` (Boolean) Transmit packet
 - `priority_level` (Number) Configure a priority level
 - `queue_limits` (Attributes List) Configure queue-limit (taildrop threshold) for this class (see [below for nested schema](#nestedatt--classes--queue_limits))
 - `service_policy_name` (String) Name of the child service policy

@@ -135,6 +135,30 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.OneOf("bps", "cellsps", "gbps", "kbps", "mbps", "per-million", "per-thousand", "percent", "pps"),
 							},
 						},
+						"police_conform_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_conform_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
+						"police_exceed_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_exceed_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
+						"police_violate_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Transmit packet").String,
+							Optional:            true,
+						},
+						"police_violate_action_drop": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Drop packet").String,
+							Optional:            true,
+						},
 						"shape_average_rate_value": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("").String,
 							Optional:            true,

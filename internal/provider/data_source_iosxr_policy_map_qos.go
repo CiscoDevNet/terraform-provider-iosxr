@@ -106,6 +106,30 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Rate unit",
 							Computed:            true,
 						},
+						"police_conform_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_conform_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
+						"police_exceed_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_exceed_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
+						"police_violate_action_transmit": schema.BoolAttribute{
+							MarkdownDescription: "Transmit packet",
+							Computed:            true,
+						},
+						"police_violate_action_drop": schema.BoolAttribute{
+							MarkdownDescription: "Drop packet",
+							Computed:            true,
+						},
 						"shape_average_rate_value": schema.StringAttribute{
 							MarkdownDescription: "",
 							Computed:            true,

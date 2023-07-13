@@ -44,6 +44,24 @@ attributes:
       - yang_name: police/rate/unit
         example: gbps
         exclude_test: true
+      - yang_name: police/conform-action/transmit
+        exclude_test: true
+        example: true
+      - yang_name: police/conform-action/drop
+        exclude_test: true
+        example: false
+      - yang_name: police/exceed-action/transmit
+        exclude_test: true
+        example: true
+      - yang_name: police/exceed-action/drop
+        exclude_test: true
+        example: false
+      - yang_name: police/violate-action/transmit
+        exclude_test: true
+        example: true
+      - yang_name: police/violate-action/drop
+        exclude_test: true
+        example: false
       - yang_name: shape/average/rate/value
         example: 100
         exclude_test: true

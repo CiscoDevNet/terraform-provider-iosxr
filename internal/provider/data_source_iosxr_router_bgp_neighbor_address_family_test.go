@@ -49,7 +49,7 @@ resource "iosxr_gnmi" "PreReq0" {
 			items = [
 				{
 					"neighbor-address" = "10.1.1.2"
-					"remote-as" = "65002"
+					"remote-as" = "65001"
 				},
 			]
 		},

@@ -39,4 +39,4 @@ test_prerequisites:
               - name: neighbor-address
                 value: 10.1.1.2
               - name: remote-as
-                value: 65002
+                value: 65001

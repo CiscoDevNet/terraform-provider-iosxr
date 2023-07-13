@@ -9,29 +9,31 @@ import (
 )
 
 func TestAccDataSourceIosxrRDSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRDSetConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"),
-				),
+				Config: testAccDataSourceIosxrRDSetConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrRDSetConfig = `
+func testAccDataSourceIosxrRDSetConfig() string {
+	config := `resource "iosxr_rd_set" "test" {` + "\n"
+	config += `	set_name = "set1"` + "\n"
+	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_rd_set" "test" {
-	set_name = "set1"
-	rpl = "rd-set set1\nend-set\n"
+	config += `
+		data "iosxr_rd_set" "test" {
+			set_name = "set1"
+			depends_on = [iosxr_rd_set.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_rd_set" "test" {
-	set_name = "set1"
-	depends_on = [iosxr_rd_set.test]
-}
-`

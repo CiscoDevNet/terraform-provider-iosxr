@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrRDSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "set_name", "set1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRDSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRDSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_rd_set.test", "set_name", "set1"),
-					resource.TestCheckResourceAttr("iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_rd_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrRDSet(t *testing.T) {
 }
 
 func testAccIosxrRDSetConfig_minimum() string {
-	return `
-	resource "iosxr_rd_set" "test" {
-		set_name = "set1"
-		rpl = "rd-set set1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_rd_set" "test" {` + "\n"
+	config += `	set_name = "set1"` + "\n"
+	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRDSetConfig_all() string {
-	return `
-	resource "iosxr_rd_set" "test" {
-		set_name = "set1"
-		rpl = "rd-set set1\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_rd_set" "test" {` + "\n"
+	config += `	set_name = "set1"` + "\n"
+	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

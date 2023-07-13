@@ -22,6 +22,8 @@ description: |-
 - Add `iosxr_extcommunity_rt_set` resource and data source
 - Add `iosxr_extcommunity_soo_set` resource and data source
 - Add `iosxr_fpd` resource and data source
+- Add `iosxr_extcommunity_cost_set` resource and data source
+- Add `iosxr_rd_set` resource and data source
 
 ## 0.2.1
 

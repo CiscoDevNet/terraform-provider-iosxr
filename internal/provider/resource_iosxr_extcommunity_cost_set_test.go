@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrExtcommunityCostSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_cost_set.test", "set_name", "COST2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_cost_set.test", "rpl", "extcommunity-set cost COST2\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrExtcommunityCostSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrExtcommunityCostSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_extcommunity_cost_set.test", "set_name", "COST2"),
-					resource.TestCheckResourceAttr("iosxr_extcommunity_cost_set.test", "rpl", "extcommunity-set cost COST2\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_extcommunity_cost_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrExtcommunityCostSet(t *testing.T) {
 }
 
 func testAccIosxrExtcommunityCostSetConfig_minimum() string {
-	return `
-	resource "iosxr_extcommunity_cost_set" "test" {
-		set_name = "COST2"
-		rpl = "extcommunity-set cost COST2\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_cost_set" "test" {` + "\n"
+	config += `	set_name = "COST2"` + "\n"
+	config += `	rpl = "extcommunity-set cost COST2\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrExtcommunityCostSetConfig_all() string {
-	return `
-	resource "iosxr_extcommunity_cost_set" "test" {
-		set_name = "COST2"
-		rpl = "extcommunity-set cost COST2\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_cost_set" "test" {` + "\n"
+	config += `	set_name = "COST2"` + "\n"
+	config += `	rpl = "extcommunity-set cost COST2\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

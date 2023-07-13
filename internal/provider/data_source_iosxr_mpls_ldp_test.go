@@ -9,28 +9,28 @@ import (
 )
 
 func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "router_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv6_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec128_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec129_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "session_protection", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSLDPPrerequisitesConfig + testAccDataSourceIosxrMPLSLDPConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "router_id", "1.2.3.4"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv6_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec128_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec129_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "session_protection", "true"),
-				),
+				Config: testAccDataSourceIosxrMPLSLDPPrerequisitesConfig + testAccDataSourceIosxrMPLSLDPConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
@@ -47,34 +47,36 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
-const testAccDataSourceIosxrMPLSLDPConfig = `
+func testAccDataSourceIosxrMPLSLDPConfig() string {
+	config := `resource "iosxr_mpls_ldp" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	router_id = "1.2.3.4"` + "\n"
+	config += `	address_families = [{` + "\n"
+	config += `		af_name = "ipv4"` + "\n"
+	config += `	}]` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	capabilities_sac_ipv4_disable = true` + "\n"
+	config += `	capabilities_sac_ipv6_disable = true` + "\n"
+	config += `	capabilities_sac_fec128_disable = true` + "\n"
+	config += `	capabilities_sac_fec129_disable = true` + "\n"
+	config += `	mldp_logging_notifications = true` + "\n"
+	config += `	mldp_address_families = [{` + "\n"
+	config += `		name = "ipv4"` + "\n"
+	config += `		make_before_break_delay = 30` + "\n"
+	config += `		forwarding_recursive = true` + "\n"
+	config += `		forwarding_recursive_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `		recursive_fec = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	session_protection = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_mpls_ldp" "test" {
-	delete_mode = "attributes"
-	router_id = "1.2.3.4"
-	address_families = [{
-		af_name = "ipv4"
-	}]
-	interfaces = [{
-		interface_name = "GigabitEthernet0/0/0/1"
-	}]
-	capabilities_sac_ipv4_disable = true
-	capabilities_sac_ipv6_disable = true
-	capabilities_sac_fec128_disable = true
-	capabilities_sac_fec129_disable = true
-	mldp_logging_notifications = true
-	mldp_address_families = [{
-		name = "ipv4"
-		make_before_break_delay = 30
-		forwarding_recursive = true
-		forwarding_recursive_route_policy = "ROUTE_POLICY_1"
-		recursive_fec = true
-	}]
-	session_protection = true
-	depends_on = [iosxr_gnmi.PreReq0, ]
+	config += `
+		data "iosxr_mpls_ldp" "test" {
+			depends_on = [iosxr_mpls_ldp.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_mpls_ldp" "test" {
-	depends_on = [iosxr_mpls_ldp.test]
-}
-`

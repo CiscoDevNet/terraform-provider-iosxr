@@ -129,14 +129,14 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
 			"timers_bgp_holdtime": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
-				Required:            true,
+				Optional:            true,
 			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,

@@ -9,44 +9,46 @@ import (
 )
 
 func TestAccDataSourceIosxrPCE(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "address_ipv4", "77.77.77.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "state_sync_ipv4s.0.address", "100.100.100.11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "peer_filter_ipv4_access_list", "Accesslist1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_authentication_digest", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_sibling_ipv4", "100.100.100.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_users.0.user_name", "rest-user"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_users.0.password_encrypted", "00141215174C04140B"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrPCEConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "address_ipv4", "77.77.77.1"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "state_sync_ipv4s.0.address", "100.100.100.11"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "peer_filter_ipv4_access_list", "Accesslist1"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_authentication_digest", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_sibling_ipv4", "100.100.100.2"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_users.0.user_name", "rest-user"),
-					resource.TestCheckResourceAttr("data.iosxr_pce.test", "api_users.0.password_encrypted", "00141215174C04140B"),
-				),
+				Config: testAccDataSourceIosxrPCEConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrPCEConfig = `
+func testAccDataSourceIosxrPCEConfig() string {
+	config := `resource "iosxr_pce" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	address_ipv4 = "77.77.77.1"` + "\n"
+	config += `	state_sync_ipv4s = [{` + "\n"
+	config += `		address = "100.100.100.11"` + "\n"
+	config += `	}]` + "\n"
+	config += `	peer_filter_ipv4_access_list = "Accesslist1"` + "\n"
+	config += `	api_authentication_digest = true` + "\n"
+	config += `	api_sibling_ipv4 = "100.100.100.2"` + "\n"
+	config += `	api_users = [{` + "\n"
+	config += `		user_name = "rest-user"` + "\n"
+	config += `		password_encrypted = "00141215174C04140B"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_pce" "test" {
-	delete_mode = "attributes"
-	address_ipv4 = "77.77.77.1"
-	state_sync_ipv4s = [{
-		address = "100.100.100.11"
-	}]
-	peer_filter_ipv4_access_list = "Accesslist1"
-	api_authentication_digest = true
-	api_sibling_ipv4 = "100.100.100.2"
-	api_users = [{
-		user_name = "rest-user"
-		password_encrypted = "00141215174C04140B"
-	}]
+	config += `
+		data "iosxr_pce" "test" {
+			depends_on = [iosxr_pce.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_pce" "test" {
-	depends_on = [iosxr_pce.test]
-}
-`

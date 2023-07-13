@@ -9,34 +9,36 @@ import (
 )
 
 func TestAccDataSourceIosxrSNMPServerView(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.name", "iso"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerViewConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.name", "iso"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_view.test", "mib_view_families.0.included", "true"),
-				),
+				Config: testAccDataSourceIosxrSNMPServerViewConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSNMPServerViewConfig = `
+func testAccDataSourceIosxrSNMPServerViewConfig() string {
+	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	view_name = "VIEW12"` + "\n"
+	config += `	mib_view_families = [{` + "\n"
+	config += `		name = "iso"` + "\n"
+	config += `		included = true` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_snmp_server_view" "test" {
-	delete_mode = "attributes"
-	view_name = "VIEW12"
-	mib_view_families = [{
-		name = "iso"
-		included = true
-	}]
+	config += `
+		data "iosxr_snmp_server_view" "test" {
+			view_name = "VIEW12"
+			depends_on = [iosxr_snmp_server_view.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_snmp_server_view" "test" {
-	view_name = "VIEW12"
-	depends_on = [iosxr_snmp_server_view.test]
-}
-`

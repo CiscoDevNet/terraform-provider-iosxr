@@ -9,44 +9,46 @@ import (
 )
 
 func TestAccDataSourceIosxrL2VPNXconnectGroupP2P(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "description", "My P2P Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.vpn_id", "4600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.service_id", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.segment_routing_srv6_locator", "LOC11"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "description", "My P2P Description"),
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/2"),
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.vpn_id", "4600"),
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.service_id", "600"),
-					resource.TestCheckResourceAttr("data.iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.segment_routing_srv6_locator", "LOC11"),
-				),
+				Config: testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig = `
+func testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig() string {
+	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	group_name = "P2P"` + "\n"
+	config += `	p2p_xconnect_name = "XC"` + "\n"
+	config += `	description = "My P2P Description"` + "\n"
+	config += `	interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	}]` + "\n"
+	config += `	neighbor_evpn_evi_segment_routing_services = [{` + "\n"
+	config += `		vpn_id = 4600` + "\n"
+	config += `		service_id = 600` + "\n"
+	config += `		segment_routing_srv6_locator = "LOC11"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_l2vpn_xconnect_group_p2p" "test" {
-	delete_mode = "attributes"
-	group_name = "P2P"
-	p2p_xconnect_name = "XC"
-	description = "My P2P Description"
-	interfaces = [{
-		interface_name = "GigabitEthernet0/0/0/2"
-	}]
-	neighbor_evpn_evi_segment_routing_services = [{
-		vpn_id = 4600
-		service_id = 600
-		segment_routing_srv6_locator = "LOC11"
-	}]
+	config += `
+		data "iosxr_l2vpn_xconnect_group_p2p" "test" {
+			group_name = "P2P"
+			p2p_xconnect_name = "XC"
+			depends_on = [iosxr_l2vpn_xconnect_group_p2p.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_l2vpn_xconnect_group_p2p" "test" {
-	group_name = "P2P"
-	p2p_xconnect_name = "XC"
-	depends_on = [iosxr_l2vpn_xconnect_group_p2p.test]
-}
-`

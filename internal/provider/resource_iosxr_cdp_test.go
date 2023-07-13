@@ -9,19 +9,22 @@ import (
 )
 
 func TestAccIosxrCDP(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "holdtime", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "timer", "34"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "advertise_v1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "log_adjacency_changes", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrCDPConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrCDPConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_cdp.test", "enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_cdp.test", "holdtime", "12"),
-					resource.TestCheckResourceAttr("iosxr_cdp.test", "timer", "34"),
-					resource.TestCheckResourceAttr("iosxr_cdp.test", "advertise_v1", "true"),
-					resource.TestCheckResourceAttr("iosxr_cdp.test", "log_adjacency_changes", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_cdp.test",
@@ -33,20 +36,18 @@ func TestAccIosxrCDP(t *testing.T) {
 }
 
 func testAccIosxrCDPConfig_minimum() string {
-	return `
-	resource "iosxr_cdp" "test" {
-	}
-	`
+	config := `resource "iosxr_cdp" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrCDPConfig_all() string {
-	return `
-	resource "iosxr_cdp" "test" {
-		enable = true
-		holdtime = 12
-		timer = 34
-		advertise_v1 = true
-		log_adjacency_changes = true
-	}
-	`
+	config := `resource "iosxr_cdp" "test" {` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	holdtime = 12` + "\n"
+	config += `	timer = 34` + "\n"
+	config += `	advertise_v1 = true` + "\n"
+	config += `	log_adjacency_changes = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

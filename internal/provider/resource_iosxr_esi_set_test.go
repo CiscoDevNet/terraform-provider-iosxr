@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrESISet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_esi_set.test", "set_name", "POLICYSET"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_esi_set.test", "rpl", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrESISetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrESISetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_esi_set.test", "set_name", "POLICYSET"),
-					resource.TestCheckResourceAttr("iosxr_esi_set.test", "rpl", "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_esi_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrESISet(t *testing.T) {
 }
 
 func testAccIosxrESISetConfig_minimum() string {
-	return `
-	resource "iosxr_esi_set" "test" {
-		set_name = "POLICYSET"
-		rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_esi_set" "test" {` + "\n"
+	config += `	set_name = "POLICYSET"` + "\n"
+	config += `	rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrESISetConfig_all() string {
-	return `
-	resource "iosxr_esi_set" "test" {
-		set_name = "POLICYSET"
-		rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_esi_set" "test" {` + "\n"
+	config += `	set_name = "POLICYSET"` + "\n"
+	config += `	rpl = "esi-set POLICYSET\n  1234.1234.1234.1234.1234\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

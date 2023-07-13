@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrPrefixSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_prefix_set.test", "set_name", "PREFIX_SET_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_prefix_set.test", "rpl", "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrPrefixSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrPrefixSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_prefix_set.test", "set_name", "PREFIX_SET_1"),
-					resource.TestCheckResourceAttr("iosxr_prefix_set.test", "rpl", "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_prefix_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrPrefixSet(t *testing.T) {
 }
 
 func testAccIosxrPrefixSetConfig_minimum() string {
-	return `
-	resource "iosxr_prefix_set" "test" {
-		set_name = "PREFIX_SET_1"
-		rpl = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_prefix_set" "test" {` + "\n"
+	config += `	set_name = "PREFIX_SET_1"` + "\n"
+	config += `	rpl = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrPrefixSetConfig_all() string {
-	return `
-	resource "iosxr_prefix_set" "test" {
-		set_name = "PREFIX_SET_1"
-		rpl = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_prefix_set" "test" {` + "\n"
+	config += `	set_name = "PREFIX_SET_1"` + "\n"
+	config += `	rpl = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

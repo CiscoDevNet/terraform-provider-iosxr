@@ -9,48 +9,50 @@ import (
 )
 
 func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_broadcast", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_non_broadcast", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_point", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_multipoint", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "cost", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_broadcast", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_non_broadcast", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_point", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "network_point_to_multipoint", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "cost", "20"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "priority", "100"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_enable", "false"),
-					resource.TestCheckResourceAttr("data.iosxr_router_ospf_area_interface.test", "passive_disable", "true"),
-				),
+				Config: testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig = `
+func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
+	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	process_name = "OSPF1"` + "\n"
+	config += `	area_id = "0"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	network_broadcast = false` + "\n"
+	config += `	network_non_broadcast = false` + "\n"
+	config += `	network_point_to_point = true` + "\n"
+	config += `	network_point_to_multipoint = false` + "\n"
+	config += `	cost = 20` + "\n"
+	config += `	priority = 100` + "\n"
+	config += `	passive_enable = false` + "\n"
+	config += `	passive_disable = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_router_ospf_area_interface" "test" {
-	delete_mode = "attributes"
-	process_name = "OSPF1"
-	area_id = "0"
-	interface_name = "GigabitEthernet0/0/0/1"
-	network_broadcast = false
-	network_non_broadcast = false
-	network_point_to_point = true
-	network_point_to_multipoint = false
-	cost = 20
-	priority = 100
-	passive_enable = false
-	passive_disable = true
+	config += `
+		data "iosxr_router_ospf_area_interface" "test" {
+			process_name = "OSPF1"
+			area_id = "0"
+			interface_name = "GigabitEthernet0/0/0/1"
+			depends_on = [iosxr_router_ospf_area_interface.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_router_ospf_area_interface" "test" {
-	process_name = "OSPF1"
-	area_id = "0"
-	interface_name = "GigabitEthernet0/0/0/1"
-	depends_on = [iosxr_router_ospf_area_interface.test]
-}
-`

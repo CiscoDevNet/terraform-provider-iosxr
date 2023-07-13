@@ -1,7 +1,7 @@
 name: SSH
 path: Cisco-IOS-XR-um-ssh-cfg:/ssh
 doc_category: System
-exclude_test: true
+test_tags: [SSH]
 attributes:
   - yang_name: server/dscp
     example: 48

@@ -1,0 +1,11 @@
+---
+name : Extcommunity SOO Set
+path : Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-soo-sets/extended-community-soo-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: SITE1
+  - yang_name: rpl-extended-community-soo-set
+    tf_name: rpl
+    example: "extcommunity-set soo SITE1\\nend-set\\n"

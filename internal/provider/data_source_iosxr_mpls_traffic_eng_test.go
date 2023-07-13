@@ -9,28 +9,30 @@ import (
 )
 
 func TestAccDataSourceIosxrMPLSTrafficEng(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_traffic_eng.test", "traffic_eng", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrMPLSTrafficEngConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_mpls_traffic_eng.test", "traffic_eng", "true"),
-				),
+				Config: testAccDataSourceIosxrMPLSTrafficEngConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrMPLSTrafficEngConfig = `
+func testAccDataSourceIosxrMPLSTrafficEngConfig() string {
+	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	traffic_eng = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_mpls_traffic_eng" "test" {
-	delete_mode = "attributes"
-	traffic_eng = true
+	config += `
+		data "iosxr_mpls_traffic_eng" "test" {
+			depends_on = [iosxr_mpls_traffic_eng.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_mpls_traffic_eng" "test" {
-	depends_on = [iosxr_mpls_traffic_eng.test]
-}
-`

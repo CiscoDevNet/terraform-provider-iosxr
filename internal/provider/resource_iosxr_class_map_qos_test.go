@@ -9,19 +9,22 @@ import (
 )
 
 func TestAccIosxrClassMapQoS(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "class_map_name", "TEST"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_any", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "description", "description1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_dscp.0", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrClassMapQoSConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrClassMapQoSConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "class_map_name", "TEST"),
-					resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_any", "true"),
-					resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "description", "description1"),
-					resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_dscp.0", "46"),
-					resource.TestCheckResourceAttr("iosxr_class_map_qos.test", "match_mpls_experimental_topmost.0", "5"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_class_map_qos.test",
@@ -33,21 +36,19 @@ func TestAccIosxrClassMapQoS(t *testing.T) {
 }
 
 func testAccIosxrClassMapQoSConfig_minimum() string {
-	return `
-	resource "iosxr_class_map_qos" "test" {
-		class_map_name = "TEST"
-	}
-	`
+	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
+	config += `	class_map_name = "TEST"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrClassMapQoSConfig_all() string {
-	return `
-	resource "iosxr_class_map_qos" "test" {
-		class_map_name = "TEST"
-		match_any = true
-		description = "description1"
-		match_dscp = ["46"]
-		match_mpls_experimental_topmost = [5]
-	}
-	`
+	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
+	config += `	class_map_name = "TEST"` + "\n"
+	config += `	match_any = true` + "\n"
+	config += `	description = "description1"` + "\n"
+	config += `	match_dscp = ["46"]` + "\n"
+	config += `	match_mpls_experimental_topmost = [5]` + "\n"
+	config += `}` + "\n"
+	return config
 }

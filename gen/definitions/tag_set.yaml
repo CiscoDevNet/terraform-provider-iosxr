@@ -1,0 +1,10 @@
+---
+name: Tag Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/tag-sets/tag-set[set-name=%s]
+no_delete_attributes: true
+doc_category: Route Policy
+attributes:
+  - yang_name: set-name
+    example: TEST
+  - yang_name: rpl-tag-set
+    example: "tag-set TEST\\n  4297\\nend-set\\n"

@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrBanner(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user !"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrBannerConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrBannerConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"),
-					resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user !"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_banner.test",
@@ -30,19 +33,17 @@ func TestAccIosxrBanner(t *testing.T) {
 }
 
 func testAccIosxrBannerConfig_minimum() string {
-	return `
-	resource "iosxr_banner" "test" {
-		banner_type = "login"
-		line = " Hello user !"
-	}
-	`
+	config := `resource "iosxr_banner" "test" {` + "\n"
+	config += `	banner_type = "login"` + "\n"
+	config += `	line = " Hello user !"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrBannerConfig_all() string {
-	return `
-	resource "iosxr_banner" "test" {
-		banner_type = "login"
-		line = " Hello user !"
-	}
-	`
+	config := `resource "iosxr_banner" "test" {` + "\n"
+	config += `	banner_type = "login"` + "\n"
+	config += `	line = " Hello user !"` + "\n"
+	config += `}` + "\n"
+	return config
 }

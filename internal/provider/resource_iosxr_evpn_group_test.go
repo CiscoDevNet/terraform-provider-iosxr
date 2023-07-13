@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrEVPNGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_group.test", "group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_group.test", "core_interfaces.0.interface_name", "Bundle-Ether111"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrEVPNGroupConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrEVPNGroupConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_evpn_group.test", "group_id", "1"),
-					resource.TestCheckResourceAttr("iosxr_evpn_group.test", "core_interfaces.0.interface_name", "Bundle-Ether111"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_evpn_group.test",
@@ -30,20 +33,18 @@ func TestAccIosxrEVPNGroup(t *testing.T) {
 }
 
 func testAccIosxrEVPNGroupConfig_minimum() string {
-	return `
-	resource "iosxr_evpn_group" "test" {
-		group_id = 1
-	}
-	`
+	config := `resource "iosxr_evpn_group" "test" {` + "\n"
+	config += `	group_id = 1` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrEVPNGroupConfig_all() string {
-	return `
-	resource "iosxr_evpn_group" "test" {
-		group_id = 1
-		core_interfaces = [{
-			interface_name = "Bundle-Ether111"
-		}]
-	}
-	`
+	config := `resource "iosxr_evpn_group" "test" {` + "\n"
+	config += `	group_id = 1` + "\n"
+	config += `	core_interfaces = [{` + "\n"
+	config += `		interface_name = "Bundle-Ether111"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

@@ -9,34 +9,36 @@ import (
 )
 
 func TestAccDataSourceIosxrSegmentRouting(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_lower_bound", "16000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_lower_bound", "16000"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "global_block_upper_bound", "29999"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_lower_bound", "15000"),
-					resource.TestCheckResourceAttr("data.iosxr_segment_routing.test", "local_block_upper_bound", "15999"),
-				),
+				Config: testAccDataSourceIosxrSegmentRoutingConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSegmentRoutingConfig = `
+func testAccDataSourceIosxrSegmentRoutingConfig() string {
+	config := `resource "iosxr_segment_routing" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	global_block_lower_bound = 16000` + "\n"
+	config += `	global_block_upper_bound = 29999` + "\n"
+	config += `	local_block_lower_bound = 15000` + "\n"
+	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_segment_routing" "test" {
-	delete_mode = "attributes"
-	global_block_lower_bound = 16000
-	global_block_upper_bound = 29999
-	local_block_lower_bound = 15000
-	local_block_upper_bound = 15999
+	config += `
+		data "iosxr_segment_routing" "test" {
+			depends_on = [iosxr_segment_routing.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_segment_routing" "test" {
-	depends_on = [iosxr_segment_routing.test]
-}
-`

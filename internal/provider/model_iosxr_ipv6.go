@@ -17,7 +17,7 @@ type IPv6 struct {
 	Id                               types.String `tfsdk:"id"`
 	DeleteMode                       types.String `tfsdk:"delete_mode"`
 	HopLimit                         types.Int64  `tfsdk:"hop_limit"`
-	IcmpErrorIntervalIntervalTime    types.Int64  `tfsdk:"icmp_error_interval_interval_time"`
+	IcmpErrorInterval                types.Int64  `tfsdk:"icmp_error_interval"`
 	IcmpErrorIntervalBucketSize      types.Int64  `tfsdk:"icmp_error_interval_bucket_size"`
 	SourceRoute                      types.Bool   `tfsdk:"source_route"`
 	AssemblerTimeout                 types.Int64  `tfsdk:"assembler_timeout"`
@@ -33,7 +33,7 @@ type IPv6Data struct {
 	Device                           types.String `tfsdk:"device"`
 	Id                               types.String `tfsdk:"id"`
 	HopLimit                         types.Int64  `tfsdk:"hop_limit"`
-	IcmpErrorIntervalIntervalTime    types.Int64  `tfsdk:"icmp_error_interval_interval_time"`
+	IcmpErrorInterval                types.Int64  `tfsdk:"icmp_error_interval"`
 	IcmpErrorIntervalBucketSize      types.Int64  `tfsdk:"icmp_error_interval_bucket_size"`
 	SourceRoute                      types.Bool   `tfsdk:"source_route"`
 	AssemblerTimeout                 types.Int64  `tfsdk:"assembler_timeout"`
@@ -58,8 +58,8 @@ func (data IPv6) toBody(ctx context.Context) string {
 	if !data.HopLimit.IsNull() && !data.HopLimit.IsUnknown() {
 		body, _ = sjson.Set(body, "hop-limit", strconv.FormatInt(data.HopLimit.ValueInt64(), 10))
 	}
-	if !data.IcmpErrorIntervalIntervalTime.IsNull() && !data.IcmpErrorIntervalIntervalTime.IsUnknown() {
-		body, _ = sjson.Set(body, "icmp.error-interval.interval-time", strconv.FormatInt(data.IcmpErrorIntervalIntervalTime.ValueInt64(), 10))
+	if !data.IcmpErrorInterval.IsNull() && !data.IcmpErrorInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "icmp.error-interval.interval-time", strconv.FormatInt(data.IcmpErrorInterval.ValueInt64(), 10))
 	}
 	if !data.IcmpErrorIntervalBucketSize.IsNull() && !data.IcmpErrorIntervalBucketSize.IsUnknown() {
 		body, _ = sjson.Set(body, "icmp.error-interval.bucket-size", strconv.FormatInt(data.IcmpErrorIntervalBucketSize.ValueInt64(), 10))
@@ -107,10 +107,10 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.HopLimit = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() && !data.IcmpErrorIntervalIntervalTime.IsNull() {
-		data.IcmpErrorIntervalIntervalTime = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() && !data.IcmpErrorInterval.IsNull() {
+		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	} else {
-		data.IcmpErrorIntervalIntervalTime = types.Int64Null()
+		data.IcmpErrorInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "icmp.error-interval.bucket-size"); value.Exists() && !data.IcmpErrorIntervalBucketSize.IsNull() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
@@ -184,7 +184,7 @@ func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 		data.HopLimit = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() {
-		data.IcmpErrorIntervalIntervalTime = types.Int64Value(value.Int())
+		data.IcmpErrorInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "icmp.error-interval.bucket-size"); value.Exists() {
 		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
@@ -255,7 +255,7 @@ func (data *IPv6) getDeletePaths(ctx context.Context) []string {
 	if !data.HopLimit.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hop-limit", data.getPath()))
 	}
-	if !data.IcmpErrorIntervalIntervalTime.IsNull() {
+	if !data.IcmpErrorInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp/error-interval", data.getPath()))
 	}
 	if !data.IcmpErrorIntervalBucketSize.IsNull() {

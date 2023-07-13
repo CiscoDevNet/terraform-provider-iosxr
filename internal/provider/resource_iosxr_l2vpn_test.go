@@ -9,17 +9,20 @@ import (
 )
 
 func TestAccIosxrL2VPN(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "description", "My L2VPN Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "router_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrL2VPNConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrL2VPNConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "description", "My L2VPN Description"),
-					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "router_id", "1.2.3.4"),
-					resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_l2vpn.test",
@@ -31,20 +34,18 @@ func TestAccIosxrL2VPN(t *testing.T) {
 }
 
 func testAccIosxrL2VPNConfig_minimum() string {
-	return `
-	resource "iosxr_l2vpn" "test" {
-	}
-	`
+	config := `resource "iosxr_l2vpn" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrL2VPNConfig_all() string {
-	return `
-	resource "iosxr_l2vpn" "test" {
-		description = "My L2VPN Description"
-		router_id = "1.2.3.4"
-		xconnect_groups = [{
-			group_name = "P2P"
-		}]
-	}
-	`
+	config := `resource "iosxr_l2vpn" "test" {` + "\n"
+	config += `	description = "My L2VPN Description"` + "\n"
+	config += `	router_id = "1.2.3.4"` + "\n"
+	config += `	xconnect_groups = [{` + "\n"
+	config += `		group_name = "P2P"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

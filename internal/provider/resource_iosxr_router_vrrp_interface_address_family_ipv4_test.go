@@ -9,30 +9,33 @@ import (
 )
 
 func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv4(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "vrrp_id", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "version", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "priority", "250"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "name", "TEST"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "text_authentication", "7"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_advertisement_seconds", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_force", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_delay", "255"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "accept_mode_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_interfaces.0.priority_decrement", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.object_name", "OBJECT"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.priority_decrement", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "bfd_fast_detect_peer_ipv4", "33.33.33.3"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "vrrp_id", "123"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "version", "2"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "address", "1.1.1.1"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "priority", "250"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "name", "TEST"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "text_authentication", "7"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_advertisement_seconds", "123"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "timer_force", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_disable", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "preempt_delay", "255"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "accept_mode_disable", "false"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_interfaces.0.priority_decrement", "12"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.object_name", "OBJECT"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.priority_decrement", "22"),
-					resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "bfd_fast_detect_peer_ipv4", "33.33.33.3"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv4.test",
@@ -44,39 +47,37 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv4(t *testing.T) {
 }
 
 func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_minimum() string {
-	return `
-	resource "iosxr_router_vrrp_interface_address_family_ipv4" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		vrrp_id = 123
-		version = 2
-	}
-	`
+	config := `resource "iosxr_router_vrrp_interface_address_family_ipv4" "test" {` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	vrrp_id = 123` + "\n"
+	config += `	version = 2` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_all() string {
-	return `
-	resource "iosxr_router_vrrp_interface_address_family_ipv4" "test" {
-		interface_name = "GigabitEthernet0/0/0/1"
-		vrrp_id = 123
-		version = 2
-		address = "1.1.1.1"
-		priority = 250
-		name = "TEST"
-		text_authentication = "7"
-		timer_advertisement_seconds = 123
-		timer_force = false
-		preempt_disable = false
-		preempt_delay = 255
-		accept_mode_disable = false
-		track_interfaces = [{
-			interface_name = "GigabitEthernet0/0/0/1"
-			priority_decrement = 12
-		}]
-		track_objects = [{
-			object_name = "OBJECT"
-			priority_decrement = 22
-		}]
-		bfd_fast_detect_peer_ipv4 = "33.33.33.3"
-	}
-	`
+	config := `resource "iosxr_router_vrrp_interface_address_family_ipv4" "test" {` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	vrrp_id = 123` + "\n"
+	config += `	version = 2` + "\n"
+	config += `	address = "1.1.1.1"` + "\n"
+	config += `	priority = 250` + "\n"
+	config += `	name = "TEST"` + "\n"
+	config += `	text_authentication = "7"` + "\n"
+	config += `	timer_advertisement_seconds = 123` + "\n"
+	config += `	timer_force = false` + "\n"
+	config += `	preempt_disable = false` + "\n"
+	config += `	preempt_delay = 255` + "\n"
+	config += `	accept_mode_disable = false` + "\n"
+	config += `	track_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		priority_decrement = 12` + "\n"
+	config += `	}]` + "\n"
+	config += `	track_objects = [{` + "\n"
+	config += `		object_name = "OBJECT"` + "\n"
+	config += `		priority_decrement = 22` + "\n"
+	config += `	}]` + "\n"
+	config += `	bfd_fast_detect_peer_ipv4 = "33.33.33.3"` + "\n"
+	config += `}` + "\n"
+	return config
 }

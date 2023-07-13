@@ -9,30 +9,32 @@ import (
 )
 
 func TestAccDataSourceIosxrSNMPServerMIB(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_ifalias_long", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifindex_persist", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerMIBConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifmib_ifalias_long", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_snmp_server_mib.test", "ifindex_persist", "true"),
-				),
+				Config: testAccDataSourceIosxrSNMPServerMIBConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrSNMPServerMIBConfig = `
+func testAccDataSourceIosxrSNMPServerMIBConfig() string {
+	config := `resource "iosxr_snmp_server_mib" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	ifmib_ifalias_long = true` + "\n"
+	config += `	ifindex_persist = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_snmp_server_mib" "test" {
-	delete_mode = "attributes"
-	ifmib_ifalias_long = true
-	ifindex_persist = true
+	config += `
+		data "iosxr_snmp_server_mib" "test" {
+			depends_on = [iosxr_snmp_server_mib.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_snmp_server_mib" "test" {
-	depends_on = [iosxr_snmp_server_mib.test]
-}
-`

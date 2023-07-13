@@ -9,60 +9,62 @@ import (
 )
 
 func TestAccDataSourceIosxrDomain(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "domains.0.domain_name", "DOMAIN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "domains.0.order", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "lookup_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "lookup_source_interface", "Loopback2147483647"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "name", "DOMAIN"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv4_hosts.0.host_name", "HOST_NAME"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "name_servers.0.address", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "name_servers.0.order", "345"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "multicast", "DOMAIN1_ACC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain.test", "default_flows_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrDomainConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "domains.0.domain_name", "DOMAIN1"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "domains.0.order", "0"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "lookup_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "lookup_source_interface", "Loopback2147483647"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "name", "DOMAIN"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv4_hosts.0.host_name", "HOST_NAME"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "name_servers.0.address", "10.0.0.1"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "name_servers.0.order", "345"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "ipv6_hosts.0.ipv6_address.0", "10::10"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "multicast", "DOMAIN1_ACC"),
-					resource.TestCheckResourceAttr("data.iosxr_domain.test", "default_flows_disable", "true"),
-				),
+				Config: testAccDataSourceIosxrDomainConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrDomainConfig = `
+func testAccDataSourceIosxrDomainConfig() string {
+	config := `resource "iosxr_domain" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	domains = [{` + "\n"
+	config += `		domain_name = "DOMAIN1"` + "\n"
+	config += `		order = 0` + "\n"
+	config += `	}]` + "\n"
+	config += `	lookup_disable = true` + "\n"
+	config += `	lookup_source_interface = "Loopback2147483647"` + "\n"
+	config += `	name = "DOMAIN"` + "\n"
+	config += `	ipv4_hosts = [{` + "\n"
+	config += `		host_name = "HOST_NAME"` + "\n"
+	config += `		ip_address = ["10.0.0.0"]` + "\n"
+	config += `	}]` + "\n"
+	config += `	name_servers = [{` + "\n"
+	config += `		address = "10.0.0.1"` + "\n"
+	config += `		order = 345` + "\n"
+	config += `	}]` + "\n"
+	config += `	ipv6_hosts = [{` + "\n"
+	config += `		host_name = "HOST_NAME_IPV6"` + "\n"
+	config += `		ipv6_address = ["10::10"]` + "\n"
+	config += `	}]` + "\n"
+	config += `	multicast = "DOMAIN1_ACC"` + "\n"
+	config += `	default_flows_disable = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_domain" "test" {
-	delete_mode = "attributes"
-	domains = [{
-		domain_name = "DOMAIN1"
-		order = 0
-	}]
-	lookup_disable = true
-	lookup_source_interface = "Loopback2147483647"
-	name = "DOMAIN"
-	ipv4_hosts = [{
-		host_name = "HOST_NAME"
-		ip_address = ["10.0.0.0"]
-	}]
-	name_servers = [{
-		address = "10.0.0.1"
-		order = 345
-	}]
-	ipv6_hosts = [{
-		host_name = "HOST_NAME_IPV6"
-		ipv6_address = ["10::10"]
-	}]
-	multicast = "DOMAIN1_ACC"
-	default_flows_disable = true
+	config += `
+		data "iosxr_domain" "test" {
+			depends_on = [iosxr_domain.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_domain" "test" {
-	depends_on = [iosxr_domain.test]
-}
-`

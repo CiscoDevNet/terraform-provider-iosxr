@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrLoggingSourceInterface(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "name", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "vrfs.0.name", "VRF1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLoggingSourceInterfaceConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLoggingSourceInterfaceConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "name", "Loopback0"),
-					resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "vrfs.0.name", "VRF1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_logging_source_interface.test",
@@ -30,20 +33,18 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 }
 
 func testAccIosxrLoggingSourceInterfaceConfig_minimum() string {
-	return `
-	resource "iosxr_logging_source_interface" "test" {
-		name = "Loopback0"
-	}
-	`
+	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
+	config += `	name = "Loopback0"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrLoggingSourceInterfaceConfig_all() string {
-	return `
-	resource "iosxr_logging_source_interface" "test" {
-		name = "Loopback0"
-		vrfs = [{
-			name = "VRF1"
-		}]
-	}
-	`
+	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
+	config += `	name = "Loopback0"` + "\n"
+	config += `	vrfs = [{` + "\n"
+	config += `		name = "VRF1"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

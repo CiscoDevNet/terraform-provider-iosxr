@@ -9,15 +9,18 @@ import (
 )
 
 func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group.test", "group_name", "BG123"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrL2VPNBridgeGroupConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrL2VPNBridgeGroupConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group.test", "group_name", "BG123"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_l2vpn_bridge_group.test",
@@ -29,17 +32,15 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 }
 
 func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
-	return `
-	resource "iosxr_l2vpn_bridge_group" "test" {
-		group_name = "BG123"
-	}
-	`
+	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
+	config += `	group_name = "BG123"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrL2VPNBridgeGroupConfig_all() string {
-	return `
-	resource "iosxr_l2vpn_bridge_group" "test" {
-		group_name = "BG123"
-	}
-	`
+	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
+	config += `	group_name = "BG123"` + "\n"
+	config += `}` + "\n"
+	return config
 }

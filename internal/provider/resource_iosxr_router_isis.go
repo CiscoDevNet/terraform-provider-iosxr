@@ -186,7 +186,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
 				},

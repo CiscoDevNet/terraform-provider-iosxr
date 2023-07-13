@@ -9,20 +9,23 @@ import (
 )
 
 func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "saf_name", "unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "af_name", "ipv4"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "saf_name", "unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"),
-					resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_isis_interface_address_family.test",
@@ -45,31 +48,29 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
-	return `
-	resource "iosxr_router_isis_interface_address_family" "test" {
-		process_id = "P1"
-		interface_name = "GigabitEthernet0/0/0/1"
-		af_name = "ipv4"
-		saf_name = "unicast"
-		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_isis_interface_address_family" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	af_name = "ipv4"` + "\n"
+	config += `	saf_name = "unicast"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
-	return `
-	resource "iosxr_router_isis_interface_address_family" "test" {
-		process_id = "P1"
-		interface_name = "GigabitEthernet0/0/0/1"
-		af_name = "ipv4"
-		saf_name = "unicast"
-		fast_reroute_per_prefix_levels = [{
-			level_id = 1
-			ti_lfa = true
-		}]
-		tag = 100
-		advertise_prefix_route_policy = "ROUTE_POLICY_1"
-  		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_isis_interface_address_family" "test" {` + "\n"
+	config += `	process_id = "P1"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	af_name = "ipv4"` + "\n"
+	config += `	saf_name = "unicast"` + "\n"
+	config += `	fast_reroute_per_prefix_levels = [{` + "\n"
+	config += `		level_id = 1` + "\n"
+	config += `		ti_lfa = true` + "\n"
+	config += `	}]` + "\n"
+	config += `	tag = 100` + "\n"
+	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

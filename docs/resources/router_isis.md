@@ -79,7 +79,6 @@ resource "iosxr_router_isis" "example" {
 
 ### Required
 
-- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `process_id` (String) Process ID
 
 ### Optional
@@ -105,6 +104,7 @@ resource "iosxr_router_isis" "example" {
   - Range: `0`-`120000`
 - `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
   - Range: `0`-`120000`
+- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
   - Range: `1`-`65535`
 - `max_lsp_lifetime` (Number) Set maximum LSP lifetime

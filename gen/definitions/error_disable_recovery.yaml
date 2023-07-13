@@ -1,0 +1,45 @@
+---
+name: Error Disable Recovery
+path: Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause
+doc_category: System
+attributes:
+  - yang_name: link-oam-session-down/interval
+    example: 30
+  - yang_name: link-oam-discovery-timeout/interval
+    example: 40
+  - yang_name: link-oam-capabilities-conflict/interval
+    example: 50
+  - yang_name: link-oam-miswired/interval
+    example: 60
+  - yang_name: link-oam-link-fault/interval
+    example: 70
+  - yang_name: link-oam-dying-gasp/interval
+    example: 80
+  - yang_name: link-oam-critical-event/interval
+    example: 90
+  - yang_name: link-oam-threshold-breached/interval
+    example: 92
+  - yang_name: stp-bpdu-guard/interval
+    example: 94
+  - yang_name: stp-legacy-bpdu/interval
+    example: 96
+  - yang_name: cluster-udld/interval
+    example: 98
+  - yang_name: cluster-minlinks/interval
+    example: 100
+  - yang_name: udld-unidirectional/interval
+    example: 110
+  - yang_name: udld-neighbor-mismatch/interval
+    example: 120
+  - yang_name: udld-timeout/interval
+    example: 140
+  - yang_name: udld-loopback/interval
+    example: 150
+  - yang_name: pvrst-pvid-mismatch/interval
+    example: 160
+  - yang_name: l2vpn-bport-mac-move/interval
+    example: 170
+  - yang_name: ot-track-state-change/interval
+    example: 180
+  - yang_name: link-oam-dampening/interval
+    example: 190

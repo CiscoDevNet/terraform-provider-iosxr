@@ -55,9 +55,6 @@ resource "iosxr_router_bgp_vrf" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_bgp_keepalive_interval` (Number) BGP timers
-  - Range: `0`-`65535`
 - `vrf_name` (String) Specify a vrf name
 
 ### Optional
@@ -83,6 +80,9 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `rd_two_byte_as_as_number` (String) bgp as-number
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
   - Range: `0`-`4294967295`
+- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_bgp_keepalive_interval` (Number) BGP timers
+  - Range: `0`-`65535`
 
 ### Read-Only
 

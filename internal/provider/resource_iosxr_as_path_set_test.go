@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrASPathSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_as_path_set.test", "set_name", "TEST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_as_path_set.test", "rpl", "as-path-set TEST1\n  length ge 10\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrASPathSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrASPathSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_as_path_set.test", "set_name", "TEST1"),
-					resource.TestCheckResourceAttr("iosxr_as_path_set.test", "rpl", "as-path-set TEST1\n  length ge 10\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_as_path_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrASPathSet(t *testing.T) {
 }
 
 func testAccIosxrASPathSetConfig_minimum() string {
-	return `
-	resource "iosxr_as_path_set" "test" {
-		set_name = "TEST1"
-		rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_as_path_set" "test" {` + "\n"
+	config += `	set_name = "TEST1"` + "\n"
+	config += `	rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrASPathSetConfig_all() string {
-	return `
-	resource "iosxr_as_path_set" "test" {
-		set_name = "TEST1"
-		rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_as_path_set" "test" {` + "\n"
+	config += `	set_name = "TEST1"` + "\n"
+	config += `	rpl = "as-path-set TEST1\n  length ge 10\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

@@ -9,22 +9,25 @@ import (
 )
 
 func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "af_name", "ipv4-unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inheritance_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "af_name", "ipv4-unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inheritance_disable", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_bgp_vrf_neighbor_address_family.test",
@@ -103,32 +106,30 @@ resource "iosxr_gnmi" "PreReq3" {
 `
 
 func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum() string {
-	return `
-	resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
-		as_number = "65001"
-		vrf_name = "VRF1"
-		neighbor_address = "10.1.1.2"
-		af_name = "ipv4-unicast"
-		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
-	}
-	`
+	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	neighbor_address = "10.1.1.2"` + "\n"
+	config += `	af_name = "ipv4-unicast"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
-	return `
-	resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
-		as_number = "65001"
-		vrf_name = "VRF1"
-		neighbor_address = "10.1.1.2"
-		af_name = "ipv4-unicast"
-		route_policy_in = "ROUTE_POLICY_1"
-		route_policy_out = "ROUTE_POLICY_1"
-		default_originate_route_policy = "ROUTE_POLICY_1"
-		next_hop_self_inheritance_disable = true
-		soft_reconfiguration_inbound_always = true
-		send_community_ebgp_inheritance_disable = true
-		remove_private_as_inheritance_disable = true
-  		depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]
-	}
-	`
+	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	neighbor_address = "10.1.1.2"` + "\n"
+	config += `	af_name = "ipv4-unicast"` + "\n"
+	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
+	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	next_hop_self_inheritance_disable = true` + "\n"
+	config += `	soft_reconfiguration_inbound_always = true` + "\n"
+	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
+	config += `	remove_private_as_inheritance_disable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

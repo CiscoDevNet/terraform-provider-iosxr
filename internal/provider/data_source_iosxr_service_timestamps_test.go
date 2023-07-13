@@ -9,49 +9,51 @@ import (
 )
 
 func TestAccDataSourceIosxrServiceTimestamps(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_localtime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_msec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_year", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_uptime", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrServiceTimestampsConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_localtime", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_msec", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_year", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_uptime", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_disable", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_localtime", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_msec", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_year", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_uptime", "true"),
-					resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_disable", "true"),
-				),
+				Config: testAccDataSourceIosxrServiceTimestampsConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrServiceTimestampsConfig = `
+func testAccDataSourceIosxrServiceTimestampsConfig() string {
+	config := `resource "iosxr_service_timestamps" "test" {` + "\n"
+	config += `	debug_datetime_localtime = true` + "\n"
+	config += `	debug_datetime_msec = true` + "\n"
+	config += `	debug_datetime_show_timezone = true` + "\n"
+	config += `	debug_datetime_year = true` + "\n"
+	config += `	debug_uptime = true` + "\n"
+	config += `	debug_disable = true` + "\n"
+	config += `	log_datetime_localtime = true` + "\n"
+	config += `	log_datetime_msec = true` + "\n"
+	config += `	log_datetime_show_timezone = true` + "\n"
+	config += `	log_datetime_year = true` + "\n"
+	config += `	log_uptime = true` + "\n"
+	config += `	log_disable = true` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_service_timestamps" "test" {
-	debug_datetime_localtime = true
-	debug_datetime_msec = true
-	debug_datetime_show_timezone = true
-	debug_datetime_year = true
-	debug_uptime = true
-	debug_disable = true
-	log_datetime_localtime = true
-	log_datetime_msec = true
-	log_datetime_show_timezone = true
-	log_datetime_year = true
-	log_uptime = true
-	log_disable = true
+	config += `
+		data "iosxr_service_timestamps" "test" {
+			depends_on = [iosxr_service_timestamps.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_service_timestamps" "test" {
-	depends_on = [iosxr_service_timestamps.test]
-}
-`

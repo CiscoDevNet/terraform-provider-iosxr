@@ -9,21 +9,24 @@ import (
 )
 
 func TestAccIosxrSegmentRoutingV6(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrSegmentRoutingV6Config_minimum(),
+			},
+			{
 				Config: testAccIosxrSegmentRoutingV6Config_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "encapsulation_source_address", "fccc:0:214::1"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.locator_enable", "true"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.name", "Locator1"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"),
-					resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_segment_routing_v6.test",
@@ -35,24 +38,22 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 }
 
 func testAccIosxrSegmentRoutingV6Config_minimum() string {
-	return `
-	resource "iosxr_segment_routing_v6" "test" {
-	}
-	`
+	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrSegmentRoutingV6Config_all() string {
-	return `
-	resource "iosxr_segment_routing_v6" "test" {
-		enable = true
-		encapsulation_source_address = "fccc:0:214::1"
-		locators = [{
-			locator_enable = true
-			name = "Locator1"
-			micro_segment_behavior = "unode-psp-usd"
-			prefix = "fccc:0:214::"
-			prefix_length = 48
-		}]
-	}
-	`
+	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	encapsulation_source_address = "fccc:0:214::1"` + "\n"
+	config += `	locators = [{` + "\n"
+	config += `		locator_enable = true` + "\n"
+	config += `		name = "Locator1"` + "\n"
+	config += `		micro_segment_behavior = "unode-psp-usd"` + "\n"
+	config += `		prefix = "fccc:0:214::"` + "\n"
+	config += `		prefix_length = 48` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
+	return config
 }

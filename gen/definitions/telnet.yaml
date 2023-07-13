@@ -1,0 +1,35 @@
+---
+name: Telnet
+path: Cisco-IOS-XR-um-telnet-cfg:/telnet
+doc_category: System
+attributes:
+  - yang_name: ipv4/client/source-interface
+    example: GigabitEthernet0/0/0/1
+  - yang_name: ipv6/client/source-interface
+    example: GigabitEthernet0/0/0/1
+    exclude_test: true
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: ROI
+      - yang_name: ipv4/server/max-servers
+        example: 32
+      - yang_name: ipv4/server/access-list
+        example: ACCESS1
+      - yang_name: ipv6/server/max-servers
+        example: 34
+      - yang_name: ipv6/server/access-list
+        example: ACCESS11
+  - yang_name: vrfs/vrf-dscp
+    tf_name: vrfs_dscp
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: TOI
+      - yang_name: ipv4/dscp 
+        example: 55
+      

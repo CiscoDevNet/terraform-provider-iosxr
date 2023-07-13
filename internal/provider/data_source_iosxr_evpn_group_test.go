@@ -9,32 +9,34 @@ import (
 )
 
 func TestAccDataSourceIosxrEVPNGroup(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_group.test", "core_interfaces.0.interface_name", "Bundle-Ether111"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNGroupConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_evpn_group.test", "core_interfaces.0.interface_name", "Bundle-Ether111"),
-				),
+				Config: testAccDataSourceIosxrEVPNGroupConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrEVPNGroupConfig = `
+func testAccDataSourceIosxrEVPNGroupConfig() string {
+	config := `resource "iosxr_evpn_group" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	group_id = 1` + "\n"
+	config += `	core_interfaces = [{` + "\n"
+	config += `		interface_name = "Bundle-Ether111"` + "\n"
+	config += `	}]` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_evpn_group" "test" {
-	delete_mode = "attributes"
-	group_id = 1
-	core_interfaces = [{
-		interface_name = "Bundle-Ether111"
-	}]
+	config += `
+		data "iosxr_evpn_group" "test" {
+			group_id = 1
+			depends_on = [iosxr_evpn_group.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_evpn_group" "test" {
-	group_id = 1
-	depends_on = [iosxr_evpn_group.test]
-}
-`

@@ -9,20 +9,23 @@ import (
 )
 
 func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "af_name", "vpnv4-unicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type_srv6", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrRouterBGPNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPNeighborAddressFamilyConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "af_name", "vpnv4-unicast"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"),
-					resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type_srv6", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_router_bgp_neighbor_address_family.test",
@@ -65,28 +68,26 @@ resource "iosxr_gnmi" "PreReq0" {
 `
 
 func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
-	return `
-	resource "iosxr_router_bgp_neighbor_address_family" "test" {
-		as_number = "65001"
-		neighbor_address = "10.1.1.2"
-		af_name = "vpnv4-unicast"
-		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_bgp_neighbor_address_family" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	neighbor_address = "10.1.1.2"` + "\n"
+	config += `	af_name = "vpnv4-unicast"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
-	return `
-	resource "iosxr_router_bgp_neighbor_address_family" "test" {
-		as_number = "65001"
-		neighbor_address = "10.1.1.2"
-		af_name = "vpnv4-unicast"
-		import_stitching_rt_re_originate_stitching_rt = true
-		route_reflector_client_inheritance_disable = true
-		advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
-		next_hop_self_inheritance_disable = true
-		encapsulation_type_srv6 = true
-  		depends_on = [iosxr_gnmi.PreReq0, ]
-	}
-	`
+	config := `resource "iosxr_router_bgp_neighbor_address_family" "test" {` + "\n"
+	config += `	as_number = "65001"` + "\n"
+	config += `	neighbor_address = "10.1.1.2"` + "\n"
+	config += `	af_name = "vpnv4-unicast"` + "\n"
+	config += `	import_stitching_rt_re_originate_stitching_rt = true` + "\n"
+	config += `	route_reflector_client_inheritance_disable = true` + "\n"
+	config += `	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true` + "\n"
+	config += `	next_hop_self_inheritance_disable = true` + "\n"
+	config += `	encapsulation_type_srv6 = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `}` + "\n"
+	return config
 }

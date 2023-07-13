@@ -9,30 +9,32 @@ import (
 )
 
 func TestAccDataSourceIosxrIPv4AccessListOptions(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv4_access_list_options.test", "log_update_threshold", "214748"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv4_access_list_options.test", "log_update_rate", "1000"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrIPv4AccessListOptionsConfig,
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_ipv4_access_list_options.test", "log_update_threshold", "214748"),
-					resource.TestCheckResourceAttr("data.iosxr_ipv4_access_list_options.test", "log_update_rate", "1000"),
-				),
+				Config: testAccDataSourceIosxrIPv4AccessListOptionsConfig(),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-const testAccDataSourceIosxrIPv4AccessListOptionsConfig = `
+func testAccDataSourceIosxrIPv4AccessListOptionsConfig() string {
+	config := `resource "iosxr_ipv4_access_list_options" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
+	config += `	log_update_threshold = 214748` + "\n"
+	config += `	log_update_rate = 1000` + "\n"
+	config += `}` + "\n"
 
-resource "iosxr_ipv4_access_list_options" "test" {
-	delete_mode = "attributes"
-	log_update_threshold = 214748
-	log_update_rate = 1000
+	config += `
+		data "iosxr_ipv4_access_list_options" "test" {
+			depends_on = [iosxr_ipv4_access_list_options.test]
+		}
+	`
+	return config
 }
-
-data "iosxr_ipv4_access_list_options" "test" {
-	depends_on = [iosxr_ipv4_access_list_options.test]
-}
-`

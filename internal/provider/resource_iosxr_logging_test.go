@@ -9,25 +9,28 @@ import (
 )
 
 func TestAccIosxrLogging(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "ipv4_dscp", "cs6"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "trap", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "events_display_location", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "events_level", "informational"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "console", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "monitor", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_logging_buffer_size", "4000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_level", "debugging"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "facility_level", "local7"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "suppress_duplicates", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrLoggingConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrLoggingConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_logging.test", "ipv4_dscp", "cs6"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "trap", "informational"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "events_display_location", "true"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "events_level", "informational"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "console", "disable"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "monitor", "disable"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_logging_buffer_size", "4000000"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "buffered_level", "debugging"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "facility_level", "local7"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "hostnameprefix", "HOSTNAME01"),
-					resource.TestCheckResourceAttr("iosxr_logging.test", "suppress_duplicates", "true"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_logging.test",
@@ -39,26 +42,24 @@ func TestAccIosxrLogging(t *testing.T) {
 }
 
 func testAccIosxrLoggingConfig_minimum() string {
-	return `
-	resource "iosxr_logging" "test" {
-	}
-	`
+	config := `resource "iosxr_logging" "test" {` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrLoggingConfig_all() string {
-	return `
-	resource "iosxr_logging" "test" {
-		ipv4_dscp = "cs6"
-		trap = "informational"
-		events_display_location = true
-		events_level = "informational"
-		console = "disable"
-		monitor = "disable"
-		buffered_logging_buffer_size = 4000000
-		buffered_level = "debugging"
-		facility_level = "local7"
-		hostnameprefix = "HOSTNAME01"
-		suppress_duplicates = true
-	}
-	`
+	config := `resource "iosxr_logging" "test" {` + "\n"
+	config += `	ipv4_dscp = "cs6"` + "\n"
+	config += `	trap = "informational"` + "\n"
+	config += `	events_display_location = true` + "\n"
+	config += `	events_level = "informational"` + "\n"
+	config += `	console = "disable"` + "\n"
+	config += `	monitor = "disable"` + "\n"
+	config += `	buffered_logging_buffer_size = 4000000` + "\n"
+	config += `	buffered_level = "debugging"` + "\n"
+	config += `	facility_level = "local7"` + "\n"
+	config += `	hostnameprefix = "HOSTNAME01"` + "\n"
+	config += `	suppress_duplicates = true` + "\n"
+	config += `}` + "\n"
+	return config
 }

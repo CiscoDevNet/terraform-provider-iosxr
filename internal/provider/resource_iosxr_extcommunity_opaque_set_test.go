@@ -9,16 +9,19 @@ import (
 )
 
 func TestAccIosxrExtcommunityOpaqueSet(t *testing.T) {
+	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "set_name", "BLUE"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "rpl", "extcommunity-set opaque BLUE\n  100\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccIosxrExtcommunityOpaqueSetConfig_minimum(),
+			},
+			{
 				Config: testAccIosxrExtcommunityOpaqueSetConfig_all(),
-				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "set_name", "BLUE"),
-					resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "rpl", "extcommunity-set opaque BLUE\n  100\nend-set\n"),
-				),
+				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 			{
 				ResourceName:  "iosxr_extcommunity_opaque_set.test",
@@ -30,19 +33,17 @@ func TestAccIosxrExtcommunityOpaqueSet(t *testing.T) {
 }
 
 func testAccIosxrExtcommunityOpaqueSetConfig_minimum() string {
-	return `
-	resource "iosxr_extcommunity_opaque_set" "test" {
-		set_name = "BLUE"
-		rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_opaque_set" "test" {` + "\n"
+	config += `	set_name = "BLUE"` + "\n"
+	config += `	rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }
 
 func testAccIosxrExtcommunityOpaqueSetConfig_all() string {
-	return `
-	resource "iosxr_extcommunity_opaque_set" "test" {
-		set_name = "BLUE"
-		rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"
-	}
-	`
+	config := `resource "iosxr_extcommunity_opaque_set" "test" {` + "\n"
+	config += `	set_name = "BLUE"` + "\n"
+	config += `	rpl = "extcommunity-set opaque BLUE\n  100\nend-set\n"` + "\n"
+	config += `}` + "\n"
+	return config
 }

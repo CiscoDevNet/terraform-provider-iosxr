@@ -12,11 +12,10 @@ import (
 )
 
 type RDSet struct {
-	Device     types.String `tfsdk:"device"`
-	Id         types.String `tfsdk:"id"`
-	DeleteMode types.String `tfsdk:"delete_mode"`
-	SetName    types.String `tfsdk:"set_name"`
-	Rpl        types.String `tfsdk:"rpl"`
+	Device  types.String `tfsdk:"device"`
+	Id      types.String `tfsdk:"id"`
+	SetName types.String `tfsdk:"set_name"`
+	Rpl     types.String `tfsdk:"rpl"`
 }
 
 type RDSetData struct {

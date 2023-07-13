@@ -26,7 +26,6 @@ func TestAccDataSourceIosxrRDSet(t *testing.T) {
 const testAccDataSourceIosxrRDSetConfig = `
 
 resource "iosxr_rd_set" "test" {
-	delete_mode = "attributes"
 	set_name = "set1"
 	rpl = "rd-set set1\nend-set\n"
 }

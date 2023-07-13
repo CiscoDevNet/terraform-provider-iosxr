@@ -1,6 +1,7 @@
 ---
 name: RD Set
 path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=%s]
+no_delete_attributes: true 
 doc_category: Route Policy
 attributes:
   - yang_name: set-name

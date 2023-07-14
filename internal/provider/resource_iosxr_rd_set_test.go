@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrRDSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "set_name", "set1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRDSetConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRDSetConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_rd_set.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=set1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRDSetConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRDSetConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_rd_set.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/rd-sets/rd-set[set-name=set1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

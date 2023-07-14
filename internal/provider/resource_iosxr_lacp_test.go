@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrLACP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lacp.test", "mac", "00:11:00:11:00:11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lacp.test", "priority", "1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrLACPConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrLACPConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_lacp.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-lacp-cfg:/lacp/system",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrLACPConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrLACPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_lacp.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-lacp-cfg:/lacp/system",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

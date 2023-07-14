@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrPrefixSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_prefix_set.test", "set_name", "PREFIX_SET_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_prefix_set.test", "rpl", "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrPrefixSetConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrPrefixSetConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_prefix_set.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrPrefixSetConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrPrefixSetConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_prefix_set.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

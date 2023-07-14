@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -13,23 +14,25 @@ func TestAccIosxrL2VPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "description", "My L2VPN Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "router_id", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrL2VPNConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrL2VPNConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_l2vpn.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrL2VPNConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrL2VPNConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_l2vpn.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

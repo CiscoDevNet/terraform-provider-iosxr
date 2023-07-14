@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -21,23 +22,25 @@ func TestAccIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_capabilities_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_description_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_system_name_disable", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrLLDPConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrLLDPConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_lldp.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-lldp-cfg:/lldp",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrLLDPConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrLLDPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_lldp.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-lldp-cfg:/lldp",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

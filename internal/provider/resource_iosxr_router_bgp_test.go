@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -48,23 +49,25 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.remote_as", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.update_source", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.bfd_minimum_interval", "3"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_bgp.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterBGPPrerequisitesConfig + testAccIosxrRouterBGPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_bgp.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

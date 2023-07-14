@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrExtcommunityOpaqueSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "set_name", "BLUE"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_extcommunity_opaque_set.test", "rpl", "extcommunity-set opaque BLUE\n  100\nend-set\n"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrExtcommunityOpaqueSetConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrExtcommunityOpaqueSetConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_extcommunity_opaque_set.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=BLUE]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrExtcommunityOpaqueSetConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrExtcommunityOpaqueSetConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_extcommunity_opaque_set.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=BLUE]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

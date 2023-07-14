@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -11,23 +12,25 @@ import (
 func TestAccIosxrEVPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn.test", "source_interface", "Loopback0"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrEVPNConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrEVPNConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_evpn.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrEVPNConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrEVPNConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_evpn.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

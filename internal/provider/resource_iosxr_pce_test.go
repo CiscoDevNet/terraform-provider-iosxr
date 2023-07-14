@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -17,23 +18,25 @@ func TestAccIosxrPCE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_sibling_ipv4", "100.100.100.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_users.0.user_name", "rest-user"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_pce.test", "api_users.0.password_encrypted", "00141215174C04140B"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrPCEConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrPCEConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_pce.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-pce-cfg:/pce",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrPCEConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrPCEConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_pce.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-pce-cfg:/pce",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

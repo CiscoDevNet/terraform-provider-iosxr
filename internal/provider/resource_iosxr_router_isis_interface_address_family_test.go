@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,23 +17,25 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_isis_interface_address_family.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterISISInterfaceAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISInterfaceAddressFamilyConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_isis_interface_address_family.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-families/address-family[af-name=ipv4][saf-name=unicast]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

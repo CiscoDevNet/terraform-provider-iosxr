@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -18,23 +19,25 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrPolicyMapQoSConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrPolicyMapQoSConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_policy_map_qos.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrPolicyMapQoSConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrPolicyMapQoSConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_policy_map_qos.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

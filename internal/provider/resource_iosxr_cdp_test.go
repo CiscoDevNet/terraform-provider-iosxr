@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -15,23 +16,25 @@ func TestAccIosxrCDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "timer", "34"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "advertise_v1", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_cdp.test", "log_adjacency_changes", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrCDPConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrCDPConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_cdp.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-cdp-cfg:/cdp",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrCDPConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrCDPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_cdp.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-cdp-cfg:/cdp",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

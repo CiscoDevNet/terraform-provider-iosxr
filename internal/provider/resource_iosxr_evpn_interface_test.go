@@ -35,23 +35,25 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_active", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_flow_active", "false"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrEVPNInterfaceConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrEVPNInterfaceConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_evpn_interface.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=Bundle-Ether12]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrEVPNInterfaceConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrEVPNInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_evpn_interface.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=Bundle-Ether12]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

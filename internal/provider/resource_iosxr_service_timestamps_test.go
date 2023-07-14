@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -22,23 +23,25 @@ func TestAccIosxrServiceTimestamps(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_datetime_year", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_uptime", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_service_timestamps.test", "log_disable", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrServiceTimestampsConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrServiceTimestampsConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_service_timestamps.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrServiceTimestampsConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrServiceTimestampsConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_service_timestamps.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

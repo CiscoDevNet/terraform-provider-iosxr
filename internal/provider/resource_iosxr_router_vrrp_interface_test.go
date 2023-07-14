@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,23 +17,25 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface.test", "delay_reload", "4321"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface.test", "bfd_minimum_interval", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface.test", "bfd_multiplier", "33"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterVRRPInterfaceConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterVRRPInterfaceConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_vrrp_interface.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterVRRPInterfaceConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterVRRPInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_vrrp_interface.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -21,23 +22,25 @@ func TestAccIosxrLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "facility_level", "local7"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "hostnameprefix", "HOSTNAME01"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging.test", "suppress_duplicates", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrLoggingConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrLoggingConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_logging.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrLoggingConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrLoggingConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_logging.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

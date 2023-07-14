@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrIPv6AccessListOptions(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list_options.test", "log_update_threshold", "214748"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list_options.test", "log_update_rate", "1000"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrIPv6AccessListOptionsConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrIPv6AccessListOptionsConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_ipv6_access_list_options.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-list-options",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrIPv6AccessListOptionsConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrIPv6AccessListOptionsConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_ipv6_access_list_options.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-list-options",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

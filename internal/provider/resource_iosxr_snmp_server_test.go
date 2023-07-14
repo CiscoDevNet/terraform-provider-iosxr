@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -46,23 +47,25 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_notify", "VIEW3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_ipv4", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_ipv6", "ACL2"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrSNMPServerConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrSNMPServerConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_snmp_server.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrSNMPServerConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrSNMPServerConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_snmp_server.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

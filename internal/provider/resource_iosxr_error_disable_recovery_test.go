@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -30,23 +31,25 @@ func TestAccIosxrErrorDisableRecovery(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_error_disable_recovery.test", "l2vpn_bport_mac_move_interval", "170"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_error_disable_recovery.test", "ot_track_state_change_interval", "180"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_error_disable_recovery.test", "link_oam_dampening_interval", "190"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrErrorDisableRecoveryConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrErrorDisableRecoveryConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_error_disable_recovery.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrErrorDisableRecoveryConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrErrorDisableRecoveryConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_error_disable_recovery.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

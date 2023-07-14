@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -24,23 +25,25 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "track_objects.0.object_name", "OBJECT"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "track_objects.0.priority_decrement", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv6.test", "bfd_fast_detect_peer_ipv6", "3::3"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv6.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=124)]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv6.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=124)]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -18,23 +19,25 @@ func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inheritance_disable", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_bgp_vrf_neighbor_address_family.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/neighbors/neighbor[neighbor-address=10.1.1.2]/address-families/address-family[af-name=ipv4-unicast]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig + testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_bgp_vrf_neighbor_address_family.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]/neighbors/neighbor[neighbor-address=10.1.1.2]/address-families/address-family[af-name=ipv4-unicast]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

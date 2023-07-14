@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -18,23 +19,25 @@ func TestAccIosxrTelnet(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telnet.test", "vrfs.0.ipv6_server_access_list", "ACCESS11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telnet.test", "vrfs_dscp.0.vrf_name", "TOI"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_telnet.test", "vrfs_dscp.0.ipv4_dscp", "55"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrTelnetConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrTelnetConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_telnet.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-telnet-cfg:/telnet",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrTelnetConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrTelnetConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_telnet.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-telnet-cfg:/telnet",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -23,23 +24,25 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST-ACC"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "TESTACC"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrDomainVRFConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrDomainVRFConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_domain_vrf.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=TEST-VRF]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrDomainVRFConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrDomainVRFConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_domain_vrf.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=TEST-VRF]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

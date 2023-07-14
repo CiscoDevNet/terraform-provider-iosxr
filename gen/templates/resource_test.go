@@ -58,23 +58,25 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_all(),
+		Check: resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_{{snakeCase $name}}.test",
+		ImportState:   true,
+		ImportStateId: "{{getExamplePath .Path .Attributes}}",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_minimum(),
-			},
-			{
-				Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_all(),
-				Check: resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_{{snakeCase $name}}.test",
-				ImportState:   true,
-				ImportStateId: "{{getExamplePath .Path .Attributes}}",
-			},
-		},
+		Steps: steps,
 	})
 }
 

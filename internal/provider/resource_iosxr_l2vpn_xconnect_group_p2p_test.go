@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,23 +17,25 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.vpn_id", "4600"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.service_id", "600"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_xconnect_group_p2p.test", "neighbor_evpn_evi_segment_routing_services.0.segment_routing_srv6_locator", "LOC11"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrL2VPNXconnectGroupP2PConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrL2VPNXconnectGroupP2PConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_l2vpn_xconnect_group_p2p.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]/p2ps/p2p[p2p-xconnect-name=XC]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrL2VPNXconnectGroupP2PConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrL2VPNXconnectGroupP2PConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_l2vpn_xconnect_group_p2p.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]/p2ps/p2p[p2p-xconnect-name=XC]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -14,23 +15,25 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrSegmentRoutingConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrSegmentRoutingConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_segment_routing.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrSegmentRoutingConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrSegmentRoutingConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_segment_routing.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

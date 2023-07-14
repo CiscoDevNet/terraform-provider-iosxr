@@ -18,23 +18,25 @@ func TestAccIosxrFPD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_reload_enable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_reload_disable", "false"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrFPDConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrFPDConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_fpd.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-fpd-cfg:/fpd",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrFPDConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrFPDConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_fpd.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-fpd-cfg:/fpd",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

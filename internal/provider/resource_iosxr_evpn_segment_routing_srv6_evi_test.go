@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -18,23 +19,25 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locator", "LOC12"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_evpn_segment_routing_srv6_evi.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=1235]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_evpn_segment_routing_srv6_evi.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=1235]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

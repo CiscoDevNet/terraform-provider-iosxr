@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -16,23 +17,25 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.metric_type", "igp"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.hop_type", "mpls"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te_policy_candidate_path.test", "path_infos.0.segment_list_name", "dynamic"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_segment_routing_te_policy_candidate_path.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%!d(string=100)]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_segment_routing_te_policy_candidate_path.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%!d(string=100)]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

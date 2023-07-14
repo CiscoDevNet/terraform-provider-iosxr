@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -47,23 +48,25 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.locator_name", "AlgoLocator"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "segment_routing_srv6_locators.0.level", "1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_isis_address_family.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv6][saf-name=unicast]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterISISAddressFamilyPrerequisitesConfig + testAccIosxrRouterISISAddressFamilyConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_isis_address_family.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv6][saf-name=unicast]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

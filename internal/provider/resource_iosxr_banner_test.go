@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrBanner(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user !"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrBannerConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrBannerConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_banner.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=login]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrBannerConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrBannerConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_banner.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=login]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

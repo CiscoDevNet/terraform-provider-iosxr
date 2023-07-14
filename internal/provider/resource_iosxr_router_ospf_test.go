@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -48,23 +49,25 @@ func TestAccIosxrRouterOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf.test", "redistribute_ospf.0.match_nssa_external", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf.test", "redistribute_ospf.0.tag", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf.test", "redistribute_ospf.0.metric_type", "1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterOSPFConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterOSPFConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_ospf.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterOSPFConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterOSPFConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_ospf.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

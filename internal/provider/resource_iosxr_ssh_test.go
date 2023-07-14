@@ -20,23 +20,25 @@ func TestAccIosxrSSH(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_session_limit", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_v2", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrSSHConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrSSHConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_ssh.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-ssh-cfg:/ssh",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrSSHConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrSSHConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_ssh.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-ssh-cfg:/ssh",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

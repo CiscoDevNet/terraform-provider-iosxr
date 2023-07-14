@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -13,23 +14,25 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain.test", "bridge_domain_name", "BD123"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain.test", "evis.0.vpn_id", "1234"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_bridge_group_bridge_domain.test", "vnis.0.vni_id", "1234"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_l2vpn_bridge_group_bridge_domain.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]/bridge-domains/bridge-domain[bridge-domain-name=BD123]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_l2vpn_bridge_group_bridge_domain.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]/bridge-domains/bridge-domain[bridge-domain-name=BD123]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

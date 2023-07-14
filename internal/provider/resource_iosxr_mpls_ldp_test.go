@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -24,23 +25,25 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.forwarding_recursive_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "mldp_address_families.0.recursive_fec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_ldp.test", "session_protection", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_mpls_ldp.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrMPLSLDPPrerequisitesConfig + testAccIosxrMPLSLDPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_mpls_ldp.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

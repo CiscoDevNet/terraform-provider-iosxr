@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -51,23 +52,25 @@ func TestAccIosxrRouterStaticIPv4Multicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_ipv4_multicast.test", "vrfs.0.nexthop_addresses.0.distance_metric", "155"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_ipv4_multicast.test", "vrfs.0.nexthop_addresses.0.track", "TRACK1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_ipv4_multicast.test", "vrfs.0.nexthop_addresses.0.metric", "10"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterStaticIPv4MulticastConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterStaticIPv4MulticastConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_static_ipv4_multicast.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/multicast/prefixes/prefix[prefix-address=100.0.1.0][prefix-length=%!d(string=24)]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterStaticIPv4MulticastConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterStaticIPv4MulticastConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_static_ipv4_multicast.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/multicast/prefixes/prefix[prefix-address=100.0.1.0][prefix-length=%!d(string=24)]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

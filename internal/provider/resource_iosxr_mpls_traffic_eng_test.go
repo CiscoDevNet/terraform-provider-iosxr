@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -11,23 +12,25 @@ import (
 func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_traffic_eng.test", "traffic_eng", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrMPLSTrafficEngConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrMPLSTrafficEngConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_mpls_traffic_eng.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-mpls-te-cfg:/mpls",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrMPLSTrafficEngConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrMPLSTrafficEngConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_mpls_traffic_eng.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-mpls-te-cfg:/mpls",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -26,23 +27,25 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.object_name", "OBJECT"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "track_objects.0.priority_decrement", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_address_family_ipv4.test", "bfd_fast_detect_peer_ipv4", "33.33.33.3"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv4.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/vrrps/vrrp[vrrp-id=%!d(string=123)][version=%!d(string=2)]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_minimum(),
-			},
-			{
-				Config: testAccIosxrRouterVRRPInterfaceAddressFamilyIPv4Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv4.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/vrrps/vrrp[vrrp-id=%!d(string=123)][version=%!d(string=2)]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -12,23 +13,25 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "name", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_source_interface.test", "vrfs.0.name", "VRF1"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrLoggingSourceInterfaceConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrLoggingSourceInterfaceConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_logging_source_interface.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=Loopback0]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrLoggingSourceInterfaceConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrLoggingSourceInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_logging_source_interface.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=Loopback0]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

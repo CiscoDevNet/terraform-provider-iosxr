@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -22,23 +23,25 @@ func TestAccIosxrIPv6AccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop1_ipv6", "3::3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_nexthop2_ipv6", "4::4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_access_list.test", "sequences.0.permit_log", "true"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrIPv6AccessListConfig_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrIPv6AccessListConfig_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_ipv6_access_list.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=TEST1]",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrIPv6AccessListConfig_minimum(),
-			},
-			{
-				Config: testAccIosxrIPv6AccessListConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_ipv6_access_list.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=TEST1]",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

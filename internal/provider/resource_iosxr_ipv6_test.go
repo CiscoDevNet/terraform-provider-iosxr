@@ -3,6 +3,7 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -21,23 +22,25 @@ func TestAccIosxrIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6.test", "assembler_overlap_frag_drop_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6.test", "path_mtu_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6.test", "path_mtu_timeout", "10"))
+	var steps []resource.TestStep
+	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
+		steps = append(steps, resource.TestStep{
+			Config: testAccIosxrIPv6Config_minimum(),
+		})
+	}
+	steps = append(steps, resource.TestStep{
+		Config: testAccIosxrIPv6Config_all(),
+		Check:  resource.ComposeTestCheckFunc(checks...),
+	})
+	steps = append(steps, resource.TestStep{
+		ResourceName:  "iosxr_ipv6.test",
+		ImportState:   true,
+		ImportStateId: "Cisco-IOS-XR-um-ipv6-cfg:/ipv6",
+	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
-		Steps: []resource.TestStep{
-			{
-				Config: testAccIosxrIPv6Config_minimum(),
-			},
-			{
-				Config: testAccIosxrIPv6Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:  "iosxr_ipv6.test",
-				ImportState:   true,
-				ImportStateId: "Cisco-IOS-XR-um-ipv6-cfg:/ipv6",
-			},
-		},
+		Steps:                    steps,
 	})
 }
 

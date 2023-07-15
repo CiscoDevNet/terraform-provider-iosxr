@@ -1090,7 +1090,7 @@ func (data *RouterStaticIPv6Multicast) getDeletedListItems(ctx context.Context, 
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/nexthop-interfaces/nexthop-interface%v/nexthop-interfaces/nexthop-interface%v", state.getPath(), keyString, ckeyString))
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				for ci := range state.Vrfs[i].NexthopInterfaceAddresses {
@@ -1130,7 +1130,7 @@ func (data *RouterStaticIPv6Multicast) getDeletedListItems(ctx context.Context, 
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/nexthop-interface-addresses/nexthop-interface-address%v/nexthop-interface-addresses/nexthop-interface-address%v", state.getPath(), keyString, ckeyString))
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				for ci := range state.Vrfs[i].NexthopAddresses {
@@ -1164,7 +1164,7 @@ func (data *RouterStaticIPv6Multicast) getDeletedListItems(ctx context.Context, 
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/nexthop-addresses/nexthop-address%v/nexthop-addresses/nexthop-address%v", state.getPath(), keyString, ckeyString))
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break

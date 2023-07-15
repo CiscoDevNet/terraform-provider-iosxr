@@ -537,6 +537,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 	deletedListItems := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if eq .Type "List"}}
+	{{- $yangName := .YangName}}
 	{{- $goKey := ""}}
 	{{- range .Attributes}}
 	{{- if .Id}}
@@ -619,7 +620,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 						for cki := range ckeys {
 							ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{.YangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				{{- end}}

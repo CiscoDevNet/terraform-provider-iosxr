@@ -510,7 +510,7 @@ func (data *PolicyMapQoS) getDeletedListItems(ctx context.Context, state PolicyM
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/queue-limits/queue-limit%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
+						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break

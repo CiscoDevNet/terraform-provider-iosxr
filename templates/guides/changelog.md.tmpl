@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.2.2 (unreleased)
+## 0.2.2
 
 - Make `icmp_error_interval_interval_time` attribute of `iosxr_ipv6` resource optional
 - Make `timers_bgp_keepalive_interval` attribute of `iosxr_router_bgp_vrf` resource optional

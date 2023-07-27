@@ -17,6 +17,10 @@
 - Add `iosxr_rd_set` resource and data source
 - Add `contact` and `location` attributes to `iosxr_snmp_server` resource and data source
 - Add `police_conform_action_transmit`, `police_conform_action_drop`, `police_exceed_action_transmit`, `police_exceed_action_drop`, `police_violate_action_transmit`, `police_violate_action_drop` attributes to `iosxr_policy_map_qos` resource and data source
+- Add `iosxr_bfd` resource and data source
+- Add `iosxr_flow_exporter_map` resource and data source
+
+
 
 ## 0.2.1
 

@@ -32,26 +32,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &SamplerMapDataSource{}
-	_ datasource.DataSourceWithConfigure = &SamplerMapDataSource{}
+	_ datasource.DataSource              = &FlowSamplerMapDataSource{}
+	_ datasource.DataSourceWithConfigure = &FlowSamplerMapDataSource{}
 )
 
-func NewSamplerMapDataSource() datasource.DataSource {
-	return &SamplerMapDataSource{}
+func NewFlowSamplerMapDataSource() datasource.DataSource {
+	return &FlowSamplerMapDataSource{}
 }
 
-type SamplerMapDataSource struct {
+type FlowSamplerMapDataSource struct {
 	client *client.Client
 }
 
-func (d *SamplerMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_sampler_map"
+func (d *FlowSamplerMapDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_flow_sampler_map"
 }
 
-func (d *SamplerMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *FlowSamplerMapDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Sampler Map configuration.",
+		MarkdownDescription: "This data source can read the Flow Sampler Map configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -62,7 +62,7 @@ func (d *SamplerMapDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"sampler_map_name": schema.StringAttribute{
+			"true": schema.StringAttribute{
 				MarkdownDescription: "Sampler map name - maximum 32 characters",
 				Required:            true,
 			},
@@ -78,7 +78,7 @@ func (d *SamplerMapDataSource) Schema(ctx context.Context, req datasource.Schema
 	}
 }
 
-func (d *SamplerMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *FlowSamplerMapDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -86,8 +86,8 @@ func (d *SamplerMapDataSource) Configure(_ context.Context, req datasource.Confi
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *SamplerMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config SamplerMapData
+func (d *FlowSamplerMapDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config FlowSamplerMapData
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

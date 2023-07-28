@@ -20,39 +20,42 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccDataSourceIosxrSamplerMap(t *testing.T) {
+func TestAccDataSourceIosxrFlowSamplerMap(t *testing.T) {
+	if os.Getenv("FLOW") == "" {
+		t.Skip("skipping test, set environment variable FLOW")
+	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_sampler_map.test", "random", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_sampler_map.test", "out_of", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_sampler_map.test", "random", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_sampler_map.test", "out_of", "1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSamplerMapConfig(),
+				Config: testAccDataSourceIosxrFlowSamplerMapConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
-func testAccDataSourceIosxrSamplerMapConfig() string {
-	config := `resource "iosxr_sampler_map" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	sampler_map_name = "sampler_map1"` + "\n"
+func testAccDataSourceIosxrFlowSamplerMapConfig() string {
+	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
+	config += `	true = "sampler_map1"` + "\n"
 	config += `	random = 1` + "\n"
 	config += `	out_of = 1` + "\n"
 	config += `}` + "\n"
 
 	config += `
-		data "iosxr_sampler_map" "test" {
-			sampler_map_name = "sampler_map1"
-			depends_on = [iosxr_sampler_map.test]
+		data "iosxr_flow_sampler_map" "test" {
+			true = "sampler_map1"
+			depends_on = [iosxr_flow_sampler_map.test]
 		}
 	`
 	return config

@@ -38,22 +38,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func NewSamplerMapResource() resource.Resource {
-	return &SamplerMapResource{}
+func NewFlowSamplerMapResource() resource.Resource {
+	return &FlowSamplerMapResource{}
 }
 
-type SamplerMapResource struct {
+type FlowSamplerMapResource struct {
 	client *client.Client
 }
 
-func (r *SamplerMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_sampler_map"
+func (r *FlowSamplerMapResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_flow_sampler_map"
 }
 
-func (r *SamplerMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *FlowSamplerMapResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Sampler Map configuration.",
+		MarkdownDescription: "This resource can manage the Flow Sampler Map configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -67,14 +67,7 @@ func (r *SamplerMapResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"delete_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("all", "attributes"),
-				},
-			},
-			"sampler_map_name": schema.StringAttribute{
+			"true": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Sampler map name - maximum 32 characters").String,
 				Required:            true,
 				Validators: []validator.String{
@@ -103,7 +96,7 @@ func (r *SamplerMapResource) Schema(ctx context.Context, req resource.SchemaRequ
 	}
 }
 
-func (r *SamplerMapResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *FlowSamplerMapResource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -111,8 +104,8 @@ func (r *SamplerMapResource) Configure(_ context.Context, req resource.Configure
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *SamplerMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan SamplerMap
+func (r *FlowSamplerMapResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan FlowSamplerMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -150,8 +143,8 @@ func (r *SamplerMapResource) Create(ctx context.Context, req resource.CreateRequ
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SamplerMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state SamplerMap
+func (r *FlowSamplerMapResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state FlowSamplerMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -176,8 +169,8 @@ func (r *SamplerMapResource) Read(ctx context.Context, req resource.ReadRequest,
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SamplerMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state SamplerMap
+func (r *FlowSamplerMapResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state FlowSamplerMap
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -227,8 +220,8 @@ func (r *SamplerMapResource) Update(ctx context.Context, req resource.UpdateRequ
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *SamplerMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state SamplerMap
+func (r *FlowSamplerMapResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state FlowSamplerMap
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -240,11 +233,6 @@ func (r *SamplerMapResource) Delete(ctx context.Context, req resource.DeleteRequ
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 	var ops []client.SetOperation
 	deleteMode := "all"
-	if state.DeleteMode.ValueString() == "all" {
-		deleteMode = "all"
-	} else if state.DeleteMode.ValueString() == "attributes" {
-		deleteMode = "attributes"
-	}
 
 	if deleteMode == "all" {
 		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
@@ -268,6 +256,6 @@ func (r *SamplerMapResource) Delete(ctx context.Context, req resource.DeleteRequ
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *SamplerMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *FlowSamplerMapResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

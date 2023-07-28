@@ -29,35 +29,34 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type SamplerMap struct {
-	Device         types.String `tfsdk:"device"`
-	Id             types.String `tfsdk:"id"`
-	DeleteMode     types.String `tfsdk:"delete_mode"`
-	SamplerMapName types.String `tfsdk:"sampler_map_name"`
-	Random         types.Int64  `tfsdk:"random"`
-	OutOf          types.Int64  `tfsdk:"out_of"`
+type FlowSamplerMap struct {
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	True   types.String `tfsdk:"true"`
+	Random types.Int64  `tfsdk:"random"`
+	OutOf  types.Int64  `tfsdk:"out_of"`
 }
 
-type SamplerMapData struct {
-	Device         types.String `tfsdk:"device"`
-	Id             types.String `tfsdk:"id"`
-	SamplerMapName types.String `tfsdk:"sampler_map_name"`
-	Random         types.Int64  `tfsdk:"random"`
-	OutOf          types.Int64  `tfsdk:"out_of"`
+type FlowSamplerMapData struct {
+	Device types.String `tfsdk:"device"`
+	Id     types.String `tfsdk:"id"`
+	True   types.String `tfsdk:"true"`
+	Random types.Int64  `tfsdk:"random"`
+	OutOf  types.Int64  `tfsdk:"out_of"`
 }
 
-func (data SamplerMap) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.SamplerMapName.ValueString())
+func (data FlowSamplerMap) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.True.ValueString())
 }
 
-func (data SamplerMapData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.SamplerMapName.ValueString())
+func (data FlowSamplerMapData) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.True.ValueString())
 }
 
-func (data SamplerMap) toBody(ctx context.Context) string {
+func (data FlowSamplerMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.SamplerMapName.IsNull() && !data.SamplerMapName.IsUnknown() {
-		body, _ = sjson.Set(body, "sampler-map-name", data.SamplerMapName.ValueString())
+	if !data.True.IsNull() && !data.True.IsUnknown() {
+		body, _ = sjson.Set(body, "sampler-map-name", data.True.ValueString())
 	}
 	if !data.Random.IsNull() && !data.Random.IsUnknown() {
 		body, _ = sjson.Set(body, "random", strconv.FormatInt(data.Random.ValueInt64(), 10))
@@ -68,7 +67,7 @@ func (data SamplerMap) toBody(ctx context.Context) string {
 	return body
 }
 
-func (data *SamplerMap) updateFromBody(ctx context.Context, res []byte) {
+func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "random"); value.Exists() && !data.Random.IsNull() {
 		data.Random = types.Int64Value(value.Int())
 	} else {
@@ -81,7 +80,7 @@ func (data *SamplerMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SamplerMapData) fromBody(ctx context.Context, res []byte) {
+func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())
 	}
@@ -90,17 +89,17 @@ func (data *SamplerMapData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SamplerMap) getDeletedListItems(ctx context.Context, state SamplerMap) []string {
+func (data *FlowSamplerMap) getDeletedListItems(ctx context.Context, state FlowSamplerMap) []string {
 	deletedListItems := make([]string, 0)
 	return deletedListItems
 }
 
-func (data *SamplerMap) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
 
-func (data *SamplerMap) getDeletePaths(ctx context.Context) []string {
+func (data *FlowSamplerMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.Random.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/random", data.getPath()))

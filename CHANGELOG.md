@@ -1,6 +1,7 @@
 ## 0.2.3 (unreleased)
 
 - Add `timers_bgp_minimum_acceptable_holdtime` attribute to `iosxr_router_bgp` resource and data source
+- Add `iosxr_flow_sampler_map` resource and data source
 
 ## 0.2.2
 

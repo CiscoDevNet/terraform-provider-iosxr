@@ -26,23 +26,26 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccIosxrSamplerMap(t *testing.T) {
+func TestAccIosxrFlowSamplerMap(t *testing.T) {
+	if os.Getenv("FLOW") == "" {
+		t.Skip("skipping test, set environment variable FLOW")
+	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_sampler_map.test", "sampler_map_name", "sampler_map1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_sampler_map.test", "random", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_sampler_map.test", "out_of", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "true", "sampler_map1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "random", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "out_of", "1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSamplerMapConfig_minimum(),
+			Config: testAccIosxrFlowSamplerMapConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSamplerMapConfig_all(),
+		Config: testAccIosxrFlowSamplerMapConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_sampler_map.test",
+		ResourceName:  "iosxr_flow_sampler_map.test",
 		ImportState:   true,
 		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=sampler_map1]",
 	})
@@ -53,16 +56,16 @@ func TestAccIosxrSamplerMap(t *testing.T) {
 	})
 }
 
-func testAccIosxrSamplerMapConfig_minimum() string {
-	config := `resource "iosxr_sampler_map" "test" {` + "\n"
-	config += `	sampler_map_name = "sampler_map1"` + "\n"
+func testAccIosxrFlowSamplerMapConfig_minimum() string {
+	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
+	config += `	true = "sampler_map1"` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
-func testAccIosxrSamplerMapConfig_all() string {
-	config := `resource "iosxr_sampler_map" "test" {` + "\n"
-	config += `	sampler_map_name = "sampler_map1"` + "\n"
+func testAccIosxrFlowSamplerMapConfig_all() string {
+	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
+	config += `	true = "sampler_map1"` + "\n"
 	config += `	random = 1` + "\n"
 	config += `	out_of = 1` + "\n"
 	config += `}` + "\n"

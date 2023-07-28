@@ -49,6 +49,7 @@ data "iosxr_router_bgp" "example" {
 - `segment_routing_srv6_locator` (String) Configure locator name
 - `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_bgp_keepalive_interval` (Number) BGP timers
+- `timers_bgp_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
 
 <a id="nestedatt--neighbor_groups"></a>
 ### Nested Schema for `neighbor_groups`
@@ -83,6 +84,7 @@ Read-Only:
 - `shutdown` (Boolean) Administratively shut down this neighbor
 - `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_keepalive_interval` (Number) BGP timers
+- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

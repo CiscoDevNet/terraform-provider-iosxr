@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.2.3 (unreleased)
+
+- Add `timers_bgp_minimum_acceptable_holdtime` attribute to `iosxr_router_bgp` resource and data source
+- Add `iosxr_flow_sampler_map` resource and data source
+
 ## 0.2.2
 
 - Make `icmp_error_interval_interval_time` attribute of `iosxr_ipv6` resource optional

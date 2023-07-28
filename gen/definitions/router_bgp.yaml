@@ -23,6 +23,10 @@ attributes:
     optional: true
     delete_parent: true
     example: 20
+  - yang_name: timers/bgp/minimum-acceptable-holdtime
+    optional: true
+    delete_parent: true
+    example: 10
   - yang_name: bgp/router-id
     example: 22.22.22.22
   - yang_name: bgp/graceful-restart/graceful-reset
@@ -80,6 +84,8 @@ attributes:
         example: 5
       - yang_name: timers/holdtime
         example: 20
+      - yang_name: timers/minimum-acceptable-holdtime
+        example: 10
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security

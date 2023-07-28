@@ -42,6 +42,7 @@ type RouterBGP struct {
 	SegmentRoutingSrv6Locator             types.String              `tfsdk:"segment_routing_srv6_locator"`
 	TimersBgpKeepaliveInterval            types.Int64               `tfsdk:"timers_bgp_keepalive_interval"`
 	TimersBgpHoldtime                     types.String              `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpMinimumAcceptableHoldtime    types.String              `tfsdk:"timers_bgp_minimum_acceptable_holdtime"`
 	BgpRouterId                           types.String              `tfsdk:"bgp_router_id"`
 	BgpGracefulRestartGracefulReset       types.Bool                `tfsdk:"bgp_graceful_restart_graceful_reset"`
 	IbgpPolicyOutEnforceModifications     types.Bool                `tfsdk:"ibgp_policy_out_enforce_modifications"`
@@ -65,6 +66,7 @@ type RouterBGPData struct {
 	SegmentRoutingSrv6Locator             types.String              `tfsdk:"segment_routing_srv6_locator"`
 	TimersBgpKeepaliveInterval            types.Int64               `tfsdk:"timers_bgp_keepalive_interval"`
 	TimersBgpHoldtime                     types.String              `tfsdk:"timers_bgp_holdtime"`
+	TimersBgpMinimumAcceptableHoldtime    types.String              `tfsdk:"timers_bgp_minimum_acceptable_holdtime"`
 	BgpRouterId                           types.String              `tfsdk:"bgp_router_id"`
 	BgpGracefulRestartGracefulReset       types.Bool                `tfsdk:"bgp_graceful_restart_graceful_reset"`
 	IbgpPolicyOutEnforceModifications     types.Bool                `tfsdk:"ibgp_policy_out_enforce_modifications"`
@@ -77,24 +79,25 @@ type RouterBGPData struct {
 	NeighborGroups                        []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
 }
 type RouterBGPNeighbors struct {
-	NeighborAddress             types.String `tfsdk:"neighbor_address"`
-	RemoteAs                    types.String `tfsdk:"remote_as"`
-	Description                 types.String `tfsdk:"description"`
-	UseNeighborGroup            types.String `tfsdk:"use_neighbor_group"`
-	IgnoreConnectedCheck        types.Bool   `tfsdk:"ignore_connected_check"`
-	EbgpMultihopMaximumHopCount types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
-	BfdMinimumInterval          types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier               types.Int64  `tfsdk:"bfd_multiplier"`
-	LocalAs                     types.String `tfsdk:"local_as"`
-	LocalAsNoPrepend            types.Bool   `tfsdk:"local_as_no_prepend"`
-	LocalAsReplaceAs            types.Bool   `tfsdk:"local_as_replace_as"`
-	LocalAsDualAs               types.Bool   `tfsdk:"local_as_dual_as"`
-	Password                    types.String `tfsdk:"password"`
-	Shutdown                    types.Bool   `tfsdk:"shutdown"`
-	TimersKeepaliveInterval     types.Int64  `tfsdk:"timers_keepalive_interval"`
-	TimersHoldtime              types.String `tfsdk:"timers_holdtime"`
-	UpdateSource                types.String `tfsdk:"update_source"`
-	TtlSecurity                 types.Bool   `tfsdk:"ttl_security"`
+	NeighborAddress                 types.String `tfsdk:"neighbor_address"`
+	RemoteAs                        types.String `tfsdk:"remote_as"`
+	Description                     types.String `tfsdk:"description"`
+	UseNeighborGroup                types.String `tfsdk:"use_neighbor_group"`
+	IgnoreConnectedCheck            types.Bool   `tfsdk:"ignore_connected_check"`
+	EbgpMultihopMaximumHopCount     types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
+	BfdMinimumInterval              types.Int64  `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                   types.Int64  `tfsdk:"bfd_multiplier"`
+	LocalAs                         types.String `tfsdk:"local_as"`
+	LocalAsNoPrepend                types.Bool   `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                types.Bool   `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                   types.Bool   `tfsdk:"local_as_dual_as"`
+	Password                        types.String `tfsdk:"password"`
+	Shutdown                        types.Bool   `tfsdk:"shutdown"`
+	TimersKeepaliveInterval         types.Int64  `tfsdk:"timers_keepalive_interval"`
+	TimersHoldtime                  types.String `tfsdk:"timers_holdtime"`
+	TimersMinimumAcceptableHoldtime types.String `tfsdk:"timers_minimum_acceptable_holdtime"`
+	UpdateSource                    types.String `tfsdk:"update_source"`
+	TtlSecurity                     types.Bool   `tfsdk:"ttl_security"`
 }
 type RouterBGPNeighborGroups struct {
 	Name                      types.String `tfsdk:"name"`
@@ -144,6 +147,9 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	}
 	if !data.TimersBgpHoldtime.IsNull() && !data.TimersBgpHoldtime.IsUnknown() {
 		body, _ = sjson.Set(body, "timers.bgp.holdtime", data.TimersBgpHoldtime.ValueString())
+	}
+	if !data.TimersBgpMinimumAcceptableHoldtime.IsNull() && !data.TimersBgpMinimumAcceptableHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.bgp.minimum-acceptable-holdtime", data.TimersBgpMinimumAcceptableHoldtime.ValueString())
 	}
 	if !data.BgpRouterId.IsNull() && !data.BgpRouterId.IsUnknown() {
 		body, _ = sjson.Set(body, "bgp.router-id", data.BgpRouterId.ValueString())
@@ -240,6 +246,9 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 			if !item.TimersHoldtime.IsNull() && !item.TimersHoldtime.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.holdtime", item.TimersHoldtime.ValueString())
 			}
+			if !item.TimersMinimumAcceptableHoldtime.IsNull() && !item.TimersMinimumAcceptableHoldtime.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"timers.minimum-acceptable-holdtime", item.TimersMinimumAcceptableHoldtime.ValueString())
+			}
 			if !item.UpdateSource.IsNull() && !item.UpdateSource.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"update-source", item.UpdateSource.ValueString())
 			}
@@ -325,6 +334,11 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		data.TimersBgpHoldtime = types.StringValue(value.String())
 	} else {
 		data.TimersBgpHoldtime = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.minimum-acceptable-holdtime"); value.Exists() && !data.TimersBgpMinimumAcceptableHoldtime.IsNull() {
+		data.TimersBgpMinimumAcceptableHoldtime = types.StringValue(value.String())
+	} else {
+		data.TimersBgpMinimumAcceptableHoldtime = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() && !data.BgpRouterId.IsNull() {
 		data.BgpRouterId = types.StringValue(value.String())
@@ -509,6 +523,11 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].TimersHoldtime = types.StringNull()
 		}
+		if value := r.Get("timers.minimum-acceptable-holdtime"); value.Exists() && !data.Neighbors[i].TimersMinimumAcceptableHoldtime.IsNull() {
+			data.Neighbors[i].TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
+		} else {
+			data.Neighbors[i].TimersMinimumAcceptableHoldtime = types.StringNull()
+		}
 		if value := r.Get("update-source"); value.Exists() && !data.Neighbors[i].UpdateSource.IsNull() {
 			data.Neighbors[i].UpdateSource = types.StringValue(value.String())
 		} else {
@@ -612,6 +631,9 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
 		data.TimersBgpHoldtime = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "timers.bgp.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersBgpMinimumAcceptableHoldtime = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() {
 		data.BgpRouterId = types.StringValue(value.String())
 	}
@@ -707,6 +729,9 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("timers.holdtime"); cValue.Exists() {
 				item.TimersHoldtime = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("timers.minimum-acceptable-holdtime"); cValue.Exists() {
+				item.TimersMinimumAcceptableHoldtime = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("update-source"); cValue.Exists() {
 				item.UpdateSource = types.StringValue(cValue.String())
@@ -902,6 +927,9 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
 	}
 	if !data.TimersBgpHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
+	}
+	if !data.TimersBgpMinimumAcceptableHoldtime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp", data.getPath()))
 	}
 	if !data.BgpRouterId.IsNull() {

@@ -94,6 +94,10 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
 				Computed:            true,
 			},
+			"timers_bgp_minimum_acceptable_holdtime": schema.StringAttribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
+				Computed:            true,
+			},
 			"bgp_router_id": schema.StringAttribute{
 				MarkdownDescription: "Configure Router-id",
 				Computed:            true,
@@ -193,6 +197,10 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"timers_holdtime": schema.StringAttribute{
 							MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+							Computed:            true,
+						},
+						"timers_minimum_acceptable_holdtime": schema.StringAttribute{
+							MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
 							Computed:            true,
 						},
 						"update_source": schema.StringAttribute{

@@ -119,6 +119,10 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
 				Optional:            true,
 			},
+			"timers_bgp_minimum_acceptable_holdtime": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.").String,
+				Optional:            true,
+			},
 			"bgp_router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Router-id").String,
 				Optional:            true,
@@ -250,6 +254,10 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"timers_holdtime": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
 							Required:            true,
+						},
+						"timers_minimum_acceptable_holdtime": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.").String,
+							Optional:            true,
 						},
 						"update_source": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,

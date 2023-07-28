@@ -62,7 +62,7 @@ func (d *FlowSamplerMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"true": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Sampler map name - maximum 32 characters",
 				Required:            true,
 			},

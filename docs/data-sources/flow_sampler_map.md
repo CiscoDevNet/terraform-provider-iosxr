@@ -14,7 +14,7 @@ This data source can read the Flow Sampler Map configuration.
 
 ```terraform
 data "iosxr_flow_sampler_map" "example" {
-  true = "sampler_map1"
+  name = "sampler_map1"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_flow_sampler_map" "example" {
 
 ### Required
 
-- `true` (String) Sampler map name - maximum 32 characters
+- `name` (String) Sampler map name - maximum 32 characters
 
 ### Optional
 

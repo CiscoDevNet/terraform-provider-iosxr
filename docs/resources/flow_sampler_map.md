@@ -14,7 +14,7 @@ This resource can manage the Flow Sampler Map configuration.
 
 ```terraform
 resource "iosxr_flow_sampler_map" "example" {
-  true   = "sampler_map1"
+  name   = "sampler_map1"
   random = 1
   out_of = 1
 }
@@ -25,7 +25,7 @@ resource "iosxr_flow_sampler_map" "example" {
 
 ### Required
 
-- `true` (String) Sampler map name - maximum 32 characters
+- `name` (String) Sampler map name - maximum 32 characters
 
 ### Optional
 

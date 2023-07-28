@@ -31,7 +31,7 @@ func TestAccIosxrFlowSamplerMap(t *testing.T) {
 		t.Skip("skipping test, set environment variable FLOW")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "true", "sampler_map1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "name", "sampler_map1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "random", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "out_of", "1"))
 	var steps []resource.TestStep
@@ -58,14 +58,14 @@ func TestAccIosxrFlowSamplerMap(t *testing.T) {
 
 func testAccIosxrFlowSamplerMapConfig_minimum() string {
 	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
-	config += `	true = "sampler_map1"` + "\n"
+	config += `	name = "sampler_map1"` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrFlowSamplerMapConfig_all() string {
 	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
-	config += `	true = "sampler_map1"` + "\n"
+	config += `	name = "sampler_map1"` + "\n"
 	config += `	random = 1` + "\n"
 	config += `	out_of = 1` + "\n"
 	config += `}` + "\n"

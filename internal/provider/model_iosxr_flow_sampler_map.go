@@ -32,7 +32,7 @@ import (
 type FlowSamplerMap struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	True   types.String `tfsdk:"true"`
+	Name   types.String `tfsdk:"name"`
 	Random types.Int64  `tfsdk:"random"`
 	OutOf  types.Int64  `tfsdk:"out_of"`
 }
@@ -40,23 +40,23 @@ type FlowSamplerMap struct {
 type FlowSamplerMapData struct {
 	Device types.String `tfsdk:"device"`
 	Id     types.String `tfsdk:"id"`
-	True   types.String `tfsdk:"true"`
+	Name   types.String `tfsdk:"name"`
 	Random types.Int64  `tfsdk:"random"`
 	OutOf  types.Int64  `tfsdk:"out_of"`
 }
 
 func (data FlowSamplerMap) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.True.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowSamplerMapData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.True.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowSamplerMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.True.IsNull() && !data.True.IsUnknown() {
-		body, _ = sjson.Set(body, "sampler-map-name", data.True.ValueString())
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "sampler-map-name", data.Name.ValueString())
 	}
 	if !data.Random.IsNull() && !data.Random.IsUnknown() {
 		body, _ = sjson.Set(body, "random", strconv.FormatInt(data.Random.ValueInt64(), 10))

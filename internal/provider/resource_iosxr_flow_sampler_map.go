@@ -67,7 +67,7 @@ func (r *FlowSamplerMapResource) Schema(ctx context.Context, req resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"true": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Sampler map name - maximum 32 characters").String,
 				Required:            true,
 				Validators: []validator.String{

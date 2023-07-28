@@ -47,14 +47,14 @@ func TestAccDataSourceIosxrFlowSamplerMap(t *testing.T) {
 
 func testAccDataSourceIosxrFlowSamplerMapConfig() string {
 	config := `resource "iosxr_flow_sampler_map" "test" {` + "\n"
-	config += `	true = "sampler_map1"` + "\n"
+	config += `	name = "sampler_map1"` + "\n"
 	config += `	random = 1` + "\n"
 	config += `	out_of = 1` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_flow_sampler_map" "test" {
-			true = "sampler_map1"
+			name = "sampler_map1"
 			depends_on = [iosxr_flow_sampler_map.test]
 		}
 	`

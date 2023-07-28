@@ -14,7 +14,7 @@ This data source can read the Flow Monitor Map configuration.
 
 ```terraform
 data "iosxr_flow_monitor_map" "example" {
-  monitor_map_name = "monitor_map1"
+  name = "monitor_map1"
 }
 ```
 
@@ -23,7 +23,7 @@ data "iosxr_flow_monitor_map" "example" {
 
 ### Required
 
-- `monitor_map_name` (String) Monitor map name - maximum 32 characters
+- `name` (String) Monitor map name - maximum 32 characters
 
 ### Optional
 
@@ -87,4 +87,4 @@ data "iosxr_flow_monitor_map" "example" {
 
 Read-Only:
 
-- `exporter_name` (String) Specify flow exporter map name
+- `name` (String) Specify flow exporter map name

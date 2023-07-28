@@ -33,8 +33,7 @@ import (
 type FlowMonitorMap struct {
 	Device                                types.String              `tfsdk:"device"`
 	Id                                    types.String              `tfsdk:"id"`
-	DeleteMode                            types.String              `tfsdk:"delete_mode"`
-	MonitorMapName                        types.String              `tfsdk:"monitor_map_name"`
+	Name                                  types.String              `tfsdk:"name"`
 	Exporters                             []FlowMonitorMapExporters `tfsdk:"exporters"`
 	OptionOutphysint                      types.Bool                `tfsdk:"option_outphysint"`
 	OptionFiltered                        types.Bool                `tfsdk:"option_filtered"`
@@ -89,7 +88,7 @@ type FlowMonitorMap struct {
 type FlowMonitorMapData struct {
 	Device                                types.String              `tfsdk:"device"`
 	Id                                    types.String              `tfsdk:"id"`
-	MonitorMapName                        types.String              `tfsdk:"monitor_map_name"`
+	Name                                  types.String              `tfsdk:"name"`
 	Exporters                             []FlowMonitorMapExporters `tfsdk:"exporters"`
 	OptionOutphysint                      types.Bool                `tfsdk:"option_outphysint"`
 	OptionFiltered                        types.Bool                `tfsdk:"option_filtered"`
@@ -141,21 +140,21 @@ type FlowMonitorMapData struct {
 	SflowOptionsOutputIfindex             types.String              `tfsdk:"sflow_options_output_ifindex"`
 }
 type FlowMonitorMapExporters struct {
-	ExporterName types.String `tfsdk:"exporter_name"`
+	Name types.String `tfsdk:"name"`
 }
 
 func (data FlowMonitorMap) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]", data.MonitorMapName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowMonitorMapData) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]", data.MonitorMapName.ValueString())
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.MonitorMapName.IsNull() && !data.MonitorMapName.IsUnknown() {
-		body, _ = sjson.Set(body, "monitor-map-name", data.MonitorMapName.ValueString())
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "monitor-map-name", data.Name.ValueString())
 	}
 	if !data.OptionOutphysint.IsNull() && !data.OptionOutphysint.IsUnknown() {
 		if data.OptionOutphysint.ValueBool() {
@@ -378,8 +377,8 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	if len(data.Exporters) > 0 {
 		body, _ = sjson.Set(body, "exporters.exporter", []interface{}{})
 		for index, item := range data.Exporters {
-			if !item.ExporterName.IsNull() && !item.ExporterName.IsUnknown() {
-				body, _ = sjson.Set(body, "exporters.exporter"+"."+strconv.Itoa(index)+"."+"exporter-name", item.ExporterName.ValueString())
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "exporters.exporter"+"."+strconv.Itoa(index)+"."+"exporter-name", item.Name.ValueString())
 			}
 		}
 	}
@@ -389,7 +388,7 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
-		keyValues := [...]string{data.Exporters[i].ExporterName.ValueString()}
+		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "exporters.exporter").ForEach(
@@ -410,10 +409,10 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("exporter-name"); value.Exists() && !data.Exporters[i].ExporterName.IsNull() {
-			data.Exporters[i].ExporterName = types.StringValue(value.String())
+		if value := r.Get("exporter-name"); value.Exists() && !data.Exporters[i].Name.IsNull() {
+			data.Exporters[i].Name = types.StringValue(value.String())
 		} else {
-			data.Exporters[i].ExporterName = types.StringNull()
+			data.Exporters[i].Name = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "option.outphysint"); !data.OptionOutphysint.IsNull() {
@@ -812,7 +811,7 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := FlowMonitorMapExporters{}
 			if cValue := v.Get("exporter-name"); cValue.Exists() {
-				item.ExporterName = types.StringValue(cValue.String())
+				item.Name = types.StringValue(cValue.String())
 			}
 			data.Exporters = append(data.Exporters, item)
 			return true
@@ -1042,10 +1041,10 @@ func (data *FlowMonitorMap) getDeletedListItems(ctx context.Context, state FlowM
 	deletedListItems := make([]string, 0)
 	for i := range state.Exporters {
 		keys := [...]string{"exporter-name"}
-		stateKeyValues := [...]string{state.Exporters[i].ExporterName.ValueString()}
+		stateKeyValues := [...]string{state.Exporters[i].Name.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Exporters[i].ExporterName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Exporters[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1055,7 +1054,7 @@ func (data *FlowMonitorMap) getDeletedListItems(ctx context.Context, state FlowM
 		found := false
 		for j := range data.Exporters {
 			found = true
-			if state.Exporters[i].ExporterName.ValueString() != data.Exporters[j].ExporterName.ValueString() {
+			if state.Exporters[i].Name.ValueString() != data.Exporters[j].Name.ValueString() {
 				found = false
 			}
 			if found {
@@ -1077,7 +1076,7 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
-		keyValues := [...]string{data.Exporters[i].ExporterName.ValueString()}
+		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -1201,7 +1200,7 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
-		keyValues := [...]string{data.Exporters[i].ExporterName.ValueString()}
+		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

@@ -20,14 +20,18 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
+	if os.Getenv("FLOW") == "" {
+		t.Skip("skipping test, set environment variable FLOW")
+	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "exporters.0.exporter_name", "exporter1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "exporters.0.name", "exporter1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_outphysint", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_filtered", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "option_bgpattr", "true"))
@@ -54,7 +58,7 @@ func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_ipv4_fields", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_ipv6_fields", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_ipv4_ipv6_fields", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_labels", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_mpls_labels", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_map_t", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_sflow", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "record_datalink_record", "true"))
@@ -74,8 +78,8 @@ func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_extended_ipv6_tunnel_egress", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_if_counters_polling_interval", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_sample_header_size", "128"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_input_ifindex", "index1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_output_ifindex", "index2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_input_ifindex", "physical"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_monitor_map.test", "sflow_options_output_ifindex", "physical"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -90,10 +94,9 @@ func TestAccDataSourceIosxrFlowMonitorMap(t *testing.T) {
 
 func testAccDataSourceIosxrFlowMonitorMapConfig() string {
 	config := `resource "iosxr_flow_monitor_map" "test" {` + "\n"
-	config += `	delete_mode = "attributes"` + "\n"
-	config += `	monitor_map_name = "monitor_map1"` + "\n"
+	config += `	name = "monitor_map1"` + "\n"
 	config += `	exporters = [{` + "\n"
-	config += `		exporter_name = "exporter1"` + "\n"
+	config += `		name = "exporter1"` + "\n"
 	config += `	}]` + "\n"
 	config += `	option_outphysint = true` + "\n"
 	config += `	option_filtered = true` + "\n"
@@ -121,7 +124,7 @@ func testAccDataSourceIosxrFlowMonitorMapConfig() string {
 	config += `	record_mpls_ipv4_fields = true` + "\n"
 	config += `	record_mpls_ipv6_fields = true` + "\n"
 	config += `	record_mpls_ipv4_ipv6_fields = true` + "\n"
-	config += `	record_mpls_labels = true` + "\n"
+	config += `	record_mpls_labels = 2` + "\n"
 	config += `	record_map_t = true` + "\n"
 	config += `	record_sflow = true` + "\n"
 	config += `	record_datalink_record = true` + "\n"
@@ -141,13 +144,13 @@ func testAccDataSourceIosxrFlowMonitorMapConfig() string {
 	config += `	sflow_options_extended_ipv6_tunnel_egress = true` + "\n"
 	config += `	sflow_options_if_counters_polling_interval = 5` + "\n"
 	config += `	sflow_options_sample_header_size = 128` + "\n"
-	config += `	sflow_options_input_ifindex = "index1"` + "\n"
-	config += `	sflow_options_output_ifindex = "index2"` + "\n"
+	config += `	sflow_options_input_ifindex = "physical"` + "\n"
+	config += `	sflow_options_output_ifindex = "physical"` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_flow_monitor_map" "test" {
-			monitor_map_name = "monitor_map1"
+			name = "monitor_map1"
 			depends_on = [iosxr_flow_monitor_map.test]
 		}
 	`

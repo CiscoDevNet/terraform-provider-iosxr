@@ -62,7 +62,7 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"monitor_map_name": schema.StringAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Monitor map name - maximum 32 characters",
 				Required:            true,
 			},
@@ -71,7 +71,7 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"exporter_name": schema.StringAttribute{
+						"name": schema.StringAttribute{
 							MarkdownDescription: "Specify flow exporter map name",
 							Computed:            true,
 						},

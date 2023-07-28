@@ -14,10 +14,10 @@ This resource can manage the Flow Monitor Map configuration.
 
 ```terraform
 resource "iosxr_flow_monitor_map" "example" {
-  monitor_map_name = "monitor_map1"
+  name = "monitor_map1"
   exporters = [
     {
-      exporter_name = "exporter1"
+      name = "exporter1"
     }
   ]
   option_outphysint                          = true
@@ -46,7 +46,7 @@ resource "iosxr_flow_monitor_map" "example" {
   record_mpls_ipv4_fields                    = true
   record_mpls_ipv6_fields                    = true
   record_mpls_ipv4_ipv6_fields               = true
-  record_mpls_labels                         = true
+  record_mpls_labels                         = 2
   record_map_t                               = true
   record_sflow                               = true
   record_datalink_record                     = true
@@ -66,8 +66,8 @@ resource "iosxr_flow_monitor_map" "example" {
   sflow_options_extended_ipv6_tunnel_egress  = true
   sflow_options_if_counters_polling_interval = 5
   sflow_options_sample_header_size           = 128
-  sflow_options_input_ifindex                = "index1"
-  sflow_options_output_ifindex               = "index2"
+  sflow_options_input_ifindex                = "physical"
+  sflow_options_output_ifindex               = "physical"
 }
 ```
 
@@ -76,7 +76,7 @@ resource "iosxr_flow_monitor_map" "example" {
 
 ### Required
 
-- `monitor_map_name` (String) Monitor map name - maximum 32 characters
+- `name` (String) Monitor map name - maximum 32 characters
 
 ### Optional
 
@@ -92,8 +92,6 @@ resource "iosxr_flow_monitor_map" "example" {
   - Range: `1`-`1000000`
 - `cache_timeout_update` (Number) Specify the update timeout
   - Range: `1`-`604800`
-- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
-  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `exporters` (Attributes List) Specify flow exporter map name (see [below for nested schema](#nestedatt--exporters))
 - `hw_cache_timeout_inactive` (Number) Specify the inactive timeout
@@ -153,7 +151,7 @@ resource "iosxr_flow_monitor_map" "example" {
 
 Required:
 
-- `exporter_name` (String) Specify flow exporter map name
+- `name` (String) Specify flow exporter map name
 
 ## Import
 

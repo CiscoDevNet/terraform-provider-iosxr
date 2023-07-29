@@ -104,7 +104,7 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
-			"echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval": schema.Int64Attribute{
+			"echo_ipv4_bundle_per_member_preferred_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("The preferred minimum interval (in ms) for the BFD session").AddIntegerRangeDescription(15, 2000).String,
 				Optional:            true,
 				Validators: []validator.Int64{

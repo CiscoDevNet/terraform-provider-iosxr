@@ -39,7 +39,7 @@ data "iosxr_bfd" "example" {
 - `dampening_secondary_wait` (Number) Secondary delay before bringing up session
 - `dampening_threshold` (Number) Stability threshold to enable dampening
 - `echo_disable` (Boolean) Disable BFD echo mode
-- `echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
+- `echo_ipv4_bundle_per_member_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
 - `echo_ipv4_source` (String) BFD echo source IP address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down
 - `echo_latency_detect_percentage` (Number) Percentage of detection time to consider as bad latency

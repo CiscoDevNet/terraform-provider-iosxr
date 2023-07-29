@@ -14,13 +14,13 @@ This resource can manage the BFD configuration.
 
 ```terraform
 resource "iosxr_bfd" "example" {
-  echo_disable                                                            = true
-  echo_latency_detect_percentage                                          = 200
-  echo_latency_detect_count                                               = 10
-  echo_startup_validate_force                                             = true
-  echo_ipv4_source                                                        = "10.1.1.1"
-  echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval = 200
-  trap_singlehop_pre_mapped                                               = true
+  echo_disable                                           = true
+  echo_latency_detect_percentage                         = 200
+  echo_latency_detect_count                              = 10
+  echo_startup_validate_force                            = true
+  echo_ipv4_source                                       = "10.1.1.1"
+  echo_ipv4_bundle_per_member_preferred_minimum_interval = 200
+  trap_singlehop_pre_mapped                              = true
   multipath_locations = [
     {
       location_name = "0/0/CPU0"
@@ -84,7 +84,7 @@ resource "iosxr_bfd" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `echo_disable` (Boolean) Disable BFD echo mode
-- `echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
+- `echo_ipv4_bundle_per_member_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
   - Range: `15`-`2000`
 - `echo_ipv4_source` (String) BFD echo source IP address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down

@@ -31,60 +31,60 @@ import (
 )
 
 type BFD struct {
-	Device                                                         types.String            `tfsdk:"device"`
-	Id                                                             types.String            `tfsdk:"id"`
-	DeleteMode                                                     types.String            `tfsdk:"delete_mode"`
-	EchoDisable                                                    types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetectPercentage                                    types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                                         types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce                                       types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                                                 types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval"`
-	TrapSinglehopPreMapped                                         types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                                             []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold                                       types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                                           types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                                         types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                                           types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                                             types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring                              types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                                               types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode                                types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait                               types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait                             types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait                               types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlbInherit                                 types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
-	BundleCoexistenceBobBlbLogical                                 types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
-	Interfaces                                                     []BFDInterfaces         `tfsdk:"interfaces"`
-	Ipv6ChecksumDisable                                            types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Device                                          types.String            `tfsdk:"device"`
+	Id                                              types.String            `tfsdk:"id"`
+	DeleteMode                                      types.String            `tfsdk:"delete_mode"`
+	EchoDisable                                     types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetectPercentage                     types.Int64             `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                          types.Int64             `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce                        types.Bool              `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                                  types.String            `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_preferred_minimum_interval"`
+	TrapSinglehopPreMapped                          types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                              []BFDMultipathLocations `tfsdk:"multipath_locations"`
+	MultihopTtlDropThreshold                        types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                            types.Int64             `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                          types.Int64             `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                            types.Int64             `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                              types.Int64             `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring               types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                                types.Bool              `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode                 types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait                types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait              types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait                types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlbInherit                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
+	BundleCoexistenceBobBlbLogical                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
+	Interfaces                                      []BFDInterfaces         `tfsdk:"interfaces"`
+	Ipv6ChecksumDisable                             types.Bool              `tfsdk:"ipv6_checksum_disable"`
 }
 
 type BFDData struct {
-	Device                                                         types.String            `tfsdk:"device"`
-	Id                                                             types.String            `tfsdk:"id"`
-	EchoDisable                                                    types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetectPercentage                                    types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                                         types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce                                       types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                                                 types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval"`
-	TrapSinglehopPreMapped                                         types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                                             []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold                                       types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                                           types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                                         types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                                           types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                                             types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring                              types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                                               types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode                                types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait                               types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait                             types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait                               types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlbInherit                                 types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
-	BundleCoexistenceBobBlbLogical                                 types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
-	Interfaces                                                     []BFDInterfaces         `tfsdk:"interfaces"`
-	Ipv6ChecksumDisable                                            types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Device                                          types.String            `tfsdk:"device"`
+	Id                                              types.String            `tfsdk:"id"`
+	EchoDisable                                     types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetectPercentage                     types.Int64             `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                          types.Int64             `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce                        types.Bool              `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                                  types.String            `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_preferred_minimum_interval"`
+	TrapSinglehopPreMapped                          types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                              []BFDMultipathLocations `tfsdk:"multipath_locations"`
+	MultihopTtlDropThreshold                        types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                            types.Int64             `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                          types.Int64             `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                            types.Int64             `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                              types.Int64             `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring               types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                                types.Bool              `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode                 types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait                types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait              types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait                types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlbInherit                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
+	BundleCoexistenceBobBlbLogical                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
+	Interfaces                                      []BFDInterfaces         `tfsdk:"interfaces"`
+	Ipv6ChecksumDisable                             types.Bool              `tfsdk:"ipv6_checksum_disable"`
 }
 type BFDMultipathLocations struct {
 	LocationName types.String `tfsdk:"location_name"`
@@ -130,8 +130,8 @@ func (data BFD) toBody(ctx context.Context) string {
 	if !data.EchoIpv4Source.IsNull() && !data.EchoIpv4Source.IsUnknown() {
 		body, _ = sjson.Set(body, "echo.ipv4.source", data.EchoIpv4Source.ValueString())
 	}
-	if !data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval.IsNull() && !data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval", strconv.FormatInt(data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval.ValueInt64(), 10))
+	if !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() && !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval", strconv.FormatInt(data.EchoIpv4BundlePerMemberPreferredMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() && !data.TrapSinglehopPreMapped.IsUnknown() {
 		if data.TrapSinglehopPreMapped.ValueBool() {
@@ -275,10 +275,10 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoIpv4Source = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval.IsNull() {
-		data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
+		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
 	} else {
-		data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval = types.Int64Null()
+		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); !data.TrapSinglehopPreMapped.IsNull() {
 		if value.Exists() {
@@ -516,7 +516,7 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() {
-		data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval = types.Int64Value(value.Int())
+		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
@@ -770,7 +770,7 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	if !data.EchoIpv4Source.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/source", data.getPath()))
 	}
-	if !data.EchoIpv4BundlePerMemberMinimumIntervalPreferredMinimumInterval.IsNull() {
+	if !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval/preferred-minimum-interval", data.getPath()))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() {

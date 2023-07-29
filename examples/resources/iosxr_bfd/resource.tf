@@ -1,11 +1,11 @@
 resource "iosxr_bfd" "example" {
-  echo_disable                                                            = true
-  echo_latency_detect_percentage                                          = 200
-  echo_latency_detect_count                                               = 10
-  echo_startup_validate_force                                             = true
-  echo_ipv4_source                                                        = "10.1.1.1"
-  echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval = 200
-  trap_singlehop_pre_mapped                                               = true
+  echo_disable                                           = true
+  echo_latency_detect_percentage                         = 200
+  echo_latency_detect_count                              = 10
+  echo_startup_validate_force                            = true
+  echo_ipv4_source                                       = "10.1.1.1"
+  echo_ipv4_bundle_per_member_preferred_minimum_interval = 200
+  trap_singlehop_pre_mapped                              = true
   multipath_locations = [
     {
       location_name = "0/0/CPU0"

@@ -82,7 +82,7 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "BFD echo source IP address",
 				Computed:            true,
 			},
-			"echo_ipv4_bundle_per_member_minimum_interval_preferred_minimum_interval": schema.Int64Attribute{
+			"echo_ipv4_bundle_per_member_preferred_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: "The preferred minimum interval (in ms) for the BFD session",
 				Computed:            true,
 			},

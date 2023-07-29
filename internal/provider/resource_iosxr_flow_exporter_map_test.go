@@ -27,24 +27,27 @@ import (
 )
 
 func TestAccIosxrFlowExporterMap(t *testing.T) {
+	if os.Getenv("FLOW") == "" {
+		t.Skip("skipping test, set environment variable FLOW")
+	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.exporter_map_name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.destination_ipv4_address", "10.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.destination_ipv6_address", "1::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.destination_vrf", "28"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.source", "10.1.1.4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.dscp", "62"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.packet_length", "512"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.transport_udp", "1033"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.dfbit_set", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_export_format", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_template_data_timeout", "1024"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_template_options_timeout", "3033"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_template_timeout", "2222"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_options_interface_table_timeout", "6048"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_options_sampler_table_timeout", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_options_class_table_timeout", "255"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "exporter_maps.0.version_options_vrf_table_timeout", "122"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "name", "TEST"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv4_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv6_address", "1::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_vrf", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "source", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "dscp", "62"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "packet_length", "512"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "transport_udp", "1033"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "dfbit_set", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_export_format", "v9"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_template_data_timeout", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_template_options_timeout", "3033"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_template_timeout", "2222"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_interface_table_timeout", "6048"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_sampler_table_timeout", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_class_table_timeout", "255"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "version_options_vrf_table_timeout", "122"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -58,7 +61,7 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_flow_exporter_map.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps",
+		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=TEST]",
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -69,31 +72,31 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 
 func testAccIosxrFlowExporterMapConfig_minimum() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
+	config += `	name = "TEST"` + "\n"
+	config += `	version_export_format = "v9"` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrFlowExporterMapConfig_all() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
-	config += `	exporter_maps = [{` + "\n"
-	config += `		exporter_map_name = "TEST"` + "\n"
-	config += `		destination_ipv4_address = "10.1.1.1"` + "\n"
-	config += `		destination_ipv6_address = "1::1"` + "\n"
-	config += `		destination_vrf = "28"` + "\n"
-	config += `		source = "10.1.1.4"` + "\n"
-	config += `		dscp = 62` + "\n"
-	config += `		packet_length = 512` + "\n"
-	config += `		transport_udp = 1033` + "\n"
-	config += `		dfbit_set = true` + "\n"
-	config += `		version_export_format = "true"` + "\n"
-	config += `		version_template_data_timeout = 1024` + "\n"
-	config += `		version_template_options_timeout = 3033` + "\n"
-	config += `		version_template_timeout = 2222` + "\n"
-	config += `		version_options_interface_table_timeout = 6048` + "\n"
-	config += `		version_options_sampler_table_timeout = 4096` + "\n"
-	config += `		version_options_class_table_timeout = 255` + "\n"
-	config += `		version_options_vrf_table_timeout = 122` + "\n"
-	config += `	}]` + "\n"
+	config += `	name = "TEST"` + "\n"
+	config += `	destination_ipv4_address = "10.1.1.1"` + "\n"
+	config += `	destination_ipv6_address = "1::1"` + "\n"
+	config += `	destination_vrf = "VRF1"` + "\n"
+	config += `	source = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	dscp = 62` + "\n"
+	config += `	packet_length = 512` + "\n"
+	config += `	transport_udp = 1033` + "\n"
+	config += `	dfbit_set = true` + "\n"
+	config += `	version_export_format = "v9"` + "\n"
+	config += `	version_template_data_timeout = 1024` + "\n"
+	config += `	version_template_options_timeout = 3033` + "\n"
+	config += `	version_template_timeout = 2222` + "\n"
+	config += `	version_options_interface_table_timeout = 6048` + "\n"
+	config += `	version_options_sampler_table_timeout = 4096` + "\n"
+	config += `	version_options_class_table_timeout = 255` + "\n"
+	config += `	version_options_vrf_table_timeout = 122` + "\n"
 	config += `}` + "\n"
 	return config
 }

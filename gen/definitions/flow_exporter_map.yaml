@@ -1,50 +1,43 @@
 ---
 name: Flow Exporter Map
-path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps
-doc_category: Flow
+path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
 no_delete_attributes: true
+doc_category: Flow
+test_tags: [FLOW]
 attributes:
-  - yang_name: exporter-map
-    tf_name: exporter_maps
-    type: List
-    attributes:
-      - yang_name: exporter-map-name
-        id: true
-        example: TEST
-      - yang_name: destination/ipv4-address
-        example: 10.1.1.1
-      - yang_name: destination/ipv6-address
-        example: 1::1
-      - yang_name: destination/vrf
-        example: 28
-      - yang_name: source
-        example: 10.1.1.4
-      - yang_name: dscp
-        example: 62
-      - yang_name: packet-length
-        example: 512
-      # - yang_name: source-address/ipv4-address
-      #   example: 20.1.1.1
-      # - yang_name: source-address/ipv6-address
-      #   example: 2::2
-      #   exclude_test: true
-      - yang_name: transport/udp
-        example: 1033
-      - yang_name: dfbit/set
-        example: true
-      - yang_name: version/export-format
-        example: true
-      - yang_name: version/template/data/timeout
-        example: 1024
-      - yang_name: version/template/options/timeout
-        example: 3033
-      - yang_name: version/template/timeout
-        example: 2222
-      - yang_name: version/options/interface-table/timeout
-        example: 6048
-      - yang_name: version/options/sampler-table/timeout
-        example: 4096
-      - yang_name: version/options/class-table/timeout
-        example: 255
-      - yang_name: version/options/vrf-table/timeout
-        example: 122
+  - yang_name: exporter-map-name
+    tf_name: name
+    id: true
+    example: TEST
+  - yang_name: destination/ipv4-address
+    example: 10.1.1.1
+  - yang_name: destination/ipv6-address
+    example: 1::1
+  - yang_name: destination/vrf
+    example: VRF1
+  - yang_name: source
+    example: GigabitEthernet0/0/0/1
+  - yang_name: dscp
+    example: 62
+  - yang_name: packet-length
+    example: 512
+  - yang_name: transport/udp
+    example: 1033
+  - yang_name: dfbit/set
+    example: true
+  - yang_name: version/export-format
+    example: v9
+  - yang_name: version/template/data/timeout
+    example: 1024
+  - yang_name: version/template/options/timeout
+    example: 3033
+  - yang_name: version/template/timeout
+    example: 2222
+  - yang_name: version/options/interface-table/timeout
+    example: 6048
+  - yang_name: version/options/sampler-table/timeout
+    example: 4096
+  - yang_name: version/options/class-table/timeout
+    example: 255
+  - yang_name: version/options/vrf-table/timeout
+    example: 122

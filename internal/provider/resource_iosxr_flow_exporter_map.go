@@ -67,133 +67,128 @@ func (r *FlowExporterMapResource) Schema(ctx context.Context, req resource.Schem
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"exporter_maps": schema.ListNestedAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Exporter map name - maximum 32 characters").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.RequiresReplace(),
+				},
+			},
+			"destination_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Destination IPv4 address").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"exporter_map_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Exporter map name - maximum 32 characters").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-						"destination_ipv4_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Destination IPv4 address").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
-							},
-						},
-						"destination_ipv6_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Destination IPv6 address").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
-								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
-							},
-						},
-						"destination_vrf": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure VRF to be used for reaching export destination").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-						"source": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Source interface").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-						"dscp": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets").AddIntegerRangeDescription(0, 63).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 63),
-							},
-						},
-						"packet_length": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Export Packet maximum L3 length, should conform to outgoing interface mtu").AddIntegerRangeDescription(512, 9000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(512, 9000),
-							},
-						},
-						"transport_udp": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use UDP as transport protocol").AddIntegerRangeDescription(1024, 65535).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1024, 65535),
-							},
-						},
-						"dfbit_set": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set Export Packet Do Not Fragment Flag").String,
-							Optional:            true,
-						},
-						"version_export_format": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify export format").AddStringEnumDescription("ipfix", "protobuf", "sflow", "v9").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("ipfix", "protobuf", "sflow", "v9"),
-							},
-						},
-						"version_template_data_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_template_options_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_template_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_options_interface_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_options_sampler_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_options_class_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-						"version_options_vrf_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 604800),
-							},
-						},
-					},
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
+			"destination_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Destination IPv6 address").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+				},
+			},
+			"destination_vrf": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure VRF to be used for reaching export destination").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 32),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
+			"source": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source interface").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
+			},
+			"dscp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets").AddIntegerRangeDescription(0, 63).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 63),
+				},
+			},
+			"packet_length": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Export Packet maximum L3 length, should conform to outgoing interface mtu").AddIntegerRangeDescription(512, 9000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(512, 9000),
+				},
+			},
+			"transport_udp": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use UDP as transport protocol").AddIntegerRangeDescription(1024, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1024, 65535),
+				},
+			},
+			"dfbit_set": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set Export Packet Do Not Fragment Flag").String,
+				Optional:            true,
+			},
+			"version_export_format": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify export format").AddStringEnumDescription("ipfix", "protobuf", "sflow", "v9").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("ipfix", "protobuf", "sflow", "v9"),
+				},
+			},
+			"version_template_data_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_template_options_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_template_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify custom timeout for the template").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_options_interface_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_options_sampler_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_options_class_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
+				},
+			},
+			"version_options_vrf_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify export timeout").AddIntegerRangeDescription(1, 604800).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 604800),
 				},
 			},
 		},

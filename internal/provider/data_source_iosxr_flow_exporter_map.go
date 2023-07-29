@@ -62,81 +62,73 @@ func (d *FlowExporterMapDataSource) Schema(ctx context.Context, req datasource.S
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"exporter_maps": schema.ListNestedAttribute{
+			"name": schema.StringAttribute{
 				MarkdownDescription: "Exporter map name - maximum 32 characters",
+				Required:            true,
+			},
+			"destination_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "Destination IPv4 address",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"exporter_map_name": schema.StringAttribute{
-							MarkdownDescription: "Exporter map name - maximum 32 characters",
-							Computed:            true,
-						},
-						"destination_ipv4_address": schema.StringAttribute{
-							MarkdownDescription: "Destination IPv4 address",
-							Computed:            true,
-						},
-						"destination_ipv6_address": schema.StringAttribute{
-							MarkdownDescription: "Destination IPv6 address",
-							Computed:            true,
-						},
-						"destination_vrf": schema.StringAttribute{
-							MarkdownDescription: "Configure VRF to be used for reaching export destination",
-							Computed:            true,
-						},
-						"source": schema.StringAttribute{
-							MarkdownDescription: "Source interface",
-							Computed:            true,
-						},
-						"dscp": schema.Int64Attribute{
-							MarkdownDescription: "Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets",
-							Computed:            true,
-						},
-						"packet_length": schema.Int64Attribute{
-							MarkdownDescription: "Export Packet maximum L3 length, should conform to outgoing interface mtu",
-							Computed:            true,
-						},
-						"transport_udp": schema.Int64Attribute{
-							MarkdownDescription: "Use UDP as transport protocol",
-							Computed:            true,
-						},
-						"dfbit_set": schema.BoolAttribute{
-							MarkdownDescription: "Set Export Packet Do Not Fragment Flag",
-							Computed:            true,
-						},
-						"version_export_format": schema.StringAttribute{
-							MarkdownDescription: "Specify export format",
-							Computed:            true,
-						},
-						"version_template_data_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify custom timeout for the template",
-							Computed:            true,
-						},
-						"version_template_options_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify custom timeout for the template",
-							Computed:            true,
-						},
-						"version_template_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify custom timeout for the template",
-							Computed:            true,
-						},
-						"version_options_interface_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify export timeout",
-							Computed:            true,
-						},
-						"version_options_sampler_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify export timeout",
-							Computed:            true,
-						},
-						"version_options_class_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify export timeout",
-							Computed:            true,
-						},
-						"version_options_vrf_table_timeout": schema.Int64Attribute{
-							MarkdownDescription: "Specify export timeout",
-							Computed:            true,
-						},
-					},
-				},
+			},
+			"destination_ipv6_address": schema.StringAttribute{
+				MarkdownDescription: "Destination IPv6 address",
+				Computed:            true,
+			},
+			"destination_vrf": schema.StringAttribute{
+				MarkdownDescription: "Configure VRF to be used for reaching export destination",
+				Computed:            true,
+			},
+			"source": schema.StringAttribute{
+				MarkdownDescription: "Source interface",
+				Computed:            true,
+			},
+			"dscp": schema.Int64Attribute{
+				MarkdownDescription: "Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets",
+				Computed:            true,
+			},
+			"packet_length": schema.Int64Attribute{
+				MarkdownDescription: "Export Packet maximum L3 length, should conform to outgoing interface mtu",
+				Computed:            true,
+			},
+			"transport_udp": schema.Int64Attribute{
+				MarkdownDescription: "Use UDP as transport protocol",
+				Computed:            true,
+			},
+			"dfbit_set": schema.BoolAttribute{
+				MarkdownDescription: "Set Export Packet Do Not Fragment Flag",
+				Computed:            true,
+			},
+			"version_export_format": schema.StringAttribute{
+				MarkdownDescription: "Specify export format",
+				Computed:            true,
+			},
+			"version_template_data_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify custom timeout for the template",
+				Computed:            true,
+			},
+			"version_template_options_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify custom timeout for the template",
+				Computed:            true,
+			},
+			"version_template_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify custom timeout for the template",
+				Computed:            true,
+			},
+			"version_options_interface_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify export timeout",
+				Computed:            true,
+			},
+			"version_options_sampler_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify export timeout",
+				Computed:            true,
+			},
+			"version_options_class_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify export timeout",
+				Computed:            true,
+			},
+			"version_options_vrf_table_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Specify export timeout",
+				Computed:            true,
 			},
 		},
 	}

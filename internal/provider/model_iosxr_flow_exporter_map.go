@@ -22,7 +22,6 @@ package provider
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -31,18 +30,31 @@ import (
 )
 
 type FlowExporterMap struct {
-	Device       types.String                  `tfsdk:"device"`
-	Id           types.String                  `tfsdk:"id"`
-	ExporterMaps []FlowExporterMapExporterMaps `tfsdk:"exporter_maps"`
+	Device                              types.String `tfsdk:"device"`
+	Id                                  types.String `tfsdk:"id"`
+	Name                                types.String `tfsdk:"name"`
+	DestinationIpv4Address              types.String `tfsdk:"destination_ipv4_address"`
+	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
+	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
+	Source                              types.String `tfsdk:"source"`
+	Dscp                                types.Int64  `tfsdk:"dscp"`
+	PacketLength                        types.Int64  `tfsdk:"packet_length"`
+	TransportUdp                        types.Int64  `tfsdk:"transport_udp"`
+	DfbitSet                            types.Bool   `tfsdk:"dfbit_set"`
+	VersionExportFormat                 types.String `tfsdk:"version_export_format"`
+	VersionTemplateDataTimeout          types.Int64  `tfsdk:"version_template_data_timeout"`
+	VersionTemplateOptionsTimeout       types.Int64  `tfsdk:"version_template_options_timeout"`
+	VersionTemplateTimeout              types.Int64  `tfsdk:"version_template_timeout"`
+	VersionOptionsInterfaceTableTimeout types.Int64  `tfsdk:"version_options_interface_table_timeout"`
+	VersionOptionsSamplerTableTimeout   types.Int64  `tfsdk:"version_options_sampler_table_timeout"`
+	VersionOptionsClassTableTimeout     types.Int64  `tfsdk:"version_options_class_table_timeout"`
+	VersionOptionsVrfTableTimeout       types.Int64  `tfsdk:"version_options_vrf_table_timeout"`
 }
 
 type FlowExporterMapData struct {
-	Device       types.String                  `tfsdk:"device"`
-	Id           types.String                  `tfsdk:"id"`
-	ExporterMaps []FlowExporterMapExporterMaps `tfsdk:"exporter_maps"`
-}
-type FlowExporterMapExporterMaps struct {
-	ExporterMapName                     types.String `tfsdk:"exporter_map_name"`
+	Device                              types.String `tfsdk:"device"`
+	Id                                  types.String `tfsdk:"id"`
+	Name                                types.String `tfsdk:"name"`
 	DestinationIpv4Address              types.String `tfsdk:"destination_ipv4_address"`
 	DestinationIpv6Address              types.String `tfsdk:"destination_ipv6_address"`
 	DestinationVrf                      types.String `tfsdk:"destination_vrf"`
@@ -62,318 +74,273 @@ type FlowExporterMapExporterMaps struct {
 }
 
 func (data FlowExporterMap) getPath() string {
-	return "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps"
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowExporterMapData) getPath() string {
-	return "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps"
+	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]", data.Name.ValueString())
 }
 
 func (data FlowExporterMap) toBody(ctx context.Context) string {
 	body := "{}"
-	if len(data.ExporterMaps) > 0 {
-		body, _ = sjson.Set(body, "exporter-map", []interface{}{})
-		for index, item := range data.ExporterMaps {
-			if !item.ExporterMapName.IsNull() && !item.ExporterMapName.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"exporter-map-name", item.ExporterMapName.ValueString())
-			}
-			if !item.DestinationIpv4Address.IsNull() && !item.DestinationIpv4Address.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"destination.ipv4-address", item.DestinationIpv4Address.ValueString())
-			}
-			if !item.DestinationIpv6Address.IsNull() && !item.DestinationIpv6Address.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"destination.ipv6-address", item.DestinationIpv6Address.ValueString())
-			}
-			if !item.DestinationVrf.IsNull() && !item.DestinationVrf.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"destination.vrf", item.DestinationVrf.ValueString())
-			}
-			if !item.Source.IsNull() && !item.Source.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"source", item.Source.ValueString())
-			}
-			if !item.Dscp.IsNull() && !item.Dscp.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"dscp", strconv.FormatInt(item.Dscp.ValueInt64(), 10))
-			}
-			if !item.PacketLength.IsNull() && !item.PacketLength.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"packet-length", strconv.FormatInt(item.PacketLength.ValueInt64(), 10))
-			}
-			if !item.TransportUdp.IsNull() && !item.TransportUdp.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"transport.udp", strconv.FormatInt(item.TransportUdp.ValueInt64(), 10))
-			}
-			if !item.DfbitSet.IsNull() && !item.DfbitSet.IsUnknown() {
-				if item.DfbitSet.ValueBool() {
-					body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"dfbit.set", map[string]string{})
-				}
-			}
-			if !item.VersionExportFormat.IsNull() && !item.VersionExportFormat.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.export-format", item.VersionExportFormat.ValueString())
-			}
-			if !item.VersionTemplateDataTimeout.IsNull() && !item.VersionTemplateDataTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.template.data.timeout", strconv.FormatInt(item.VersionTemplateDataTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionTemplateOptionsTimeout.IsNull() && !item.VersionTemplateOptionsTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.template.options.timeout", strconv.FormatInt(item.VersionTemplateOptionsTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionTemplateTimeout.IsNull() && !item.VersionTemplateTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.template.timeout", strconv.FormatInt(item.VersionTemplateTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionOptionsInterfaceTableTimeout.IsNull() && !item.VersionOptionsInterfaceTableTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.options.interface-table.timeout", strconv.FormatInt(item.VersionOptionsInterfaceTableTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionOptionsSamplerTableTimeout.IsNull() && !item.VersionOptionsSamplerTableTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.options.sampler-table.timeout", strconv.FormatInt(item.VersionOptionsSamplerTableTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionOptionsClassTableTimeout.IsNull() && !item.VersionOptionsClassTableTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.options.class-table.timeout", strconv.FormatInt(item.VersionOptionsClassTableTimeout.ValueInt64(), 10))
-			}
-			if !item.VersionOptionsVrfTableTimeout.IsNull() && !item.VersionOptionsVrfTableTimeout.IsUnknown() {
-				body, _ = sjson.Set(body, "exporter-map"+"."+strconv.Itoa(index)+"."+"version.options.vrf-table.timeout", strconv.FormatInt(item.VersionOptionsVrfTableTimeout.ValueInt64(), 10))
-			}
+	if !data.Name.IsNull() && !data.Name.IsUnknown() {
+		body, _ = sjson.Set(body, "exporter-map-name", data.Name.ValueString())
+	}
+	if !data.DestinationIpv4Address.IsNull() && !data.DestinationIpv4Address.IsUnknown() {
+		body, _ = sjson.Set(body, "destination.ipv4-address", data.DestinationIpv4Address.ValueString())
+	}
+	if !data.DestinationIpv6Address.IsNull() && !data.DestinationIpv6Address.IsUnknown() {
+		body, _ = sjson.Set(body, "destination.ipv6-address", data.DestinationIpv6Address.ValueString())
+	}
+	if !data.DestinationVrf.IsNull() && !data.DestinationVrf.IsUnknown() {
+		body, _ = sjson.Set(body, "destination.vrf", data.DestinationVrf.ValueString())
+	}
+	if !data.Source.IsNull() && !data.Source.IsUnknown() {
+		body, _ = sjson.Set(body, "source", data.Source.ValueString())
+	}
+	if !data.Dscp.IsNull() && !data.Dscp.IsUnknown() {
+		body, _ = sjson.Set(body, "dscp", strconv.FormatInt(data.Dscp.ValueInt64(), 10))
+	}
+	if !data.PacketLength.IsNull() && !data.PacketLength.IsUnknown() {
+		body, _ = sjson.Set(body, "packet-length", strconv.FormatInt(data.PacketLength.ValueInt64(), 10))
+	}
+	if !data.TransportUdp.IsNull() && !data.TransportUdp.IsUnknown() {
+		body, _ = sjson.Set(body, "transport.udp", strconv.FormatInt(data.TransportUdp.ValueInt64(), 10))
+	}
+	if !data.DfbitSet.IsNull() && !data.DfbitSet.IsUnknown() {
+		if data.DfbitSet.ValueBool() {
+			body, _ = sjson.Set(body, "dfbit.set", map[string]string{})
 		}
+	}
+	if !data.VersionExportFormat.IsNull() && !data.VersionExportFormat.IsUnknown() {
+		body, _ = sjson.Set(body, "version.export-format", data.VersionExportFormat.ValueString())
+	}
+	if !data.VersionTemplateDataTimeout.IsNull() && !data.VersionTemplateDataTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.template.data.timeout", strconv.FormatInt(data.VersionTemplateDataTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionTemplateOptionsTimeout.IsNull() && !data.VersionTemplateOptionsTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.template.options.timeout", strconv.FormatInt(data.VersionTemplateOptionsTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionTemplateTimeout.IsNull() && !data.VersionTemplateTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.template.timeout", strconv.FormatInt(data.VersionTemplateTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionOptionsInterfaceTableTimeout.IsNull() && !data.VersionOptionsInterfaceTableTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.options.interface-table.timeout", strconv.FormatInt(data.VersionOptionsInterfaceTableTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionOptionsSamplerTableTimeout.IsNull() && !data.VersionOptionsSamplerTableTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.options.sampler-table.timeout", strconv.FormatInt(data.VersionOptionsSamplerTableTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionOptionsClassTableTimeout.IsNull() && !data.VersionOptionsClassTableTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.options.class-table.timeout", strconv.FormatInt(data.VersionOptionsClassTableTimeout.ValueInt64(), 10))
+	}
+	if !data.VersionOptionsVrfTableTimeout.IsNull() && !data.VersionOptionsVrfTableTimeout.IsUnknown() {
+		body, _ = sjson.Set(body, "version.options.vrf-table.timeout", strconv.FormatInt(data.VersionOptionsVrfTableTimeout.ValueInt64(), 10))
 	}
 	return body
 }
 
 func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
-	for i := range data.ExporterMaps {
-		keys := [...]string{"exporter-map-name"}
-		keyValues := [...]string{data.ExporterMaps[i].ExporterMapName.ValueString()}
-
-		var r gjson.Result
-		gjson.GetBytes(res, "exporter-map").ForEach(
-			func(_, v gjson.Result) bool {
-				found := false
-				for ik := range keys {
-					if v.Get(keys[ik]).String() == keyValues[ik] {
-						found = true
-						continue
-					}
-					found = false
-					break
-				}
-				if found {
-					r = v
-					return false
-				}
-				return true
-			},
-		)
-		if value := r.Get("exporter-map-name"); value.Exists() && !data.ExporterMaps[i].ExporterMapName.IsNull() {
-			data.ExporterMaps[i].ExporterMapName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() && !data.DestinationIpv4Address.IsNull() {
+		data.DestinationIpv4Address = types.StringValue(value.String())
+	} else {
+		data.DestinationIpv4Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "destination.ipv6-address"); value.Exists() && !data.DestinationIpv6Address.IsNull() {
+		data.DestinationIpv6Address = types.StringValue(value.String())
+	} else {
+		data.DestinationIpv6Address = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "destination.vrf"); value.Exists() && !data.DestinationVrf.IsNull() {
+		data.DestinationVrf = types.StringValue(value.String())
+	} else {
+		data.DestinationVrf = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "source"); value.Exists() && !data.Source.IsNull() {
+		data.Source = types.StringValue(value.String())
+	} else {
+		data.Source = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() && !data.Dscp.IsNull() {
+		data.Dscp = types.Int64Value(value.Int())
+	} else {
+		data.Dscp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() && !data.PacketLength.IsNull() {
+		data.PacketLength = types.Int64Value(value.Int())
+	} else {
+		data.PacketLength = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() && !data.TransportUdp.IsNull() {
+		data.TransportUdp = types.Int64Value(value.Int())
+	} else {
+		data.TransportUdp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "dfbit.set"); !data.DfbitSet.IsNull() {
+		if value.Exists() {
+			data.DfbitSet = types.BoolValue(true)
 		} else {
-			data.ExporterMaps[i].ExporterMapName = types.StringNull()
+			data.DfbitSet = types.BoolValue(false)
 		}
-		if value := r.Get("destination.ipv4-address"); value.Exists() && !data.ExporterMaps[i].DestinationIpv4Address.IsNull() {
-			data.ExporterMaps[i].DestinationIpv4Address = types.StringValue(value.String())
-		} else {
-			data.ExporterMaps[i].DestinationIpv4Address = types.StringNull()
-		}
-		if value := r.Get("destination.ipv6-address"); value.Exists() && !data.ExporterMaps[i].DestinationIpv6Address.IsNull() {
-			data.ExporterMaps[i].DestinationIpv6Address = types.StringValue(value.String())
-		} else {
-			data.ExporterMaps[i].DestinationIpv6Address = types.StringNull()
-		}
-		if value := r.Get("destination.vrf"); value.Exists() && !data.ExporterMaps[i].DestinationVrf.IsNull() {
-			data.ExporterMaps[i].DestinationVrf = types.StringValue(value.String())
-		} else {
-			data.ExporterMaps[i].DestinationVrf = types.StringNull()
-		}
-		if value := r.Get("source"); value.Exists() && !data.ExporterMaps[i].Source.IsNull() {
-			data.ExporterMaps[i].Source = types.StringValue(value.String())
-		} else {
-			data.ExporterMaps[i].Source = types.StringNull()
-		}
-		if value := r.Get("dscp"); value.Exists() && !data.ExporterMaps[i].Dscp.IsNull() {
-			data.ExporterMaps[i].Dscp = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].Dscp = types.Int64Null()
-		}
-		if value := r.Get("packet-length"); value.Exists() && !data.ExporterMaps[i].PacketLength.IsNull() {
-			data.ExporterMaps[i].PacketLength = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].PacketLength = types.Int64Null()
-		}
-		if value := r.Get("transport.udp"); value.Exists() && !data.ExporterMaps[i].TransportUdp.IsNull() {
-			data.ExporterMaps[i].TransportUdp = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].TransportUdp = types.Int64Null()
-		}
-		if value := r.Get("dfbit.set"); !data.ExporterMaps[i].DfbitSet.IsNull() {
-			if value.Exists() {
-				data.ExporterMaps[i].DfbitSet = types.BoolValue(true)
-			} else {
-				data.ExporterMaps[i].DfbitSet = types.BoolValue(false)
-			}
-		} else {
-			data.ExporterMaps[i].DfbitSet = types.BoolNull()
-		}
-		if value := r.Get("version.export-format"); value.Exists() && !data.ExporterMaps[i].VersionExportFormat.IsNull() {
-			data.ExporterMaps[i].VersionExportFormat = types.StringValue(value.String())
-		} else {
-			data.ExporterMaps[i].VersionExportFormat = types.StringNull()
-		}
-		if value := r.Get("version.template.data.timeout"); value.Exists() && !data.ExporterMaps[i].VersionTemplateDataTimeout.IsNull() {
-			data.ExporterMaps[i].VersionTemplateDataTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionTemplateDataTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.template.options.timeout"); value.Exists() && !data.ExporterMaps[i].VersionTemplateOptionsTimeout.IsNull() {
-			data.ExporterMaps[i].VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionTemplateOptionsTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.template.timeout"); value.Exists() && !data.ExporterMaps[i].VersionTemplateTimeout.IsNull() {
-			data.ExporterMaps[i].VersionTemplateTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionTemplateTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.options.interface-table.timeout"); value.Exists() && !data.ExporterMaps[i].VersionOptionsInterfaceTableTimeout.IsNull() {
-			data.ExporterMaps[i].VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionOptionsInterfaceTableTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.options.sampler-table.timeout"); value.Exists() && !data.ExporterMaps[i].VersionOptionsSamplerTableTimeout.IsNull() {
-			data.ExporterMaps[i].VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionOptionsSamplerTableTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.options.class-table.timeout"); value.Exists() && !data.ExporterMaps[i].VersionOptionsClassTableTimeout.IsNull() {
-			data.ExporterMaps[i].VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionOptionsClassTableTimeout = types.Int64Null()
-		}
-		if value := r.Get("version.options.vrf-table.timeout"); value.Exists() && !data.ExporterMaps[i].VersionOptionsVrfTableTimeout.IsNull() {
-			data.ExporterMaps[i].VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
-		} else {
-			data.ExporterMaps[i].VersionOptionsVrfTableTimeout = types.Int64Null()
-		}
+	} else {
+		data.DfbitSet = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() && !data.VersionExportFormat.IsNull() {
+		data.VersionExportFormat = types.StringValue(value.String())
+	} else {
+		data.VersionExportFormat = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "version.template.data.timeout"); value.Exists() && !data.VersionTemplateDataTimeout.IsNull() {
+		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionTemplateDataTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.template.options.timeout"); value.Exists() && !data.VersionTemplateOptionsTimeout.IsNull() {
+		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionTemplateOptionsTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.template.timeout"); value.Exists() && !data.VersionTemplateTimeout.IsNull() {
+		data.VersionTemplateTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionTemplateTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.options.interface-table.timeout"); value.Exists() && !data.VersionOptionsInterfaceTableTimeout.IsNull() {
+		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionOptionsInterfaceTableTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.options.sampler-table.timeout"); value.Exists() && !data.VersionOptionsSamplerTableTimeout.IsNull() {
+		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionOptionsSamplerTableTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.options.class-table.timeout"); value.Exists() && !data.VersionOptionsClassTableTimeout.IsNull() {
+		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionOptionsClassTableTimeout = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() && !data.VersionOptionsVrfTableTimeout.IsNull() {
+		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
+	} else {
+		data.VersionOptionsVrfTableTimeout = types.Int64Null()
 	}
 }
 
 func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "exporter-map"); value.Exists() {
-		data.ExporterMaps = make([]FlowExporterMapExporterMaps, 0)
-		value.ForEach(func(k, v gjson.Result) bool {
-			item := FlowExporterMapExporterMaps{}
-			if cValue := v.Get("exporter-map-name"); cValue.Exists() {
-				item.ExporterMapName = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.ipv4-address"); cValue.Exists() {
-				item.DestinationIpv4Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.ipv6-address"); cValue.Exists() {
-				item.DestinationIpv6Address = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("destination.vrf"); cValue.Exists() {
-				item.DestinationVrf = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("source"); cValue.Exists() {
-				item.Source = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("dscp"); cValue.Exists() {
-				item.Dscp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("packet-length"); cValue.Exists() {
-				item.PacketLength = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("transport.udp"); cValue.Exists() {
-				item.TransportUdp = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("dfbit.set"); cValue.Exists() {
-				item.DfbitSet = types.BoolValue(true)
-			} else {
-				item.DfbitSet = types.BoolValue(false)
-			}
-			if cValue := v.Get("version.export-format"); cValue.Exists() {
-				item.VersionExportFormat = types.StringValue(cValue.String())
-			}
-			if cValue := v.Get("version.template.data.timeout"); cValue.Exists() {
-				item.VersionTemplateDataTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.template.options.timeout"); cValue.Exists() {
-				item.VersionTemplateOptionsTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.template.timeout"); cValue.Exists() {
-				item.VersionTemplateTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.options.interface-table.timeout"); cValue.Exists() {
-				item.VersionOptionsInterfaceTableTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.options.sampler-table.timeout"); cValue.Exists() {
-				item.VersionOptionsSamplerTableTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.options.class-table.timeout"); cValue.Exists() {
-				item.VersionOptionsClassTableTimeout = types.Int64Value(cValue.Int())
-			}
-			if cValue := v.Get("version.options.vrf-table.timeout"); cValue.Exists() {
-				item.VersionOptionsVrfTableTimeout = types.Int64Value(cValue.Int())
-			}
-			data.ExporterMaps = append(data.ExporterMaps, item)
-			return true
-		})
+	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() {
+		data.DestinationIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "destination.ipv6-address"); value.Exists() {
+		data.DestinationIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "destination.vrf"); value.Exists() {
+		data.DestinationVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source"); value.Exists() {
+		data.Source = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
+		data.Dscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() {
+		data.TransportUdp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
+		data.DfbitSet = types.BoolValue(true)
+	} else {
+		data.DfbitSet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() {
+		data.VersionExportFormat = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "version.template.data.timeout"); value.Exists() {
+		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.template.options.timeout"); value.Exists() {
+		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.template.timeout"); value.Exists() {
+		data.VersionTemplateTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.interface-table.timeout"); value.Exists() {
+		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.sampler-table.timeout"); value.Exists() {
+		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.class-table.timeout"); value.Exists() {
+		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() {
+		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
 }
 
 func (data *FlowExporterMap) getDeletedListItems(ctx context.Context, state FlowExporterMap) []string {
 	deletedListItems := make([]string, 0)
-	for i := range state.ExporterMaps {
-		keys := [...]string{"exporter-map-name"}
-		stateKeyValues := [...]string{state.ExporterMaps[i].ExporterMapName.ValueString()}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.ExporterMaps[i].ExporterMapName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.ExporterMaps {
-			found = true
-			if state.ExporterMaps[i].ExporterMapName.ValueString() != data.ExporterMaps[j].ExporterMapName.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/exporter-map%v", state.getPath(), keyString))
-		}
-	}
 	return deletedListItems
 }
 
 func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.ExporterMaps {
-		keys := [...]string{"exporter-map-name"}
-		keyValues := [...]string{data.ExporterMaps[i].ExporterMapName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.ExporterMaps[i].DfbitSet.IsNull() && !data.ExporterMaps[i].DfbitSet.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/exporter-map%v/dfbit/set", data.getPath(), keyString))
-		}
+	if !data.DfbitSet.IsNull() && !data.DfbitSet.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/dfbit/set", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
 
 func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.ExporterMaps {
-		keys := [...]string{"exporter-map-name"}
-		keyValues := [...]string{data.ExporterMaps[i].ExporterMapName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/exporter-map%v", data.getPath(), keyString))
+	if !data.DestinationIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/ipv4-address", data.getPath()))
+	}
+	if !data.DestinationIpv6Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/ipv6-address", data.getPath()))
+	}
+	if !data.DestinationVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/vrf", data.getPath()))
+	}
+	if !data.Source.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source", data.getPath()))
+	}
+	if !data.Dscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
+	}
+	if !data.PacketLength.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-length", data.getPath()))
+	}
+	if !data.TransportUdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
+	}
+	if !data.DfbitSet.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dfbit/set", data.getPath()))
+	}
+	if !data.VersionExportFormat.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/export-format", data.getPath()))
+	}
+	if !data.VersionTemplateDataTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/data/timeout", data.getPath()))
+	}
+	if !data.VersionTemplateOptionsTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/options/timeout", data.getPath()))
+	}
+	if !data.VersionTemplateTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsInterfaceTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/interface-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsSamplerTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/sampler-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsClassTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/class-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsVrfTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/vrf-table/timeout", data.getPath()))
 	}
 	return deletePaths
 }

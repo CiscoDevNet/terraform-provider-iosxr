@@ -1,0 +1,113 @@
+name: Flow Monitor Map
+path: Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]
+no_delete_attributes: true
+doc_category: Flow
+test_tags: [FLOW]
+attributes:
+  - yang_name: monitor-map-name
+    tf_name: name
+    example: monitor_map1
+  - yang_name: exporters/exporter
+    tf_name: exporters
+    type: List
+    attributes:
+      - yang_name: exporter-name
+        tf_name: name
+        id: true
+        example: exporter1
+  - yang_name: option/outphysint
+    example: true
+  - yang_name: option/filtered
+    example: true
+  - yang_name: option/bgpattr
+    example: true
+  - yang_name: option/outbundlemember
+    example: true
+  - yang_name: record/ipv4/destination
+    example: true
+  - yang_name: record/ipv4/destination-tos
+    example: true
+  - yang_name: record/ipv4/as
+    example: true
+  - yang_name: record/ipv4/protocol-port
+    example: true
+  - yang_name: record/ipv4/prefix
+    example: true
+  - yang_name: record/ipv4/source-prefix
+    example: true
+  - yang_name: record/ipv4/destination-prefix
+    example: true
+  - yang_name: record/ipv4/as-tos
+    example: true
+  - yang_name: record/ipv4/protocol-port-tos
+    example: true
+  - yang_name: record/ipv4/prefix-tos
+    example: true
+  - yang_name: record/ipv4/source-prefix-tos
+    example: true
+  - yang_name: record/ipv4/destination-prefix-tos
+    example: true
+  - yang_name: record/ipv4/prefix-port
+    example: true
+  - yang_name: record/ipv4/bgp-nexthop-tos
+    example: true
+  - yang_name: record/ipv4/peer-as
+    example: true
+  - yang_name: record/ipv4/gtp
+    example: true
+  - yang_name: record/ipv6/destination
+    example: true
+  - yang_name: record/ipv6/peer-as
+    example: true
+  - yang_name: record/ipv6/gtp
+    example: true
+  - yang_name: record/mpls/ipv4-fields
+    example: true
+  - yang_name: record/mpls/ipv6-fields
+    example: true
+  - yang_name: record/mpls/ipv4-ipv6-fields
+    example: true
+  - yang_name: record/mpls/labels
+    example: 2
+  - yang_name: record/map-t
+    example: true
+  - yang_name: record/sflow
+    example: true
+  - yang_name: record/datalink-record
+    example: true
+  - yang_name: record/default-rtp
+    example: true
+  - yang_name: record/default-mdi
+    example: true
+  - yang_name: cache/entries
+    example: 5000
+  - yang_name: cache/timeout/active
+    example: 1
+  - yang_name: cache/timeout/inactive
+    example: 0
+  - yang_name: cache/timeout/update
+    example: 1
+  - yang_name: cache/timeout/rate-limit
+    example: 5000
+  - yang_name: cache/permanent
+    example: true
+  - yang_name: cache/immediate
+    example: true
+  - yang_name: hw-cache/timeout/inactive
+    example: 50
+  - yang_name: sflow/options/extended-router
+    example: true
+  - yang_name: sflow/options/extended-gateway
+    example: true
+  - yang_name: sflow/options/extended-ipv4-tunnel-egress
+    example: true
+  - yang_name: sflow/options/extended-ipv6-tunnel-egress
+    example: true
+  - yang_name: sflow/options/if-counters/polling-interval
+    example: 5
+  - yang_name: sflow/options/sample-header/size
+    example: 128
+  - yang_name: sflow/options/input/ifindex
+    example: physical
+  - yang_name: sflow/options/output/ifindex
+    example: physical

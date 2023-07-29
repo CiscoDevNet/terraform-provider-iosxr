@@ -1,0 +1,308 @@
+---
+name: NTP
+path: Cisco-IOS-XR-um-ntp-cfg:/ntp
+doc_category: System
+attributes:
+  - yang_name: ipv4/dscp
+    exclude_test: true
+    example: af11
+  - yang_name: ipv4/precedence
+    example: network
+  - yang_name: ipv6/dscp
+    example: af11
+  - yang_name: ipv6/precedence
+    exclude_test: true
+    example: network
+  - yang_name: access-group/ipv6/peer
+    example: peer1
+  - yang_name: access-group/ipv6/query-only
+    example: query1
+  - yang_name: access-group/ipv6/serve
+    example: serve1
+  - yang_name: access-group/ipv6/serve-only
+    example: serve-only123
+  - yang_name: access-group/ipv4/peer
+    example: peer1
+  - yang_name: access-group/ipv4/query-only
+    example: query1
+  - yang_name: access-group/ipv4/serve
+    example: serve1
+  - yang_name: access-group/ipv4/serve-only
+    example: serve-only123
+  - yang_name: access-group/vrfs/vrf
+    tf_name: access_group_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: ntp_vrf
+      - yang_name: ipv6/peer
+        example: peer1
+      - yang_name: ipv6/query-only
+        example: query1
+      - yang_name: ipv6/serve
+        example: serve1
+      - yang_name: ipv6/serve-only
+        example: serve-only123
+      - yang_name: ipv4/peer
+        example: peer1
+      - yang_name: ipv4/query-only
+        example: query1
+      - yang_name: ipv4/serve
+        example: serve1
+      - yang_name: ipv4/serve-only
+        example: serve-only123
+  - yang_name: authenticate
+    example: true
+  - yang_name: authentication-keys/authentication-key
+    tf_name: authentication_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 10
+      - yang_name: md5/encrypted
+        example: 1212000E43
+  - yang_name: broadcastdelay
+    example: 10
+  - yang_name: max-associations
+    example: 1
+  - yang_name: trusted-keys/trusted-key
+    tf_name: trusted_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 8
+  - yang_name: update-calendar
+    example: true
+  - yang_name: log-internal-sync
+    example: true
+  - yang_name: source/interface-name
+    example: BVI1
+  - yang_name: source/vrfs/vrf
+    tf_name: source_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: source_vrf
+      - yang_name: interface-name
+        example: BVI1
+  - yang_name: passive
+    example: true
+  - yang_name: cmac-authentication-keys/cmac-authentication-key
+    tf_name: cmac_authentication_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 2
+      - yang_name: cmac/encrypted
+        example: 135445415F59527D737D78626771475240
+  - yang_name: hmac-sha1-authentication-keys/hmac-sha1-authentication-key
+    tf_name: hmac_sha1_authentication_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 3
+      - yang_name: hmac-sha1/encrypted
+        example: 101F5B4A5142445C545D7A7A767B676074
+  - yang_name: hmac-sha2-authentication-keys/hmac-sha2-authentication-key
+    tf_name: hmac_sha2_authentication_keys
+    type: List
+    attributes:
+      - yang_name: key-number
+        id: true
+        example: 4
+      - yang_name: hmac-sha2/encrypted
+        example: 091D1C5A4D5041455355547B79777C6663
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: Bundle-Ether1
+      - yang_name: broadcast/destination
+        example: 1.2.3.4
+        exclude_test: true
+      - yang_name: broadcast/key
+        example: 1
+        exclude_test: true
+      - yang_name: broadcast/version
+        example: 2
+      - yang_name: disable
+        example: true
+  - yang_name: interfaces/vrfs/vrf
+    tf_name: interface_vrfs
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: ntp_vrf
+      - yang_name: interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: GigabitEthernet0/0/0/1
+          - yang_name: broadcast-client
+            example: true
+          - yang_name: broadcast/destination
+            example: 1.2.3.4
+          - yang_name: broadcast/key
+            example: 1
+          - yang_name: broadcast/version
+            example: 2
+          - yang_name: disable
+            example: true
+  - yang_name: primary/stratum-number
+    example: 1
+    exclude_test: true
+  - yang_name: primary/primary-reference-clock
+    tf_name: primary_reference_clock
+    example: true
+    exclude_test: true
+  - yang_name: peer-server/ipv4/ipv4-peer-server
+    tf_name: ipv4_peers_servers
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 1.2.3.4
+      - yang_name: type
+        id: true
+        example: server
+      - yang_name: version
+        example: 2
+      - yang_name: key
+        example: 1
+      - yang_name: minpoll
+        example: 4
+      - yang_name: maxpoll
+        example: 5
+      - yang_name: prefer
+        example: true
+      - yang_name: burst
+        example: true
+      - yang_name: iburst
+        example: true
+      - yang_name: source
+        example: GigabitEthernet0/0/0/1
+  - yang_name: peer-server/ipv6/ipv6-peer-server
+    tf_name: ipv6_peers_servers
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001::1
+      - yang_name: type
+        id: true
+        example: peer
+      - yang_name: version
+        example: 2
+      - yang_name: key
+        example: 1
+      - yang_name: minpoll
+        example: 4
+      - yang_name: maxpoll
+        example: 5
+      - yang_name: prefer
+        example: true
+      - yang_name: burst
+        example: true
+      - yang_name: iburst
+        example: true
+      - yang_name: source
+        example: GigabitEthernet0/0/0/1
+      - yang_name: ipv6-address
+        example: 2001::1
+  - yang_name: peer-server/vrfs/vrf
+    tf_name: peers_servers_vrfs
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: vrf1
+      - yang_name: ipv4/ipv4-peer-server
+        tf_name: ipv4_peers_servers
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 1.2.3.4
+          - yang_name: type
+            id: true
+            example: server
+          - yang_name: version
+            example: 2
+          - yang_name: key
+            example: 1
+          - yang_name: minpoll
+            example: 4
+          - yang_name: maxpoll
+            example: 5
+          - yang_name: prefer
+            example: true
+          - yang_name: burst
+            example: true
+          - yang_name: iburst
+            example: true
+          - yang_name: source
+            example: GigabitEthernet0/0/0/1
+      - yang_name: ipv6/ipv6-peer-server
+        tf_name: ipv6_peers_servers
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 2001::1
+          - yang_name: type
+            id: true
+            example: peer
+          - yang_name: version
+            example: 2
+          - yang_name: key
+            example: 1
+          - yang_name: minpoll
+            example: 4
+          - yang_name: maxpoll
+            example: 5
+          - yang_name: prefer
+            example: true
+          - yang_name: burst
+            example: true
+          - yang_name: iburst
+            example: true
+          - yang_name: source
+            example: GigabitEthernet0/0/0/1
+          - yang_name: ipv6-address
+            example: 2001::1
+  - yang_name: admin-plane/version
+    example: 1
+    exclude_test: true
+  - yang_name: admin-plane/key
+    example: 1
+    exclude_test: true
+  - yang_name: admin-plane/minpoll
+    example: 4
+    exclude_test: true
+  - yang_name: admin-plane/maxpoll
+    example: 4
+    exclude_test: true
+  - yang_name: admin-plane/prefer
+    example: true
+    exclude_test: true
+  - yang_name: admin-plane/burst
+    example: true
+    exclude_test: true
+  - yang_name: admin-plane/iburst
+    example: true
+    exclude_test: true

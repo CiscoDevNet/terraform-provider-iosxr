@@ -1,0 +1,14 @@
+---
+name: Flow Sampler Map
+path: Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=%s]
+no_delete_attributes: true
+doc_category: Flow
+test_tags: [FLOW]
+attributes:
+  - yang_name: sampler-map-name
+    tf_name: name
+    example: sampler_map1
+  - yang_name: random
+    example: 1
+  - yang_name: out-of
+    example: 1

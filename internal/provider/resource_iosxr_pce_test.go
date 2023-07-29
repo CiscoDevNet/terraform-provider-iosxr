@@ -68,14 +68,14 @@ func testAccIosxrPCEConfig_all() string {
 	config += `	address_ipv4 = "77.77.77.1"` + "\n"
 	config += `	state_sync_ipv4s = [{` + "\n"
 	config += `		address = "100.100.100.11"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	peer_filter_ipv4_access_list = "Accesslist1"` + "\n"
 	config += `	api_authentication_digest = true` + "\n"
 	config += `	api_sibling_ipv4 = "100.100.100.2"` + "\n"
 	config += `	api_users = [{` + "\n"
 	config += `		user_name = "rest-user"` + "\n"
 	config += `		password_encrypted = "00141215174C04140B"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -133,7 +133,7 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	config += `		timers_holdtime = "20"` + "\n"
 	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		ttl_security = false` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

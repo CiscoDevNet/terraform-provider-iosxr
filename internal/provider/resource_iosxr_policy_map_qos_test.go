@@ -78,7 +78,7 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 	config += `			value = "100"` + "\n"
 	config += `			unit = "us"` + "\n"
 	config += `		}]` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

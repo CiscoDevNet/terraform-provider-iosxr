@@ -87,11 +87,11 @@ func testAccIosxrRouterVRRPInterfaceAddressFamilyIPv6Config_all() string {
 	config += `	track_interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/5"` + "\n"
 	config += `		priority_decrement = 12` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	track_objects = [{` + "\n"
 	config += `		object_name = "OBJECT"` + "\n"
 	config += `		priority_decrement = 22` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	bfd_fast_detect_peer_ipv6 = "3::3"` + "\n"
 	config += `}` + "\n"
 	return config

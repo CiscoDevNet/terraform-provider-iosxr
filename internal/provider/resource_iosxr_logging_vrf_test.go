@@ -68,11 +68,11 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	host_ipv6_addresses = [{` + "\n"
 	config += `		ipv6_address = "2001::1"` + "\n"
 	config += `		severity = "info"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -71,12 +71,12 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
 	config += `	description = "My P2P Description"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	neighbor_evpn_evi_segment_routing_services = [{` + "\n"
 	config += `		vpn_id = 4600` + "\n"
 	config += `		service_id = 600` + "\n"
 	config += `		segment_routing_srv6_locator = "LOC11"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

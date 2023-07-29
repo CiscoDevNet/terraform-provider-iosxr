@@ -73,11 +73,11 @@ func testAccIosxrTelnetConfig_all() string {
 	config += `		ipv4_server_access_list = "ACCESS1"` + "\n"
 	config += `		ipv6_server_max_servers = 34` + "\n"
 	config += `		ipv6_server_access_list = "ACCESS11"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	vrfs_dscp = [{` + "\n"
 	config += `		vrf_name = "TOI"` + "\n"
 	config += `		ipv4_dscp = 55` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

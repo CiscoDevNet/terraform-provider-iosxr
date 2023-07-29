@@ -73,7 +73,7 @@ func testAccIosxrSegmentRoutingV6Config_all() string {
 	config += `		micro_segment_behavior = "unode-psp-usd"` + "\n"
 	config += `		prefix = "fccc:0:214::"` + "\n"
 	config += `		prefix_length = 48` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

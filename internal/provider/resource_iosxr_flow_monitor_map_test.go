@@ -115,7 +115,7 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config += `	name = "monitor_map1"` + "\n"
 	config += `	exporters = [{` + "\n"
 	config += `		name = "exporter1"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	option_outphysint = true` + "\n"
 	config += `	option_filtered = true` + "\n"
 	config += `	option_bgpattr = true` + "\n"

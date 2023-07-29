@@ -78,7 +78,7 @@ func testAccIosxrIPv6PrefixListConfig_all() string {
 	config += `		match_prefix_length_eq = 10` + "\n"
 	config += `		match_prefix_length_ge = 20` + "\n"
 	config += `		match_prefix_length_le = 20` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

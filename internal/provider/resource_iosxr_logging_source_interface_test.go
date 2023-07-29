@@ -64,7 +64,7 @@ func testAccIosxrLoggingSourceInterfaceConfig_all() string {
 	config += `	name = "Loopback0"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

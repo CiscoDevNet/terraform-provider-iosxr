@@ -97,7 +97,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"
 	config += `		next_hop_self_inheritance_disable = true` + "\n"
 	config += `		route_reflector_client_inheritance_disable = true` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -64,7 +64,7 @@ func testAccIosxrEVPNGroupConfig_all() string {
 	config += `	group_id = 1` + "\n"
 	config += `	core_interfaces = [{` + "\n"
 	config += `		interface_name = "Bundle-Ether111"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

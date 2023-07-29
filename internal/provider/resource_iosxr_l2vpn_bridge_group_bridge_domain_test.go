@@ -67,10 +67,10 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all() string {
 	config += `	bridge_domain_name = "BD123"` + "\n"
 	config += `	evis = [{` + "\n"
 	config += `		vpn_id = 1234` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	vnis = [{` + "\n"
 	config += `		vni_id = 1234` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

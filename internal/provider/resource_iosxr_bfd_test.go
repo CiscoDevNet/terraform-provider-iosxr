@@ -98,7 +98,7 @@ func testAccIosxrBFDConfig_all() string {
 	config += `	trap_singlehop_pre_mapped = true` + "\n"
 	config += `	multipath_locations = [{` + "\n"
 	config += `		location_name = "0/0/CPU0"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	multihop_ttl_drop_threshold = 200` + "\n"
 	config += `	dampening_initial_wait = 3600` + "\n"
 	config += `	dampening_secondary_wait = 3200` + "\n"
@@ -122,7 +122,7 @@ func testAccIosxrBFDConfig_all() string {
 	config += `		tx_interval = 3200` + "\n"
 	config += `		rx_interval = 4200` + "\n"
 	config += `		multiplier = 40` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	ipv6_checksum_disable = true` + "\n"
 	config += `}` + "\n"
 	return config

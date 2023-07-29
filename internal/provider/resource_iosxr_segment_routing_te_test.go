@@ -100,7 +100,7 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `	pce_peers = [{` + "\n"
 	config += `		pce_address = "66.66.66.6"` + "\n"
 	config += `		precedence = 122` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	on_demand_colors = [{` + "\n"
 	config += `		dynamic_anycast_sid_inclusion = true` + "\n"
 	config += `		dynamic_metric_type = "te"` + "\n"
@@ -114,7 +114,7 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `		effective_metric_type = "igp"` + "\n"
 	config += `		constraint_segments_protection_type = "protected-only"` + "\n"
 	config += `		constraint_segments_sid_algorithm = 128` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	policies = [{` + "\n"
 	config += `		policy_name = "POLICY1"` + "\n"
 	config += `		srv6_locator_name = "Locator11"` + "\n"
@@ -125,7 +125,7 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `		policy_color_endpoint_color = 65534` + "\n"
 	config += `		policy_color_endpoint_type = "end-point-type-ipv6"` + "\n"
 	config += `		policy_color_endpoint_address = "fccc:0:215::1"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

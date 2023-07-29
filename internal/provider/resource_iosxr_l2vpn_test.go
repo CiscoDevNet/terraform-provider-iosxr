@@ -65,7 +65,7 @@ func testAccIosxrL2VPNConfig_all() string {
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	xconnect_groups = [{` + "\n"
 	config += `		group_name = "P2P"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

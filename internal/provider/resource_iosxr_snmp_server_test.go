@@ -123,7 +123,7 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `		user_name = "USER1"` + "\n"
 	config += `		group_name = "GROUP1"` + "\n"
 	config += `		v3_auth_md5_encryption_aes = "073C05626E2A4841141D"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	groups = [{` + "\n"
 	config += `		group_name = "GROUP12"` + "\n"
 	config += `		v3_priv = true` + "\n"
@@ -133,7 +133,7 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `		v3_notify = "VIEW3"` + "\n"
 	config += `		v3_ipv4 = "ACL1"` + "\n"
 	config += `		v3_ipv6 = "ACL2"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

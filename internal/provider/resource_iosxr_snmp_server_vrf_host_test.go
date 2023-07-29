@@ -68,7 +68,7 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config += `	unencrypted_strings = [{` + "\n"
 	config += `		community_string = "COMMUNITY1"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

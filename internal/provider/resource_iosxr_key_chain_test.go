@@ -96,7 +96,7 @@ func testAccIosxrKeyChainConfig_all() string {
 	config += `		send_lifetime_start_time_month = "january"` + "\n"
 	config += `		send_lifetime_start_time_year = 2023` + "\n"
 	config += `		send_lifetime_infinite = true` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

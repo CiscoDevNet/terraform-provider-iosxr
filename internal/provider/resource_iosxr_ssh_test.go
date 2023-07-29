@@ -74,7 +74,7 @@ func testAccIosxrSSHConfig_all() string {
 	config += `	server_v2 = true` + "\n"
 	config += `	server_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

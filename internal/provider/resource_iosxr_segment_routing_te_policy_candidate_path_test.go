@@ -74,7 +74,7 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
 	config += `		metric_type = "igp"` + "\n"
 	config += `		hop_type = "mpls"` + "\n"
 	config += `		segment_list_name = "dynamic"` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

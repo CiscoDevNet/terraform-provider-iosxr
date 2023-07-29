@@ -84,7 +84,7 @@ func testAccIosxrIPv6AccessListConfig_all() string {
 	config += `		permit_nexthop1_ipv6 = "3::3"` + "\n"
 	config += `		permit_nexthop2_ipv6 = "4::4"` + "\n"
 	config += `		permit_log = true` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -66,7 +66,7 @@ func testAccIosxrSNMPServerViewConfig_all() string {
 	config += `	mib_view_families = [{` + "\n"
 	config += `		name = "iso"` + "\n"
 	config += `		included = true` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -87,7 +87,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `	fast_reroute_per_prefix_levels = [{` + "\n"
 	config += `		level_id = 1` + "\n"
 	config += `		ti_lfa = true` + "\n"
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
 	config += `	tag = 100` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"

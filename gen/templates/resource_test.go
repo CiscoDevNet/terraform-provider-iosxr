@@ -38,10 +38,16 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- if and (not .Reference) (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $list := .TfName }}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if eq .Type "List"}}
 	{{- $clist := .TfName }}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
 	{{- range .Attributes}}
 	{{- if and (not .WriteOnly) (not .ExcludeTest)}}
 	{{- if len .TestTags}}
@@ -53,6 +59,9 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- if len .TestTags}}
+	}
+	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -63,6 +72,9 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	{{- end}}
+	{{- end}}
+	{{- if len .TestTags}}
+	}
 	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
@@ -142,10 +154,16 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- range  .Attributes}}
 	{{- if or .Reference .Id .Mandatory}}
 	{{- if eq .Type "List"}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
 	config += `	{{.TfName}} = [{` + "\n"
 		{{- range  .Attributes}}
 		{{- if or .Id .Mandatory}}
 		{{- if eq .Type "List"}}
+		{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		{{- end}}
 	config += `		{{.TfName}} = [{` + "\n"
 			{{- range  .Attributes}}
 			{{- if or .Id .Mandatory}}
@@ -159,6 +177,9 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 			{{- end}}
 			{{- end}}
 	config += `		}]` + "\n"
+		{{- if len .TestTags}}
+	}
+		{{- end}}
 		{{- else}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -170,7 +191,10 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 		{{- end}}
 		{{- end}}
 		{{- end}}
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
+	{{- if len .TestTags}}
+	}
+	{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -197,10 +221,16 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	{{- range  .Attributes}}
 	{{- if not .ExcludeTest}}
 	{{- if eq .Type "List"}}
+	{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+	{{- end}}
 	config += `	{{.TfName}} = [{` + "\n"
 		{{- range  .Attributes}}
 		{{- if not .ExcludeTest}}
 		{{- if eq .Type "List"}}
+		{{- if len .TestTags}}
+	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
+		{{- end}}
 	config += `		{{.TfName}} = [{` + "\n"
 			{{- range  .Attributes}}
 			{{- if not .ExcludeTest}}
@@ -214,6 +244,9 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 			{{- end}}
 			{{- end}}
 	config += `		}]` + "\n"
+			{{- if len .TestTags}}
+	}
+			{{- end}}
 		{{- else}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
@@ -225,7 +258,10 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 		{{- end}}
 		{{- end}}
 		{{- end}}
-	config += `	}]` + "\n"
+	config += `		}]` + "\n"
+		{{- if len .TestTags}}
+	}
+		{{- end}}
 	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {

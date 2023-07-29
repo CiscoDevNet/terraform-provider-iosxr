@@ -9,6 +9,7 @@ resource "iosxr_flow_monitor_map" "example" {
   option_filtered                            = true
   option_bgpattr                             = true
   option_outbundlemember                     = true
+  record_ipv4                                = true
   record_ipv4_destination                    = true
   record_ipv4_destination_tos                = true
   record_ipv4_as                             = true
@@ -25,9 +26,11 @@ resource "iosxr_flow_monitor_map" "example" {
   record_ipv4_bgp_nexthop_tos                = true
   record_ipv4_peer_as                        = true
   record_ipv4_gtp                            = true
+  record_ipv6                                = true
   record_ipv6_destination                    = true
   record_ipv6_peer_as                        = true
   record_ipv6_gtp                            = true
+  record_mpls                                = true
   record_mpls_ipv4_fields                    = true
   record_mpls_ipv6_fields                    = true
   record_mpls_ipv4_ipv6_fields               = true
@@ -45,6 +48,7 @@ resource "iosxr_flow_monitor_map" "example" {
   cache_permanent                            = true
   cache_immediate                            = true
   hw_cache_timeout_inactive                  = 50
+  sflow_options                              = true
   sflow_options_extended_router              = true
   sflow_options_extended_gateway             = true
   sflow_options_extended_ipv4_tunnel_egress  = true

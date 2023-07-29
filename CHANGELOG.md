@@ -1,3 +1,7 @@
+## 0.2.4 (unreleased)
+
+- Add `record_ipv4`, `record_ipv6`, `record_mpls` and `sflow_options` attributes to `iosxr_flow_monitor_map` resource and data source
+
 ## 0.2.3
 
 - Add `timers_bgp_minimum_acceptable_holdtime` attribute to `iosxr_router_bgp` resource and data source

@@ -94,6 +94,10 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "export output physical interfaces of bundle interface",
 				Computed:            true,
 			},
+			"record_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "IPv4 raw record format",
+				Computed:            true,
+			},
 			"record_ipv4_destination": schema.BoolAttribute{
 				MarkdownDescription: "IPv4 Destination Based NetFlow Accounting",
 				Computed:            true,
@@ -158,6 +162,10 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "IPV4 gtp record format",
 				Computed:            true,
 			},
+			"record_ipv6": schema.BoolAttribute{
+				MarkdownDescription: "IPv6 raw record format",
+				Computed:            true,
+			},
 			"record_ipv6_destination": schema.BoolAttribute{
 				MarkdownDescription: "IPv6 Destination Based NetFlow Accounting",
 				Computed:            true,
@@ -168,6 +176,10 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"record_ipv6_gtp": schema.BoolAttribute{
 				MarkdownDescription: "IPV6 gtp record format",
+				Computed:            true,
+			},
+			"record_mpls": schema.BoolAttribute{
+				MarkdownDescription: "MPLS record format",
 				Computed:            true,
 			},
 			"record_mpls_ipv4_fields": schema.BoolAttribute{
@@ -236,6 +248,10 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"hw_cache_timeout_inactive": schema.Int64Attribute{
 				MarkdownDescription: "Specify the inactive timeout",
+				Computed:            true,
+			},
+			"sflow_options": schema.BoolAttribute{
+				MarkdownDescription: "submode to configure sFlow related options",
 				Computed:            true,
 			},
 			"sflow_options_extended_router": schema.BoolAttribute{

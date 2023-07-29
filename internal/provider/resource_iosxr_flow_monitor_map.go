@@ -110,6 +110,10 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: helpers.NewAttributeDescription("export output physical interfaces of bundle interface").String,
 				Optional:            true,
 			},
+			"record_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 raw record format").String,
+				Optional:            true,
+			},
 			"record_ipv4_destination": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 Destination Based NetFlow Accounting").String,
 				Optional:            true,
@@ -174,6 +178,10 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: helpers.NewAttributeDescription("IPV4 gtp record format").String,
 				Optional:            true,
 			},
+			"record_ipv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 raw record format").String,
+				Optional:            true,
+			},
 			"record_ipv6_destination": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Destination Based NetFlow Accounting").String,
 				Optional:            true,
@@ -184,6 +192,10 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"record_ipv6_gtp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPV6 gtp record format").String,
+				Optional:            true,
+			},
+			"record_mpls": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("MPLS record format").String,
 				Optional:            true,
 			},
 			"record_mpls_ipv4_fields": schema.BoolAttribute{
@@ -274,6 +286,10 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				Validators: []validator.Int64{
 					int64validator.Between(50, 1800),
 				},
+			},
+			"sflow_options": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("submode to configure sFlow related options").String,
+				Optional:            true,
 			},
 			"sflow_options_extended_router": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable extended-router flow data type").String,

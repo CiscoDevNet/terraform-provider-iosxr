@@ -23,6 +23,8 @@ attributes:
     example: true
   - yang_name: option/outbundlemember
     example: true
+  - yang_name: record/ipv4
+    example: true
   - yang_name: record/ipv4/destination
     example: true
   - yang_name: record/ipv4/destination-tos
@@ -55,11 +57,15 @@ attributes:
     example: true
   - yang_name: record/ipv4/gtp
     example: true
+  - yang_name: record/ipv6
+    example: true
   - yang_name: record/ipv6/destination
     example: true
   - yang_name: record/ipv6/peer-as
     example: true
   - yang_name: record/ipv6/gtp
+    example: true
+  - yang_name: record/mpls
     example: true
   - yang_name: record/mpls/ipv4-fields
     example: true
@@ -95,6 +101,8 @@ attributes:
     example: true
   - yang_name: hw-cache/timeout/inactive
     example: 50
+  - yang_name: sflow/options
+    example: true
   - yang_name: sflow/options/extended-router
     example: true
   - yang_name: sflow/options/extended-gateway

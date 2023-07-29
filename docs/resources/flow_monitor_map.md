@@ -24,6 +24,7 @@ resource "iosxr_flow_monitor_map" "example" {
   option_filtered                            = true
   option_bgpattr                             = true
   option_outbundlemember                     = true
+  record_ipv4                                = true
   record_ipv4_destination                    = true
   record_ipv4_destination_tos                = true
   record_ipv4_as                             = true
@@ -40,9 +41,11 @@ resource "iosxr_flow_monitor_map" "example" {
   record_ipv4_bgp_nexthop_tos                = true
   record_ipv4_peer_as                        = true
   record_ipv4_gtp                            = true
+  record_ipv6                                = true
   record_ipv6_destination                    = true
   record_ipv6_peer_as                        = true
   record_ipv6_gtp                            = true
+  record_mpls                                = true
   record_mpls_ipv4_fields                    = true
   record_mpls_ipv6_fields                    = true
   record_mpls_ipv4_ipv6_fields               = true
@@ -60,6 +63,7 @@ resource "iosxr_flow_monitor_map" "example" {
   cache_permanent                            = true
   cache_immediate                            = true
   hw_cache_timeout_inactive                  = 50
+  sflow_options                              = true
   sflow_options_extended_router              = true
   sflow_options_extended_gateway             = true
   sflow_options_extended_ipv4_tunnel_egress  = true
@@ -103,6 +107,7 @@ resource "iosxr_flow_monitor_map" "example" {
 - `record_datalink_record` (Boolean) Layer2 traffic based flow
 - `record_default_mdi` (Boolean) Default MDI record format
 - `record_default_rtp` (Boolean) Default RTP record format
+- `record_ipv4` (Boolean) IPv4 raw record format
 - `record_ipv4_as` (Boolean) Autonomous System based aggregation
 - `record_ipv4_as_tos` (Boolean) AS-TOS based aggregation
 - `record_ipv4_bgp_nexthop_tos` (Boolean) BGP, nexthop and tos based aggregation
@@ -119,16 +124,19 @@ resource "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_protocol_port_tos` (Boolean) Protocol, port and tos based aggregation
 - `record_ipv4_source_prefix` (Boolean) source prefix based aggregation
 - `record_ipv4_source_prefix_tos` (Boolean) Source, Prefix and TOS based aggregation
+- `record_ipv6` (Boolean) IPv6 raw record format
 - `record_ipv6_destination` (Boolean) IPv6 Destination Based NetFlow Accounting
 - `record_ipv6_gtp` (Boolean) IPV6 gtp record format
 - `record_ipv6_peer_as` (Boolean) Record peer AS
 - `record_map_t` (Boolean) map-t translation based Netflow
+- `record_mpls` (Boolean) MPLS record format
 - `record_mpls_ipv4_fields` (Boolean) MPLS with IPv4 fields format
 - `record_mpls_ipv4_ipv6_fields` (Boolean) MPLS with IPv4 and IPv6 fields format
 - `record_mpls_ipv6_fields` (Boolean) MPLS with IPv6 fields format
 - `record_mpls_labels` (Number) Labels to be used for Hashing
   - Range: `1`-`6`
 - `record_sflow` (Boolean) sFlow based flow
+- `sflow_options` (Boolean) submode to configure sFlow related options
 - `sflow_options_extended_gateway` (Boolean) Enable extended-gateway flow data type
 - `sflow_options_extended_ipv4_tunnel_egress` (Boolean) Enable extended-ipv4-tunnel-egress flow data type
 - `sflow_options_extended_ipv6_tunnel_egress` (Boolean) Enable extended-ipv6-tunnel-egress flow data type

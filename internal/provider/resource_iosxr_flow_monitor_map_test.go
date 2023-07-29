@@ -37,6 +37,7 @@ func TestAccIosxrFlowMonitorMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_filtered", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_bgpattr", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_outbundlemember", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination_tos", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_as", "true"))
@@ -53,9 +54,11 @@ func TestAccIosxrFlowMonitorMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_bgp_nexthop_tos", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_peer_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_gtp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_destination", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_peer_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_gtp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv4_fields", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv6_fields", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv4_ipv6_fields", "true"))
@@ -73,6 +76,7 @@ func TestAccIosxrFlowMonitorMap(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_permanent", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_immediate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "hw_cache_timeout_inactive", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "sflow_options", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "sflow_options_extended_router", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "sflow_options_extended_gateway", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "sflow_options_extended_ipv4_tunnel_egress", "true"))
@@ -120,6 +124,7 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config += `	option_filtered = true` + "\n"
 	config += `	option_bgpattr = true` + "\n"
 	config += `	option_outbundlemember = true` + "\n"
+	config += `	record_ipv4 = true` + "\n"
 	config += `	record_ipv4_destination = true` + "\n"
 	config += `	record_ipv4_destination_tos = true` + "\n"
 	config += `	record_ipv4_as = true` + "\n"
@@ -136,9 +141,11 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config += `	record_ipv4_bgp_nexthop_tos = true` + "\n"
 	config += `	record_ipv4_peer_as = true` + "\n"
 	config += `	record_ipv4_gtp = true` + "\n"
+	config += `	record_ipv6 = true` + "\n"
 	config += `	record_ipv6_destination = true` + "\n"
 	config += `	record_ipv6_peer_as = true` + "\n"
 	config += `	record_ipv6_gtp = true` + "\n"
+	config += `	record_mpls = true` + "\n"
 	config += `	record_mpls_ipv4_fields = true` + "\n"
 	config += `	record_mpls_ipv6_fields = true` + "\n"
 	config += `	record_mpls_ipv4_ipv6_fields = true` + "\n"
@@ -156,6 +163,7 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config += `	cache_permanent = true` + "\n"
 	config += `	cache_immediate = true` + "\n"
 	config += `	hw_cache_timeout_inactive = 50` + "\n"
+	config += `	sflow_options = true` + "\n"
 	config += `	sflow_options_extended_router = true` + "\n"
 	config += `	sflow_options_extended_gateway = true` + "\n"
 	config += `	sflow_options_extended_ipv4_tunnel_egress = true` + "\n"

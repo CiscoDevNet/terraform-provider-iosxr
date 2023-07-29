@@ -39,6 +39,7 @@ type FlowMonitorMap struct {
 	OptionFiltered                        types.Bool                `tfsdk:"option_filtered"`
 	OptionBgpattr                         types.Bool                `tfsdk:"option_bgpattr"`
 	OptionOutbundlemember                 types.Bool                `tfsdk:"option_outbundlemember"`
+	RecordIpv4                            types.Bool                `tfsdk:"record_ipv4"`
 	RecordIpv4Destination                 types.Bool                `tfsdk:"record_ipv4_destination"`
 	RecordIpv4DestinationTos              types.Bool                `tfsdk:"record_ipv4_destination_tos"`
 	RecordIpv4As                          types.Bool                `tfsdk:"record_ipv4_as"`
@@ -55,9 +56,11 @@ type FlowMonitorMap struct {
 	RecordIpv4BgpNexthopTos               types.Bool                `tfsdk:"record_ipv4_bgp_nexthop_tos"`
 	RecordIpv4PeerAs                      types.Bool                `tfsdk:"record_ipv4_peer_as"`
 	RecordIpv4Gtp                         types.Bool                `tfsdk:"record_ipv4_gtp"`
+	RecordIpv6                            types.Bool                `tfsdk:"record_ipv6"`
 	RecordIpv6Destination                 types.Bool                `tfsdk:"record_ipv6_destination"`
 	RecordIpv6PeerAs                      types.Bool                `tfsdk:"record_ipv6_peer_as"`
 	RecordIpv6Gtp                         types.Bool                `tfsdk:"record_ipv6_gtp"`
+	RecordMpls                            types.Bool                `tfsdk:"record_mpls"`
 	RecordMplsIpv4Fields                  types.Bool                `tfsdk:"record_mpls_ipv4_fields"`
 	RecordMplsIpv6Fields                  types.Bool                `tfsdk:"record_mpls_ipv6_fields"`
 	RecordMplsIpv4Ipv6Fields              types.Bool                `tfsdk:"record_mpls_ipv4_ipv6_fields"`
@@ -75,6 +78,7 @@ type FlowMonitorMap struct {
 	CachePermanent                        types.Bool                `tfsdk:"cache_permanent"`
 	CacheImmediate                        types.Bool                `tfsdk:"cache_immediate"`
 	HwCacheTimeoutInactive                types.Int64               `tfsdk:"hw_cache_timeout_inactive"`
+	SflowOptions                          types.Bool                `tfsdk:"sflow_options"`
 	SflowOptionsExtendedRouter            types.Bool                `tfsdk:"sflow_options_extended_router"`
 	SflowOptionsExtendedGateway           types.Bool                `tfsdk:"sflow_options_extended_gateway"`
 	SflowOptionsExtendedIpv4TunnelEgress  types.Bool                `tfsdk:"sflow_options_extended_ipv4_tunnel_egress"`
@@ -94,6 +98,7 @@ type FlowMonitorMapData struct {
 	OptionFiltered                        types.Bool                `tfsdk:"option_filtered"`
 	OptionBgpattr                         types.Bool                `tfsdk:"option_bgpattr"`
 	OptionOutbundlemember                 types.Bool                `tfsdk:"option_outbundlemember"`
+	RecordIpv4                            types.Bool                `tfsdk:"record_ipv4"`
 	RecordIpv4Destination                 types.Bool                `tfsdk:"record_ipv4_destination"`
 	RecordIpv4DestinationTos              types.Bool                `tfsdk:"record_ipv4_destination_tos"`
 	RecordIpv4As                          types.Bool                `tfsdk:"record_ipv4_as"`
@@ -110,9 +115,11 @@ type FlowMonitorMapData struct {
 	RecordIpv4BgpNexthopTos               types.Bool                `tfsdk:"record_ipv4_bgp_nexthop_tos"`
 	RecordIpv4PeerAs                      types.Bool                `tfsdk:"record_ipv4_peer_as"`
 	RecordIpv4Gtp                         types.Bool                `tfsdk:"record_ipv4_gtp"`
+	RecordIpv6                            types.Bool                `tfsdk:"record_ipv6"`
 	RecordIpv6Destination                 types.Bool                `tfsdk:"record_ipv6_destination"`
 	RecordIpv6PeerAs                      types.Bool                `tfsdk:"record_ipv6_peer_as"`
 	RecordIpv6Gtp                         types.Bool                `tfsdk:"record_ipv6_gtp"`
+	RecordMpls                            types.Bool                `tfsdk:"record_mpls"`
 	RecordMplsIpv4Fields                  types.Bool                `tfsdk:"record_mpls_ipv4_fields"`
 	RecordMplsIpv6Fields                  types.Bool                `tfsdk:"record_mpls_ipv6_fields"`
 	RecordMplsIpv4Ipv6Fields              types.Bool                `tfsdk:"record_mpls_ipv4_ipv6_fields"`
@@ -130,6 +137,7 @@ type FlowMonitorMapData struct {
 	CachePermanent                        types.Bool                `tfsdk:"cache_permanent"`
 	CacheImmediate                        types.Bool                `tfsdk:"cache_immediate"`
 	HwCacheTimeoutInactive                types.Int64               `tfsdk:"hw_cache_timeout_inactive"`
+	SflowOptions                          types.Bool                `tfsdk:"sflow_options"`
 	SflowOptionsExtendedRouter            types.Bool                `tfsdk:"sflow_options_extended_router"`
 	SflowOptionsExtendedGateway           types.Bool                `tfsdk:"sflow_options_extended_gateway"`
 	SflowOptionsExtendedIpv4TunnelEgress  types.Bool                `tfsdk:"sflow_options_extended_ipv4_tunnel_egress"`
@@ -174,6 +182,11 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	if !data.OptionOutbundlemember.IsNull() && !data.OptionOutbundlemember.IsUnknown() {
 		if data.OptionOutbundlemember.ValueBool() {
 			body, _ = sjson.Set(body, "option.outbundlemember", map[string]string{})
+		}
+	}
+	if !data.RecordIpv4.IsNull() && !data.RecordIpv4.IsUnknown() {
+		if data.RecordIpv4.ValueBool() {
+			body, _ = sjson.Set(body, "record.ipv4", map[string]string{})
 		}
 	}
 	if !data.RecordIpv4Destination.IsNull() && !data.RecordIpv4Destination.IsUnknown() {
@@ -256,6 +269,11 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "record.ipv4.gtp", map[string]string{})
 		}
 	}
+	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.IsUnknown() {
+		if data.RecordIpv6.ValueBool() {
+			body, _ = sjson.Set(body, "record.ipv6", map[string]string{})
+		}
+	}
 	if !data.RecordIpv6Destination.IsNull() && !data.RecordIpv6Destination.IsUnknown() {
 		if data.RecordIpv6Destination.ValueBool() {
 			body, _ = sjson.Set(body, "record.ipv6.destination", map[string]string{})
@@ -269,6 +287,11 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.IsUnknown() {
 		if data.RecordIpv6Gtp.ValueBool() {
 			body, _ = sjson.Set(body, "record.ipv6.gtp", map[string]string{})
+		}
+	}
+	if !data.RecordMpls.IsNull() && !data.RecordMpls.IsUnknown() {
+		if data.RecordMpls.ValueBool() {
+			body, _ = sjson.Set(body, "record.mpls", map[string]string{})
 		}
 	}
 	if !data.RecordMplsIpv4Fields.IsNull() && !data.RecordMplsIpv4Fields.IsUnknown() {
@@ -341,6 +364,11 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	}
 	if !data.HwCacheTimeoutInactive.IsNull() && !data.HwCacheTimeoutInactive.IsUnknown() {
 		body, _ = sjson.Set(body, "hw-cache.timeout.inactive", strconv.FormatInt(data.HwCacheTimeoutInactive.ValueInt64(), 10))
+	}
+	if !data.SflowOptions.IsNull() && !data.SflowOptions.IsUnknown() {
+		if data.SflowOptions.ValueBool() {
+			body, _ = sjson.Set(body, "sflow.options", map[string]string{})
+		}
 	}
 	if !data.SflowOptionsExtendedRouter.IsNull() && !data.SflowOptionsExtendedRouter.IsUnknown() {
 		if data.SflowOptionsExtendedRouter.ValueBool() {
@@ -450,6 +478,15 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.OptionOutbundlemember = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "record.ipv4"); !data.RecordIpv4.IsNull() {
+		if value.Exists() {
+			data.RecordIpv4 = types.BoolValue(true)
+		} else {
+			data.RecordIpv4 = types.BoolValue(false)
+		}
+	} else {
+		data.RecordIpv4 = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "record.ipv4.destination"); !data.RecordIpv4Destination.IsNull() {
 		if value.Exists() {
@@ -595,6 +632,15 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RecordIpv4Gtp = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "record.ipv6"); !data.RecordIpv6.IsNull() {
+		if value.Exists() {
+			data.RecordIpv6 = types.BoolValue(true)
+		} else {
+			data.RecordIpv6 = types.BoolValue(false)
+		}
+	} else {
+		data.RecordIpv6 = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "record.ipv6.destination"); !data.RecordIpv6Destination.IsNull() {
 		if value.Exists() {
 			data.RecordIpv6Destination = types.BoolValue(true)
@@ -621,6 +667,15 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.RecordIpv6Gtp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "record.mpls"); !data.RecordMpls.IsNull() {
+		if value.Exists() {
+			data.RecordMpls = types.BoolValue(true)
+		} else {
+			data.RecordMpls = types.BoolValue(false)
+		}
+	} else {
+		data.RecordMpls = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "record.mpls.ipv4-fields"); !data.RecordMplsIpv4Fields.IsNull() {
 		if value.Exists() {
@@ -747,6 +802,15 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.HwCacheTimeoutInactive = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "sflow.options"); !data.SflowOptions.IsNull() {
+		if value.Exists() {
+			data.SflowOptions = types.BoolValue(true)
+		} else {
+			data.SflowOptions = types.BoolValue(false)
+		}
+	} else {
+		data.SflowOptions = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "sflow.options.extended-router"); !data.SflowOptionsExtendedRouter.IsNull() {
 		if value.Exists() {
 			data.SflowOptionsExtendedRouter = types.BoolValue(true)
@@ -837,6 +901,11 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.OptionOutbundlemember = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "record.ipv4"); value.Exists() {
+		data.RecordIpv4 = types.BoolValue(true)
+	} else {
+		data.RecordIpv4 = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "record.ipv4.destination"); value.Exists() {
 		data.RecordIpv4Destination = types.BoolValue(true)
 	} else {
@@ -917,6 +986,11 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RecordIpv4Gtp = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "record.ipv6"); value.Exists() {
+		data.RecordIpv6 = types.BoolValue(true)
+	} else {
+		data.RecordIpv6 = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "record.ipv6.destination"); value.Exists() {
 		data.RecordIpv6Destination = types.BoolValue(true)
 	} else {
@@ -931,6 +1005,11 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 		data.RecordIpv6Gtp = types.BoolValue(true)
 	} else {
 		data.RecordIpv6Gtp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls"); value.Exists() {
+		data.RecordMpls = types.BoolValue(true)
+	} else {
+		data.RecordMpls = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "record.mpls.ipv4-fields"); value.Exists() {
 		data.RecordMplsIpv4Fields = types.BoolValue(true)
@@ -1002,6 +1081,11 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "hw-cache.timeout.inactive"); value.Exists() {
 		data.HwCacheTimeoutInactive = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sflow.options"); value.Exists() {
+		data.SflowOptions = types.BoolValue(true)
+	} else {
+		data.SflowOptions = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "sflow.options.extended-router"); value.Exists() {
 		data.SflowOptionsExtendedRouter = types.BoolValue(true)
@@ -1094,6 +1178,9 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.OptionOutbundlemember.IsNull() && !data.OptionOutbundlemember.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
 	}
+	if !data.RecordIpv4.IsNull() && !data.RecordIpv4.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4", data.getPath()))
+	}
 	if !data.RecordIpv4Destination.IsNull() && !data.RecordIpv4Destination.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
 	}
@@ -1142,6 +1229,9 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.RecordIpv4Gtp.IsNull() && !data.RecordIpv4Gtp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
 	}
+	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6", data.getPath()))
+	}
 	if !data.RecordIpv6Destination.IsNull() && !data.RecordIpv6Destination.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
 	}
@@ -1150,6 +1240,9 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
+	}
+	if !data.RecordMpls.IsNull() && !data.RecordMpls.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls", data.getPath()))
 	}
 	if !data.RecordMplsIpv4Fields.IsNull() && !data.RecordMplsIpv4Fields.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
@@ -1180,6 +1273,9 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	if !data.CacheImmediate.IsNull() && !data.CacheImmediate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cache/immediate", data.getPath()))
+	}
+	if !data.SflowOptions.IsNull() && !data.SflowOptions.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options", data.getPath()))
 	}
 	if !data.SflowOptionsExtendedRouter.IsNull() && !data.SflowOptionsExtendedRouter.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))
@@ -1219,6 +1315,9 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.OptionOutbundlemember.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
+	}
+	if !data.RecordIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4", data.getPath()))
 	}
 	if !data.RecordIpv4Destination.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
@@ -1268,6 +1367,9 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	if !data.RecordIpv4Gtp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
 	}
+	if !data.RecordIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6", data.getPath()))
+	}
 	if !data.RecordIpv6Destination.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
 	}
@@ -1276,6 +1378,9 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.RecordIpv6Gtp.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
+	}
+	if !data.RecordMpls.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls", data.getPath()))
 	}
 	if !data.RecordMplsIpv4Fields.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
@@ -1327,6 +1432,9 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.HwCacheTimeoutInactive.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hw-cache/timeout/inactive", data.getPath()))
+	}
+	if !data.SflowOptions.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options", data.getPath()))
 	}
 	if !data.SflowOptionsExtendedRouter.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))

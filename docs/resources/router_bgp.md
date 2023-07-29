@@ -31,6 +31,20 @@ resource "iosxr_router_bgp" "example" {
   bfd_multiplier                             = 4
   nexthop_validation_color_extcomm_sr_policy = true
   nexthop_validation_color_extcomm_disable   = true
+  bgp_bestpath_as_path_ignore                = true
+  bgp_bestpath_as_path_multipath_relax       = true
+  bgp_bestpath_cost_community_ignore         = true
+  bgp_bestpath_compare_routerid              = true
+  bgp_bestpath_aigp_ignore                   = true
+  bgp_bestpath_igp_metric_ignore             = true
+  bgp_bestpath_igp_metric_sr_policy          = true
+  bgp_bestpath_med_always                    = true
+  bgp_bestpath_med_confed                    = true
+  bgp_bestpath_med_missing_as_worst          = true
+  bgp_bestpath_origin_as_use_validity        = true
+  bgp_bestpath_origin_as_allow_invalid       = true
+  bgp_bestpath_sr_policy_prefer              = false
+  bgp_bestpath_sr_policy_force               = true
   neighbors = [
     {
       neighbor_address                   = "10.1.1.2"
@@ -78,6 +92,20 @@ resource "iosxr_router_bgp" "example" {
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
+- `bgp_bestpath_aigp_ignore` (Boolean) Ignore AIGP attribute
+- `bgp_bestpath_as_path_ignore` (Boolean) Ignore as-path length
+- `bgp_bestpath_as_path_multipath_relax` (Boolean) Relax as-path check for multipath selection
+- `bgp_bestpath_compare_routerid` (Boolean) Compare router-id for identical EBGP paths
+- `bgp_bestpath_cost_community_ignore` (Boolean) Ignore cost-community comparison
+- `bgp_bestpath_igp_metric_ignore` (Boolean) Ignore IGP metric during path comparison
+- `bgp_bestpath_igp_metric_sr_policy` (Boolean) Use next-hop admin/metric from SR policy at Next Hop metric comparison stage
+- `bgp_bestpath_med_always` (Boolean) Allow comparing MED from different neighbors
+- `bgp_bestpath_med_confed` (Boolean) Compare MED among confederation paths
+- `bgp_bestpath_med_missing_as_worst` (Boolean) Treat missing MED as the least preferred one
+- `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
+- `bgp_bestpath_origin_as_use_validity` (Boolean) BGP bestpath selection will use origin-AS validity
+- `bgp_bestpath_sr_policy_force` (Boolean) Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible
+- `bgp_bestpath_sr_policy_prefer` (Boolean) Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible
 - `bgp_graceful_restart_graceful_reset` (Boolean) Reset gracefully if configuration change forces a peer reset
 - `bgp_log_neighbor_changes_detail` (Boolean) Include extra detail in change messages
 - `bgp_redistribute_internal` (Boolean) Allow redistribution of iBGP into IGPs (dangerous)

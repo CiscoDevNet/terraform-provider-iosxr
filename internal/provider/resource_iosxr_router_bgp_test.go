@@ -45,6 +45,20 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "nexthop_validation_color_extcomm_sr_policy", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "nexthop_validation_color_extcomm_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_as_path_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_as_path_multipath_relax", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_cost_community_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_compare_routerid", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_aigp_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_igp_metric_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_igp_metric_sr_policy", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_med_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_med_confed", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_med_missing_as_worst", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_origin_as_use_validity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_origin_as_allow_invalid", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_sr_policy_prefer", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_bestpath_sr_policy_force", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.neighbor_address", "10.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.remote_as", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.description", "My Neighbor Description"))
@@ -127,6 +141,20 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	nexthop_validation_color_extcomm_sr_policy = true` + "\n"
 	config += `	nexthop_validation_color_extcomm_disable = true` + "\n"
+	config += `	bgp_bestpath_as_path_ignore = true` + "\n"
+	config += `	bgp_bestpath_as_path_multipath_relax = true` + "\n"
+	config += `	bgp_bestpath_cost_community_ignore = true` + "\n"
+	config += `	bgp_bestpath_compare_routerid = true` + "\n"
+	config += `	bgp_bestpath_aigp_ignore = true` + "\n"
+	config += `	bgp_bestpath_igp_metric_ignore = true` + "\n"
+	config += `	bgp_bestpath_igp_metric_sr_policy = true` + "\n"
+	config += `	bgp_bestpath_med_always = true` + "\n"
+	config += `	bgp_bestpath_med_confed = true` + "\n"
+	config += `	bgp_bestpath_med_missing_as_worst = true` + "\n"
+	config += `	bgp_bestpath_origin_as_use_validity = true` + "\n"
+	config += `	bgp_bestpath_origin_as_allow_invalid = true` + "\n"
+	config += `	bgp_bestpath_sr_policy_prefer = false` + "\n"
+	config += `	bgp_bestpath_sr_policy_force = true` + "\n"
 	config += `	neighbors = [{` + "\n"
 	config += `		neighbor_address = "10.1.1.2"` + "\n"
 	config += `		remote_as = "65002"` + "\n"

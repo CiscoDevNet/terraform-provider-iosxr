@@ -51,6 +51,20 @@ type RouterBGP struct {
 	BfdMultiplier                         types.Int64               `tfsdk:"bfd_multiplier"`
 	NexthopValidationColorExtcommSrPolicy types.Bool                `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
 	NexthopValidationColorExtcommDisable  types.Bool                `tfsdk:"nexthop_validation_color_extcomm_disable"`
+	BgpBestpathAsPathIgnore               types.Bool                `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax       types.Bool                `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathCostCommunityIgnore        types.Bool                `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid            types.Bool                `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                 types.Bool                `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore            types.Bool                `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathIgpMetricSrPolicy          types.Bool                `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
+	BgpBestpathMedAlways                  types.Bool                `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathMedConfed                  types.Bool                `tfsdk:"bgp_bestpath_med_confed"`
+	BgpBestpathMedMissingAsWorst          types.Bool                `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathOriginAsUseValidity        types.Bool                `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid       types.Bool                `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer             types.Bool                `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce              types.Bool                `tfsdk:"bgp_bestpath_sr_policy_force"`
 	Neighbors                             []RouterBGPNeighbors      `tfsdk:"neighbors"`
 	NeighborGroups                        []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
 }
@@ -75,6 +89,20 @@ type RouterBGPData struct {
 	BfdMultiplier                         types.Int64               `tfsdk:"bfd_multiplier"`
 	NexthopValidationColorExtcommSrPolicy types.Bool                `tfsdk:"nexthop_validation_color_extcomm_sr_policy"`
 	NexthopValidationColorExtcommDisable  types.Bool                `tfsdk:"nexthop_validation_color_extcomm_disable"`
+	BgpBestpathAsPathIgnore               types.Bool                `tfsdk:"bgp_bestpath_as_path_ignore"`
+	BgpBestpathAsPathMultipathRelax       types.Bool                `tfsdk:"bgp_bestpath_as_path_multipath_relax"`
+	BgpBestpathCostCommunityIgnore        types.Bool                `tfsdk:"bgp_bestpath_cost_community_ignore"`
+	BgpBestpathCompareRouterid            types.Bool                `tfsdk:"bgp_bestpath_compare_routerid"`
+	BgpBestpathAigpIgnore                 types.Bool                `tfsdk:"bgp_bestpath_aigp_ignore"`
+	BgpBestpathIgpMetricIgnore            types.Bool                `tfsdk:"bgp_bestpath_igp_metric_ignore"`
+	BgpBestpathIgpMetricSrPolicy          types.Bool                `tfsdk:"bgp_bestpath_igp_metric_sr_policy"`
+	BgpBestpathMedAlways                  types.Bool                `tfsdk:"bgp_bestpath_med_always"`
+	BgpBestpathMedConfed                  types.Bool                `tfsdk:"bgp_bestpath_med_confed"`
+	BgpBestpathMedMissingAsWorst          types.Bool                `tfsdk:"bgp_bestpath_med_missing_as_worst"`
+	BgpBestpathOriginAsUseValidity        types.Bool                `tfsdk:"bgp_bestpath_origin_as_use_validity"`
+	BgpBestpathOriginAsAllowInvalid       types.Bool                `tfsdk:"bgp_bestpath_origin_as_allow_invalid"`
+	BgpBestpathSrPolicyPrefer             types.Bool                `tfsdk:"bgp_bestpath_sr_policy_prefer"`
+	BgpBestpathSrPolicyForce              types.Bool                `tfsdk:"bgp_bestpath_sr_policy_force"`
 	Neighbors                             []RouterBGPNeighbors      `tfsdk:"neighbors"`
 	NeighborGroups                        []RouterBGPNeighborGroups `tfsdk:"neighbor_groups"`
 }
@@ -183,6 +211,76 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	if !data.NexthopValidationColorExtcommDisable.IsNull() && !data.NexthopValidationColorExtcommDisable.IsUnknown() {
 		if data.NexthopValidationColorExtcommDisable.ValueBool() {
 			body, _ = sjson.Set(body, "nexthop.validation.color-extcomm.disable", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathAsPathIgnore.IsNull() && !data.BgpBestpathAsPathIgnore.IsUnknown() {
+		if data.BgpBestpathAsPathIgnore.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.as-path.ignore", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathAsPathMultipathRelax.IsNull() && !data.BgpBestpathAsPathMultipathRelax.IsUnknown() {
+		if data.BgpBestpathAsPathMultipathRelax.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.as-path.multipath-relax", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathCostCommunityIgnore.IsNull() && !data.BgpBestpathCostCommunityIgnore.IsUnknown() {
+		if data.BgpBestpathCostCommunityIgnore.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.cost-community.ignore", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathCompareRouterid.IsNull() && !data.BgpBestpathCompareRouterid.IsUnknown() {
+		if data.BgpBestpathCompareRouterid.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.compare-routerid", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathAigpIgnore.IsNull() && !data.BgpBestpathAigpIgnore.IsUnknown() {
+		if data.BgpBestpathAigpIgnore.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.aigp.ignore", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathIgpMetricIgnore.IsNull() && !data.BgpBestpathIgpMetricIgnore.IsUnknown() {
+		if data.BgpBestpathIgpMetricIgnore.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.igp-metric.ignore", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathIgpMetricSrPolicy.IsNull() && !data.BgpBestpathIgpMetricSrPolicy.IsUnknown() {
+		if data.BgpBestpathIgpMetricSrPolicy.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.igp-metric.sr-policy", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathMedAlways.IsNull() && !data.BgpBestpathMedAlways.IsUnknown() {
+		if data.BgpBestpathMedAlways.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.med.always", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathMedConfed.IsNull() && !data.BgpBestpathMedConfed.IsUnknown() {
+		if data.BgpBestpathMedConfed.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.med.confed", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathMedMissingAsWorst.IsNull() && !data.BgpBestpathMedMissingAsWorst.IsUnknown() {
+		if data.BgpBestpathMedMissingAsWorst.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.med.missing-as-worst", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathOriginAsUseValidity.IsNull() && !data.BgpBestpathOriginAsUseValidity.IsUnknown() {
+		if data.BgpBestpathOriginAsUseValidity.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.origin-as.use.validity", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathOriginAsAllowInvalid.IsNull() && !data.BgpBestpathOriginAsAllowInvalid.IsUnknown() {
+		if data.BgpBestpathOriginAsAllowInvalid.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.origin-as.allow.invalid", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathSrPolicyPrefer.IsNull() && !data.BgpBestpathSrPolicyPrefer.IsUnknown() {
+		if data.BgpBestpathSrPolicyPrefer.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.sr-policy.prefer", map[string]string{})
+		}
+	}
+	if !data.BgpBestpathSrPolicyForce.IsNull() && !data.BgpBestpathSrPolicyForce.IsUnknown() {
+		if data.BgpBestpathSrPolicyForce.ValueBool() {
+			body, _ = sjson.Set(body, "bgp.bestpath.sr-policy.force", map[string]string{})
 		}
 	}
 	if len(data.Neighbors) > 0 {
@@ -399,6 +497,132 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.ignore"); !data.BgpBestpathAsPathIgnore.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathAsPathIgnore = types.BoolValue(true)
+		} else {
+			data.BgpBestpathAsPathIgnore = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathAsPathIgnore = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.multipath-relax"); !data.BgpBestpathAsPathMultipathRelax.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
+		} else {
+			data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.cost-community.ignore"); !data.BgpBestpathCostCommunityIgnore.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
+		} else {
+			data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathCostCommunityIgnore = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.compare-routerid"); !data.BgpBestpathCompareRouterid.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathCompareRouterid = types.BoolValue(true)
+		} else {
+			data.BgpBestpathCompareRouterid = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathCompareRouterid = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.aigp.ignore"); !data.BgpBestpathAigpIgnore.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathAigpIgnore = types.BoolValue(true)
+		} else {
+			data.BgpBestpathAigpIgnore = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathAigpIgnore = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.ignore"); !data.BgpBestpathIgpMetricIgnore.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
+		} else {
+			data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathIgpMetricIgnore = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.sr-policy"); !data.BgpBestpathIgpMetricSrPolicy.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
+		} else {
+			data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.always"); !data.BgpBestpathMedAlways.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathMedAlways = types.BoolValue(true)
+		} else {
+			data.BgpBestpathMedAlways = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathMedAlways = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.confed"); !data.BgpBestpathMedConfed.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathMedConfed = types.BoolValue(true)
+		} else {
+			data.BgpBestpathMedConfed = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathMedConfed = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.missing-as-worst"); !data.BgpBestpathMedMissingAsWorst.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
+		} else {
+			data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathMedMissingAsWorst = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.use.validity"); !data.BgpBestpathOriginAsUseValidity.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
+		} else {
+			data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathOriginAsUseValidity = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.allow.invalid"); !data.BgpBestpathOriginAsAllowInvalid.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
+		} else {
+			data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.prefer"); !data.BgpBestpathSrPolicyPrefer.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
+		} else {
+			data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathSrPolicyPrefer = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.force"); !data.BgpBestpathSrPolicyForce.IsNull() {
+		if value.Exists() {
+			data.BgpBestpathSrPolicyForce = types.BoolValue(true)
+		} else {
+			data.BgpBestpathSrPolicyForce = types.BoolValue(false)
+		}
+	} else {
+		data.BgpBestpathSrPolicyForce = types.BoolNull()
 	}
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}
@@ -668,6 +892,76 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.ignore"); value.Exists() {
+		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAsPathIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.multipath-relax"); value.Exists() {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.cost-community.ignore"); value.Exists() {
+		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.compare-routerid"); value.Exists() {
+		data.BgpBestpathCompareRouterid = types.BoolValue(true)
+	} else {
+		data.BgpBestpathCompareRouterid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.aigp.ignore"); value.Exists() {
+		data.BgpBestpathAigpIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAigpIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.ignore"); value.Exists() {
+		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
+	} else {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.always"); value.Exists() {
+		data.BgpBestpathMedAlways = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.confed"); value.Exists() {
+		data.BgpBestpathMedConfed = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedConfed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.missing-as-worst"); value.Exists() {
+		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.use.validity"); value.Exists() {
+		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
+	} else {
+		data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
+	} else {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.prefer"); value.Exists() {
+		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
+	} else {
+		data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.force"); value.Exists() {
+		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
+	} else {
+		data.BgpBestpathSrPolicyForce = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
 		data.Neighbors = make([]RouterBGPNeighbors, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -866,6 +1160,48 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.NexthopValidationColorExtcommDisable.IsNull() && !data.NexthopValidationColorExtcommDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nexthop/validation/color-extcomm/disable", data.getPath()))
 	}
+	if !data.BgpBestpathAsPathIgnore.IsNull() && !data.BgpBestpathAsPathIgnore.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/as-path/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathAsPathMultipathRelax.IsNull() && !data.BgpBestpathAsPathMultipathRelax.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/as-path/multipath-relax", data.getPath()))
+	}
+	if !data.BgpBestpathCostCommunityIgnore.IsNull() && !data.BgpBestpathCostCommunityIgnore.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/cost-community/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathCompareRouterid.IsNull() && !data.BgpBestpathCompareRouterid.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/compare-routerid", data.getPath()))
+	}
+	if !data.BgpBestpathAigpIgnore.IsNull() && !data.BgpBestpathAigpIgnore.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/aigp/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathIgpMetricIgnore.IsNull() && !data.BgpBestpathIgpMetricIgnore.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/igp-metric/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathIgpMetricSrPolicy.IsNull() && !data.BgpBestpathIgpMetricSrPolicy.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/igp-metric/sr-policy", data.getPath()))
+	}
+	if !data.BgpBestpathMedAlways.IsNull() && !data.BgpBestpathMedAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/med/always", data.getPath()))
+	}
+	if !data.BgpBestpathMedConfed.IsNull() && !data.BgpBestpathMedConfed.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/med/confed", data.getPath()))
+	}
+	if !data.BgpBestpathMedMissingAsWorst.IsNull() && !data.BgpBestpathMedMissingAsWorst.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/med/missing-as-worst", data.getPath()))
+	}
+	if !data.BgpBestpathOriginAsUseValidity.IsNull() && !data.BgpBestpathOriginAsUseValidity.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/origin-as/use/validity", data.getPath()))
+	}
+	if !data.BgpBestpathOriginAsAllowInvalid.IsNull() && !data.BgpBestpathOriginAsAllowInvalid.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/origin-as/allow/invalid", data.getPath()))
+	}
+	if !data.BgpBestpathSrPolicyPrefer.IsNull() && !data.BgpBestpathSrPolicyPrefer.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/prefer", data.getPath()))
+	}
+	if !data.BgpBestpathSrPolicyForce.IsNull() && !data.BgpBestpathSrPolicyForce.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/force", data.getPath()))
+	}
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		keyValues := [...]string{data.Neighbors[i].NeighborAddress.ValueString()}
@@ -955,6 +1291,48 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.NexthopValidationColorExtcommDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/validation/color-extcomm/disable", data.getPath()))
+	}
+	if !data.BgpBestpathAsPathIgnore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/as-path/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathAsPathMultipathRelax.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/as-path/multipath-relax", data.getPath()))
+	}
+	if !data.BgpBestpathCostCommunityIgnore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/cost-community/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathCompareRouterid.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/compare-routerid", data.getPath()))
+	}
+	if !data.BgpBestpathAigpIgnore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/aigp/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathIgpMetricIgnore.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/igp-metric/ignore", data.getPath()))
+	}
+	if !data.BgpBestpathIgpMetricSrPolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/igp-metric/sr-policy", data.getPath()))
+	}
+	if !data.BgpBestpathMedAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/med/always", data.getPath()))
+	}
+	if !data.BgpBestpathMedConfed.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/med/confed", data.getPath()))
+	}
+	if !data.BgpBestpathMedMissingAsWorst.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/med/missing-as-worst", data.getPath()))
+	}
+	if !data.BgpBestpathOriginAsUseValidity.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/origin-as/use/validity", data.getPath()))
+	}
+	if !data.BgpBestpathOriginAsAllowInvalid.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/origin-as/allow/invalid", data.getPath()))
+	}
+	if !data.BgpBestpathSrPolicyPrefer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/prefer", data.getPath()))
+	}
+	if !data.BgpBestpathSrPolicyForce.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/force", data.getPath()))
 	}
 	for i := range data.Neighbors {
 		keys := [...]string{"neighbor-address"}

@@ -16,6 +16,20 @@ resource "iosxr_router_bgp" "example" {
   bfd_multiplier                             = 4
   nexthop_validation_color_extcomm_sr_policy = true
   nexthop_validation_color_extcomm_disable   = true
+  bgp_bestpath_as_path_ignore                = true
+  bgp_bestpath_as_path_multipath_relax       = true
+  bgp_bestpath_cost_community_ignore         = true
+  bgp_bestpath_compare_routerid              = true
+  bgp_bestpath_aigp_ignore                   = true
+  bgp_bestpath_igp_metric_ignore             = true
+  bgp_bestpath_igp_metric_sr_policy          = true
+  bgp_bestpath_med_always                    = true
+  bgp_bestpath_med_confed                    = true
+  bgp_bestpath_med_missing_as_worst          = true
+  bgp_bestpath_origin_as_use_validity        = true
+  bgp_bestpath_origin_as_allow_invalid       = true
+  bgp_bestpath_sr_policy_prefer              = false
+  bgp_bestpath_sr_policy_force               = true
   neighbors = [
     {
       neighbor_address                   = "10.1.1.2"

@@ -43,6 +43,34 @@ attributes:
     example: true
   - yang_name: nexthop/validation/color-extcomm/disable
     example: true
+  - yang_name: bgp/bestpath/as-path/ignore
+    example: true
+  - yang_name: bgp/bestpath/as-path/multipath-relax
+    example: true
+  - yang_name: bgp/bestpath/cost-community/ignore
+    example: true
+  - yang_name: bgp/bestpath/compare-routerid
+    example: true
+  - yang_name: bgp/bestpath/aigp/ignore
+    example: true
+  - yang_name: bgp/bestpath/igp-metric/ignore
+    example: true
+  - yang_name: bgp/bestpath/igp-metric/sr-policy
+    example: true
+  - yang_name: bgp/bestpath/med/always
+    example: true
+  - yang_name: bgp/bestpath/med/confed
+    example: true
+  - yang_name: bgp/bestpath/med/missing-as-worst
+    example: true
+  - yang_name: bgp/bestpath/origin-as/use/validity
+    example: true
+  - yang_name: bgp/bestpath/origin-as/allow/invalid
+    example: true
+  - yang_name: bgp/bestpath/sr-policy/prefer
+    example: false
+  - yang_name: bgp/bestpath/sr-policy/force
+    example: true
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List

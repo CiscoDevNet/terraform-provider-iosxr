@@ -130,6 +130,62 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm path",
 				Computed:            true,
 			},
+			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore as-path length",
+				Computed:            true,
+			},
+			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
+				MarkdownDescription: "Relax as-path check for multipath selection",
+				Computed:            true,
+			},
+			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore cost-community comparison",
+				Computed:            true,
+			},
+			"bgp_bestpath_compare_routerid": schema.BoolAttribute{
+				MarkdownDescription: "Compare router-id for identical EBGP paths",
+				Computed:            true,
+			},
+			"bgp_bestpath_aigp_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore AIGP attribute",
+				Computed:            true,
+			},
+			"bgp_bestpath_igp_metric_ignore": schema.BoolAttribute{
+				MarkdownDescription: "Ignore IGP metric during path comparison",
+				Computed:            true,
+			},
+			"bgp_bestpath_igp_metric_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: "Use next-hop admin/metric from SR policy at Next Hop metric comparison stage",
+				Computed:            true,
+			},
+			"bgp_bestpath_med_always": schema.BoolAttribute{
+				MarkdownDescription: "Allow comparing MED from different neighbors",
+				Computed:            true,
+			},
+			"bgp_bestpath_med_confed": schema.BoolAttribute{
+				MarkdownDescription: "Compare MED among confederation paths",
+				Computed:            true,
+			},
+			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
+				MarkdownDescription: "Treat missing MED as the least preferred one",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will use origin-AS validity",
+				Computed:            true,
+			},
+			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+				MarkdownDescription: "BGP bestpath selection will allow 'invalid' origin-AS",
+				Computed:            true,
+			},
+			"bgp_bestpath_sr_policy_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible",
+				Computed:            true,
+			},
+			"bgp_bestpath_sr_policy_force": schema.BoolAttribute{
+				MarkdownDescription: "Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible",
+				Computed:            true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: "Neighbor address",
 				Computed:            true,

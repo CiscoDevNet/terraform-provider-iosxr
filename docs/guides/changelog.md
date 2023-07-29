@@ -15,6 +15,7 @@ description: |-
 - Add `iosxr_ntp` resource and data source
 - Add `iosxr_bfd` resource and data source
 - Add `iosxr_flow_exporter_map` resource and data source
+- Add `bgp_bestpath` attributes to `iosxr_router_bgp` resource and data source
 
 ## 0.2.2
 

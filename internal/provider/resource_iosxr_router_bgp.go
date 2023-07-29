@@ -165,6 +165,62 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Disable next-hop reachability validation for color-extcomm path").String,
 				Optional:            true,
 			},
+			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore as-path length").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Relax as-path check for multipath selection").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore cost-community comparison").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_compare_routerid": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compare router-id for identical EBGP paths").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_aigp_ignore": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore AIGP attribute").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_igp_metric_ignore": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Ignore IGP metric during path comparison").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_igp_metric_sr_policy": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use next-hop admin/metric from SR policy at Next Hop metric comparison stage").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_med_always": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow comparing MED from different neighbors").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_med_confed": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compare MED among confederation paths").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Treat missing MED as the least preferred one").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_origin_as_use_validity": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will use origin-AS validity").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_origin_as_allow_invalid": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("BGP bestpath selection will allow 'invalid' origin-AS").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_sr_policy_prefer": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible").String,
+				Optional:            true,
+			},
+			"bgp_bestpath_sr_policy_force": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible").String,
+				Optional:            true,
+			},
 			"neighbors": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
 				Optional:            true,

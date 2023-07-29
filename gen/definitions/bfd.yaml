@@ -1,0 +1,78 @@
+---
+name: BFD
+path: Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd
+doc_category: System
+attributes:
+  - yang_name: echo/disable
+    example: true
+  - yang_name: echo/latency/detect/percentage
+    example: 200
+  - yang_name: echo/latency/detect/count
+    example: 10
+  - yang_name: echo/startup/validate/force
+    example: true
+  - yang_name: echo/ipv4/source
+    example: 10.1.1.1
+  - yang_name: echo/ipv4/bundle-per-member/minimum-interval/preferred-minimum-interval
+    example: 200
+  - yang_name: trap/singlehop/pre-mapped
+    example: true
+  - yang_name: multipath/include/locations/location
+    tf_name: multipath_locations
+    type: List
+    attributes:
+      - yang_name: location-name
+        id: true
+        example: 0/0/CPU0
+
+  - yang_name: multihop/ttl-drop-threshold
+    example: 200
+  - yang_name: dampening/initial-wait
+    example: 3600
+  - yang_name: dampening/secondary-wait
+    example: 3200
+  - yang_name: dampening/maximum-wait
+    example: 3100
+  - yang_name: dampening/threshold
+    example: 60000
+  - yang_name: dampening/extensions/down-monitoring
+    example: true
+  - yang_name: dampening/disable
+    example: true
+  - yang_name: dampening/bundle-member/l3-only-mode
+    example: true
+  - yang_name: dampening/bundle-member/initial-wait
+    example: 5184
+  - yang_name: dampening/bundle-member/secondary-wait
+    example: 6184
+  - yang_name: dampening/bundle-member/maximum-wait
+    example: 7184
+  - yang_name: bundle/coexistence/bob-blb/inherit
+    example: false
+  - yang_name: bundle/coexistence/bob-blb/logical
+    example: true
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/0
+      - yang_name: echo/disable
+        example: true
+      - yang_name: echo/ipv4/source
+        example: 12.1.1.1
+      - yang_name: ipv6/checksum/disable
+        example: true
+      - yang_name: disable
+        example: true
+      - yang_name: local-address
+        example: 33.33.31.1
+      - yang_name: tx-interval
+        example: 3200
+      - yang_name: rx-interval
+        example: 4200
+      - yang_name: multiplier
+        example: 40
+  - yang_name: ipv6/checksum/disable
+    example: true

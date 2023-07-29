@@ -50,6 +50,18 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_addresses.0.zone", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "bundle_port_priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_ingress_monitors.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_egress_monitors.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_egress_monitor_samplers.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv4_egress_monitor_samplers.0.sampler_map_name", "SMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_ingress_monitors.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_egress_monitors.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_egress_monitor_samplers.0.monitor_map_name", "MMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "flow_ipv6_egress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -138,6 +150,34 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	config += `		zone = "0"` + "\n"
 	config += `	}]` + "\n"
 	config += `	bundle_port_priority = 100` + "\n"
+	config += `	flow_ipv4_ingress_monitors = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv4_ingress_monitor_samplers = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `		sampler_map_name = "SMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv4_egress_monitors = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv4_egress_monitor_samplers = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `		sampler_map_name = "SMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv6_ingress_monitors = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv6_ingress_monitor_samplers = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `		sampler_map_name = "SMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv6_egress_monitors = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `	}]` + "\n"
+	config += `	flow_ipv6_egress_monitor_samplers = [{` + "\n"
+	config += `		monitor_map_name = "MMAP1"` + "\n"
+	config += `		sampler_map_name = "SMAP1"` + "\n"
+	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

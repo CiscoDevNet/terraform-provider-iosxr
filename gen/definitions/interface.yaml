@@ -147,6 +147,82 @@ attributes:
     example: active
   - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority
     example: 100
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor
+    tf_name: flow_ipv4_ingress_monitors
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler
+    tf_name: flow_ipv4_ingress_monitor_samplers
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+      - yang_name: sampler-map-name
+        id: true
+        example: SMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor
+    tf_name: flow_ipv4_egress_monitors
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler
+    tf_name: flow_ipv4_egress_monitor_samplers
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+      - yang_name: sampler-map-name
+        id: true
+        example: SMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor
+    tf_name: flow_ipv6_ingress_monitors
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler
+    tf_name: flow_ipv6_ingress_monitor_samplers
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+      - yang_name: sampler-map-name
+        id: true
+        example: SMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor
+    tf_name: flow_ipv6_egress_monitors
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+  - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler
+    tf_name: flow_ipv6_egress_monitor_samplers
+    test_tags: [FLOW]
+    type: List
+    attributes:
+      - yang_name: monitor-map-name
+        id: true
+        example: MMAP1
+      - yang_name: sampler-map-name
+        id: true
+        example: SMAP1
 test_prerequisites:
   - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]
     attributes:

@@ -313,6 +313,166 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(1, 65535),
 				},
 			},
+			"flow_ipv4_ingress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv4_ingress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor and sampler for incoming packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a sampler for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv4_egress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv4_egress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor and sampler for outgoing packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a sampler for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv6_ingress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv6_ingress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor and sampler for incoming packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a sampler for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv6_egress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"flow_ipv6_egress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor and sampler for outgoing packets").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a flow monitor for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a sampler for packets").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

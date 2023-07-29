@@ -44,6 +44,14 @@ data "iosxr_interface" "example" {
 - `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
 - `description` (String) Set description for this interface
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface
+- `flow_ipv4_egress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for outgoing packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitor_samplers))
+- `flow_ipv4_egress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv4_egress_monitors))
+- `flow_ipv4_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv4_ingress_monitor_samplers))
+- `flow_ipv4_ingress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv4_ingress_monitors))
+- `flow_ipv6_egress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for outgoing packets (see [below for nested schema](#nestedatt--flow_ipv6_egress_monitor_samplers))
+- `flow_ipv6_egress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv6_egress_monitors))
+- `flow_ipv6_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitor_samplers))
+- `flow_ipv6_ingress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitors))
 - `id` (String) The path of the retrieved object.
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
@@ -67,6 +75,74 @@ data "iosxr_interface" "example" {
 - `shutdown` (Boolean) shutdown the given interface
 - `unnumbered` (String) Enable IP processing without an explicit address
 - `vrf` (String) Set VRF in which the interface operates
+
+<a id="nestedatt--flow_ipv4_egress_monitor_samplers"></a>
+### Nested Schema for `flow_ipv4_egress_monitor_samplers`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+- `sampler_map_name` (String) Specify a sampler for packets
+
+
+<a id="nestedatt--flow_ipv4_egress_monitors"></a>
+### Nested Schema for `flow_ipv4_egress_monitors`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+
+
+<a id="nestedatt--flow_ipv4_ingress_monitor_samplers"></a>
+### Nested Schema for `flow_ipv4_ingress_monitor_samplers`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+- `sampler_map_name` (String) Specify a sampler for packets
+
+
+<a id="nestedatt--flow_ipv4_ingress_monitors"></a>
+### Nested Schema for `flow_ipv4_ingress_monitors`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+
+
+<a id="nestedatt--flow_ipv6_egress_monitor_samplers"></a>
+### Nested Schema for `flow_ipv6_egress_monitor_samplers`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+- `sampler_map_name` (String) Specify a sampler for packets
+
+
+<a id="nestedatt--flow_ipv6_egress_monitors"></a>
+### Nested Schema for `flow_ipv6_egress_monitors`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+
+
+<a id="nestedatt--flow_ipv6_ingress_monitor_samplers"></a>
+### Nested Schema for `flow_ipv6_ingress_monitor_samplers`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+- `sampler_map_name` (String) Specify a sampler for packets
+
+
+<a id="nestedatt--flow_ipv6_ingress_monitors"></a>
+### Nested Schema for `flow_ipv6_ingress_monitors`
+
+Read-Only:
+
+- `monitor_map_name` (String) Specify a flow monitor for packets
+
 
 <a id="nestedatt--ipv6_addresses"></a>
 ### Nested Schema for `ipv6_addresses`

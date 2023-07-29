@@ -238,6 +238,118 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Priority for this port. Lower value is higher priority.",
 				Computed:            true,
 			},
+			"flow_ipv4_ingress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor for packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv4_ingress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor and sampler for incoming packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a sampler for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv4_egress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor for packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv4_egress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor and sampler for outgoing packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a sampler for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv6_ingress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor for packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv6_ingress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor and sampler for incoming packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a sampler for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv6_egress_monitors": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor for packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"flow_ipv6_egress_monitor_samplers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify a flow monitor and sampler for outgoing packets",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"monitor_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a flow monitor for packets",
+							Computed:            true,
+						},
+						"sampler_map_name": schema.StringAttribute{
+							MarkdownDescription: "Specify a sampler for packets",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

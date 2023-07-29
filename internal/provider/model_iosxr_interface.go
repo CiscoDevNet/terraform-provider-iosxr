@@ -31,86 +31,102 @@ import (
 )
 
 type Interface struct {
-	Device                                   types.String                   `tfsdk:"device"`
-	Id                                       types.String                   `tfsdk:"id"`
-	DeleteMode                               types.String                   `tfsdk:"delete_mode"`
-	InterfaceName                            types.String                   `tfsdk:"interface_name"`
-	L2transport                              types.Bool                     `tfsdk:"l2transport"`
-	PointToPoint                             types.Bool                     `tfsdk:"point_to_point"`
-	Multipoint                               types.Bool                     `tfsdk:"multipoint"`
-	DampeningDecayHalfLifeValue              types.Int64                    `tfsdk:"dampening_decay_half_life_value"`
-	Ipv4PointToPoint                         types.Bool                     `tfsdk:"ipv4_point_to_point"`
-	ServicePolicyInput                       []InterfaceServicePolicyInput  `tfsdk:"service_policy_input"`
-	ServicePolicyOutput                      []InterfaceServicePolicyOutput `tfsdk:"service_policy_output"`
-	BfdModeIetf                              types.Bool                     `tfsdk:"bfd_mode_ietf"`
-	EncapsulationDot1qVlanId                 types.Int64                    `tfsdk:"encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qVlanId      types.String                   `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qSecondDot1q types.String                   `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
-	RewriteIngressTagPopOne                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_one"`
-	RewriteIngressTagPopTwo                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_two"`
-	Shutdown                                 types.Bool                     `tfsdk:"shutdown"`
-	Mtu                                      types.Int64                    `tfsdk:"mtu"`
-	Bandwidth                                types.Int64                    `tfsdk:"bandwidth"`
-	Description                              types.String                   `tfsdk:"description"`
-	LoadInterval                             types.Int64                    `tfsdk:"load_interval"`
-	Vrf                                      types.String                   `tfsdk:"vrf"`
-	Ipv4Address                              types.String                   `tfsdk:"ipv4_address"`
-	Ipv4Netmask                              types.String                   `tfsdk:"ipv4_netmask"`
-	Unnumbered                               types.String                   `tfsdk:"unnumbered"`
-	Ipv6LinkLocalAddress                     types.String                   `tfsdk:"ipv6_link_local_address"`
-	Ipv6LinkLocalZone                        types.String                   `tfsdk:"ipv6_link_local_zone"`
-	Ipv6Autoconfig                           types.Bool                     `tfsdk:"ipv6_autoconfig"`
-	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
-	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
-	BundleMinimumActiveLinks                 types.Int64                    `tfsdk:"bundle_minimum_active_links"`
-	BundleMaximumActiveLinks                 types.Int64                    `tfsdk:"bundle_maximum_active_links"`
-	BundleShutdown                           types.Bool                     `tfsdk:"bundle_shutdown"`
-	BundleLoadBalancingHashSrcIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_src_ip"`
-	BundleLoadBalancingHashDstIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_dst_ip"`
-	BundleId                                 types.Int64                    `tfsdk:"bundle_id"`
-	BundleIdMode                             types.String                   `tfsdk:"bundle_id_mode"`
-	BundlePortPriority                       types.Int64                    `tfsdk:"bundle_port_priority"`
+	Device                                   types.String                              `tfsdk:"device"`
+	Id                                       types.String                              `tfsdk:"id"`
+	DeleteMode                               types.String                              `tfsdk:"delete_mode"`
+	InterfaceName                            types.String                              `tfsdk:"interface_name"`
+	L2transport                              types.Bool                                `tfsdk:"l2transport"`
+	PointToPoint                             types.Bool                                `tfsdk:"point_to_point"`
+	Multipoint                               types.Bool                                `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue              types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                         types.Bool                                `tfsdk:"ipv4_point_to_point"`
+	ServicePolicyInput                       []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
+	ServicePolicyOutput                      []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
+	BfdModeIetf                              types.Bool                                `tfsdk:"bfd_mode_ietf"`
+	EncapsulationDot1qVlanId                 types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId      types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                 types.Bool                                `tfsdk:"shutdown"`
+	Mtu                                      types.Int64                               `tfsdk:"mtu"`
+	Bandwidth                                types.Int64                               `tfsdk:"bandwidth"`
+	Description                              types.String                              `tfsdk:"description"`
+	LoadInterval                             types.Int64                               `tfsdk:"load_interval"`
+	Vrf                                      types.String                              `tfsdk:"vrf"`
+	Ipv4Address                              types.String                              `tfsdk:"ipv4_address"`
+	Ipv4Netmask                              types.String                              `tfsdk:"ipv4_netmask"`
+	Unnumbered                               types.String                              `tfsdk:"unnumbered"`
+	Ipv6LinkLocalAddress                     types.String                              `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                        types.String                              `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                           types.Bool                                `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                               types.Bool                                `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                            []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                 types.Int64                               `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                 types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                           types.Bool                                `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                 types.Int64                               `tfsdk:"bundle_id"`
+	BundleIdMode                             types.String                              `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                       types.Int64                               `tfsdk:"bundle_port_priority"`
+	FlowIpv4IngressMonitors                  []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
+	FlowIpv4IngressMonitorSamplers           []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
+	FlowIpv4EgressMonitors                   []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
+	FlowIpv4EgressMonitorSamplers            []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
+	FlowIpv6IngressMonitors                  []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
+	FlowIpv6IngressMonitorSamplers           []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
+	FlowIpv6EgressMonitors                   []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
+	FlowIpv6EgressMonitorSamplers            []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
 }
 
 type InterfaceData struct {
-	Device                                   types.String                   `tfsdk:"device"`
-	Id                                       types.String                   `tfsdk:"id"`
-	InterfaceName                            types.String                   `tfsdk:"interface_name"`
-	L2transport                              types.Bool                     `tfsdk:"l2transport"`
-	PointToPoint                             types.Bool                     `tfsdk:"point_to_point"`
-	Multipoint                               types.Bool                     `tfsdk:"multipoint"`
-	DampeningDecayHalfLifeValue              types.Int64                    `tfsdk:"dampening_decay_half_life_value"`
-	Ipv4PointToPoint                         types.Bool                     `tfsdk:"ipv4_point_to_point"`
-	ServicePolicyInput                       []InterfaceServicePolicyInput  `tfsdk:"service_policy_input"`
-	ServicePolicyOutput                      []InterfaceServicePolicyOutput `tfsdk:"service_policy_output"`
-	BfdModeIetf                              types.Bool                     `tfsdk:"bfd_mode_ietf"`
-	EncapsulationDot1qVlanId                 types.Int64                    `tfsdk:"encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qVlanId      types.String                   `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qSecondDot1q types.String                   `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
-	RewriteIngressTagPopOne                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_one"`
-	RewriteIngressTagPopTwo                  types.Bool                     `tfsdk:"rewrite_ingress_tag_pop_two"`
-	Shutdown                                 types.Bool                     `tfsdk:"shutdown"`
-	Mtu                                      types.Int64                    `tfsdk:"mtu"`
-	Bandwidth                                types.Int64                    `tfsdk:"bandwidth"`
-	Description                              types.String                   `tfsdk:"description"`
-	LoadInterval                             types.Int64                    `tfsdk:"load_interval"`
-	Vrf                                      types.String                   `tfsdk:"vrf"`
-	Ipv4Address                              types.String                   `tfsdk:"ipv4_address"`
-	Ipv4Netmask                              types.String                   `tfsdk:"ipv4_netmask"`
-	Unnumbered                               types.String                   `tfsdk:"unnumbered"`
-	Ipv6LinkLocalAddress                     types.String                   `tfsdk:"ipv6_link_local_address"`
-	Ipv6LinkLocalZone                        types.String                   `tfsdk:"ipv6_link_local_zone"`
-	Ipv6Autoconfig                           types.Bool                     `tfsdk:"ipv6_autoconfig"`
-	Ipv6Enable                               types.Bool                     `tfsdk:"ipv6_enable"`
-	Ipv6Addresses                            []InterfaceIpv6Addresses       `tfsdk:"ipv6_addresses"`
-	BundleMinimumActiveLinks                 types.Int64                    `tfsdk:"bundle_minimum_active_links"`
-	BundleMaximumActiveLinks                 types.Int64                    `tfsdk:"bundle_maximum_active_links"`
-	BundleShutdown                           types.Bool                     `tfsdk:"bundle_shutdown"`
-	BundleLoadBalancingHashSrcIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_src_ip"`
-	BundleLoadBalancingHashDstIp             types.Bool                     `tfsdk:"bundle_load_balancing_hash_dst_ip"`
-	BundleId                                 types.Int64                    `tfsdk:"bundle_id"`
-	BundleIdMode                             types.String                   `tfsdk:"bundle_id_mode"`
-	BundlePortPriority                       types.Int64                    `tfsdk:"bundle_port_priority"`
+	Device                                   types.String                              `tfsdk:"device"`
+	Id                                       types.String                              `tfsdk:"id"`
+	InterfaceName                            types.String                              `tfsdk:"interface_name"`
+	L2transport                              types.Bool                                `tfsdk:"l2transport"`
+	PointToPoint                             types.Bool                                `tfsdk:"point_to_point"`
+	Multipoint                               types.Bool                                `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue              types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                         types.Bool                                `tfsdk:"ipv4_point_to_point"`
+	ServicePolicyInput                       []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
+	ServicePolicyOutput                      []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
+	BfdModeIetf                              types.Bool                                `tfsdk:"bfd_mode_ietf"`
+	EncapsulationDot1qVlanId                 types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId      types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                 types.Bool                                `tfsdk:"shutdown"`
+	Mtu                                      types.Int64                               `tfsdk:"mtu"`
+	Bandwidth                                types.Int64                               `tfsdk:"bandwidth"`
+	Description                              types.String                              `tfsdk:"description"`
+	LoadInterval                             types.Int64                               `tfsdk:"load_interval"`
+	Vrf                                      types.String                              `tfsdk:"vrf"`
+	Ipv4Address                              types.String                              `tfsdk:"ipv4_address"`
+	Ipv4Netmask                              types.String                              `tfsdk:"ipv4_netmask"`
+	Unnumbered                               types.String                              `tfsdk:"unnumbered"`
+	Ipv6LinkLocalAddress                     types.String                              `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                        types.String                              `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                           types.Bool                                `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                               types.Bool                                `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                            []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                 types.Int64                               `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                 types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                           types.Bool                                `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                 types.Int64                               `tfsdk:"bundle_id"`
+	BundleIdMode                             types.String                              `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                       types.Int64                               `tfsdk:"bundle_port_priority"`
+	FlowIpv4IngressMonitors                  []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
+	FlowIpv4IngressMonitorSamplers           []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
+	FlowIpv4EgressMonitors                   []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
+	FlowIpv4EgressMonitorSamplers            []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
+	FlowIpv6IngressMonitors                  []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
+	FlowIpv6IngressMonitorSamplers           []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
+	FlowIpv6EgressMonitors                   []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
+	FlowIpv6EgressMonitorSamplers            []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
 }
 type InterfaceServicePolicyInput struct {
 	Name types.String `tfsdk:"name"`
@@ -122,6 +138,34 @@ type InterfaceIpv6Addresses struct {
 	Address      types.String `tfsdk:"address"`
 	PrefixLength types.Int64  `tfsdk:"prefix_length"`
 	Zone         types.String `tfsdk:"zone"`
+}
+type InterfaceFlowIpv4IngressMonitors struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+}
+type InterfaceFlowIpv4IngressMonitorSamplers struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+	SamplerMapName types.String `tfsdk:"sampler_map_name"`
+}
+type InterfaceFlowIpv4EgressMonitors struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+}
+type InterfaceFlowIpv4EgressMonitorSamplers struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+	SamplerMapName types.String `tfsdk:"sampler_map_name"`
+}
+type InterfaceFlowIpv6IngressMonitors struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+}
+type InterfaceFlowIpv6IngressMonitorSamplers struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+	SamplerMapName types.String `tfsdk:"sampler_map_name"`
+}
+type InterfaceFlowIpv6EgressMonitors struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+}
+type InterfaceFlowIpv6EgressMonitorSamplers struct {
+	MonitorMapName types.String `tfsdk:"monitor_map_name"`
+	SamplerMapName types.String `tfsdk:"sampler_map_name"`
 }
 
 func (data Interface) getPath() string {
@@ -286,6 +330,82 @@ func (data Interface) toBody(ctx context.Context) string {
 			}
 			if !item.Zone.IsNull() && !item.Zone.IsUnknown() {
 				body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.ipv6-address"+"."+strconv.Itoa(index)+"."+"zone", item.Zone.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv4IngressMonitors) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor", []interface{}{})
+		for index, item := range data.FlowIpv4IngressMonitors {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv4IngressMonitorSamplers) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitor-samplers.ingress-monitor-sampler", []interface{}{})
+		for index, item := range data.FlowIpv4IngressMonitorSamplers {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitor-samplers.ingress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+			if !item.SamplerMapName.IsNull() && !item.SamplerMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitor-samplers.ingress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"sampler-map-name", item.SamplerMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv4EgressMonitors) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitors.egress-monitor", []interface{}{})
+		for index, item := range data.FlowIpv4EgressMonitors {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitors.egress-monitor"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv4EgressMonitorSamplers) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitor-samplers.egress-monitor-sampler", []interface{}{})
+		for index, item := range data.FlowIpv4EgressMonitorSamplers {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitor-samplers.egress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+			if !item.SamplerMapName.IsNull() && !item.SamplerMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitor-samplers.egress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"sampler-map-name", item.SamplerMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv6IngressMonitors) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitors.ingress-monitor", []interface{}{})
+		for index, item := range data.FlowIpv6IngressMonitors {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitors.ingress-monitor"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv6IngressMonitorSamplers) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitor-samplers.ingress-monitor-sampler", []interface{}{})
+		for index, item := range data.FlowIpv6IngressMonitorSamplers {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitor-samplers.ingress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+			if !item.SamplerMapName.IsNull() && !item.SamplerMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitor-samplers.ingress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"sampler-map-name", item.SamplerMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv6EgressMonitors) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitors.egress-monitor", []interface{}{})
+		for index, item := range data.FlowIpv6EgressMonitors {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitors.egress-monitor"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+		}
+	}
+	if len(data.FlowIpv6EgressMonitorSamplers) > 0 {
+		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitor-samplers.egress-monitor-sampler", []interface{}{})
+		for index, item := range data.FlowIpv6EgressMonitorSamplers {
+			if !item.MonitorMapName.IsNull() && !item.MonitorMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitor-samplers.egress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"monitor-map-name", item.MonitorMapName.ValueString())
+			}
+			if !item.SamplerMapName.IsNull() && !item.SamplerMapName.IsUnknown() {
+				body, _ = sjson.Set(body, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitor-samplers.egress-monitor-sampler"+"."+strconv.Itoa(index)+"."+"sampler-map-name", item.SamplerMapName.ValueString())
 			}
 		}
 	}
@@ -602,6 +722,258 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BundlePortPriority = types.Int64Null()
 	}
+	for i := range data.FlowIpv4IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv4IngressMonitors[i].MonitorMapName.IsNull() {
+			data.FlowIpv4IngressMonitors[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4IngressMonitors[i].MonitorMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv4IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitor-samplers.ingress-monitor-sampler").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.IsNull() {
+			data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName = types.StringNull()
+		}
+		if value := r.Get("sampler-map-name"); value.Exists() && !data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.IsNull() {
+			data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv4EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitors.egress-monitor").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv4EgressMonitors[i].MonitorMapName.IsNull() {
+			data.FlowIpv4EgressMonitors[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4EgressMonitors[i].MonitorMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv4EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitor-samplers.egress-monitor-sampler").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.IsNull() {
+			data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName = types.StringNull()
+		}
+		if value := r.Get("sampler-map-name"); value.Exists() && !data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.IsNull() {
+			data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv6IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitors.ingress-monitor").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv6IngressMonitors[i].MonitorMapName.IsNull() {
+			data.FlowIpv6IngressMonitors[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6IngressMonitors[i].MonitorMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv6IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitor-samplers.ingress-monitor-sampler").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.IsNull() {
+			data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName = types.StringNull()
+		}
+		if value := r.Get("sampler-map-name"); value.Exists() && !data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.IsNull() {
+			data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv6EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitors.egress-monitor").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv6EgressMonitors[i].MonitorMapName.IsNull() {
+			data.FlowIpv6EgressMonitors[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6EgressMonitors[i].MonitorMapName = types.StringNull()
+		}
+	}
+	for i := range data.FlowIpv6EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitor-samplers.egress-monitor-sampler").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("monitor-map-name"); value.Exists() && !data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.IsNull() {
+			data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName = types.StringNull()
+		}
+		if value := r.Get("sampler-map-name"); value.Exists() && !data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.IsNull() {
+			data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName = types.StringValue(value.String())
+		} else {
+			data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName = types.StringNull()
+		}
+	}
 }
 
 func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
@@ -766,6 +1138,106 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.port-priority"); value.Exists() {
 		data.BundlePortPriority = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitors.ingress-monitor"); value.Exists() {
+		data.FlowIpv4IngressMonitors = make([]InterfaceFlowIpv4IngressMonitors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv4IngressMonitors{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv4IngressMonitors = append(data.FlowIpv4IngressMonitors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.ingress-monitor-samplers.ingress-monitor-sampler"); value.Exists() {
+		data.FlowIpv4IngressMonitorSamplers = make([]InterfaceFlowIpv4IngressMonitorSamplers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv4IngressMonitorSamplers{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sampler-map-name"); cValue.Exists() {
+				item.SamplerMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv4IngressMonitorSamplers = append(data.FlowIpv4IngressMonitorSamplers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitors.egress-monitor"); value.Exists() {
+		data.FlowIpv4EgressMonitors = make([]InterfaceFlowIpv4EgressMonitors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv4EgressMonitors{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv4EgressMonitors = append(data.FlowIpv4EgressMonitors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv4.monitor.egress-monitor-samplers.egress-monitor-sampler"); value.Exists() {
+		data.FlowIpv4EgressMonitorSamplers = make([]InterfaceFlowIpv4EgressMonitorSamplers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv4EgressMonitorSamplers{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sampler-map-name"); cValue.Exists() {
+				item.SamplerMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv4EgressMonitorSamplers = append(data.FlowIpv4EgressMonitorSamplers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitors.ingress-monitor"); value.Exists() {
+		data.FlowIpv6IngressMonitors = make([]InterfaceFlowIpv6IngressMonitors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv6IngressMonitors{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv6IngressMonitors = append(data.FlowIpv6IngressMonitors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.ingress-monitor-samplers.ingress-monitor-sampler"); value.Exists() {
+		data.FlowIpv6IngressMonitorSamplers = make([]InterfaceFlowIpv6IngressMonitorSamplers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv6IngressMonitorSamplers{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sampler-map-name"); cValue.Exists() {
+				item.SamplerMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv6IngressMonitorSamplers = append(data.FlowIpv6IngressMonitorSamplers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitors.egress-monitor"); value.Exists() {
+		data.FlowIpv6EgressMonitors = make([]InterfaceFlowIpv6EgressMonitors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv6EgressMonitors{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv6EgressMonitors = append(data.FlowIpv6EgressMonitors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-flow-cfg:flow.ipv6.monitor.egress-monitor-samplers.egress-monitor-sampler"); value.Exists() {
+		data.FlowIpv6EgressMonitorSamplers = make([]InterfaceFlowIpv6EgressMonitorSamplers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := InterfaceFlowIpv6EgressMonitorSamplers{}
+			if cValue := v.Get("monitor-map-name"); cValue.Exists() {
+				item.MonitorMapName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("sampler-map-name"); cValue.Exists() {
+				item.SamplerMapName = types.StringValue(cValue.String())
+			}
+			data.FlowIpv6EgressMonitorSamplers = append(data.FlowIpv6EgressMonitorSamplers, item)
+			return true
+		})
+	}
 }
 
 func (data *Interface) getDeletedListItems(ctx context.Context, state Interface) []string {
@@ -860,6 +1332,270 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.FlowIpv4IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv4IngressMonitors {
+			found = true
+			if state.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString() != data.FlowIpv4IngressMonitors[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv4IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv4IngressMonitorSamplers {
+			found = true
+			if state.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString() != data.FlowIpv4IngressMonitorSamplers[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if state.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString() != data.FlowIpv4IngressMonitorSamplers[j].SamplerMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv4EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv4EgressMonitors {
+			found = true
+			if state.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString() != data.FlowIpv4EgressMonitors[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv4EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv4EgressMonitorSamplers {
+			found = true
+			if state.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString() != data.FlowIpv4EgressMonitorSamplers[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if state.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString() != data.FlowIpv4EgressMonitorSamplers[j].SamplerMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv6IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv6IngressMonitors {
+			found = true
+			if state.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString() != data.FlowIpv6IngressMonitors[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv6IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv6IngressMonitorSamplers {
+			found = true
+			if state.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString() != data.FlowIpv6IngressMonitorSamplers[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if state.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString() != data.FlowIpv6IngressMonitorSamplers[j].SamplerMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv6EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv6EgressMonitors {
+			found = true
+			if state.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString() != data.FlowIpv6EgressMonitors[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.FlowIpv6EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		stateKeyValues := [...]string{state.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if !reflect.ValueOf(state.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlowIpv6EgressMonitorSamplers {
+			found = true
+			if state.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString() != data.FlowIpv6EgressMonitorSamplers[j].MonitorMapName.ValueString() {
+				found = false
+			}
+			if state.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString() != data.FlowIpv6EgressMonitorSamplers[j].SamplerMapName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
@@ -927,6 +1663,70 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	if !data.BundleLoadBalancingHashDstIp.IsNull() && !data.BundleLoadBalancingHashDstIp.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/dst-ip", data.getPath()))
+	}
+	for i := range data.FlowIpv4IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv4IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv4EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv4EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv6IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv6IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv6EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.FlowIpv6EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -1058,6 +1858,86 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.BundlePortPriority.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority", data.getPath()))
+	}
+	for i := range data.FlowIpv4IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv4IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv4EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv4EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv6IngressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv6IngressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv6EgressMonitors {
+		keys := [...]string{"monitor-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor%v", data.getPath(), keyString))
+	}
+	for i := range data.FlowIpv6EgressMonitorSamplers {
+		keys := [...]string{"monitor-map-name", "sampler-map-name"}
+		keyValues := [...]string{data.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString(), data.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

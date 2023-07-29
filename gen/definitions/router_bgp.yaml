@@ -92,6 +92,12 @@ attributes:
         example: 10
       - yang_name: bfd/multiplier
         example: 4
+      - yang_name: bfd/fast-detect
+        example: true
+      - yang_name: bfd/fast-detect/strict-mode
+        example: false
+      - yang_name: bfd/fast-detect/inheritance-disable
+        example: true
       - yang_name: local-as/as-number
         tf_name: local_as
         example: 65003
@@ -118,29 +124,16 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security
         example: false
-  - yang_name: neighbor-groups/neighbor-group
-    tf_name: neighbor_groups
-    type: List
-    attributes:
-      - yang_name: neighbor-group-name
-        tf_name: name
-        id: true
-        example: GROUP1
-      - yang_name: remote-as
-        example: 65001
-      - yang_name: update-source
-        example: Loopback0
-      - yang_name: ao/key-chain-name
-        example: BGP-GROUP1-CLIENTS
-        exclude_test: true
-      - yang_name: ao/include-tcp-options/enable
-        example: true
-        exclude_test: true
-      - yang_name: bfd/minimum-interval
-        example: 3
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
       - name: as-number
         value: 65001
+    lists:
+      - name: neighbor-groups/neighbor-group
+        key: neighbor-group-name
+        items:
+          - attributes:
+              - name: neighbor-group-name
+                value: GROUP1

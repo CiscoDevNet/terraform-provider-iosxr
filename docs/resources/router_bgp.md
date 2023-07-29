@@ -47,33 +47,28 @@ resource "iosxr_router_bgp" "example" {
   bgp_bestpath_sr_policy_force               = true
   neighbors = [
     {
-      neighbor_address                   = "10.1.1.2"
-      remote_as                          = "65002"
-      description                        = "My Neighbor Description"
-      use_neighbor_group                 = "GROUP1"
-      ignore_connected_check             = true
-      ebgp_multihop_maximum_hop_count    = 10
-      bfd_minimum_interval               = 10
-      bfd_multiplier                     = 4
-      local_as                           = "65003"
-      local_as_no_prepend                = true
-      local_as_replace_as                = true
-      local_as_dual_as                   = true
-      password                           = "12341C2713181F13253920"
-      shutdown                           = false
-      timers_keepalive_interval          = 5
-      timers_holdtime                    = "20"
-      timers_minimum_acceptable_holdtime = "10"
-      update_source                      = "GigabitEthernet0/0/0/1"
-      ttl_security                       = false
-    }
-  ]
-  neighbor_groups = [
-    {
-      name                 = "GROUP1"
-      remote_as            = "65001"
-      update_source        = "Loopback0"
-      bfd_minimum_interval = 3
+      neighbor_address                    = "10.1.1.2"
+      remote_as                           = "65002"
+      description                         = "My Neighbor Description"
+      use_neighbor_group                  = "GROUP1"
+      ignore_connected_check              = true
+      ebgp_multihop_maximum_hop_count     = 10
+      bfd_minimum_interval                = 10
+      bfd_multiplier                      = 4
+      bfd_fast_detect                     = true
+      bfd_fast_detect_strict_mode         = false
+      bfd_fast_detect_inheritance_disable = true
+      local_as                            = "65003"
+      local_as_no_prepend                 = true
+      local_as_replace_as                 = true
+      local_as_dual_as                    = true
+      password                            = "12341C2713181F13253920"
+      shutdown                            = false
+      timers_keepalive_interval           = 5
+      timers_holdtime                     = "20"
+      timers_minimum_acceptable_holdtime  = "10"
+      update_source                       = "GigabitEthernet0/0/0/1"
+      ttl_security                        = false
     }
   ]
 }
@@ -117,7 +112,6 @@ resource "iosxr_router_bgp" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
-- `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 - `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
@@ -131,23 +125,6 @@ resource "iosxr_router_bgp" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
-
-<a id="nestedatt--neighbor_groups"></a>
-### Nested Schema for `neighbor_groups`
-
-Required:
-
-- `name` (String) Specify a Neighbor-group
-
-Optional:
-
-- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
-- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
-- `bfd_minimum_interval` (Number) Hello interval
-  - Range: `3`-`30000`
-- `remote_as` (String) bgp as-number
-- `update_source` (String) Source of routing updates
-
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
@@ -163,6 +140,9 @@ Required:
 
 Optional:
 
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier

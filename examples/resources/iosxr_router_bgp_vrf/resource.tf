@@ -19,6 +19,9 @@ resource "iosxr_router_bgp_vrf" "example" {
       ebgp_multihop_maximum_hop_count = 10
       bfd_minimum_interval            = 10
       bfd_multiplier                  = 4
+      bfd_fast_detect                 = true
+      bfd_fast_detect_strict_mode     = false
+      bfd_fast_detect_disable         = false
       local_as                        = "65003"
       local_as_no_prepend             = true
       local_as_replace_as             = true

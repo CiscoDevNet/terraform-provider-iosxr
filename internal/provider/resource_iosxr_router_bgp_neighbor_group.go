@@ -121,8 +121,23 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(3, 30000),
 				},
 			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 16).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 16),
+				},
+			},
 			"bfd_fast_detect": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+				Optional:            true,
+			},
+			"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
 				Optional:            true,
 			},
 			"address_families": schema.ListNestedAttribute{

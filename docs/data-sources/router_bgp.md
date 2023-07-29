@@ -55,7 +55,6 @@ data "iosxr_router_bgp" "example" {
 - `default_metric` (Number) default redistributed metric
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
 - `id` (String) The path of the retrieved object.
-- `neighbor_groups` (Attributes List) Specify a Neighbor-group (see [below for nested schema](#nestedatt--neighbor_groups))
 - `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
 - `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
@@ -65,24 +64,14 @@ data "iosxr_router_bgp" "example" {
 - `timers_bgp_keepalive_interval` (Number) BGP timers
 - `timers_bgp_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
 
-<a id="nestedatt--neighbor_groups"></a>
-### Nested Schema for `neighbor_groups`
-
-Read-Only:
-
-- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
-- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
-- `bfd_minimum_interval` (Number) Hello interval
-- `name` (String) Specify a Neighbor-group
-- `remote_as` (String) bgp as-number
-- `update_source` (String) Source of routing updates
-
-
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
 
 Read-Only:
 
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `description` (String) Neighbor specific description

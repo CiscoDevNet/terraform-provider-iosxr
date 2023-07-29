@@ -80,6 +80,9 @@ type RouterBGPVRFNeighbors struct {
 	EbgpMultihopMaximumHopCount types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
 	BfdMinimumInterval          types.Int64  `tfsdk:"bfd_minimum_interval"`
 	BfdMultiplier               types.Int64  `tfsdk:"bfd_multiplier"`
+	BfdFastDetect               types.Bool   `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode     types.Bool   `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectDisable        types.Bool   `tfsdk:"bfd_fast_detect_disable"`
 	LocalAs                     types.String `tfsdk:"local_as"`
 	LocalAsNoPrepend            types.Bool   `tfsdk:"local_as_no_prepend"`
 	LocalAsReplaceAs            types.Bool   `tfsdk:"local_as_replace_as"`
@@ -173,6 +176,21 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 			}
 			if !item.BfdMultiplier.IsNull() && !item.BfdMultiplier.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bfd.multiplier", strconv.FormatInt(item.BfdMultiplier.ValueInt64(), 10))
+			}
+			if !item.BfdFastDetect.IsNull() && !item.BfdFastDetect.IsUnknown() {
+				if item.BfdFastDetect.ValueBool() {
+					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bfd.fast-detect", map[string]string{})
+				}
+			}
+			if !item.BfdFastDetectStrictMode.IsNull() && !item.BfdFastDetectStrictMode.IsUnknown() {
+				if item.BfdFastDetectStrictMode.ValueBool() {
+					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bfd.fast-detect.strict-mode", map[string]string{})
+				}
+			}
+			if !item.BfdFastDetectDisable.IsNull() && !item.BfdFastDetectDisable.IsUnknown() {
+				if item.BfdFastDetectDisable.ValueBool() {
+					body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"bfd.fast-detect.disable", map[string]string{})
+				}
 			}
 			if !item.LocalAs.IsNull() && !item.LocalAs.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"local-as.as-number", item.LocalAs.ValueString())
@@ -355,6 +373,33 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].BfdMultiplier = types.Int64Null()
 		}
+		if value := r.Get("bfd.fast-detect"); !data.Neighbors[i].BfdFastDetect.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].BfdFastDetect = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].BfdFastDetect = types.BoolValue(false)
+			}
+		} else {
+			data.Neighbors[i].BfdFastDetect = types.BoolNull()
+		}
+		if value := r.Get("bfd.fast-detect.strict-mode"); !data.Neighbors[i].BfdFastDetectStrictMode.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].BfdFastDetectStrictMode = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].BfdFastDetectStrictMode = types.BoolValue(false)
+			}
+		} else {
+			data.Neighbors[i].BfdFastDetectStrictMode = types.BoolNull()
+		}
+		if value := r.Get("bfd.fast-detect.disable"); !data.Neighbors[i].BfdFastDetectDisable.IsNull() {
+			if value.Exists() {
+				data.Neighbors[i].BfdFastDetectDisable = types.BoolValue(true)
+			} else {
+				data.Neighbors[i].BfdFastDetectDisable = types.BoolValue(false)
+			}
+		} else {
+			data.Neighbors[i].BfdFastDetectDisable = types.BoolNull()
+		}
 		if value := r.Get("local-as.as-number"); value.Exists() && !data.Neighbors[i].LocalAs.IsNull() {
 			data.Neighbors[i].LocalAs = types.StringValue(value.String())
 		} else {
@@ -499,6 +544,21 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("bfd.multiplier"); cValue.Exists() {
 				item.BfdMultiplier = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
+				item.BfdFastDetect = types.BoolValue(true)
+			} else {
+				item.BfdFastDetect = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.strict-mode"); cValue.Exists() {
+				item.BfdFastDetectStrictMode = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictMode = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.disable"); cValue.Exists() {
+				item.BfdFastDetectDisable = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectDisable = types.BoolValue(false)
+			}
 			if cValue := v.Get("local-as.as-number"); cValue.Exists() {
 				item.LocalAs = types.StringValue(cValue.String())
 			}
@@ -597,6 +657,15 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 		if !data.Neighbors[i].IgnoreConnectedCheck.IsNull() && !data.Neighbors[i].IgnoreConnectedCheck.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].BfdFastDetect.IsNull() && !data.Neighbors[i].BfdFastDetect.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].BfdFastDetectStrictMode.IsNull() && !data.Neighbors[i].BfdFastDetectStrictMode.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode", data.getPath(), keyString))
+		}
+		if !data.Neighbors[i].BfdFastDetectDisable.IsNull() && !data.Neighbors[i].BfdFastDetectDisable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/disable", data.getPath(), keyString))
 		}
 		if !data.Neighbors[i].LocalAsNoPrepend.IsNull() && !data.Neighbors[i].LocalAsNoPrepend.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend", data.getPath(), keyString))

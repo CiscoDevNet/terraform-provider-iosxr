@@ -214,6 +214,18 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 								int64validator.Between(2, 16),
 							},
 						},
+						"bfd_fast_detect": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+							Optional:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+							Optional:            true,
+						},
+						"bfd_fast_detect_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
+							Optional:            true,
+						},
 						"local_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,

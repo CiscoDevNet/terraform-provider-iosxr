@@ -90,8 +90,20 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Hello interval",
 				Computed:            true,
 			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
+				Computed:            true,
+			},
 			"bfd_fast_detect": schema.BoolAttribute{
 				MarkdownDescription: "Enable Fast detection",
+				Computed:            true,
+			},
+			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+				MarkdownDescription: "Hold down neighbor session until BFD session is up",
+				Computed:            true,
+			},
+			"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
 				Computed:            true,
 			},
 			"address_families": schema.ListNestedAttribute{

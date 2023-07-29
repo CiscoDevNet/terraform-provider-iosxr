@@ -17,6 +17,10 @@ description: |-
 - Add `iosxr_flow_exporter_map` resource and data source
 - Add `bgp_bestpath` attributes to `iosxr_router_bgp` resource and data source
 - Add `flow_ipv4` and `flow_ipv6` attributes to `iosxr_interface` resource and data source
+- BREAKING CHANGE: Remove `neighbor_groups` attributes from `iosxr_router_bgp` resource and data source
+- Add `bfd_fast_detect` attributes to `iosxr_router_bgp` resource and data source
+- Add `bfd_multiplier` and `bfd_fast_detect` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
+- Add `bfd_fast_detect` attributes to `iosxr_router_bgp_vrf` resource and data source
 
 ## 0.2.2
 

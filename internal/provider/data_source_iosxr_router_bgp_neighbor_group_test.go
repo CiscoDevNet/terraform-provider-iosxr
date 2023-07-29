@@ -30,7 +30,10 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_strict_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_inheritance_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"))
@@ -65,7 +68,10 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	remote_as = "65001"` + "\n"
 	config += `	update_source = "Loopback0"` + "\n"
 	config += `	bfd_minimum_interval = 3` + "\n"
+	config += `	bfd_multiplier = 4` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
+	config += `	bfd_fast_detect_strict_mode = false` + "\n"
+	config += `	bfd_fast_detect_inheritance_disable = false` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"

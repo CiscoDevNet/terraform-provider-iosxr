@@ -21,8 +21,14 @@ attributes:
     exclude_test: true
   - yang_name: bfd/minimum-interval
     example: 3
+  - yang_name: bfd/multiplier
+    example: 4
   - yang_name: bfd/fast-detect
     example: true
+  - yang_name: bfd/fast-detect/strict-mode
+    example: false
+  - yang_name: bfd/fast-detect/inheritance-disable
+    example: false
   - yang_name: address-families/address-family
     tf_name: address_families
     type: List

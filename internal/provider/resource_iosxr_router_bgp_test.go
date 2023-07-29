@@ -67,6 +67,9 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.local_as", "65003"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.local_as_no_prepend", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.local_as_replace_as", "true"))
@@ -78,10 +81,6 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.timers_minimum_acceptable_holdtime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.ttl_security", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.name", "GROUP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.remote_as", "65001"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.update_source", "Loopback0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbor_groups.0.bfd_minimum_interval", "3"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -110,6 +109,17 @@ resource "iosxr_gnmi" "PreReq0" {
 	attributes = {
 		"as-number" = "65001"
 	}
+	lists = [
+		{
+			name = "neighbor-groups/neighbor-group"
+			key = "neighbor-group-name"
+			items = [
+				{
+					"neighbor-group-name" = "GROUP1"
+				},
+			] 
+		},
+	]
 }
 
 `
@@ -164,6 +174,9 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		ebgp_multihop_maximum_hop_count = 10` + "\n"
 	config += `		bfd_minimum_interval = 10` + "\n"
 	config += `		bfd_multiplier = 4` + "\n"
+	config += `		bfd_fast_detect = true` + "\n"
+	config += `		bfd_fast_detect_strict_mode = false` + "\n"
+	config += `		bfd_fast_detect_inheritance_disable = true` + "\n"
 	config += `		local_as = "65003"` + "\n"
 	config += `		local_as_no_prepend = true` + "\n"
 	config += `		local_as_replace_as = true` + "\n"
@@ -175,12 +188,6 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		timers_minimum_acceptable_holdtime = "10"` + "\n"
 	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		ttl_security = false` + "\n"
-	config += `	}]` + "\n"
-	config += `	neighbor_groups = [{` + "\n"
-	config += `		name = "GROUP1"` + "\n"
-	config += `		remote_as = "65001"` + "\n"
-	config += `		update_source = "Loopback0"` + "\n"
-	config += `		bfd_minimum_interval = 3` + "\n"
 	config += `	}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"

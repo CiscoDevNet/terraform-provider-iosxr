@@ -155,6 +155,18 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Detect multiplier",
 							Computed:            true,
 						},
+						"bfd_fast_detect": schema.BoolAttribute{
+							MarkdownDescription: "Enable Fast detection",
+							Computed:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: "Hold down neighbor session until BFD session is up",
+							Computed:            true,
+						},
+						"bfd_fast_detect_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
+							Computed:            true,
+						},
 						"local_as": schema.StringAttribute{
 							MarkdownDescription: "bgp as-number",
 							Computed:            true,

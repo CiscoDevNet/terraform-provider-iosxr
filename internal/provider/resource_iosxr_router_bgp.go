@@ -273,6 +273,18 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 								int64validator.Between(2, 16),
 							},
 						},
+						"bfd_fast_detect": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable Fast detection").String,
+							Optional:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+							Optional:            true,
+						},
+						"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
+							Optional:            true,
+						},
 						"local_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
@@ -325,51 +337,6 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Enable EBGP TTL security").String,
 							Optional:            true,
-						},
-					},
-				},
-			},
-			"neighbor_groups": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a Neighbor-group").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 900),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-						"remote_as": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
-							Optional:            true,
-						},
-						"update_source": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-							},
-						},
-						"ao_key_chain_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-							},
-						},
-						"ao_include_tcp_options_enable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Include other TCP options in the header").String,
-							Optional:            true,
-						},
-						"bfd_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(3, 30000),
-							},
 						},
 					},
 				},

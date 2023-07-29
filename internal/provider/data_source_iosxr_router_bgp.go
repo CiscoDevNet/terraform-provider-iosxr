@@ -223,6 +223,18 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Detect multiplier",
 							Computed:            true,
 						},
+						"bfd_fast_detect": schema.BoolAttribute{
+							MarkdownDescription: "Enable Fast detection",
+							Computed:            true,
+						},
+						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
+							MarkdownDescription: "Hold down neighbor session until BFD session is up",
+							Computed:            true,
+						},
+						"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
+							Computed:            true,
+						},
 						"local_as": schema.StringAttribute{
 							MarkdownDescription: "bgp as-number",
 							Computed:            true,
@@ -265,38 +277,6 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 						},
 						"ttl_security": schema.BoolAttribute{
 							MarkdownDescription: "Enable EBGP TTL security",
-							Computed:            true,
-						},
-					},
-				},
-			},
-			"neighbor_groups": schema.ListNestedAttribute{
-				MarkdownDescription: "Specify a Neighbor-group",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"name": schema.StringAttribute{
-							MarkdownDescription: "Specify a Neighbor-group",
-							Computed:            true,
-						},
-						"remote_as": schema.StringAttribute{
-							MarkdownDescription: "bgp as-number",
-							Computed:            true,
-						},
-						"update_source": schema.StringAttribute{
-							MarkdownDescription: "Source of routing updates",
-							Computed:            true,
-						},
-						"ao_key_chain_name": schema.StringAttribute{
-							MarkdownDescription: "Name of the key chain - maximum 32 characters",
-							Computed:            true,
-						},
-						"ao_include_tcp_options_enable": schema.BoolAttribute{
-							MarkdownDescription: "Include other TCP options in the header",
-							Computed:            true,
-						},
-						"bfd_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval",
 							Computed:            true,
 						},
 					},

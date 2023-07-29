@@ -72,6 +72,12 @@ attributes:
         example: 10
       - yang_name: bfd/multiplier
         example: 4
+      - yang_name: bfd/fast-detect
+        example: true
+      - yang_name: bfd/fast-detect/strict-mode
+        example: false
+      - yang_name: bfd/fast-detect/disable
+        example: false
       - yang_name: local-as/as-number
         tf_name: local_as
         example: 65003

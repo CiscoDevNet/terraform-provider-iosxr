@@ -54,6 +54,9 @@ data "iosxr_router_bgp_vrf" "example" {
 
 Read-Only:
 
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `description` (String) Neighbor specific description

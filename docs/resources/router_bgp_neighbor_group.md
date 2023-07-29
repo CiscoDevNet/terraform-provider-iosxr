@@ -14,12 +14,15 @@ This resource can manage the Router BGP Neighbor Group configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_group" "example" {
-  as_number            = "65001"
-  name                 = "GROUP1"
-  remote_as            = "65001"
-  update_source        = "Loopback0"
-  bfd_minimum_interval = 3
-  bfd_fast_detect      = true
+  as_number                           = "65001"
+  name                                = "GROUP1"
+  remote_as                           = "65001"
+  update_source                       = "Loopback0"
+  bfd_minimum_interval                = 3
+  bfd_multiplier                      = 4
+  bfd_fast_detect                     = true
+  bfd_fast_detect_strict_mode         = false
+  bfd_fast_detect_inheritance_disable = false
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"
@@ -45,8 +48,12 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
+- `bfd_multiplier` (Number) Detect multiplier
+  - Range: `2`-`16`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.

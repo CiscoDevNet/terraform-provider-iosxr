@@ -45,6 +45,9 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as", "65003"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as_replace_as", "true"))
@@ -117,6 +120,9 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	config += `		ebgp_multihop_maximum_hop_count = 10` + "\n"
 	config += `		bfd_minimum_interval = 10` + "\n"
 	config += `		bfd_multiplier = 4` + "\n"
+	config += `		bfd_fast_detect = true` + "\n"
+	config += `		bfd_fast_detect_strict_mode = false` + "\n"
+	config += `		bfd_fast_detect_disable = false` + "\n"
 	config += `		local_as = "65003"` + "\n"
 	config += `		local_as_no_prepend = true` + "\n"
 	config += `		local_as_replace_as = true` + "\n"

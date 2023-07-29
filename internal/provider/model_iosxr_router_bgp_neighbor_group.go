@@ -31,32 +31,38 @@ import (
 )
 
 type RouterBGPNeighborGroup struct {
-	Device                    types.String                            `tfsdk:"device"`
-	Id                        types.String                            `tfsdk:"id"`
-	DeleteMode                types.String                            `tfsdk:"delete_mode"`
-	AsNumber                  types.String                            `tfsdk:"as_number"`
-	Name                      types.String                            `tfsdk:"name"`
-	RemoteAs                  types.String                            `tfsdk:"remote_as"`
-	UpdateSource              types.String                            `tfsdk:"update_source"`
-	AoKeyChainName            types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval        types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdFastDetect             types.Bool                              `tfsdk:"bfd_fast_detect"`
-	AddressFamilies           []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	Device                          types.String                            `tfsdk:"device"`
+	Id                              types.String                            `tfsdk:"id"`
+	DeleteMode                      types.String                            `tfsdk:"delete_mode"`
+	AsNumber                        types.String                            `tfsdk:"as_number"`
+	Name                            types.String                            `tfsdk:"name"`
+	RemoteAs                        types.String                            `tfsdk:"remote_as"`
+	UpdateSource                    types.String                            `tfsdk:"update_source"`
+	AoKeyChainName                  types.String                            `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable       types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval              types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                   types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                   types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode         types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectInheritanceDisable types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	AddressFamilies                 []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 
 type RouterBGPNeighborGroupData struct {
-	Device                    types.String                            `tfsdk:"device"`
-	Id                        types.String                            `tfsdk:"id"`
-	AsNumber                  types.String                            `tfsdk:"as_number"`
-	Name                      types.String                            `tfsdk:"name"`
-	RemoteAs                  types.String                            `tfsdk:"remote_as"`
-	UpdateSource              types.String                            `tfsdk:"update_source"`
-	AoKeyChainName            types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval        types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdFastDetect             types.Bool                              `tfsdk:"bfd_fast_detect"`
-	AddressFamilies           []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	Device                          types.String                            `tfsdk:"device"`
+	Id                              types.String                            `tfsdk:"id"`
+	AsNumber                        types.String                            `tfsdk:"as_number"`
+	Name                            types.String                            `tfsdk:"name"`
+	RemoteAs                        types.String                            `tfsdk:"remote_as"`
+	UpdateSource                    types.String                            `tfsdk:"update_source"`
+	AoKeyChainName                  types.String                            `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable       types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval              types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                   types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                   types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode         types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectInheritanceDisable types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	AddressFamilies                 []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
@@ -95,9 +101,22 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
 	}
+	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
+	}
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.IsUnknown() {
 		if data.BfdFastDetect.ValueBool() {
 			body, _ = sjson.Set(body, "bfd.fast-detect", map[string]string{})
+		}
+	}
+	if !data.BfdFastDetectStrictMode.IsNull() && !data.BfdFastDetectStrictMode.IsUnknown() {
+		if data.BfdFastDetectStrictMode.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect.strict-mode", map[string]string{})
+		}
+	}
+	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.IsUnknown() {
+		if data.BfdFastDetectInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect.inheritance-disable", map[string]string{})
 		}
 	}
 	if len(data.AddressFamilies) > 0 {
@@ -156,6 +175,11 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.BfdMinimumInterval = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	} else {
+		data.BfdMultiplier = types.Int64Null()
+	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); !data.BfdFastDetect.IsNull() {
 		if value.Exists() {
 			data.BfdFastDetect = types.BoolValue(true)
@@ -164,6 +188,24 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		}
 	} else {
 		data.BfdFastDetect = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); !data.BfdFastDetectStrictMode.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetectStrictMode = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectStrictMode = types.BoolValue(false)
+		}
+	} else {
+		data.BfdFastDetectStrictMode = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); !data.BfdFastDetectInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.BfdFastDetectInheritanceDisable = types.BoolNull()
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -241,10 +283,23 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
 		data.BfdFastDetect = types.BoolValue(true)
 	} else {
 		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectStrictMode = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); value.Exists() {
+		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
@@ -317,6 +372,12 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
 	}
+	if !data.BfdFastDetectStrictMode.IsNull() && !data.BfdFastDetectStrictMode.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
+	}
+	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
+	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
@@ -354,8 +415,17 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	if !data.BfdMinimumInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
 	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
+	}
 	if !data.BfdFastDetect.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
+	if !data.BfdFastDetectStrictMode.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
+	}
+	if !data.BfdFastDetectInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}

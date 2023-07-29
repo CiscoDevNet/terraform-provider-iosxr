@@ -32,33 +32,28 @@ resource "iosxr_router_bgp" "example" {
   bgp_bestpath_sr_policy_force               = true
   neighbors = [
     {
-      neighbor_address                   = "10.1.1.2"
-      remote_as                          = "65002"
-      description                        = "My Neighbor Description"
-      use_neighbor_group                 = "GROUP1"
-      ignore_connected_check             = true
-      ebgp_multihop_maximum_hop_count    = 10
-      bfd_minimum_interval               = 10
-      bfd_multiplier                     = 4
-      local_as                           = "65003"
-      local_as_no_prepend                = true
-      local_as_replace_as                = true
-      local_as_dual_as                   = true
-      password                           = "12341C2713181F13253920"
-      shutdown                           = false
-      timers_keepalive_interval          = 5
-      timers_holdtime                    = "20"
-      timers_minimum_acceptable_holdtime = "10"
-      update_source                      = "GigabitEthernet0/0/0/1"
-      ttl_security                       = false
-    }
-  ]
-  neighbor_groups = [
-    {
-      name                 = "GROUP1"
-      remote_as            = "65001"
-      update_source        = "Loopback0"
-      bfd_minimum_interval = 3
+      neighbor_address                    = "10.1.1.2"
+      remote_as                           = "65002"
+      description                         = "My Neighbor Description"
+      use_neighbor_group                  = "GROUP1"
+      ignore_connected_check              = true
+      ebgp_multihop_maximum_hop_count     = 10
+      bfd_minimum_interval                = 10
+      bfd_multiplier                      = 4
+      bfd_fast_detect                     = true
+      bfd_fast_detect_strict_mode         = false
+      bfd_fast_detect_inheritance_disable = true
+      local_as                            = "65003"
+      local_as_no_prepend                 = true
+      local_as_replace_as                 = true
+      local_as_dual_as                    = true
+      password                            = "12341C2713181F13253920"
+      shutdown                            = false
+      timers_keepalive_interval           = 5
+      timers_holdtime                     = "20"
+      timers_minimum_acceptable_holdtime  = "10"
+      update_source                       = "GigabitEthernet0/0/0/1"
+      ttl_security                        = false
     }
   ]
 }

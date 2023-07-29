@@ -37,7 +37,10 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
+- `bfd_multiplier` (Number) Detect multiplier
 - `id` (String) The path of the retrieved object.
 - `remote_as` (String) bgp as-number
 - `update_source` (String) Source of routing updates

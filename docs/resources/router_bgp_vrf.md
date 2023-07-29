@@ -34,6 +34,9 @@ resource "iosxr_router_bgp_vrf" "example" {
       ebgp_multihop_maximum_hop_count = 10
       bfd_minimum_interval            = 10
       bfd_multiplier                  = 4
+      bfd_fast_detect                 = true
+      bfd_fast_detect_strict_mode     = false
+      bfd_fast_detect_disable         = false
       local_as                        = "65003"
       local_as_no_prepend             = true
       local_as_replace_as             = true
@@ -102,6 +105,9 @@ Required:
 
 Optional:
 
+- `bfd_fast_detect` (Boolean) Enable Fast detection
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier

@@ -9,7 +9,7 @@ resource "iosxr_ntp" "example" {
   access_group_ipv4_query_only = "query1"
   access_group_ipv4_serve      = "serve1"
   access_group_ipv4_serve_only = "serve-only123"
-  vrfs = [
+  access_group_vrfs = [
     {
       vrf_name        = "ntp_vrf"
       ipv6_peer       = "peer1"
@@ -23,7 +23,7 @@ resource "iosxr_ntp" "example" {
     }
   ]
   authenticate = true
-  auth_keys = [
+  authentication_keys = [
     {
       key_number    = 10
       md5_encrypted = "1212000E43"
@@ -46,4 +46,36 @@ resource "iosxr_ntp" "example" {
     }
   ]
   passive = true
+  cmac_authentication_keys = [
+    {
+      key_number     = 2
+      cmac_encrypted = "135445415F59527D737D78626771475240"
+    }
+  ]
+  hmac_sha1_authentication_keys = [
+    {
+      key_number          = 3
+      hmac_sha1_encrypted = "101F5B4A5142445C545D7A7A767B676074"
+    }
+  ]
+  hmac_sha2_authentication_keys = [
+    {
+      key_number          = 4
+      hmac_sha2_encrypted = "091D1C5A4D5041455355547B79777C6663"
+    }
+  ]
+  ipv4_peers_servers = [
+    {
+      address = "1.2.3.4"
+      type    = "server"
+      version = 2
+      key     = 1
+      minpoll = 4
+      maxpoll = 5
+      prefer  = true
+      burst   = true
+      iburst  = true
+      source  = "GigabitEthernet0/0/0/1"
+    }
+  ]
 }

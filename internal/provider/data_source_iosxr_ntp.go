@@ -110,7 +110,7 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Provide only server access",
 				Computed:            true,
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"access_group_vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify non-default VRF",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -158,7 +158,7 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Authenticate time sources",
 				Computed:            true,
 			},
-			"auth_keys": schema.ListNestedAttribute{
+			"authentication_keys": schema.ListNestedAttribute{
 				MarkdownDescription: "Authentication key for trusted time sources",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -224,6 +224,374 @@ func (d *NTPDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"passive": schema.BoolAttribute{
 				MarkdownDescription: "Enable the passive associations",
+				Computed:            true,
+			},
+			"cmac_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "CMAC Authentication key for trusted time sources",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: "Authentication key for trusted time sources",
+							Computed:            true,
+						},
+						"cmac_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specify an encrypted key",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hmac_sha1_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "HMA-SHA1 Authentication key for trusted time sources",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: "Authentication key for trusted time sources",
+							Computed:            true,
+						},
+						"hmac_sha1_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specify an encrypted key",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hmac_sha2_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: "HMA-SHA2 Authentication key for trusted time sources",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: "Authentication key for trusted time sources",
+							Computed:            true,
+						},
+						"hmac_sha2_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specify an encrypted key",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure NTP on an interface",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Configure NTP on an interface",
+							Computed:            true,
+						},
+						"broadcast_destination": schema.StringAttribute{
+							MarkdownDescription: "Configure broadcast destination address",
+							Computed:            true,
+						},
+						"broadcast_key": schema.Int64Attribute{
+							MarkdownDescription: "Configure broadcast authentication key",
+							Computed:            true,
+						},
+						"broadcast_version": schema.Int64Attribute{
+							MarkdownDescription: "Configure NTP version",
+							Computed:            true,
+						},
+						"disable": schema.BoolAttribute{
+							MarkdownDescription: "Disable NTP",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"interface_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify non-default VRF",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Specify non-default VRF",
+							Computed:            true,
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: "Configure NTP on an interface",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: "Configure NTP on an interface",
+										Computed:            true,
+									},
+									"broadcast_client": schema.BoolAttribute{
+										MarkdownDescription: "Listen to NTP broadcasts",
+										Computed:            true,
+									},
+									"broadcast_destination": schema.StringAttribute{
+										MarkdownDescription: "Configure broadcast destination address",
+										Computed:            true,
+									},
+									"broadcast_key": schema.Int64Attribute{
+										MarkdownDescription: "Configure broadcast authentication key",
+										Computed:            true,
+									},
+									"broadcast_version": schema.Int64Attribute{
+										MarkdownDescription: "Configure NTP version",
+										Computed:            true,
+									},
+									"disable": schema.BoolAttribute{
+										MarkdownDescription: "Disable NTP",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"primary_stratum_number": schema.Int64Attribute{
+				MarkdownDescription: "Use NTP as clock source with stratum number <n>",
+				Computed:            true,
+			},
+			"primary_reference_clock": schema.BoolAttribute{
+				MarkdownDescription: "Use a primary reference clock as clock source",
+				Computed:            true,
+			},
+			"ipv4_peers_servers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify IPv4 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Peer/server address",
+							Computed:            true,
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: "Specify peer/server",
+							Computed:            true,
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: "Configure NTP version",
+							Computed:            true,
+						},
+						"key": schema.Int64Attribute{
+							MarkdownDescription: "Configure peer authentication key",
+							Computed:            true,
+						},
+						"minpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure minimum polling rate",
+							Computed:            true,
+						},
+						"maxpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure maximum polling rate",
+							Computed:            true,
+						},
+						"prefer": schema.BoolAttribute{
+							MarkdownDescription: "Prefer this peer when possible",
+							Computed:            true,
+						},
+						"burst": schema.BoolAttribute{
+							MarkdownDescription: "Use burst mode",
+							Computed:            true,
+						},
+						"iburst": schema.BoolAttribute{
+							MarkdownDescription: "Use initial burst mode",
+							Computed:            true,
+						},
+						"source": schema.StringAttribute{
+							MarkdownDescription: "Interface for source address",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"ipv6_peers_servers": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify IPv6 address",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: "Peer/server address",
+							Computed:            true,
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: "Specify peer/server",
+							Computed:            true,
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: "Configure NTP version",
+							Computed:            true,
+						},
+						"key": schema.Int64Attribute{
+							MarkdownDescription: "Configure peer authentication key",
+							Computed:            true,
+						},
+						"minpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure minimum polling rate",
+							Computed:            true,
+						},
+						"maxpoll": schema.Int64Attribute{
+							MarkdownDescription: "Configure maximum polling rate",
+							Computed:            true,
+						},
+						"prefer": schema.BoolAttribute{
+							MarkdownDescription: "Prefer this peer when possible",
+							Computed:            true,
+						},
+						"burst": schema.BoolAttribute{
+							MarkdownDescription: "Use burst mode",
+							Computed:            true,
+						},
+						"iburst": schema.BoolAttribute{
+							MarkdownDescription: "Use initial burst mode",
+							Computed:            true,
+						},
+						"source": schema.StringAttribute{
+							MarkdownDescription: "Interface for source address",
+							Computed:            true,
+						},
+						"ipv6_address": schema.StringAttribute{
+							MarkdownDescription: "IPv6 address (must be same as key node 'address')",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"peers_servers_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify non-default VRF",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Specify non-default VRF",
+							Computed:            true,
+						},
+						"ipv4_peers_servers": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify IPv4 address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Peer/server address",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer/server",
+										Computed:            true,
+									},
+									"version": schema.Int64Attribute{
+										MarkdownDescription: "Configure NTP version",
+										Computed:            true,
+									},
+									"key": schema.Int64Attribute{
+										MarkdownDescription: "Configure peer authentication key",
+										Computed:            true,
+									},
+									"minpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure minimum polling rate",
+										Computed:            true,
+									},
+									"maxpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure maximum polling rate",
+										Computed:            true,
+									},
+									"prefer": schema.BoolAttribute{
+										MarkdownDescription: "Prefer this peer when possible",
+										Computed:            true,
+									},
+									"burst": schema.BoolAttribute{
+										MarkdownDescription: "Use burst mode",
+										Computed:            true,
+									},
+									"iburst": schema.BoolAttribute{
+										MarkdownDescription: "Use initial burst mode",
+										Computed:            true,
+									},
+									"source": schema.StringAttribute{
+										MarkdownDescription: "Interface for source address",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"ipv6_peers_servers": schema.ListNestedAttribute{
+							MarkdownDescription: "Specify IPv6 address",
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: "Peer/server address",
+										Computed:            true,
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: "Specify peer/server",
+										Computed:            true,
+									},
+									"version": schema.Int64Attribute{
+										MarkdownDescription: "Configure NTP version",
+										Computed:            true,
+									},
+									"key": schema.Int64Attribute{
+										MarkdownDescription: "Configure peer authentication key",
+										Computed:            true,
+									},
+									"minpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure minimum polling rate",
+										Computed:            true,
+									},
+									"maxpoll": schema.Int64Attribute{
+										MarkdownDescription: "Configure maximum polling rate",
+										Computed:            true,
+									},
+									"prefer": schema.BoolAttribute{
+										MarkdownDescription: "Prefer this peer when possible",
+										Computed:            true,
+									},
+									"burst": schema.BoolAttribute{
+										MarkdownDescription: "Use burst mode",
+										Computed:            true,
+									},
+									"iburst": schema.BoolAttribute{
+										MarkdownDescription: "Use initial burst mode",
+										Computed:            true,
+									},
+									"source": schema.StringAttribute{
+										MarkdownDescription: "Interface for source address",
+										Computed:            true,
+									},
+									"ipv6_address": schema.StringAttribute{
+										MarkdownDescription: "IPv6 address (must be same as key node 'address')",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"admin_plane_version": schema.Int64Attribute{
+				MarkdownDescription: "Configure NTP version",
+				Computed:            true,
+			},
+			"admin_plane_key": schema.Int64Attribute{
+				MarkdownDescription: "Configure peer authentication key",
+				Computed:            true,
+			},
+			"admin_plane_minpoll": schema.Int64Attribute{
+				MarkdownDescription: "Configure minimum polling rate",
+				Computed:            true,
+			},
+			"admin_plane_maxpoll": schema.Int64Attribute{
+				MarkdownDescription: "Configure maximum polling rate",
+				Computed:            true,
+			},
+			"admin_plane_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Prefer this peer when possible",
+				Computed:            true,
+			},
+			"admin_plane_burst": schema.BoolAttribute{
+				MarkdownDescription: "Use burst mode",
+				Computed:            true,
+			},
+			"admin_plane_iburst": schema.BoolAttribute{
+				MarkdownDescription: "Use initial burst mode",
 				Computed:            true,
 			},
 		},

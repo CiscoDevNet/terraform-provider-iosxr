@@ -160,7 +160,7 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
 				},
 			},
-			"vrfs": schema.ListNestedAttribute{
+			"access_group_vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify non-default VRF").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -244,7 +244,7 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Authenticate time sources").String,
 				Optional:            true,
 			},
-			"auth_keys": schema.ListNestedAttribute{
+			"authentication_keys": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Authentication key for trusted time sources").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -335,6 +335,541 @@ func (r *NTPResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			},
 			"passive": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable the passive associations").String,
+				Optional:            true,
+			},
+			"cmac_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("CMAC Authentication key for trusted time sources").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication key for trusted time sources").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"cmac_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an encrypted key").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"hmac_sha1_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HMA-SHA1 Authentication key for trusted time sources").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication key for trusted time sources").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"hmac_sha1_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an encrypted key").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"hmac_sha2_authentication_keys": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("HMA-SHA2 Authentication key for trusted time sources").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"key_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Authentication key for trusted time sources").AddIntegerRangeDescription(1, 65535).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"hmac_sha2_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify an encrypted key").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure NTP on an interface").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure NTP on an interface").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"broadcast_destination": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure broadcast destination address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"broadcast_key": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure broadcast authentication key").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"broadcast_version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 4),
+							},
+						},
+						"disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable NTP").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"interface_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify non-default VRF").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify non-default VRF").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 800),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"interfaces": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure NTP on an interface").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"interface_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure NTP on an interface").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+									"broadcast_client": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Listen to NTP broadcasts").String,
+										Optional:            true,
+									},
+									"broadcast_destination": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure broadcast destination address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"broadcast_key": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure broadcast authentication key").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"broadcast_version": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(2, 4),
+										},
+									},
+									"disable": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Disable NTP").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"primary_stratum_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use NTP as clock source with stratum number <n>").AddIntegerRangeDescription(1, 15).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 15),
+				},
+			},
+			"primary_reference_clock": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use a primary reference clock as clock source").String,
+				Optional:            true,
+			},
+			"ipv4_peers_servers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify IPv4 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Peer/server address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify peer/server").AddStringEnumDescription("peer", "server").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("peer", "server"),
+							},
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 4),
+							},
+						},
+						"key": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure peer authentication key").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"minpoll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(4, 5),
+							},
+						},
+						"maxpoll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(4, 9),
+							},
+						},
+						"prefer": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefer this peer when possible").String,
+							Optional:            true,
+						},
+						"burst": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use burst mode").String,
+							Optional:            true,
+						},
+						"iburst": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use initial burst mode").String,
+							Optional:            true,
+						},
+						"source": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface for source address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+					},
+				},
+			},
+			"ipv6_peers_servers": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify IPv6 address").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Peer/server address").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+						"type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify peer/server").AddStringEnumDescription("peer", "server").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("peer", "server"),
+							},
+						},
+						"version": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(2, 4),
+							},
+						},
+						"key": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure peer authentication key").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"minpoll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(4, 5),
+							},
+						},
+						"maxpoll": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(4, 9),
+							},
+						},
+						"prefer": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefer this peer when possible").String,
+							Optional:            true,
+						},
+						"burst": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use burst mode").String,
+							Optional:            true,
+						},
+						"iburst": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use initial burst mode").String,
+							Optional:            true,
+						},
+						"source": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interface for source address").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"ipv6_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv6 address (must be same as key node 'address')").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+							},
+						},
+					},
+				},
+			},
+			"peers_servers_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify non-default VRF").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify non-default VRF").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"ipv4_peers_servers": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify IPv4 address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer/server address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+										},
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify peer/server").AddStringEnumDescription("peer", "server").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("peer", "server"),
+										},
+									},
+									"version": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(2, 4),
+										},
+									},
+									"key": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure peer authentication key").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"minpoll": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(4, 5),
+										},
+									},
+									"maxpoll": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(4, 9),
+										},
+									},
+									"prefer": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefer this peer when possible").String,
+										Optional:            true,
+									},
+									"burst": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use burst mode").String,
+										Optional:            true,
+									},
+									"iburst": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use initial burst mode").String,
+										Optional:            true,
+									},
+									"source": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface for source address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+								},
+							},
+						},
+						"ipv6_peers_servers": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify IPv6 address").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Peer/server address").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+									"type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Specify peer/server").AddStringEnumDescription("peer", "server").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("peer", "server"),
+										},
+									},
+									"version": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(2, 4).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(2, 4),
+										},
+									},
+									"key": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure peer authentication key").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"minpoll": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 5).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(4, 5),
+										},
+									},
+									"maxpoll": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 9).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(4, 9),
+										},
+									},
+									"prefer": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefer this peer when possible").String,
+										Optional:            true,
+									},
+									"burst": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use burst mode").String,
+										Optional:            true,
+									},
+									"iburst": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Use initial burst mode").String,
+										Optional:            true,
+									},
+									"source": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface for source address").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+										},
+									},
+									"ipv6_address": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("IPv6 address (must be same as key node 'address')").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.RegexMatches(regexp.MustCompile(`((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))(%[\p{N}\p{L}]+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)(%.+)?`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"admin_plane_version": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure NTP version").AddIntegerRangeDescription(1, 4).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4),
+				},
+			},
+			"admin_plane_key": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure peer authentication key").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"admin_plane_minpoll": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure minimum polling rate").AddIntegerRangeDescription(4, 17).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4, 17),
+				},
+			},
+			"admin_plane_maxpoll": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure maximum polling rate").AddIntegerRangeDescription(4, 17).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(4, 17),
+				},
+			},
+			"admin_plane_prefer": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefer this peer when possible").String,
+				Optional:            true,
+			},
+			"admin_plane_burst": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use burst mode").String,
+				Optional:            true,
+			},
+			"admin_plane_iburst": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use initial burst mode").String,
 				Optional:            true,
 			},
 		},

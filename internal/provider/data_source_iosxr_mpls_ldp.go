@@ -75,6 +75,14 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 							MarkdownDescription: "Configure Address Family and its parameters",
 							Computed:            true,
 						},
+						"label_local_allocate_for_access_list": schema.StringAttribute{
+							MarkdownDescription: "IP access-list",
+							Computed:            true,
+						},
+						"label_local_allocate_for_host_routes": schema.BoolAttribute{
+							MarkdownDescription: "Allocate label for host routes only",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -104,6 +112,14 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"capabilities_sac_fec129_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable exchanging PW FEC129 label bindings",
+				Computed:            true,
+			},
+			"igp_sync_delay_on_session_up": schema.Int64Attribute{
+				MarkdownDescription: "Interface sync-up delay after session up",
+				Computed:            true,
+			},
+			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
+				MarkdownDescription: "Global sync up delay to be used after process restart",
 				Computed:            true,
 			},
 			"mldp_logging_notifications": schema.BoolAttribute{

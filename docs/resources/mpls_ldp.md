@@ -17,7 +17,8 @@ resource "iosxr_mpls_ldp" "example" {
   router_id = "1.2.3.4"
   address_families = [
     {
-      af_name = "ipv4"
+      af_name                              = "ipv4"
+      label_local_allocate_for_access_list = "ACL1"
     }
   ]
   interfaces = [
@@ -29,6 +30,8 @@ resource "iosxr_mpls_ldp" "example" {
   capabilities_sac_ipv6_disable   = true
   capabilities_sac_fec128_disable = true
   capabilities_sac_fec129_disable = true
+  igp_sync_delay_on_session_up    = 10
+  igp_sync_delay_on_proc_restart  = 100
   mldp_logging_notifications      = true
   mldp_address_families = [
     {
@@ -56,6 +59,10 @@ resource "iosxr_mpls_ldp" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `igp_sync_delay_on_proc_restart` (Number) Global sync up delay to be used after process restart
+  - Range: `60`-`600`
+- `igp_sync_delay_on_session_up` (Number) Interface sync-up delay after session up
+  - Range: `5`-`300`
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
 - `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
 - `mldp_logging_notifications` (Boolean) MLDP logging notifications
@@ -73,6 +80,11 @@ Required:
 
 - `af_name` (String) Configure Address Family and its parameters
   - Choices: `ipv4`, `ipv6`
+
+Optional:
+
+- `label_local_allocate_for_access_list` (String) IP access-list
+- `label_local_allocate_for_host_routes` (Boolean) Allocate label for host routes only
 
 
 <a id="nestedatt--interfaces"></a>

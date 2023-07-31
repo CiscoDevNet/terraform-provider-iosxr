@@ -94,6 +94,17 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 								stringvalidator.OneOf("ipv4", "ipv6"),
 							},
 						},
+						"label_local_allocate_for_access_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"label_local_allocate_for_host_routes": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Allocate label for host routes only").String,
+							Optional:            true,
+						},
 					},
 				},
 			},
@@ -127,6 +138,20 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"capabilities_sac_fec129_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable exchanging PW FEC129 label bindings").String,
 				Optional:            true,
+			},
+			"igp_sync_delay_on_session_up": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Interface sync-up delay after session up").AddIntegerRangeDescription(5, 300).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 300),
+				},
+			},
+			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Global sync up delay to be used after process restart").AddIntegerRangeDescription(60, 600).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(60, 600),
+				},
 			},
 			"mldp_logging_notifications": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MLDP logging notifications").String,

@@ -16,6 +16,7 @@ description: |-
 - Add `advertisement_interval` attributes to `iosxr_router_bgp`, `iosxr_router_bgp_vrf` and `iosxr_router_bgp_neighbor_group` resources and data sources
 - Add `load_balancing_flow_src_dst_mac` and `load_balancing_flow_src_dst_ip` attributes to `iosxr_l2vpn` resource and data source
 - Add `iosxr_l2vpn_pw_class` resource and data source
+- Add `igp_sync_delay` and `label_local_allocate` attributes to `iosxr_mpls_ldp` resource and data source
 
 ## 0.2.3
 

@@ -41,6 +41,8 @@ type MPLSLDP struct {
 	CapabilitiesSacIpv6Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv6_disable"`
 	CapabilitiesSacFec128Disable types.Bool                   `tfsdk:"capabilities_sac_fec128_disable"`
 	CapabilitiesSacFec129Disable types.Bool                   `tfsdk:"capabilities_sac_fec129_disable"`
+	IgpSyncDelayOnSessionUp      types.Int64                  `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnProcRestart    types.Int64                  `tfsdk:"igp_sync_delay_on_proc_restart"`
 	MldpLoggingNotifications     types.Bool                   `tfsdk:"mldp_logging_notifications"`
 	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
 	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
@@ -56,12 +58,16 @@ type MPLSLDPData struct {
 	CapabilitiesSacIpv6Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv6_disable"`
 	CapabilitiesSacFec128Disable types.Bool                   `tfsdk:"capabilities_sac_fec128_disable"`
 	CapabilitiesSacFec129Disable types.Bool                   `tfsdk:"capabilities_sac_fec129_disable"`
+	IgpSyncDelayOnSessionUp      types.Int64                  `tfsdk:"igp_sync_delay_on_session_up"`
+	IgpSyncDelayOnProcRestart    types.Int64                  `tfsdk:"igp_sync_delay_on_proc_restart"`
 	MldpLoggingNotifications     types.Bool                   `tfsdk:"mldp_logging_notifications"`
 	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
 	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
 }
 type MPLSLDPAddressFamilies struct {
-	AfName types.String `tfsdk:"af_name"`
+	AfName                          types.String `tfsdk:"af_name"`
+	LabelLocalAllocateForAccessList types.String `tfsdk:"label_local_allocate_for_access_list"`
+	LabelLocalAllocateForHostRoutes types.Bool   `tfsdk:"label_local_allocate_for_host_routes"`
 }
 type MPLSLDPInterfaces struct {
 	InterfaceName types.String `tfsdk:"interface_name"`
@@ -107,6 +113,12 @@ func (data MPLSLDP) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "capabilities.sac.fec129-disable", map[string]string{})
 		}
 	}
+	if !data.IgpSyncDelayOnSessionUp.IsNull() && !data.IgpSyncDelayOnSessionUp.IsUnknown() {
+		body, _ = sjson.Set(body, "igp.sync.delay.on-session-up", strconv.FormatInt(data.IgpSyncDelayOnSessionUp.ValueInt64(), 10))
+	}
+	if !data.IgpSyncDelayOnProcRestart.IsNull() && !data.IgpSyncDelayOnProcRestart.IsUnknown() {
+		body, _ = sjson.Set(body, "igp.sync.delay.on-proc-restart", strconv.FormatInt(data.IgpSyncDelayOnProcRestart.ValueInt64(), 10))
+	}
 	if !data.MldpLoggingNotifications.IsNull() && !data.MldpLoggingNotifications.IsUnknown() {
 		if data.MldpLoggingNotifications.ValueBool() {
 			body, _ = sjson.Set(body, "mldp.logging.notifications", map[string]string{})
@@ -122,6 +134,14 @@ func (data MPLSLDP) toBody(ctx context.Context) string {
 		for index, item := range data.AddressFamilies {
 			if !item.AfName.IsNull() && !item.AfName.IsUnknown() {
 				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"af-name", item.AfName.ValueString())
+			}
+			if !item.LabelLocalAllocateForAccessList.IsNull() && !item.LabelLocalAllocateForAccessList.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"label.local.allocate.for.access-list", item.LabelLocalAllocateForAccessList.ValueString())
+			}
+			if !item.LabelLocalAllocateForHostRoutes.IsNull() && !item.LabelLocalAllocateForHostRoutes.IsUnknown() {
+				if item.LabelLocalAllocateForHostRoutes.ValueBool() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"label.local.allocate.for.host-routes", map[string]string{})
+				}
 			}
 		}
 	}
@@ -194,6 +214,20 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.AddressFamilies[i].AfName = types.StringNull()
 		}
+		if value := r.Get("label.local.allocate.for.access-list"); value.Exists() && !data.AddressFamilies[i].LabelLocalAllocateForAccessList.IsNull() {
+			data.AddressFamilies[i].LabelLocalAllocateForAccessList = types.StringValue(value.String())
+		} else {
+			data.AddressFamilies[i].LabelLocalAllocateForAccessList = types.StringNull()
+		}
+		if value := r.Get("label.local.allocate.for.host-routes"); !data.AddressFamilies[i].LabelLocalAllocateForHostRoutes.IsNull() {
+			if value.Exists() {
+				data.AddressFamilies[i].LabelLocalAllocateForHostRoutes = types.BoolValue(true)
+			} else {
+				data.AddressFamilies[i].LabelLocalAllocateForHostRoutes = types.BoolValue(false)
+			}
+		} else {
+			data.AddressFamilies[i].LabelLocalAllocateForHostRoutes = types.BoolNull()
+		}
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -259,6 +293,16 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.CapabilitiesSacFec129Disable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up"); value.Exists() && !data.IgpSyncDelayOnSessionUp.IsNull() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	} else {
+		data.IgpSyncDelayOnSessionUp = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-proc-restart"); value.Exists() && !data.IgpSyncDelayOnProcRestart.IsNull() {
+		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
+	} else {
+		data.IgpSyncDelayOnProcRestart = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "mldp.logging.notifications"); !data.MldpLoggingNotifications.IsNull() {
 		if value.Exists() {
@@ -348,6 +392,14 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("af-name"); cValue.Exists() {
 				item.AfName = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("label.local.allocate.for.access-list"); cValue.Exists() {
+				item.LabelLocalAllocateForAccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("label.local.allocate.for.host-routes"); cValue.Exists() {
+				item.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
+			} else {
+				item.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
+			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
@@ -382,6 +434,12 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 		data.CapabilitiesSacFec129Disable = types.BoolValue(true)
 	} else {
 		data.CapabilitiesSacFec129Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up"); value.Exists() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-proc-restart"); value.Exists() {
+		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "mldp.logging.notifications"); value.Exists() {
 		data.MldpLoggingNotifications = types.BoolValue(true)
@@ -526,6 +584,9 @@ func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+		if !data.AddressFamilies[i].LabelLocalAllocateForHostRoutes.IsNull() && !data.AddressFamilies[i].LabelLocalAllocateForHostRoutes.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/host-routes", data.getPath(), keyString))
+		}
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -606,6 +667,12 @@ func (data *MPLSLDP) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.CapabilitiesSacFec129Disable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
+	}
+	if !data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-session-up", data.getPath()))
+	}
+	if !data.IgpSyncDelayOnProcRestart.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", data.getPath()))
 	}
 	if !data.MldpLoggingNotifications.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))

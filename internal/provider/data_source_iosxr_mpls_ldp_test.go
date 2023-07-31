@@ -29,11 +29,14 @@ func TestAccDataSourceIosxrMPLSLDP(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "router_id", "1.2.3.4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "address_families.0.af_name", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "address_families.0.label_local_allocate_for_access_list", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv4_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_ipv6_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec128_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "capabilities_sac_fec129_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "igp_sync_delay_on_session_up", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "igp_sync_delay_on_proc_restart", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_logging_notifications", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.name", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_mpls_ldp.test", "mldp_address_families.0.make_before_break_delay", "30"))
@@ -70,6 +73,7 @@ func testAccDataSourceIosxrMPLSLDPConfig() string {
 	config += `	router_id = "1.2.3.4"` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4"` + "\n"
+	config += `		label_local_allocate_for_access_list = "ACL1"` + "\n"
 	config += `	}]` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -78,6 +82,8 @@ func testAccDataSourceIosxrMPLSLDPConfig() string {
 	config += `	capabilities_sac_ipv6_disable = true` + "\n"
 	config += `	capabilities_sac_fec128_disable = true` + "\n"
 	config += `	capabilities_sac_fec129_disable = true` + "\n"
+	config += `	igp_sync_delay_on_session_up = 10` + "\n"
+	config += `	igp_sync_delay_on_proc_restart = 100` + "\n"
 	config += `	mldp_logging_notifications = true` + "\n"
 	config += `	mldp_address_families = [{` + "\n"
 	config += `		name = "ipv4"` + "\n"

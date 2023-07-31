@@ -2,7 +2,8 @@ resource "iosxr_mpls_ldp" "example" {
   router_id = "1.2.3.4"
   address_families = [
     {
-      af_name = "ipv4"
+      af_name                              = "ipv4"
+      label_local_allocate_for_access_list = "ACL1"
     }
   ]
   interfaces = [
@@ -14,6 +15,8 @@ resource "iosxr_mpls_ldp" "example" {
   capabilities_sac_ipv6_disable   = true
   capabilities_sac_fec128_disable = true
   capabilities_sac_fec129_disable = true
+  igp_sync_delay_on_session_up    = 10
+  igp_sync_delay_on_proc_restart  = 100
   mldp_logging_notifications      = true
   mldp_address_families = [
     {

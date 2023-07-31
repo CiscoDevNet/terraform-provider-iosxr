@@ -32,6 +32,8 @@ data "iosxr_mpls_ldp" "example" {
 - `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
 - `capabilities_sac_ipv6_disable` (Boolean) Disable exchanging IPv6 prefix label bindings
 - `id` (String) The path of the retrieved object.
+- `igp_sync_delay_on_proc_restart` (Number) Global sync up delay to be used after process restart
+- `igp_sync_delay_on_session_up` (Number) Interface sync-up delay after session up
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
 - `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
 - `mldp_logging_notifications` (Boolean) MLDP logging notifications
@@ -44,6 +46,8 @@ data "iosxr_mpls_ldp" "example" {
 Read-Only:
 
 - `af_name` (String) Configure Address Family and its parameters
+- `label_local_allocate_for_access_list` (String) IP access-list
+- `label_local_allocate_for_host_routes` (Boolean) Allocate label for host routes only
 
 
 <a id="nestedatt--interfaces"></a>

@@ -91,6 +91,29 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
+			"set_overload_bit_on_startup_advertise_as_overloaded": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").String,
+				Optional:            true,
+			},
+			"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(5, 86400),
+				},
+			},
+			"set_overload_bit_on_startup_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set overload bit on startup until BGP signals convergence, or timeout").String,
+				Optional:            true,
+			},
+			"set_overload_bit_advertise_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("If overload-bit set advertise IP prefixes learned from other protocols").String,
+				Optional:            true,
+			},
+			"set_overload_bit_advertise_interlevel": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("If overload-bit set advertise IP prefixes learned from another ISIS level").String,
+				Optional:            true,
+			},
 			"set_overload_bit_levels": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set overload-bit for one level only").String,
 				Optional:            true,

@@ -70,6 +70,26 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Area type (level)",
 				Computed:            true,
 			},
+			"set_overload_bit_on_startup_advertise_as_overloaded": schema.BoolAttribute{
+				MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
+				Computed:            true,
+			},
+			"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+				MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
+				Computed:            true,
+			},
+			"set_overload_bit_on_startup_wait_for_bgp": schema.BoolAttribute{
+				MarkdownDescription: "Set overload bit on startup until BGP signals convergence, or timeout",
+				Computed:            true,
+			},
+			"set_overload_bit_advertise_external": schema.BoolAttribute{
+				MarkdownDescription: "If overload-bit set advertise IP prefixes learned from other protocols",
+				Computed:            true,
+			},
+			"set_overload_bit_advertise_interlevel": schema.BoolAttribute{
+				MarkdownDescription: "If overload-bit set advertise IP prefixes learned from another ISIS level",
+				Computed:            true,
+			},
 			"set_overload_bit_levels": schema.ListNestedAttribute{
 				MarkdownDescription: "Set overload-bit for one level only",
 				Computed:            true,

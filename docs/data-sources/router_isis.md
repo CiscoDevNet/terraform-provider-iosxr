@@ -53,7 +53,12 @@ data "iosxr_router_isis" "example" {
 - `nsf_interface_timer` (Number) Timer used to wait for a restart ACK (seconds)
 - `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
 - `nsr` (Boolean) Enable NSR
+- `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
+- `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
+- `set_overload_bit_on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 <a id="nestedatt--affinity_maps"></a>
 ### Nested Schema for `affinity_maps`

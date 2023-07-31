@@ -30,6 +30,11 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "process_id", "P1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "is_type", "level-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_advertise_as_overloaded", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_wait_for_bgp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_advertise_external", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_advertise_interlevel", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.level_id", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_advertise_as_overloaded", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_advertise_as_overloaded_time_to_advertise", "10"))
@@ -90,6 +95,7 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 func testAccIosxrRouterISISConfig_minimum() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
+	config += `	set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -98,6 +104,11 @@ func testAccIosxrRouterISISConfig_all() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	is_type = "level-1"` + "\n"
+	config += `	set_overload_bit_on_startup_advertise_as_overloaded = true` + "\n"
+	config += `	set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10` + "\n"
+	config += `	set_overload_bit_on_startup_wait_for_bgp = false` + "\n"
+	config += `	set_overload_bit_advertise_external = true` + "\n"
+	config += `	set_overload_bit_advertise_interlevel = true` + "\n"
 	config += `	set_overload_bit_levels = [{` + "\n"
 	config += `		level_id = 1` + "\n"
 	config += `		on_startup_advertise_as_overloaded = true` + "\n"

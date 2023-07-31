@@ -14,8 +14,13 @@ This resource can manage the Router ISIS configuration.
 
 ```terraform
 resource "iosxr_router_isis" "example" {
-  process_id = "P1"
-  is_type    = "level-1"
+  process_id                                                            = "P1"
+  is_type                                                               = "level-1"
+  set_overload_bit_on_startup_advertise_as_overloaded                   = true
+  set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10
+  set_overload_bit_on_startup_wait_for_bgp                              = false
+  set_overload_bit_advertise_external                                   = true
+  set_overload_bit_advertise_interlevel                                 = true
   set_overload_bit_levels = [
     {
       level_id                                             = 1
@@ -80,6 +85,8 @@ resource "iosxr_router_isis" "example" {
 ### Required
 
 - `process_id` (String) Process ID
+- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+  - Range: `5`-`86400`
 
 ### Optional
 
@@ -119,7 +126,11 @@ resource "iosxr_router_isis" "example" {
 - `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
   - Range: `5`-`300`
 - `nsr` (Boolean) Enable NSR
+- `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
+- `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
+- `set_overload_bit_on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 ### Read-Only
 

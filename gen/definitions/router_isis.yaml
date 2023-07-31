@@ -7,6 +7,17 @@ attributes:
     example: P1
   - yang_name: is-type
     example: level-1
+  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded
+    example: true
+  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded/time-to-advertise
+    delete_parent: true
+    example: 10
+  - yang_name: set-overload-bit/on-startup/wait-for-bgp
+    example: false
+  - yang_name: set-overload-bit/advertise/external
+    example: true
+  - yang_name: set-overload-bit/advertise/interlevel
+    example: true
   - yang_name: set-overload-bit-levels/level
     tf_name: set_overload_bit_levels
     type: List

@@ -31,60 +31,70 @@ import (
 )
 
 type RouterISIS struct {
-	Device                        types.String                     `tfsdk:"device"`
-	Id                            types.String                     `tfsdk:"id"`
-	DeleteMode                    types.String                     `tfsdk:"delete_mode"`
-	ProcessId                     types.String                     `tfsdk:"process_id"`
-	IsType                        types.String                     `tfsdk:"is_type"`
-	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
-	Nsr                           types.Bool                       `tfsdk:"nsr"`
-	NsfCisco                      types.Bool                       `tfsdk:"nsf_cisco"`
-	NsfIetf                       types.Bool                       `tfsdk:"nsf_ietf"`
-	NsfLifetime                   types.Int64                      `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer             types.Int64                      `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires           types.Int64                      `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges           types.Bool                       `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait     types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait     types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait   types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval            types.Int64                      `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime                types.Int64                      `tfsdk:"max_lsp_lifetime"`
-	LspPasswordKeychain           types.String                     `tfsdk:"lsp_password_keychain"`
-	DistributeLinkStateInstanceId types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
-	DistributeLinkStateThrottle   types.Int64                      `tfsdk:"distribute_link_state_throttle"`
-	DistributeLinkStateLevel      types.Int64                      `tfsdk:"distribute_link_state_level"`
-	AffinityMaps                  []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
-	FlexAlgos                     []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
-	Nets                          []RouterISISNets                 `tfsdk:"nets"`
-	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
+	Device                                                      types.String                     `tfsdk:"device"`
+	Id                                                          types.String                     `tfsdk:"id"`
+	DeleteMode                                                  types.String                     `tfsdk:"delete_mode"`
+	ProcessId                                                   types.String                     `tfsdk:"process_id"`
+	IsType                                                      types.String                     `tfsdk:"is_type"`
+	SetOverloadBitOnStartupAdvertiseAsOverloaded                types.Bool                       `tfsdk:"set_overload_bit_on_startup_advertise_as_overloaded"`
+	SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise types.Int64                      `tfsdk:"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise"`
+	SetOverloadBitOnStartupWaitForBgp                           types.Bool                       `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
+	SetOverloadBitAdvertiseExternal                             types.Bool                       `tfsdk:"set_overload_bit_advertise_external"`
+	SetOverloadBitAdvertiseInterlevel                           types.Bool                       `tfsdk:"set_overload_bit_advertise_interlevel"`
+	SetOverloadBitLevels                                        []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                                                         types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                                                    types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                                                     types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                                                 types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer                                           types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires                                         types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges                                         types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait                                   types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait                                   types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait                                 types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval                                          types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                                              types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordKeychain                                         types.String                     `tfsdk:"lsp_password_keychain"`
+	DistributeLinkStateInstanceId                               types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle                                 types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel                                    types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                                                []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                                                   []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                                                        []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                                                  []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 
 type RouterISISData struct {
-	Device                        types.String                     `tfsdk:"device"`
-	Id                            types.String                     `tfsdk:"id"`
-	ProcessId                     types.String                     `tfsdk:"process_id"`
-	IsType                        types.String                     `tfsdk:"is_type"`
-	SetOverloadBitLevels          []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
-	Nsr                           types.Bool                       `tfsdk:"nsr"`
-	NsfCisco                      types.Bool                       `tfsdk:"nsf_cisco"`
-	NsfIetf                       types.Bool                       `tfsdk:"nsf_ietf"`
-	NsfLifetime                   types.Int64                      `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer             types.Int64                      `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires           types.Int64                      `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges           types.Bool                       `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait     types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait     types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait   types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval            types.Int64                      `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime                types.Int64                      `tfsdk:"max_lsp_lifetime"`
-	LspPasswordKeychain           types.String                     `tfsdk:"lsp_password_keychain"`
-	DistributeLinkStateInstanceId types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
-	DistributeLinkStateThrottle   types.Int64                      `tfsdk:"distribute_link_state_throttle"`
-	DistributeLinkStateLevel      types.Int64                      `tfsdk:"distribute_link_state_level"`
-	AffinityMaps                  []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
-	FlexAlgos                     []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
-	Nets                          []RouterISISNets                 `tfsdk:"nets"`
-	Interfaces                    []RouterISISInterfaces           `tfsdk:"interfaces"`
+	Device                                                      types.String                     `tfsdk:"device"`
+	Id                                                          types.String                     `tfsdk:"id"`
+	ProcessId                                                   types.String                     `tfsdk:"process_id"`
+	IsType                                                      types.String                     `tfsdk:"is_type"`
+	SetOverloadBitOnStartupAdvertiseAsOverloaded                types.Bool                       `tfsdk:"set_overload_bit_on_startup_advertise_as_overloaded"`
+	SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise types.Int64                      `tfsdk:"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise"`
+	SetOverloadBitOnStartupWaitForBgp                           types.Bool                       `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
+	SetOverloadBitAdvertiseExternal                             types.Bool                       `tfsdk:"set_overload_bit_advertise_external"`
+	SetOverloadBitAdvertiseInterlevel                           types.Bool                       `tfsdk:"set_overload_bit_advertise_interlevel"`
+	SetOverloadBitLevels                                        []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                                                         types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                                                    types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                                                     types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                                                 types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer                                           types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires                                         types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges                                         types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait                                   types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait                                   types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait                                 types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval                                          types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                                              types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordKeychain                                         types.String                     `tfsdk:"lsp_password_keychain"`
+	DistributeLinkStateInstanceId                               types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle                                 types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel                                    types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                                                []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                                                   []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                                                        []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                                                  []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 type RouterISISSetOverloadBitLevels struct {
 	LevelId                                       types.Int64 `tfsdk:"level_id"`
@@ -133,6 +143,29 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	if !data.IsType.IsNull() && !data.IsType.IsUnknown() {
 		body, _ = sjson.Set(body, "is-type", data.IsType.ValueString())
+	}
+	if !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() && !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsUnknown() {
+		if data.SetOverloadBitOnStartupAdvertiseAsOverloaded.ValueBool() {
+			body, _ = sjson.Set(body, "set-overload-bit.on-startup.advertise-as-overloaded", map[string]string{})
+		}
+	}
+	if !data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() && !data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsUnknown() {
+		body, _ = sjson.Set(body, "set-overload-bit.on-startup.advertise-as-overloaded.time-to-advertise", strconv.FormatInt(data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.ValueInt64(), 10))
+	}
+	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.IsUnknown() {
+		if data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
+			body, _ = sjson.Set(body, "set-overload-bit.on-startup.wait-for-bgp", map[string]string{})
+		}
+	}
+	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.IsUnknown() {
+		if data.SetOverloadBitAdvertiseExternal.ValueBool() {
+			body, _ = sjson.Set(body, "set-overload-bit.advertise.external", map[string]string{})
+		}
+	}
+	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.IsUnknown() {
+		if data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
+			body, _ = sjson.Set(body, "set-overload-bit.advertise.interlevel", map[string]string{})
+		}
 	}
 	if !data.Nsr.IsNull() && !data.Nsr.IsUnknown() {
 		if data.Nsr.ValueBool() {
@@ -310,6 +343,47 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 		data.IsType = types.StringValue(value.String())
 	} else {
 		data.IsType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded"); !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() {
+		if value.Exists() {
+			data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+		} else {
+			data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+		}
+	} else {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded.time-to-advertise"); value.Exists() && !data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(value.Int())
+	} else {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		if value.Exists() {
+			data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
+		} else {
+			data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
+		}
+	} else {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); !data.SetOverloadBitAdvertiseExternal.IsNull() {
+		if value.Exists() {
+			data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
+		} else {
+			data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
+		}
+	} else {
+		data.SetOverloadBitAdvertiseExternal = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		if value.Exists() {
+			data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
+		} else {
+			data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
+		}
+	} else {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolNull()
 	}
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}
@@ -686,6 +760,29 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded"); value.Exists() {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded.time-to-advertise"); value.Exists() {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); value.Exists() {
+		data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); value.Exists() {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "set-overload-bit-levels.level"); value.Exists() {
 		data.SetOverloadBitLevels = make([]RouterISISSetOverloadBitLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -1028,6 +1125,18 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() && !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup/advertise-as-overloaded", data.getPath()))
+	}
+	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup/wait-for-bgp", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
+	}
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}
 		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
@@ -1123,6 +1232,21 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.IsType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/is-type", data.getPath()))
+	}
+	if !data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/advertise-as-overloaded", data.getPath()))
+	}
+	if !data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/advertise-as-overloaded", data.getPath()))
+	}
+	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/wait-for-bgp", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
 	}
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}

@@ -1,6 +1,11 @@
 resource "iosxr_router_isis" "example" {
-  process_id = "P1"
-  is_type    = "level-1"
+  process_id                                                            = "P1"
+  is_type                                                               = "level-1"
+  set_overload_bit_on_startup_advertise_as_overloaded                   = true
+  set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10
+  set_overload_bit_on_startup_wait_for_bgp                              = false
+  set_overload_bit_advertise_external                                   = true
+  set_overload_bit_advertise_interlevel                                 = true
   set_overload_bit_levels = [
     {
       level_id                                             = 1

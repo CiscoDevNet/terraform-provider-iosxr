@@ -47,6 +47,8 @@ data "iosxr_router_bgp_address_family" "example" {
 - `maximum_paths_eibgp_multipath` (Number) eiBGP-multipath
 - `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
 - `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
+- `nexthop_trigger_delay_critical` (Number) For critical notification
+- `nexthop_trigger_delay_non_critical` (Number) For non-critical notification
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
 - `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))

@@ -34,6 +34,8 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "additional_paths_selection_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "advertise_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "allocate_label_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "nexthop_trigger_delay_critical", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "nexthop_trigger_delay_non_critical", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "label_mode_per_ce", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "label_mode_per_vrf", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_connected", "true"))
@@ -122,6 +124,8 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `	additional_paths_selection_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	advertise_best_external = true` + "\n"
 	config += `	allocate_label_all = true` + "\n"
+	config += `	nexthop_trigger_delay_critical = 10` + "\n"
+	config += `	nexthop_trigger_delay_non_critical = 20` + "\n"
 	config += `	label_mode_per_ce = false` + "\n"
 	config += `	label_mode_per_vrf = false` + "\n"
 	config += `	redistribute_connected = true` + "\n"

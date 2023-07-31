@@ -32,6 +32,10 @@ attributes:
     optional: true
     example: 10
     exclude_test: true
+  - yang_name: nexthop/trigger-delay/critical
+    example: 10
+  - yang_name: nexthop/trigger-delay/non-critical
+    example: 20
   - yang_name: label/mode/per-ce
     example: false
   - yang_name: label/mode/per-vrf

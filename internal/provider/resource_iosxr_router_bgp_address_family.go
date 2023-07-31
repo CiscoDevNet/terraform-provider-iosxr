@@ -139,6 +139,20 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(2, 1024),
 				},
 			},
+			"nexthop_trigger_delay_critical": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For critical notification").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
+			"nexthop_trigger_delay_non_critical": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("For non-critical notification").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
+				},
+			},
 			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
 				Optional:            true,

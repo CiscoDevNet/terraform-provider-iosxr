@@ -21,6 +21,8 @@ resource "iosxr_router_bgp_address_family" "example" {
   additional_paths_selection_route_policy = "ROUTE_POLICY_1"
   advertise_best_external                 = true
   allocate_label_all                      = true
+  nexthop_trigger_delay_critical          = 10
+  nexthop_trigger_delay_non_critical      = 20
   label_mode_per_ce                       = false
   label_mode_per_vrf                      = false
   redistribute_connected                  = true
@@ -100,6 +102,10 @@ resource "iosxr_router_bgp_address_family" "example" {
 - `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
   - Range: `2`-`1024`
 - `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
+- `nexthop_trigger_delay_critical` (Number) For critical notification
+  - Range: `0`-`4294967295`
+- `nexthop_trigger_delay_non_critical` (Number) For non-critical notification
+  - Range: `0`-`4294967295`
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`

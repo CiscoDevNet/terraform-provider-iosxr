@@ -45,6 +45,8 @@ type RouterBGPAddressFamily struct {
 	MaximumPathsEbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ebgp_multipath"`
 	MaximumPathsEibgpMultipath          types.Int64                                `tfsdk:"maximum_paths_eibgp_multipath"`
 	MaximumPathsIbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ibgp_multipath"`
+	NexthopTriggerDelayCritical         types.Int64                                `tfsdk:"nexthop_trigger_delay_critical"`
+	NexthopTriggerDelayNonCritical      types.Int64                                `tfsdk:"nexthop_trigger_delay_non_critical"`
 	LabelModePerCe                      types.Bool                                 `tfsdk:"label_mode_per_ce"`
 	LabelModePerVrf                     types.Bool                                 `tfsdk:"label_mode_per_vrf"`
 	RedistributeConnected               types.Bool                                 `tfsdk:"redistribute_connected"`
@@ -71,6 +73,8 @@ type RouterBGPAddressFamilyData struct {
 	MaximumPathsEbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ebgp_multipath"`
 	MaximumPathsEibgpMultipath          types.Int64                                `tfsdk:"maximum_paths_eibgp_multipath"`
 	MaximumPathsIbgpMultipath           types.Int64                                `tfsdk:"maximum_paths_ibgp_multipath"`
+	NexthopTriggerDelayCritical         types.Int64                                `tfsdk:"nexthop_trigger_delay_critical"`
+	NexthopTriggerDelayNonCritical      types.Int64                                `tfsdk:"nexthop_trigger_delay_non_critical"`
 	LabelModePerCe                      types.Bool                                 `tfsdk:"label_mode_per_ce"`
 	LabelModePerVrf                     types.Bool                                 `tfsdk:"label_mode_per_vrf"`
 	RedistributeConnected               types.Bool                                 `tfsdk:"redistribute_connected"`
@@ -164,6 +168,12 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.MaximumPathsIbgpMultipath.IsNull() && !data.MaximumPathsIbgpMultipath.IsUnknown() {
 		body, _ = sjson.Set(body, "maximum-paths.ibgp.multipath", strconv.FormatInt(data.MaximumPathsIbgpMultipath.ValueInt64(), 10))
+	}
+	if !data.NexthopTriggerDelayCritical.IsNull() && !data.NexthopTriggerDelayCritical.IsUnknown() {
+		body, _ = sjson.Set(body, "nexthop.trigger-delay.critical", strconv.FormatInt(data.NexthopTriggerDelayCritical.ValueInt64(), 10))
+	}
+	if !data.NexthopTriggerDelayNonCritical.IsNull() && !data.NexthopTriggerDelayNonCritical.IsUnknown() {
+		body, _ = sjson.Set(body, "nexthop.trigger-delay.non-critical", strconv.FormatInt(data.NexthopTriggerDelayNonCritical.ValueInt64(), 10))
 	}
 	if !data.LabelModePerCe.IsNull() && !data.LabelModePerCe.IsUnknown() {
 		if data.LabelModePerCe.ValueBool() {
@@ -383,6 +393,16 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 		data.MaximumPathsIbgpMultipath = types.Int64Value(value.Int())
 	} else {
 		data.MaximumPathsIbgpMultipath = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "nexthop.trigger-delay.critical"); value.Exists() && !data.NexthopTriggerDelayCritical.IsNull() {
+		data.NexthopTriggerDelayCritical = types.Int64Value(value.Int())
+	} else {
+		data.NexthopTriggerDelayCritical = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "nexthop.trigger-delay.non-critical"); value.Exists() && !data.NexthopTriggerDelayNonCritical.IsNull() {
+		data.NexthopTriggerDelayNonCritical = types.Int64Value(value.Int())
+	} else {
+		data.NexthopTriggerDelayNonCritical = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "label.mode.per-ce"); !data.LabelModePerCe.IsNull() {
 		if value.Exists() {
@@ -749,6 +769,12 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 	}
 	if value := gjson.GetBytes(res, "maximum-paths.ibgp.multipath"); value.Exists() {
 		data.MaximumPathsIbgpMultipath = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nexthop.trigger-delay.critical"); value.Exists() {
+		data.NexthopTriggerDelayCritical = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nexthop.trigger-delay.non-critical"); value.Exists() {
+		data.NexthopTriggerDelayNonCritical = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "label.mode.per-ce"); value.Exists() {
 		data.LabelModePerCe = types.BoolValue(true)
@@ -1191,6 +1217,12 @@ func (data *RouterBGPAddressFamily) getDeletePaths(ctx context.Context) []string
 	}
 	if !data.MaximumPathsIbgpMultipath.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ibgp/multipath", data.getPath()))
+	}
+	if !data.NexthopTriggerDelayCritical.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/trigger-delay/critical", data.getPath()))
+	}
+	if !data.NexthopTriggerDelayNonCritical.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/trigger-delay/non-critical", data.getPath()))
 	}
 	if !data.LabelModePerCe.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/label/mode/per-ce", data.getPath()))

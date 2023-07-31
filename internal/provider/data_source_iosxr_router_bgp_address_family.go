@@ -106,6 +106,14 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "iBGP-multipath",
 				Computed:            true,
 			},
+			"nexthop_trigger_delay_critical": schema.Int64Attribute{
+				MarkdownDescription: "For critical notification",
+				Computed:            true,
+			},
+			"nexthop_trigger_delay_non_critical": schema.Int64Attribute{
+				MarkdownDescription: "For non-critical notification",
+				Computed:            true,
+			},
 			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: "Set per CE label mode",
 				Computed:            true,

@@ -1,0 +1,38 @@
+---
+name: L2VPN PW Class
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]
+doc_category: L2VPN
+attributes:
+  - yang_name: pw-class-name
+    tf_name: name
+    example: PWC1
+  - yang_name: encapsulation/mpls
+    example: true
+  - yang_name: encapsulation/mpls/transport-mode/ethernet
+    example: true
+  - yang_name: encapsulation/mpls/transport-mode/vlan
+    example: false
+  - yang_name: encapsulation/mpls/transport-mode/passthrough
+    example: false
+  - yang_name: encapsulation/mpls/load-balancing/pw-label
+    example: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/transmit
+    example: false
+    exclude_test: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/transmit/static
+    example: false
+    exclude_test: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/receive
+    example: false
+    exclude_test: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/receive/static
+    example: false
+    exclude_test: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/both
+    example: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/both/static
+    example: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/code/one7
+    example: true
+  - yang_name: encapsulation/mpls/load-balancing/flow-label/code/one7/disable
+    example: true

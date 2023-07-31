@@ -69,6 +69,8 @@ data "iosxr_router_bgp" "example" {
 
 Read-Only:
 
+- `advertisement_interval_milliseconds` (Number) time in milliseconds
+- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
 - `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up

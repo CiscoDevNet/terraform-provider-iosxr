@@ -63,6 +63,7 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.remote_as", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.description", "My Neighbor Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.use_neighbor_group", "GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.advertisement_interval_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.ignore_connected_check", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.bfd_minimum_interval", "10"))
@@ -170,6 +171,7 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		remote_as = "65002"` + "\n"
 	config += `		description = "My Neighbor Description"` + "\n"
 	config += `		use_neighbor_group = "GROUP1"` + "\n"
+	config += `		advertisement_interval_seconds = 10` + "\n"
 	config += `		ignore_connected_check = true` + "\n"
 	config += `		ebgp_multihop_maximum_hop_count = 10` + "\n"
 	config += `		bfd_minimum_interval = 10` + "\n"

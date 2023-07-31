@@ -36,6 +36,7 @@ resource "iosxr_router_bgp" "example" {
       remote_as                           = "65002"
       description                         = "My Neighbor Description"
       use_neighbor_group                  = "GROUP1"
+      advertisement_interval_seconds      = 10
       ignore_connected_check              = true
       ebgp_multihop_maximum_hop_count     = 10
       bfd_minimum_interval                = 10

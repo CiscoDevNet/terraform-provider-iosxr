@@ -13,6 +13,7 @@ description: |-
 - Add `set_overload_bit` attributes to `iosxr_router_isis` resource and data source
 - Add `metric` attributes to `iosxr_router_isis_interface_address_family` resource and data source
 - Add `nexthop_trigger_delay_critical` and `nexthop_trigger_delay_non_critical` attributes to `iosxr_router_bgp_address_family` resource and data source
+- Add `advertisement_interval` attributes to `iosxr_router_bgp`, `iosxr_router_bgp_vrf` and `iosxr_router_bgp_neighbor_group` resources and data sources
 
 ## 0.2.3
 

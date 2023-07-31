@@ -139,6 +139,14 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Neighbor specific description",
 							Computed:            true,
 						},
+						"advertisement_interval_seconds": schema.Int64Attribute{
+							MarkdownDescription: "Minimum interval between sending BGP routing updates",
+							Computed:            true,
+						},
+						"advertisement_interval_milliseconds": schema.Int64Attribute{
+							MarkdownDescription: "time in milliseconds",
+							Computed:            true,
+						},
 						"ignore_connected_check": schema.BoolAttribute{
 							MarkdownDescription: "Bypass the directly connected nexthop check for single-hop eBGP peering",
 							Computed:            true,

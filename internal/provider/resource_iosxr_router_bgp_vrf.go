@@ -189,6 +189,20 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 								stringvalidator.LengthBetween(1, 1024),
 							},
 						},
+						"advertisement_interval_seconds": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between sending BGP routing updates").AddIntegerRangeDescription(0, 600).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 600),
+							},
+						},
+						"advertisement_interval_milliseconds": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("time in milliseconds").AddIntegerRangeDescription(0, 999).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 999),
+							},
+						},
 						"ignore_connected_check": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Bypass the directly connected nexthop check for single-hop eBGP peering").String,
 							Optional:            true,

@@ -15,6 +15,7 @@ resource "iosxr_router_bgp_vrf" "example" {
       neighbor_address                = "10.1.1.2"
       remote_as                       = "65002"
       description                     = "My Neighbor Description"
+      advertisement_interval_seconds  = 10
       ignore_connected_check          = true
       ebgp_multihop_maximum_hop_count = 10
       bfd_minimum_interval            = 10

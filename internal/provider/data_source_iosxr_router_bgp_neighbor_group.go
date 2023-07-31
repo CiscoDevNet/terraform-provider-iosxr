@@ -78,6 +78,14 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Source of routing updates",
 				Computed:            true,
 			},
+			"advertisement_interval_seconds": schema.Int64Attribute{
+				MarkdownDescription: "Minimum interval between sending BGP routing updates",
+				Computed:            true,
+			},
+			"advertisement_interval_milliseconds": schema.Int64Attribute{
+				MarkdownDescription: "time in milliseconds",
+				Computed:            true,
+			},
 			"ao_key_chain_name": schema.StringAttribute{
 				MarkdownDescription: "Name of the key chain - maximum 32 characters",
 				Computed:            true,

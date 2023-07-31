@@ -3,6 +3,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   name                                = "GROUP1"
   remote_as                           = "65001"
   update_source                       = "Loopback0"
+  advertisement_interval_seconds      = 10
   bfd_minimum_interval                = 3
   bfd_multiplier                      = 4
   bfd_fast_detect                     = true

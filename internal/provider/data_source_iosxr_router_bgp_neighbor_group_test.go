@@ -29,6 +29,7 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "advertisement_interval_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
@@ -67,6 +68,7 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	name = "GROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"
 	config += `	update_source = "Loopback0"` + "\n"
+	config += `	advertisement_interval_seconds = 10` + "\n"
 	config += `	bfd_minimum_interval = 3` + "\n"
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"

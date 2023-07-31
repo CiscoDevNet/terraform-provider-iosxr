@@ -39,6 +39,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.neighbor_address", "10.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.remote_as", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.description", "My Neighbor Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.advertisement_interval_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ignore_connected_check", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.ebgp_multihop_maximum_hop_count", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.bfd_minimum_interval", "10"))
@@ -96,6 +97,7 @@ func testAccDataSourceIosxrRouterBGPVRFConfig() string {
 	config += `		neighbor_address = "10.1.1.2"` + "\n"
 	config += `		remote_as = "65002"` + "\n"
 	config += `		description = "My Neighbor Description"` + "\n"
+	config += `		advertisement_interval_seconds = 10` + "\n"
 	config += `		ignore_connected_check = true` + "\n"
 	config += `		ebgp_multihop_maximum_hop_count = 10` + "\n"
 	config += `		bfd_minimum_interval = 10` + "\n"

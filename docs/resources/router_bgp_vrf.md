@@ -30,6 +30,7 @@ resource "iosxr_router_bgp_vrf" "example" {
       neighbor_address                = "10.1.1.2"
       remote_as                       = "65002"
       description                     = "My Neighbor Description"
+      advertisement_interval_seconds  = 10
       ignore_connected_check          = true
       ebgp_multihop_maximum_hop_count = 10
       bfd_minimum_interval            = 10
@@ -96,6 +97,8 @@ resource "iosxr_router_bgp_vrf" "example" {
 
 Required:
 
+- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+  - Range: `0`-`600`
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
 - `neighbor_address` (String) Neighbor address
@@ -105,6 +108,8 @@ Required:
 
 Optional:
 
+- `advertisement_interval_milliseconds` (Number) time in milliseconds
+  - Range: `0`-`999`
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
 - `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up

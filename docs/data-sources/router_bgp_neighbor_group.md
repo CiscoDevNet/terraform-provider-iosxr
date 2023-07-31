@@ -34,6 +34,8 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 ### Read-Only
 
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
+- `advertisement_interval_milliseconds` (Number) time in milliseconds
+- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection

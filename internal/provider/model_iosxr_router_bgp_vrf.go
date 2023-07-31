@@ -73,26 +73,28 @@ type RouterBGPVRFData struct {
 	Neighbors                   []RouterBGPVRFNeighbors `tfsdk:"neighbors"`
 }
 type RouterBGPVRFNeighbors struct {
-	NeighborAddress             types.String `tfsdk:"neighbor_address"`
-	RemoteAs                    types.String `tfsdk:"remote_as"`
-	Description                 types.String `tfsdk:"description"`
-	IgnoreConnectedCheck        types.Bool   `tfsdk:"ignore_connected_check"`
-	EbgpMultihopMaximumHopCount types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
-	BfdMinimumInterval          types.Int64  `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier               types.Int64  `tfsdk:"bfd_multiplier"`
-	BfdFastDetect               types.Bool   `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode     types.Bool   `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectDisable        types.Bool   `tfsdk:"bfd_fast_detect_disable"`
-	LocalAs                     types.String `tfsdk:"local_as"`
-	LocalAsNoPrepend            types.Bool   `tfsdk:"local_as_no_prepend"`
-	LocalAsReplaceAs            types.Bool   `tfsdk:"local_as_replace_as"`
-	LocalAsDualAs               types.Bool   `tfsdk:"local_as_dual_as"`
-	Password                    types.String `tfsdk:"password"`
-	Shutdown                    types.Bool   `tfsdk:"shutdown"`
-	TimersKeepaliveInterval     types.Int64  `tfsdk:"timers_keepalive_interval"`
-	TimersHoldtime              types.String `tfsdk:"timers_holdtime"`
-	UpdateSource                types.String `tfsdk:"update_source"`
-	TtlSecurity                 types.Bool   `tfsdk:"ttl_security"`
+	NeighborAddress                   types.String `tfsdk:"neighbor_address"`
+	RemoteAs                          types.String `tfsdk:"remote_as"`
+	Description                       types.String `tfsdk:"description"`
+	AdvertisementIntervalSeconds      types.Int64  `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds types.Int64  `tfsdk:"advertisement_interval_milliseconds"`
+	IgnoreConnectedCheck              types.Bool   `tfsdk:"ignore_connected_check"`
+	EbgpMultihopMaximumHopCount       types.Int64  `tfsdk:"ebgp_multihop_maximum_hop_count"`
+	BfdMinimumInterval                types.Int64  `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                     types.Int64  `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                     types.Bool   `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode           types.Bool   `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectDisable              types.Bool   `tfsdk:"bfd_fast_detect_disable"`
+	LocalAs                           types.String `tfsdk:"local_as"`
+	LocalAsNoPrepend                  types.Bool   `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                  types.Bool   `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                     types.Bool   `tfsdk:"local_as_dual_as"`
+	Password                          types.String `tfsdk:"password"`
+	Shutdown                          types.Bool   `tfsdk:"shutdown"`
+	TimersKeepaliveInterval           types.Int64  `tfsdk:"timers_keepalive_interval"`
+	TimersHoldtime                    types.String `tfsdk:"timers_holdtime"`
+	UpdateSource                      types.String `tfsdk:"update_source"`
+	TtlSecurity                       types.Bool   `tfsdk:"ttl_security"`
 }
 
 func (data RouterBGPVRF) getPath() string {
@@ -162,6 +164,12 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 			}
 			if !item.Description.IsNull() && !item.Description.IsUnknown() {
 				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"description", item.Description.ValueString())
+			}
+			if !item.AdvertisementIntervalSeconds.IsNull() && !item.AdvertisementIntervalSeconds.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"advertisement-interval.time-in-seconds", strconv.FormatInt(item.AdvertisementIntervalSeconds.ValueInt64(), 10))
+			}
+			if !item.AdvertisementIntervalMilliseconds.IsNull() && !item.AdvertisementIntervalMilliseconds.IsUnknown() {
+				body, _ = sjson.Set(body, "neighbors.neighbor"+"."+strconv.Itoa(index)+"."+"advertisement-interval.time-in-milliseconds", strconv.FormatInt(item.AdvertisementIntervalMilliseconds.ValueInt64(), 10))
 			}
 			if !item.IgnoreConnectedCheck.IsNull() && !item.IgnoreConnectedCheck.IsUnknown() {
 				if item.IgnoreConnectedCheck.ValueBool() {
@@ -349,6 +357,16 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Neighbors[i].Description = types.StringNull()
 		}
+		if value := r.Get("advertisement-interval.time-in-seconds"); value.Exists() && !data.Neighbors[i].AdvertisementIntervalSeconds.IsNull() {
+			data.Neighbors[i].AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+		} else {
+			data.Neighbors[i].AdvertisementIntervalSeconds = types.Int64Null()
+		}
+		if value := r.Get("advertisement-interval.time-in-milliseconds"); value.Exists() && !data.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() {
+			data.Neighbors[i].AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+		} else {
+			data.Neighbors[i].AdvertisementIntervalMilliseconds = types.Int64Null()
+		}
 		if value := r.Get("ignore-connected-check"); !data.Neighbors[i].IgnoreConnectedCheck.IsNull() {
 			if value.Exists() {
 				data.Neighbors[i].IgnoreConnectedCheck = types.BoolValue(true)
@@ -529,6 +547,12 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("description"); cValue.Exists() {
 				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-seconds"); cValue.Exists() {
+				item.AdvertisementIntervalSeconds = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-milliseconds"); cValue.Exists() {
+				item.AdvertisementIntervalMilliseconds = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("ignore-connected-check"); cValue.Exists() {
 				item.IgnoreConnectedCheck = types.BoolValue(true)

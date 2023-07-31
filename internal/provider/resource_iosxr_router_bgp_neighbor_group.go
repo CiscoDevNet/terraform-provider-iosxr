@@ -103,6 +103,20 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
+			"advertisement_interval_seconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between sending BGP routing updates").AddIntegerRangeDescription(0, 600).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 600),
+				},
+			},
+			"advertisement_interval_milliseconds": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("time in milliseconds").AddIntegerRangeDescription(0, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 999),
+				},
+			},
 			"ao_key_chain_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
 				Optional:            true,

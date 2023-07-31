@@ -84,6 +84,15 @@ attributes:
         example: My Neighbor Description
       - yang_name: use/neighbor-group
         example: GROUP1
+      - yang_name: advertisement-interval/time-in-seconds
+        tf_name: advertisement_interval_seconds
+        delete_parent: true
+        example: 10
+      - yang_name: advertisement-interval/time-in-milliseconds
+        tf_name: advertisement_interval_milliseconds
+        delete_parent: true
+        example: 500
+        exclude_test: true
       - yang_name: ignore-connected-check
         example: true
       - yang_name: ebgp-multihop/maximum-hop-count

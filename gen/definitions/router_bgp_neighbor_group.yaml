@@ -13,6 +13,15 @@ attributes:
     example: 65001
   - yang_name: update-source
     example: Loopback0
+  - yang_name: advertisement-interval/time-in-seconds
+    tf_name: advertisement_interval_seconds
+    delete_parent: true
+    example: 10
+  - yang_name: advertisement-interval/time-in-milliseconds
+    tf_name: advertisement_interval_milliseconds
+    delete_parent: true
+    example: 500
+    exclude_test: true
   - yang_name: ao/key-chain-name
     example: BGP-GROUP1-CLIENTS
     exclude_test: true

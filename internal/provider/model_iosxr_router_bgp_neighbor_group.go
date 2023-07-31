@@ -31,38 +31,42 @@ import (
 )
 
 type RouterBGPNeighborGroup struct {
-	Device                          types.String                            `tfsdk:"device"`
-	Id                              types.String                            `tfsdk:"id"`
-	DeleteMode                      types.String                            `tfsdk:"delete_mode"`
-	AsNumber                        types.String                            `tfsdk:"as_number"`
-	Name                            types.String                            `tfsdk:"name"`
-	RemoteAs                        types.String                            `tfsdk:"remote_as"`
-	UpdateSource                    types.String                            `tfsdk:"update_source"`
-	AoKeyChainName                  types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable       types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval              types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                   types.Int64                             `tfsdk:"bfd_multiplier"`
-	BfdFastDetect                   types.Bool                              `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode         types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectInheritanceDisable types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
-	AddressFamilies                 []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	Device                            types.String                            `tfsdk:"device"`
+	Id                                types.String                            `tfsdk:"id"`
+	DeleteMode                        types.String                            `tfsdk:"delete_mode"`
+	AsNumber                          types.String                            `tfsdk:"as_number"`
+	Name                              types.String                            `tfsdk:"name"`
+	RemoteAs                          types.String                            `tfsdk:"remote_as"`
+	UpdateSource                      types.String                            `tfsdk:"update_source"`
+	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
+	AoKeyChainName                    types.String                            `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable         types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval                types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                     types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 
 type RouterBGPNeighborGroupData struct {
-	Device                          types.String                            `tfsdk:"device"`
-	Id                              types.String                            `tfsdk:"id"`
-	AsNumber                        types.String                            `tfsdk:"as_number"`
-	Name                            types.String                            `tfsdk:"name"`
-	RemoteAs                        types.String                            `tfsdk:"remote_as"`
-	UpdateSource                    types.String                            `tfsdk:"update_source"`
-	AoKeyChainName                  types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable       types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval              types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                   types.Int64                             `tfsdk:"bfd_multiplier"`
-	BfdFastDetect                   types.Bool                              `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode         types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectInheritanceDisable types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
-	AddressFamilies                 []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	Device                            types.String                            `tfsdk:"device"`
+	Id                                types.String                            `tfsdk:"id"`
+	AsNumber                          types.String                            `tfsdk:"as_number"`
+	Name                              types.String                            `tfsdk:"name"`
+	RemoteAs                          types.String                            `tfsdk:"remote_as"`
+	UpdateSource                      types.String                            `tfsdk:"update_source"`
+	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
+	AoKeyChainName                    types.String                            `tfsdk:"ao_key_chain_name"`
+	AoIncludeTcpOptionsEnable         types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
+	BfdMinimumInterval                types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                     types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
@@ -89,6 +93,12 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	}
 	if !data.UpdateSource.IsNull() && !data.UpdateSource.IsUnknown() {
 		body, _ = sjson.Set(body, "update-source", data.UpdateSource.ValueString())
+	}
+	if !data.AdvertisementIntervalSeconds.IsNull() && !data.AdvertisementIntervalSeconds.IsUnknown() {
+		body, _ = sjson.Set(body, "advertisement-interval.time-in-seconds", strconv.FormatInt(data.AdvertisementIntervalSeconds.ValueInt64(), 10))
+	}
+	if !data.AdvertisementIntervalMilliseconds.IsNull() && !data.AdvertisementIntervalMilliseconds.IsUnknown() {
+		body, _ = sjson.Set(body, "advertisement-interval.time-in-milliseconds", strconv.FormatInt(data.AdvertisementIntervalMilliseconds.ValueInt64(), 10))
 	}
 	if !data.AoKeyChainName.IsNull() && !data.AoKeyChainName.IsUnknown() {
 		body, _ = sjson.Set(body, "ao.key-chain-name", data.AoKeyChainName.ValueString())
@@ -155,6 +165,16 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		data.UpdateSource = types.StringValue(value.String())
 	} else {
 		data.UpdateSource = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() && !data.AdvertisementIntervalSeconds.IsNull() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	} else {
+		data.AdvertisementIntervalSeconds = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() && !data.AdvertisementIntervalMilliseconds.IsNull() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	} else {
+		data.AdvertisementIntervalMilliseconds = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() && !data.AoKeyChainName.IsNull() {
 		data.AoKeyChainName = types.StringValue(value.String())
@@ -271,6 +291,12 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	}
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() {
 		data.AoKeyChainName = types.StringValue(value.String())
@@ -405,6 +431,12 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	}
 	if !data.UpdateSource.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-source", data.getPath()))
+	}
+	if !data.AdvertisementIntervalSeconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertisement-interval", data.getPath()))
+	}
+	if !data.AdvertisementIntervalMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertisement-interval", data.getPath()))
 	}
 	if !data.AoKeyChainName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name", data.getPath()))

@@ -31,6 +31,7 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "name", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "advertisement_interval_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
@@ -76,6 +77,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
+	config += `	advertisement_interval_seconds = 10` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -87,6 +89,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `	name = "GROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"
 	config += `	update_source = "Loopback0"` + "\n"
+	config += `	advertisement_interval_seconds = 10` + "\n"
 	config += `	bfd_minimum_interval = 3` + "\n"
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"

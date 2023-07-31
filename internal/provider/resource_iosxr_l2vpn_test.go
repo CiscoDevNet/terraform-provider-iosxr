@@ -30,6 +30,8 @@ func TestAccIosxrL2VPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "description", "My L2VPN Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "router_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "load_balancing_flow_src_dst_mac", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "load_balancing_flow_src_dst_ip", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
@@ -63,6 +65,8 @@ func testAccIosxrL2VPNConfig_all() string {
 	config := `resource "iosxr_l2vpn" "test" {` + "\n"
 	config += `	description = "My L2VPN Description"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
+	config += `	load_balancing_flow_src_dst_mac = false` + "\n"
+	config += `	load_balancing_flow_src_dst_ip = true` + "\n"
 	config += `	xconnect_groups = [{` + "\n"
 	config += `		group_name = "P2P"` + "\n"
 	config += `		}]` + "\n"

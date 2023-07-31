@@ -31,20 +31,24 @@ import (
 )
 
 type L2VPN struct {
-	Device         types.String          `tfsdk:"device"`
-	Id             types.String          `tfsdk:"id"`
-	DeleteMode     types.String          `tfsdk:"delete_mode"`
-	Description    types.String          `tfsdk:"description"`
-	RouterId       types.String          `tfsdk:"router_id"`
-	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
+	Device                     types.String          `tfsdk:"device"`
+	Id                         types.String          `tfsdk:"id"`
+	DeleteMode                 types.String          `tfsdk:"delete_mode"`
+	Description                types.String          `tfsdk:"description"`
+	RouterId                   types.String          `tfsdk:"router_id"`
+	LoadBalancingFlowSrcDstMac types.Bool            `tfsdk:"load_balancing_flow_src_dst_mac"`
+	LoadBalancingFlowSrcDstIp  types.Bool            `tfsdk:"load_balancing_flow_src_dst_ip"`
+	XconnectGroups             []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
 }
 
 type L2VPNData struct {
-	Device         types.String          `tfsdk:"device"`
-	Id             types.String          `tfsdk:"id"`
-	Description    types.String          `tfsdk:"description"`
-	RouterId       types.String          `tfsdk:"router_id"`
-	XconnectGroups []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
+	Device                     types.String          `tfsdk:"device"`
+	Id                         types.String          `tfsdk:"id"`
+	Description                types.String          `tfsdk:"description"`
+	RouterId                   types.String          `tfsdk:"router_id"`
+	LoadBalancingFlowSrcDstMac types.Bool            `tfsdk:"load_balancing_flow_src_dst_mac"`
+	LoadBalancingFlowSrcDstIp  types.Bool            `tfsdk:"load_balancing_flow_src_dst_ip"`
+	XconnectGroups             []L2VPNXconnectGroups `tfsdk:"xconnect_groups"`
 }
 type L2VPNXconnectGroups struct {
 	GroupName types.String `tfsdk:"group_name"`
@@ -65,6 +69,16 @@ func (data L2VPN) toBody(ctx context.Context) string {
 	}
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.ValueString())
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.IsUnknown() {
+		if data.LoadBalancingFlowSrcDstMac.ValueBool() {
+			body, _ = sjson.Set(body, "load-balancing.flow.src-dst-mac", map[string]string{})
+		}
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.IsUnknown() {
+		if data.LoadBalancingFlowSrcDstIp.ValueBool() {
+			body, _ = sjson.Set(body, "load-balancing.flow.src-dst-ip", map[string]string{})
+		}
 	}
 	if len(data.XconnectGroups) > 0 {
 		body, _ = sjson.Set(body, "xconnect.groups.group", []interface{}{})
@@ -87,6 +101,24 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 		data.RouterId = types.StringValue(value.String())
 	} else {
 		data.RouterId = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		if value.Exists() {
+			data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+		} else {
+			data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancingFlowSrcDstMac = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		if value.Exists() {
+			data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+		} else {
+			data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+		}
+	} else {
+		data.LoadBalancingFlowSrcDstIp = types.BoolNull()
 	}
 	for i := range data.XconnectGroups {
 		keys := [...]string{"group-name"}
@@ -125,6 +157,16 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
 		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
@@ -176,6 +218,12 @@ func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []strin
 
 func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() && !data.LoadBalancingFlowSrcDstMac.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getPath()))
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() && !data.LoadBalancingFlowSrcDstIp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getPath()))
+	}
 	for i := range data.XconnectGroups {
 		keys := [...]string{"group-name"}
 		keyValues := [...]string{data.XconnectGroups[i].GroupName.ValueString()}
@@ -194,6 +242,12 @@ func (data *L2VPN) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.RouterId.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+	}
+	if !data.LoadBalancingFlowSrcDstMac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", data.getPath()))
+	}
+	if !data.LoadBalancingFlowSrcDstIp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", data.getPath()))
 	}
 	for i := range data.XconnectGroups {
 		keys := [...]string{"group-name"}

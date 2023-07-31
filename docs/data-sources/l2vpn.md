@@ -28,6 +28,8 @@ data "iosxr_l2vpn" "example" {
 
 - `description` (String) Multi segment psedowire global description
 - `id` (String) The path of the retrieved object.
+- `load_balancing_flow_src_dst_ip` (Boolean) Use source and destination IP addresses for hashing
+- `load_balancing_flow_src_dst_mac` (Boolean) Use source and destination MAC addresses for hashing
 - `router_id` (String) Global L2VPN Router ID
 - `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
 

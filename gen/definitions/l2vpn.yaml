@@ -7,6 +7,10 @@ attributes:
     example: My L2VPN Description
   - yang_name: router-id
     example: 1.2.3.4
+  - yang_name: load-balancing/flow/src-dst-mac
+    example: false
+  - yang_name: load-balancing/flow/src-dst-ip
+    example: true
   - yang_name: xconnect/groups/group
     tf_name: xconnect_groups
     type: List

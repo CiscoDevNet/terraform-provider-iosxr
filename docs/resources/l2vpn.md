@@ -14,8 +14,10 @@ This resource can manage the L2VPN configuration.
 
 ```terraform
 resource "iosxr_l2vpn" "example" {
-  description = "My L2VPN Description"
-  router_id   = "1.2.3.4"
+  description                     = "My L2VPN Description"
+  router_id                       = "1.2.3.4"
+  load_balancing_flow_src_dst_mac = false
+  load_balancing_flow_src_dst_ip  = true
   xconnect_groups = [
     {
       group_name = "P2P"
@@ -33,6 +35,8 @@ resource "iosxr_l2vpn" "example" {
   - Choices: `all`, `attributes`
 - `description` (String) Multi segment psedowire global description
 - `device` (String) A device name from the provider configuration.
+- `load_balancing_flow_src_dst_ip` (Boolean) Use source and destination IP addresses for hashing
+- `load_balancing_flow_src_dst_mac` (Boolean) Use source and destination MAC addresses for hashing
 - `router_id` (String) Global L2VPN Router ID
 - `xconnect_groups` (Attributes List) Specify the group the cross connects belong to (see [below for nested schema](#nestedatt--xconnect_groups))
 

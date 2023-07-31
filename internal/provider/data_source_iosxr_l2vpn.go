@@ -70,6 +70,14 @@ func (d *L2VPNDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				MarkdownDescription: "Global L2VPN Router ID",
 				Computed:            true,
 			},
+			"load_balancing_flow_src_dst_mac": schema.BoolAttribute{
+				MarkdownDescription: "Use source and destination MAC addresses for hashing",
+				Computed:            true,
+			},
+			"load_balancing_flow_src_dst_ip": schema.BoolAttribute{
+				MarkdownDescription: "Use source and destination IP addresses for hashing",
+				Computed:            true,
+			},
 			"xconnect_groups": schema.ListNestedAttribute{
 				MarkdownDescription: "Specify the group the cross connects belong to",
 				Computed:            true,

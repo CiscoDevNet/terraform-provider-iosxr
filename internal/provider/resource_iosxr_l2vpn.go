@@ -88,6 +88,14 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
+			"load_balancing_flow_src_dst_mac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use source and destination MAC addresses for hashing").String,
+				Optional:            true,
+			},
+			"load_balancing_flow_src_dst_ip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use source and destination IP addresses for hashing").String,
+				Optional:            true,
+			},
 			"xconnect_groups": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify the group the cross connects belong to").String,
 				Optional:            true,

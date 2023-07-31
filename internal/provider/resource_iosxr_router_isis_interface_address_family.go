@@ -172,6 +172,43 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					int64validator.Between(16000, 1048575),
 				},
 			},
+			"metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default metric").AddIntegerRangeDescription(1, 16777214).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 16777214),
+				},
+			},
+			"metric_maximum": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum wide metric. All routers will exclude this link from their SPF").String,
+				Optional:            true,
+			},
+			"metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set metric for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set metric for one level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default metric").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+						"maximum": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum wide metric. All routers will exclude this link from their SPF").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

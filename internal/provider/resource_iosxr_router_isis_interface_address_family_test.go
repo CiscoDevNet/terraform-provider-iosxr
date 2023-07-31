@@ -34,6 +34,9 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_levels.0.level_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_levels.0.maximum", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -90,6 +93,11 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	tag = 100` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	metric = 500` + "\n"
+	config += `	metric_levels = [{` + "\n"
+	config += `		level_id = 1` + "\n"
+	config += `		maximum = true` + "\n"
+	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

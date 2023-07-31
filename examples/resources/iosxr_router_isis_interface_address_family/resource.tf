@@ -11,4 +11,11 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   ]
   tag                           = 100
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
+  metric                        = 500
+  metric_levels = [
+    {
+      level_id = 1
+      maximum  = true
+    }
+  ]
 }

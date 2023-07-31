@@ -118,6 +118,34 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
 				Computed:            true,
 			},
+			"metric": schema.Int64Attribute{
+				MarkdownDescription: "Default metric",
+				Computed:            true,
+			},
+			"metric_maximum": schema.BoolAttribute{
+				MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
+				Computed:            true,
+			},
+			"metric_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set metric for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_id": schema.Int64Attribute{
+							MarkdownDescription: "Set metric for one level only",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Default metric",
+							Computed:            true,
+						},
+						"maximum": schema.BoolAttribute{
+							MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

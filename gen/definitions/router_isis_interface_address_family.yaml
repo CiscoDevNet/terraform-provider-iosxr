@@ -44,6 +44,25 @@ attributes:
     optional: true
     exclude_test: true
     example: 24001
+  - yang_name: metric/default-metric
+    tf_name: metric
+    example: 500
+  - yang_name: metric/maximum
+    example: true
+    exclude_test: true
+  - yang_name: metric/levels/level
+    tf_name: metric_levels
+    type: List
+    attributes:
+      - yang_name: level-id
+        id: true
+        example: 1
+      - yang_name: default-metric
+        tf_name: metric
+        example: 600
+        exclude_test: true
+      - yang_name: maximum
+        example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]

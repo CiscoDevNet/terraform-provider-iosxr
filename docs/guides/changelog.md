@@ -11,6 +11,7 @@ description: |-
 
 - Add `record_ipv4`, `record_ipv6`, `record_mpls` and `sflow_options` attributes to `iosxr_flow_monitor_map` resource and data source
 - Add `set_overload_bit` attributes to `iosxr_router_isis` resource and data source
+- Add `metric` attributes to `iosxr_router_isis_interface_address_family` resource and data source
 
 ## 0.2.3
 

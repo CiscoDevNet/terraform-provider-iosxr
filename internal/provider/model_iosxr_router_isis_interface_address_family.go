@@ -45,6 +45,9 @@ type RouterISISInterfaceAddressFamily struct {
 	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
 	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
 	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+	Metric                     types.Int64                                                  `tfsdk:"metric"`
+	MetricMaximum              types.Bool                                                   `tfsdk:"metric_maximum"`
+	MetricLevels               []RouterISISInterfaceAddressFamilyMetricLevels               `tfsdk:"metric_levels"`
 }
 
 type RouterISISInterfaceAddressFamilyData struct {
@@ -61,10 +64,18 @@ type RouterISISInterfaceAddressFamilyData struct {
 	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
 	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
 	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+	Metric                     types.Int64                                                  `tfsdk:"metric"`
+	MetricMaximum              types.Bool                                                   `tfsdk:"metric_maximum"`
+	MetricLevels               []RouterISISInterfaceAddressFamilyMetricLevels               `tfsdk:"metric_levels"`
 }
 type RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels struct {
 	LevelId types.Int64 `tfsdk:"level_id"`
 	TiLfa   types.Bool  `tfsdk:"ti_lfa"`
+}
+type RouterISISInterfaceAddressFamilyMetricLevels struct {
+	LevelId types.Int64 `tfsdk:"level_id"`
+	Metric  types.Int64 `tfsdk:"metric"`
+	Maximum types.Bool  `tfsdk:"maximum"`
 }
 
 func (data RouterISISInterfaceAddressFamily) getPath() string {
@@ -103,6 +114,14 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	if !data.PrefixSidStrictSpfAbsolute.IsNull() && !data.PrefixSidStrictSpfAbsolute.IsUnknown() {
 		body, _ = sjson.Set(body, "prefix-sid.strict-spf.absolute.sid-value", strconv.FormatInt(data.PrefixSidStrictSpfAbsolute.ValueInt64(), 10))
 	}
+	if !data.Metric.IsNull() && !data.Metric.IsUnknown() {
+		body, _ = sjson.Set(body, "metric.default-metric", strconv.FormatInt(data.Metric.ValueInt64(), 10))
+	}
+	if !data.MetricMaximum.IsNull() && !data.MetricMaximum.IsUnknown() {
+		if data.MetricMaximum.ValueBool() {
+			body, _ = sjson.Set(body, "metric.maximum", map[string]string{})
+		}
+	}
 	if len(data.FastReroutePerPrefixLevels) > 0 {
 		body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level", []interface{}{})
 		for index, item := range data.FastReroutePerPrefixLevels {
@@ -112,6 +131,22 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			if !item.TiLfa.IsNull() && !item.TiLfa.IsUnknown() {
 				if item.TiLfa.ValueBool() {
 					body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level"+"."+strconv.Itoa(index)+"."+"ti-lfa", map[string]string{})
+				}
+			}
+		}
+	}
+	if len(data.MetricLevels) > 0 {
+		body, _ = sjson.Set(body, "metric.levels.level", []interface{}{})
+		for index, item := range data.MetricLevels {
+			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
+				body, _ = sjson.Set(body, "metric.levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
+			}
+			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
+				body, _ = sjson.Set(body, "metric.levels.level"+"."+strconv.Itoa(index)+"."+"default-metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.Maximum.IsNull() && !item.Maximum.IsUnknown() {
+				if item.Maximum.ValueBool() {
+					body, _ = sjson.Set(body, "metric.levels.level"+"."+strconv.Itoa(index)+"."+"maximum", map[string]string{})
 				}
 			}
 		}
@@ -192,6 +227,63 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	} else {
 		data.PrefixSidStrictSpfAbsolute = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "metric.default-metric"); value.Exists() && !data.Metric.IsNull() {
+		data.Metric = types.Int64Value(value.Int())
+	} else {
+		data.Metric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "metric.maximum"); !data.MetricMaximum.IsNull() {
+		if value.Exists() {
+			data.MetricMaximum = types.BoolValue(true)
+		} else {
+			data.MetricMaximum = types.BoolValue(false)
+		}
+	} else {
+		data.MetricMaximum = types.BoolNull()
+	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelId.ValueInt64(), 10)}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "metric.levels.level").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("level-id"); value.Exists() && !data.MetricLevels[i].LevelId.IsNull() {
+			data.MetricLevels[i].LevelId = types.Int64Value(value.Int())
+		} else {
+			data.MetricLevels[i].LevelId = types.Int64Null()
+		}
+		if value := r.Get("default-metric"); value.Exists() && !data.MetricLevels[i].Metric.IsNull() {
+			data.MetricLevels[i].Metric = types.Int64Value(value.Int())
+		} else {
+			data.MetricLevels[i].Metric = types.Int64Null()
+		}
+		if value := r.Get("maximum"); !data.MetricLevels[i].Maximum.IsNull() {
+			if value.Exists() {
+				data.MetricLevels[i].Maximum = types.BoolValue(true)
+			} else {
+				data.MetricLevels[i].Maximum = types.BoolValue(false)
+			}
+		} else {
+			data.MetricLevels[i].Maximum = types.BoolNull()
+		}
+	}
 }
 
 func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res []byte) {
@@ -231,6 +323,33 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.sid-value"); value.Exists() {
 		data.PrefixSidStrictSpfAbsolute = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "metric.default-metric"); value.Exists() {
+		data.Metric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "metric.maximum"); value.Exists() {
+		data.MetricMaximum = types.BoolValue(true)
+	} else {
+		data.MetricMaximum = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric.levels.level"); value.Exists() {
+		data.MetricLevels = make([]RouterISISInterfaceAddressFamilyMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceAddressFamilyMetricLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("default-metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maximum"); cValue.Exists() {
+				item.Maximum = types.BoolValue(true)
+			} else {
+				item.Maximum = types.BoolValue(false)
+			}
+			data.MetricLevels = append(data.MetricLevels, item)
+			return true
+		})
+	}
 }
 
 func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
@@ -265,6 +384,36 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedListItems(ctx context.Co
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.MetricLevels {
+		keys := [...]string{"level-id"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.MetricLevels[i].LevelId.ValueInt64(), 10)}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.MetricLevels[i].LevelId.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.MetricLevels {
+			found = true
+			if state.MetricLevels[i].LevelId.ValueInt64() != data.MetricLevels[j].LevelId.ValueInt64() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/metric/levels/level%v", state.getPath(), keyString))
+		}
+	}
 	return deletedListItems
 }
 
@@ -283,6 +432,20 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 	}
 	if !data.PrefixSidNFlagClear.IsNull() && !data.PrefixSidNFlagClear.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/prefix-sid/sid/n-flag-clear", data.getPath()))
+	}
+	if !data.MetricMaximum.IsNull() && !data.MetricMaximum.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric/maximum", data.getPath()))
+	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MetricLevels[i].Maximum.IsNull() && !data.MetricLevels[i].Maximum.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric/levels/level%v/maximum", data.getPath(), keyString))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -316,6 +479,22 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 	}
 	if !data.PrefixSidStrictSpfAbsolute.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/prefix-sid/strict-spf/absolute/sid-value", data.getPath()))
+	}
+	if !data.Metric.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/default-metric", data.getPath()))
+	}
+	if !data.MetricMaximum.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/maximum", data.getPath()))
+	}
+	for i := range data.MetricLevels {
+		keys := [...]string{"level-id"}
+		keyValues := [...]string{strconv.FormatInt(data.MetricLevels[i].LevelId.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/levels/level%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

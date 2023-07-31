@@ -26,6 +26,13 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   ]
   tag                           = 100
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
+  metric                        = 500
+  metric_levels = [
+    {
+      level_id = 1
+      maximum  = true
+    }
+  ]
 }
 ```
 
@@ -48,6 +55,10 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
+- `metric` (Number) Default metric
+  - Range: `1`-`16777214`
+- `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
+- `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
 - `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
   - Range: `16000`-`1048575`
 - `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
@@ -73,6 +84,21 @@ Required:
 Optional:
 
 - `ti_lfa` (Boolean) Enable TI LFA computation
+
+
+<a id="nestedatt--metric_levels"></a>
+### Nested Schema for `metric_levels`
+
+Required:
+
+- `level_id` (Number) Set metric for one level only
+  - Range: `1`-`2`
+
+Optional:
+
+- `maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
+- `metric` (Number) Default metric
+  - Range: `1`-`16777214`
 
 ## Import
 

@@ -12,7 +12,7 @@ require (
 	github.com/openconfig/gnmi v0.10.0
 	github.com/openconfig/gnmic v0.31.7
 	github.com/openconfig/goyang v1.4.1
-	github.com/tidwall/gjson v1.15.0
+	github.com/tidwall/gjson v1.16.0
 	github.com/tidwall/sjson v1.2.5
 	golang.org/x/tools v0.12.0
 	gopkg.in/yaml.v3 v3.0.1

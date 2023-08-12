@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.2.5 (unreleased)
+
+- Add `ipv4_access_list` and `ipv6_access_list` attributes to `iosxr_ssh` resource and data source
+
 ## 0.2.4
 
 - Add `record_ipv4`, `record_ipv6`, `record_mpls` and `sflow_options` attributes to `iosxr_flow_monitor_map` resource and data source

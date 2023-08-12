@@ -21,7 +21,9 @@ resource "iosxr_ssh" "example" {
   server_v2            = true
   server_vrfs = [
     {
-      vrf_name = "VRF1"
+      vrf_name         = "VRF1"
+      ipv4_access_list = "ACL1"
+      ipv6_access_list = "ACL2"
     }
   ]
 }
@@ -55,6 +57,11 @@ resource "iosxr_ssh" "example" {
 Required:
 
 - `vrf_name` (String) Cisco sshd VRF name
+
+Optional:
+
+- `ipv4_access_list` (String) Configure IPv4 access-list
+- `ipv6_access_list` (String) Configure IPv6 access-list
 
 ## Import
 

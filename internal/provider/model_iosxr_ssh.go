@@ -53,7 +53,9 @@ type SSHData struct {
 	ServerVrfs         []SSHServerVrfs `tfsdk:"server_vrfs"`
 }
 type SSHServerVrfs struct {
-	VrfName types.String `tfsdk:"vrf_name"`
+	VrfName        types.String `tfsdk:"vrf_name"`
+	Ipv4AccessList types.String `tfsdk:"ipv4_access_list"`
+	Ipv6AccessList types.String `tfsdk:"ipv6_access_list"`
 }
 
 func (data SSH) getPath() string {
@@ -90,6 +92,12 @@ func (data SSH) toBody(ctx context.Context) string {
 		for index, item := range data.ServerVrfs {
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body, _ = sjson.Set(body, "server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Ipv4AccessList.IsNull() && !item.Ipv4AccessList.IsUnknown() {
+				body, _ = sjson.Set(body, "server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv4.access-list", item.Ipv4AccessList.ValueString())
+			}
+			if !item.Ipv6AccessList.IsNull() && !item.Ipv6AccessList.IsUnknown() {
+				body, _ = sjson.Set(body, "server.vrfs.vrf"+"."+strconv.Itoa(index)+"."+"ipv6.access-list", item.Ipv6AccessList.ValueString())
 			}
 		}
 	}
@@ -158,6 +166,16 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.ServerVrfs[i].VrfName = types.StringNull()
 		}
+		if value := r.Get("ipv4.access-list"); value.Exists() && !data.ServerVrfs[i].Ipv4AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringValue(value.String())
+		} else {
+			data.ServerVrfs[i].Ipv4AccessList = types.StringNull()
+		}
+		if value := r.Get("ipv6.access-list"); value.Exists() && !data.ServerVrfs[i].Ipv6AccessList.IsNull() {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringValue(value.String())
+		} else {
+			data.ServerVrfs[i].Ipv6AccessList = types.StringNull()
+		}
 	}
 }
 
@@ -187,6 +205,12 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 			item := SSHServerVrfs{}
 			if cValue := v.Get("vrf-name"); cValue.Exists() {
 				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
 			}
 			data.ServerVrfs = append(data.ServerVrfs, item)
 			return true

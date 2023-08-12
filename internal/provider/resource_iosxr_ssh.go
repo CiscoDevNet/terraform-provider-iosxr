@@ -22,6 +22,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"regexp"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -110,6 +111,24 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 						"vrf_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd VRF name").String,
 							Required:            true,
+						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure IPv4 access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
+							},
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure IPv6 access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 64),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
+							},
 						},
 					},
 				},

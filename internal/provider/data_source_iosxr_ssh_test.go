@@ -37,6 +37,8 @@ func TestAccDataSourceIosxrSSH(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_session_limit", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_v2", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv4_access_list", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ssh.test", "server_vrfs.0.ipv6_access_list", "ACL2"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -59,6 +61,8 @@ func testAccDataSourceIosxrSSHConfig() string {
 	config += `	server_v2 = true` + "\n"
 	config += `	server_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
+	config += `		ipv4_access_list = "ACL1"` + "\n"
+	config += `		ipv6_access_list = "ACL2"` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

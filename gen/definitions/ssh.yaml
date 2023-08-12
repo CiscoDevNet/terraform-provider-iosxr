@@ -20,3 +20,7 @@ attributes:
       - yang_name: vrf-name
         id: true
         example: VRF1
+      - yang_name: ipv4/access-list
+        example: ACL1
+      - yang_name: ipv6/access-list
+        example: ACL2

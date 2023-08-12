@@ -37,6 +37,8 @@ func TestAccIosxrSSH(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_session_limit", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_v2", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_vrfs.0.vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_vrfs.0.ipv4_access_list", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ssh.test", "server_vrfs.0.ipv6_access_list", "ACL2"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -74,6 +76,8 @@ func testAccIosxrSSHConfig_all() string {
 	config += `	server_v2 = true` + "\n"
 	config += `	server_vrfs = [{` + "\n"
 	config += `		vrf_name = "VRF1"` + "\n"
+	config += `		ipv4_access_list = "ACL1"` + "\n"
+	config += `		ipv6_access_list = "ACL2"` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

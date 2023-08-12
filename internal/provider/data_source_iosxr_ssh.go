@@ -91,6 +91,14 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							MarkdownDescription: "Cisco sshd VRF name",
 							Computed:            true,
 						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv4 access-list",
+							Computed:            true,
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv6 access-list",
+							Computed:            true,
+						},
 					},
 				},
 			},

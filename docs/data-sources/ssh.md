@@ -39,4 +39,6 @@ data "iosxr_ssh" "example" {
 
 Read-Only:
 
+- `ipv4_access_list` (String) Configure IPv4 access-list
+- `ipv6_access_list` (String) Configure IPv6 access-list
 - `vrf_name` (String) Cisco sshd VRF name

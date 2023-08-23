@@ -1,6 +1,8 @@
 ## 0.2.5 (unreleased)
 
 - Add `ipv4_access_list` and `ipv6_access_list` attributes to `iosxr_ssh` resource and data source
+- Add `iosxr_router_hsrp_interface` resource and data source
+- Add `iosxr_router_hsrp_interface_address_family_ipv4` resource and data source
 
 ## 0.2.4
 
@@ -12,9 +14,6 @@
 - Add `load_balancing_flow_src_dst_mac` and `load_balancing_flow_src_dst_ip` attributes to `iosxr_l2vpn` resource and data source
 - Add `iosxr_l2vpn_pw_class` resource and data source
 - Add `igp_sync_delay` and `label_local_allocate` attributes to `iosxr_mpls_ldp` resource and data source
-- Add `iosxr_router_hsrp_interface` resource and data source
-- Add `iosxr_router_hsrp_interface_address_family_ipv4` resource and data source
-
 
 ## 0.2.3
 

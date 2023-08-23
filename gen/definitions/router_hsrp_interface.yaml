@@ -1,0 +1,21 @@
+---
+name: Router HSRP Interface
+path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]
+doc_category: HSRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: hsrp/use-bia
+    example: true
+  - yang_name: hsrp/redirects/disable
+    example: true
+  - yang_name: hsrp/delay/minimum
+    example: 500
+  - yang_name: hsrp/delay/reload
+    example: 700
+  - yang_name: hsrp/bfd/minimum-interval
+    example: 20000
+  - yang_name: hsrp/bfd/multiplier
+    example: 40
+  - yang_name: hsrp/mac-refresh
+    example: 5000

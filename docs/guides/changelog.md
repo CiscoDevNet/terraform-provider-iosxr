@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.2.5 (unreleased)
+## 0.2.5
 
 - Add `ipv4_access_list` and `ipv6_access_list` attributes to `iosxr_ssh` resource and data source
 - Add `iosxr_router_hsrp_interface` resource and data source

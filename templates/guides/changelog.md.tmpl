@@ -11,7 +11,8 @@ description: |-
 
 - Add `ipv4_access_list` and `ipv6_access_list` attributes to `iosxr_ssh` resource and data source
 - Add `iosxr_router_hsrp_interface` resource and data source
-- Add `iosxr_router_hsrp_interface_address_family_ipv4` resource and data source
+- Add `iosxr_router_hsrp_interface_address_family_ipv4_group_v1` resource and data source
+- Add `iosxr_router_hsrp_interface_address_family_ipv4_group_v2` resource and data source
 
 ## 0.2.4
 

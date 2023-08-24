@@ -1,1 +1,0 @@
-terraform import iosxr_router_hsrp_interface_address_family_ipv4.example "Cisco-IOS-XR-um-router-hsrp-cfg:router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/hsrp"

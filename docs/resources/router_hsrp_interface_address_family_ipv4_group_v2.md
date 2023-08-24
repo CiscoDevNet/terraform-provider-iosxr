@@ -52,6 +52,8 @@ resource "iosxr_router_hsrp_interface_address_family_ipv4_group_v2" "example" {
 - `address_learn` (Boolean) Learn virtual IP address from peer
 - `bfd_fast_detect_peer_interface` (String) Select an interface over which to run BFD
 - `bfd_fast_detect_peer_ipv4` (String) BFD peer interface IPv4 address
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+  - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `mac_address` (String) Use specified mac address for the virtual router
 - `name` (String) MGO session name

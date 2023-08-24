@@ -33,6 +33,7 @@ import (
 type RouterHSRPInterfaceAddressFamilyIPv4GroupV2 struct {
 	Device                     types.String                                                        `tfsdk:"device"`
 	Id                         types.String                                                        `tfsdk:"id"`
+	DeleteMode                 types.String                                                        `tfsdk:"delete_mode"`
 	InterfaceName              types.String                                                        `tfsdk:"interface_name"`
 	GroupId                    types.Int64                                                         `tfsdk:"group_id"`
 	Address                    types.String                                                        `tfsdk:"address"`

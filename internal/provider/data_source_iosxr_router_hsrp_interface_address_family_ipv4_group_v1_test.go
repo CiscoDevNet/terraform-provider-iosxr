@@ -52,6 +52,7 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv4GroupV1(t *testin
 
 func testAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv4GroupV1Config() string {
 	config := `resource "iosxr_router_hsrp_interface_address_family_ipv4_group_v1" "test" {` + "\n"
+	config += `	delete_mode = "attributes"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	group_id = 123` + "\n"
 	config += `	address = "22.22.1.1"` + "\n"

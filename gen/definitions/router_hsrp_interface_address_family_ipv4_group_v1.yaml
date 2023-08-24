@@ -1,7 +1,6 @@
 ---
 name: Router HSRP Interface Address Family IPv4 Group V1
 path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]
-no_delete_attributes: true
 doc_category: HSRP
 attributes:
   - yang_name: interface-name

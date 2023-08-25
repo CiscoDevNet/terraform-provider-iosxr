@@ -203,6 +203,17 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 					int64validator.Between(1, 2),
 				},
 			},
+			"auto_cost_reference_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 4294967).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967),
+				},
+			},
+			"auto_cost_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Assign OSPF cost based on interface type").String,
+				Optional:            true,
+			},
 			"areas": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enter the OSPF area configuration submode").String,
 				Optional:            true,

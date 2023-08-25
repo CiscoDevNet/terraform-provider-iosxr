@@ -22,6 +22,8 @@ resource "iosxr_router_ospf_vrf" "example" {
   default_information_originate             = true
   default_information_originate_always      = true
   default_information_originate_metric_type = 1
+  auto_cost_reference_bandwidth             = 100000
+  auto_cost_disable                         = false
   areas = [
     {
       area_id = "0"

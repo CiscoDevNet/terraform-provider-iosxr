@@ -56,6 +56,8 @@ type RouterOSPF struct {
 	DefaultInformationOriginate           types.Bool                   `tfsdk:"default_information_originate"`
 	DefaultInformationOriginateAlways     types.Bool                   `tfsdk:"default_information_originate_always"`
 	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
+	AutoCostReferenceBandwidth            types.Int64                  `tfsdk:"auto_cost_reference_bandwidth"`
+	AutoCostDisable                       types.Bool                   `tfsdk:"auto_cost_disable"`
 	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
 	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
 	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
@@ -87,6 +89,8 @@ type RouterOSPFData struct {
 	DefaultInformationOriginate           types.Bool                   `tfsdk:"default_information_originate"`
 	DefaultInformationOriginateAlways     types.Bool                   `tfsdk:"default_information_originate_always"`
 	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
+	AutoCostReferenceBandwidth            types.Int64                  `tfsdk:"auto_cost_reference_bandwidth"`
+	AutoCostDisable                       types.Bool                   `tfsdk:"auto_cost_disable"`
 	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
 	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
 	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
@@ -212,6 +216,14 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 	}
 	if !data.DefaultInformationOriginateMetricType.IsNull() && !data.DefaultInformationOriginateMetricType.IsUnknown() {
 		body, _ = sjson.Set(body, "default-information.originate.metric-type", strconv.FormatInt(data.DefaultInformationOriginateMetricType.ValueInt64(), 10))
+	}
+	if !data.AutoCostReferenceBandwidth.IsNull() && !data.AutoCostReferenceBandwidth.IsUnknown() {
+		body, _ = sjson.Set(body, "auto-cost.reference-bandwidth", strconv.FormatInt(data.AutoCostReferenceBandwidth.ValueInt64(), 10))
+	}
+	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.IsUnknown() {
+		if data.AutoCostDisable.ValueBool() {
+			body, _ = sjson.Set(body, "auto-cost.disable", map[string]string{})
+		}
 	}
 	if len(data.Areas) > 0 {
 		body, _ = sjson.Set(body, "areas.area", []interface{}{})
@@ -441,6 +453,20 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
 	} else {
 		data.DefaultInformationOriginateMetricType = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "auto-cost.reference-bandwidth"); value.Exists() && !data.AutoCostReferenceBandwidth.IsNull() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	} else {
+		data.AutoCostReferenceBandwidth = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "auto-cost.disable"); !data.AutoCostDisable.IsNull() {
+		if value.Exists() {
+			data.AutoCostDisable = types.BoolValue(true)
+		} else {
+			data.AutoCostDisable = types.BoolValue(false)
+		}
+	} else {
+		data.AutoCostDisable = types.BoolNull()
 	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}
@@ -728,6 +754,14 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
 		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "auto-cost.reference-bandwidth"); value.Exists() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "auto-cost.disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	} else {
+		data.AutoCostDisable = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
 		data.Areas = make([]RouterOSPFAreas, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -979,6 +1013,9 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.DefaultInformationOriginateAlways.IsNull() && !data.DefaultInformationOriginateAlways.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-information/originate/always", data.getPath()))
 	}
+	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-cost/disable", data.getPath()))
+	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}
 		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
@@ -1096,6 +1133,12 @@ func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.DefaultInformationOriginateMetricType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate/metric-type", data.getPath()))
+	}
+	if !data.AutoCostReferenceBandwidth.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-cost/reference-bandwidth", data.getPath()))
+	}
+	if !data.AutoCostDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-cost/disable", data.getPath()))
 	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}

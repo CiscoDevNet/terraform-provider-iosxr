@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.2.6 (unreleased)
+
+- Add `auto_cost` attributes to `iosxr_ospf` and `iosxr_ospf_vrf` resources and data sources
+
 ## 0.2.5
 
 - Add `ipv4_access_list` and `ipv6_access_list` attributes to `iosxr_ssh` resource and data source

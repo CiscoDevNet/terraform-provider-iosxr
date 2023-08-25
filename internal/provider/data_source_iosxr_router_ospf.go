@@ -150,6 +150,14 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "OSPF metric type for default routes",
 				Computed:            true,
 			},
+			"auto_cost_reference_bandwidth": schema.Int64Attribute{
+				MarkdownDescription: "Specify reference bandwidth for OSPF cost computations",
+				Computed:            true,
+			},
+			"auto_cost_disable": schema.BoolAttribute{
+				MarkdownDescription: "Assign OSPF cost based on interface type",
+				Computed:            true,
+			},
 			"areas": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter the OSPF area configuration submode",
 				Computed:            true,

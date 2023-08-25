@@ -32,6 +32,8 @@ data "iosxr_router_ospf" "example" {
 ### Read-Only
 
 - `areas` (Attributes List) Enter the OSPF area configuration submode (see [below for nested schema](#nestedatt--areas))
+- `auto_cost_disable` (Boolean) Assign OSPF cost based on interface type
+- `auto_cost_reference_bandwidth` (Number) Specify reference bandwidth for OSPF cost computations
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_minimum_interval` (Number) Minimum interval
 - `bfd_multiplier` (Number) Detect multiplier

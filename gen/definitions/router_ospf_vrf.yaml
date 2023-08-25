@@ -49,6 +49,10 @@ attributes:
     example: true
   - yang_name: default-information/originate/metric-type
     example: 1
+  - yang_name: auto-cost/reference-bandwidth
+    example: 100000
+  - yang_name: auto-cost/disable
+    example: false
   - yang_name: areas/area
     tf_name: areas
     type: List

@@ -48,6 +48,8 @@ func TestAccDataSourceIosxrRouterOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "default_information_originate_metric_type", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "auto_cost_reference_bandwidth", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "auto_cost_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "areas.0.area_id", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_bgp.0.as_number", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_ospf.test", "redistribute_bgp.0.tag", "3"))
@@ -101,6 +103,8 @@ func testAccDataSourceIosxrRouterOSPFConfig() string {
 	config += `	default_information_originate = true` + "\n"
 	config += `	default_information_originate_always = true` + "\n"
 	config += `	default_information_originate_metric_type = 1` + "\n"
+	config += `	auto_cost_reference_bandwidth = 100000` + "\n"
+	config += `	auto_cost_disable = false` + "\n"
 	config += `	areas = [{` + "\n"
 	config += `		area_id = "0"` + "\n"
 	config += `	}]` + "\n"

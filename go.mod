@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 	github.com/hashicorp/terraform-plugin-testing v1.4.0
 	github.com/openconfig/gnmi v0.10.0
-	github.com/openconfig/gnmic v0.31.7
+	github.com/openconfig/gnmic v0.32.0
 	github.com/openconfig/goyang v1.4.1
 	github.com/tidwall/gjson v1.16.0
 	github.com/tidwall/sjson v1.2.5

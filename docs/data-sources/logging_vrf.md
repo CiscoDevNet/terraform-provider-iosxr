@@ -41,6 +41,8 @@ data "iosxr_logging_vrf" "example" {
 Read-Only:
 
 - `ipv4_address` (String) IPV4 address of the logging host
+- `operator` (String) Set severity operator of  messages for particular remote host/vrf
+- `port` (Number) Set UDP port for this remote host/vrf
 - `severity` (String) Set severity of  messages for particular remote host/vrf
 
 

@@ -19,6 +19,8 @@ resource "iosxr_logging_vrf" "example" {
     {
       ipv4_address = "1.1.1.1"
       severity     = "info"
+      port         = 514
+      operator     = "equals"
     }
   ]
   host_ipv6_addresses = [
@@ -58,6 +60,10 @@ Required:
 
 Optional:
 
+- `operator` (String) Set severity operator of  messages for particular remote host/vrf
+  - Choices: `equals`, `equals-or-higher`, `not-equals`
+- `port` (Number) Set UDP port for this remote host/vrf
+  - Range: `0`-`65535`
 - `severity` (String) Set severity of  messages for particular remote host/vrf
   - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
 

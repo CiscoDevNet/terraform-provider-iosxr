@@ -31,6 +31,8 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.operator", "equals"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"))
 	var steps []resource.TestStep
@@ -68,6 +70,8 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
+	config += `		port = 514` + "\n"
+	config += `		operator = "equals"` + "\n"
 	config += `		}]` + "\n"
 	config += `	host_ipv6_addresses = [{` + "\n"
 	config += `		ipv6_address = "2001::1"` + "\n"

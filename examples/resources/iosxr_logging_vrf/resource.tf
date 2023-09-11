@@ -4,6 +4,8 @@ resource "iosxr_logging_vrf" "example" {
     {
       ipv4_address = "1.1.1.1"
       severity     = "info"
+      port         = 514
+      operator     = "equals"
     }
   ]
   host_ipv6_addresses = [

@@ -30,74 +30,74 @@ import (
 	"github.com/tidwall/sjson"
 )
 
-type RouterHSRPInterfaceAddressFamilyIPv6V2 struct {
-	Device                                     types.String                                            `tfsdk:"device"`
-	Id                                         types.String                                            `tfsdk:"id"`
-	DeleteMode                                 types.String                                            `tfsdk:"delete_mode"`
-	InterfaceName                              types.String                                            `tfsdk:"interface_name"`
-	GroupNumberVersion2Id                      types.Int64                                             `tfsdk:"group_number_version_2_id"`
-	Name                                       types.String                                            `tfsdk:"name"`
-	MacAddress                                 types.String                                            `tfsdk:"mac_address"`
-	TimersHoldTime                             types.Int64                                             `tfsdk:"timers_hold_time"`
-	TimersHoldTime2                            types.Int64                                             `tfsdk:"timers_hold_time2"`
-	TimersMsec                                 types.Int64                                             `tfsdk:"timers_msec"`
-	TimersMsec2                                types.Int64                                             `tfsdk:"timers_msec2"`
-	PreemptDelay                               types.Int64                                             `tfsdk:"preempt_delay"`
-	Priority                                   types.Int64                                             `tfsdk:"priority"`
-	BfdFastDetectPeerIpv6                      types.String                                            `tfsdk:"bfd_fast_detect_peer_ipv6"`
-	BfdFastDetectPeerInterface                 types.String                                            `tfsdk:"bfd_fast_detect_peer_interface"`
-	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6V2TrackObjects    `tfsdk:"track_objects"`
-	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6V2TrackInterfaces `tfsdk:"track_interfaces"`
-	AddressGlobals                             []RouterHSRPInterfaceAddressFamilyIPv6V2AddressGlobals  `tfsdk:"address_globals"`
-	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                              `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
-	AddressLinkLocalIpv6Address                types.String                                            `tfsdk:"address_link_local_ipv6_address"`
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2 struct {
+	Device                                     types.String                                                 `tfsdk:"device"`
+	Id                                         types.String                                                 `tfsdk:"id"`
+	DeleteMode                                 types.String                                                 `tfsdk:"delete_mode"`
+	InterfaceName                              types.String                                                 `tfsdk:"interface_name"`
+	GroupId                                    types.Int64                                                  `tfsdk:"group_id"`
+	Name                                       types.String                                                 `tfsdk:"name"`
+	MacAddress                                 types.String                                                 `tfsdk:"mac_address"`
+	TimersHoldTime                             types.Int64                                                  `tfsdk:"timers_hold_time"`
+	TimersHoldTime2                            types.Int64                                                  `tfsdk:"timers_hold_time2"`
+	TimersMsec                                 types.Int64                                                  `tfsdk:"timers_msec"`
+	TimersMsec2                                types.Int64                                                  `tfsdk:"timers_msec2"`
+	PreemptDelay                               types.Int64                                                  `tfsdk:"preempt_delay"`
+	Priority                                   types.Int64                                                  `tfsdk:"priority"`
+	BfdFastDetectPeerIpv6                      types.String                                                 `tfsdk:"bfd_fast_detect_peer_ipv6"`
+	BfdFastDetectPeerInterface                 types.String                                                 `tfsdk:"bfd_fast_detect_peer_interface"`
+	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
+	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
+	Addresses                                  []RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                                   `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
+	AddressLinkLocalIpv6Address                types.String                                                 `tfsdk:"address_link_local_ipv6_address"`
 }
 
-type RouterHSRPInterfaceAddressFamilyIPv6V2Data struct {
-	Device                                     types.String                                            `tfsdk:"device"`
-	Id                                         types.String                                            `tfsdk:"id"`
-	InterfaceName                              types.String                                            `tfsdk:"interface_name"`
-	GroupNumberVersion2Id                      types.Int64                                             `tfsdk:"group_number_version_2_id"`
-	Name                                       types.String                                            `tfsdk:"name"`
-	MacAddress                                 types.String                                            `tfsdk:"mac_address"`
-	TimersHoldTime                             types.Int64                                             `tfsdk:"timers_hold_time"`
-	TimersHoldTime2                            types.Int64                                             `tfsdk:"timers_hold_time2"`
-	TimersMsec                                 types.Int64                                             `tfsdk:"timers_msec"`
-	TimersMsec2                                types.Int64                                             `tfsdk:"timers_msec2"`
-	PreemptDelay                               types.Int64                                             `tfsdk:"preempt_delay"`
-	Priority                                   types.Int64                                             `tfsdk:"priority"`
-	BfdFastDetectPeerIpv6                      types.String                                            `tfsdk:"bfd_fast_detect_peer_ipv6"`
-	BfdFastDetectPeerInterface                 types.String                                            `tfsdk:"bfd_fast_detect_peer_interface"`
-	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6V2TrackObjects    `tfsdk:"track_objects"`
-	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6V2TrackInterfaces `tfsdk:"track_interfaces"`
-	AddressGlobals                             []RouterHSRPInterfaceAddressFamilyIPv6V2AddressGlobals  `tfsdk:"address_globals"`
-	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                              `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
-	AddressLinkLocalIpv6Address                types.String                                            `tfsdk:"address_link_local_ipv6_address"`
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data struct {
+	Device                                     types.String                                                 `tfsdk:"device"`
+	Id                                         types.String                                                 `tfsdk:"id"`
+	InterfaceName                              types.String                                                 `tfsdk:"interface_name"`
+	GroupId                                    types.Int64                                                  `tfsdk:"group_id"`
+	Name                                       types.String                                                 `tfsdk:"name"`
+	MacAddress                                 types.String                                                 `tfsdk:"mac_address"`
+	TimersHoldTime                             types.Int64                                                  `tfsdk:"timers_hold_time"`
+	TimersHoldTime2                            types.Int64                                                  `tfsdk:"timers_hold_time2"`
+	TimersMsec                                 types.Int64                                                  `tfsdk:"timers_msec"`
+	TimersMsec2                                types.Int64                                                  `tfsdk:"timers_msec2"`
+	PreemptDelay                               types.Int64                                                  `tfsdk:"preempt_delay"`
+	Priority                                   types.Int64                                                  `tfsdk:"priority"`
+	BfdFastDetectPeerIpv6                      types.String                                                 `tfsdk:"bfd_fast_detect_peer_ipv6"`
+	BfdFastDetectPeerInterface                 types.String                                                 `tfsdk:"bfd_fast_detect_peer_interface"`
+	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
+	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
+	Addresses                                  []RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                                   `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
+	AddressLinkLocalIpv6Address                types.String                                                 `tfsdk:"address_link_local_ipv6_address"`
 }
-type RouterHSRPInterfaceAddressFamilyIPv6V2TrackObjects struct {
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects struct {
 	ObjectName        types.String `tfsdk:"object_name"`
 	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
-type RouterHSRPInterfaceAddressFamilyIPv6V2TrackInterfaces struct {
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces struct {
 	TrackName         types.String `tfsdk:"track_name"`
 	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
-type RouterHSRPInterfaceAddressFamilyIPv6V2AddressGlobals struct {
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses struct {
 	Address types.String `tfsdk:"address"`
 }
 
-func (data RouterHSRPInterfaceAddressFamilyIPv6V2) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]", data.InterfaceName.ValueString(), data.GroupNumberVersion2Id.ValueInt64())
+func (data RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]", data.InterfaceName.ValueString(), data.GroupId.ValueInt64())
 }
 
-func (data RouterHSRPInterfaceAddressFamilyIPv6V2Data) getPath() string {
-	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]", data.InterfaceName.ValueString(), data.GroupNumberVersion2Id.ValueInt64())
+func (data RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data) getPath() string {
+	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]", data.InterfaceName.ValueString(), data.GroupId.ValueInt64())
 }
 
-func (data RouterHSRPInterfaceAddressFamilyIPv6V2) toBody(ctx context.Context) string {
+func (data RouterHSRPInterfaceAddressFamilyIPv6GroupV2) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.GroupNumberVersion2Id.IsNull() && !data.GroupNumberVersion2Id.IsUnknown() {
-		body, _ = sjson.Set(body, "group-number-version-2-id", strconv.FormatInt(data.GroupNumberVersion2Id.ValueInt64(), 10))
+	if !data.GroupId.IsNull() && !data.GroupId.IsUnknown() {
+		body, _ = sjson.Set(body, "group-number-version-2-id", strconv.FormatInt(data.GroupId.ValueInt64(), 10))
 	}
 	if !data.Name.IsNull() && !data.Name.IsUnknown() {
 		body, _ = sjson.Set(body, "name", data.Name.ValueString())
@@ -159,9 +159,9 @@ func (data RouterHSRPInterfaceAddressFamilyIPv6V2) toBody(ctx context.Context) s
 			}
 		}
 	}
-	if len(data.AddressGlobals) > 0 {
+	if len(data.Addresses) > 0 {
 		body, _ = sjson.Set(body, "address.globals.global", []interface{}{})
-		for index, item := range data.AddressGlobals {
+		for index, item := range data.Addresses {
 			if !item.Address.IsNull() && !item.Address.IsUnknown() {
 				body, _ = sjson.Set(body, "address.globals.global"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
 			}
@@ -170,7 +170,7 @@ func (data RouterHSRPInterfaceAddressFamilyIPv6V2) toBody(ctx context.Context) s
 	return body
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) updateFromBody(ctx context.Context, res []byte) {
+func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "name"); value.Exists() && !data.Name.IsNull() {
 		data.Name = types.StringValue(value.String())
 	} else {
@@ -289,9 +289,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) updateFromBody(ctx context.C
 			data.TrackInterfaces[i].PriorityDecrement = types.Int64Null()
 		}
 	}
-	for i := range data.AddressGlobals {
+	for i := range data.Addresses {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.AddressGlobals[i].Address.ValueString()}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "address.globals.global").ForEach(
@@ -312,10 +312,10 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) updateFromBody(ctx context.C
 				return true
 			},
 		)
-		if value := r.Get("address"); value.Exists() && !data.AddressGlobals[i].Address.IsNull() {
-			data.AddressGlobals[i].Address = types.StringValue(value.String())
+		if value := r.Get("address"); value.Exists() && !data.Addresses[i].Address.IsNull() {
+			data.Addresses[i].Address = types.StringValue(value.String())
 		} else {
-			data.AddressGlobals[i].Address = types.StringNull()
+			data.Addresses[i].Address = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
@@ -334,7 +334,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) updateFromBody(ctx context.C
 	}
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv6V2Data) fromBody(ctx context.Context, res []byte) {
+func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "name"); value.Exists() {
 		data.Name = types.StringValue(value.String())
 	}
@@ -366,9 +366,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2Data) fromBody(ctx context.Con
 		data.BfdFastDetectPeerInterface = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "track-objects.track-object"); value.Exists() {
-		data.TrackObjects = make([]RouterHSRPInterfaceAddressFamilyIPv6V2TrackObjects, 0)
+		data.TrackObjects = make([]RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterHSRPInterfaceAddressFamilyIPv6V2TrackObjects{}
+			item := RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects{}
 			if cValue := v.Get("object-name"); cValue.Exists() {
 				item.ObjectName = types.StringValue(cValue.String())
 			}
@@ -380,9 +380,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2Data) fromBody(ctx context.Con
 		})
 	}
 	if value := gjson.GetBytes(res, "track-interfaces.track-interface"); value.Exists() {
-		data.TrackInterfaces = make([]RouterHSRPInterfaceAddressFamilyIPv6V2TrackInterfaces, 0)
+		data.TrackInterfaces = make([]RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterHSRPInterfaceAddressFamilyIPv6V2TrackInterfaces{}
+			item := RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces{}
 			if cValue := v.Get("track-name"); cValue.Exists() {
 				item.TrackName = types.StringValue(cValue.String())
 			}
@@ -394,13 +394,13 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2Data) fromBody(ctx context.Con
 		})
 	}
 	if value := gjson.GetBytes(res, "address.globals.global"); value.Exists() {
-		data.AddressGlobals = make([]RouterHSRPInterfaceAddressFamilyIPv6V2AddressGlobals, 0)
+		data.Addresses = make([]RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterHSRPInterfaceAddressFamilyIPv6V2AddressGlobals{}
+			item := RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses{}
 			if cValue := v.Get("address"); cValue.Exists() {
 				item.Address = types.StringValue(cValue.String())
 			}
-			data.AddressGlobals = append(data.AddressGlobals, item)
+			data.Addresses = append(data.Addresses, item)
 			return true
 		})
 	}
@@ -414,7 +414,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2Data) fromBody(ctx context.Con
 	}
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletedListItems(ctx context.Context, state RouterHSRPInterfaceAddressFamilyIPv6V2) []string {
+func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getDeletedListItems(ctx context.Context, state RouterHSRPInterfaceAddressFamilyIPv6GroupV2) []string {
 	deletedListItems := make([]string, 0)
 	for i := range state.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -476,12 +476,12 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletedListItems(ctx cont
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track-interfaces/track-interface%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.AddressGlobals {
+	for i := range state.Addresses {
 		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.AddressGlobals[i].Address.ValueString()}
+		stateKeyValues := [...]string{state.Addresses[i].Address.ValueString()}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressGlobals[i].Address.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.Addresses[i].Address.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -489,9 +489,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletedListItems(ctx cont
 		}
 
 		found := false
-		for j := range data.AddressGlobals {
+		for j := range data.Addresses {
 			found = true
-			if state.AddressGlobals[i].Address.ValueString() != data.AddressGlobals[j].Address.ValueString() {
+			if state.Addresses[i].Address.ValueString() != data.Addresses[j].Address.ValueString() {
 				found = false
 			}
 			if found {
@@ -509,7 +509,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletedListItems(ctx cont
 	return deletedListItems
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getEmptyLeafsDelete(ctx context.Context) []string {
+func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -527,9 +527,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getEmptyLeafsDelete(ctx cont
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.AddressGlobals {
+	for i := range data.Addresses {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.AddressGlobals[i].Address.ValueString()}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -541,7 +541,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getEmptyLeafsDelete(ctx cont
 	return emptyLeafsDelete
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletePaths(ctx context.Context) []string {
+func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.Name.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
@@ -593,9 +593,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6V2) getDeletePaths(ctx context.C
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/track-interfaces/track-interface%v", data.getPath(), keyString))
 	}
-	for i := range data.AddressGlobals {
+	for i := range data.Addresses {
 		keys := [...]string{"address"}
-		keyValues := [...]string{data.AddressGlobals[i].Address.ValueString()}
+		keyValues := [...]string{data.Addresses[i].Address.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

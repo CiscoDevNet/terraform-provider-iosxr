@@ -1,11 +1,12 @@
 ---
-name: Router HSRP Interface Address Family IPv6 V2
+name: Router HSRP Interface Address Family IPv6 Group V2
 path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]
 doc_category: HSRP
 attributes:
   - yang_name: interface-name
     example: GigabitEthernet0/0/0/2
   - yang_name: group-number-version-2-id
+    tf_name: group_id
     id: true
     example: 4055
   - yang_name: name
@@ -19,8 +20,8 @@ attributes:
   - yang_name: timers/msec
     example: 100
   - yang_name: timers/msec2
-    example: 130
-  - yang_name: preempt/delay 
+    example: 300
+  - yang_name: preempt/delay
     example: 256
   - yang_name: priority
     example: 244
@@ -47,7 +48,7 @@ attributes:
       - yang_name: priority-decrement
         example: 244
   - yang_name: address/globals/global
-    tf_name: address_globals
+    tf_name: addresses
     type: List
     attributes:
       - yang_name: address

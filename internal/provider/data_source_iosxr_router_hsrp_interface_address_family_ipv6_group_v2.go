@@ -32,26 +32,26 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ datasource.DataSource              = &RouterHSRPInterfaceAddressFamilyIPv6V1DataSource{}
-	_ datasource.DataSourceWithConfigure = &RouterHSRPInterfaceAddressFamilyIPv6V1DataSource{}
+	_ datasource.DataSource              = &RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource{}
+	_ datasource.DataSourceWithConfigure = &RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource{}
 )
 
-func NewRouterHSRPInterfaceAddressFamilyIPv6V1DataSource() datasource.DataSource {
-	return &RouterHSRPInterfaceAddressFamilyIPv6V1DataSource{}
+func NewRouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource() datasource.DataSource {
+	return &RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource{}
 }
 
-type RouterHSRPInterfaceAddressFamilyIPv6V1DataSource struct {
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource struct {
 	client *client.Client
 }
 
-func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_hsrp_interface_address_family_ipv6_v1"
+func (d *RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_hsrp_interface_address_family_ipv6_group_v2"
 }
 
-func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This data source can read the Router HSRP Interface Address Family IPv6 V1 configuration.",
+		MarkdownDescription: "This data source can read the Router HSRP Interface Address Family IPv6 Group V2 configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -66,8 +66,8 @@ func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Schema(ctx context.Co
 				MarkdownDescription: "HSRP interface configuration subcommands",
 				Required:            true,
 			},
-			"group_number_version_1_id": schema.Int64Attribute{
-				MarkdownDescription: "group number version 1",
+			"group_id": schema.Int64Attribute{
+				MarkdownDescription: "group number version 2",
 				Required:            true,
 			},
 			"name": schema.StringAttribute{
@@ -142,7 +142,7 @@ func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Schema(ctx context.Co
 					},
 				},
 			},
-			"address_globals": schema.ListNestedAttribute{
+			"addresses": schema.ListNestedAttribute{
 				MarkdownDescription: "Global HSRP IPv6 address",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -166,7 +166,7 @@ func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Schema(ctx context.Co
 	}
 }
 
-func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
+func (d *RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource) Configure(_ context.Context, req datasource.ConfigureRequest, _ *datasource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -174,8 +174,8 @@ func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Configure(_ context.C
 	d.client = req.ProviderData.(*client.Client)
 }
 
-func (d *RouterHSRPInterfaceAddressFamilyIPv6V1DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var config RouterHSRPInterfaceAddressFamilyIPv6V1Data
+func (d *RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var config RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data
 
 	// Read config
 	diags := req.Config.Get(ctx, &config)

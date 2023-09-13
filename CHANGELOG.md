@@ -3,6 +3,7 @@
 - Add `auto_cost` attributes to `iosxr_router_ospf` and `iosxr_router_ospf_vrf` resources and data sources
 - Add support for leaf-lists to `iosxr_gnmi` resource
 - Add `port` and `operator` attributes to `iosxr_logging_vrf` resource and data source
+- Add `iosxr_router_hsrp_interface_address_family_ipv6_group_v2` resource and data source
 
 ## 0.2.5
 

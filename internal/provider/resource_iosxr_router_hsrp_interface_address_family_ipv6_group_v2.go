@@ -39,22 +39,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-func NewRouterHSRPInterfaceAddressFamilyIPv6V1Resource() resource.Resource {
-	return &RouterHSRPInterfaceAddressFamilyIPv6V1Resource{}
+func NewRouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource() resource.Resource {
+	return &RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource{}
 }
 
-type RouterHSRPInterfaceAddressFamilyIPv6V1Resource struct {
+type RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource struct {
 	client *client.Client
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_router_hsrp_interface_address_family_ipv6_v1"
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_router_hsrp_interface_address_family_ipv6_group_v2"
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: "This resource can manage the Router HSRP Interface Address Family IPv6 V1 configuration.",
+		MarkdownDescription: "This resource can manage the Router HSRP Interface Address Family IPv6 Group V2 configuration.",
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -85,11 +85,11 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Schema(ctx context.Cont
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"group_number_version_1_id": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("group number version 1").AddIntegerRangeDescription(0, 255).String,
+			"group_id": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("group number version 2").AddIntegerRangeDescription(0, 4095).String,
 				Required:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 255),
+					int64validator.Between(0, 4095),
 				},
 				PlanModifiers: []planmodifier.Int64{
 					int64planmodifier.RequiresReplace(),
@@ -213,7 +213,7 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Schema(ctx context.Cont
 					},
 				},
 			},
-			"address_globals": schema.ListNestedAttribute{
+			"addresses": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Global HSRP IPv6 address").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -247,7 +247,7 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Schema(ctx context.Cont
 	}
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Configure(_ context.Context, req resource.ConfigureRequest, _ *resource.ConfigureResponse) {
 	if req.ProviderData == nil {
 		return
 	}
@@ -255,8 +255,8 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Configure(_ context.Con
 	r.client = req.ProviderData.(*client.Client)
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RouterHSRPInterfaceAddressFamilyIPv6V1
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan RouterHSRPInterfaceAddressFamilyIPv6GroupV2
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -294,8 +294,8 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Create(ctx context.Cont
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RouterHSRPInterfaceAddressFamilyIPv6V1
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state RouterHSRPInterfaceAddressFamilyIPv6GroupV2
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -320,8 +320,8 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Read(ctx context.Contex
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan, state RouterHSRPInterfaceAddressFamilyIPv6V1
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state RouterHSRPInterfaceAddressFamilyIPv6GroupV2
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -371,8 +371,8 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Update(ctx context.Cont
 	resp.Diagnostics.Append(diags...)
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RouterHSRPInterfaceAddressFamilyIPv6V1
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state RouterHSRPInterfaceAddressFamilyIPv6GroupV2
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -412,6 +412,6 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) Delete(ctx context.Cont
 	resp.State.RemoveResource(ctx)
 }
 
-func (r *RouterHSRPInterfaceAddressFamilyIPv6V1Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }

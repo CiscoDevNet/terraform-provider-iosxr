@@ -40,4 +40,5 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `id` (String) The path of the retrieved object.
 - `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent

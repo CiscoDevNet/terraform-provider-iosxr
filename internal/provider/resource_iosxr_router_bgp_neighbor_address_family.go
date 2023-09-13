@@ -100,6 +100,10 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
 				Optional:            true,
 			},
+			"route_reflector_client": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a neighbor as Route Reflector client").String,
+				Optional:            true,
+			},
 			"route_reflector_client_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 				Optional:            true,

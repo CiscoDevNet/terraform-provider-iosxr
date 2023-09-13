@@ -72,6 +72,7 @@ type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
 	SoftReconfigurationInboundAlways       types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
 	NextHopSelfInheritanceDisable          types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	RouteReflectorClient                   types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 }
 
@@ -143,6 +144,11 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			if !item.NextHopSelfInheritanceDisable.IsNull() && !item.NextHopSelfInheritanceDisable.IsUnknown() {
 				if item.NextHopSelfInheritanceDisable.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"next-hop-self.inheritance-disable", map[string]string{})
+				}
+			}
+			if !item.RouteReflectorClient.IsNull() && !item.RouteReflectorClient.IsUnknown() {
+				if item.RouteReflectorClient.ValueBool() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-reflector-client", map[string]string{})
 				}
 			}
 			if !item.RouteReflectorClientInheritanceDisable.IsNull() && !item.RouteReflectorClientInheritanceDisable.IsUnknown() {
@@ -273,6 +279,15 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolNull()
 		}
+		if value := r.Get("route-reflector-client"); !data.AddressFamilies[i].RouteReflectorClient.IsNull() {
+			if value.Exists() {
+				data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(true)
+			} else {
+				data.AddressFamilies[i].RouteReflectorClient = types.BoolValue(false)
+			}
+		} else {
+			data.AddressFamilies[i].RouteReflectorClient = types.BoolNull()
+		}
 		if value := r.Get("route-reflector-client.inheritance-disable"); !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() {
 			if value.Exists() {
 				data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolValue(true)
@@ -343,6 +358,11 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
 			} else {
 				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-reflector-client"); cValue.Exists() {
+				item.RouteReflectorClient = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClient = types.BoolValue(false)
 			}
 			if cValue := v.Get("route-reflector-client.inheritance-disable"); cValue.Exists() {
 				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
@@ -416,6 +436,9 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		}
 		if !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && !data.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", data.getPath(), keyString))
+		}
+		if !data.AddressFamilies[i].RouteReflectorClient.IsNull() && !data.AddressFamilies[i].RouteReflectorClient.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", data.getPath(), keyString))
 		}
 		if !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && !data.AddressFamilies[i].RouteReflectorClientInheritanceDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", data.getPath(), keyString))

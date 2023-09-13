@@ -29,6 +29,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       af_name                                    = "ipv4-labeled-unicast"
       soft_reconfiguration_inbound_always        = true
       next_hop_self_inheritance_disable          = true
+      route_reflector_client                     = true
       route_reflector_client_inheritance_disable = true
     }
   ]
@@ -80,6 +81,7 @@ Required:
 Optional:
 
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
 

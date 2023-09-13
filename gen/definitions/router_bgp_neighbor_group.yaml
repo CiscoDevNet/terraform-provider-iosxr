@@ -49,6 +49,8 @@ attributes:
         example: true
       - yang_name: next-hop-self/inheritance-disable
         example: true
+      - yang_name: route-reflector-client
+        example: true
       - yang_name: route-reflector-client/inheritance-disable
         example: true
 

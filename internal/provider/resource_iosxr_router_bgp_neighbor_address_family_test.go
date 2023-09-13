@@ -30,6 +30,7 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "af_name", "vpnv4-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
@@ -103,6 +104,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	config += `	neighbor_address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
 	config += `	import_stitching_rt_re_originate_stitching_rt = true` + "\n"
+	config += `	route_reflector_client = true` + "\n"
 	config += `	route_reflector_client_inheritance_disable = true` + "\n"
 	config += `	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"

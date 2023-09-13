@@ -14,6 +14,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       af_name                                    = "ipv4-labeled-unicast"
       soft_reconfiguration_inbound_always        = true
       next_hop_self_inheritance_disable          = true
+      route_reflector_client                     = true
       route_reflector_client_inheritance_disable = true
     }
   ]

@@ -36,6 +36,7 @@ type RouterBGPNeighborAddressFamily struct {
 	NeighborAddress                                    types.String `tfsdk:"neighbor_address"`
 	AfName                                             types.String `tfsdk:"af_name"`
 	ImportStitchingRtReOriginateStitchingRt            types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	RouteReflectorClient                               types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable             types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
@@ -49,6 +50,7 @@ type RouterBGPNeighborAddressFamilyData struct {
 	NeighborAddress                                    types.String `tfsdk:"neighbor_address"`
 	AfName                                             types.String `tfsdk:"af_name"`
 	ImportStitchingRtReOriginateStitchingRt            types.Bool   `tfsdk:"import_stitching_rt_re_originate_stitching_rt"`
+	RouteReflectorClient                               types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable             types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
@@ -71,6 +73,11 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.IsUnknown() {
 		if data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
 			body, _ = sjson.Set(body, "import.stitching-rt.re-originate.stitching-rt", map[string]string{})
+		}
+	}
+	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.IsUnknown() {
+		if data.RouteReflectorClient.ValueBool() {
+			body, _ = sjson.Set(body, "route-reflector-client", map[string]string{})
 		}
 	}
 	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.IsUnknown() {
@@ -105,6 +112,15 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 		}
 	} else {
 		data.ImportStitchingRtReOriginateStitchingRt = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); !data.RouteReflectorClient.IsNull() {
+		if value.Exists() {
+			data.RouteReflectorClient = types.BoolValue(true)
+		} else {
+			data.RouteReflectorClient = types.BoolValue(false)
+		}
+	} else {
+		data.RouteReflectorClient = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); !data.RouteReflectorClientInheritanceDisable.IsNull() {
 		if value.Exists() {
@@ -150,6 +166,11 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	} else {
 		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
+		data.RouteReflectorClient = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClient = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
 		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
 	} else {
@@ -182,6 +203,9 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate/stitching-rt", data.getPath()))
 	}
+	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	}
 	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
 	}
@@ -201,6 +225,9 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	var deletePaths []string
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate/stitching-rt", data.getPath()))
+	}
+	if !data.RouteReflectorClient.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
 	}
 	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))

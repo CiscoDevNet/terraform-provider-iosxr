@@ -11,6 +11,8 @@ attributes:
     example: vpnv4-unicast
   - yang_name: import/stitching-rt/re-originate/stitching-rt
     example: true
+  - yang_name: route-reflector-client
+    example: true
   - yang_name: route-reflector-client/inheritance-disable
     example: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt

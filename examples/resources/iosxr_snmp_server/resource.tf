@@ -43,4 +43,16 @@ resource "iosxr_snmp_server" "example" {
       v3_ipv6    = "ACL2"
     }
   ]
+  communities = [
+    {
+      community   = "COMMUNITY1"
+      view        = "VIEW1"
+      ro          = true
+      rw          = false
+      sdrowner    = false
+      systemowner = true
+      ipv4        = "ACL1"
+      ipv6        = "ACL2"
+    }
+  ]
 }

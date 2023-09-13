@@ -298,6 +298,46 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 					},
 				},
 			},
+			"communities": schema.ListNestedAttribute{
+				MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community": schema.StringAttribute{
+							MarkdownDescription: "The UNENCRYPTED (cleartext) community string",
+							Computed:            true,
+						},
+						"view": schema.StringAttribute{
+							MarkdownDescription: "Restrict this community to a named view",
+							Computed:            true,
+						},
+						"ro": schema.BoolAttribute{
+							MarkdownDescription: "Read-only community",
+							Computed:            true,
+						},
+						"rw": schema.BoolAttribute{
+							MarkdownDescription: "Read-write community",
+							Computed:            true,
+						},
+						"sdrowner": schema.BoolAttribute{
+							MarkdownDescription: "SDR Owner permissions for MIB Objects",
+							Computed:            true,
+						},
+						"systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
+						"ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"ipv6": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

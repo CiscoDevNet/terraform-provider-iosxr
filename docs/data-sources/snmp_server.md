@@ -30,6 +30,7 @@ data "iosxr_snmp_server" "example" {
 - `bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
 - `bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
+- `communities` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--communities))
 - `config` (Boolean) Enable SNMP config traps
 - `contact` (String) Text for mib Object sysContact
 - `copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
@@ -72,6 +73,21 @@ data "iosxr_snmp_server" "example" {
 - `traps_snmp_linkdown` (Boolean) Enable SNMPv2-MIB linDownp traps
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
 - `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
+
+<a id="nestedatt--communities"></a>
+### Nested Schema for `communities`
+
+Read-Only:
+
+- `community` (String) The UNENCRYPTED (cleartext) community string
+- `ipv4` (String) Type of Access-list
+- `ipv6` (String) Type of Access-list
+- `ro` (Boolean) Read-only community
+- `rw` (Boolean) Read-write community
+- `sdrowner` (Boolean) SDR Owner permissions for MIB Objects
+- `systemowner` (Boolean) System Owner permissions for MIB objects
+- `view` (String) Restrict this community to a named view
+
 
 <a id="nestedatt--groups"></a>
 ### Nested Schema for `groups`

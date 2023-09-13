@@ -161,3 +161,25 @@ attributes:
         example: ACL1
       - yang_name: v3/ipv6
         example: ACL2
+  - yang_name: community/unencrypted/unencrypted-string
+    tf_name: communities
+    type: List
+    attributes:
+      - yang_name: community-string
+        tf_name: community
+        id: true
+        example: COMMUNITY1
+      - yang_name: view
+        example: VIEW1
+      - yang_name: ro
+        example: true
+      - yang_name: rw
+        example: false
+      - yang_name: sdrowner
+        example: false
+      - yang_name: systemowner
+        example: true
+      - yang_name: ipv4
+        example: ACL1
+      - yang_name: ipv6
+        example: ACL2

@@ -64,6 +64,14 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_notify", "VIEW3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_ipv4", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "groups.0.v3_ipv6", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.community", "COMMUNITY1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.view", "VIEW1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.ro", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.rw", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.sdrowner", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.systemowner", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "communities.0.ipv6", "ACL2"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -133,6 +141,16 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `		v3_notify = "VIEW3"` + "\n"
 	config += `		v3_ipv4 = "ACL1"` + "\n"
 	config += `		v3_ipv6 = "ACL2"` + "\n"
+	config += `		}]` + "\n"
+	config += `	communities = [{` + "\n"
+	config += `		community = "COMMUNITY1"` + "\n"
+	config += `		view = "VIEW1"` + "\n"
+	config += `		ro = true` + "\n"
+	config += `		rw = false` + "\n"
+	config += `		sdrowner = false` + "\n"
+	config += `		systemowner = true` + "\n"
+	config += `		ipv4 = "ACL1"` + "\n"
+	config += `		ipv6 = "ACL2"` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

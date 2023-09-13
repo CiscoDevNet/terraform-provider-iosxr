@@ -456,6 +456,61 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					},
 				},
 			},
+			"communities": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"community": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The UNENCRYPTED (cleartext) community string").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+							},
+						},
+						"view": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Restrict this community to a named view").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"ro": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Read-only community").String,
+							Optional:            true,
+						},
+						"rw": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Read-write community").String,
+							Optional:            true,
+						},
+						"sdrowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SDR Owner permissions for MIB Objects").String,
+							Optional:            true,
+						},
+						"systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
+						"ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"ipv6": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }

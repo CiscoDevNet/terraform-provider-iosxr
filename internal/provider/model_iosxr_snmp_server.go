@@ -31,104 +31,106 @@ import (
 )
 
 type SNMPServer struct {
-	Device                         types.String       `tfsdk:"device"`
-	Id                             types.String       `tfsdk:"id"`
-	DeleteMode                     types.String       `tfsdk:"delete_mode"`
-	Location                       types.String       `tfsdk:"location"`
-	Contact                        types.String       `tfsdk:"contact"`
-	Rf                             types.Bool         `tfsdk:"rf"`
-	Bfd                            types.Bool         `tfsdk:"bfd"`
-	Ntp                            types.Bool         `tfsdk:"ntp"`
-	EthernetOamEvents              types.Bool         `tfsdk:"ethernet_oam_events"`
-	CopyComplete                   types.Bool         `tfsdk:"copy_complete"`
-	TrapsSnmpLinkup                types.Bool         `tfsdk:"traps_snmp_linkup"`
-	TrapsSnmpLinkdown              types.Bool         `tfsdk:"traps_snmp_linkdown"`
-	Power                          types.Bool         `tfsdk:"power"`
-	Config                         types.Bool         `tfsdk:"config"`
-	Entity                         types.Bool         `tfsdk:"entity"`
-	System                         types.Bool         `tfsdk:"system"`
-	Bridgemib                      types.Bool         `tfsdk:"bridgemib"`
-	EntityStateOperstatus          types.Bool         `tfsdk:"entity_state_operstatus"`
-	EntityRedundancyAll            types.Bool         `tfsdk:"entity_redundancy_all"`
-	TrapSourceBoth                 types.String       `tfsdk:"trap_source_both"`
-	L2vpnAll                       types.Bool         `tfsdk:"l2vpn_all"`
-	L2vpnVcUp                      types.Bool         `tfsdk:"l2vpn_vc_up"`
-	L2vpnVcDown                    types.Bool         `tfsdk:"l2vpn_vc_down"`
-	Sensor                         types.Bool         `tfsdk:"sensor"`
-	FruCtrl                        types.Bool         `tfsdk:"fru_ctrl"`
-	IsisAll                        types.String       `tfsdk:"isis_all"`
-	IsisDatabaseOverload           types.String       `tfsdk:"isis_database_overload"`
-	IsisManualAddressDrops         types.String       `tfsdk:"isis_manual_address_drops"`
-	IsisCorruptedLspDetected       types.String       `tfsdk:"isis_corrupted_lsp_detected"`
-	IsisAttemptToExceedMaxSequence types.String       `tfsdk:"isis_attempt_to_exceed_max_sequence"`
-	IsisIdLenMismatch              types.String       `tfsdk:"isis_id_len_mismatch"`
-	IsisMaxAreaAddressesMismatch   types.String       `tfsdk:"isis_max_area_addresses_mismatch"`
-	IsisOwnLspPurge                types.String       `tfsdk:"isis_own_lsp_purge"`
-	IsisSequenceNumberSkip         types.String       `tfsdk:"isis_sequence_number_skip"`
-	IsisAuthenticationTypeFailure  types.String       `tfsdk:"isis_authentication_type_failure"`
-	IsisAuthenticationFailure      types.String       `tfsdk:"isis_authentication_failure"`
-	IsisVersionSkew                types.String       `tfsdk:"isis_version_skew"`
-	IsisAreaMismatch               types.String       `tfsdk:"isis_area_mismatch"`
-	IsisRejectedAdjacency          types.String       `tfsdk:"isis_rejected_adjacency"`
-	IsisLspTooLargeToPropagate     types.String       `tfsdk:"isis_lsp_too_large_to_propagate"`
-	IsisOrigLspBuffSizeMismatch    types.String       `tfsdk:"isis_orig_lsp_buff_size_mismatch"`
-	IsisProtocolsSupportedMismatch types.String       `tfsdk:"isis_protocols_supported_mismatch"`
-	IsisAdjacencyChange            types.String       `tfsdk:"isis_adjacency_change"`
-	IsisLspErrorDetected           types.String       `tfsdk:"isis_lsp_error_detected"`
-	BgpCbgp2Updown                 types.Bool         `tfsdk:"bgp_cbgp2_updown"`
-	BgpBgp4MibUpdown               types.Bool         `tfsdk:"bgp_bgp4_mib_updown"`
-	Users                          []SNMPServerUsers  `tfsdk:"users"`
-	Groups                         []SNMPServerGroups `tfsdk:"groups"`
+	Device                         types.String            `tfsdk:"device"`
+	Id                             types.String            `tfsdk:"id"`
+	DeleteMode                     types.String            `tfsdk:"delete_mode"`
+	Location                       types.String            `tfsdk:"location"`
+	Contact                        types.String            `tfsdk:"contact"`
+	Rf                             types.Bool              `tfsdk:"rf"`
+	Bfd                            types.Bool              `tfsdk:"bfd"`
+	Ntp                            types.Bool              `tfsdk:"ntp"`
+	EthernetOamEvents              types.Bool              `tfsdk:"ethernet_oam_events"`
+	CopyComplete                   types.Bool              `tfsdk:"copy_complete"`
+	TrapsSnmpLinkup                types.Bool              `tfsdk:"traps_snmp_linkup"`
+	TrapsSnmpLinkdown              types.Bool              `tfsdk:"traps_snmp_linkdown"`
+	Power                          types.Bool              `tfsdk:"power"`
+	Config                         types.Bool              `tfsdk:"config"`
+	Entity                         types.Bool              `tfsdk:"entity"`
+	System                         types.Bool              `tfsdk:"system"`
+	Bridgemib                      types.Bool              `tfsdk:"bridgemib"`
+	EntityStateOperstatus          types.Bool              `tfsdk:"entity_state_operstatus"`
+	EntityRedundancyAll            types.Bool              `tfsdk:"entity_redundancy_all"`
+	TrapSourceBoth                 types.String            `tfsdk:"trap_source_both"`
+	L2vpnAll                       types.Bool              `tfsdk:"l2vpn_all"`
+	L2vpnVcUp                      types.Bool              `tfsdk:"l2vpn_vc_up"`
+	L2vpnVcDown                    types.Bool              `tfsdk:"l2vpn_vc_down"`
+	Sensor                         types.Bool              `tfsdk:"sensor"`
+	FruCtrl                        types.Bool              `tfsdk:"fru_ctrl"`
+	IsisAll                        types.String            `tfsdk:"isis_all"`
+	IsisDatabaseOverload           types.String            `tfsdk:"isis_database_overload"`
+	IsisManualAddressDrops         types.String            `tfsdk:"isis_manual_address_drops"`
+	IsisCorruptedLspDetected       types.String            `tfsdk:"isis_corrupted_lsp_detected"`
+	IsisAttemptToExceedMaxSequence types.String            `tfsdk:"isis_attempt_to_exceed_max_sequence"`
+	IsisIdLenMismatch              types.String            `tfsdk:"isis_id_len_mismatch"`
+	IsisMaxAreaAddressesMismatch   types.String            `tfsdk:"isis_max_area_addresses_mismatch"`
+	IsisOwnLspPurge                types.String            `tfsdk:"isis_own_lsp_purge"`
+	IsisSequenceNumberSkip         types.String            `tfsdk:"isis_sequence_number_skip"`
+	IsisAuthenticationTypeFailure  types.String            `tfsdk:"isis_authentication_type_failure"`
+	IsisAuthenticationFailure      types.String            `tfsdk:"isis_authentication_failure"`
+	IsisVersionSkew                types.String            `tfsdk:"isis_version_skew"`
+	IsisAreaMismatch               types.String            `tfsdk:"isis_area_mismatch"`
+	IsisRejectedAdjacency          types.String            `tfsdk:"isis_rejected_adjacency"`
+	IsisLspTooLargeToPropagate     types.String            `tfsdk:"isis_lsp_too_large_to_propagate"`
+	IsisOrigLspBuffSizeMismatch    types.String            `tfsdk:"isis_orig_lsp_buff_size_mismatch"`
+	IsisProtocolsSupportedMismatch types.String            `tfsdk:"isis_protocols_supported_mismatch"`
+	IsisAdjacencyChange            types.String            `tfsdk:"isis_adjacency_change"`
+	IsisLspErrorDetected           types.String            `tfsdk:"isis_lsp_error_detected"`
+	BgpCbgp2Updown                 types.Bool              `tfsdk:"bgp_cbgp2_updown"`
+	BgpBgp4MibUpdown               types.Bool              `tfsdk:"bgp_bgp4_mib_updown"`
+	Users                          []SNMPServerUsers       `tfsdk:"users"`
+	Groups                         []SNMPServerGroups      `tfsdk:"groups"`
+	Communities                    []SNMPServerCommunities `tfsdk:"communities"`
 }
 
 type SNMPServerData struct {
-	Device                         types.String       `tfsdk:"device"`
-	Id                             types.String       `tfsdk:"id"`
-	Location                       types.String       `tfsdk:"location"`
-	Contact                        types.String       `tfsdk:"contact"`
-	Rf                             types.Bool         `tfsdk:"rf"`
-	Bfd                            types.Bool         `tfsdk:"bfd"`
-	Ntp                            types.Bool         `tfsdk:"ntp"`
-	EthernetOamEvents              types.Bool         `tfsdk:"ethernet_oam_events"`
-	CopyComplete                   types.Bool         `tfsdk:"copy_complete"`
-	TrapsSnmpLinkup                types.Bool         `tfsdk:"traps_snmp_linkup"`
-	TrapsSnmpLinkdown              types.Bool         `tfsdk:"traps_snmp_linkdown"`
-	Power                          types.Bool         `tfsdk:"power"`
-	Config                         types.Bool         `tfsdk:"config"`
-	Entity                         types.Bool         `tfsdk:"entity"`
-	System                         types.Bool         `tfsdk:"system"`
-	Bridgemib                      types.Bool         `tfsdk:"bridgemib"`
-	EntityStateOperstatus          types.Bool         `tfsdk:"entity_state_operstatus"`
-	EntityRedundancyAll            types.Bool         `tfsdk:"entity_redundancy_all"`
-	TrapSourceBoth                 types.String       `tfsdk:"trap_source_both"`
-	L2vpnAll                       types.Bool         `tfsdk:"l2vpn_all"`
-	L2vpnVcUp                      types.Bool         `tfsdk:"l2vpn_vc_up"`
-	L2vpnVcDown                    types.Bool         `tfsdk:"l2vpn_vc_down"`
-	Sensor                         types.Bool         `tfsdk:"sensor"`
-	FruCtrl                        types.Bool         `tfsdk:"fru_ctrl"`
-	IsisAll                        types.String       `tfsdk:"isis_all"`
-	IsisDatabaseOverload           types.String       `tfsdk:"isis_database_overload"`
-	IsisManualAddressDrops         types.String       `tfsdk:"isis_manual_address_drops"`
-	IsisCorruptedLspDetected       types.String       `tfsdk:"isis_corrupted_lsp_detected"`
-	IsisAttemptToExceedMaxSequence types.String       `tfsdk:"isis_attempt_to_exceed_max_sequence"`
-	IsisIdLenMismatch              types.String       `tfsdk:"isis_id_len_mismatch"`
-	IsisMaxAreaAddressesMismatch   types.String       `tfsdk:"isis_max_area_addresses_mismatch"`
-	IsisOwnLspPurge                types.String       `tfsdk:"isis_own_lsp_purge"`
-	IsisSequenceNumberSkip         types.String       `tfsdk:"isis_sequence_number_skip"`
-	IsisAuthenticationTypeFailure  types.String       `tfsdk:"isis_authentication_type_failure"`
-	IsisAuthenticationFailure      types.String       `tfsdk:"isis_authentication_failure"`
-	IsisVersionSkew                types.String       `tfsdk:"isis_version_skew"`
-	IsisAreaMismatch               types.String       `tfsdk:"isis_area_mismatch"`
-	IsisRejectedAdjacency          types.String       `tfsdk:"isis_rejected_adjacency"`
-	IsisLspTooLargeToPropagate     types.String       `tfsdk:"isis_lsp_too_large_to_propagate"`
-	IsisOrigLspBuffSizeMismatch    types.String       `tfsdk:"isis_orig_lsp_buff_size_mismatch"`
-	IsisProtocolsSupportedMismatch types.String       `tfsdk:"isis_protocols_supported_mismatch"`
-	IsisAdjacencyChange            types.String       `tfsdk:"isis_adjacency_change"`
-	IsisLspErrorDetected           types.String       `tfsdk:"isis_lsp_error_detected"`
-	BgpCbgp2Updown                 types.Bool         `tfsdk:"bgp_cbgp2_updown"`
-	BgpBgp4MibUpdown               types.Bool         `tfsdk:"bgp_bgp4_mib_updown"`
-	Users                          []SNMPServerUsers  `tfsdk:"users"`
-	Groups                         []SNMPServerGroups `tfsdk:"groups"`
+	Device                         types.String            `tfsdk:"device"`
+	Id                             types.String            `tfsdk:"id"`
+	Location                       types.String            `tfsdk:"location"`
+	Contact                        types.String            `tfsdk:"contact"`
+	Rf                             types.Bool              `tfsdk:"rf"`
+	Bfd                            types.Bool              `tfsdk:"bfd"`
+	Ntp                            types.Bool              `tfsdk:"ntp"`
+	EthernetOamEvents              types.Bool              `tfsdk:"ethernet_oam_events"`
+	CopyComplete                   types.Bool              `tfsdk:"copy_complete"`
+	TrapsSnmpLinkup                types.Bool              `tfsdk:"traps_snmp_linkup"`
+	TrapsSnmpLinkdown              types.Bool              `tfsdk:"traps_snmp_linkdown"`
+	Power                          types.Bool              `tfsdk:"power"`
+	Config                         types.Bool              `tfsdk:"config"`
+	Entity                         types.Bool              `tfsdk:"entity"`
+	System                         types.Bool              `tfsdk:"system"`
+	Bridgemib                      types.Bool              `tfsdk:"bridgemib"`
+	EntityStateOperstatus          types.Bool              `tfsdk:"entity_state_operstatus"`
+	EntityRedundancyAll            types.Bool              `tfsdk:"entity_redundancy_all"`
+	TrapSourceBoth                 types.String            `tfsdk:"trap_source_both"`
+	L2vpnAll                       types.Bool              `tfsdk:"l2vpn_all"`
+	L2vpnVcUp                      types.Bool              `tfsdk:"l2vpn_vc_up"`
+	L2vpnVcDown                    types.Bool              `tfsdk:"l2vpn_vc_down"`
+	Sensor                         types.Bool              `tfsdk:"sensor"`
+	FruCtrl                        types.Bool              `tfsdk:"fru_ctrl"`
+	IsisAll                        types.String            `tfsdk:"isis_all"`
+	IsisDatabaseOverload           types.String            `tfsdk:"isis_database_overload"`
+	IsisManualAddressDrops         types.String            `tfsdk:"isis_manual_address_drops"`
+	IsisCorruptedLspDetected       types.String            `tfsdk:"isis_corrupted_lsp_detected"`
+	IsisAttemptToExceedMaxSequence types.String            `tfsdk:"isis_attempt_to_exceed_max_sequence"`
+	IsisIdLenMismatch              types.String            `tfsdk:"isis_id_len_mismatch"`
+	IsisMaxAreaAddressesMismatch   types.String            `tfsdk:"isis_max_area_addresses_mismatch"`
+	IsisOwnLspPurge                types.String            `tfsdk:"isis_own_lsp_purge"`
+	IsisSequenceNumberSkip         types.String            `tfsdk:"isis_sequence_number_skip"`
+	IsisAuthenticationTypeFailure  types.String            `tfsdk:"isis_authentication_type_failure"`
+	IsisAuthenticationFailure      types.String            `tfsdk:"isis_authentication_failure"`
+	IsisVersionSkew                types.String            `tfsdk:"isis_version_skew"`
+	IsisAreaMismatch               types.String            `tfsdk:"isis_area_mismatch"`
+	IsisRejectedAdjacency          types.String            `tfsdk:"isis_rejected_adjacency"`
+	IsisLspTooLargeToPropagate     types.String            `tfsdk:"isis_lsp_too_large_to_propagate"`
+	IsisOrigLspBuffSizeMismatch    types.String            `tfsdk:"isis_orig_lsp_buff_size_mismatch"`
+	IsisProtocolsSupportedMismatch types.String            `tfsdk:"isis_protocols_supported_mismatch"`
+	IsisAdjacencyChange            types.String            `tfsdk:"isis_adjacency_change"`
+	IsisLspErrorDetected           types.String            `tfsdk:"isis_lsp_error_detected"`
+	BgpCbgp2Updown                 types.Bool              `tfsdk:"bgp_cbgp2_updown"`
+	BgpBgp4MibUpdown               types.Bool              `tfsdk:"bgp_bgp4_mib_updown"`
+	Users                          []SNMPServerUsers       `tfsdk:"users"`
+	Groups                         []SNMPServerGroups      `tfsdk:"groups"`
+	Communities                    []SNMPServerCommunities `tfsdk:"communities"`
 }
 type SNMPServerUsers struct {
 	UserName                   types.String `tfsdk:"user_name"`
@@ -145,6 +147,16 @@ type SNMPServerGroups struct {
 	V3Notify  types.String `tfsdk:"v3_notify"`
 	V3Ipv4    types.String `tfsdk:"v3_ipv4"`
 	V3Ipv6    types.String `tfsdk:"v3_ipv6"`
+}
+type SNMPServerCommunities struct {
+	Community   types.String `tfsdk:"community"`
+	View        types.String `tfsdk:"view"`
+	Ro          types.Bool   `tfsdk:"ro"`
+	Rw          types.Bool   `tfsdk:"rw"`
+	Sdrowner    types.Bool   `tfsdk:"sdrowner"`
+	Systemowner types.Bool   `tfsdk:"systemowner"`
+	Ipv4        types.String `tfsdk:"ipv4"`
+	Ipv6        types.String `tfsdk:"ipv6"`
 }
 
 func (data SNMPServer) getPath() string {
@@ -373,6 +385,43 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			}
 			if !item.V3Ipv6.IsNull() && !item.V3Ipv6.IsUnknown() {
 				body, _ = sjson.Set(body, "groups.group"+"."+strconv.Itoa(index)+"."+"v3.ipv6", item.V3Ipv6.ValueString())
+			}
+		}
+	}
+	if len(data.Communities) > 0 {
+		body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string", []interface{}{})
+		for index, item := range data.Communities {
+			if !item.Community.IsNull() && !item.Community.IsUnknown() {
+				body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"community-string", item.Community.ValueString())
+			}
+			if !item.View.IsNull() && !item.View.IsUnknown() {
+				body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"view", item.View.ValueString())
+			}
+			if !item.Ro.IsNull() && !item.Ro.IsUnknown() {
+				if item.Ro.ValueBool() {
+					body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"ro", map[string]string{})
+				}
+			}
+			if !item.Rw.IsNull() && !item.Rw.IsUnknown() {
+				if item.Rw.ValueBool() {
+					body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"rw", map[string]string{})
+				}
+			}
+			if !item.Sdrowner.IsNull() && !item.Sdrowner.IsUnknown() {
+				if item.Sdrowner.ValueBool() {
+					body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"sdrowner", map[string]string{})
+				}
+			}
+			if !item.Systemowner.IsNull() && !item.Systemowner.IsUnknown() {
+				if item.Systemowner.ValueBool() {
+					body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"systemowner", map[string]string{})
+				}
+			}
+			if !item.Ipv4.IsNull() && !item.Ipv4.IsUnknown() {
+				body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"ipv4", item.Ipv4.ValueString())
+			}
+			if !item.Ipv6.IsNull() && !item.Ipv6.IsUnknown() {
+				body, _ = sjson.Set(body, "community.unencrypted.unencrypted-string"+"."+strconv.Itoa(index)+"."+"ipv6", item.Ipv6.ValueString())
 			}
 		}
 	}
@@ -791,6 +840,86 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 			data.Groups[i].V3Ipv6 = types.StringNull()
 		}
 	}
+	for i := range data.Communities {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.Communities[i].Community.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "community.unencrypted.unencrypted-string").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("community-string"); value.Exists() && !data.Communities[i].Community.IsNull() {
+			data.Communities[i].Community = types.StringValue(value.String())
+		} else {
+			data.Communities[i].Community = types.StringNull()
+		}
+		if value := r.Get("view"); value.Exists() && !data.Communities[i].View.IsNull() {
+			data.Communities[i].View = types.StringValue(value.String())
+		} else {
+			data.Communities[i].View = types.StringNull()
+		}
+		if value := r.Get("ro"); !data.Communities[i].Ro.IsNull() {
+			if value.Exists() {
+				data.Communities[i].Ro = types.BoolValue(true)
+			} else {
+				data.Communities[i].Ro = types.BoolValue(false)
+			}
+		} else {
+			data.Communities[i].Ro = types.BoolNull()
+		}
+		if value := r.Get("rw"); !data.Communities[i].Rw.IsNull() {
+			if value.Exists() {
+				data.Communities[i].Rw = types.BoolValue(true)
+			} else {
+				data.Communities[i].Rw = types.BoolValue(false)
+			}
+		} else {
+			data.Communities[i].Rw = types.BoolNull()
+		}
+		if value := r.Get("sdrowner"); !data.Communities[i].Sdrowner.IsNull() {
+			if value.Exists() {
+				data.Communities[i].Sdrowner = types.BoolValue(true)
+			} else {
+				data.Communities[i].Sdrowner = types.BoolValue(false)
+			}
+		} else {
+			data.Communities[i].Sdrowner = types.BoolNull()
+		}
+		if value := r.Get("systemowner"); !data.Communities[i].Systemowner.IsNull() {
+			if value.Exists() {
+				data.Communities[i].Systemowner = types.BoolValue(true)
+			} else {
+				data.Communities[i].Systemowner = types.BoolValue(false)
+			}
+		} else {
+			data.Communities[i].Systemowner = types.BoolNull()
+		}
+		if value := r.Get("ipv4"); value.Exists() && !data.Communities[i].Ipv4.IsNull() {
+			data.Communities[i].Ipv4 = types.StringValue(value.String())
+		} else {
+			data.Communities[i].Ipv4 = types.StringNull()
+		}
+		if value := r.Get("ipv6"); value.Exists() && !data.Communities[i].Ipv6.IsNull() {
+			data.Communities[i].Ipv6 = types.StringValue(value.String())
+		} else {
+			data.Communities[i].Ipv6 = types.StringNull()
+		}
+	}
 }
 
 func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
@@ -1019,6 +1148,46 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "community.unencrypted.unencrypted-string"); value.Exists() {
+		data.Communities = make([]SNMPServerCommunities, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerCommunities{}
+			if cValue := v.Get("community-string"); cValue.Exists() {
+				item.Community = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("view"); cValue.Exists() {
+				item.View = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ro"); cValue.Exists() {
+				item.Ro = types.BoolValue(true)
+			} else {
+				item.Ro = types.BoolValue(false)
+			}
+			if cValue := v.Get("rw"); cValue.Exists() {
+				item.Rw = types.BoolValue(true)
+			} else {
+				item.Rw = types.BoolValue(false)
+			}
+			if cValue := v.Get("sdrowner"); cValue.Exists() {
+				item.Sdrowner = types.BoolValue(true)
+			} else {
+				item.Sdrowner = types.BoolValue(false)
+			}
+			if cValue := v.Get("systemowner"); cValue.Exists() {
+				item.Systemowner = types.BoolValue(true)
+			} else {
+				item.Systemowner = types.BoolValue(false)
+			}
+			if cValue := v.Get("ipv4"); cValue.Exists() {
+				item.Ipv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6"); cValue.Exists() {
+				item.Ipv6 = types.StringValue(cValue.String())
+			}
+			data.Communities = append(data.Communities, item)
+			return true
+		})
+	}
 }
 
 func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServer) []string {
@@ -1081,6 +1250,36 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
 			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/groups/group%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Communities {
+		keys := [...]string{"community-string"}
+		stateKeyValues := [...]string{state.Communities[i].Community.ValueString()}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Communities[i].Community.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Communities {
+			found = true
+			if state.Communities[i].Community.ValueString() != data.Communities[j].Community.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			keyString := ""
+			for ki := range keys {
+				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+			}
+			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v", state.getPath(), keyString))
 		}
 	}
 	return deletedListItems
@@ -1168,6 +1367,26 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 		if !data.Groups[i].V3Priv.IsNull() && !data.Groups[i].V3Priv.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/groups/group%v/v3/priv", data.getPath(), keyString))
+		}
+	}
+	for i := range data.Communities {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.Communities[i].Community.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Communities[i].Ro.IsNull() && !data.Communities[i].Ro.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v/ro", data.getPath(), keyString))
+		}
+		if !data.Communities[i].Rw.IsNull() && !data.Communities[i].Rw.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v/rw", data.getPath(), keyString))
+		}
+		if !data.Communities[i].Sdrowner.IsNull() && !data.Communities[i].Sdrowner.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v/sdrowner", data.getPath(), keyString))
+		}
+		if !data.Communities[i].Systemowner.IsNull() && !data.Communities[i].Systemowner.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v/systemowner", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete
@@ -1323,6 +1542,16 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/groups/group%v", data.getPath(), keyString))
+	}
+	for i := range data.Communities {
+		keys := [...]string{"community-string"}
+		keyValues := [...]string{data.Communities[i].Community.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

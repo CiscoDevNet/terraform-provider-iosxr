@@ -55,6 +55,8 @@ type LoggingVRFHostIpv4Addresses struct {
 type LoggingVRFHostIpv6Addresses struct {
 	Ipv6Address types.String `tfsdk:"ipv6_address"`
 	Severity    types.String `tfsdk:"severity"`
+	Port        types.Int64  `tfsdk:"port"`
+	Operator    types.String `tfsdk:"operator"`
 }
 
 func (data LoggingVRF) getPath() string {
@@ -95,6 +97,12 @@ func (data LoggingVRF) toBody(ctx context.Context) string {
 			}
 			if !item.Severity.IsNull() && !item.Severity.IsUnknown() {
 				body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address"+"."+strconv.Itoa(index)+"."+"severity", item.Severity.ValueString())
+			}
+			if !item.Port.IsNull() && !item.Port.IsUnknown() {
+				body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address"+"."+strconv.Itoa(index)+"."+"port", strconv.FormatInt(item.Port.ValueInt64(), 10))
+			}
+			if !item.Operator.IsNull() && !item.Operator.IsUnknown() {
+				body, _ = sjson.Set(body, "host-ipv6-addresses.host-ipv6-address"+"."+strconv.Itoa(index)+"."+"operator", item.Operator.ValueString())
 			}
 		}
 	}
@@ -179,6 +187,16 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.HostIpv6Addresses[i].Severity = types.StringNull()
 		}
+		if value := r.Get("port"); value.Exists() && !data.HostIpv6Addresses[i].Port.IsNull() {
+			data.HostIpv6Addresses[i].Port = types.Int64Value(value.Int())
+		} else {
+			data.HostIpv6Addresses[i].Port = types.Int64Null()
+		}
+		if value := r.Get("operator"); value.Exists() && !data.HostIpv6Addresses[i].Operator.IsNull() {
+			data.HostIpv6Addresses[i].Operator = types.StringValue(value.String())
+		} else {
+			data.HostIpv6Addresses[i].Operator = types.StringNull()
+		}
 	}
 }
 
@@ -212,6 +230,12 @@ func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 			}
 			if cValue := v.Get("severity"); cValue.Exists() {
 				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
 			}
 			data.HostIpv6Addresses = append(data.HostIpv6Addresses, item)
 			return true

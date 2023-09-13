@@ -127,6 +127,9 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 				},
 				{{- end}}
 			]
+			{{- if len .Values}}
+			values = [{{range .Values}}"{{.}}", {{end}}]
+			{{- end}}
 		},
 	{{- end}}
 	]

@@ -70,7 +70,7 @@ resource "iosxr_gnmi" "PreReq0" {
 				{
 					"af-name" = "vpnv4-unicast"
 				},
-			] 
+			]
 		},
 		{
 			name = "neighbors/neighbor"
@@ -80,7 +80,7 @@ resource "iosxr_gnmi" "PreReq0" {
 					"neighbor-address" = "10.1.1.2"
 					"remote-as" = "65001"
 				},
-			] 
+			]
 		},
 	]
 }

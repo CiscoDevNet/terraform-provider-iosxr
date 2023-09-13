@@ -14,7 +14,7 @@ This resource can manage the Logging VRF configuration.
 
 ```terraform
 resource "iosxr_logging_vrf" "example" {
-  vrf_name = "VRF1"
+  vrf_name = "default"
   host_ipv4_addresses = [
     {
       ipv4_address = "1.1.1.1"
@@ -27,6 +27,8 @@ resource "iosxr_logging_vrf" "example" {
     {
       ipv6_address = "2001::1"
       severity     = "info"
+      port         = 514
+      operator     = "equals-or-higher"
     }
   ]
 }
@@ -77,6 +79,10 @@ Required:
 
 Optional:
 
+- `operator` (String) Set severity operator of  messages for particular remote host/vrf
+  - Choices: `equals`, `equals-or-higher`, `not-equals`
+- `port` (Number) Set UDP port for this remote host/vrf
+  - Range: `0`-`65535`
 - `severity` (String) Set severity of  messages for particular remote host/vrf
   - Choices: `alerts`, `critical`, `debugging`, `emergencies`, `error`, `info`, `notifications`, `warning`
 
@@ -85,5 +91,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_logging_vrf.example "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=VRF1]"
+terraform import iosxr_logging_vrf.example "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=default]"
 ```

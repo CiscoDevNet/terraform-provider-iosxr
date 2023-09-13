@@ -80,7 +80,7 @@ resource "iosxr_gnmi" "PreReq1" {
 				{
 					"af-name" = "vpnv4-unicast"
 				},
-			] 
+			]
 		},
 	]
 }
@@ -99,7 +99,7 @@ resource "iosxr_gnmi" "PreReq2" {
 				{
 					"af-name" = "ipv4-unicast"
 				},
-			] 
+			]
 		},
 		{
 			name = "neighbors/neighbor"
@@ -109,7 +109,7 @@ resource "iosxr_gnmi" "PreReq2" {
 					"neighbor-address" = "10.1.1.2"
 					"remote-as" = "65002"
 				},
-			] 
+			]
 		},
 	]
 	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]

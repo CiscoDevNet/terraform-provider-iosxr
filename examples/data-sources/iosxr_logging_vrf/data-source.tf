@@ -1,3 +1,3 @@
 data "iosxr_logging_vrf" "example" {
-  vrf_name = "VRF1"
+  vrf_name = "default"
 }

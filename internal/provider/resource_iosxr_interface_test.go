@@ -118,7 +118,7 @@ resource "iosxr_gnmi" "PreReq0" {
 					"type" = "qos"
 					"set/qos-group" = "0"
 				},
-			] 
+			]
 		},
 	]
 }
@@ -138,7 +138,7 @@ resource "iosxr_gnmi" "PreReq1" {
 					"type" = "qos"
 					"set/dscp" = "0"
 				},
-			] 
+			]
 		},
 	]
 }

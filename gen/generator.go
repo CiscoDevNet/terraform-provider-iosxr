@@ -159,9 +159,10 @@ type YamlTestAttribute struct {
 }
 
 type YamlTestList struct {
-	Name  string             `yaml:"name"`
-	Key   string             `yaml:"key"`
-	Items []YamlTestListItem `yaml:"items"`
+	Name   string             `yaml:"name"`
+	Key    string             `yaml:"key"`
+	Items  []YamlTestListItem `yaml:"items"`
+	Values []string           `yaml:"values"`
 }
 
 type YamlTestListItem struct {

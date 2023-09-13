@@ -98,7 +98,7 @@ resource "iosxr_gnmi" "PreReq1" {
 				{
 					"af-name" = "vpnv4-unicast"
 				},
-			] 
+			]
 		},
 	]
 }

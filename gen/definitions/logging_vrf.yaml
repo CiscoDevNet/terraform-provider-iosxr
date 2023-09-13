@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]
 doc_category: Management
 attributes:
   - yang_name: vrf-name
-    example: VRF1
+    example: default
   - yang_name: host-ipv4-addresses/host-ipv4-address
     tf_name: host_ipv4_addresses
     type: List
@@ -27,20 +27,7 @@ attributes:
         example: 2001::1
       - yang_name: severity
         example: info
-  # - yang_name: host-names/host-name
-  #   tf_name: host_names
-  #   type: List
-  #   exclude_test: true
-  #   attributes:
-  #     - yang_name: name
-  #       example: host_name
-  #       exclude_test: true
-  #     - yang_name: severity
-  #       example: 1
-  #       exclude_test: true
-  #     - yang_name: port
-  #       example: 3032
-  #       exclude_test: true
-  #     - yang_name: operator
-  #       example: true
-  #       exclude_test: true
+      - yang_name: port
+        example: 514
+      - yang_name: operator
+        example: equals-or-higher

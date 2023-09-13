@@ -118,7 +118,7 @@ resource "iosxr_gnmi" "PreReq0" {
 				{
 					"neighbor-group-name" = "GROUP1"
 				},
-			] 
+			]
 		},
 	]
 }

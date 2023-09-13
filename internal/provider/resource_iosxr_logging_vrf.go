@@ -139,6 +139,20 @@ func (r *LoggingVRFResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("alerts", "critical", "debugging", "emergencies", "error", "info", "notifications", "warning"),
 							},
 						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set UDP port for this remote host/vrf").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"operator": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set severity operator of  messages for particular remote host/vrf").AddStringEnumDescription("equals", "equals-or-higher", "not-equals").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("equals", "equals-or-higher", "not-equals"),
+							},
+						},
 					},
 				},
 			},

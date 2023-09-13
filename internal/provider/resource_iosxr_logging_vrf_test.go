@@ -28,13 +28,15 @@ import (
 
 func TestAccIosxrLoggingVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "vrf_name", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.severity", "info"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.port", "514"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv4_addresses.0.operator", "equals"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.ipv6_address", "2001::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.severity", "info"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_logging_vrf.test", "host_ipv6_addresses.0.operator", "equals-or-higher"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -48,7 +50,7 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_logging_vrf.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=VRF1]",
+		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=default]",
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -59,14 +61,14 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 
 func testAccIosxrLoggingVRFConfig_minimum() string {
 	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "default"` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
 func testAccIosxrLoggingVRFConfig_all() string {
 	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "default"` + "\n"
 	config += `	host_ipv4_addresses = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		severity = "info"` + "\n"
@@ -76,6 +78,8 @@ func testAccIosxrLoggingVRFConfig_all() string {
 	config += `	host_ipv6_addresses = [{` + "\n"
 	config += `		ipv6_address = "2001::1"` + "\n"
 	config += `		severity = "info"` + "\n"
+	config += `		port = 514` + "\n"
+	config += `		operator = "equals-or-higher"` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

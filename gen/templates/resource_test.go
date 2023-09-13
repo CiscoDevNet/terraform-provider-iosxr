@@ -127,7 +127,8 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 		{{- range .Lists}}
 		{
 			name = "{{.Name}}"
-			key = "{{.Key}}"
+			{{ if .Key}}key = "{{.Key}}"{{end}}
+			{{- if len .Items}}
 			items = [
 				{{- range .Items}}
 				{
@@ -136,7 +137,11 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 					{{- end}}
 				},
 				{{- end}}
-			] 
+			]
+			{{- end}}
+			{{- if len .Values}}
+			values = [{{range .Values}}"{{.}}", {{end}}]
+			{{- end}}
 		},
 		{{- end}}
 	]

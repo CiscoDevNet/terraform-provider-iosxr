@@ -14,7 +14,7 @@ This data source can read the Logging VRF configuration.
 
 ```terraform
 data "iosxr_logging_vrf" "example" {
-  vrf_name = "VRF1"
+  vrf_name = "default"
 }
 ```
 
@@ -52,4 +52,6 @@ Read-Only:
 Read-Only:
 
 - `ipv6_address` (String) IPV6 address of the logging host
+- `operator` (String) Set severity operator of  messages for particular remote host/vrf
+- `port` (Number) Set UDP port for this remote host/vrf
 - `severity` (String) Set severity of  messages for particular remote host/vrf

@@ -103,6 +103,14 @@ func (d *LoggingVRFDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Set severity of  messages for particular remote host/vrf",
 							Computed:            true,
 						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "Set UDP port for this remote host/vrf",
+							Computed:            true,
+						},
+						"operator": schema.StringAttribute{
+							MarkdownDescription: "Set severity operator of  messages for particular remote host/vrf",
+							Computed:            true,
+						},
 					},
 				},
 			},

@@ -39,9 +39,10 @@ type Gnmi struct {
 }
 
 type GnmiList struct {
-	Name  types.String `tfsdk:"name"`
-	Key   types.String `tfsdk:"key"`
-	Items []types.Map  `tfsdk:"items"`
+	Name   types.String   `tfsdk:"name"`
+	Key    types.String   `tfsdk:"key"`
+	Items  []types.Map    `tfsdk:"items"`
+	Values []types.String `tfsdk:"values"`
 }
 
 type GnmiData struct {
@@ -68,16 +69,22 @@ func (data Gnmi) toBody(ctx context.Context) string {
 
 	for i := range data.Lists {
 		listName := strings.ReplaceAll(data.Lists[i].Name.ValueString(), "/", ".")
-		body, _ = sjson.Set(body, listName, []interface{}{})
-		for ii := range data.Lists[i].Items {
-			var listAttributes map[string]string
-			data.Lists[i].Items[ii].ElementsAs(ctx, &listAttributes, false)
-			attrs := ""
-			for attr, value := range listAttributes {
-				attr = strings.ReplaceAll(attr, "/", ".")
-				attrs, _ = sjson.Set(attrs, attr, value)
+		if len(data.Lists[i].Items) > 0 {
+			body, _ = sjson.Set(body, listName, []interface{}{})
+			for ii := range data.Lists[i].Items {
+				var listAttributes map[string]string
+				data.Lists[i].Items[ii].ElementsAs(ctx, &listAttributes, false)
+				attrs := ""
+				for attr, value := range listAttributes {
+					attr = strings.ReplaceAll(attr, "/", ".")
+					attrs, _ = sjson.Set(attrs, attr, value)
+				}
+				body, _ = sjson.SetRaw(body, listName+".-1", attrs)
 			}
-			body, _ = sjson.SetRaw(body, listName+".-1", attrs)
+		} else if len(data.Lists[i].Values) > 0 {
+			for _, value := range data.Lists[i].Values {
+				body, _ = sjson.Set(body, listName+".-1", value.ValueString())
+			}
 		}
 	}
 
@@ -117,58 +124,65 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 
 	for i := range data.Lists {
 		keys := strings.Split(data.Lists[i].Key.ValueString(), ",")
-		for ii := range data.Lists[i].Items {
-			var keyValues []string
-			for _, key := range keys {
-				elements := data.Lists[i].Items[ii].Elements()
-				element, ok := elements[key]
-				if !ok {
-					diags.AddError("Missing key", fmt.Sprintf("Cannot locate key '%s' in list item: %v", key, elements))
-					return diags
+		namePath := strings.ReplaceAll(data.Lists[i].Name.ValueString(), "/", ".")
+		if len(data.Lists[i].Items) > 0 {
+			for ii := range data.Lists[i].Items {
+				var keyValues []string
+				for _, key := range keys {
+					elements := data.Lists[i].Items[ii].Elements()
+					element, ok := elements[key]
+					if !ok {
+						diags.AddError("Missing key", fmt.Sprintf("Cannot locate key '%s' in list item: %v", key, elements))
+						return diags
+					}
+					v, _ := element.ToTerraformValue(ctx)
+					var keyValue string
+					v.As(&keyValue)
+					keyValues = append(keyValues, keyValue)
 				}
-				v, _ := element.ToTerraformValue(ctx)
-				var keyValue string
-				v.As(&keyValue)
-				keyValues = append(keyValues, keyValue)
-			}
 
-			// find item by key(s)
-			var r gjson.Result
-			namePath := strings.ReplaceAll(data.Lists[i].Name.ValueString(), "/", ".")
-			gjson.GetBytes(res, namePath).ForEach(
-				func(_, v gjson.Result) bool {
-					found := false
-					for ik := range keys {
-						if v.Get(keys[ik]).String() == keyValues[ik] {
-							found = true
-							continue
+				// find item by key(s)
+				var r gjson.Result
+				gjson.GetBytes(res, namePath).ForEach(
+					func(_, v gjson.Result) bool {
+						found := false
+						for ik := range keys {
+							if v.Get(keys[ik]).String() == keyValues[ik] {
+								found = true
+								continue
+							}
+							found = false
+							break
 						}
-						found = false
-						break
-					}
-					if found {
-						r = v
-						return false
-					}
-					return true
-				},
-			)
+						if found {
+							r = v
+							return false
+						}
+						return true
+					},
+				)
 
-			listAttributes := data.Lists[i].Items[ii].Elements()
-			for attr := range listAttributes {
-				attrPath := strings.ReplaceAll(attr, "/", ".")
-				value := r.Get(attrPath)
-				if !value.Exists() ||
-					(value.IsObject() && len(value.Map()) == 0) ||
-					value.Raw == "[null]" {
+				listAttributes := data.Lists[i].Items[ii].Elements()
+				for attr := range listAttributes {
+					attrPath := strings.ReplaceAll(attr, "/", ".")
+					value := r.Get(attrPath)
+					if !value.Exists() ||
+						(value.IsObject() && len(value.Map()) == 0) ||
+						value.Raw == "[null]" {
 
-					listAttributes[attr] = types.StringValue("")
-				} else {
-					listAttributes[attr] = types.StringValue(value.String())
+						listAttributes[attr] = types.StringValue("")
+					} else {
+						listAttributes[attr] = types.StringValue(value.String())
+					}
+				}
+				if len(listAttributes) > 0 {
+					data.Lists[i].Items[ii] = types.MapValueMust(types.StringType, listAttributes)
 				}
 			}
-			if len(listAttributes) > 0 {
-				data.Lists[i].Items[ii] = types.MapValueMust(types.StringType, listAttributes)
+		} else if len(data.Lists[i].Values) > 0 {
+			values := gjson.GetBytes(res, namePath)
+			if values.IsArray() {
+				data.Lists[i].Values = helpers.GetStringSlice(values.Array())
 			}
 		}
 	}
@@ -179,6 +193,7 @@ func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string 
 	deletedListItems := make([]string, 0)
 	for l := range state.Lists {
 		name := state.Lists[l].Name.ValueString()
+		namePath := strings.ReplaceAll(name, "/", ".")
 		keys := strings.Split(state.Lists[l].Key.ValueString(), ",")
 		var dataList GnmiList
 		for _, dl := range data.Lists {
@@ -186,48 +201,50 @@ func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string 
 				dataList = dl
 			}
 		}
-		// check if state item is also included in plan, if not delete item
-		for i := range state.Lists[l].Items {
-			var slia map[string]string
-			state.Lists[l].Items[i].ElementsAs(ctx, &slia, false)
+		if len(state.Lists[l].Items) > 0 {
+			// check if state item is also included in plan, if not delete item
+			for i := range state.Lists[l].Items {
+				var slia map[string]string
+				state.Lists[l].Items[i].ElementsAs(ctx, &slia, false)
 
-			// if state key values are empty move on to next item
-			emptyKey := false
-			for _, key := range keys {
-				if slia[key] == "" {
-					emptyKey = true
-					break
-				}
-			}
-			if emptyKey {
-				continue
-			}
-
-			// find data (plan) item with matching key values
-			found := false
-			for dli := range dataList.Items {
-				var dlia map[string]string
-				dataList.Items[dli].ElementsAs(ctx, &dlia, false)
+				// if state key values are empty move on to next item
+				emptyKey := false
 				for _, key := range keys {
-					if dlia[key] == slia[key] {
-						found = true
-						continue
+					if slia[key] == "" {
+						emptyKey = true
+						break
 					}
-					found = false
-					break
 				}
-				if found {
-					break
+				if emptyKey {
+					continue
 				}
-			}
 
-			// if no matching item in plan found -> delete
-			if !found {
-				keyString := ""
-				for _, key := range keys {
-					keyString += fmt.Sprintf("[%s=%s]", key, slia[key])
+				// find data (plan) item with matching key values
+				found := false
+				for dli := range dataList.Items {
+					var dlia map[string]string
+					dataList.Items[dli].ElementsAs(ctx, &dlia, false)
+					for _, key := range keys {
+						if dlia[key] == slia[key] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						break
+					}
 				}
-				deletedListItems = append(deletedListItems, state.getPath()+"/"+name+keyString)
+
+				// if no matching item in plan found -> delete
+				if !found {
+					keyString := ""
+					for _, key := range keys {
+						keyString += fmt.Sprintf("[%s=%s]", key, slia[key])
+					}
+					deletedListItems = append(deletedListItems, state.getPath()+"/"+namePath+keyString)
+				}
 			}
 		}
 	}

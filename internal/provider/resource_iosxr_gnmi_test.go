@@ -62,6 +62,14 @@ func TestAccIosxrGnmi(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.stitching", "true"),
 				),
 			},
+			{
+				Config: testAccIosxrGnmiConfig_leafList(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=abc.cisco.com]"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.host-name", "abc.cisco.com"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.values.0", "1.2.3.4"),
+				),
+			},
 		},
 	})
 }
@@ -103,6 +111,23 @@ func testAccIosxrGnmiConfig_list() string {
 						stitching  = "true"
 					}
 				]
+			}
+		]
+	}
+	`
+}
+
+func testAccIosxrGnmiConfig_leafList() string {
+	return `
+	resource "iosxr_gnmi" "test" {
+		path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=abc.cisco.com]"
+		attributes = {
+			"host-name" = "abc.cisco.com"
+		}
+		lists = [
+			{
+				name = "ip-address"
+				values = ["1.2.3.4"]
 			}
 		]
 	}

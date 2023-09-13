@@ -1,6 +1,7 @@
 ## 0.2.6 (unreleased)
 
 - Add `auto_cost` attributes to `iosxr_router_ospf` and `iosxr_router_ospf_vrf` resources and data sources
+- Add support for leaf-lists to `iosxr_gnmi` resource
 
 ## 0.2.5
 

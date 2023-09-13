@@ -94,17 +94,49 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						},
 						"key": schema.StringAttribute{
 							MarkdownDescription: "YANG list key attribute(s). In case of multiple keys, those should be separated by a comma (`,`).",
-							Required:            true,
+							Optional:            true,
 						},
 						"items": schema.ListAttribute{
 							MarkdownDescription: "List of maps of key-value pairs which represents the attributes and its values.",
 							Optional:            true,
 							ElementType:         types.MapType{ElemType: types.StringType},
 						},
+						"values": schema.ListAttribute{
+							MarkdownDescription: "YANG leaf-list values.",
+							Optional:            true,
+							ElementType:         types.StringType,
+						},
 					},
 				},
 			},
 		},
+	}
+}
+
+func (r *GnmiResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var data Gnmi
+
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	for _, l := range data.Lists {
+		if (len(l.Values) == 0) == (len(l.Items) == 0) {
+			resp.Diagnostics.AddAttributeError(
+				path.Root("lists"),
+				"Invalid List Configuration",
+				"List must contain either items or values.",
+			)
+		}
+		if len(l.Items) > 0 && l.Key.IsNull() {
+			resp.Diagnostics.AddAttributeError(
+				path.Root("lists"),
+				"Invalid List Configuration",
+				"List must contain a key.",
+			)
+		}
 	}
 }
 

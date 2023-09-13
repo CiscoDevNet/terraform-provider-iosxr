@@ -26,3 +26,16 @@ resource "iosxr_gnmi" "vrf" {
     }
   ]
 }
+
+resource "iosxr_gnmi" "domain_host" {
+  path = "Cisco-IOS-XR-um-domain-cfg:/domain/ipv4/hosts/host[host-name=abc.cisco.com]"
+  attributes = {
+    "host-name" = "abc.cisco.com"
+  }
+  lists = [
+    {
+      name   = "ip-address"
+      values = ["1.2.3.4"]
+    }
+  ]
+}

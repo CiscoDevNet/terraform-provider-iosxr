@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.2.7 (unreleased)
+## 0.3.0
 
 - Add `ipv4_verify_unicast_source_reachable_via` and `ipv4_access_group` attributes to `iosxr_interface` resource and data source
 - Add `ipv6_verify_unicast_source_reachable_via` and `ipv6_access_group` attributes to `iosxr_interface` resource and data source

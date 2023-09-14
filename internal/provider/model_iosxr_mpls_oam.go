@@ -150,6 +150,21 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []string {
 	deletedItems := make([]string, 0)
+	if !state.Oam.IsNull() && data.Oam.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam", state.getPath()))
+	}
+	if !state.OamEchoDisableVendorExtension.IsNull() && data.OamEchoDisableVendorExtension.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", state.getPath()))
+	}
+	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
+	}
+	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/pps", state.getPath()))
+	}
+	if !state.OamDpmInterval.IsNull() && data.OamDpmInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/interval", state.getPath()))
+	}
 	return deletedItems
 }
 

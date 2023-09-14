@@ -536,12 +536,24 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedItems := make([]string, 0)
 	{{- range .Attributes}}
-	{{- if eq .Type "List"}}
+	{{- if and (not .Reference) (not .Id) (ne .Type "List") (not .NoDelete)}}
+	if !state.{{toGoName .TfName}}.IsNull() && data.{{toGoName .TfName}}.IsNull() {
+		{{- if .DeleteParent}}
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/{{removeLastPathElement .YangName}}", state.getPath()))
+		{{- else}}
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/{{.YangName}}", state.getPath()))
+		{{- end}}
+	}
+	{{- else if eq .Type "List"}}
 	{{- $yangName := .YangName}}
 	for i := range state.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
 		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
 		stateKeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+		keyString := ""
+		for ki := range keys {
+			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
+		}
 		
 		emptyKeys := true
 		{{- range .Attributes}}
@@ -567,11 +579,24 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 			{{- end}}
 			if found {
 				{{- range .Attributes}}
-				{{- if eq .Type "List"}}
+				{{- if and (not .Reference) (not .Id) (ne .Type "List") (not .NoDelete)}}
+				if !state.{{$list}}[i].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{toGoName .TfName}}.IsNull() {
+					{{- if .DeleteParent}}
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{removeLastPathElement .YangName}}", state.getPath(), keyString))
+					{{- else}}
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}", state.getPath(), keyString))
+					{{- end}}
+				}
+				{{- else if eq .Type "List"}}
+				{{- $cYangName := .YangName}}
 				for ci := range state.{{$list}}[i].{{toGoName .TfName}} {
 					{{- $clist := (toGoName .TfName)}}
 					ckeys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
 					cstateKeyValues := [...]string{ {{range .Attributes}}{{if .Id}}{{if eq .Type "Int64"}}strconv.FormatInt(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueInt64(), 10), {{else if eq .Type "Bool"}}strconv.FormatBool(state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool()), {{else}}state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}(), {{end}}{{end}}{{end}} }
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
+					}
 					
 					cemptyKeys := true
 					{{- range .Attributes}}
@@ -596,18 +621,21 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 						{{- end}}
 						{{- end}}
 						if found {
+							{{- range .Attributes}}
+							{{- if and (not .Reference) (not .Id) (ne .Type "List") (not .NoDelete)}}
+							if !state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.IsNull() {
+								{{- if .DeleteParent}}
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{$cYangName}}%v/{{removeLastPathElement .YangName}}", state.getPath(), keyString, ckeyString))
+								{{- else}}
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{$cYangName}}%v/{{.YangName}}", state.getPath(), keyString, ckeyString))
+								{{- end}}
+							}
+							{{- end}}
+							{{- end}}
 							break
 						}
 					}
 					if !found {
-						keyString := ""
-						for ki := range keys {
-							keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
-						}
-						ckeyString := ""
-						for cki := range ckeys {
-							ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
-						}
 						deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
 					}
 				}
@@ -617,10 +645,6 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/{{.YangName}}%v", state.getPath(), keyString))
 		}
 	}

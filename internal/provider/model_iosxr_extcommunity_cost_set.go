@@ -77,6 +77,9 @@ func (data *ExtcommunityCostSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ExtcommunityCostSet) getDeletedItems(ctx context.Context, state ExtcommunityCostSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-extended-community-cost-set", state.getPath()))
+	}
 	return deletedItems
 }
 

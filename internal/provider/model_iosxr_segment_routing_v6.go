@@ -205,9 +205,19 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 
 func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state SegmentRoutingV6) []string {
 	deletedItems := make([]string, 0)
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	}
+	if !state.EncapsulationSourceAddress.IsNull() && data.EncapsulationSourceAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/source-address", state.getPath()))
+	}
 	for i := range state.Locators {
 		keys := [...]string{"name"}
 		stateKeyValues := [...]string{state.Locators[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Locators[i].Name.ValueString()).IsZero() {
@@ -224,14 +234,22 @@ func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state Segment
 				found = false
 			}
 			if found {
+				if !state.Locators[i].LocatorEnable.IsNull() && data.Locators[j].LocatorEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", state.getPath(), keyString))
+				}
+				if !state.Locators[i].MicroSegmentBehavior.IsNull() && data.Locators[j].MicroSegmentBehavior.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/micro-segment/behavior", state.getPath(), keyString))
+				}
+				if !state.Locators[i].Prefix.IsNull() && data.Locators[j].Prefix.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix", state.getPath(), keyString))
+				}
+				if !state.Locators[i].PrefixLength.IsNull() && data.Locators[j].PrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v/prefix/prefix-length", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
 		}
 	}

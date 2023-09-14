@@ -387,9 +387,46 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6Data) fromBody(ctx context.Conte
 
 func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceAddressFamilyIPv6) []string {
 	deletedItems := make([]string, 0)
+	if !state.GlobalAddresses.IsNull() && data.GlobalAddresses.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/global/global-address/address", state.getPath()))
+	}
+	if !state.AddressLinklocal.IsNull() && data.AddressLinklocal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/linklocal-address", state.getPath()))
+	}
+	if !state.AddressLinklocalAutoconfig.IsNull() && data.AddressLinklocalAutoconfig.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/autoconfig", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
+	}
+	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
+	}
+	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", state.getPath()))
+	}
+	if !state.TimerForce.IsNull() && data.TimerForce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/force", state.getPath()))
+	}
+	if !state.PreemptDisable.IsNull() && data.PreemptDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/disable", state.getPath()))
+	}
+	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
+	}
+	if !state.AcceptModeDisable.IsNull() && data.AcceptModeDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-mode/disable", state.getPath()))
+	}
 	for i := range state.TrackInterfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.TrackInterfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -406,20 +443,23 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedItems(ctx context.Co
 				found = false
 			}
 			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackObjects {
 		keys := [...]string{"object-name"}
 		stateKeyValues := [...]string{state.TrackObjects[i].ObjectName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.TrackObjects[i].ObjectName.ValueString()).IsZero() {
@@ -436,16 +476,18 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedItems(ctx context.Co
 				found = false
 			}
 			if found {
+				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
 		}
+	}
+	if !state.BfdFastDetectPeerIpv6.IsNull() && data.BfdFastDetectPeerIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", state.getPath()))
 	}
 	return deletedItems
 }

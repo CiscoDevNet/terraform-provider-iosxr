@@ -77,6 +77,9 @@ func (data *ExtcommunityOpaqueSetData) fromBody(ctx context.Context, res []byte)
 
 func (data *ExtcommunityOpaqueSet) getDeletedItems(ctx context.Context, state ExtcommunityOpaqueSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-extended-community-opaque-set", state.getPath()))
+	}
 	return deletedItems
 }
 

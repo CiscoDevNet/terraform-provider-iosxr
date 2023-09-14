@@ -280,6 +280,33 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state RouterISISInterface) []string {
 	deletedItems := make([]string, 0)
+	if !state.CircuitType.IsNull() && data.CircuitType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/circuit-type", state.getPath()))
+	}
+	if !state.HelloPaddingDisable.IsNull() && data.HelloPaddingDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding/disable", state.getPath()))
+	}
+	if !state.HelloPaddingSometimes.IsNull() && data.HelloPaddingSometimes.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-padding/sometimes", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority/priority-value", state.getPath()))
+	}
+	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/point-to-point", state.getPath()))
+	}
+	if !state.Passive.IsNull() && data.Passive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive", state.getPath()))
+	}
+	if !state.Suppressed.IsNull() && data.Suppressed.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppressed", state.getPath()))
+	}
+	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/shutdown", state.getPath()))
+	}
+	if !state.BfdFastDetectIpv6.IsNull() && data.BfdFastDetectIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/ipv6", state.getPath()))
+	}
 	return deletedItems
 }
 

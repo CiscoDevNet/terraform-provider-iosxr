@@ -241,6 +241,39 @@ func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterface) []string {
 	deletedItems := make([]string, 0)
+	if !state.CoreIsolationGroup.IsNull() && data.CoreIsolationGroup.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/core-isolation-group", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeAllActive.IsNull() && data.EthernetSegmentLoadBalancingModeAllActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/all-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModePortActive.IsNull() && data.EthernetSegmentLoadBalancingModePortActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/port-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeSingleActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-active", state.getPath()))
+	}
+	if !state.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() && data.EthernetSegmentLoadBalancingModeSingleFlowActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/load-balancing-mode/single-flow-active", state.getPath()))
+	}
 	return deletedItems
 }
 

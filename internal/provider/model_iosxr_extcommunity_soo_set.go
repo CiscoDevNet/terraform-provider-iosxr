@@ -77,6 +77,9 @@ func (data *ExtcommunitySOOSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ExtcommunitySOOSet) getDeletedItems(ctx context.Context, state ExtcommunitySOOSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-extended-community-soo-set", state.getPath()))
+	}
 	return deletedItems
 }
 

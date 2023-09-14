@@ -77,6 +77,9 @@ func (data *CommunitySetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *CommunitySet) getDeletedItems(ctx context.Context, state CommunitySet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-community-set", state.getPath()))
+	}
 	return deletedItems
 }
 

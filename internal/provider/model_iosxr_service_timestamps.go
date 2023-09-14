@@ -353,6 +353,48 @@ func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state ServiceTimestamps) []string {
 	deletedItems := make([]string, 0)
+	if !state.DebugDatetimeLocaltimeOnly.IsNull() && data.DebugDatetimeLocaltimeOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime-only", state.getPath()))
+	}
+	if !state.DebugDatetimeLocaltime.IsNull() && data.DebugDatetimeLocaltime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime", state.getPath()))
+	}
+	if !state.DebugDatetimeMsec.IsNull() && data.DebugDatetimeMsec.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/msec", state.getPath()))
+	}
+	if !state.DebugDatetimeShowTimezone.IsNull() && data.DebugDatetimeShowTimezone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/show-timezone", state.getPath()))
+	}
+	if !state.DebugDatetimeYear.IsNull() && data.DebugDatetimeYear.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/year", state.getPath()))
+	}
+	if !state.DebugUptime.IsNull() && data.DebugUptime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/uptime", state.getPath()))
+	}
+	if !state.DebugDisable.IsNull() && data.DebugDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/disable", state.getPath()))
+	}
+	if !state.LogDatetimeLocaltimeOnly.IsNull() && data.LogDatetimeLocaltimeOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime-only", state.getPath()))
+	}
+	if !state.LogDatetimeLocaltime.IsNull() && data.LogDatetimeLocaltime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime", state.getPath()))
+	}
+	if !state.LogDatetimeMsec.IsNull() && data.LogDatetimeMsec.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/msec", state.getPath()))
+	}
+	if !state.LogDatetimeShowTimezone.IsNull() && data.LogDatetimeShowTimezone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/show-timezone", state.getPath()))
+	}
+	if !state.LogDatetimeYear.IsNull() && data.LogDatetimeYear.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/year", state.getPath()))
+	}
+	if !state.LogUptime.IsNull() && data.LogUptime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/uptime", state.getPath()))
+	}
+	if !state.LogDisable.IsNull() && data.LogDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/disable", state.getPath()))
+	}
 	return deletedItems
 }
 

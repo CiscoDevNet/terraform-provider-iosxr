@@ -77,6 +77,9 @@ func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.RplTagSet.IsNull() && data.RplTagSet.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-tag-set", state.getPath()))
+	}
 	return deletedItems
 }
 

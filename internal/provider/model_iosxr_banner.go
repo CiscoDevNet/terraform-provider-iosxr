@@ -77,6 +77,9 @@ func (data *BannerData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Banner) getDeletedItems(ctx context.Context, state Banner) []string {
 	deletedItems := make([]string, 0)
+	if !state.Line.IsNull() && data.Line.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/line", state.getPath()))
+	}
 	return deletedItems
 }
 

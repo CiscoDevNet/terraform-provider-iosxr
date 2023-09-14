@@ -123,6 +123,10 @@ func (data *EVPNGroup) getDeletedItems(ctx context.Context, state EVPNGroup) []s
 	for i := range state.CoreInterfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.CoreInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.CoreInterfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -143,10 +147,6 @@ func (data *EVPNGroup) getDeletedItems(ctx context.Context, state EVPNGroup) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/core/interface%v", state.getPath(), keyString))
 		}
 	}

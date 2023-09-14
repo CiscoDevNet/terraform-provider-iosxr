@@ -87,6 +87,12 @@ func (data *LACPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *LACP) getDeletedItems(ctx context.Context, state LACP) []string {
 	deletedItems := make([]string, 0)
+	if !state.Mac.IsNull() && data.Mac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
 	return deletedItems
 }
 

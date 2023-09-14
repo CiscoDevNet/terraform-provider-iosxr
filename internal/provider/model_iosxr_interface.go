@@ -1242,9 +1242,28 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []string {
 	deletedItems := make([]string, 0)
+	if !state.L2transport.IsNull() && data.L2transport.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/l2transport", state.getPath()))
+	}
+	if !state.PointToPoint.IsNull() && data.PointToPoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/point-to-point", state.getPath()))
+	}
+	if !state.Multipoint.IsNull() && data.Multipoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/multipoint", state.getPath()))
+	}
+	if !state.DampeningDecayHalfLifeValue.IsNull() && data.DampeningDecayHalfLifeValue.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/decay-half-life", state.getPath()))
+	}
+	if !state.Ipv4PointToPoint.IsNull() && data.Ipv4PointToPoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point", state.getPath()))
+	}
 	for i := range state.ServicePolicyInput {
 		keys := [...]string{"service-policy-name"}
 		stateKeyValues := [...]string{state.ServicePolicyInput[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.ServicePolicyInput[i].Name.ValueString()).IsZero() {
@@ -1265,16 +1284,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ServicePolicyOutput {
 		keys := [...]string{"service-policy-name"}
 		stateKeyValues := [...]string{state.ServicePolicyOutput[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.ServicePolicyOutput[i].Name.ValueString()).IsZero() {
@@ -1295,16 +1314,73 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
 		}
+	}
+	if !state.BfdModeIetf.IsNull() && data.BfdModeIetf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bfd/mode/ietf", state.getPath()))
+	}
+	if !state.EncapsulationDot1qVlanId.IsNull() && data.EncapsulationDot1qVlanId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:encapsulation/dot1q/vlan-id", state.getPath()))
+	}
+	if !state.L2transportEncapsulationDot1qVlanId.IsNull() && data.L2transportEncapsulationDot1qVlanId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/vlan-id", state.getPath()))
+	}
+	if !state.L2transportEncapsulationDot1qSecondDot1q.IsNull() && data.L2transportEncapsulationDot1qSecondDot1q.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:l2transport-encapsulation/dot1q/second-dot1q", state.getPath()))
+	}
+	if !state.RewriteIngressTagPopOne.IsNull() && data.RewriteIngressTagPopOne.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/one", state.getPath()))
+	}
+	if !state.RewriteIngressTagPopTwo.IsNull() && data.RewriteIngressTagPopTwo.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-l2-ethernet-cfg:rewrite/ingress/tag/pop/two", state.getPath()))
+	}
+	if !state.Shutdown.IsNull() && data.Shutdown.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/shutdown", state.getPath()))
+	}
+	if !state.Mtu.IsNull() && data.Mtu.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu", state.getPath()))
+	}
+	if !state.Bandwidth.IsNull() && data.Bandwidth.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bandwidth", state.getPath()))
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
+	if !state.LoadInterval.IsNull() && data.LoadInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-statistics-cfg:load-interval", state.getPath()))
+	}
+	if !state.Vrf.IsNull() && data.Vrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-vrf-cfg:vrf", state.getPath()))
+	}
+	if !state.Ipv4Address.IsNull() && data.Ipv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address", state.getPath()))
+	}
+	if !state.Ipv4Netmask.IsNull() && data.Ipv4Netmask.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address", state.getPath()))
+	}
+	if !state.Unnumbered.IsNull() && data.Unnumbered.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", state.getPath()))
+	}
+	if !state.Ipv6LinkLocalAddress.IsNull() && data.Ipv6LinkLocalAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", state.getPath()))
+	}
+	if !state.Ipv6LinkLocalZone.IsNull() && data.Ipv6LinkLocalZone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", state.getPath()))
+	}
+	if !state.Ipv6Autoconfig.IsNull() && data.Ipv6Autoconfig.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig", state.getPath()))
+	}
+	if !state.Ipv6Enable.IsNull() && data.Ipv6Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable", state.getPath()))
 	}
 	for i := range state.Ipv6Addresses {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.Ipv6Addresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Ipv6Addresses[i].Address.ValueString()).IsZero() {
@@ -1321,20 +1397,50 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 				found = false
 			}
 			if found {
+				if !state.Ipv6Addresses[i].PrefixLength.IsNull() && data.Ipv6Addresses[j].PrefixLength.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v/prefix-length", state.getPath(), keyString))
+				}
+				if !state.Ipv6Addresses[i].Zone.IsNull() && data.Ipv6Addresses[j].Zone.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v/zone", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
 		}
+	}
+	if !state.BundleMinimumActiveLinks.IsNull() && data.BundleMinimumActiveLinks.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/minimum-active/links", state.getPath()))
+	}
+	if !state.BundleMaximumActiveLinks.IsNull() && data.BundleMaximumActiveLinks.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/maximum-active/links/maximum-number", state.getPath()))
+	}
+	if !state.BundleShutdown.IsNull() && data.BundleShutdown.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", state.getPath()))
+	}
+	if !state.BundleLoadBalancingHashSrcIp.IsNull() && data.BundleLoadBalancingHashSrcIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/src-ip", state.getPath()))
+	}
+	if !state.BundleLoadBalancingHashDstIp.IsNull() && data.BundleLoadBalancingHashDstIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/load-balancing/hash/dst-ip", state.getPath()))
+	}
+	if !state.BundleId.IsNull() && data.BundleId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/bundle-id", state.getPath()))
+	}
+	if !state.BundleIdMode.IsNull() && data.BundleIdMode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/id/mode", state.getPath()))
+	}
+	if !state.BundlePortPriority.IsNull() && data.BundlePortPriority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority", state.getPath()))
 	}
 	for i := range state.FlowIpv4IngressMonitors {
 		keys := [...]string{"monitor-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv4IngressMonitors[i].MonitorMapName.ValueString()).IsZero() {
@@ -1355,16 +1461,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4IngressMonitorSamplers {
 		keys := [...]string{"monitor-map-name", "sampler-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv4IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv4IngressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
@@ -1391,16 +1497,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4EgressMonitors {
 		keys := [...]string{"monitor-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv4EgressMonitors[i].MonitorMapName.ValueString()).IsZero() {
@@ -1421,16 +1527,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4EgressMonitorSamplers {
 		keys := [...]string{"monitor-map-name", "sampler-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv4EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv4EgressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
@@ -1457,16 +1563,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6IngressMonitors {
 		keys := [...]string{"monitor-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv6IngressMonitors[i].MonitorMapName.ValueString()).IsZero() {
@@ -1487,16 +1593,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6IngressMonitorSamplers {
 		keys := [...]string{"monitor-map-name", "sampler-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv6IngressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv6IngressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
@@ -1523,16 +1629,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6EgressMonitors {
 		keys := [...]string{"monitor-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv6EgressMonitors[i].MonitorMapName.ValueString()).IsZero() {
@@ -1553,16 +1659,16 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6EgressMonitorSamplers {
 		keys := [...]string{"monitor-map-name", "sampler-map-name"}
 		stateKeyValues := [...]string{state.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString(), state.FlowIpv6EgressMonitorSamplers[i].SamplerMapName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlowIpv6EgressMonitorSamplers[i].MonitorMapName.ValueString()).IsZero() {
@@ -1589,10 +1695,6 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}

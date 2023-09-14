@@ -503,9 +503,16 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []b
 
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, state EVPNSegmentRoutingSRv6EVI) []string {
 	deletedItems := make([]string, 0)
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
@@ -532,16 +539,16 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetImportFourByteAsFormat {
 		keys := [...]string{"four-byte-as-number", "assigned-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetImportFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
@@ -568,16 +575,16 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
 		stateKeyValues := [...]string{state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetImportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetImportIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
@@ -604,16 +611,16 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetExportTwoByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
@@ -640,16 +647,16 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportFourByteAsFormat {
 		keys := [...]string{"four-byte-as-number", "assigned-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetExportFourByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetExportFourByteAsFormat[i].AsNumber.ValueInt64()).IsZero() {
@@ -676,16 +683,16 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
 		keys := [...]string{"ipv4-address", "assigned-number"}
 		stateKeyValues := [...]string{state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString(), strconv.FormatInt(state.BgpRouteTargetExportIpv4AddressFormat[i].AssignedNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.BgpRouteTargetExportIpv4AddressFormat[i].Ipv4Address.ValueString()).IsZero() {
@@ -712,12 +719,14 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
 		}
+	}
+	if !state.AdvertiseMac.IsNull() && data.AdvertiseMac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
+	}
+	if !state.Locator.IsNull() && data.Locator.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/locator", state.getPath()))
 	}
 	return deletedItems
 }

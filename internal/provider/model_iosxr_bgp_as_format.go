@@ -101,6 +101,12 @@ func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
 
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
+	if !state.Asdot.IsNull() && data.Asdot.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/asdot", state.getPath()))
+	}
+	if !state.Asplain.IsNull() && data.Asplain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/asplain", state.getPath()))
+	}
 	return deletedItems
 }
 

@@ -206,6 +206,10 @@ func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefi
 	for i := range state.Sequences {
 		keys := [...]string{"sequence-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Sequences[i].SequenceNumber.ValueInt64()).IsZero() {
@@ -222,14 +226,31 @@ func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefi
 				found = false
 			}
 			if found {
+				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/remark", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Permission.IsNull() && data.Sequences[j].Permission.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permission", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/prefix", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthEq.IsNull() && data.Sequences[j].MatchPrefixLengthEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthGe.IsNull() && data.Sequences[j].MatchPrefixLengthGe.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/ge", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthLe.IsNull() && data.Sequences[j].MatchPrefixLengthLe.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/le", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v", state.getPath(), keyString))
 		}
 	}

@@ -1126,6 +1126,10 @@ func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonit
 	for i := range state.Exporters {
 		keys := [...]string{"exporter-name"}
 		stateKeyValues := [...]string{state.Exporters[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Exporters[i].Name.ValueString()).IsZero() {
@@ -1146,12 +1150,164 @@ func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonit
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/exporters/exporter%v", state.getPath(), keyString))
 		}
+	}
+	if !state.OptionOutphysint.IsNull() && data.OptionOutphysint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outphysint", state.getPath()))
+	}
+	if !state.OptionFiltered.IsNull() && data.OptionFiltered.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/filtered", state.getPath()))
+	}
+	if !state.OptionBgpattr.IsNull() && data.OptionBgpattr.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/bgpattr", state.getPath()))
+	}
+	if !state.OptionOutbundlemember.IsNull() && data.OptionOutbundlemember.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outbundlemember", state.getPath()))
+	}
+	if !state.RecordIpv4.IsNull() && data.RecordIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4", state.getPath()))
+	}
+	if !state.RecordIpv4Destination.IsNull() && data.RecordIpv4Destination.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationTos.IsNull() && data.RecordIpv4DestinationTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-tos", state.getPath()))
+	}
+	if !state.RecordIpv4As.IsNull() && data.RecordIpv4As.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as", state.getPath()))
+	}
+	if !state.RecordIpv4ProtocolPort.IsNull() && data.RecordIpv4ProtocolPort.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port", state.getPath()))
+	}
+	if !state.RecordIpv4Prefix.IsNull() && data.RecordIpv4Prefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix", state.getPath()))
+	}
+	if !state.RecordIpv4SourcePrefix.IsNull() && data.RecordIpv4SourcePrefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationPrefix.IsNull() && data.RecordIpv4DestinationPrefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix", state.getPath()))
+	}
+	if !state.RecordIpv4AsTos.IsNull() && data.RecordIpv4AsTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as-tos", state.getPath()))
+	}
+	if !state.RecordIpv4ProtocolPortTos.IsNull() && data.RecordIpv4ProtocolPortTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PrefixTos.IsNull() && data.RecordIpv4PrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4SourcePrefixTos.IsNull() && data.RecordIpv4SourcePrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationPrefixTos.IsNull() && data.RecordIpv4DestinationPrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PrefixPort.IsNull() && data.RecordIpv4PrefixPort.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-port", state.getPath()))
+	}
+	if !state.RecordIpv4BgpNexthopTos.IsNull() && data.RecordIpv4BgpNexthopTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PeerAs.IsNull() && data.RecordIpv4PeerAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/peer-as", state.getPath()))
+	}
+	if !state.RecordIpv4Gtp.IsNull() && data.RecordIpv4Gtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/gtp", state.getPath()))
+	}
+	if !state.RecordIpv6.IsNull() && data.RecordIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6", state.getPath()))
+	}
+	if !state.RecordIpv6Destination.IsNull() && data.RecordIpv6Destination.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/destination", state.getPath()))
+	}
+	if !state.RecordIpv6PeerAs.IsNull() && data.RecordIpv6PeerAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/peer-as", state.getPath()))
+	}
+	if !state.RecordIpv6Gtp.IsNull() && data.RecordIpv6Gtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/gtp", state.getPath()))
+	}
+	if !state.RecordMpls.IsNull() && data.RecordMpls.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls", state.getPath()))
+	}
+	if !state.RecordMplsIpv4Fields.IsNull() && data.RecordMplsIpv4Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-fields", state.getPath()))
+	}
+	if !state.RecordMplsIpv6Fields.IsNull() && data.RecordMplsIpv6Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv6-fields", state.getPath()))
+	}
+	if !state.RecordMplsIpv4Ipv6Fields.IsNull() && data.RecordMplsIpv4Ipv6Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", state.getPath()))
+	}
+	if !state.RecordMplsLabels.IsNull() && data.RecordMplsLabels.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/labels", state.getPath()))
+	}
+	if !state.RecordMapT.IsNull() && data.RecordMapT.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/map-t", state.getPath()))
+	}
+	if !state.RecordSflow.IsNull() && data.RecordSflow.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/sflow", state.getPath()))
+	}
+	if !state.RecordDatalinkRecord.IsNull() && data.RecordDatalinkRecord.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/datalink-record", state.getPath()))
+	}
+	if !state.RecordDefaultRtp.IsNull() && data.RecordDefaultRtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-rtp", state.getPath()))
+	}
+	if !state.RecordDefaultMdi.IsNull() && data.RecordDefaultMdi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-mdi", state.getPath()))
+	}
+	if !state.CacheEntries.IsNull() && data.CacheEntries.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/entries", state.getPath()))
+	}
+	if !state.CacheTimeoutActive.IsNull() && data.CacheTimeoutActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/active", state.getPath()))
+	}
+	if !state.CacheTimeoutInactive.IsNull() && data.CacheTimeoutInactive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/inactive", state.getPath()))
+	}
+	if !state.CacheTimeoutUpdate.IsNull() && data.CacheTimeoutUpdate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/update", state.getPath()))
+	}
+	if !state.CacheTimeoutRateLimit.IsNull() && data.CacheTimeoutRateLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/rate-limit", state.getPath()))
+	}
+	if !state.CachePermanent.IsNull() && data.CachePermanent.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/permanent", state.getPath()))
+	}
+	if !state.CacheImmediate.IsNull() && data.CacheImmediate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/immediate", state.getPath()))
+	}
+	if !state.HwCacheTimeoutInactive.IsNull() && data.HwCacheTimeoutInactive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hw-cache/timeout/inactive", state.getPath()))
+	}
+	if !state.SflowOptions.IsNull() && data.SflowOptions.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedRouter.IsNull() && data.SflowOptionsExtendedRouter.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-router", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedGateway.IsNull() && data.SflowOptionsExtendedGateway.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-gateway", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", state.getPath()))
+	}
+	if !state.SflowOptionsIfCountersPollingInterval.IsNull() && data.SflowOptionsIfCountersPollingInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/if-counters/polling-interval", state.getPath()))
+	}
+	if !state.SflowOptionsSampleHeaderSize.IsNull() && data.SflowOptionsSampleHeaderSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/sample-header/size", state.getPath()))
+	}
+	if !state.SflowOptionsInputIfindex.IsNull() && data.SflowOptionsInputIfindex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/input/ifindex", state.getPath()))
+	}
+	if !state.SflowOptionsOutputIfindex.IsNull() && data.SflowOptionsOutputIfindex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/output/ifindex", state.getPath()))
 	}
 	return deletedItems
 }

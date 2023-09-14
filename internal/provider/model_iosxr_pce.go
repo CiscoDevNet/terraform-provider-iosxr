@@ -253,9 +253,19 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 
 func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 	deletedItems := make([]string, 0)
+	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4", state.getPath()))
+	}
+	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv6", state.getPath()))
+	}
 	for i := range state.StateSyncIpv4s {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
@@ -276,16 +286,25 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
 		}
+	}
+	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
+	}
+	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
+	}
+	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
 	}
 	for i := range state.ApiUsers {
 		keys := [...]string{"user-name"}
 		stateKeyValues := [...]string{state.ApiUsers[i].UserName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.ApiUsers[i].UserName.ValueString()).IsZero() {
@@ -302,14 +321,13 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 				found = false
 			}
 			if found {
+				if !state.ApiUsers[i].PasswordEncrypted.IsNull() && data.ApiUsers[j].PasswordEncrypted.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v/password/encrypted", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
 		}
 	}

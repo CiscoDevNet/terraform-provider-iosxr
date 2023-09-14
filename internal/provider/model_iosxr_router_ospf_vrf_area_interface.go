@@ -224,6 +224,30 @@ func (data *RouterOSPFVRFAreaInterfaceData) fromBody(ctx context.Context, res []
 
 func (data *RouterOSPFVRFAreaInterface) getDeletedItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
 	deletedItems := make([]string, 0)
+	if !state.NetworkBroadcast.IsNull() && data.NetworkBroadcast.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/network/broadcast", state.getPath()))
+	}
+	if !state.NetworkNonBroadcast.IsNull() && data.NetworkNonBroadcast.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/network/non-broadcast", state.getPath()))
+	}
+	if !state.NetworkPointToPoint.IsNull() && data.NetworkPointToPoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/network/point-to-point", state.getPath()))
+	}
+	if !state.NetworkPointToMultipoint.IsNull() && data.NetworkPointToMultipoint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/network/point-to-multipoint", state.getPath()))
+	}
+	if !state.Cost.IsNull() && data.Cost.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cost", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.PassiveEnable.IsNull() && data.PassiveEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/enable", state.getPath()))
+	}
+	if !state.PassiveDisable.IsNull() && data.PassiveDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/passive/disable", state.getPath()))
+	}
 	return deletedItems
 }
 

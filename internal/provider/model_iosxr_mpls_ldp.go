@@ -482,9 +482,16 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []string {
 	deletedItems := make([]string, 0)
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
 		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
@@ -501,20 +508,26 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 				found = false
 			}
 			if found {
+				if !state.AddressFamilies[i].LabelLocalAllocateForAccessList.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForAccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/access-list", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].LabelLocalAllocateForHostRoutes.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForHostRoutes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/host-routes", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -535,16 +548,37 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
+	}
+	if !state.CapabilitiesSacIpv4Disable.IsNull() && data.CapabilitiesSacIpv4Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacIpv6Disable.IsNull() && data.CapabilitiesSacIpv6Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacFec128Disable.IsNull() && data.CapabilitiesSacFec128Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec128-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacFec129Disable.IsNull() && data.CapabilitiesSacFec129Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec129-disable", state.getPath()))
+	}
+	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-session-up", state.getPath()))
+	}
+	if !state.IgpSyncDelayOnProcRestart.IsNull() && data.IgpSyncDelayOnProcRestart.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", state.getPath()))
+	}
+	if !state.MldpLoggingNotifications.IsNull() && data.MldpLoggingNotifications.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/logging/notifications", state.getPath()))
 	}
 	for i := range state.MldpAddressFamilies {
 		keys := [...]string{"af-name"}
 		stateKeyValues := [...]string{state.MldpAddressFamilies[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.MldpAddressFamilies[i].Name.ValueString()).IsZero() {
@@ -561,16 +595,27 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 				found = false
 			}
 			if found {
+				if !state.MldpAddressFamilies[i].MakeBeforeBreakDelay.IsNull() && data.MldpAddressFamilies[j].MakeBeforeBreakDelay.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/make-before-break/delay/forwarding-delay", state.getPath(), keyString))
+				}
+				if !state.MldpAddressFamilies[i].ForwardingRecursive.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive", state.getPath(), keyString))
+				}
+				if !state.MldpAddressFamilies[i].ForwardingRecursiveRoutePolicy.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursiveRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive/route-policy", state.getPath(), keyString))
+				}
+				if !state.MldpAddressFamilies[i].RecursiveFec.IsNull() && data.MldpAddressFamilies[j].RecursiveFec.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/recursive-fec/enable", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v", state.getPath(), keyString))
 		}
+	}
+	if !state.SessionProtection.IsNull() && data.SessionProtection.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/protection", state.getPath()))
 	}
 	return deletedItems
 }

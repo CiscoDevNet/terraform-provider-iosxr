@@ -395,6 +395,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 	for i := range state.Evis {
 		keys := [...]string{"vpn-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Evis[i].VpnId.ValueInt64()).IsZero() {
@@ -415,16 +419,16 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/evis/evi%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Vnis {
 		keys := [...]string{"vni-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Vnis[i].VniId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Vnis[i].VniId.ValueInt64()).IsZero() {
@@ -445,16 +449,37 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/vnis/vni%v", state.getPath(), keyString))
 		}
+	}
+	if !state.Mtu.IsNull() && data.Mtu.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mtu", state.getPath()))
+	}
+	if !state.StormControlBroadcastPps.IsNull() && data.StormControlBroadcastPps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/broadcast/pps", state.getPath()))
+	}
+	if !state.StormControlBroadcastKbps.IsNull() && data.StormControlBroadcastKbps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/broadcast/kbps", state.getPath()))
+	}
+	if !state.StormControlMulticastPps.IsNull() && data.StormControlMulticastPps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/multicast/pps", state.getPath()))
+	}
+	if !state.StormControlMulticastKbps.IsNull() && data.StormControlMulticastKbps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/multicast/kbps", state.getPath()))
+	}
+	if !state.StormControlUnknownUnicastPps.IsNull() && data.StormControlUnknownUnicastPps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/unknown-unicast/pps", state.getPath()))
+	}
+	if !state.StormControlUnknownUnicastKbps.IsNull() && data.StormControlUnknownUnicastKbps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/storm-control/unknown-unicast/kbps", state.getPath()))
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -471,20 +496,23 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 				found = false
 			}
 			if found {
+				if !state.Interfaces[i].SplitHorizonGroup.IsNull() && data.Interfaces[j].SplitHorizonGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/split-horizon/group", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.SegmentRoutingSrv6Evis {
 		keys := [...]string{"vpn-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.SegmentRoutingSrv6Evis[i].VpnId.ValueInt64()).IsZero() {
@@ -505,10 +533,6 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", state.getPath(), keyString))
 		}
 	}

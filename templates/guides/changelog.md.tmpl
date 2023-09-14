@@ -15,6 +15,7 @@ description: |-
 - Add `iosxr_router_hsrp_interface_address_family_ipv6_group_v2` resource and data source
 - Add `route_reflector_client` attribute to `iosxr_router_bgp_neighbor_address_family` and `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `communities` attributes to `iosxr_snmp_server` resource and data source
+- When removing attributes from a resource (or setting them to `null`) which were previously set, the corresponding configuration will be removed from the device
 
 ## 0.2.5
 

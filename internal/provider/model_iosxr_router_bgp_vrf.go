@@ -631,9 +631,52 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVRF) []string {
 	deletedItems := make([]string, 0)
+	if !state.RdAuto.IsNull() && data.RdAuto.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/auto", state.getPath()))
+	}
+	if !state.RdTwoByteAsAsNumber.IsNull() && data.RdTwoByteAsAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/two-byte-as", state.getPath()))
+	}
+	if !state.RdTwoByteAsIndex.IsNull() && data.RdTwoByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/two-byte-as", state.getPath()))
+	}
+	if !state.RdFourByteAsAsNumber.IsNull() && data.RdFourByteAsAsNumber.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/four-byte-as", state.getPath()))
+	}
+	if !state.RdFourByteAsIndex.IsNull() && data.RdFourByteAsIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/four-byte-as", state.getPath()))
+	}
+	if !state.RdIpAddressIpv4Address.IsNull() && data.RdIpAddressIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/ip-address", state.getPath()))
+	}
+	if !state.RdIpAddressIndex.IsNull() && data.RdIpAddressIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rd/ip-address", state.getPath()))
+	}
+	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
+	}
+	if !state.DefaultMetric.IsNull() && data.DefaultMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-metric", state.getPath()))
+	}
+	if !state.TimersBgpKeepaliveInterval.IsNull() && data.TimersBgpKeepaliveInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp", state.getPath()))
+	}
+	if !state.TimersBgpHoldtime.IsNull() && data.TimersBgpHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp", state.getPath()))
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
+	}
 	for i := range state.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		stateKeyValues := [...]string{state.Neighbors[i].NeighborAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Neighbors[i].NeighborAddress.ValueString()).IsZero() {
@@ -650,14 +693,73 @@ func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVR
 				found = false
 			}
 			if found {
+				if !state.Neighbors[i].RemoteAs.IsNull() && data.Neighbors[j].RemoteAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/remote-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Description.IsNull() && data.Neighbors[j].Description.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/description", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalSeconds.IsNull() && data.Neighbors[j].AdvertisementIntervalSeconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].AdvertisementIntervalMilliseconds.IsNull() && data.Neighbors[j].AdvertisementIntervalMilliseconds.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/advertisement-interval", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].IgnoreConnectedCheck.IsNull() && data.Neighbors[j].IgnoreConnectedCheck.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ignore-connected-check", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].EbgpMultihopMaximumHopCount.IsNull() && data.Neighbors[j].EbgpMultihopMaximumHopCount.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ebgp-multihop/maximum-hop-count", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdMinimumInterval.IsNull() && data.Neighbors[j].BfdMinimumInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/minimum-interval", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdMultiplier.IsNull() && data.Neighbors[j].BfdMultiplier.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/multiplier", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetect.IsNull() && data.Neighbors[j].BfdFastDetect.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectStrictMode.IsNull() && data.Neighbors[j].BfdFastDetectStrictMode.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/strict-mode", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].BfdFastDetectDisable.IsNull() && data.Neighbors[j].BfdFastDetectDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/bfd/fast-detect/disable", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAs.IsNull() && data.Neighbors[j].LocalAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/as-number", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsNoPrepend.IsNull() && data.Neighbors[j].LocalAsNoPrepend.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsReplaceAs.IsNull() && data.Neighbors[j].LocalAsReplaceAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend/replace-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].LocalAsDualAs.IsNull() && data.Neighbors[j].LocalAsDualAs.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/local-as/no-prepend/replace-as/dual-as", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Password.IsNull() && data.Neighbors[j].Password.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/password/encrypted", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].Shutdown.IsNull() && data.Neighbors[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/shutdown", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersKeepaliveInterval.IsNull() && data.Neighbors[j].TimersKeepaliveInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/keepalive-interval", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TimersHoldtime.IsNull() && data.Neighbors[j].TimersHoldtime.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update-source", state.getPath(), keyString))
+				}
+				if !state.Neighbors[i].TtlSecurity.IsNull() && data.Neighbors[j].TtlSecurity.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
 		}
 	}

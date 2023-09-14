@@ -183,9 +183,25 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 
 func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 	deletedItems := make([]string, 0)
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+	}
+	if !state.LoadBalancingFlowSrcDstMac.IsNull() && data.LoadBalancingFlowSrcDstMac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-mac", state.getPath()))
+	}
+	if !state.LoadBalancingFlowSrcDstIp.IsNull() && data.LoadBalancingFlowSrcDstIp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/load-balancing/flow/src-dst-ip", state.getPath()))
+	}
 	for i := range state.XconnectGroups {
 		keys := [...]string{"group-name"}
 		stateKeyValues := [...]string{state.XconnectGroups[i].GroupName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.XconnectGroups[i].GroupName.ValueString()).IsZero() {
@@ -206,10 +222,6 @@ func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
 		}
 	}

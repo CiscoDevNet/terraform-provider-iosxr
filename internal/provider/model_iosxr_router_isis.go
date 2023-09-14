@@ -970,9 +970,31 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) []string {
 	deletedItems := make([]string, 0)
+	if !state.IsType.IsNull() && data.IsType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/is-type", state.getPath()))
+	}
+	if !state.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() && data.SetOverloadBitOnStartupAdvertiseAsOverloaded.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/advertise-as-overloaded", state.getPath()))
+	}
+	if !state.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/advertise-as-overloaded", state.getPath()))
+	}
+	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/wait-for-bgp", state.getPath()))
+	}
+	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
+	}
+	if !state.SetOverloadBitAdvertiseInterlevel.IsNull() && data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", state.getPath()))
+	}
 	for i := range state.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.SetOverloadBitLevels[i].LevelId.ValueInt64()).IsZero() {
@@ -989,20 +1011,80 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
+				if !state.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloaded.IsNull() && data.SetOverloadBitLevels[j].OnStartupAdvertiseAsOverloaded.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v/on-startup/advertise-as-overloaded", state.getPath(), keyString))
+				}
+				if !state.SetOverloadBitLevels[i].OnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupAdvertiseAsOverloadedTimeToAdvertise.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v/on-startup/advertise-as-overloaded/time-to-advertise", state.getPath(), keyString))
+				}
+				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v/on-startup/wait-for-bgp", state.getPath(), keyString))
+				}
+				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v/advertise/external", state.getPath(), keyString))
+				}
+				if !state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && data.SetOverloadBitLevels[j].AdvertiseInterlevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v/advertise/interlevel", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v", state.getPath(), keyString))
 		}
+	}
+	if !state.Nsr.IsNull() && data.Nsr.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
+	}
+	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/cisco", state.getPath()))
+	}
+	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/ietf", state.getPath()))
+	}
+	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
+	}
+	if !state.NsfInterfaceTimer.IsNull() && data.NsfInterfaceTimer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-timer", state.getPath()))
+	}
+	if !state.NsfInterfaceExpires.IsNull() && data.NsfInterfaceExpires.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-expires", state.getPath()))
+	}
+	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
+	}
+	if !state.LspGenIntervalMaximumWait.IsNull() && data.LspGenIntervalMaximumWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", state.getPath()))
+	}
+	if !state.LspGenIntervalInitialWait.IsNull() && data.LspGenIntervalInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", state.getPath()))
+	}
+	if !state.LspGenIntervalSecondaryWait.IsNull() && data.LspGenIntervalSecondaryWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", state.getPath()))
+	}
+	if !state.LspRefreshInterval.IsNull() && data.LspRefreshInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval/lsp-refresh-interval-time", state.getPath()))
+	}
+	if !state.MaxLspLifetime.IsNull() && data.MaxLspLifetime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime/max-lsp-lifetime", state.getPath()))
+	}
+	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
+	}
+	if !state.DistributeLinkStateThrottle.IsNull() && data.DistributeLinkStateThrottle.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/throttle", state.getPath()))
+	}
+	if !state.DistributeLinkStateLevel.IsNull() && data.DistributeLinkStateLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/level", state.getPath()))
 	}
 	for i := range state.AffinityMaps {
 		keys := [...]string{"affinity-map-name"}
 		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
@@ -1019,20 +1101,23 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
+				if !state.AffinityMaps[i].BitPosition.IsNull() && data.AffinityMaps[j].BitPosition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v/bit-position", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlexAlgos {
 		keys := [...]string{"algorithm-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].AlgorithmNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FlexAlgos[i].AlgorithmNumber.ValueInt64()).IsZero() {
@@ -1049,20 +1134,26 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
+				if !state.FlexAlgos[i].AdvertiseDefinition.IsNull() && data.FlexAlgos[j].AdvertiseDefinition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algos/flex-algo%v/advertise-definition", state.getPath(), keyString))
+				}
+				if !state.FlexAlgos[i].MetricTypeDelay.IsNull() && data.FlexAlgos[j].MetricTypeDelay.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algos/flex-algo%v/metric-type/delay", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algos/flex-algo%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Nets {
 		keys := [...]string{"net-id"}
 		stateKeyValues := [...]string{state.Nets[i].NetId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Nets[i].NetId.ValueString()).IsZero() {
@@ -1083,16 +1174,16 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -1109,14 +1200,34 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
+				if !state.Interfaces[i].CircuitType.IsNull() && data.Interfaces[j].CircuitType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/circuit-type", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].HelloPaddingDisable.IsNull() && data.Interfaces[j].HelloPaddingDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/hello-padding/disable", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].HelloPaddingSometimes.IsNull() && data.Interfaces[j].HelloPaddingSometimes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/hello-padding/sometimes", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Priority.IsNull() && data.Interfaces[j].Priority.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/priority/priority-value", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].PointToPoint.IsNull() && data.Interfaces[j].PointToPoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Passive.IsNull() && data.Interfaces[j].Passive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/passive", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Suppressed.IsNull() && data.Interfaces[j].Suppressed.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/suppressed", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Shutdown.IsNull() && data.Interfaces[j].Shutdown.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/shutdown", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}

@@ -281,6 +281,54 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExporterMap) []string {
 	deletedItems := make([]string, 0)
+	if !state.DestinationIpv4Address.IsNull() && data.DestinationIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/ipv4-address", state.getPath()))
+	}
+	if !state.DestinationIpv6Address.IsNull() && data.DestinationIpv6Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/ipv6-address", state.getPath()))
+	}
+	if !state.DestinationVrf.IsNull() && data.DestinationVrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/vrf", state.getPath()))
+	}
+	if !state.Source.IsNull() && data.Source.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source", state.getPath()))
+	}
+	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
+	}
+	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-length", state.getPath()))
+	}
+	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
+	}
+	if !state.DfbitSet.IsNull() && data.DfbitSet.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
+	}
+	if !state.VersionExportFormat.IsNull() && data.VersionExportFormat.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/export-format", state.getPath()))
+	}
+	if !state.VersionTemplateDataTimeout.IsNull() && data.VersionTemplateDataTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/data/timeout", state.getPath()))
+	}
+	if !state.VersionTemplateOptionsTimeout.IsNull() && data.VersionTemplateOptionsTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/options/timeout", state.getPath()))
+	}
+	if !state.VersionTemplateTimeout.IsNull() && data.VersionTemplateTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsInterfaceTableTimeout.IsNull() && data.VersionOptionsInterfaceTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/interface-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsSamplerTableTimeout.IsNull() && data.VersionOptionsSamplerTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/sampler-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsClassTableTimeout.IsNull() && data.VersionOptionsClassTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/class-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsVrfTableTimeout.IsNull() && data.VersionOptionsVrfTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/vrf-table/timeout", state.getPath()))
+	}
 	return deletedItems
 }
 

@@ -144,6 +144,18 @@ func (data *FPDData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
 	deletedItems := make([]string, 0)
+	if !state.AutoUpgradeEnable.IsNull() && data.AutoUpgradeEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/enable", state.getPath()))
+	}
+	if !state.AutoUpgradeDisable.IsNull() && data.AutoUpgradeDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/disable", state.getPath()))
+	}
+	if !state.AutoReloadEnable.IsNull() && data.AutoReloadEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/enable", state.getPath()))
+	}
+	if !state.AutoReloadDisable.IsNull() && data.AutoReloadDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/disable", state.getPath()))
+	}
 	return deletedItems
 }
 

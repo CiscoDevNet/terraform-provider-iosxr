@@ -377,9 +377,46 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 
 func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
 	deletedItems := make([]string, 0)
+	if !state.RemoteAs.IsNull() && data.RemoteAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remote-as", state.getPath()))
+	}
+	if !state.UpdateSource.IsNull() && data.UpdateSource.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/update-source", state.getPath()))
+	}
+	if !state.AdvertisementIntervalSeconds.IsNull() && data.AdvertisementIntervalSeconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertisement-interval", state.getPath()))
+	}
+	if !state.AdvertisementIntervalMilliseconds.IsNull() && data.AdvertisementIntervalMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertisement-interval", state.getPath()))
+	}
+	if !state.AoKeyChainName.IsNull() && data.AoKeyChainName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name", state.getPath()))
+	}
+	if !state.AoIncludeTcpOptionsEnable.IsNull() && data.AoIncludeTcpOptionsEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/include-tcp-options/enable", state.getPath()))
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
+	}
+	if !state.BfdFastDetect.IsNull() && data.BfdFastDetect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+	}
+	if !state.BfdFastDetectStrictMode.IsNull() && data.BfdFastDetectStrictMode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", state.getPath()))
+	}
+	if !state.BfdFastDetectInheritanceDisable.IsNull() && data.BfdFastDetectInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", state.getPath()))
+	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
 		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
@@ -396,14 +433,22 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && data.AddressFamilies[j].SoftReconfigurationInboundAlways.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && data.AddressFamilies[j].NextHopSelfInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].RouteReflectorClient.IsNull() && data.AddressFamilies[j].RouteReflectorClient.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}

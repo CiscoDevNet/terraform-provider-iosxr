@@ -289,6 +289,42 @@ func (data *LLDPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *LLDP) getDeletedItems(ctx context.Context, state LLDP) []string {
 	deletedItems := make([]string, 0)
+	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/holdtime", state.getPath()))
+	}
+	if !state.Timer.IsNull() && data.Timer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
+	}
+	if !state.Reinit.IsNull() && data.Reinit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/reinit", state.getPath()))
+	}
+	if !state.SubinterfacesEnable.IsNull() && data.SubinterfacesEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/subinterfaces/enable", state.getPath()))
+	}
+	if !state.ManagementEnable.IsNull() && data.ManagementEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/management/enable", state.getPath()))
+	}
+	if !state.PriorityaddrEnable.IsNull() && data.PriorityaddrEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priorityaddr/enable", state.getPath()))
+	}
+	if !state.ExtendedShowWidthEnable.IsNull() && data.ExtendedShowWidthEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/extended-show-width/enable", state.getPath()))
+	}
+	if !state.TlvSelectManagementAddressDisable.IsNull() && data.TlvSelectManagementAddressDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tlv-select/management-address/disable", state.getPath()))
+	}
+	if !state.TlvSelectPortDescriptionDisable.IsNull() && data.TlvSelectPortDescriptionDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tlv-select/port-description/disable", state.getPath()))
+	}
+	if !state.TlvSelectSystemCapabilitiesDisable.IsNull() && data.TlvSelectSystemCapabilitiesDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tlv-select/system-capabilities/disable", state.getPath()))
+	}
+	if !state.TlvSelectSystemDescriptionDisable.IsNull() && data.TlvSelectSystemDescriptionDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tlv-select/system-description/disable", state.getPath()))
+	}
+	if !state.TlvSelectSystemNameDisable.IsNull() && data.TlvSelectSystemNameDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tlv-select/system-name/disable", state.getPath()))
+	}
 	return deletedItems
 }
 

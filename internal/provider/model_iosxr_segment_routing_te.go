@@ -657,9 +657,37 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state SegmentRoutingTE) []string {
 	deletedItems := make([]string, 0)
+	if !state.LoggingPcepPeerStatus.IsNull() && data.LoggingPcepPeerStatus.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/pcep-peer-status", state.getPath()))
+	}
+	if !state.LoggingPolicyStatus.IsNull() && data.LoggingPolicyStatus.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/logging/policy-status", state.getPath()))
+	}
+	if !state.PccReportAll.IsNull() && data.PccReportAll.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/report-all", state.getPath()))
+	}
+	if !state.PccSourceAddress.IsNull() && data.PccSourceAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/source-address", state.getPath()))
+	}
+	if !state.PccDelegationTimeout.IsNull() && data.PccDelegationTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/delegation-timeout", state.getPath()))
+	}
+	if !state.PccDeadTimer.IsNull() && data.PccDeadTimer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/dead-timer-interval", state.getPath()))
+	}
+	if !state.PccInitiatedState.IsNull() && data.PccInitiatedState.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/initiated-state-interval", state.getPath()))
+	}
+	if !state.PccInitiatedOrphan.IsNull() && data.PccInitiatedOrphan.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/initiated-orphan-interval", state.getPath()))
+	}
 	for i := range state.PcePeers {
 		keys := [...]string{"pce-address"}
 		stateKeyValues := [...]string{state.PcePeers[i].PceAddress.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.PcePeers[i].PceAddress.ValueString()).IsZero() {
@@ -676,20 +704,23 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 				found = false
 			}
 			if found {
+				if !state.PcePeers[i].Precedence.IsNull() && data.PcePeers[j].Precedence.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/pce-peers/pce-peer%v/precedence", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/pce-peers/pce-peer%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.OnDemandColors {
 		keys := [...]string{"color"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.OnDemandColors[i].Color.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.OnDemandColors[i].Color.ValueInt64()).IsZero() {
@@ -706,20 +737,59 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 				found = false
 			}
 			if found {
+				if !state.OnDemandColors[i].DynamicAnycastSidInclusion.IsNull() && data.OnDemandColors[j].DynamicAnycastSidInclusion.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].DynamicMetricType.IsNull() && data.OnDemandColors[j].DynamicMetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].Srv6Enable.IsNull() && data.OnDemandColors[j].Srv6Enable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/srv6/enable", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].Srv6LocatorName.IsNull() && data.OnDemandColors[j].Srv6LocatorName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/srv6/locator/locator-name", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].Srv6LocatorBehavior.IsNull() && data.OnDemandColors[j].Srv6LocatorBehavior.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/srv6/locator/behavior", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].Srv6LocatorBindingSidType.IsNull() && data.OnDemandColors[j].Srv6LocatorBindingSidType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/srv6/locator/binding-sid-type", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].SourceAddress.IsNull() && data.OnDemandColors[j].SourceAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/source-address/source-address", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].SourceAddressType.IsNull() && data.OnDemandColors[j].SourceAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/source-address/ip-address-type", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].EffectiveMetricEnable.IsNull() && data.OnDemandColors[j].EffectiveMetricEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/effective-metric/enable", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].EffectiveMetricValue.IsNull() && data.OnDemandColors[j].EffectiveMetricValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/effective-metric/metric-value-type/metric-value", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].EffectiveMetricType.IsNull() && data.OnDemandColors[j].EffectiveMetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/effective-metric/metric-value-type/metric-type", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].ConstraintSegmentsProtectionType.IsNull() && data.OnDemandColors[j].ConstraintSegmentsProtectionType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/constraint/segments/protection-type", state.getPath(), keyString))
+				}
+				if !state.OnDemandColors[i].ConstraintSegmentsSidAlgorithm.IsNull() && data.OnDemandColors[j].ConstraintSegmentsSidAlgorithm.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v/constraint/segments/sid-algorithm", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Policies {
 		keys := [...]string{"policy-name"}
 		stateKeyValues := [...]string{state.Policies[i].PolicyName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Policies[i].PolicyName.ValueString()).IsZero() {
@@ -736,14 +806,37 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 				found = false
 			}
 			if found {
+				if !state.Policies[i].Srv6Enable.IsNull() && data.Policies[j].Srv6Enable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/srv6/enable", state.getPath(), keyString))
+				}
+				if !state.Policies[i].Srv6LocatorName.IsNull() && data.Policies[j].Srv6LocatorName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/srv6/locator/locator-name", state.getPath(), keyString))
+				}
+				if !state.Policies[i].Srv6LocatorBindingSidType.IsNull() && data.Policies[j].Srv6LocatorBindingSidType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/srv6/locator/binding-sid-type", state.getPath(), keyString))
+				}
+				if !state.Policies[i].Srv6LocatorBehavior.IsNull() && data.Policies[j].Srv6LocatorBehavior.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/srv6/locator/behavior", state.getPath(), keyString))
+				}
+				if !state.Policies[i].SourceAddress.IsNull() && data.Policies[j].SourceAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/source-address/source-address", state.getPath(), keyString))
+				}
+				if !state.Policies[i].SourceAddressType.IsNull() && data.Policies[j].SourceAddressType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/source-address/ip-address-type", state.getPath(), keyString))
+				}
+				if !state.Policies[i].PolicyColorEndpointColor.IsNull() && data.Policies[j].PolicyColorEndpointColor.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/policy-color-endpoint/color", state.getPath(), keyString))
+				}
+				if !state.Policies[i].PolicyColorEndpointType.IsNull() && data.Policies[j].PolicyColorEndpointType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/policy-color-endpoint/end-point-type", state.getPath(), keyString))
+				}
+				if !state.Policies[i].PolicyColorEndpointAddress.IsNull() && data.Policies[j].PolicyColorEndpointAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v/policy-color-endpoint/end-point-address", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v", state.getPath(), keyString))
 		}
 	}

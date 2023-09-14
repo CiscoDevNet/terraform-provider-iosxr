@@ -220,9 +220,28 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 	deletedItems := make([]string, 0)
+	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/dscp", state.getPath()))
+	}
+	if !state.ServerLogging.IsNull() && data.ServerLogging.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/logging", state.getPath()))
+	}
+	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/rate-limit", state.getPath()))
+	}
+	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/session-limit", state.getPath()))
+	}
+	if !state.ServerV2.IsNull() && data.ServerV2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/v2", state.getPath()))
+	}
 	for i := range state.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.ServerVrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.ServerVrfs[i].VrfName.ValueString()).IsZero() {
@@ -239,14 +258,16 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 				found = false
 			}
 			if found {
+				if !state.ServerVrfs[i].Ipv4AccessList.IsNull() && data.ServerVrfs[j].Ipv4AccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v/ipv4/access-list", state.getPath(), keyString))
+				}
+				if !state.ServerVrfs[i].Ipv6AccessList.IsNull() && data.ServerVrfs[j].Ipv6AccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v/ipv6/access-list", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}

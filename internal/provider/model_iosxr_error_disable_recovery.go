@@ -321,6 +321,66 @@ func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res []byte) 
 
 func (data *ErrorDisableRecovery) getDeletedItems(ctx context.Context, state ErrorDisableRecovery) []string {
 	deletedItems := make([]string, 0)
+	if !state.LinkOamSessionDownInterval.IsNull() && data.LinkOamSessionDownInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-session-down/interval", state.getPath()))
+	}
+	if !state.LinkOamDiscoveryTimeoutInterval.IsNull() && data.LinkOamDiscoveryTimeoutInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-discovery-timeout/interval", state.getPath()))
+	}
+	if !state.LinkOamCapabilitiesConflictInterval.IsNull() && data.LinkOamCapabilitiesConflictInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-capabilities-conflict/interval", state.getPath()))
+	}
+	if !state.LinkOamMiswiredInterval.IsNull() && data.LinkOamMiswiredInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-miswired/interval", state.getPath()))
+	}
+	if !state.LinkOamLinkFaultInterval.IsNull() && data.LinkOamLinkFaultInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-link-fault/interval", state.getPath()))
+	}
+	if !state.LinkOamDyingGaspInterval.IsNull() && data.LinkOamDyingGaspInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-dying-gasp/interval", state.getPath()))
+	}
+	if !state.LinkOamCriticalEventInterval.IsNull() && data.LinkOamCriticalEventInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-critical-event/interval", state.getPath()))
+	}
+	if !state.LinkOamThresholdBreachedInterval.IsNull() && data.LinkOamThresholdBreachedInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-threshold-breached/interval", state.getPath()))
+	}
+	if !state.StpBpduGuardInterval.IsNull() && data.StpBpduGuardInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/stp-bpdu-guard/interval", state.getPath()))
+	}
+	if !state.StpLegacyBpduInterval.IsNull() && data.StpLegacyBpduInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/stp-legacy-bpdu/interval", state.getPath()))
+	}
+	if !state.ClusterUdldInterval.IsNull() && data.ClusterUdldInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cluster-udld/interval", state.getPath()))
+	}
+	if !state.ClusterMinlinksInterval.IsNull() && data.ClusterMinlinksInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cluster-minlinks/interval", state.getPath()))
+	}
+	if !state.UdldUnidirectionalInterval.IsNull() && data.UdldUnidirectionalInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/udld-unidirectional/interval", state.getPath()))
+	}
+	if !state.UdldNeighborMismatchInterval.IsNull() && data.UdldNeighborMismatchInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/udld-neighbor-mismatch/interval", state.getPath()))
+	}
+	if !state.UdldTimeoutInterval.IsNull() && data.UdldTimeoutInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/udld-timeout/interval", state.getPath()))
+	}
+	if !state.UdldLoopbackInterval.IsNull() && data.UdldLoopbackInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/udld-loopback/interval", state.getPath()))
+	}
+	if !state.PvrstPvidMismatchInterval.IsNull() && data.PvrstPvidMismatchInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/pvrst-pvid-mismatch/interval", state.getPath()))
+	}
+	if !state.L2vpnBportMacMoveInterval.IsNull() && data.L2vpnBportMacMoveInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/l2vpn-bport-mac-move/interval", state.getPath()))
+	}
+	if !state.OtTrackStateChangeInterval.IsNull() && data.OtTrackStateChangeInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ot-track-state-change/interval", state.getPath()))
+	}
+	if !state.LinkOamDampeningInterval.IsNull() && data.LinkOamDampeningInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/link-oam-dampening/interval", state.getPath()))
+	}
 	return deletedItems
 }
 

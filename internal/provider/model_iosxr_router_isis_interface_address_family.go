@@ -357,6 +357,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 	for i := range state.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64()).IsZero() {
@@ -373,20 +377,47 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 				found = false
 			}
 			if found {
+				if !state.FastReroutePerPrefixLevels[i].TiLfa.IsNull() && data.FastReroutePerPrefixLevels[j].TiLfa.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v/ti-lfa", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v", state.getPath(), keyString))
 		}
+	}
+	if !state.Tag.IsNull() && data.Tag.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/tag/interface-tag", state.getPath()))
+	}
+	if !state.PrefixSidAbsolute.IsNull() && data.PrefixSidAbsolute.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid/sid/absolute/sid-value", state.getPath()))
+	}
+	if !state.PrefixSidNFlagClear.IsNull() && data.PrefixSidNFlagClear.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid/sid/n-flag-clear", state.getPath()))
+	}
+	if !state.AdvertisePrefixRoutePolicy.IsNull() && data.AdvertisePrefixRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/prefix/route-policy", state.getPath()))
+	}
+	if !state.PrefixSidIndex.IsNull() && data.PrefixSidIndex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid/sid/index/sid-index", state.getPath()))
+	}
+	if !state.PrefixSidStrictSpfAbsolute.IsNull() && data.PrefixSidStrictSpfAbsolute.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/prefix-sid/strict-spf/absolute/sid-value", state.getPath()))
+	}
+	if !state.Metric.IsNull() && data.Metric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/default-metric", state.getPath()))
+	}
+	if !state.MetricMaximum.IsNull() && data.MetricMaximum.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/maximum", state.getPath()))
 	}
 	for i := range state.MetricLevels {
 		keys := [...]string{"level-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.MetricLevels[i].LevelId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.MetricLevels[i].LevelId.ValueInt64()).IsZero() {
@@ -403,14 +434,16 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 				found = false
 			}
 			if found {
+				if !state.MetricLevels[i].Metric.IsNull() && data.MetricLevels[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/levels/level%v/default-metric", state.getPath(), keyString))
+				}
+				if !state.MetricLevels[i].Maximum.IsNull() && data.MetricLevels[j].Maximum.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/levels/level%v/maximum", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/levels/level%v", state.getPath(), keyString))
 		}
 	}

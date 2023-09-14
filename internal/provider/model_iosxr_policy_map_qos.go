@@ -448,9 +448,16 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res []byte) {
 
 func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQoS) []string {
 	deletedItems := make([]string, 0)
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
 	for i := range state.Classes {
 		keys := [...]string{"name", "type"}
 		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Classes[i].Name.ValueString()).IsZero() {
@@ -473,9 +480,22 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 				found = false
 			}
 			if found {
+				if !state.Classes[i].SetMplsExperimentalTopmost.IsNull() && data.Classes[j].SetMplsExperimentalTopmost.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/mpls/experimental/topmost", state.getPath(), keyString))
+				}
+				if !state.Classes[i].SetDscp.IsNull() && data.Classes[j].SetDscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/set/dscp", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PriorityLevel.IsNull() && data.Classes[j].PriorityLevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/priority/level", state.getPath(), keyString))
+				}
 				for ci := range state.Classes[i].QueueLimits {
 					ckeys := [...]string{"value", "unit"}
 					cstateKeyValues := [...]string{state.Classes[i].QueueLimits[ci].Value.ValueString(), state.Classes[i].QueueLimits[ci].Unit.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
 
 					cemptyKeys := true
 					if !reflect.ValueOf(state.Classes[i].QueueLimits[ci].Value.ValueString()).IsZero() {
@@ -502,25 +522,52 @@ func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQo
 						}
 					}
 					if !found {
-						keyString := ""
-						for ki := range keys {
-							keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-						}
-						ckeyString := ""
-						for cki := range ckeys {
-							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-						}
 						deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
 					}
+				}
+				if !state.Classes[i].ServicePolicyName.IsNull() && data.Classes[j].ServicePolicyName.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/service-policy/name", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceRateValue.IsNull() && data.Classes[j].PoliceRateValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceRateUnit.IsNull() && data.Classes[j].PoliceRateUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/rate/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionTransmit.IsNull() && data.Classes[j].PoliceConformActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceConformActionDrop.IsNull() && data.Classes[j].PoliceConformActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/conform-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionTransmit.IsNull() && data.Classes[j].PoliceExceedActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceExceedActionDrop.IsNull() && data.Classes[j].PoliceExceedActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/exceed-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionTransmit.IsNull() && data.Classes[j].PoliceViolateActionTransmit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/transmit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].PoliceViolateActionDrop.IsNull() && data.Classes[j].PoliceViolateActionDrop.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/police/violate-action/drop", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ShapeAverageRateValue.IsNull() && data.Classes[j].ShapeAverageRateValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/value", state.getPath(), keyString))
+				}
+				if !state.Classes[i].ShapeAverageRateUnit.IsNull() && data.Classes[j].ShapeAverageRateUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/shape/average/rate/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthRemainingUnit.IsNull() && data.Classes[j].BandwidthRemainingUnit.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/unit", state.getPath(), keyString))
+				}
+				if !state.Classes[i].BandwidthRemainingValue.IsNull() && data.Classes[j].BandwidthRemainingValue.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/bandwidth-remaining/value", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v", state.getPath(), keyString))
 		}
 	}

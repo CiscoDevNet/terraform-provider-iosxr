@@ -81,6 +81,9 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng) []string {
 	deletedItems := make([]string, 0)
+	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traffic-eng", state.getPath()))
+	}
 	return deletedItems
 }
 

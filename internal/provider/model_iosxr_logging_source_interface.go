@@ -122,6 +122,10 @@ func (data *LoggingSourceInterface) getDeletedItems(ctx context.Context, state L
 	for i := range state.Vrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.Vrfs[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Vrfs[i].Name.ValueString()).IsZero() {
@@ -142,10 +146,6 @@ func (data *LoggingSourceInterface) getDeletedItems(ctx context.Context, state L
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}

@@ -195,6 +195,24 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate/stitching-rt", state.getPath()))
+	}
+	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
+	}
+	if !state.RouteReflectorClientInheritanceDisable.IsNull() && data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", state.getPath()))
+	}
+	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+	}
+	if !state.EncapsulationTypeSrv6.IsNull() && data.EncapsulationTypeSrv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation-type/srv6", state.getPath()))
+	}
 	return deletedItems
 }
 

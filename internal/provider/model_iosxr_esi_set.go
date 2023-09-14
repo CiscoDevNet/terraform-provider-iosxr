@@ -77,6 +77,9 @@ func (data *ESISetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ESISet) getDeletedItems(ctx context.Context, state ESISet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/esi-set-as-text", state.getPath()))
+	}
 	return deletedItems
 }
 

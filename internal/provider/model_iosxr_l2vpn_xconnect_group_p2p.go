@@ -532,9 +532,16 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 
 func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
 	deletedItems := make([]string, 0)
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -555,16 +562,16 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv4Neighbors {
 		keys := [...]string{"address", "pw-id"}
 		stateKeyValues := [...]string{state.Ipv4Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Ipv4Neighbors[i].PwId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Ipv4Neighbors[i].Address.ValueString()).IsZero() {
@@ -587,20 +594,23 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 				found = false
 			}
 			if found {
+				if !state.Ipv4Neighbors[i].PwClass.IsNull() && data.Ipv4Neighbors[j].PwClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v/pw-class", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv6Neighbors {
 		keys := [...]string{"address", "pw-id"}
 		stateKeyValues := [...]string{state.Ipv6Neighbors[i].Address.ValueString(), strconv.FormatInt(state.Ipv6Neighbors[i].PwId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Ipv6Neighbors[i].Address.ValueString()).IsZero() {
@@ -623,20 +633,23 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 				found = false
 			}
 			if found {
+				if !state.Ipv6Neighbors[i].PwClass.IsNull() && data.Ipv6Neighbors[j].PwClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v/pw-class", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.EvpnTargetNeighbors {
 		keys := [...]string{"vpn-id", "remote-ac-id", "source"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnTargetNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].RemoteAcId.ValueInt64(), 10), strconv.FormatInt(state.EvpnTargetNeighbors[i].Source.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.EvpnTargetNeighbors[i].VpnId.ValueInt64()).IsZero() {
@@ -665,20 +678,23 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 				found = false
 			}
 			if found {
+				if !state.EvpnTargetNeighbors[i].PwClass.IsNull() && data.EvpnTargetNeighbors[j].PwClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v/pw-class", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.EvpnServiceNeighbors {
 		keys := [...]string{"vpn-id", "service-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.EvpnServiceNeighbors[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.EvpnServiceNeighbors[i].ServiceId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.EvpnServiceNeighbors[i].VpnId.ValueInt64()).IsZero() {
@@ -701,20 +717,23 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 				found = false
 			}
 			if found {
+				if !state.EvpnServiceNeighbors[i].PwClass.IsNull() && data.EvpnServiceNeighbors[j].PwClass.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v/pw-class", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.NeighborEvpnEviSegmentRoutingServices {
 		keys := [...]string{"vpn-id", "service-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64(), 10), strconv.FormatInt(state.NeighborEvpnEviSegmentRoutingServices[i].ServiceId.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.NeighborEvpnEviSegmentRoutingServices[i].VpnId.ValueInt64()).IsZero() {
@@ -737,14 +756,13 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 				found = false
 			}
 			if found {
+				if !state.NeighborEvpnEviSegmentRoutingServices[i].SegmentRoutingSrv6Locator.IsNull() && data.NeighborEvpnEviSegmentRoutingServices[j].SegmentRoutingSrv6Locator.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v/segment-routing/srv6/locator", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v", state.getPath(), keyString))
 		}
 	}

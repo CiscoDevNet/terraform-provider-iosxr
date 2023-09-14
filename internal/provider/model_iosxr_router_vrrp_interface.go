@@ -131,6 +131,21 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state RouterVRRPInterface) []string {
 	deletedItems := make([]string, 0)
+	if !state.MacRefresh.IsNull() && data.MacRefresh.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac-refresh", state.getPath()))
+	}
+	if !state.DelayMinimum.IsNull() && data.DelayMinimum.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/minimum", state.getPath()))
+	}
+	if !state.DelayReload.IsNull() && data.DelayReload.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/reload", state.getPath()))
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
+	}
 	return deletedItems
 }
 

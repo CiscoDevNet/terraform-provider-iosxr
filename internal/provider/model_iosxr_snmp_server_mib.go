@@ -102,6 +102,12 @@ func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
 	deletedItems := make([]string, 0)
+	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
+	}
+	if !state.IfindexPersist.IsNull() && data.IfindexPersist.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", state.getPath()))
+	}
 	return deletedItems
 }
 

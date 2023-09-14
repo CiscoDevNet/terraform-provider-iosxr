@@ -222,7 +222,7 @@ func (r *ServiceTimestampsResource) Update(ctx context.Context, req resource.Upd
 	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
 	deletedListItems := plan.getDeletedItems(ctx, state)
-	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
+	tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})

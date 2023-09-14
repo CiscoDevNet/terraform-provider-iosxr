@@ -220,6 +220,39 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
 	deletedItems := make([]string, 0)
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/dscp", state.getPath()))
+	}
+	if !state.Trap.IsNull() && data.Trap.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/trap", state.getPath()))
+	}
+	if !state.EventsDisplayLocation.IsNull() && data.EventsDisplayLocation.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
+	}
+	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", state.getPath()))
+	}
+	if !state.Console.IsNull() && data.Console.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console", state.getPath()))
+	}
+	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor", state.getPath()))
+	}
+	if !state.BufferedLoggingBufferSize.IsNull() && data.BufferedLoggingBufferSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/logging-buffer-size", state.getPath()))
+	}
+	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/level", state.getPath()))
+	}
+	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/facility/level", state.getPath()))
+	}
+	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostnameprefix", state.getPath()))
+	}
+	if !state.SuppressDuplicates.IsNull() && data.SuppressDuplicates.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
+	}
 	return deletedItems
 }
 

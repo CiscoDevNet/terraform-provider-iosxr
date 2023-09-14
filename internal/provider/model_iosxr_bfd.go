@@ -633,9 +633,34 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 
 func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	deletedItems := make([]string, 0)
+	if !state.EchoDisable.IsNull() && data.EchoDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/disable", state.getPath()))
+	}
+	if !state.EchoLatencyDetectPercentage.IsNull() && data.EchoLatencyDetectPercentage.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/percentage", state.getPath()))
+	}
+	if !state.EchoLatencyDetectCount.IsNull() && data.EchoLatencyDetectCount.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/count", state.getPath()))
+	}
+	if !state.EchoStartupValidateForce.IsNull() && data.EchoStartupValidateForce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate/force", state.getPath()))
+	}
+	if !state.EchoIpv4Source.IsNull() && data.EchoIpv4Source.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/source", state.getPath()))
+	}
+	if !state.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() && data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval/preferred-minimum-interval", state.getPath()))
+	}
+	if !state.TrapSinglehopPreMapped.IsNull() && data.TrapSinglehopPreMapped.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/trap/singlehop/pre-mapped", state.getPath()))
+	}
 	for i := range state.MultipathLocations {
 		keys := [...]string{"location-name"}
 		stateKeyValues := [...]string{state.MultipathLocations[i].LocationName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.MultipathLocations[i].LocationName.ValueString()).IsZero() {
@@ -656,16 +681,55 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/multipath/include/locations/location%v", state.getPath(), keyString))
 		}
+	}
+	if !state.MultihopTtlDropThreshold.IsNull() && data.MultihopTtlDropThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/multihop/ttl-drop-threshold", state.getPath()))
+	}
+	if !state.DampeningInitialWait.IsNull() && data.DampeningInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/initial-wait", state.getPath()))
+	}
+	if !state.DampeningSecondaryWait.IsNull() && data.DampeningSecondaryWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/secondary-wait", state.getPath()))
+	}
+	if !state.DampeningMaximumWait.IsNull() && data.DampeningMaximumWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/maximum-wait", state.getPath()))
+	}
+	if !state.DampeningThreshold.IsNull() && data.DampeningThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/threshold", state.getPath()))
+	}
+	if !state.DampeningExtensionsDownMonitoring.IsNull() && data.DampeningExtensionsDownMonitoring.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/extensions/down-monitoring", state.getPath()))
+	}
+	if !state.DampeningDisable.IsNull() && data.DampeningDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/disable", state.getPath()))
+	}
+	if !state.DampeningBundleMemberL3OnlyMode.IsNull() && data.DampeningBundleMemberL3OnlyMode.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/bundle-member/l3-only-mode", state.getPath()))
+	}
+	if !state.DampeningBundleMemberInitialWait.IsNull() && data.DampeningBundleMemberInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/bundle-member/initial-wait", state.getPath()))
+	}
+	if !state.DampeningBundleMemberSecondaryWait.IsNull() && data.DampeningBundleMemberSecondaryWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/bundle-member/secondary-wait", state.getPath()))
+	}
+	if !state.DampeningBundleMemberMaximumWait.IsNull() && data.DampeningBundleMemberMaximumWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/bundle-member/maximum-wait", state.getPath()))
+	}
+	if !state.BundleCoexistenceBobBlbInherit.IsNull() && data.BundleCoexistenceBobBlbInherit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb/inherit", state.getPath()))
+	}
+	if !state.BundleCoexistenceBobBlbLogical.IsNull() && data.BundleCoexistenceBobBlbLogical.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb/logical", state.getPath()))
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
@@ -682,16 +746,39 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 				found = false
 			}
 			if found {
+				if !state.Interfaces[i].EchoDisable.IsNull() && data.Interfaces[j].EchoDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/disable", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].EchoIpv4Source.IsNull() && data.Interfaces[j].EchoIpv4Source.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/ipv4/source", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Ipv6ChecksumDisable.IsNull() && data.Interfaces[j].Ipv6ChecksumDisable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum/disable", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Disable.IsNull() && data.Interfaces[j].Disable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/disable", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].LocalAddress.IsNull() && data.Interfaces[j].LocalAddress.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/local-address", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].TxInterval.IsNull() && data.Interfaces[j].TxInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/tx-interval", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].RxInterval.IsNull() && data.Interfaces[j].RxInterval.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/rx-interval", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].Multiplier.IsNull() && data.Interfaces[j].Multiplier.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/multiplier", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
+	}
+	if !state.Ipv6ChecksumDisable.IsNull() && data.Ipv6ChecksumDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/checksum/disable", state.getPath()))
 	}
 	return deletedItems
 }

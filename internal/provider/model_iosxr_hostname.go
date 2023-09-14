@@ -72,6 +72,9 @@ func (data *HostnameData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Hostname) getDeletedItems(ctx context.Context, state Hostname) []string {
 	deletedItems := make([]string, 0)
+	if !state.SystemNetworkName.IsNull() && data.SystemNetworkName.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/system-network-name", state.getPath()))
+	}
 	return deletedItems
 }
 

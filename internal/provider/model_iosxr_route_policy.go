@@ -77,6 +77,9 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RoutePolicy) getDeletedItems(ctx context.Context, state RoutePolicy) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-route-policy", state.getPath()))
+	}
 	return deletedItems
 }
 

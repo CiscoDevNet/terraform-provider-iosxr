@@ -181,6 +181,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Con
 	for i := range state.PathInfos {
 		keys := [...]string{"type", "hop-type", "segment-list-name"}
 		stateKeyValues := [...]string{state.PathInfos[i].Type.ValueString(), state.PathInfos[i].HopType.ValueString(), state.PathInfos[i].SegmentListName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.PathInfos[i].Type.ValueString()).IsZero() {
@@ -209,14 +213,16 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Con
 				found = false
 			}
 			if found {
+				if !state.PathInfos[i].Pcep.IsNull() && data.PathInfos[j].Pcep.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v/pcep", state.getPath(), keyString))
+				}
+				if !state.PathInfos[i].MetricType.IsNull() && data.PathInfos[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v/metric/metric-type", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v", state.getPath(), keyString))
 		}
 	}

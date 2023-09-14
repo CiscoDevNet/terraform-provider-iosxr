@@ -254,9 +254,19 @@ func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Ipv4ClientSourceInterface.IsNull() && data.Ipv4ClientSourceInterface.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/client/source-interface", state.getPath()))
+	}
+	if !state.Ipv6ClientSourceInterface.IsNull() && data.Ipv6ClientSourceInterface.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/client/source-interface", state.getPath()))
+	}
 	for i := range state.Vrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
@@ -273,20 +283,32 @@ func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string 
 				found = false
 			}
 			if found {
+				if !state.Vrfs[i].Ipv4ServerMaxServers.IsNull() && data.Vrfs[j].Ipv4ServerMaxServers.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv4/server/max-servers", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv4ServerAccessList.IsNull() && data.Vrfs[j].Ipv4ServerAccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv4/server/access-list", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv6ServerMaxServers.IsNull() && data.Vrfs[j].Ipv6ServerMaxServers.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv6/server/max-servers", state.getPath(), keyString))
+				}
+				if !state.Vrfs[i].Ipv6ServerAccessList.IsNull() && data.Vrfs[j].Ipv6ServerAccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/ipv6/server/access-list", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.VrfsDscp {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.VrfsDscp[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.VrfsDscp[i].VrfName.ValueString()).IsZero() {
@@ -303,14 +325,13 @@ func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string 
 				found = false
 			}
 			if found {
+				if !state.VrfsDscp[i].Ipv4Dscp.IsNull() && data.VrfsDscp[j].Ipv4Dscp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf-dscp%v/ipv4/dscp", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf-dscp%v", state.getPath(), keyString))
 		}
 	}

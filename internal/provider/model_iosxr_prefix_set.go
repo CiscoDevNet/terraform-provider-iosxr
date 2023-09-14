@@ -77,6 +77,9 @@ func (data *PrefixSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *PrefixSet) getDeletedItems(ctx context.Context, state PrefixSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rpl-prefix-set", state.getPath()))
+	}
 	return deletedItems
 }
 

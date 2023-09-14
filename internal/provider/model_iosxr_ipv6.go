@@ -244,6 +244,39 @@ func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 
 func (data *IPv6) getDeletedItems(ctx context.Context, state IPv6) []string {
 	deletedItems := make([]string, 0)
+	if !state.HopLimit.IsNull() && data.HopLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hop-limit", state.getPath()))
+	}
+	if !state.IcmpErrorInterval.IsNull() && data.IcmpErrorInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp/error-interval", state.getPath()))
+	}
+	if !state.IcmpErrorIntervalBucketSize.IsNull() && data.IcmpErrorIntervalBucketSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp/error-interval", state.getPath()))
+	}
+	if !state.SourceRoute.IsNull() && data.SourceRoute.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source-route", state.getPath()))
+	}
+	if !state.AssemblerTimeout.IsNull() && data.AssemblerTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/assembler/timeout", state.getPath()))
+	}
+	if !state.AssemblerMaxPackets.IsNull() && data.AssemblerMaxPackets.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/assembler/max-packets", state.getPath()))
+	}
+	if !state.AssemblerReassemblerDropEnable.IsNull() && data.AssemblerReassemblerDropEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/assembler/reassembler-drop/enable", state.getPath()))
+	}
+	if !state.AssemblerFragHdrIncompleteEnable.IsNull() && data.AssemblerFragHdrIncompleteEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/assembler/frag-hdr-incomplete/enable", state.getPath()))
+	}
+	if !state.AssemblerOverlapFragDropEnable.IsNull() && data.AssemblerOverlapFragDropEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/assembler/overlap-frag-drop/enable", state.getPath()))
+	}
+	if !state.PathMtuEnable.IsNull() && data.PathMtuEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/path-mtu/enable", state.getPath()))
+	}
+	if !state.PathMtuTimeout.IsNull() && data.PathMtuTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/path-mtu/timeout", state.getPath()))
+	}
 	return deletedItems
 }
 

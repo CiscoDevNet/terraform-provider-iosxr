@@ -215,6 +215,30 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 
 func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
+	}
+	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
+	}
+	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/route-policy", state.getPath()))
+	}
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/inheritance-disable", state.getPath()))
+	}
+	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+	}
+	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
+	}
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.RemovePrivateAsInheritanceDisable.IsNull() && data.RemovePrivateAsInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inheritance-disable", state.getPath()))
+	}
 	return deletedItems
 }
 

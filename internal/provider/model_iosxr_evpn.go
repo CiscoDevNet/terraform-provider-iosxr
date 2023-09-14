@@ -73,6 +73,9 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 
 func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 	deletedItems := make([]string, 0)
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface", state.getPath()))
+	}
 	return deletedItems
 }
 

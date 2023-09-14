@@ -113,6 +113,18 @@ func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
 	deletedItems := make([]string, 0)
+	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
+	}
+	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
+	}
+	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
+	}
+	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
+	}
 	return deletedItems
 }
 

@@ -91,6 +91,12 @@ func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSamplerMap) []string {
 	deletedItems := make([]string, 0)
+	if !state.Random.IsNull() && data.Random.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/random", state.getPath()))
+	}
+	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/out-of", state.getPath()))
+	}
 	return deletedItems
 }
 

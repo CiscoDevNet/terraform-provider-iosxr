@@ -150,6 +150,21 @@ func (data *CDPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 	deletedItems := make([]string, 0)
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	}
+	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/holdtime", state.getPath()))
+	}
+	if !state.Timer.IsNull() && data.Timer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
+	}
+	if !state.AdvertiseV1.IsNull() && data.AdvertiseV1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/v1", state.getPath()))
+	}
+	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
+	}
 	return deletedItems
 }
 

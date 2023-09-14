@@ -416,9 +416,49 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1Data) fromBody(ctx contex
 
 func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedItems(ctx context.Context, state RouterHSRPInterfaceAddressFamilyIPv4GroupV1) []string {
 	deletedItems := make([]string, 0)
+	if !state.Address.IsNull() && data.Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4-address", state.getPath()))
+	}
+	if !state.AddressLearn.IsNull() && data.AddressLearn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/learn", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.MacAddress.IsNull() && data.MacAddress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac-address", state.getPath()))
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
+	}
+	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
+	}
+	if !state.TimersMsec.IsNull() && data.TimersMsec.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/msec", state.getPath()))
+	}
+	if !state.TimersMsec2.IsNull() && data.TimersMsec2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/msec2", state.getPath()))
+	}
+	if !state.TimersHoldTime.IsNull() && data.TimersHoldTime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/hold-time", state.getPath()))
+	}
+	if !state.TimersHoldTime2.IsNull() && data.TimersHoldTime2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/hold-time2", state.getPath()))
+	}
+	if !state.BfdFastDetectPeerIpv4.IsNull() && data.BfdFastDetectPeerIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv4", state.getPath()))
+	}
+	if !state.BfdFastDetectPeerInterface.IsNull() && data.BfdFastDetectPeerInterface.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/interface", state.getPath()))
+	}
 	for i := range state.SecondaryIpv4Addresses {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.SecondaryIpv4Addresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.SecondaryIpv4Addresses[i].Address.ValueString()).IsZero() {
@@ -439,16 +479,16 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedItems(ctx con
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address/secondary-ipv4-addresses/secondary-ipv4-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackInterfaces {
 		keys := [...]string{"track-name"}
 		stateKeyValues := [...]string{state.TrackInterfaces[i].TrackName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.TrackInterfaces[i].TrackName.ValueString()).IsZero() {
@@ -465,20 +505,23 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedItems(ctx con
 				found = false
 			}
 			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track-interfaces/track-interface%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track-interfaces/track-interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackObjects {
 		keys := [...]string{"object-name"}
 		stateKeyValues := [...]string{state.TrackObjects[i].ObjectName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.TrackObjects[i].ObjectName.ValueString()).IsZero() {
@@ -495,14 +538,13 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedItems(ctx con
 				found = false
 			}
 			if found {
+				if !state.TrackObjects[i].PriorityDecrement.IsNull() && data.TrackObjects[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track-objects/track-object%v/priority-decrement", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track-objects/track-object%v", state.getPath(), keyString))
 		}
 	}

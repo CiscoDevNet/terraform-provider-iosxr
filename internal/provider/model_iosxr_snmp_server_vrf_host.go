@@ -149,6 +149,10 @@ func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPSe
 	for i := range state.UnencryptedStrings {
 		keys := [...]string{"community-string"}
 		stateKeyValues := [...]string{state.UnencryptedStrings[i].CommunityString.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.UnencryptedStrings[i].CommunityString.ValueString()).IsZero() {
@@ -165,14 +169,16 @@ func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPSe
 				found = false
 			}
 			if found {
+				if !state.UnencryptedStrings[i].UdpPort.IsNull() && data.UnencryptedStrings[j].UdpPort.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/udp-port", state.getPath(), keyString))
+				}
+				if !state.UnencryptedStrings[i].VersionV3SecurityLevel.IsNull() && data.UnencryptedStrings[j].VersionV3SecurityLevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v/version/v3/security-level", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v", state.getPath(), keyString))
 		}
 	}

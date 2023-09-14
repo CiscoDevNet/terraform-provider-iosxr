@@ -163,6 +163,10 @@ func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServe
 	for i := range state.MibViewFamilies {
 		keys := [...]string{"mib-view-family-name"}
 		stateKeyValues := [...]string{state.MibViewFamilies[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.MibViewFamilies[i].Name.ValueString()).IsZero() {
@@ -179,14 +183,16 @@ func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServe
 				found = false
 			}
 			if found {
+				if !state.MibViewFamilies[i].Included.IsNull() && data.MibViewFamilies[j].Included.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/included", state.getPath(), keyString))
+				}
+				if !state.MibViewFamilies[i].Excluded.IsNull() && data.MibViewFamilies[j].Excluded.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v/excluded", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v", state.getPath(), keyString))
 		}
 	}

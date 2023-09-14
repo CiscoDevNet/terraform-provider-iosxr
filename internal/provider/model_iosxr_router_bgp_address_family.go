@@ -942,9 +942,64 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 
 func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.AdditionalPathsSend.IsNull() && data.AdditionalPathsSend.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/send", state.getPath()))
+	}
+	if !state.AdditionalPathsReceive.IsNull() && data.AdditionalPathsReceive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/receive", state.getPath()))
+	}
+	if !state.AdditionalPathsSelectionRoutePolicy.IsNull() && data.AdditionalPathsSelectionRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/additional-paths/selection/route-policy", state.getPath()))
+	}
+	if !state.AllocateLabelAllUnlabeledPath.IsNull() && data.AllocateLabelAllUnlabeledPath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/allocate-label/all/unlabeled-path", state.getPath()))
+	}
+	if !state.AdvertiseBestExternal.IsNull() && data.AdvertiseBestExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/best-external", state.getPath()))
+	}
+	if !state.AllocateLabelAll.IsNull() && data.AllocateLabelAll.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/allocate-label/all", state.getPath()))
+	}
+	if !state.MaximumPathsEbgpMultipath.IsNull() && data.MaximumPathsEbgpMultipath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ebgp/multipath", state.getPath()))
+	}
+	if !state.MaximumPathsEibgpMultipath.IsNull() && data.MaximumPathsEibgpMultipath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/eibgp/multipath", state.getPath()))
+	}
+	if !state.MaximumPathsIbgpMultipath.IsNull() && data.MaximumPathsIbgpMultipath.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ibgp/multipath", state.getPath()))
+	}
+	if !state.NexthopTriggerDelayCritical.IsNull() && data.NexthopTriggerDelayCritical.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop/trigger-delay/critical", state.getPath()))
+	}
+	if !state.NexthopTriggerDelayNonCritical.IsNull() && data.NexthopTriggerDelayNonCritical.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop/trigger-delay/non-critical", state.getPath()))
+	}
+	if !state.LabelModePerCe.IsNull() && data.LabelModePerCe.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/label/mode/per-ce", state.getPath()))
+	}
+	if !state.LabelModePerVrf.IsNull() && data.LabelModePerVrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/label/mode/per-vrf", state.getPath()))
+	}
+	if !state.RedistributeConnected.IsNull() && data.RedistributeConnected.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected", state.getPath()))
+	}
+	if !state.RedistributeConnectedMetric.IsNull() && data.RedistributeConnectedMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric", state.getPath()))
+	}
+	if !state.RedistributeStatic.IsNull() && data.RedistributeStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
+	}
+	if !state.RedistributeStaticMetric.IsNull() && data.RedistributeStaticMetric.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric", state.getPath()))
+	}
 	for i := range state.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
 		stateKeyValues := [...]string{state.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(state.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.AggregateAddresses[i].Address.ValueString()).IsZero() {
@@ -967,20 +1022,29 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.AggregateAddresses[i].AsSet.IsNull() && data.AggregateAddresses[j].AsSet.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/as-set", state.getPath(), keyString))
+				}
+				if !state.AggregateAddresses[i].AsConfedSet.IsNull() && data.AggregateAddresses[j].AsConfedSet.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/as-confed-set", state.getPath(), keyString))
+				}
+				if !state.AggregateAddresses[i].SummaryOnly.IsNull() && data.AggregateAddresses[j].SummaryOnly.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v/summary-only", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Networks {
 		keys := [...]string{"address", "masklength"}
 		stateKeyValues := [...]string{state.Networks[i].Address.ValueString(), strconv.FormatInt(state.Networks[i].Masklength.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.Networks[i].Address.ValueString()).IsZero() {
@@ -1007,16 +1071,16 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeIsis {
 		keys := [...]string{"instance-name"}
 		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceName.ValueString()).IsZero() {
@@ -1033,20 +1097,44 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.RedistributeIsis[i].LevelOne.IsNull() && data.RedistributeIsis[j].LevelOne.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/one", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelOneTwo.IsNull() && data.RedistributeIsis[j].LevelOneTwo.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/one/two", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelOneTwoOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneTwoOneInterArea.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/one/two/one-inter-area", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelOneOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneOneInterArea.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/one/one-inter-area", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelTwo.IsNull() && data.RedistributeIsis[j].LevelTwo.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/two", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelTwoOneInterArea.IsNull() && data.RedistributeIsis[j].LevelTwoOneInterArea.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/two/one-inter-area", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].LevelOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneInterArea.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/level/one-inter-area", state.getPath(), keyString))
+				}
+				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/metric", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeOspf {
 		keys := [...]string{"router-tag"}
 		stateKeyValues := [...]string{state.RedistributeOspf[i].RouterTag.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
 
 		emptyKeys := true
 		if !reflect.ValueOf(state.RedistributeOspf[i].RouterTag.ValueString()).IsZero() {
@@ -1063,14 +1151,31 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.RedistributeOspf[i].MatchInternal.IsNull() && data.RedistributeOspf[j].MatchInternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/internal", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchInternalExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/internal/external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchInternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/internal/nssa-external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchExternal.IsNull() && data.RedistributeOspf[j].MatchExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchExternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternalNssaExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/external/nssa-external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].MatchNssaExternal.IsNull() && data.RedistributeOspf[j].MatchNssaExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/match/nssa-external", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].Metric.IsNull() && data.RedistributeOspf[j].Metric.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/metric", state.getPath(), keyString))
+				}
 				break
 			}
 		}
 		if !found {
-			keyString := ""
-			for ki := range keys {
-				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-			}
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
 		}
 	}

@@ -108,6 +108,15 @@ func (data *IPv6AccessListOptionsData) fromBody(ctx context.Context, res []byte)
 
 func (data *IPv6AccessListOptions) getDeletedItems(ctx context.Context, state IPv6AccessListOptions) []string {
 	deletedItems := make([]string, 0)
+	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/threshold", state.getPath()))
+	}
+	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
+	}
+	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
+	}
 	return deletedItems
 }
 

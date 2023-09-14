@@ -77,6 +77,9 @@ func (data *ASPathSetData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ASPathSet) getDeletedItems(ctx context.Context, state ASPathSet) []string {
 	deletedItems := make([]string, 0)
+	if !state.Rpl.IsNull() && data.Rpl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/rplas-path-set", state.getPath()))
+	}
 	return deletedItems
 }
 

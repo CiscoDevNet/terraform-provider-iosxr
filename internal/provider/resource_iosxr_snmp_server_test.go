@@ -30,29 +30,29 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "location", "My location"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "contact", "My contact"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "rf", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bfd", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "ntp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "ethernet_oam_events", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "copy_complete", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_rf", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bfd", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_ntp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_ethernet_oam_events", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_copy_complete", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_snmp_linkup", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_snmp_linkdown", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "power", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "config", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "system", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bridgemib", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity_state_operstatus", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "entity_redundancy_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_power", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_config", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_system", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bridgemib", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_state_operstatus", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_redundancy_all", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "trap_source_both", "Loopback10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_all", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_vc_up", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "l2vpn_vc_down", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "sensor", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "fru_ctrl", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "isis_authentication_failure", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_cbgp2_updown", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "bgp_bgp4_mib_updown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_up", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_sensor", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_fru_ctrl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_failure", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp2_updown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_bgp4_mib_updown", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.user_name", "USER1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"))
@@ -104,29 +104,29 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config := `resource "iosxr_snmp_server" "test" {` + "\n"
 	config += `	location = "My location"` + "\n"
 	config += `	contact = "My contact"` + "\n"
-	config += `	rf = true` + "\n"
-	config += `	bfd = true` + "\n"
-	config += `	ntp = true` + "\n"
-	config += `	ethernet_oam_events = true` + "\n"
-	config += `	copy_complete = true` + "\n"
+	config += `	traps_rf = true` + "\n"
+	config += `	traps_bfd = true` + "\n"
+	config += `	traps_ntp = true` + "\n"
+	config += `	traps_ethernet_oam_events = true` + "\n"
+	config += `	traps_copy_complete = true` + "\n"
 	config += `	traps_snmp_linkup = true` + "\n"
 	config += `	traps_snmp_linkdown = true` + "\n"
-	config += `	power = true` + "\n"
-	config += `	config = true` + "\n"
-	config += `	entity = true` + "\n"
-	config += `	system = true` + "\n"
-	config += `	bridgemib = true` + "\n"
-	config += `	entity_state_operstatus = true` + "\n"
-	config += `	entity_redundancy_all = true` + "\n"
+	config += `	traps_power = true` + "\n"
+	config += `	traps_config = true` + "\n"
+	config += `	traps_entity = true` + "\n"
+	config += `	traps_system = true` + "\n"
+	config += `	traps_bridgemib = true` + "\n"
+	config += `	traps_entity_state_operstatus = true` + "\n"
+	config += `	traps_entity_redundancy_all = true` + "\n"
 	config += `	trap_source_both = "Loopback10"` + "\n"
-	config += `	l2vpn_all = true` + "\n"
-	config += `	l2vpn_vc_up = true` + "\n"
-	config += `	l2vpn_vc_down = true` + "\n"
-	config += `	sensor = true` + "\n"
-	config += `	fru_ctrl = true` + "\n"
-	config += `	isis_authentication_failure = "enable"` + "\n"
-	config += `	bgp_cbgp2_updown = true` + "\n"
-	config += `	bgp_bgp4_mib_updown = true` + "\n"
+	config += `	traps_l2vpn_all = true` + "\n"
+	config += `	traps_l2vpn_vc_up = true` + "\n"
+	config += `	traps_l2vpn_vc_down = true` + "\n"
+	config += `	traps_sensor = true` + "\n"
+	config += `	traps_fru_ctrl = true` + "\n"
+	config += `	traps_isis_authentication_failure = "enable"` + "\n"
+	config += `	traps_bgp_cbgp2_updown = true` + "\n"
+	config += `	traps_bgp_bgp4_mib_updown = true` + "\n"
 	config += `	users = [{` + "\n"
 	config += `		user_name = "USER1"` + "\n"
 	config += `		group_name = "GROUP1"` + "\n"

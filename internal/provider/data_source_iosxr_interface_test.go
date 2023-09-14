@@ -43,6 +43,26 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_netmask", "255.255.255.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_type", "any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_self_ping", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_acl1", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_hardware_count", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_interface_statistics", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_acl", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_hardware_count", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_interface_statistics", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_type", "any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_allow_self_ping", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_allow_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_acl1", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_interface_statistics", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_acl1", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_interface_statistics", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_compress_level", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_link_local_address", "fe80::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_link_local_zone", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_autoconfig", "false"))
@@ -132,6 +152,48 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]"
+	attributes = {
+		"access-list-name" = "ACL1"
+	}
+	lists = [
+		{
+			name = "sequences/sequence"
+			key = "sequence-number"
+			items = [
+				{
+					"sequence-number" = "10"
+					"permit/protocol" = "ipv4"
+					"permit/source/host" = "10.1.1.1"
+					"permit/destination/host" = "10.1.1.2"
+				},
+			]
+		},
+	]
+}
+
+resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]"
+	attributes = {
+		"access-list-name" = "ACL2"
+	}
+	lists = [
+		{
+			name = "sequences/sequence"
+			key = "sequence-number"
+			items = [
+				{
+					"sequence-number" = "10"
+					"permit/protocol" = "ipv6"
+					"permit/source/host" = "2001::1"
+					"permit/destination/host" = "2001::2"
+				},
+			]
+		},
+	]
+}
+
 `
 
 func testAccDataSourceIosxrInterfaceConfig() string {
@@ -157,6 +219,26 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	config += `	vrf = "VRF1"` + "\n"
 	config += `	ipv4_address = "1.1.1.1"` + "\n"
 	config += `	ipv4_netmask = "255.255.255.0"` + "\n"
+	config += `	ipv4_verify_unicast_source_reachable_via_type = "any"` + "\n"
+	config += `	ipv4_verify_unicast_source_reachable_via_allow_self_ping = true` + "\n"
+	config += `	ipv4_verify_unicast_source_reachable_via_allow_default = false` + "\n"
+	config += `	ipv4_access_group_ingress_acl1 = "ACL1"` + "\n"
+	config += `	ipv4_access_group_ingress_hardware_count = true` + "\n"
+	config += `	ipv4_access_group_ingress_interface_statistics = true` + "\n"
+	config += `	ipv4_access_group_ingress_compress_level = 0` + "\n"
+	config += `	ipv4_access_group_egress_acl = "ACL1"` + "\n"
+	config += `	ipv4_access_group_egress_hardware_count = true` + "\n"
+	config += `	ipv4_access_group_egress_interface_statistics = true` + "\n"
+	config += `	ipv4_access_group_egress_compress_level = 0` + "\n"
+	config += `	ipv6_verify_unicast_source_reachable_via_type = "any"` + "\n"
+	config += `	ipv6_verify_unicast_source_reachable_via_allow_self_ping = true` + "\n"
+	config += `	ipv6_verify_unicast_source_reachable_via_allow_default = false` + "\n"
+	config += `	ipv6_access_group_ingress_acl1 = "ACL2"` + "\n"
+	config += `	ipv6_access_group_ingress_interface_statistics = true` + "\n"
+	config += `	ipv6_access_group_ingress_compress_level = 0` + "\n"
+	config += `	ipv6_access_group_egress_acl1 = "ACL2"` + "\n"
+	config += `	ipv6_access_group_egress_interface_statistics = true` + "\n"
+	config += `	ipv6_access_group_egress_compress_level = 0` + "\n"
 	config += `	ipv6_link_local_address = "fe80::1"` + "\n"
 	config += `	ipv6_link_local_zone = "0"` + "\n"
 	config += `	ipv6_autoconfig = false` + "\n"
@@ -211,7 +293,7 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 		config += `		sampler_map_name = "SMAP1"` + "\n"
 		config += `	}]` + "\n"
 	}
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

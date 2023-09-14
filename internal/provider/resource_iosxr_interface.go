@@ -225,6 +225,120 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
+			"ipv4_verify_unicast_source_reachable_via_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("any", "rx"),
+				},
+			},
+			"ipv4_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow router to ping itself (opens vulnerability in verification)").String,
+				Optional:            true,
+			},
+			"ipv4_verify_unicast_source_reachable_via_allow_default": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow default route to match when checking source address").String,
+				Optional:            true,
+			},
+			"ipv4_access_group_ingress_acl1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
+			"ipv4_access_group_ingress_hardware_count": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Count packets in hardware").String,
+				Optional:            true,
+			},
+			"ipv4_access_group_ingress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
+				Optional:            true,
+			},
+			"ipv4_access_group_ingress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3),
+				},
+			},
+			"ipv4_access_group_egress_acl": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
+			"ipv4_access_group_egress_hardware_count": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Count packets in hardware").String,
+				Optional:            true,
+			},
+			"ipv4_access_group_egress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
+				Optional:            true,
+			},
+			"ipv4_access_group_egress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3),
+				},
+			},
+			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source reachable type").AddStringEnumDescription("any", "rx").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("any", "rx"),
+				},
+			},
+			"ipv6_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow router to ping itself (opens vulnerability in verification)").String,
+				Optional:            true,
+			},
+			"ipv6_verify_unicast_source_reachable_via_allow_default": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow default route to match when checking source address").String,
+				Optional:            true,
+			},
+			"ipv6_access_group_ingress_acl1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
+			"ipv6_access_group_ingress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
+				Optional:            true,
+			},
+			"ipv6_access_group_ingress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3),
+				},
+			},
+			"ipv6_access_group_egress_acl1": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+				},
+			},
+			"ipv6_access_group_egress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
+				Optional:            true,
+			},
+			"ipv6_access_group_egress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 3),
+				},
+			},
 			"ipv6_link_local_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 address").String,
 				Optional:            true,

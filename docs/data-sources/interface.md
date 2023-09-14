@@ -53,14 +53,34 @@ data "iosxr_interface" "example" {
 - `flow_ipv6_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitor_samplers))
 - `flow_ipv6_ingress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitors))
 - `id` (String) The path of the retrieved object.
+- `ipv4_access_group_egress_acl` (String) Access-list name
+- `ipv4_access_group_egress_compress_level` (Number) Specify ACL compression in hardware
+- `ipv4_access_group_egress_hardware_count` (Boolean) Count packets in hardware
+- `ipv4_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
+- `ipv4_access_group_ingress_acl1` (String) Access-list name
+- `ipv4_access_group_ingress_compress_level` (Number) Specify ACL compression in hardware
+- `ipv4_access_group_ingress_hardware_count` (Boolean) Count packets in hardware
+- `ipv4_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_address` (String) IP address
 - `ipv4_netmask` (String) IP subnet mask
 - `ipv4_point_to_point` (Boolean) Enable point-to-point handling for this interface.
+- `ipv4_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
+- `ipv4_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
+- `ipv4_verify_unicast_source_reachable_via_type` (String) Source reachable type
+- `ipv6_access_group_egress_acl1` (String) Access-list name
+- `ipv6_access_group_egress_compress_level` (Number) Specify ACL compression in hardware
+- `ipv6_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
+- `ipv6_access_group_ingress_acl1` (String) Access-list name
+- `ipv6_access_group_ingress_compress_level` (Number) Specify ACL compression in hardware
+- `ipv6_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
 - `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface
 - `ipv6_enable` (Boolean) Enable IPv6 on interface
 - `ipv6_link_local_address` (String) IPv6 address
 - `ipv6_link_local_zone` (String) IPv6 address zone
+- `ipv6_verify_unicast_source_reachable_via_allow_default` (Boolean) Allow default route to match when checking source address
+- `ipv6_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
+- `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
 - `l2transport` (Boolean) l2transport sub-interface
 - `l2transport_encapsulation_dot1q_second_dot1q` (String) End of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range

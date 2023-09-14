@@ -170,6 +170,86 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Enable IP processing without an explicit address",
 				Computed:            true,
 			},
+			"ipv4_verify_unicast_source_reachable_via_type": schema.StringAttribute{
+				MarkdownDescription: "Source reachable type",
+				Computed:            true,
+			},
+			"ipv4_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
+				MarkdownDescription: "Allow router to ping itself (opens vulnerability in verification)",
+				Computed:            true,
+			},
+			"ipv4_verify_unicast_source_reachable_via_allow_default": schema.BoolAttribute{
+				MarkdownDescription: "Allow default route to match when checking source address",
+				Computed:            true,
+			},
+			"ipv4_access_group_ingress_acl1": schema.StringAttribute{
+				MarkdownDescription: "Access-list name",
+				Computed:            true,
+			},
+			"ipv4_access_group_ingress_hardware_count": schema.BoolAttribute{
+				MarkdownDescription: "Count packets in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_ingress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_ingress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_egress_acl": schema.StringAttribute{
+				MarkdownDescription: "Access-list name",
+				Computed:            true,
+			},
+			"ipv4_access_group_egress_hardware_count": schema.BoolAttribute{
+				MarkdownDescription: "Count packets in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_egress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv4_access_group_egress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
+			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
+				MarkdownDescription: "Source reachable type",
+				Computed:            true,
+			},
+			"ipv6_verify_unicast_source_reachable_via_allow_self_ping": schema.BoolAttribute{
+				MarkdownDescription: "Allow router to ping itself (opens vulnerability in verification)",
+				Computed:            true,
+			},
+			"ipv6_verify_unicast_source_reachable_via_allow_default": schema.BoolAttribute{
+				MarkdownDescription: "Allow default route to match when checking source address",
+				Computed:            true,
+			},
+			"ipv6_access_group_ingress_acl1": schema.StringAttribute{
+				MarkdownDescription: "Access-list name",
+				Computed:            true,
+			},
+			"ipv6_access_group_ingress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv6_access_group_ingress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
+			"ipv6_access_group_egress_acl1": schema.StringAttribute{
+				MarkdownDescription: "Access-list name",
+				Computed:            true,
+			},
+			"ipv6_access_group_egress_interface_statistics": schema.BoolAttribute{
+				MarkdownDescription: "Per interface statistics in hardware",
+				Computed:            true,
+			},
+			"ipv6_access_group_egress_compress_level": schema.Int64Attribute{
+				MarkdownDescription: "Specify ACL compression in hardware",
+				Computed:            true,
+			},
 			"ipv6_link_local_address": schema.StringAttribute{
 				MarkdownDescription: "IPv6 address",
 				Computed:            true,

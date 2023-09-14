@@ -91,6 +91,70 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
     tf_name: unnumbered
     exclude_test: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/type
+    optional: true
+    delete_parent: true
+    example: any
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-default
+    optional: true
+    delete_parent: true
+    example: false
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
+    tf_name: ipv4_access_group_ingress_acl1
+    optional: true
+    delete_parent: true
+    example: ACL1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level
+    example: 0
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
+    tf_name: ipv4_access_group_egress_acl
+    optional: true
+    delete_parent: true
+    example: ACL1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    example: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level
+    example: 0
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
+    optional: true
+    delete_parent: true
+    example: any
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default
+    optional: true
+    delete_parent: true
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
+    tf_name: ipv6_access_group_ingress_acl1
+    optional: true
+    delete_parent: true
+    example: ACL2
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level
+    example: 0
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name-1/name
+    tf_name: ipv6_access_group_egress_acl1
+    optional: true
+    delete_parent: true
+    example: ACL2
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level
+    example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address
     optional: true
@@ -254,3 +318,37 @@ test_prerequisites:
                 value: qos
               - name: set/dscp
                 value: 0
+  - path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]
+    attributes:
+      - name: access-list-name
+        value: ACL1
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv4
+              - name: permit/source/host
+                value: 10.1.1.1
+              - name: permit/destination/host
+                value: 10.1.1.2
+  - path: Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]
+    attributes:
+      - name: access-list-name
+        value: ACL2
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv6
+              - name: permit/source/host
+                value: 2001::1
+              - name: permit/destination/host
+                value: 2001::2

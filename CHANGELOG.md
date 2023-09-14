@@ -1,3 +1,9 @@
+## 0.2.7 (unreleased)
+
+- Add `ipv4_verify_unicast_source_reachable_via` and `ipv4_access_group` attributes to `iosxr_interface` resource and data source
+- Add `ipv6_verify_unicast_source_reachable_via` and `ipv6_access_group` attributes to `iosxr_interface` resource and data source
+- BREAKING CHANGE: Rename traps related attributes of `iosxr_snmp_server` resource and data source to `traps_*`
+
 ## 0.2.6
 
 - Add `auto_cost` attributes to `iosxr_router_ospf` and `iosxr_router_ospf_vrf` resources and data sources

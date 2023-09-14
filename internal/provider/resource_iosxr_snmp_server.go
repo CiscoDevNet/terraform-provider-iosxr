@@ -88,23 +88,23 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"rf": schema.BoolAttribute{
+			"traps_rf": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP RF-MIB traps").String,
 				Optional:            true,
 			},
-			"bfd": schema.BoolAttribute{
+			"traps_bfd": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD traps").String,
 				Optional:            true,
 			},
-			"ntp": schema.BoolAttribute{
+			"traps_ntp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Cisco Ntp traps").String,
 				Optional:            true,
 			},
-			"ethernet_oam_events": schema.BoolAttribute{
+			"traps_ethernet_oam_events": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all OAM event traps").String,
 				Optional:            true,
 			},
-			"copy_complete": schema.BoolAttribute{
+			"traps_copy_complete": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps").String,
 				Optional:            true,
 			},
@@ -116,31 +116,31 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMPv2-MIB linDownp traps").String,
 				Optional:            true,
 			},
-			"power": schema.BoolAttribute{
+			"traps_power": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity power traps").String,
 				Optional:            true,
 			},
-			"config": schema.BoolAttribute{
+			"traps_config": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP config traps").String,
 				Optional:            true,
 			},
-			"entity": schema.BoolAttribute{
+			"traps_entity": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity traps").String,
 				Optional:            true,
 			},
-			"system": schema.BoolAttribute{
+			"traps_system": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP SYSTEMMIB-MIB traps").String,
 				Optional:            true,
 			},
-			"bridgemib": schema.BoolAttribute{
+			"traps_bridgemib": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP Trap for Bridge MIB").String,
 				Optional:            true,
 			},
-			"entity_state_operstatus": schema.BoolAttribute{
+			"traps_entity_state_operstatus": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable entity oper status enable notification").String,
 				Optional:            true,
 			},
-			"entity_redundancy_all": schema.BoolAttribute{
+			"traps_entity_redundancy_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all CISCO-ENTITY-REDUNDANCY-MIB traps").String,
 				Optional:            true,
 			},
@@ -151,27 +151,27 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
-			"l2vpn_all": schema.BoolAttribute{
+			"traps_l2vpn_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all L2VPN traps").String,
 				Optional:            true,
 			},
-			"l2vpn_vc_up": schema.BoolAttribute{
+			"traps_l2vpn_vc_up": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VC up traps").String,
 				Optional:            true,
 			},
-			"l2vpn_vc_down": schema.BoolAttribute{
+			"traps_l2vpn_vc_down": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable VC down traps").String,
 				Optional:            true,
 			},
-			"sensor": schema.BoolAttribute{
+			"traps_sensor": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity sensor traps").String,
 				Optional:            true,
 			},
-			"fru_ctrl": schema.BoolAttribute{
+			"traps_fru_ctrl": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity FRU control traps").String,
 				Optional:            true,
 			},
-			"isis_all": schema.StringAttribute{
+			"traps_isis_all": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -180,7 +180,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_database_overload": schema.StringAttribute{
+			"traps_isis_database_overload": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -189,7 +189,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_manual_address_drops": schema.StringAttribute{
+			"traps_isis_manual_address_drops": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -198,7 +198,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_corrupted_lsp_detected": schema.StringAttribute{
+			"traps_isis_corrupted_lsp_detected": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -207,7 +207,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
+			"traps_isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -216,7 +216,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_id_len_mismatch": schema.StringAttribute{
+			"traps_isis_id_len_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -225,7 +225,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_max_area_addresses_mismatch": schema.StringAttribute{
+			"traps_isis_max_area_addresses_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -234,7 +234,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_own_lsp_purge": schema.StringAttribute{
+			"traps_isis_own_lsp_purge": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -243,7 +243,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_sequence_number_skip": schema.StringAttribute{
+			"traps_isis_sequence_number_skip": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -252,7 +252,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_authentication_type_failure": schema.StringAttribute{
+			"traps_isis_authentication_type_failure": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -261,7 +261,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_authentication_failure": schema.StringAttribute{
+			"traps_isis_authentication_failure": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -270,7 +270,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_version_skew": schema.StringAttribute{
+			"traps_isis_version_skew": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -279,7 +279,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_area_mismatch": schema.StringAttribute{
+			"traps_isis_area_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -288,7 +288,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_rejected_adjacency": schema.StringAttribute{
+			"traps_isis_rejected_adjacency": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -297,7 +297,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_lsp_too_large_to_propagate": schema.StringAttribute{
+			"traps_isis_lsp_too_large_to_propagate": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -306,7 +306,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
+			"traps_isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -315,7 +315,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_protocols_supported_mismatch": schema.StringAttribute{
+			"traps_isis_protocols_supported_mismatch": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -324,7 +324,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_adjacency_change": schema.StringAttribute{
+			"traps_isis_adjacency_change": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -333,7 +333,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"isis_lsp_error_detected": schema.StringAttribute{
+			"traps_isis_lsp_error_detected": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
 				Optional:            true,
 				Computed:            true,
@@ -342,11 +342,11 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 				Default: stringdefault.StaticString("disable"),
 			},
-			"bgp_cbgp2_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp2_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
-			"bgp_bgp4_mib_updown": schema.BoolAttribute{
+			"traps_bgp_bgp4_mib_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},

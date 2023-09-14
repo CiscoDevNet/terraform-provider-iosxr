@@ -31,102 +31,142 @@ import (
 )
 
 type Interface struct {
-	Device                                   types.String                              `tfsdk:"device"`
-	Id                                       types.String                              `tfsdk:"id"`
-	DeleteMode                               types.String                              `tfsdk:"delete_mode"`
-	InterfaceName                            types.String                              `tfsdk:"interface_name"`
-	L2transport                              types.Bool                                `tfsdk:"l2transport"`
-	PointToPoint                             types.Bool                                `tfsdk:"point_to_point"`
-	Multipoint                               types.Bool                                `tfsdk:"multipoint"`
-	DampeningDecayHalfLifeValue              types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
-	Ipv4PointToPoint                         types.Bool                                `tfsdk:"ipv4_point_to_point"`
-	ServicePolicyInput                       []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
-	ServicePolicyOutput                      []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
-	BfdModeIetf                              types.Bool                                `tfsdk:"bfd_mode_ietf"`
-	EncapsulationDot1qVlanId                 types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qVlanId      types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qSecondDot1q types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
-	RewriteIngressTagPopOne                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
-	RewriteIngressTagPopTwo                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
-	Shutdown                                 types.Bool                                `tfsdk:"shutdown"`
-	Mtu                                      types.Int64                               `tfsdk:"mtu"`
-	Bandwidth                                types.Int64                               `tfsdk:"bandwidth"`
-	Description                              types.String                              `tfsdk:"description"`
-	LoadInterval                             types.Int64                               `tfsdk:"load_interval"`
-	Vrf                                      types.String                              `tfsdk:"vrf"`
-	Ipv4Address                              types.String                              `tfsdk:"ipv4_address"`
-	Ipv4Netmask                              types.String                              `tfsdk:"ipv4_netmask"`
-	Unnumbered                               types.String                              `tfsdk:"unnumbered"`
-	Ipv6LinkLocalAddress                     types.String                              `tfsdk:"ipv6_link_local_address"`
-	Ipv6LinkLocalZone                        types.String                              `tfsdk:"ipv6_link_local_zone"`
-	Ipv6Autoconfig                           types.Bool                                `tfsdk:"ipv6_autoconfig"`
-	Ipv6Enable                               types.Bool                                `tfsdk:"ipv6_enable"`
-	Ipv6Addresses                            []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
-	BundleMinimumActiveLinks                 types.Int64                               `tfsdk:"bundle_minimum_active_links"`
-	BundleMaximumActiveLinks                 types.Int64                               `tfsdk:"bundle_maximum_active_links"`
-	BundleShutdown                           types.Bool                                `tfsdk:"bundle_shutdown"`
-	BundleLoadBalancingHashSrcIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
-	BundleLoadBalancingHashDstIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
-	BundleId                                 types.Int64                               `tfsdk:"bundle_id"`
-	BundleIdMode                             types.String                              `tfsdk:"bundle_id_mode"`
-	BundlePortPriority                       types.Int64                               `tfsdk:"bundle_port_priority"`
-	FlowIpv4IngressMonitors                  []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
-	FlowIpv4IngressMonitorSamplers           []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
-	FlowIpv4EgressMonitors                   []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
-	FlowIpv4EgressMonitorSamplers            []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
-	FlowIpv6IngressMonitors                  []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
-	FlowIpv6IngressMonitorSamplers           []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
-	FlowIpv6EgressMonitors                   []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
-	FlowIpv6EgressMonitorSamplers            []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
+	Device                                           types.String                              `tfsdk:"device"`
+	Id                                               types.String                              `tfsdk:"id"`
+	DeleteMode                                       types.String                              `tfsdk:"delete_mode"`
+	InterfaceName                                    types.String                              `tfsdk:"interface_name"`
+	L2transport                                      types.Bool                                `tfsdk:"l2transport"`
+	PointToPoint                                     types.Bool                                `tfsdk:"point_to_point"`
+	Multipoint                                       types.Bool                                `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue                      types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                                 types.Bool                                `tfsdk:"ipv4_point_to_point"`
+	ServicePolicyInput                               []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
+	ServicePolicyOutput                              []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
+	BfdModeIetf                                      types.Bool                                `tfsdk:"bfd_mode_ietf"`
+	EncapsulationDot1qVlanId                         types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId              types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q         types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                          types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                          types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                         types.Bool                                `tfsdk:"shutdown"`
+	Mtu                                              types.Int64                               `tfsdk:"mtu"`
+	Bandwidth                                        types.Int64                               `tfsdk:"bandwidth"`
+	Description                                      types.String                              `tfsdk:"description"`
+	LoadInterval                                     types.Int64                               `tfsdk:"load_interval"`
+	Vrf                                              types.String                              `tfsdk:"vrf"`
+	Ipv4Address                                      types.String                              `tfsdk:"ipv4_address"`
+	Ipv4Netmask                                      types.String                              `tfsdk:"ipv4_netmask"`
+	Unnumbered                                       types.String                              `tfsdk:"unnumbered"`
+	Ipv4VerifyUnicastSourceReachableViaType          types.String                              `tfsdk:"ipv4_verify_unicast_source_reachable_via_type"`
+	Ipv4VerifyUnicastSourceReachableViaAllowSelfPing types.Bool                                `tfsdk:"ipv4_verify_unicast_source_reachable_via_allow_self_ping"`
+	Ipv4VerifyUnicastSourceReachableViaAllowDefault  types.Bool                                `tfsdk:"ipv4_verify_unicast_source_reachable_via_allow_default"`
+	Ipv4AccessGroupIngressAcl1                       types.String                              `tfsdk:"ipv4_access_group_ingress_acl1"`
+	Ipv4AccessGroupIngressHardwareCount              types.Bool                                `tfsdk:"ipv4_access_group_ingress_hardware_count"`
+	Ipv4AccessGroupIngressInterfaceStatistics        types.Bool                                `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
+	Ipv4AccessGroupIngressCompressLevel              types.Int64                               `tfsdk:"ipv4_access_group_ingress_compress_level"`
+	Ipv4AccessGroupEgressAcl                         types.String                              `tfsdk:"ipv4_access_group_egress_acl"`
+	Ipv4AccessGroupEgressHardwareCount               types.Bool                                `tfsdk:"ipv4_access_group_egress_hardware_count"`
+	Ipv4AccessGroupEgressInterfaceStatistics         types.Bool                                `tfsdk:"ipv4_access_group_egress_interface_statistics"`
+	Ipv4AccessGroupEgressCompressLevel               types.Int64                               `tfsdk:"ipv4_access_group_egress_compress_level"`
+	Ipv6VerifyUnicastSourceReachableViaType          types.String                              `tfsdk:"ipv6_verify_unicast_source_reachable_via_type"`
+	Ipv6VerifyUnicastSourceReachableViaAllowSelfPing types.Bool                                `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_self_ping"`
+	Ipv6VerifyUnicastSourceReachableViaAllowDefault  types.Bool                                `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_default"`
+	Ipv6AccessGroupIngressAcl1                       types.String                              `tfsdk:"ipv6_access_group_ingress_acl1"`
+	Ipv6AccessGroupIngressInterfaceStatistics        types.Bool                                `tfsdk:"ipv6_access_group_ingress_interface_statistics"`
+	Ipv6AccessGroupIngressCompressLevel              types.Int64                               `tfsdk:"ipv6_access_group_ingress_compress_level"`
+	Ipv6AccessGroupEgressAcl1                        types.String                              `tfsdk:"ipv6_access_group_egress_acl1"`
+	Ipv6AccessGroupEgressInterfaceStatistics         types.Bool                                `tfsdk:"ipv6_access_group_egress_interface_statistics"`
+	Ipv6AccessGroupEgressCompressLevel               types.Int64                               `tfsdk:"ipv6_access_group_egress_compress_level"`
+	Ipv6LinkLocalAddress                             types.String                              `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                                types.String                              `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                                   types.Bool                                `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                                       types.Bool                                `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                                    []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                         types.Int64                               `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                         types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                                   types.Bool                                `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                         types.Int64                               `tfsdk:"bundle_id"`
+	BundleIdMode                                     types.String                              `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                               types.Int64                               `tfsdk:"bundle_port_priority"`
+	FlowIpv4IngressMonitors                          []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
+	FlowIpv4IngressMonitorSamplers                   []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
+	FlowIpv4EgressMonitors                           []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
+	FlowIpv4EgressMonitorSamplers                    []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
+	FlowIpv6IngressMonitors                          []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
+	FlowIpv6IngressMonitorSamplers                   []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
+	FlowIpv6EgressMonitors                           []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
+	FlowIpv6EgressMonitorSamplers                    []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
 }
 
 type InterfaceData struct {
-	Device                                   types.String                              `tfsdk:"device"`
-	Id                                       types.String                              `tfsdk:"id"`
-	InterfaceName                            types.String                              `tfsdk:"interface_name"`
-	L2transport                              types.Bool                                `tfsdk:"l2transport"`
-	PointToPoint                             types.Bool                                `tfsdk:"point_to_point"`
-	Multipoint                               types.Bool                                `tfsdk:"multipoint"`
-	DampeningDecayHalfLifeValue              types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
-	Ipv4PointToPoint                         types.Bool                                `tfsdk:"ipv4_point_to_point"`
-	ServicePolicyInput                       []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
-	ServicePolicyOutput                      []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
-	BfdModeIetf                              types.Bool                                `tfsdk:"bfd_mode_ietf"`
-	EncapsulationDot1qVlanId                 types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qVlanId      types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
-	L2transportEncapsulationDot1qSecondDot1q types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
-	RewriteIngressTagPopOne                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
-	RewriteIngressTagPopTwo                  types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
-	Shutdown                                 types.Bool                                `tfsdk:"shutdown"`
-	Mtu                                      types.Int64                               `tfsdk:"mtu"`
-	Bandwidth                                types.Int64                               `tfsdk:"bandwidth"`
-	Description                              types.String                              `tfsdk:"description"`
-	LoadInterval                             types.Int64                               `tfsdk:"load_interval"`
-	Vrf                                      types.String                              `tfsdk:"vrf"`
-	Ipv4Address                              types.String                              `tfsdk:"ipv4_address"`
-	Ipv4Netmask                              types.String                              `tfsdk:"ipv4_netmask"`
-	Unnumbered                               types.String                              `tfsdk:"unnumbered"`
-	Ipv6LinkLocalAddress                     types.String                              `tfsdk:"ipv6_link_local_address"`
-	Ipv6LinkLocalZone                        types.String                              `tfsdk:"ipv6_link_local_zone"`
-	Ipv6Autoconfig                           types.Bool                                `tfsdk:"ipv6_autoconfig"`
-	Ipv6Enable                               types.Bool                                `tfsdk:"ipv6_enable"`
-	Ipv6Addresses                            []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
-	BundleMinimumActiveLinks                 types.Int64                               `tfsdk:"bundle_minimum_active_links"`
-	BundleMaximumActiveLinks                 types.Int64                               `tfsdk:"bundle_maximum_active_links"`
-	BundleShutdown                           types.Bool                                `tfsdk:"bundle_shutdown"`
-	BundleLoadBalancingHashSrcIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
-	BundleLoadBalancingHashDstIp             types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
-	BundleId                                 types.Int64                               `tfsdk:"bundle_id"`
-	BundleIdMode                             types.String                              `tfsdk:"bundle_id_mode"`
-	BundlePortPriority                       types.Int64                               `tfsdk:"bundle_port_priority"`
-	FlowIpv4IngressMonitors                  []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
-	FlowIpv4IngressMonitorSamplers           []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
-	FlowIpv4EgressMonitors                   []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
-	FlowIpv4EgressMonitorSamplers            []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
-	FlowIpv6IngressMonitors                  []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
-	FlowIpv6IngressMonitorSamplers           []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
-	FlowIpv6EgressMonitors                   []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
-	FlowIpv6EgressMonitorSamplers            []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
+	Device                                           types.String                              `tfsdk:"device"`
+	Id                                               types.String                              `tfsdk:"id"`
+	InterfaceName                                    types.String                              `tfsdk:"interface_name"`
+	L2transport                                      types.Bool                                `tfsdk:"l2transport"`
+	PointToPoint                                     types.Bool                                `tfsdk:"point_to_point"`
+	Multipoint                                       types.Bool                                `tfsdk:"multipoint"`
+	DampeningDecayHalfLifeValue                      types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
+	Ipv4PointToPoint                                 types.Bool                                `tfsdk:"ipv4_point_to_point"`
+	ServicePolicyInput                               []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
+	ServicePolicyOutput                              []InterfaceServicePolicyOutput            `tfsdk:"service_policy_output"`
+	BfdModeIetf                                      types.Bool                                `tfsdk:"bfd_mode_ietf"`
+	EncapsulationDot1qVlanId                         types.Int64                               `tfsdk:"encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qVlanId              types.String                              `tfsdk:"l2transport_encapsulation_dot1q_vlan_id"`
+	L2transportEncapsulationDot1qSecondDot1q         types.String                              `tfsdk:"l2transport_encapsulation_dot1q_second_dot1q"`
+	RewriteIngressTagPopOne                          types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_one"`
+	RewriteIngressTagPopTwo                          types.Bool                                `tfsdk:"rewrite_ingress_tag_pop_two"`
+	Shutdown                                         types.Bool                                `tfsdk:"shutdown"`
+	Mtu                                              types.Int64                               `tfsdk:"mtu"`
+	Bandwidth                                        types.Int64                               `tfsdk:"bandwidth"`
+	Description                                      types.String                              `tfsdk:"description"`
+	LoadInterval                                     types.Int64                               `tfsdk:"load_interval"`
+	Vrf                                              types.String                              `tfsdk:"vrf"`
+	Ipv4Address                                      types.String                              `tfsdk:"ipv4_address"`
+	Ipv4Netmask                                      types.String                              `tfsdk:"ipv4_netmask"`
+	Unnumbered                                       types.String                              `tfsdk:"unnumbered"`
+	Ipv4VerifyUnicastSourceReachableViaType          types.String                              `tfsdk:"ipv4_verify_unicast_source_reachable_via_type"`
+	Ipv4VerifyUnicastSourceReachableViaAllowSelfPing types.Bool                                `tfsdk:"ipv4_verify_unicast_source_reachable_via_allow_self_ping"`
+	Ipv4VerifyUnicastSourceReachableViaAllowDefault  types.Bool                                `tfsdk:"ipv4_verify_unicast_source_reachable_via_allow_default"`
+	Ipv4AccessGroupIngressAcl1                       types.String                              `tfsdk:"ipv4_access_group_ingress_acl1"`
+	Ipv4AccessGroupIngressHardwareCount              types.Bool                                `tfsdk:"ipv4_access_group_ingress_hardware_count"`
+	Ipv4AccessGroupIngressInterfaceStatistics        types.Bool                                `tfsdk:"ipv4_access_group_ingress_interface_statistics"`
+	Ipv4AccessGroupIngressCompressLevel              types.Int64                               `tfsdk:"ipv4_access_group_ingress_compress_level"`
+	Ipv4AccessGroupEgressAcl                         types.String                              `tfsdk:"ipv4_access_group_egress_acl"`
+	Ipv4AccessGroupEgressHardwareCount               types.Bool                                `tfsdk:"ipv4_access_group_egress_hardware_count"`
+	Ipv4AccessGroupEgressInterfaceStatistics         types.Bool                                `tfsdk:"ipv4_access_group_egress_interface_statistics"`
+	Ipv4AccessGroupEgressCompressLevel               types.Int64                               `tfsdk:"ipv4_access_group_egress_compress_level"`
+	Ipv6VerifyUnicastSourceReachableViaType          types.String                              `tfsdk:"ipv6_verify_unicast_source_reachable_via_type"`
+	Ipv6VerifyUnicastSourceReachableViaAllowSelfPing types.Bool                                `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_self_ping"`
+	Ipv6VerifyUnicastSourceReachableViaAllowDefault  types.Bool                                `tfsdk:"ipv6_verify_unicast_source_reachable_via_allow_default"`
+	Ipv6AccessGroupIngressAcl1                       types.String                              `tfsdk:"ipv6_access_group_ingress_acl1"`
+	Ipv6AccessGroupIngressInterfaceStatistics        types.Bool                                `tfsdk:"ipv6_access_group_ingress_interface_statistics"`
+	Ipv6AccessGroupIngressCompressLevel              types.Int64                               `tfsdk:"ipv6_access_group_ingress_compress_level"`
+	Ipv6AccessGroupEgressAcl1                        types.String                              `tfsdk:"ipv6_access_group_egress_acl1"`
+	Ipv6AccessGroupEgressInterfaceStatistics         types.Bool                                `tfsdk:"ipv6_access_group_egress_interface_statistics"`
+	Ipv6AccessGroupEgressCompressLevel               types.Int64                               `tfsdk:"ipv6_access_group_egress_compress_level"`
+	Ipv6LinkLocalAddress                             types.String                              `tfsdk:"ipv6_link_local_address"`
+	Ipv6LinkLocalZone                                types.String                              `tfsdk:"ipv6_link_local_zone"`
+	Ipv6Autoconfig                                   types.Bool                                `tfsdk:"ipv6_autoconfig"`
+	Ipv6Enable                                       types.Bool                                `tfsdk:"ipv6_enable"`
+	Ipv6Addresses                                    []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
+	BundleMinimumActiveLinks                         types.Int64                               `tfsdk:"bundle_minimum_active_links"`
+	BundleMaximumActiveLinks                         types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	BundleShutdown                                   types.Bool                                `tfsdk:"bundle_shutdown"`
+	BundleLoadBalancingHashSrcIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
+	BundleLoadBalancingHashDstIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
+	BundleId                                         types.Int64                               `tfsdk:"bundle_id"`
+	BundleIdMode                                     types.String                              `tfsdk:"bundle_id_mode"`
+	BundlePortPriority                               types.Int64                               `tfsdk:"bundle_port_priority"`
+	FlowIpv4IngressMonitors                          []InterfaceFlowIpv4IngressMonitors        `tfsdk:"flow_ipv4_ingress_monitors"`
+	FlowIpv4IngressMonitorSamplers                   []InterfaceFlowIpv4IngressMonitorSamplers `tfsdk:"flow_ipv4_ingress_monitor_samplers"`
+	FlowIpv4EgressMonitors                           []InterfaceFlowIpv4EgressMonitors         `tfsdk:"flow_ipv4_egress_monitors"`
+	FlowIpv4EgressMonitorSamplers                    []InterfaceFlowIpv4EgressMonitorSamplers  `tfsdk:"flow_ipv4_egress_monitor_samplers"`
+	FlowIpv6IngressMonitors                          []InterfaceFlowIpv6IngressMonitors        `tfsdk:"flow_ipv6_ingress_monitors"`
+	FlowIpv6IngressMonitorSamplers                   []InterfaceFlowIpv6IngressMonitorSamplers `tfsdk:"flow_ipv6_ingress_monitor_samplers"`
+	FlowIpv6EgressMonitors                           []InterfaceFlowIpv6EgressMonitors         `tfsdk:"flow_ipv6_egress_monitors"`
+	FlowIpv6EgressMonitorSamplers                    []InterfaceFlowIpv6EgressMonitorSamplers  `tfsdk:"flow_ipv6_egress_monitor_samplers"`
 }
 type InterfaceServicePolicyInput struct {
 	Name types.String `tfsdk:"name"`
@@ -256,6 +296,78 @@ func (data Interface) toBody(ctx context.Context) string {
 	}
 	if !data.Unnumbered.IsNull() && !data.Unnumbered.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered", data.Unnumbered.ValueString())
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaType.IsNull() && !data.Ipv4VerifyUnicastSourceReachableViaType.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.type", data.Ipv4VerifyUnicastSourceReachableViaType.ValueString())
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-self-ping", data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool())
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() && !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-default", data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.ValueBool())
+	}
+	if !data.Ipv4AccessGroupIngressAcl1.IsNull() && !data.Ipv4AccessGroupIngressAcl1.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name", data.Ipv4AccessGroupIngressAcl1.ValueString())
+	}
+	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.IsUnknown() {
+		if data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.hardware-count", map[string]string{})
+		}
+	}
+	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupIngressInterfaceStatistics.IsUnknown() {
+		if data.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", map[string]string{})
+		}
+	}
+	if !data.Ipv4AccessGroupIngressCompressLevel.IsNull() && !data.Ipv4AccessGroupIngressCompressLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level", strconv.FormatInt(data.Ipv4AccessGroupIngressCompressLevel.ValueInt64(), 10))
+	}
+	if !data.Ipv4AccessGroupEgressAcl.IsNull() && !data.Ipv4AccessGroupEgressAcl.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name", data.Ipv4AccessGroupEgressAcl.ValueString())
+	}
+	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() && !data.Ipv4AccessGroupEgressHardwareCount.IsUnknown() {
+		if data.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.hardware-count", map[string]string{})
+		}
+	}
+	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupEgressInterfaceStatistics.IsUnknown() {
+		if data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
+			body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", map[string]string{})
+		}
+	}
+	if !data.Ipv4AccessGroupEgressCompressLevel.IsNull() && !data.Ipv4AccessGroupEgressCompressLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level", strconv.FormatInt(data.Ipv4AccessGroupEgressCompressLevel.ValueInt64(), 10))
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaType.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type", data.Ipv6VerifyUnicastSourceReachableViaType.ValueString())
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-self-ping", data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.ValueBool())
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() && !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-default", data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.ValueBool())
+	}
+	if !data.Ipv6AccessGroupIngressAcl1.IsNull() && !data.Ipv6AccessGroupIngressAcl1.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name", data.Ipv6AccessGroupIngressAcl1.ValueString())
+	}
+	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupIngressInterfaceStatistics.IsUnknown() {
+		if data.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics", map[string]string{})
+		}
+	}
+	if !data.Ipv6AccessGroupIngressCompressLevel.IsNull() && !data.Ipv6AccessGroupIngressCompressLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level", strconv.FormatInt(data.Ipv6AccessGroupIngressCompressLevel.ValueInt64(), 10))
+	}
+	if !data.Ipv6AccessGroupEgressAcl1.IsNull() && !data.Ipv6AccessGroupEgressAcl1.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name-1.name", data.Ipv6AccessGroupEgressAcl1.ValueString())
+	}
+	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupEgressInterfaceStatistics.IsUnknown() {
+		if data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
+			body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics", map[string]string{})
+		}
+	}
+	if !data.Ipv6AccessGroupEgressCompressLevel.IsNull() && !data.Ipv6AccessGroupEgressCompressLevel.IsUnknown() {
+		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level", strconv.FormatInt(data.Ipv6AccessGroupEgressCompressLevel.ValueInt64(), 10))
 	}
 	if !data.Ipv6LinkLocalAddress.IsNull() && !data.Ipv6LinkLocalAddress.IsUnknown() {
 		body, _ = sjson.Set(body, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address", data.Ipv6LinkLocalAddress.ValueString())
@@ -602,6 +714,138 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 		data.Unnumbered = types.StringValue(value.String())
 	} else {
 		data.Unnumbered = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.type"); value.Exists() && !data.Ipv4VerifyUnicastSourceReachableViaType.IsNull() {
+		data.Ipv4VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
+	} else {
+		data.Ipv4VerifyUnicastSourceReachableViaType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-self-ping"); !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		if value.Exists() {
+			data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(value.Bool())
+		}
+	} else {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-default"); !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		if value.Exists() {
+			data.Ipv4VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(value.Bool())
+		}
+	} else {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowDefault = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() && !data.Ipv4AccessGroupIngressAcl1.IsNull() {
+		data.Ipv4AccessGroupIngressAcl1 = types.StringValue(value.String())
+	} else {
+		data.Ipv4AccessGroupIngressAcl1 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.hardware-count"); !data.Ipv4AccessGroupIngressHardwareCount.IsNull() {
+		if value.Exists() {
+			data.Ipv4AccessGroupIngressHardwareCount = types.BoolValue(true)
+		} else {
+			data.Ipv4AccessGroupIngressHardwareCount = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4AccessGroupIngressHardwareCount = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics"); !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
+		if value.Exists() {
+			data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(true)
+		} else {
+			data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level"); value.Exists() && !data.Ipv4AccessGroupIngressCompressLevel.IsNull() {
+		data.Ipv4AccessGroupIngressCompressLevel = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4AccessGroupIngressCompressLevel = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() && !data.Ipv4AccessGroupEgressAcl.IsNull() {
+		data.Ipv4AccessGroupEgressAcl = types.StringValue(value.String())
+	} else {
+		data.Ipv4AccessGroupEgressAcl = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.hardware-count"); !data.Ipv4AccessGroupEgressHardwareCount.IsNull() {
+		if value.Exists() {
+			data.Ipv4AccessGroupEgressHardwareCount = types.BoolValue(true)
+		} else {
+			data.Ipv4AccessGroupEgressHardwareCount = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4AccessGroupEgressHardwareCount = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics"); !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
+		if value.Exists() {
+			data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
+		} else {
+			data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level"); value.Exists() && !data.Ipv4AccessGroupEgressCompressLevel.IsNull() {
+		data.Ipv4AccessGroupEgressCompressLevel = types.Int64Value(value.Int())
+	} else {
+		data.Ipv4AccessGroupEgressCompressLevel = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type"); value.Exists() && !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
+		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
+	} else {
+		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-self-ping"); !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		if value.Exists() {
+			data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(value.Bool())
+		}
+	} else {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-default"); !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		if value.Exists() {
+			data.Ipv6VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(value.Bool())
+		}
+	} else {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowDefault = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() && !data.Ipv6AccessGroupIngressAcl1.IsNull() {
+		data.Ipv6AccessGroupIngressAcl1 = types.StringValue(value.String())
+	} else {
+		data.Ipv6AccessGroupIngressAcl1 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics"); !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
+		if value.Exists() {
+			data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(true)
+		} else {
+			data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level"); value.Exists() && !data.Ipv6AccessGroupIngressCompressLevel.IsNull() {
+		data.Ipv6AccessGroupIngressCompressLevel = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6AccessGroupIngressCompressLevel = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name-1.name"); value.Exists() && !data.Ipv6AccessGroupEgressAcl1.IsNull() {
+		data.Ipv6AccessGroupEgressAcl1 = types.StringValue(value.String())
+	} else {
+		data.Ipv6AccessGroupEgressAcl1 = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics"); !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
+		if value.Exists() {
+			data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
+		} else {
+			data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+		}
+	} else {
+		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level"); value.Exists() && !data.Ipv6AccessGroupEgressCompressLevel.IsNull() {
+		data.Ipv6AccessGroupEgressCompressLevel = types.Int64Value(value.Int())
+	} else {
+		data.Ipv6AccessGroupEgressCompressLevel = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() && !data.Ipv6LinkLocalAddress.IsNull() {
 		data.Ipv6LinkLocalAddress = types.StringValue(value.String())
@@ -1075,6 +1319,86 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.unnumbered"); value.Exists() {
 		data.Unnumbered = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.type"); value.Exists() {
+		data.Ipv4VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-self-ping"); value.Exists() {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(value.Bool())
+	} else {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-ipv4-cfg:verify.unicast.source.reachable-via.allow-default"); value.Exists() {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(value.Bool())
+	} else {
+		data.Ipv4VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() {
+		data.Ipv4AccessGroupIngressAcl1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.hardware-count"); value.Exists() {
+		data.Ipv4AccessGroupIngressHardwareCount = types.BoolValue(true)
+	} else {
+		data.Ipv4AccessGroupIngressHardwareCount = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics"); value.Exists() {
+		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(true)
+	} else {
+		data.Ipv4AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level"); value.Exists() {
+		data.Ipv4AccessGroupIngressCompressLevel = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name.name"); value.Exists() {
+		data.Ipv4AccessGroupEgressAcl = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.hardware-count"); value.Exists() {
+		data.Ipv4AccessGroupEgressHardwareCount = types.BoolValue(true)
+	} else {
+		data.Ipv4AccessGroupEgressHardwareCount = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics"); value.Exists() {
+		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
+	} else {
+		data.Ipv4AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv4.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level"); value.Exists() {
+		data.Ipv4AccessGroupEgressCompressLevel = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.type"); value.Exists() {
+		data.Ipv6VerifyUnicastSourceReachableViaType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-self-ping"); value.Exists() {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(value.Bool())
+	} else {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ipv6-cfg:verify.unicast.source.reachable-via.allow-default"); value.Exists() {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(value.Bool())
+	} else {
+		data.Ipv6VerifyUnicastSourceReachableViaAllowDefault = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.access-list-name-1.name"); value.Exists() {
+		data.Ipv6AccessGroupIngressAcl1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.interface-statistics"); value.Exists() {
+		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(true)
+	} else {
+		data.Ipv6AccessGroupIngressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.ingress.compress-level"); value.Exists() {
+		data.Ipv6AccessGroupIngressCompressLevel = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.access-list-name-1.name"); value.Exists() {
+		data.Ipv6AccessGroupEgressAcl1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.interface-statistics"); value.Exists() {
+		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(true)
+	} else {
+		data.Ipv6AccessGroupEgressInterfaceStatistics = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-access-group-cfg:access-group.egress.compress-level"); value.Exists() {
+		data.Ipv6AccessGroupEgressCompressLevel = types.Int64Value(value.Int())
+	}
 	if value := gjson.GetBytes(res, "ipv6.Cisco-IOS-XR-um-if-ip-address-cfg:addresses.link-local-address.address"); value.Exists() {
 		data.Ipv6LinkLocalAddress = types.StringValue(value.String())
 	}
@@ -1361,6 +1685,66 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 	}
 	if !state.Unnumbered.IsNull() && data.Unnumbered.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", state.getPath()))
+	}
+	if !state.Ipv4VerifyUnicastSourceReachableViaType.IsNull() && data.Ipv4VerifyUnicastSourceReachableViaType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() && data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupIngressAcl1.IsNull() && data.Ipv4AccessGroupIngressAcl1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupIngressHardwareCount.IsNull() && data.Ipv4AccessGroupIngressHardwareCount.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupIngressCompressLevel.IsNull() && data.Ipv4AccessGroupIngressCompressLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupEgressAcl.IsNull() && data.Ipv4AccessGroupEgressAcl.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupEgressHardwareCount.IsNull() && data.Ipv4AccessGroupEgressHardwareCount.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", state.getPath()))
+	}
+	if !state.Ipv4AccessGroupEgressCompressLevel.IsNull() && data.Ipv4AccessGroupEgressCompressLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level", state.getPath()))
+	}
+	if !state.Ipv6VerifyUnicastSourceReachableViaType.IsNull() && data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() && data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() && data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupIngressAcl1.IsNull() && data.Ipv6AccessGroupIngressAcl1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupIngressCompressLevel.IsNull() && data.Ipv6AccessGroupIngressCompressLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupEgressAcl1.IsNull() && data.Ipv6AccessGroupEgressAcl1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name-1", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", state.getPath()))
+	}
+	if !state.Ipv6AccessGroupEgressCompressLevel.IsNull() && data.Ipv6AccessGroupEgressCompressLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level", state.getPath()))
 	}
 	if !state.Ipv6LinkLocalAddress.IsNull() && data.Ipv6LinkLocalAddress.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", state.getPath()))
@@ -1743,6 +2127,24 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.Shutdown.IsNull() && !data.Shutdown.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getPath()))
 	}
+	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() && !data.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+	}
 	if !data.Ipv6Autoconfig.IsNull() && !data.Ipv6Autoconfig.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig", data.getPath()))
 	}
@@ -1914,6 +2316,66 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.Unnumbered.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered", data.getPath()))
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv4VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressAcl1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupIngressCompressLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressAcl.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv4AccessGroupEgressCompressLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level", data.getPath()))
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaAllowSelfPing.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv6VerifyUnicastSourceReachableViaAllowDefault.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupIngressAcl1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupIngressCompressLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupEgressAcl1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name-1", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+	}
+	if !data.Ipv6AccessGroupEgressCompressLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level", data.getPath()))
 	}
 	if !data.Ipv6LinkLocalAddress.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", data.getPath()))

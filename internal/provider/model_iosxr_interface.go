@@ -1240,8 +1240,8 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Interface) getDeletedListItems(ctx context.Context, state Interface) []string {
-	deletedListItems := make([]string, 0)
+func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.ServicePolicyInput {
 		keys := [...]string{"service-policy-name"}
 		stateKeyValues := [...]string{state.ServicePolicyInput[i].Name.ValueString()}
@@ -1269,7 +1269,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ServicePolicyOutput {
@@ -1299,7 +1299,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv6Addresses {
@@ -1329,7 +1329,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4IngressMonitors {
@@ -1359,7 +1359,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4IngressMonitorSamplers {
@@ -1395,7 +1395,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4EgressMonitors {
@@ -1425,7 +1425,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv4EgressMonitorSamplers {
@@ -1461,7 +1461,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6IngressMonitors {
@@ -1491,7 +1491,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6IngressMonitorSamplers {
@@ -1527,7 +1527,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6EgressMonitors {
@@ -1557,7 +1557,7 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlowIpv6EgressMonitorSamplers {
@@ -1593,10 +1593,10 @@ func (data *Interface) getDeletedListItems(ctx context.Context, state Interface)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {

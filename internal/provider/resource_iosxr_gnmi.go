@@ -234,7 +234,7 @@ func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		ops = append(ops, client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
 	}
 
-	deletedListItems := plan.getDeletedListItems(ctx, state)
+	deletedListItems := plan.getDeletedItems(ctx, state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {

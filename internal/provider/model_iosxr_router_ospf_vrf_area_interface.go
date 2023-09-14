@@ -222,9 +222,9 @@ func (data *RouterOSPFVRFAreaInterfaceData) fromBody(ctx context.Context, res []
 	}
 }
 
-func (data *RouterOSPFVRFAreaInterface) getDeletedListItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RouterOSPFVRFAreaInterface) getDeletedItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []string {

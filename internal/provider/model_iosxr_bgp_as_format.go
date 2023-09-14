@@ -99,9 +99,9 @@ func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *BGPASFormat) getDeletedListItems(ctx context.Context, state BGPASFormat) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {

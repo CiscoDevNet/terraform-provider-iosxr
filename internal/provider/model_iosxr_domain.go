@@ -410,8 +410,8 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []string {
-	deletedListItems := make([]string, 0)
+func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Domains {
 		keys := [...]string{"domain-name", "order"}
 		stateKeyValues := [...]string{state.Domains[i].DomainName.ValueString(), strconv.FormatInt(state.Domains[i].Order.ValueInt64(), 10)}
@@ -445,7 +445,7 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/list/domain%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/list/domain%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv4Hosts {
@@ -475,7 +475,7 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv4/hosts/host%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/hosts/host%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.NameServers {
@@ -511,7 +511,7 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/name-servers/name-server%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/name-servers/name-server%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv6Hosts {
@@ -541,10 +541,10 @@ func (data *Domain) getDeletedListItems(ctx context.Context, state Domain) []str
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/ipv6/host/host%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/host/host%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {

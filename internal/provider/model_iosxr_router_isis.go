@@ -968,8 +968,8 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISIS) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.SetOverloadBitLevels {
 		keys := [...]string{"level-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.SetOverloadBitLevels[i].LevelId.ValueInt64(), 10)}
@@ -997,7 +997,7 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/level%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.AffinityMaps {
@@ -1027,7 +1027,7 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.FlexAlgos {
@@ -1057,7 +1057,7 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/flex-algos/flex-algo%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algos/flex-algo%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Nets {
@@ -1087,7 +1087,7 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
@@ -1117,10 +1117,10 @@ func (data *RouterISIS) getDeletedListItems(ctx context.Context, state RouterISI
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {

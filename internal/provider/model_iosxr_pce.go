@@ -251,8 +251,8 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
-	deletedListItems := make([]string, 0)
+func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.StateSyncIpv4s {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
@@ -280,7 +280,7 @@ func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.ApiUsers {
@@ -310,10 +310,10 @@ func (data *PCE) getDeletedListItems(ctx context.Context, state PCE) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {

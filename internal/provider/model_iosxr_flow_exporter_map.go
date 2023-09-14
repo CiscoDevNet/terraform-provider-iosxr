@@ -279,9 +279,9 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *FlowExporterMap) getDeletedListItems(ctx context.Context, state FlowExporterMap) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExporterMap) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context) []string {

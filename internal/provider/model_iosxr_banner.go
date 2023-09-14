@@ -75,9 +75,9 @@ func (data *BannerData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Banner) getDeletedListItems(ctx context.Context, state Banner) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *Banner) getDeletedItems(ctx context.Context, state Banner) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *Banner) getEmptyLeafsDelete(ctx context.Context) []string {

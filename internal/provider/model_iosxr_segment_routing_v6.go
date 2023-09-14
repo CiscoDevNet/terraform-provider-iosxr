@@ -203,8 +203,8 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRoutingV6) getDeletedListItems(ctx context.Context, state SegmentRoutingV6) []string {
-	deletedListItems := make([]string, 0)
+func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state SegmentRoutingV6) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Locators {
 		keys := [...]string{"name"}
 		stateKeyValues := [...]string{state.Locators[i].Name.ValueString()}
@@ -232,10 +232,10 @@ func (data *SegmentRoutingV6) getDeletedListItems(ctx context.Context, state Seg
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string {

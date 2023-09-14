@@ -242,9 +242,9 @@ func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *IPv6) getDeletedListItems(ctx context.Context, state IPv6) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *IPv6) getDeletedItems(ctx context.Context, state IPv6) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *IPv6) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -287,7 +287,7 @@ func (r *RouterBGPNeighborGroupResource) Update(ctx context.Context, req resourc
 	body := plan.toBody(ctx)
 	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
-	deletedListItems := plan.getDeletedListItems(ctx, state)
+	deletedListItems := plan.getDeletedItems(ctx, state)
 	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 	for _, i := range deletedListItems {

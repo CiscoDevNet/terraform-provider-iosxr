@@ -75,9 +75,9 @@ func (data *ExtcommunityCostSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ExtcommunityCostSet) getDeletedListItems(ctx context.Context, state ExtcommunityCostSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ExtcommunityCostSet) getDeletedItems(ctx context.Context, state ExtcommunityCostSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ExtcommunityCostSet) getEmptyLeafsDelete(ctx context.Context) []string {

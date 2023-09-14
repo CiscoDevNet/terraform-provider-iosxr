@@ -165,9 +165,9 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ClassMapQoS) getDeletedListItems(ctx context.Context, state ClassMapQoS) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -218,9 +218,9 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Logging) getDeletedListItems(ctx context.Context, state Logging) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {

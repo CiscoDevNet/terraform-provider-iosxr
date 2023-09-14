@@ -75,9 +75,9 @@ func (data *ExtcommunitySOOSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ExtcommunitySOOSet) getDeletedListItems(ctx context.Context, state ExtcommunitySOOSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ExtcommunitySOOSet) getDeletedItems(ctx context.Context, state ExtcommunitySOOSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ExtcommunitySOOSet) getEmptyLeafsDelete(ctx context.Context) []string {

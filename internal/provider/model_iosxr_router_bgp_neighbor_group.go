@@ -375,8 +375,8 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	}
 }
 
-func (data *RouterBGPNeighborGroup) getDeletedListItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
 		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
@@ -404,10 +404,10 @@ func (data *RouterBGPNeighborGroup) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {

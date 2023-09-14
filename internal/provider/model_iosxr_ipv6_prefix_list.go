@@ -201,8 +201,8 @@ func (data *IPv6PrefixListData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *IPv6PrefixList) getDeletedListItems(ctx context.Context, state IPv6PrefixList) []string {
-	deletedListItems := make([]string, 0)
+func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6PrefixList) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Sequences {
 		keys := [...]string{"sequence-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Sequences[i].SequenceNumber.ValueInt64(), 10)}
@@ -230,10 +230,10 @@ func (data *IPv6PrefixList) getDeletedListItems(ctx context.Context, state IPv6P
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/sequences/sequence%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *IPv6PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {

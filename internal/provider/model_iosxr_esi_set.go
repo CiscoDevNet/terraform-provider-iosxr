@@ -75,9 +75,9 @@ func (data *ESISetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ESISet) getDeletedListItems(ctx context.Context, state ESISet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ESISet) getDeletedItems(ctx context.Context, state ESISet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ESISet) getEmptyLeafsDelete(ctx context.Context) []string {

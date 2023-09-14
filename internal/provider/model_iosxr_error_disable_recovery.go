@@ -319,9 +319,9 @@ func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res []byte) 
 	}
 }
 
-func (data *ErrorDisableRecovery) getDeletedListItems(ctx context.Context, state ErrorDisableRecovery) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ErrorDisableRecovery) getDeletedItems(ctx context.Context, state ErrorDisableRecovery) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ErrorDisableRecovery) getEmptyLeafsDelete(ctx context.Context) []string {

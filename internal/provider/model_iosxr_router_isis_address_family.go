@@ -969,8 +969,8 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 	}
 }
 
-func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, state RouterISISAddressFamily) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.MetricStyleLevels {
 		keys := [...]string{"level-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.MetricStyleLevels[i].LevelId.ValueInt64(), 10)}
@@ -998,7 +998,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/metric-style/levels/level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/levels/level%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.SpfPrefixPriorities {
@@ -1028,7 +1028,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/spf/prefix-priority/prefix-priority%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/prefix-priority%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.MaximumRedistributedPrefixesLevels {
@@ -1058,7 +1058,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes/levels/level%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeIsis {
@@ -1088,7 +1088,7 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.SegmentRoutingSrv6Locators {
@@ -1118,10 +1118,10 @@ func (data *RouterISISAddressFamily) getDeletedListItems(ctx context.Context, st
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {

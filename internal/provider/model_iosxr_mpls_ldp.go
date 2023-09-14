@@ -480,8 +480,8 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []string {
-	deletedListItems := make([]string, 0)
+func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
 		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
@@ -509,7 +509,7 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
@@ -539,7 +539,7 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.MldpAddressFamilies {
@@ -569,10 +569,10 @@ func (data *MPLSLDP) getDeletedListItems(ctx context.Context, state MPLSLDP) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/mldp/address-families/address-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {

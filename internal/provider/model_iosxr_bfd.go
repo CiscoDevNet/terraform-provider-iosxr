@@ -631,8 +631,8 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *BFD) getDeletedListItems(ctx context.Context, state BFD) []string {
-	deletedListItems := make([]string, 0)
+func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.MultipathLocations {
 		keys := [...]string{"location-name"}
 		stateKeyValues := [...]string{state.MultipathLocations[i].LocationName.ValueString()}
@@ -660,7 +660,7 @@ func (data *BFD) getDeletedListItems(ctx context.Context, state BFD) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/multipath/include/locations/location%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/multipath/include/locations/location%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
@@ -690,10 +690,10 @@ func (data *BFD) getDeletedListItems(ctx context.Context, state BFD) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {

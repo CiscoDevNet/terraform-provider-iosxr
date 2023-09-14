@@ -325,8 +325,8 @@ func (data *KeyChainData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) []string {
-	deletedListItems := make([]string, 0)
+func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Keys {
 		keys := [...]string{"key-name"}
 		stateKeyValues := [...]string{state.Keys[i].KeyName.ValueString()}
@@ -354,10 +354,10 @@ func (data *KeyChain) getDeletedListItems(ctx context.Context, state KeyChain) [
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/keys/key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context) []string {

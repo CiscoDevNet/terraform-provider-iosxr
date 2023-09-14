@@ -336,9 +336,9 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *L2VPNPWClass) getDeletedListItems(ctx context.Context, state L2VPNPWClass) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClass) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {

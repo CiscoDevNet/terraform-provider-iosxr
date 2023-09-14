@@ -446,8 +446,8 @@ func (data *PolicyMapQoSData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PolicyMapQoS) getDeletedListItems(ctx context.Context, state PolicyMapQoS) []string {
-	deletedListItems := make([]string, 0)
+func (data *PolicyMapQoS) getDeletedItems(ctx context.Context, state PolicyMapQoS) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Classes {
 		keys := [...]string{"name", "type"}
 		stateKeyValues := [...]string{state.Classes[i].Name.ValueString(), state.Classes[i].Type.ValueString()}
@@ -510,7 +510,7 @@ func (data *PolicyMapQoS) getDeletedListItems(ctx context.Context, state PolicyM
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v/queue-limits/queue-limit%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
@@ -521,10 +521,10 @@ func (data *PolicyMapQoS) getDeletedListItems(ctx context.Context, state PolicyM
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/class%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/class%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *PolicyMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {

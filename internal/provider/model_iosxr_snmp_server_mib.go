@@ -100,9 +100,9 @@ func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerMIB) getDeletedListItems(ctx context.Context, state SNMPServerMIB) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {

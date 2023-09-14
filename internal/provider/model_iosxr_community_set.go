@@ -75,9 +75,9 @@ func (data *CommunitySetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *CommunitySet) getDeletedListItems(ctx context.Context, state CommunitySet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *CommunitySet) getDeletedItems(ctx context.Context, state CommunitySet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *CommunitySet) getEmptyLeafsDelete(ctx context.Context) []string {

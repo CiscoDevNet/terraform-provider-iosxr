@@ -940,8 +940,8 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 	}
 }
 
-func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPAddressFamily) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPAddressFamily) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
 		stateKeyValues := [...]string{state.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(state.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
@@ -975,7 +975,7 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Networks {
@@ -1011,7 +1011,7 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/networks/network%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeIsis {
@@ -1041,7 +1041,7 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeOspf {
@@ -1071,10 +1071,10 @@ func (data *RouterBGPAddressFamily) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterBGPAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {

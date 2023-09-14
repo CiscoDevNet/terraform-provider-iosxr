@@ -422,8 +422,8 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4Data) fromBody(ctx context.Conte
 	}
 }
 
-func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletedListItems(ctx context.Context, state RouterVRRPInterfaceAddressFamilyIPv4) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceAddressFamilyIPv4) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.SecondaryAddresses {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.SecondaryAddresses[i].Address.ValueString()}
@@ -451,7 +451,7 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletedListItems(ctx contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackInterfaces {
@@ -481,7 +481,7 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletedListItems(ctx contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackObjects {
@@ -511,10 +511,10 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv4) getDeletedListItems(ctx contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterVRRPInterfaceAddressFamilyIPv4) getEmptyLeafsDelete(ctx context.Context) []string {

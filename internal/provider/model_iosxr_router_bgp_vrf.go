@@ -629,8 +629,8 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterBGPVRF) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVRF) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Neighbors {
 		keys := [...]string{"neighbor-address"}
 		stateKeyValues := [...]string{state.Neighbors[i].NeighborAddress.ValueString()}
@@ -658,10 +658,10 @@ func (data *RouterBGPVRF) getDeletedListItems(ctx context.Context, state RouterB
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {

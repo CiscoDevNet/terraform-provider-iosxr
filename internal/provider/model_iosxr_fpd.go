@@ -142,9 +142,9 @@ func (data *FPDData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *FPD) getDeletedListItems(ctx context.Context, state FPD) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *FPD) getEmptyLeafsDelete(ctx context.Context) []string {

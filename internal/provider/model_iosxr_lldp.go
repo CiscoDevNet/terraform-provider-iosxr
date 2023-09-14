@@ -287,9 +287,9 @@ func (data *LLDPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LLDP) getDeletedListItems(ctx context.Context, state LLDP) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *LLDP) getDeletedItems(ctx context.Context, state LLDP) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *LLDP) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -75,9 +75,9 @@ func (data *RoutePolicyData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RoutePolicy) getDeletedListItems(ctx context.Context, state RoutePolicy) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RoutePolicy) getDeletedItems(ctx context.Context, state RoutePolicy) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RoutePolicy) getEmptyLeafsDelete(ctx context.Context) []string {

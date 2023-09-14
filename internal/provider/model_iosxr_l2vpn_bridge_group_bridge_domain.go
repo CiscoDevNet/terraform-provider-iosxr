@@ -390,8 +390,8 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 	}
 }
 
-func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomain) []string {
-	deletedListItems := make([]string, 0)
+func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomain) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Evis {
 		keys := [...]string{"vpn-id"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.Evis[i].VpnId.ValueInt64(), 10)}
@@ -419,7 +419,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/evis/evi%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/evis/evi%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Vnis {
@@ -449,7 +449,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/vnis/vni%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/vnis/vni%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
@@ -479,7 +479,7 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.SegmentRoutingSrv6Evis {
@@ -509,10 +509,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedListItems(ctx context.Contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing-srv6-evis/evi%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context) []string {

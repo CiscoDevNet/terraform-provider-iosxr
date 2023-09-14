@@ -85,9 +85,9 @@ func (data *LACPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *LACP) getDeletedListItems(ctx context.Context, state LACP) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *LACP) getDeletedItems(ctx context.Context, state LACP) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *LACP) getEmptyLeafsDelete(ctx context.Context) []string {

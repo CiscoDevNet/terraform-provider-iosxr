@@ -385,8 +385,8 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6Data) fromBody(ctx context.Conte
 	}
 }
 
-func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedListItems(ctx context.Context, state RouterVRRPInterfaceAddressFamilyIPv6) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceAddressFamilyIPv6) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.TrackInterfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
@@ -414,7 +414,7 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedListItems(ctx contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackObjects {
@@ -444,10 +444,10 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6) getDeletedListItems(ctx contex
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterVRRPInterfaceAddressFamilyIPv6) getEmptyLeafsDelete(ctx context.Context) []string {

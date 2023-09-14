@@ -414,8 +414,8 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1Data) fromBody(ctx contex
 	}
 }
 
-func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedListItems(ctx context.Context, state RouterHSRPInterfaceAddressFamilyIPv4GroupV1) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedItems(ctx context.Context, state RouterHSRPInterfaceAddressFamilyIPv4GroupV1) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.SecondaryIpv4Addresses {
 		keys := [...]string{"address"}
 		stateKeyValues := [...]string{state.SecondaryIpv4Addresses[i].Address.ValueString()}
@@ -443,7 +443,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedListItems(ctx
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/address/secondary-ipv4-addresses/secondary-ipv4-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address/secondary-ipv4-addresses/secondary-ipv4-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackInterfaces {
@@ -473,7 +473,7 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedListItems(ctx
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track-interfaces/track-interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track-interfaces/track-interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrackObjects {
@@ -503,10 +503,10 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getDeletedListItems(ctx
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/track-objects/track-object%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track-objects/track-object%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterHSRPInterfaceAddressFamilyIPv4GroupV1) getEmptyLeafsDelete(ctx context.Context) []string {

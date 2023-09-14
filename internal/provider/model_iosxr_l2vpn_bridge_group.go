@@ -62,9 +62,9 @@ func (data *L2VPNBridgeGroup) updateFromBody(ctx context.Context, res []byte) {
 func (data *L2VPNBridgeGroupData) fromBody(ctx context.Context, res []byte) {
 }
 
-func (data *L2VPNBridgeGroup) getDeletedListItems(ctx context.Context, state L2VPNBridgeGroup) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *L2VPNBridgeGroup) getDeletedItems(ctx context.Context, state L2VPNBridgeGroup) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *L2VPNBridgeGroup) getEmptyLeafsDelete(ctx context.Context) []string {

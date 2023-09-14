@@ -75,9 +75,9 @@ func (data *ASPathSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ASPathSet) getDeletedListItems(ctx context.Context, state ASPathSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ASPathSet) getDeletedItems(ctx context.Context, state ASPathSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ASPathSet) getEmptyLeafsDelete(ctx context.Context) []string {

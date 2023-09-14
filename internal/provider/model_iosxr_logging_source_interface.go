@@ -117,8 +117,8 @@ func (data *LoggingSourceInterfaceData) fromBody(ctx context.Context, res []byte
 	}
 }
 
-func (data *LoggingSourceInterface) getDeletedListItems(ctx context.Context, state LoggingSourceInterface) []string {
-	deletedListItems := make([]string, 0)
+func (data *LoggingSourceInterface) getDeletedItems(ctx context.Context, state LoggingSourceInterface) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Vrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.Vrfs[i].Name.ValueString()}
@@ -146,10 +146,10 @@ func (data *LoggingSourceInterface) getDeletedListItems(ctx context.Context, sta
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *LoggingSourceInterface) getEmptyLeafsDelete(ctx context.Context) []string {

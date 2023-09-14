@@ -218,8 +218,8 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SSH) getDeletedListItems(ctx context.Context, state SSH) []string {
-	deletedListItems := make([]string, 0)
+func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.ServerVrfs[i].VrfName.ValueString()}
@@ -247,10 +247,10 @@ func (data *SSH) getDeletedListItems(ctx context.Context, state SSH) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/server/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {

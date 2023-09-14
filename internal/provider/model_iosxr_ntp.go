@@ -2120,8 +2120,8 @@ func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
-	deletedListItems := make([]string, 0)
+func (data *NTP) getDeletedItems(ctx context.Context, state NTP) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.AccessGroupVrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.AccessGroupVrfs[i].VrfName.ValueString()}
@@ -2149,7 +2149,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/access-group/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/access-group/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.AuthenticationKeys {
@@ -2179,7 +2179,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/authentication-keys/authentication-key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/authentication-keys/authentication-key%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.TrustedKeys {
@@ -2209,7 +2209,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/trusted-keys/trusted-key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/trusted-keys/trusted-key%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.SourceVrfs {
@@ -2239,7 +2239,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/source/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/source/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.CmacAuthenticationKeys {
@@ -2269,7 +2269,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/cmac-authentication-keys/cmac-authentication-key%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.HmacSha1AuthenticationKeys {
@@ -2299,7 +2299,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/hmac-sha1-authentication-keys/hmac-sha1-authentication-key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/hmac-sha1-authentication-keys/hmac-sha1-authentication-key%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.HmacSha2AuthenticationKeys {
@@ -2329,7 +2329,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/hmac-sha2-authentication-keys/hmac-sha2-authentication-key%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/hmac-sha2-authentication-keys/hmac-sha2-authentication-key%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Interfaces {
@@ -2359,7 +2359,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.InterfaceVrfs {
@@ -2412,7 +2412,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/interface%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/interface%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
@@ -2423,7 +2423,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv4PeersServers {
@@ -2459,7 +2459,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/ipv4/ipv4-peer-server%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv6PeersServers {
@@ -2495,7 +2495,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/peer-server/ipv6/ipv6-peer-server%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/ipv6/ipv6-peer-server%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.PeersServersVrfs {
@@ -2554,7 +2554,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				for ci := range state.PeersServersVrfs[i].Ipv6PeersServers {
@@ -2594,7 +2594,7 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 						for cki := range ckeys {
 							ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv6/ipv6-peer-server%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv6/ipv6-peer-server%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				break
@@ -2605,10 +2605,10 @@ func (data *NTP) getDeletedListItems(ctx context.Context, state NTP) []string {
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-server/vrfs/vrf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {

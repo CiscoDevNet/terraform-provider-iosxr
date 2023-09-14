@@ -75,9 +75,9 @@ func (data *RDSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RDSet) getDeletedListItems(ctx context.Context, state RDSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RDSet) getDeletedItems(ctx context.Context, state RDSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RDSet) getEmptyLeafsDelete(ctx context.Context) []string {

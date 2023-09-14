@@ -533,17 +533,11 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	{{- end}}
 }
 
-func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state {{camelCase .Name}}) []string {
-	deletedListItems := make([]string, 0)
+func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
+	deletedItems := make([]string, 0)
 	{{- range .Attributes}}
 	{{- if eq .Type "List"}}
 	{{- $yangName := .YangName}}
-	{{- $goKey := ""}}
-	{{- range .Attributes}}
-	{{- if .Id}}
-	{{- $goKey = (toGoName .TfName)}}
-	{{- end}}
-	{{- end}}
 	for i := range state.{{toGoName .TfName}} {
 		{{- $list := (toGoName .TfName)}}
 		keys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
@@ -574,12 +568,6 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 			if found {
 				{{- range .Attributes}}
 				{{- if eq .Type "List"}}
-				{{- $cgoKey := ""}}
-				{{- range .Attributes}}
-				{{- if .Id}}
-				{{- $cgoKey = (toGoName .TfName)}}
-				{{- end}}
-				{{- end}}
 				for ci := range state.{{$list}}[i].{{toGoName .TfName}} {
 					{{- $clist := (toGoName .TfName)}}
 					ckeys := [...]string{ {{range .Attributes}}{{if .Id}}"{{.YangName}}", {{end}}{{end}} }
@@ -620,7 +608,7 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 						for cki := range ckeys {
 							ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 						}
-						deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$yangName}}%v/{{.YangName}}%v", state.getPath(), keyString, ckeyString))
 					}
 				}
 				{{- end}}
@@ -633,12 +621,12 @@ func (data *{{camelCase .Name}}) getDeletedListItems(ctx context.Context, state 
 			for ki := range keys {
 				keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/{{.YangName}}%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/{{.YangName}}%v", state.getPath(), keyString))
 		}
 	}
 	{{- end}}
 	{{- end}}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {

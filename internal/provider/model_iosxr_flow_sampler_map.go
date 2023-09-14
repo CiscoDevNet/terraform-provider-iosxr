@@ -89,9 +89,9 @@ func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *FlowSamplerMap) getDeletedListItems(ctx context.Context, state FlowSamplerMap) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSamplerMap) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context) []string {

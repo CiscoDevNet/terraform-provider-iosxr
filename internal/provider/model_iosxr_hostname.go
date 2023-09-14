@@ -70,9 +70,9 @@ func (data *HostnameData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *Hostname) getDeletedListItems(ctx context.Context, state Hostname) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *Hostname) getDeletedItems(ctx context.Context, state Hostname) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *Hostname) getEmptyLeafsDelete(ctx context.Context) []string {

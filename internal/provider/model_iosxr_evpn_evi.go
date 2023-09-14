@@ -740,8 +740,8 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []string {
-	deletedListItems := make([]string, 0)
+func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.BgpRouteTargetImportTwoByteAsFormat {
 		keys := [...]string{"two-byte-as-number", "assigned-number"}
 		stateKeyValues := [...]string{strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AsNumber.ValueInt64(), 10), strconv.FormatInt(state.BgpRouteTargetImportTwoByteAsFormat[i].AssignedNumber.ValueInt64(), 10)}
@@ -775,7 +775,7 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetImportFourByteAsFormat {
@@ -811,7 +811,7 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetImportIpv4AddressFormat {
@@ -847,7 +847,7 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportTwoByteAsFormat {
@@ -883,7 +883,7 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportFourByteAsFormat {
@@ -919,7 +919,7 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.BgpRouteTargetExportIpv4AddressFormat {
@@ -955,10 +955,10 @@ func (data *EVPNEVI) getDeletedListItems(ctx context.Context, state EVPNEVI) []s
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -351,9 +351,9 @@ func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *ServiceTimestamps) getDeletedListItems(ctx context.Context, state ServiceTimestamps) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state ServiceTimestamps) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string {

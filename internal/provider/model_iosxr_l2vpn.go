@@ -181,8 +181,8 @@ func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []string {
-	deletedListItems := make([]string, 0)
+func (data *L2VPN) getDeletedItems(ctx context.Context, state L2VPN) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.XconnectGroups {
 		keys := [...]string{"group-name"}
 		stateKeyValues := [...]string{state.XconnectGroups[i].GroupName.ValueString()}
@@ -210,10 +210,10 @@ func (data *L2VPN) getDeletedListItems(ctx context.Context, state L2VPN) []strin
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/xconnect/groups/group%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *L2VPN) getEmptyLeafsDelete(ctx context.Context) []string {

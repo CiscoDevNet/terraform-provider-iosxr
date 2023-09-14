@@ -627,8 +627,8 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 	}
 }
 
-func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPVRFAddressFamily) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFAddressFamily) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
 		stateKeyValues := [...]string{state.AggregateAddresses[i].Address.ValueString(), strconv.FormatInt(state.AggregateAddresses[i].Masklength.ValueInt64(), 10)}
@@ -662,7 +662,7 @@ func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, 
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/aggregate-addresses/aggregate-address%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Networks {
@@ -698,7 +698,7 @@ func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, 
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/networks/network%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeOspf {
@@ -728,10 +728,10 @@ func (data *RouterBGPVRFAddressFamily) getDeletedListItems(ctx context.Context, 
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {

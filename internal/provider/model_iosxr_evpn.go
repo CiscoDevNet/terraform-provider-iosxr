@@ -71,9 +71,9 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPN) getDeletedListItems(ctx context.Context, state EVPN) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {

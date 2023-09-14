@@ -106,9 +106,9 @@ func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte)
 	}
 }
 
-func (data *IPv4AccessListOptions) getDeletedListItems(ctx context.Context, state IPv4AccessListOptions) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context) []string {

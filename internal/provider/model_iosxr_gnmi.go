@@ -189,8 +189,8 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 	return diags
 }
 
-func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string {
-	deletedListItems := make([]string, 0)
+func (data *Gnmi) getDeletedItems(ctx context.Context, state Gnmi) []string {
+	deletedItems := make([]string, 0)
 	for l := range state.Lists {
 		name := state.Lists[l].Name.ValueString()
 		namePath := strings.ReplaceAll(name, "/", ".")
@@ -243,10 +243,10 @@ func (data *Gnmi) getDeletedListItems(ctx context.Context, state Gnmi) []string 
 					for _, key := range keys {
 						keyString += fmt.Sprintf("[%s=%s]", key, slia[key])
 					}
-					deletedListItems = append(deletedListItems, state.getPath()+"/"+namePath+keyString)
+					deletedItems = append(deletedItems, state.getPath()+"/"+namePath+keyString)
 				}
 			}
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }

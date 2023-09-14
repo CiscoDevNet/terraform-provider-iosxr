@@ -1190,8 +1190,8 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServer) []string {
-	deletedListItems := make([]string, 0)
+func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Users {
 		keys := [...]string{"user-name"}
 		stateKeyValues := [...]string{state.Users[i].UserName.ValueString()}
@@ -1219,7 +1219,7 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/users/user%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Groups {
@@ -1249,7 +1249,7 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/groups/group%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/groups/group%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Communities {
@@ -1279,10 +1279,10 @@ func (data *SNMPServer) getDeletedListItems(ctx context.Context, state SNMPServe
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/community/unencrypted/unencrypted-string%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {

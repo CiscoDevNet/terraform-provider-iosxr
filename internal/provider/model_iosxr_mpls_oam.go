@@ -148,9 +148,9 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSOAM) getDeletedListItems(ctx context.Context, state MPLSOAM) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {

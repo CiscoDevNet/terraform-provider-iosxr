@@ -655,8 +655,8 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state SegmentRoutingTE) []string {
-	deletedListItems := make([]string, 0)
+func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state SegmentRoutingTE) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.PcePeers {
 		keys := [...]string{"pce-address"}
 		stateKeyValues := [...]string{state.PcePeers[i].PceAddress.ValueString()}
@@ -684,7 +684,7 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/pcc/pce-peers/pce-peer%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/pcc/pce-peers/pce-peer%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.OnDemandColors {
@@ -714,7 +714,7 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/on-demand-colors/on-demand-color%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Policies {
@@ -744,10 +744,10 @@ func (data *SegmentRoutingTE) getDeletedListItems(ctx context.Context, state Seg
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/policies/policy%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/policies/policy%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string {

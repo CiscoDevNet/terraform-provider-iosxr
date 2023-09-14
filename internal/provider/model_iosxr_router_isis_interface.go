@@ -278,9 +278,9 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterISISInterface) getDeletedListItems(ctx context.Context, state RouterISISInterface) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state RouterISISInterface) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -148,9 +148,9 @@ func (data *CDPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *CDP) getDeletedListItems(ctx context.Context, state CDP) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *CDP) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -158,8 +158,8 @@ func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPServerView) []string {
-	deletedListItems := make([]string, 0)
+func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServerView) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.MibViewFamilies {
 		keys := [...]string{"mib-view-family-name"}
 		stateKeyValues := [...]string{state.MibViewFamilies[i].Name.ValueString()}
@@ -187,10 +187,10 @@ func (data *SNMPServerView) getDeletedListItems(ctx context.Context, state SNMPS
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mib-view-families/mib-view-family%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {

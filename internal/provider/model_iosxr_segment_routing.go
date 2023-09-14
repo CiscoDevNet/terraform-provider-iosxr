@@ -111,9 +111,9 @@ func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SegmentRouting) getDeletedListItems(ctx context.Context, state SegmentRouting) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {

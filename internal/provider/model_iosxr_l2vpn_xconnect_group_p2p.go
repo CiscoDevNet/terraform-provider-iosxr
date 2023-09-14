@@ -530,8 +530,8 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 	}
 }
 
-func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
-	deletedListItems := make([]string, 0)
+func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
@@ -559,7 +559,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv4Neighbors {
@@ -595,7 +595,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv4s/ipv4%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.Ipv6Neighbors {
@@ -631,7 +631,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/ipv6s/ipv6%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.EvpnTargetNeighbors {
@@ -673,7 +673,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/targets/target%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.EvpnServiceNeighbors {
@@ -709,7 +709,7 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/services/service%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.NeighborEvpnEviSegmentRoutingServices {
@@ -745,10 +745,10 @@ func (data *L2VPNXconnectGroupP2P) getDeletedListItems(ctx context.Context, stat
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbor/evpn/evi/segment-routing-services/service%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []string {

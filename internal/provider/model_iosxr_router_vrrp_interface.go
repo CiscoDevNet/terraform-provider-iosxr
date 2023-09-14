@@ -129,9 +129,9 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterVRRPInterface) getDeletedListItems(ctx context.Context, state RouterVRRPInterface) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state RouterVRRPInterface) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context) []string {

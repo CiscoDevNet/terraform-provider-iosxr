@@ -1121,8 +1121,8 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *FlowMonitorMap) getDeletedListItems(ctx context.Context, state FlowMonitorMap) []string {
-	deletedListItems := make([]string, 0)
+func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonitorMap) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Exporters {
 		keys := [...]string{"exporter-name"}
 		stateKeyValues := [...]string{state.Exporters[i].Name.ValueString()}
@@ -1150,10 +1150,10 @@ func (data *FlowMonitorMap) getDeletedListItems(ctx context.Context, state FlowM
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/exporters/exporter%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/exporters/exporter%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {

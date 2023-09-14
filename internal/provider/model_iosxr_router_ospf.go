@@ -856,8 +856,8 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSPF) []string {
-	deletedListItems := make([]string, 0)
+func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.Areas {
 		keys := [...]string{"area-id"}
 		stateKeyValues := [...]string{state.Areas[i].AreaId.ValueString()}
@@ -885,7 +885,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/areas/area%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/areas/area%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeBgp {
@@ -915,7 +915,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/bgp/as%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/bgp/as%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeIsis {
@@ -945,7 +945,7 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v", state.getPath(), keyString))
 		}
 	}
 	for i := range state.RedistributeOspf {
@@ -975,10 +975,10 @@ func (data *RouterOSPF) getDeletedListItems(ctx context.Context, state RouterOSP
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -144,8 +144,8 @@ func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SNMPServerVRFHost) []string {
-	deletedListItems := make([]string, 0)
+func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPServerVRFHost) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.UnencryptedStrings {
 		keys := [...]string{"community-string"}
 		stateKeyValues := [...]string{state.UnencryptedStrings[i].CommunityString.ValueString()}
@@ -173,10 +173,10 @@ func (data *SNMPServerVRFHost) getDeletedListItems(ctx context.Context, state SN
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/unencrypted/unencrypted-string%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {

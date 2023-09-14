@@ -75,9 +75,9 @@ func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *TagSet) getDeletedListItems(ctx context.Context, state TagSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *TagSet) getEmptyLeafsDelete(ctx context.Context) []string {

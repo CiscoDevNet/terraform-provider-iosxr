@@ -79,9 +79,9 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *MPLSTrafficEng) getDeletedListItems(ctx context.Context, state MPLSTrafficEng) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context) []string {

@@ -176,8 +176,8 @@ func (data *SegmentRoutingTEPolicyCandidatePathData) fromBody(ctx context.Contex
 	}
 }
 
-func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedListItems(ctx context.Context, state SegmentRoutingTEPolicyCandidatePath) []string {
-	deletedListItems := make([]string, 0)
+func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Context, state SegmentRoutingTEPolicyCandidatePath) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.PathInfos {
 		keys := [...]string{"type", "hop-type", "segment-list-name"}
 		stateKeyValues := [...]string{state.PathInfos[i].Type.ValueString(), state.PathInfos[i].HopType.ValueString(), state.PathInfos[i].SegmentListName.ValueString()}
@@ -217,10 +217,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedListItems(ctx context
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/path-infos/path-info%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *SegmentRoutingTEPolicyCandidatePath) getEmptyLeafsDelete(ctx context.Context) []string {

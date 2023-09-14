@@ -118,8 +118,8 @@ func (data *EVPNGroupData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup) []string {
-	deletedListItems := make([]string, 0)
+func (data *EVPNGroup) getDeletedItems(ctx context.Context, state EVPNGroup) []string {
+	deletedItems := make([]string, 0)
 	for i := range state.CoreInterfaces {
 		keys := [...]string{"interface-name"}
 		stateKeyValues := [...]string{state.CoreInterfaces[i].InterfaceName.ValueString()}
@@ -147,10 +147,10 @@ func (data *EVPNGroup) getDeletedListItems(ctx context.Context, state EVPNGroup)
 			for ki := range keys {
 				keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 			}
-			deletedListItems = append(deletedListItems, fmt.Sprintf("%v/core/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/core/interface%v", state.getPath(), keyString))
 		}
 	}
-	return deletedListItems
+	return deletedItems
 }
 
 func (data *EVPNGroup) getEmptyLeafsDelete(ctx context.Context) []string {

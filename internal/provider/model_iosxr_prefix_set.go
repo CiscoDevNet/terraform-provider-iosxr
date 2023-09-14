@@ -75,9 +75,9 @@ func (data *PrefixSetData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
-func (data *PrefixSet) getDeletedListItems(ctx context.Context, state PrefixSet) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *PrefixSet) getDeletedItems(ctx context.Context, state PrefixSet) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *PrefixSet) getEmptyLeafsDelete(ctx context.Context) []string {

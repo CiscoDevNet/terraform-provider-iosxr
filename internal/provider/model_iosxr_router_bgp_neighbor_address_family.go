@@ -193,9 +193,9 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	}
 }
 
-func (data *RouterBGPNeighborAddressFamily) getDeletedListItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
-	deletedListItems := make([]string, 0)
-	return deletedListItems
+func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
+	deletedItems := make([]string, 0)
+	return deletedItems
 }
 
 func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {

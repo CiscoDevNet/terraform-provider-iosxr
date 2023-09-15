@@ -100,8 +100,6 @@ Required:
 
 Required:
 
-- `make_before_break_delay` (Number) MBB delay
-  - Range: `0`-`600`
 - `name` (String) Configure Address Family and its parameters
   - Choices: `ipv4`
 
@@ -109,6 +107,8 @@ Optional:
 
 - `forwarding_recursive` (Boolean) Enable recursive forwarding
 - `forwarding_recursive_route_policy` (String) Route policy
+- `make_before_break_delay` (Number) MBB delay
+  - Range: `0`-`600`
 - `recursive_fec` (Boolean) MLDP Recursive FEC enable
 
 ## Import

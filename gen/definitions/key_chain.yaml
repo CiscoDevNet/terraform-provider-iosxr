@@ -20,30 +20,42 @@ attributes:
       - yang_name: cryptographic-algorithm
         example: hmac-md5
       - yang_name: accept-lifetime/start-time/hour
+        optional: true
         example: 11
       - yang_name: accept-lifetime/start-time/minute
+        optional: true
         example: 52
       - yang_name: accept-lifetime/start-time/second
+        optional: true
         example: 55
       - yang_name: accept-lifetime/start-time/day-of-month
+        optional: true
         example: 21
       - yang_name: accept-lifetime/start-time/month
+        optional: true
         example: january
       - yang_name: accept-lifetime/start-time/year
+        optional: true
         example: 2023
       - yang_name: accept-lifetime/infinite
         example: true
       - yang_name: send-lifetime/start-time/hour
+        optional: true
         example: 8
       - yang_name: send-lifetime/start-time/minute
+        optional: true
         example: 36
       - yang_name: send-lifetime/start-time/second
+        optional: true
         example: 22
       - yang_name: send-lifetime/start-time/day-of-month
+        optional: true
         example: 15
       - yang_name: send-lifetime/start-time/month
+        optional: true
         example: january
       - yang_name: send-lifetime/start-time/year
+        optional: true
         example: 2023
       - yang_name: send-lifetime/infinite
         example: true

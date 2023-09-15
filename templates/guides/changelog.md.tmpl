@@ -11,6 +11,8 @@ description: |-
 
 - Make various BGP neighbor attributes optional
 - Make `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` and `on_startup_advertise_as_overloaded_time_to_advertise` attributes of `iosxr_router_isis` resource optional
+- Make `make_before_break_delay` attribute of `iosxr_mpls_ldp` resource optional
+- Make various `iosxr_key_chain` resource attributes optional
 
 ## 0.3.0
 

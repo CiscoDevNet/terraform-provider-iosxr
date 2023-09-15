@@ -60,6 +60,11 @@ resource "iosxr_key_chain" "example" {
 
 Required:
 
+- `key_name` (String) Configure a Key
+
+Optional:
+
+- `accept_lifetime_infinite` (Boolean) Never expires
 - `accept_lifetime_start_time_day_of_month` (Number) Day of the month
   - Range: `1`-`31`
 - `accept_lifetime_start_time_hour` (Number) Start time hour
@@ -72,7 +77,10 @@ Required:
   - Range: `0`-`59`
 - `accept_lifetime_start_time_year` (Number) Year
   - Range: `1993`-`2035`
-- `key_name` (String) Configure a Key
+- `cryptographic_algorithm` (String) Choose cryptographic algorithm
+  - Choices: `aes-128-cmac-96`, `hmac-md5`, `hmac-sha-256`, `hmac-sha1-12`, `hmac-sha1-20`, `hmac-sha1-96`, `md5`, `sha-1`
+- `key_string_password` (String) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
+- `send_lifetime_infinite` (Boolean) Never expires
 - `send_lifetime_start_time_day_of_month` (Number) Day of the month
   - Range: `1`-`31`
 - `send_lifetime_start_time_hour` (Number) Start time hour
@@ -85,14 +93,6 @@ Required:
   - Range: `0`-`59`
 - `send_lifetime_start_time_year` (Number) Year
   - Range: `1993`-`2035`
-
-Optional:
-
-- `accept_lifetime_infinite` (Boolean) Never expires
-- `cryptographic_algorithm` (String) Choose cryptographic algorithm
-  - Choices: `aes-128-cmac-96`, `hmac-md5`, `hmac-sha-256`, `hmac-sha1-12`, `hmac-sha1-20`, `hmac-sha1-96`, `md5`, `sha-1`
-- `key_string_password` (String) Encrypted key string (even number of characters with first two as digits and sum less than 53, and rest of the characters should be hex digits)
-- `send_lifetime_infinite` (Boolean) Never expires
 
 ## Import
 

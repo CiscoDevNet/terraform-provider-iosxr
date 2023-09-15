@@ -48,6 +48,7 @@ attributes:
         example: ipv4
       - yang_name: make-before-break/delay/forwarding-delay
         tf_name: make_before_break_delay
+        optional: true
         example: 30
       - yang_name: forwarding/recursive
         example: true

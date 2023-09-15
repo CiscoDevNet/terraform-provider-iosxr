@@ -108,42 +108,42 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 						"accept_lifetime_start_time_hour": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time hour").AddIntegerRangeDescription(0, 23).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 23),
 							},
 						},
 						"accept_lifetime_start_time_minute": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time minute").AddIntegerRangeDescription(0, 59).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 59),
 							},
 						},
 						"accept_lifetime_start_time_second": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time second").AddIntegerRangeDescription(0, 59).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 59),
 							},
 						},
 						"accept_lifetime_start_time_day_of_month": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 31),
 							},
 						},
 						"accept_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
 							},
 						},
 						"accept_lifetime_start_time_year": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1993, 2035),
 							},
@@ -154,42 +154,42 @@ func (r *KeyChainResource) Schema(ctx context.Context, req resource.SchemaReques
 						},
 						"send_lifetime_start_time_hour": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time hour").AddIntegerRangeDescription(0, 23).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 23),
 							},
 						},
 						"send_lifetime_start_time_minute": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time minute").AddIntegerRangeDescription(0, 59).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 59),
 							},
 						},
 						"send_lifetime_start_time_second": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Start time second").AddIntegerRangeDescription(0, 59).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 59),
 							},
 						},
 						"send_lifetime_start_time_day_of_month": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Day of the month").AddIntegerRangeDescription(1, 31).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 31),
 							},
 						},
 						"send_lifetime_start_time_month": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Month of the year").AddStringEnumDescription("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september").String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("april", "august", "december", "february", "january", "july", "june", "march", "may", "november", "october", "september"),
 							},
 						},
 						"send_lifetime_start_time_year": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Year").AddIntegerRangeDescription(1993, 2035).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1993, 2035),
 							},

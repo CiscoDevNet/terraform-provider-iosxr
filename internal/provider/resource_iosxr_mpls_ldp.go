@@ -171,7 +171,7 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 						},
 						"make_before_break_delay": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("MBB delay").AddIntegerRangeDescription(0, 600).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 600),
 							},

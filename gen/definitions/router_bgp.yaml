@@ -86,6 +86,7 @@ attributes:
         example: GROUP1
       - yang_name: advertisement-interval/time-in-seconds
         tf_name: advertisement_interval_seconds
+        optional: true
         delete_parent: true
         example: 10
       - yang_name: advertisement-interval/time-in-milliseconds
@@ -96,6 +97,7 @@ attributes:
       - yang_name: ignore-connected-check
         example: true
       - yang_name: ebgp-multihop/maximum-hop-count
+        optional: true
         example: 10
       - yang_name: bfd/minimum-interval
         example: 10
@@ -124,8 +126,10 @@ attributes:
       - yang_name: shutdown
         example: false
       - yang_name: timers/keepalive-interval
+        optional: true
         example: 5
       - yang_name: timers/holdtime
+        optional: true
         example: 20
       - yang_name: timers/minimum-acceptable-holdtime
         example: 10

@@ -15,6 +15,7 @@ attributes:
     example: Loopback0
   - yang_name: advertisement-interval/time-in-seconds
     tf_name: advertisement_interval_seconds
+    optional: true
     delete_parent: true
     example: 10
   - yang_name: advertisement-interval/time-in-milliseconds

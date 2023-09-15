@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.3.1 (unreleased)
+
+- Make various BGP neighbor attributes optional
+
 ## 0.3.0
 
 - Add `ipv4_verify_unicast_source_reachable_via` and `ipv4_access_group` attributes to `iosxr_interface` resource and data source

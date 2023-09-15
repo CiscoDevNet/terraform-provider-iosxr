@@ -191,7 +191,7 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"advertisement_interval_seconds": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between sending BGP routing updates").AddIntegerRangeDescription(0, 600).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 600),
 							},
@@ -209,7 +209,7 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"ebgp_multihop_maximum_hop_count": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("maximum hop count").AddIntegerRangeDescription(1, 255).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 255),
 							},
@@ -269,14 +269,14 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						},
 						"timers_keepalive_interval": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
 						"timers_holdtime": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
-							Required:            true,
+							Optional:            true,
 						},
 						"update_source": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,

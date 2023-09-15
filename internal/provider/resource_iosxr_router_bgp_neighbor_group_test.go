@@ -78,7 +78,6 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
-	config += `	advertisement_interval_seconds = 10` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

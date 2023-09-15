@@ -41,8 +41,6 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 
 ### Required
 
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
-  - Range: `0`-`600`
 - `as_number` (String) bgp as-number
 - `name` (String) Specify a Neighbor-group
 
@@ -51,6 +49,8 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
   - Range: `0`-`999`
+- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+  - Range: `0`-`600`
 - `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection

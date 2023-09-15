@@ -95,7 +95,6 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 func testAccIosxrRouterISISConfig_minimum() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
-	config += `	set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10` + "\n"
 	config += `}` + "\n"
 	return config
 }

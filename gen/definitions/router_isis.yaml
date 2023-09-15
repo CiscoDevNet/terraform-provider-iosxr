@@ -10,6 +10,7 @@ attributes:
   - yang_name: set-overload-bit/on-startup/advertise-as-overloaded
     example: true
   - yang_name: set-overload-bit/on-startup/advertise-as-overloaded/time-to-advertise
+    optional: true
     delete_parent: true
     example: 10
   - yang_name: set-overload-bit/on-startup/wait-for-bgp
@@ -28,6 +29,7 @@ attributes:
       - yang_name: on-startup/advertise-as-overloaded
         example: true
       - yang_name: on-startup/advertise-as-overloaded/time-to-advertise
+        optional: true
         example: 10
       - yang_name: on-startup/wait-for-bgp
         example: false

@@ -85,8 +85,6 @@ resource "iosxr_router_isis" "example" {
 ### Required
 
 - `process_id` (String) Process ID
-- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
-  - Range: `5`-`86400`
 
 ### Optional
 
@@ -130,6 +128,8 @@ resource "iosxr_router_isis" "example" {
 - `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
 - `set_overload_bit_on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+  - Range: `5`-`86400`
 - `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 ### Read-Only
@@ -196,14 +196,14 @@ Required:
 
 - `level_id` (Number) Set overload-bit for one level only
   - Range: `1`-`2`
-- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
-  - Range: `5`-`86400`
 
 Optional:
 
 - `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+  - Range: `5`-`86400`
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 ## Import

@@ -97,7 +97,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 			},
 			"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
-				Required:            true,
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(5, 86400),
 				},
@@ -132,7 +132,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 						},
 						"on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(5, 86400),
 							},

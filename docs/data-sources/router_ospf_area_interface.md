@@ -36,6 +36,9 @@ data "iosxr_router_ospf_area_interface" "example" {
 ### Read-Only
 
 - `cost` (Number) Interface cost
+- `fast_reroute_per_prefix_ti_lfa_enable` (Boolean) Enable TI LFA computation
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
 - `id` (String) The path of the retrieved object.
 - `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
 - `network_non_broadcast` (Boolean) Specify OSPF NBMA network

@@ -25,3 +25,9 @@ attributes:
     example: false
   - yang_name: passive/disable
     example: true
+  - yang_name: fast-reroute/per-prefix/ti-lfa/enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    example: 22
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    example: 33

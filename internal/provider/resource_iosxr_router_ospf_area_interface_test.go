@@ -37,6 +37,9 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "priority", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "passive_enable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "passive_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_ti_lfa_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_ospf_area_interface.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "33"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -81,6 +84,9 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	priority = 100` + "\n"
 	config += `	passive_enable = false` + "\n"
 	config += `	passive_disable = true` + "\n"
+	config += `	fast_reroute_per_prefix_ti_lfa_enable = true` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 22` + "\n"
+	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 33` + "\n"
 	config += `}` + "\n"
 	return config
 }

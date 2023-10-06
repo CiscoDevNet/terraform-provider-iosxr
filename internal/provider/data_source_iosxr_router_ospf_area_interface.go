@@ -106,6 +106,18 @@ func (d *RouterOSPFAreaInterfaceDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Disable passive",
 				Computed:            true,
 			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
 		},
 	}
 }

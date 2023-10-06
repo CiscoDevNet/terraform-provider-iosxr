@@ -51,6 +51,10 @@ attributes:
     example: 100000
   - yang_name: auto-cost/disable
     example: false
+  - yang_name: segment-routing/mpls
+    example: true
+  - yang_name: segment-routing/sr-prefer
+    example: true
   - yang_name: areas/area
     tf_name: areas
     type: List

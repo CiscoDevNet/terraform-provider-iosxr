@@ -158,6 +158,14 @@ func (d *RouterOSPFDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Assign OSPF cost based on interface type",
 				Computed:            true,
 			},
+			"segment_routing_mpls": schema.BoolAttribute{
+				MarkdownDescription: "SR using MPLS dataplane",
+				Computed:            true,
+			},
+			"segment_routing_sr_prefer": schema.BoolAttribute{
+				MarkdownDescription: "Prefer segment routing labels over LDP labels",
+				Computed:            true,
+			},
 			"areas": schema.ListNestedAttribute{
 				MarkdownDescription: "Enter the OSPF area configuration submode",
 				Computed:            true,

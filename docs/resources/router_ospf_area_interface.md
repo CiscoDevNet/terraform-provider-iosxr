@@ -58,12 +58,34 @@ resource "iosxr_router_ospf_area_interface" "example" {
 - `network_point_to_point` (Boolean) Specify OSPF point-to-point network
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
+- `prefix_sid_algorithms` (Attributes List) Algorithm Specific Prefix SID Configuration (see [below for nested schema](#nestedatt--prefix_sid_algorithms))
+- `prefix_sid_strict_spf_index_sid_index` (Number) SID Index
+  - Range: `0`-`1048575`
 - `priority` (Number) Router priority
   - Range: `0`-`255`
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--prefix_sid_algorithms"></a>
+### Nested Schema for `prefix_sid_algorithms`
+
+Required:
+
+- `absolute_sid_label` (Number) SID value
+  - Range: `16000`-`1048575`
+- `algorithm_number` (Number) Algorithm Specific Prefix SID Configuration
+  - Range: `128`-`255`
+- `index_sid_index` (Number) SID Index
+  - Range: `0`-`1048575`
+
+Optional:
+
+- `absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
 
 ## Import
 

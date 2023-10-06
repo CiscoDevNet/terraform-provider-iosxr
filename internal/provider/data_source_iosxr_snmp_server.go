@@ -255,6 +255,30 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
 							Computed:            true,
 						},
+						"v3_auth_sha_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+						},
+						"v3_auth_sha_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+						},
+						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
+							MarkdownDescription: "Specifies an default ENCRYPTED authentication password",
+							Computed:            true,
+						},
+						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: "Specifies an aes-128 ENCRYPTED authentication password",
+							Computed:            true,
+						},
+						"v3_ipv4": schema.StringAttribute{
+							MarkdownDescription: "Type of Access-list",
+							Computed:            true,
+						},
+						"v3_systemowner": schema.BoolAttribute{
+							MarkdownDescription: "System Owner permissions for MIB objects",
+							Computed:            true,
+						},
 					},
 				},
 			},

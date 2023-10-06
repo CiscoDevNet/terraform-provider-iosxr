@@ -133,10 +133,16 @@ type SNMPServerData struct {
 	Communities                         []SNMPServerCommunities `tfsdk:"communities"`
 }
 type SNMPServerUsers struct {
-	UserName                   types.String `tfsdk:"user_name"`
-	GroupName                  types.String `tfsdk:"group_name"`
-	V3AuthMd5EncryptionAes     types.String `tfsdk:"v3_auth_md5_encryption_aes"`
-	V3AuthMd5EncryptionDefault types.String `tfsdk:"v3_auth_md5_encryption_default"`
+	UserName                         types.String `tfsdk:"user_name"`
+	GroupName                        types.String `tfsdk:"group_name"`
+	V3AuthMd5EncryptionAes           types.String `tfsdk:"v3_auth_md5_encryption_aes"`
+	V3AuthMd5EncryptionDefault       types.String `tfsdk:"v3_auth_md5_encryption_default"`
+	V3AuthShaEncryptionAes           types.String `tfsdk:"v3_auth_sha_encryption_aes"`
+	V3AuthShaEncryptionDefault       types.String `tfsdk:"v3_auth_sha_encryption_default"`
+	V3PrivAesAes128EncryptionDefault types.String `tfsdk:"v3_priv_aes_aes_128_encryption_default"`
+	V3PrivAesAes128EncryptionAes     types.String `tfsdk:"v3_priv_aes_aes_128_encryption_aes"`
+	V3Ipv4                           types.String `tfsdk:"v3_ipv4"`
+	V3Systemowner                    types.Bool   `tfsdk:"v3_systemowner"`
 }
 type SNMPServerGroups struct {
 	GroupName types.String `tfsdk:"group_name"`
@@ -354,6 +360,26 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			}
 			if !item.V3AuthMd5EncryptionDefault.IsNull() && !item.V3AuthMd5EncryptionDefault.IsUnknown() {
 				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.auth.md5.encryption-default", item.V3AuthMd5EncryptionDefault.ValueString())
+			}
+			if !item.V3AuthShaEncryptionAes.IsNull() && !item.V3AuthShaEncryptionAes.IsUnknown() {
+				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.auth.sha.encryption-aes", item.V3AuthShaEncryptionAes.ValueString())
+			}
+			if !item.V3AuthShaEncryptionDefault.IsNull() && !item.V3AuthShaEncryptionDefault.IsUnknown() {
+				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.auth.sha.encryption-default", item.V3AuthShaEncryptionDefault.ValueString())
+			}
+			if !item.V3PrivAesAes128EncryptionDefault.IsNull() && !item.V3PrivAesAes128EncryptionDefault.IsUnknown() {
+				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.priv.aes.aes-128.encryption-default", item.V3PrivAesAes128EncryptionDefault.ValueString())
+			}
+			if !item.V3PrivAesAes128EncryptionAes.IsNull() && !item.V3PrivAesAes128EncryptionAes.IsUnknown() {
+				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.priv.aes.aes-128.encryption-aes", item.V3PrivAesAes128EncryptionAes.ValueString())
+			}
+			if !item.V3Ipv4.IsNull() && !item.V3Ipv4.IsUnknown() {
+				body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.ipv4", item.V3Ipv4.ValueString())
+			}
+			if !item.V3Systemowner.IsNull() && !item.V3Systemowner.IsUnknown() {
+				if item.V3Systemowner.ValueBool() {
+					body, _ = sjson.Set(body, "users.user"+"."+strconv.Itoa(index)+"."+"v3.systemowner", map[string]string{})
+				}
 			}
 		}
 	}
@@ -771,6 +797,40 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Users[i].V3AuthMd5EncryptionDefault = types.StringNull()
 		}
+		if value := r.Get("v3.auth.sha.encryption-aes"); value.Exists() && !data.Users[i].V3AuthShaEncryptionAes.IsNull() {
+			data.Users[i].V3AuthShaEncryptionAes = types.StringValue(value.String())
+		} else {
+			data.Users[i].V3AuthShaEncryptionAes = types.StringNull()
+		}
+		if value := r.Get("v3.auth.sha.encryption-default"); value.Exists() && !data.Users[i].V3AuthShaEncryptionDefault.IsNull() {
+			data.Users[i].V3AuthShaEncryptionDefault = types.StringValue(value.String())
+		} else {
+			data.Users[i].V3AuthShaEncryptionDefault = types.StringNull()
+		}
+		if value := r.Get("v3.priv.aes.aes-128.encryption-default"); value.Exists() && !data.Users[i].V3PrivAesAes128EncryptionDefault.IsNull() {
+			data.Users[i].V3PrivAesAes128EncryptionDefault = types.StringValue(value.String())
+		} else {
+			data.Users[i].V3PrivAesAes128EncryptionDefault = types.StringNull()
+		}
+		if value := r.Get("v3.priv.aes.aes-128.encryption-aes"); value.Exists() && !data.Users[i].V3PrivAesAes128EncryptionAes.IsNull() {
+			data.Users[i].V3PrivAesAes128EncryptionAes = types.StringValue(value.String())
+		} else {
+			data.Users[i].V3PrivAesAes128EncryptionAes = types.StringNull()
+		}
+		if value := r.Get("v3.ipv4"); value.Exists() && !data.Users[i].V3Ipv4.IsNull() {
+			data.Users[i].V3Ipv4 = types.StringValue(value.String())
+		} else {
+			data.Users[i].V3Ipv4 = types.StringNull()
+		}
+		if value := r.Get("v3.systemowner"); !data.Users[i].V3Systemowner.IsNull() {
+			if value.Exists() {
+				data.Users[i].V3Systemowner = types.BoolValue(true)
+			} else {
+				data.Users[i].V3Systemowner = types.BoolValue(false)
+			}
+		} else {
+			data.Users[i].V3Systemowner = types.BoolNull()
+		}
 	}
 	for i := range data.Groups {
 		keys := [...]string{"group-name"}
@@ -1110,6 +1170,26 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("v3.auth.md5.encryption-default"); cValue.Exists() {
 				item.V3AuthMd5EncryptionDefault = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("v3.auth.sha.encryption-aes"); cValue.Exists() {
+				item.V3AuthShaEncryptionAes = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("v3.auth.sha.encryption-default"); cValue.Exists() {
+				item.V3AuthShaEncryptionDefault = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("v3.priv.aes.aes-128.encryption-default"); cValue.Exists() {
+				item.V3PrivAesAes128EncryptionDefault = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("v3.priv.aes.aes-128.encryption-aes"); cValue.Exists() {
+				item.V3PrivAesAes128EncryptionAes = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("v3.ipv4"); cValue.Exists() {
+				item.V3Ipv4 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("v3.systemowner"); cValue.Exists() {
+				item.V3Systemowner = types.BoolValue(true)
+			} else {
+				item.V3Systemowner = types.BoolValue(false)
+			}
 			data.Users = append(data.Users, item)
 			return true
 		})
@@ -1353,6 +1433,24 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 				if !state.Users[i].V3AuthMd5EncryptionDefault.IsNull() && data.Users[j].V3AuthMd5EncryptionDefault.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/auth/md5/encryption-default", state.getPath(), keyString))
 				}
+				if !state.Users[i].V3AuthShaEncryptionAes.IsNull() && data.Users[j].V3AuthShaEncryptionAes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/auth/sha/encryption-aes", state.getPath(), keyString))
+				}
+				if !state.Users[i].V3AuthShaEncryptionDefault.IsNull() && data.Users[j].V3AuthShaEncryptionDefault.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/auth/sha/encryption-default", state.getPath(), keyString))
+				}
+				if !state.Users[i].V3PrivAesAes128EncryptionDefault.IsNull() && data.Users[j].V3PrivAesAes128EncryptionDefault.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/priv/aes/aes-128/encryption-default", state.getPath(), keyString))
+				}
+				if !state.Users[i].V3PrivAesAes128EncryptionAes.IsNull() && data.Users[j].V3PrivAesAes128EncryptionAes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/priv/aes/aes-128/encryption-aes", state.getPath(), keyString))
+				}
+				if !state.Users[i].V3Ipv4.IsNull() && data.Users[j].V3Ipv4.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/ipv4", state.getPath(), keyString))
+				}
+				if !state.Users[i].V3Systemowner.IsNull() && data.Users[j].V3Systemowner.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/users/user%v/v3/systemowner", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1536,6 +1634,9 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Users[i].V3Systemowner.IsNull() && !data.Users[i].V3Systemowner.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/users/user%v/v3/systemowner", data.getPath(), keyString))
 		}
 	}
 	for i := range data.Groups {

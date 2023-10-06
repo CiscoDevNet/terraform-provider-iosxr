@@ -44,6 +44,8 @@ resource "iosxr_snmp_server" "example" {
       user_name                  = "USER1"
       group_name                 = "GROUP1"
       v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
+      v3_ipv4                    = "ACL1"
+      v3_systemowner             = true
     }
   ]
   groups = [
@@ -218,6 +220,12 @@ Optional:
 
 - `v3_auth_md5_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
 - `v3_auth_md5_encryption_default` (String) Specifies an default ENCRYPTED authentication password
+- `v3_auth_sha_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_auth_sha_encryption_default` (String) Specifies an default ENCRYPTED authentication password
+- `v3_ipv4` (String) Type of Access-list
+- `v3_priv_aes_aes_128_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
+- `v3_priv_aes_aes_128_encryption_default` (String) Specifies an default ENCRYPTED authentication password
+- `v3_systemowner` (Boolean) System Owner permissions for MIB objects
 
 ## Import
 

@@ -140,6 +140,22 @@ attributes:
       - yang_name: v3/auth/md5/encryption-default
         exclude_test: true
         example: 073C05626E2A4841141D
+      - yang_name: v3/auth/sha/encryption-aes
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/auth/sha/encryption-default
+        exclude_test: true
+        example: 073C05626E2A4843341D
+      - yang_name: v3/priv/aes/aes-128/encryption-default
+        example: 073C05626E2A4841141D
+        exclude_test: true
+      - yang_name: v3/priv/aes/aes-128/encryption-aes
+        example: 073C05626E2A4841231D
+        exclude_test: true
+      - yang_name: v3/ipv4
+        example: ACL1
+      - yang_name: v3/systemowner
+        example: true
   - yang_name: groups/group
     tf_name: groups
     type: List

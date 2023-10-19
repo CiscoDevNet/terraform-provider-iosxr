@@ -14,11 +14,13 @@ This resource can manage the Router ISIS Interface Address Family configuration.
 
 ```terraform
 resource "iosxr_router_isis_interface_address_family" "example" {
-  process_id     = "P1"
-  interface_name = "GigabitEthernet0/0/0/1"
-  af_name        = "ipv4"
-  saf_name       = "unicast"
-  fast_reroute_per_prefix_levels = [
+  process_id                                      = "P1"
+  interface_name                                  = "GigabitEthernet0/0/0/1"
+  af_name                                         = "ipv4"
+  saf_name                                        = "unicast"
+  fast_reroute_computation_per_prefix_computation = true
+  fast_reroute_per_prefix_ti_lfa                  = true
+  fast_reroute_per_prefix = [
     {
       level_id = 1
       ti_lfa   = true
@@ -54,7 +56,9 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
+- `fast_reroute_computation_per_prefix_computation` (Boolean) Prefix dependent computation
+- `fast_reroute_per_prefix` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix))
+- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
 - `metric` (Number) Default metric
   - Range: `1`-`16777214`
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
@@ -73,8 +77,8 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
-### Nested Schema for `fast_reroute_per_prefix_levels`
+<a id="nestedatt--fast_reroute_per_prefix"></a>
+### Nested Schema for `fast_reroute_per_prefix`
 
 Required:
 

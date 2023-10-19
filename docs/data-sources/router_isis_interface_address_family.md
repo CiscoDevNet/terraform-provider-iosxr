@@ -38,7 +38,9 @@ data "iosxr_router_isis_interface_address_family" "example" {
 ### Read-Only
 
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
-- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
+- `fast_reroute_computation_per_prefix_computation` (Boolean) Prefix dependent computation
+- `fast_reroute_per_prefix` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix))
+- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
 - `id` (String) The path of the retrieved object.
 - `metric` (Number) Default metric
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
@@ -49,8 +51,8 @@ data "iosxr_router_isis_interface_address_family" "example" {
 - `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
 - `tag` (Number) Set interface tag
 
-<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
-### Nested Schema for `fast_reroute_per_prefix_levels`
+<a id="nestedatt--fast_reroute_per_prefix"></a>
+### Nested Schema for `fast_reroute_per_prefix`
 
 Read-Only:
 

@@ -182,6 +182,20 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 							MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 							Optional:            true,
 						},
+						"route_policy_in": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply route policy to inbound routes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"route_policy_out": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Apply route policy to outbound routes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
 					},
 				},
 			},

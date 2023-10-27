@@ -74,6 +74,8 @@ type RouterBGPNeighborGroupAddressFamilies struct {
 	NextHopSelfInheritanceDisable          types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	RouteReflectorClient                   types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	RoutePolicyIn                          types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                         types.String `tfsdk:"route_policy_out"`
 }
 
 func (data RouterBGPNeighborGroup) getPath() string {
@@ -155,6 +157,12 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 				if item.RouteReflectorClientInheritanceDisable.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-reflector-client.inheritance-disable", map[string]string{})
 				}
+			}
+			if !item.RoutePolicyIn.IsNull() && !item.RoutePolicyIn.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-policy.in", item.RoutePolicyIn.ValueString())
+			}
+			if !item.RoutePolicyOut.IsNull() && !item.RoutePolicyOut.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-policy.out", item.RoutePolicyOut.ValueString())
 			}
 		}
 	}
@@ -297,6 +305,16 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].RouteReflectorClientInheritanceDisable = types.BoolNull()
 		}
+		if value := r.Get("route-policy.in"); value.Exists() && !data.AddressFamilies[i].RoutePolicyIn.IsNull() {
+			data.AddressFamilies[i].RoutePolicyIn = types.StringValue(value.String())
+		} else {
+			data.AddressFamilies[i].RoutePolicyIn = types.StringNull()
+		}
+		if value := r.Get("route-policy.out"); value.Exists() && !data.AddressFamilies[i].RoutePolicyOut.IsNull() {
+			data.AddressFamilies[i].RoutePolicyOut = types.StringValue(value.String())
+		} else {
+			data.AddressFamilies[i].RoutePolicyOut = types.StringNull()
+		}
 	}
 }
 
@@ -368,6 +386,12 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
 			} else {
 				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-policy.in"); cValue.Exists() {
+				item.RoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("route-policy.out"); cValue.Exists() {
+				item.RoutePolicyOut = types.StringValue(cValue.String())
 			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
@@ -444,6 +468,12 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				}
 				if !state.AddressFamilies[i].RouteReflectorClientInheritanceDisable.IsNull() && data.AddressFamilies[j].RouteReflectorClientInheritanceDisable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-reflector-client/inheritance-disable", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].RoutePolicyIn.IsNull() && data.AddressFamilies[j].RoutePolicyIn.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-policy/in", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].RoutePolicyOut.IsNull() && data.AddressFamilies[j].RoutePolicyOut.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-policy/out", state.getPath(), keyString))
 				}
 				break
 			}

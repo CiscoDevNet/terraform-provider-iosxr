@@ -114,7 +114,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"fast_reroute_computation_per_prefix_computation": schema.BoolAttribute{
+			"fast_reroute_per_prefix": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefix dependent computation").String,
 				Optional:            true,
 			},
@@ -122,7 +122,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix": schema.ListNestedAttribute{
+			"fast_reroute_per_prefix_levels": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

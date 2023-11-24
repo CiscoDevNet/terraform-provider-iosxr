@@ -27,10 +27,10 @@ import (
 
 func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_computation_per_prefix_computation", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_ti_lfa", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix.0.level_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix.0.ti_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "metric", "500"))
@@ -66,9 +66,9 @@ func testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
-	config += `	fast_reroute_computation_per_prefix_computation = true` + "\n"
+	config += `	fast_reroute_per_prefix = true` + "\n"
 	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
-	config += `	fast_reroute_per_prefix = [{` + "\n"
+	config += `	fast_reroute_per_prefix_levels = [{` + "\n"
 	config += `		level_id = 1` + "\n"
 	config += `		ti_lfa = true` + "\n"
 	config += `	}]` + "\n"

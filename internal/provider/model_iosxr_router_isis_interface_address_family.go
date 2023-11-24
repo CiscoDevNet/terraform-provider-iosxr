@@ -31,48 +31,48 @@ import (
 )
 
 type RouterISISInterfaceAddressFamily struct {
-	Device                                     types.String                                           `tfsdk:"device"`
-	Id                                         types.String                                           `tfsdk:"id"`
-	DeleteMode                                 types.String                                           `tfsdk:"delete_mode"`
-	ProcessId                                  types.String                                           `tfsdk:"process_id"`
-	InterfaceName                              types.String                                           `tfsdk:"interface_name"`
-	AfName                                     types.String                                           `tfsdk:"af_name"`
-	SafName                                    types.String                                           `tfsdk:"saf_name"`
-	FastRerouteComputationPerPrefixComputation types.Bool                                             `tfsdk:"fast_reroute_computation_per_prefix_computation"`
-	FastReroutePerPrefixTiLfa                  types.Bool                                             `tfsdk:"fast_reroute_per_prefix_ti_lfa"`
-	FastReroutePerPrefix                       []RouterISISInterfaceAddressFamilyFastReroutePerPrefix `tfsdk:"fast_reroute_per_prefix"`
-	Tag                                        types.Int64                                            `tfsdk:"tag"`
-	PrefixSidAbsolute                          types.Int64                                            `tfsdk:"prefix_sid_absolute"`
-	PrefixSidNFlagClear                        types.Bool                                             `tfsdk:"prefix_sid_n_flag_clear"`
-	AdvertisePrefixRoutePolicy                 types.String                                           `tfsdk:"advertise_prefix_route_policy"`
-	PrefixSidIndex                             types.Int64                                            `tfsdk:"prefix_sid_index"`
-	PrefixSidStrictSpfAbsolute                 types.Int64                                            `tfsdk:"prefix_sid_strict_spf_absolute"`
-	Metric                                     types.Int64                                            `tfsdk:"metric"`
-	MetricMaximum                              types.Bool                                             `tfsdk:"metric_maximum"`
-	MetricLevels                               []RouterISISInterfaceAddressFamilyMetricLevels         `tfsdk:"metric_levels"`
+	Device                     types.String                                                 `tfsdk:"device"`
+	Id                         types.String                                                 `tfsdk:"id"`
+	DeleteMode                 types.String                                                 `tfsdk:"delete_mode"`
+	ProcessId                  types.String                                                 `tfsdk:"process_id"`
+	InterfaceName              types.String                                                 `tfsdk:"interface_name"`
+	AfName                     types.String                                                 `tfsdk:"af_name"`
+	SafName                    types.String                                                 `tfsdk:"saf_name"`
+	FastReroutePerPrefix       types.Bool                                                   `tfsdk:"fast_reroute_per_prefix"`
+	FastReroutePerPrefixTiLfa  types.Bool                                                   `tfsdk:"fast_reroute_per_prefix_ti_lfa"`
+	FastReroutePerPrefixLevels []RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels `tfsdk:"fast_reroute_per_prefix_levels"`
+	Tag                        types.Int64                                                  `tfsdk:"tag"`
+	PrefixSidAbsolute          types.Int64                                                  `tfsdk:"prefix_sid_absolute"`
+	PrefixSidNFlagClear        types.Bool                                                   `tfsdk:"prefix_sid_n_flag_clear"`
+	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
+	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
+	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+	Metric                     types.Int64                                                  `tfsdk:"metric"`
+	MetricMaximum              types.Bool                                                   `tfsdk:"metric_maximum"`
+	MetricLevels               []RouterISISInterfaceAddressFamilyMetricLevels               `tfsdk:"metric_levels"`
 }
 
 type RouterISISInterfaceAddressFamilyData struct {
-	Device                                     types.String                                           `tfsdk:"device"`
-	Id                                         types.String                                           `tfsdk:"id"`
-	ProcessId                                  types.String                                           `tfsdk:"process_id"`
-	InterfaceName                              types.String                                           `tfsdk:"interface_name"`
-	AfName                                     types.String                                           `tfsdk:"af_name"`
-	SafName                                    types.String                                           `tfsdk:"saf_name"`
-	FastRerouteComputationPerPrefixComputation types.Bool                                             `tfsdk:"fast_reroute_computation_per_prefix_computation"`
-	FastReroutePerPrefixTiLfa                  types.Bool                                             `tfsdk:"fast_reroute_per_prefix_ti_lfa"`
-	FastReroutePerPrefix                       []RouterISISInterfaceAddressFamilyFastReroutePerPrefix `tfsdk:"fast_reroute_per_prefix"`
-	Tag                                        types.Int64                                            `tfsdk:"tag"`
-	PrefixSidAbsolute                          types.Int64                                            `tfsdk:"prefix_sid_absolute"`
-	PrefixSidNFlagClear                        types.Bool                                             `tfsdk:"prefix_sid_n_flag_clear"`
-	AdvertisePrefixRoutePolicy                 types.String                                           `tfsdk:"advertise_prefix_route_policy"`
-	PrefixSidIndex                             types.Int64                                            `tfsdk:"prefix_sid_index"`
-	PrefixSidStrictSpfAbsolute                 types.Int64                                            `tfsdk:"prefix_sid_strict_spf_absolute"`
-	Metric                                     types.Int64                                            `tfsdk:"metric"`
-	MetricMaximum                              types.Bool                                             `tfsdk:"metric_maximum"`
-	MetricLevels                               []RouterISISInterfaceAddressFamilyMetricLevels         `tfsdk:"metric_levels"`
+	Device                     types.String                                                 `tfsdk:"device"`
+	Id                         types.String                                                 `tfsdk:"id"`
+	ProcessId                  types.String                                                 `tfsdk:"process_id"`
+	InterfaceName              types.String                                                 `tfsdk:"interface_name"`
+	AfName                     types.String                                                 `tfsdk:"af_name"`
+	SafName                    types.String                                                 `tfsdk:"saf_name"`
+	FastReroutePerPrefix       types.Bool                                                   `tfsdk:"fast_reroute_per_prefix"`
+	FastReroutePerPrefixTiLfa  types.Bool                                                   `tfsdk:"fast_reroute_per_prefix_ti_lfa"`
+	FastReroutePerPrefixLevels []RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels `tfsdk:"fast_reroute_per_prefix_levels"`
+	Tag                        types.Int64                                                  `tfsdk:"tag"`
+	PrefixSidAbsolute          types.Int64                                                  `tfsdk:"prefix_sid_absolute"`
+	PrefixSidNFlagClear        types.Bool                                                   `tfsdk:"prefix_sid_n_flag_clear"`
+	AdvertisePrefixRoutePolicy types.String                                                 `tfsdk:"advertise_prefix_route_policy"`
+	PrefixSidIndex             types.Int64                                                  `tfsdk:"prefix_sid_index"`
+	PrefixSidStrictSpfAbsolute types.Int64                                                  `tfsdk:"prefix_sid_strict_spf_absolute"`
+	Metric                     types.Int64                                                  `tfsdk:"metric"`
+	MetricMaximum              types.Bool                                                   `tfsdk:"metric_maximum"`
+	MetricLevels               []RouterISISInterfaceAddressFamilyMetricLevels               `tfsdk:"metric_levels"`
 }
-type RouterISISInterfaceAddressFamilyFastReroutePerPrefix struct {
+type RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels struct {
 	LevelId types.Int64 `tfsdk:"level_id"`
 	TiLfa   types.Bool  `tfsdk:"ti_lfa"`
 }
@@ -98,8 +98,8 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	if !data.SafName.IsNull() && !data.SafName.IsUnknown() {
 		body, _ = sjson.Set(body, "saf-name", data.SafName.ValueString())
 	}
-	if !data.FastRerouteComputationPerPrefixComputation.IsNull() && !data.FastRerouteComputationPerPrefixComputation.IsUnknown() {
-		if data.FastRerouteComputationPerPrefixComputation.ValueBool() {
+	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.IsUnknown() {
+		if data.FastReroutePerPrefix.ValueBool() {
 			body, _ = sjson.Set(body, "fast-reroute.computation.per-prefix-computation", map[string]string{})
 		}
 	}
@@ -136,9 +136,9 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 			body, _ = sjson.Set(body, "metric.maximum", map[string]string{})
 		}
 	}
-	if len(data.FastReroutePerPrefix) > 0 {
+	if len(data.FastReroutePerPrefixLevels) > 0 {
 		body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level", []interface{}{})
-		for index, item := range data.FastReroutePerPrefix {
+		for index, item := range data.FastReroutePerPrefixLevels {
 			if !item.LevelId.IsNull() && !item.LevelId.IsUnknown() {
 				body, _ = sjson.Set(body, "fast-reroute.per-prefix.per-prefix.levels.level"+"."+strconv.Itoa(index)+"."+"level-id", strconv.FormatInt(item.LevelId.ValueInt64(), 10))
 			}
@@ -169,14 +169,14 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 }
 
 func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "fast-reroute.computation.per-prefix-computation"); !data.FastRerouteComputationPerPrefixComputation.IsNull() {
+	if value := gjson.GetBytes(res, "fast-reroute.computation.per-prefix-computation"); !data.FastReroutePerPrefix.IsNull() {
 		if value.Exists() {
-			data.FastRerouteComputationPerPrefixComputation = types.BoolValue(true)
+			data.FastReroutePerPrefix = types.BoolValue(true)
 		} else {
-			data.FastRerouteComputationPerPrefixComputation = types.BoolValue(false)
+			data.FastReroutePerPrefix = types.BoolValue(false)
 		}
 	} else {
-		data.FastRerouteComputationPerPrefixComputation = types.BoolNull()
+		data.FastReroutePerPrefix = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.ti-lfa"); !data.FastReroutePerPrefixTiLfa.IsNull() {
 		if value.Exists() {
@@ -187,9 +187,9 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	} else {
 		data.FastReroutePerPrefixTiLfa = types.BoolNull()
 	}
-	for i := range data.FastReroutePerPrefix {
+	for i := range data.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefix[i].LevelId.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level").ForEach(
@@ -210,19 +210,19 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 				return true
 			},
 		)
-		if value := r.Get("level-id"); value.Exists() && !data.FastReroutePerPrefix[i].LevelId.IsNull() {
-			data.FastReroutePerPrefix[i].LevelId = types.Int64Value(value.Int())
+		if value := r.Get("level-id"); value.Exists() && !data.FastReroutePerPrefixLevels[i].LevelId.IsNull() {
+			data.FastReroutePerPrefixLevels[i].LevelId = types.Int64Value(value.Int())
 		} else {
-			data.FastReroutePerPrefix[i].LevelId = types.Int64Null()
+			data.FastReroutePerPrefixLevels[i].LevelId = types.Int64Null()
 		}
-		if value := r.Get("ti-lfa"); !data.FastReroutePerPrefix[i].TiLfa.IsNull() {
+		if value := r.Get("ti-lfa"); !data.FastReroutePerPrefixLevels[i].TiLfa.IsNull() {
 			if value.Exists() {
-				data.FastReroutePerPrefix[i].TiLfa = types.BoolValue(true)
+				data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolValue(true)
 			} else {
-				data.FastReroutePerPrefix[i].TiLfa = types.BoolValue(false)
+				data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolValue(false)
 			}
 		} else {
-			data.FastReroutePerPrefix[i].TiLfa = types.BoolNull()
+			data.FastReroutePerPrefixLevels[i].TiLfa = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "tag.interface-tag"); value.Exists() && !data.Tag.IsNull() {
@@ -320,9 +320,9 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 
 func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.computation.per-prefix-computation"); value.Exists() {
-		data.FastRerouteComputationPerPrefixComputation = types.BoolValue(true)
+		data.FastReroutePerPrefix = types.BoolValue(true)
 	} else {
-		data.FastRerouteComputationPerPrefixComputation = types.BoolValue(false)
+		data.FastReroutePerPrefix = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.ti-lfa"); value.Exists() {
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
@@ -330,9 +330,9 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level"); value.Exists() {
-		data.FastReroutePerPrefix = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefix, 0)
+		data.FastReroutePerPrefixLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefix{}
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels{}
 			if cValue := v.Get("level-id"); cValue.Exists() {
 				item.LevelId = types.Int64Value(cValue.Int())
 			}
@@ -341,7 +341,7 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 			} else {
 				item.TiLfa = types.BoolValue(false)
 			}
-			data.FastReroutePerPrefix = append(data.FastReroutePerPrefix, item)
+			data.FastReroutePerPrefixLevels = append(data.FastReroutePerPrefixLevels, item)
 			return true
 		})
 	}
@@ -396,22 +396,22 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 
 func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
 	deletedItems := make([]string, 0)
-	if !state.FastRerouteComputationPerPrefixComputation.IsNull() && data.FastRerouteComputationPerPrefixComputation.IsNull() {
+	if !state.FastReroutePerPrefix.IsNull() && data.FastReroutePerPrefix.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/computation/per-prefix-computation", state.getPath()))
 	}
 	if !state.FastReroutePerPrefixTiLfa.IsNull() && data.FastReroutePerPrefixTiLfa.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/ti-lfa", state.getPath()))
 	}
-	for i := range state.FastReroutePerPrefix {
+	for i := range state.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.FastReroutePerPrefix[i].LevelId.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.FastReroutePerPrefix[i].LevelId.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -419,13 +419,13 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 		}
 
 		found := false
-		for j := range data.FastReroutePerPrefix {
+		for j := range data.FastReroutePerPrefixLevels {
 			found = true
-			if state.FastReroutePerPrefix[i].LevelId.ValueInt64() != data.FastReroutePerPrefix[j].LevelId.ValueInt64() {
+			if state.FastReroutePerPrefixLevels[i].LevelId.ValueInt64() != data.FastReroutePerPrefixLevels[j].LevelId.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.FastReroutePerPrefix[i].TiLfa.IsNull() && data.FastReroutePerPrefix[j].TiLfa.IsNull() {
+				if !state.FastReroutePerPrefixLevels[i].TiLfa.IsNull() && data.FastReroutePerPrefixLevels[j].TiLfa.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v/ti-lfa", state.getPath(), keyString))
 				}
 				break
@@ -500,20 +500,20 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 
 func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.FastRerouteComputationPerPrefixComputation.IsNull() && !data.FastRerouteComputationPerPrefixComputation.ValueBool() {
+	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/computation/per-prefix-computation", data.getPath()))
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() && !data.FastReroutePerPrefixTiLfa.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/ti-lfa", data.getPath()))
 	}
-	for i := range data.FastReroutePerPrefix {
+	for i := range data.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefix[i].LevelId.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.FastReroutePerPrefix[i].TiLfa.IsNull() && !data.FastReroutePerPrefix[i].TiLfa.ValueBool() {
+		if !data.FastReroutePerPrefixLevels[i].TiLfa.IsNull() && !data.FastReroutePerPrefixLevels[i].TiLfa.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/levels/level%v/ti-lfa", data.getPath(), keyString))
 		}
 	}
@@ -539,15 +539,15 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 
 func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.FastRerouteComputationPerPrefixComputation.IsNull() {
+	if !data.FastReroutePerPrefix.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/computation/per-prefix-computation", data.getPath()))
 	}
 	if !data.FastReroutePerPrefixTiLfa.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-prefix/per-prefix/ti-lfa", data.getPath()))
 	}
-	for i := range data.FastReroutePerPrefix {
+	for i := range data.FastReroutePerPrefixLevels {
 		keys := [...]string{"level-id"}
-		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefix[i].LevelId.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FastReroutePerPrefixLevels[i].LevelId.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {

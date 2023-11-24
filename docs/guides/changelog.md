@@ -10,6 +10,10 @@ description: |-
 ## 0.3.2 (unreleased)
 
 - Add `route_policy_in` and `route_policy_out` attributes to `iosxr_bgp_neighbor_group` resource and data source
+- Add `fast_reroute_per_prefix_ti_lfa` and `fast_reroute_node_protecting_srlg_disjoint` attributes to `iosxr_router_ospf_area_interface` resource and data source
+- Add `prefix_sid_strict_spf` and `prefix_sid_algorithm` attributes to `iosxr_router_ospf_area_interface` resource and data source
+- Add `segment_routing_mpls` and `segment_routing_sr_prefer` attributes to `iosxr_router_ospf` resource and data source
+- Add `v3_sha_encryption` and `v3_aes_encryption` attributes to `iosxr_snmp_server` resource and data source
 
 ## 0.3.1
 
@@ -17,10 +21,6 @@ description: |-
 - Make `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` and `on_startup_advertise_as_overloaded_time_to_advertise` attributes of `iosxr_router_isis` resource optional
 - Make `make_before_break_delay` attribute of `iosxr_mpls_ldp` resource optional
 - Make various `iosxr_key_chain` resource attributes optional
-- Add `fast_reroute_per_prefix_ti_lfa` and `fast_reroute_node_protecting_srlg_disjoint` attributes to `iosxr_router_ospf_area_interface` resource and data source
-- Add `prefix_sid_strict_spf` and `prefix_sid_algorithm` attributes to `iosxr_router_ospf_area_interface` resource and data source
-- Add `segment_routing_mpls` and `segment_routing_sr_prefer` attributes to `iosxr_router_ospf` resource and data source
-- Add `v3_sha_encryption` and `v3_aes_encryption` attributes to `iosxr_snmp_server` resource and data source
 
 
 ## 0.3.0

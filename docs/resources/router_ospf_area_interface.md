@@ -14,20 +14,20 @@ This resource can manage the Router OSPF Area Interface configuration.
 
 ```terraform
 resource "iosxr_router_ospf_area_interface" "example" {
-  process_name                                             = "OSPF1"
-  area_id                                                  = "0"
-  interface_name                                           = "GigabitEthernet0/0/0/1"
-  network_broadcast                                        = false
-  network_non_broadcast                                    = false
-  network_point_to_point                                   = true
-  network_point_to_multipoint                              = false
-  cost                                                     = 20
-  priority                                                 = 100
-  passive_enable                                           = false
-  passive_disable                                          = true
-  fast_reroute_per_prefix_ti_lfa_enable                    = true
-  fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index   = 22
-  fast_reroute_per_prefix_tiebreaker_node_protecting_index = 33
+  process_name                                       = "OSPF1"
+  area_id                                            = "0"
+  interface_name                                     = "GigabitEthernet0/0/0/1"
+  network_broadcast                                  = false
+  network_non_broadcast                              = false
+  network_point_to_point                             = true
+  network_point_to_multipoint                        = false
+  cost                                               = 20
+  priority                                           = 100
+  passive_enable                                     = false
+  passive_disable                                    = true
+  fast_reroute_per_prefix_ti_lfa                     = true
+  fast_reroute_per_prefix_tiebreaker_srlg_disjoint   = 22
+  fast_reroute_per_prefix_tiebreaker_node_protecting = 33
 }
 ```
 
@@ -47,10 +47,10 @@ resource "iosxr_router_ospf_area_interface" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `fast_reroute_per_prefix_ti_lfa_enable` (Boolean) Enable TI LFA computation
-- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
+- `fast_reroute_per_prefix_tiebreaker_node_protecting` (Number) Set preference order among tiebreakers
   - Range: `1`-`255`
-- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint` (Number) Set preference order among tiebreakers
   - Range: `1`-`255`
 - `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
 - `network_non_broadcast` (Boolean) Specify OSPF NBMA network
@@ -59,7 +59,7 @@ resource "iosxr_router_ospf_area_interface" "example" {
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
 - `prefix_sid_algorithms` (Attributes List) Algorithm Specific Prefix SID Configuration (see [below for nested schema](#nestedatt--prefix_sid_algorithms))
-- `prefix_sid_strict_spf_index_sid_index` (Number) SID Index
+- `prefix_sid_strict_spf_index` (Number) SID Index
   - Range: `0`-`1048575`
 - `priority` (Number) Router priority
   - Range: `0`-`255`

@@ -1,4 +1,4 @@
-## 0.3.2 (unreleased)
+## 0.3.2
 
 - Add `route_policy_in` and `route_policy_out` attributes to `iosxr_bgp_neighbor_group` resource and data source
 - Add `fast_reroute_per_prefix_ti_lfa` and `fast_reroute_node_protecting_srlg_disjoint` attributes to `iosxr_router_ospf_area_interface` resource and data source

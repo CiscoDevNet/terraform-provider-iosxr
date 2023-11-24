@@ -102,6 +102,33 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Send capability").String,
+				Optional:            true,
+			},
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Additional paths Receive capability").String,
+				Optional:            true,
+			},
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route-policy for additional paths selection").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
+				Optional:            true,
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+				Optional:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate labels for all prefixes").String,
+				Optional:            true,
+			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("eBGP-multipath").AddIntegerRangeDescription(2, 128).String,
 				Optional:            true,
@@ -142,6 +169,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
 				Optional:            true,
@@ -151,6 +185,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
+				},
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
 				},
 			},
 			"segment_routing_srv6_locator": schema.StringAttribute{
@@ -211,6 +252,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 								int64validator.Between(0, 128),
 							},
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
 					},
 				},
 			},
@@ -256,6 +304,13 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
 							},
 						},
 					},

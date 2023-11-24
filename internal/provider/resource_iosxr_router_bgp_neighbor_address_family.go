@@ -120,6 +120,20 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("SRv6 encapsulation").String,
 				Optional:            true,
 			},
+			"route_policy_in": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply route policy to inbound routes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"route_policy_out": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Apply route policy to outbound routes").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
 		},
 	}
 }

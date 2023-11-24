@@ -51,8 +51,10 @@ type RouterBGPAddressFamily struct {
 	LabelModePerVrf                     types.Bool                                 `tfsdk:"label_mode_per_vrf"`
 	RedistributeConnected               types.Bool                                 `tfsdk:"redistribute_connected"`
 	RedistributeConnectedMetric         types.Int64                                `tfsdk:"redistribute_connected_metric"`
+	RedistributeConnectedRoutePolicy    types.String                               `tfsdk:"redistribute_connected_route_policy"`
 	RedistributeStatic                  types.Bool                                 `tfsdk:"redistribute_static"`
 	RedistributeStaticMetric            types.Int64                                `tfsdk:"redistribute_static_metric"`
+	RedistributeStaticRoutePolicy       types.String                               `tfsdk:"redistribute_static_route_policy"`
 	AggregateAddresses                  []RouterBGPAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
 	Networks                            []RouterBGPAddressFamilyNetworks           `tfsdk:"networks"`
 	RedistributeIsis                    []RouterBGPAddressFamilyRedistributeIsis   `tfsdk:"redistribute_isis"`
@@ -79,8 +81,10 @@ type RouterBGPAddressFamilyData struct {
 	LabelModePerVrf                     types.Bool                                 `tfsdk:"label_mode_per_vrf"`
 	RedistributeConnected               types.Bool                                 `tfsdk:"redistribute_connected"`
 	RedistributeConnectedMetric         types.Int64                                `tfsdk:"redistribute_connected_metric"`
+	RedistributeConnectedRoutePolicy    types.String                               `tfsdk:"redistribute_connected_route_policy"`
 	RedistributeStatic                  types.Bool                                 `tfsdk:"redistribute_static"`
 	RedistributeStaticMetric            types.Int64                                `tfsdk:"redistribute_static_metric"`
+	RedistributeStaticRoutePolicy       types.String                               `tfsdk:"redistribute_static_route_policy"`
 	AggregateAddresses                  []RouterBGPAddressFamilyAggregateAddresses `tfsdk:"aggregate_addresses"`
 	Networks                            []RouterBGPAddressFamilyNetworks           `tfsdk:"networks"`
 	RedistributeIsis                    []RouterBGPAddressFamilyRedistributeIsis   `tfsdk:"redistribute_isis"`
@@ -94,8 +98,9 @@ type RouterBGPAddressFamilyAggregateAddresses struct {
 	SummaryOnly types.Bool   `tfsdk:"summary_only"`
 }
 type RouterBGPAddressFamilyNetworks struct {
-	Address    types.String `tfsdk:"address"`
-	Masklength types.Int64  `tfsdk:"masklength"`
+	Address     types.String `tfsdk:"address"`
+	Masklength  types.Int64  `tfsdk:"masklength"`
+	RoutePolicy types.String `tfsdk:"route_policy"`
 }
 type RouterBGPAddressFamilyRedistributeIsis struct {
 	InstanceName            types.String `tfsdk:"instance_name"`
@@ -107,6 +112,7 @@ type RouterBGPAddressFamilyRedistributeIsis struct {
 	LevelTwoOneInterArea    types.Bool   `tfsdk:"level_two_one_inter_area"`
 	LevelOneInterArea       types.Bool   `tfsdk:"level_one_inter_area"`
 	Metric                  types.Int64  `tfsdk:"metric"`
+	RoutePolicy             types.String `tfsdk:"route_policy"`
 }
 type RouterBGPAddressFamilyRedistributeOspf struct {
 	RouterTag                 types.String `tfsdk:"router_tag"`
@@ -117,6 +123,7 @@ type RouterBGPAddressFamilyRedistributeOspf struct {
 	MatchExternalNssaExternal types.Bool   `tfsdk:"match_external_nssa_external"`
 	MatchNssaExternal         types.Bool   `tfsdk:"match_nssa_external"`
 	Metric                    types.Int64  `tfsdk:"metric"`
+	RoutePolicy               types.String `tfsdk:"route_policy"`
 }
 
 func (data RouterBGPAddressFamily) getPath() string {
@@ -193,6 +200,9 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 	if !data.RedistributeConnectedMetric.IsNull() && !data.RedistributeConnectedMetric.IsUnknown() {
 		body, _ = sjson.Set(body, "redistribute.connected.metric", strconv.FormatInt(data.RedistributeConnectedMetric.ValueInt64(), 10))
 	}
+	if !data.RedistributeConnectedRoutePolicy.IsNull() && !data.RedistributeConnectedRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.connected.route-policy", data.RedistributeConnectedRoutePolicy.ValueString())
+	}
 	if !data.RedistributeStatic.IsNull() && !data.RedistributeStatic.IsUnknown() {
 		if data.RedistributeStatic.ValueBool() {
 			body, _ = sjson.Set(body, "redistribute.static", map[string]string{})
@@ -200,6 +210,9 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.RedistributeStaticMetric.IsNull() && !data.RedistributeStaticMetric.IsUnknown() {
 		body, _ = sjson.Set(body, "redistribute.static.metric", strconv.FormatInt(data.RedistributeStaticMetric.ValueInt64(), 10))
+	}
+	if !data.RedistributeStaticRoutePolicy.IsNull() && !data.RedistributeStaticRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "redistribute.static.route-policy", data.RedistributeStaticRoutePolicy.ValueString())
 	}
 	if len(data.AggregateAddresses) > 0 {
 		body, _ = sjson.Set(body, "aggregate-addresses.aggregate-address", []interface{}{})
@@ -235,6 +248,9 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.Masklength.IsNull() && !item.Masklength.IsUnknown() {
 				body, _ = sjson.Set(body, "networks.network"+"."+strconv.Itoa(index)+"."+"masklength", strconv.FormatInt(item.Masklength.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "networks.network"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
 		}
 	}
@@ -282,6 +298,9 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
 			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
+			}
 		}
 	}
 	if len(data.RedistributeOspf) > 0 {
@@ -322,6 +341,9 @@ func (data RouterBGPAddressFamily) toBody(ctx context.Context) string {
 			}
 			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
+			}
+			if !item.RoutePolicy.IsNull() && !item.RoutePolicy.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.ospf"+"."+strconv.Itoa(index)+"."+"route-policy", item.RoutePolicy.ValueString())
 			}
 		}
 	}
@@ -436,6 +458,11 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.RedistributeConnectedMetric = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() && !data.RedistributeConnectedRoutePolicy.IsNull() {
+		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.RedistributeConnectedRoutePolicy = types.StringNull()
+	}
 	if value := gjson.GetBytes(res, "redistribute.static"); !data.RedistributeStatic.IsNull() {
 		if value.Exists() {
 			data.RedistributeStatic = types.BoolValue(true)
@@ -449,6 +476,11 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
 	} else {
 		data.RedistributeStaticMetric = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() && !data.RedistributeStaticRoutePolicy.IsNull() {
+		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.RedistributeStaticRoutePolicy = types.StringNull()
 	}
 	for i := range data.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
@@ -543,6 +575,11 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 			data.Networks[i].Masklength = types.Int64Value(value.Int())
 		} else {
 			data.Networks[i].Masklength = types.Int64Null()
+		}
+		if value := r.Get("route-policy"); value.Exists() && !data.Networks[i].RoutePolicy.IsNull() {
+			data.Networks[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.Networks[i].RoutePolicy = types.StringNull()
 		}
 	}
 	for i := range data.RedistributeIsis {
@@ -641,6 +678,11 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.RedistributeIsis[i].Metric = types.Int64Null()
 		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
+			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
+		}
 	}
 	for i := range data.RedistributeOspf {
 		keys := [...]string{"router-tag"}
@@ -729,6 +771,11 @@ func (data *RouterBGPAddressFamily) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.RedistributeOspf[i].Metric = types.Int64Null()
 		}
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeOspf[i].RoutePolicy.IsNull() {
+			data.RedistributeOspf[i].RoutePolicy = types.StringValue(value.String())
+		} else {
+			data.RedistributeOspf[i].RoutePolicy = types.StringNull()
+		}
 	}
 }
 
@@ -794,6 +841,9 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 	if value := gjson.GetBytes(res, "redistribute.connected.metric"); value.Exists() {
 		data.RedistributeConnectedMetric = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "redistribute.connected.route-policy"); value.Exists() {
+		data.RedistributeConnectedRoutePolicy = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
 		data.RedistributeStatic = types.BoolValue(true)
 	} else {
@@ -801,6 +851,9 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 	}
 	if value := gjson.GetBytes(res, "redistribute.static.metric"); value.Exists() {
 		data.RedistributeStaticMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.route-policy"); value.Exists() {
+		data.RedistributeStaticRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "aggregate-addresses.aggregate-address"); value.Exists() {
 		data.AggregateAddresses = make([]RouterBGPAddressFamilyAggregateAddresses, 0)
@@ -840,6 +893,9 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 			}
 			if cValue := v.Get("masklength"); cValue.Exists() {
 				item.Masklength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
 			}
 			data.Networks = append(data.Networks, item)
 			return true
@@ -890,6 +946,9 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
 			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
 		})
@@ -934,6 +993,9 @@ func (data *RouterBGPAddressFamilyData) fromBody(ctx context.Context, res []byte
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
 			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
 			data.RedistributeOspf = append(data.RedistributeOspf, item)
 			return true
 		})
@@ -961,13 +1023,13 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/allocate-label/all", state.getPath()))
 	}
 	if !state.MaximumPathsEbgpMultipath.IsNull() && data.MaximumPathsEbgpMultipath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ebgp/multipath", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ebgp", state.getPath()))
 	}
 	if !state.MaximumPathsEibgpMultipath.IsNull() && data.MaximumPathsEibgpMultipath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/eibgp/multipath", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/eibgp", state.getPath()))
 	}
 	if !state.MaximumPathsIbgpMultipath.IsNull() && data.MaximumPathsIbgpMultipath.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ibgp/multipath", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-paths/ibgp", state.getPath()))
 	}
 	if !state.NexthopTriggerDelayCritical.IsNull() && data.NexthopTriggerDelayCritical.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/nexthop/trigger-delay/critical", state.getPath()))
@@ -987,11 +1049,17 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 	if !state.RedistributeConnectedMetric.IsNull() && data.RedistributeConnectedMetric.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/metric", state.getPath()))
 	}
+	if !state.RedistributeConnectedRoutePolicy.IsNull() && data.RedistributeConnectedRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/connected/route-policy", state.getPath()))
+	}
 	if !state.RedistributeStatic.IsNull() && data.RedistributeStatic.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static", state.getPath()))
 	}
 	if !state.RedistributeStaticMetric.IsNull() && data.RedistributeStaticMetric.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/metric", state.getPath()))
+	}
+	if !state.RedistributeStaticRoutePolicy.IsNull() && data.RedistributeStaticRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/static/route-policy", state.getPath()))
 	}
 	for i := range state.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}
@@ -1067,6 +1135,9 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				found = false
 			}
 			if found {
+				if !state.Networks[i].RoutePolicy.IsNull() && data.Networks[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/networks/network%v/route-policy", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1121,6 +1192,9 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/metric", state.getPath(), keyString))
 				}
+				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis%v/route-policy", state.getPath(), keyString))
+				}
 				break
 			}
 		}
@@ -1171,6 +1245,9 @@ func (data *RouterBGPAddressFamily) getDeletedItems(ctx context.Context, state R
 				}
 				if !state.RedistributeOspf[i].Metric.IsNull() && data.RedistributeOspf[j].Metric.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/metric", state.getPath(), keyString))
+				}
+				if !state.RedistributeOspf[i].RoutePolicy.IsNull() && data.RedistributeOspf[j].RoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospf%v/route-policy", state.getPath(), keyString))
 				}
 				break
 			}
@@ -1315,13 +1392,13 @@ func (data *RouterBGPAddressFamily) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/allocate-label/all", data.getPath()))
 	}
 	if !data.MaximumPathsEbgpMultipath.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ebgp/multipath", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ebgp", data.getPath()))
 	}
 	if !data.MaximumPathsEibgpMultipath.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/eibgp/multipath", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/eibgp", data.getPath()))
 	}
 	if !data.MaximumPathsIbgpMultipath.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ibgp/multipath", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-paths/ibgp", data.getPath()))
 	}
 	if !data.NexthopTriggerDelayCritical.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nexthop/trigger-delay/critical", data.getPath()))
@@ -1341,11 +1418,17 @@ func (data *RouterBGPAddressFamily) getDeletePaths(ctx context.Context) []string
 	if !data.RedistributeConnectedMetric.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/metric", data.getPath()))
 	}
+	if !data.RedistributeConnectedRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/connected/route-policy", data.getPath()))
+	}
 	if !data.RedistributeStatic.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static", data.getPath()))
 	}
 	if !data.RedistributeStaticMetric.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/metric", data.getPath()))
+	}
+	if !data.RedistributeStaticRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/redistribute/static/route-policy", data.getPath()))
 	}
 	for i := range data.AggregateAddresses {
 		keys := [...]string{"address", "masklength"}

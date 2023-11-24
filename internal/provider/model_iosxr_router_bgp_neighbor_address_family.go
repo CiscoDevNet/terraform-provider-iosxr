@@ -41,6 +41,8 @@ type RouterBGPNeighborAddressFamily struct {
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
+	RoutePolicyIn                                      types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                                     types.String `tfsdk:"route_policy_out"`
 }
 
 type RouterBGPNeighborAddressFamilyData struct {
@@ -55,6 +57,8 @@ type RouterBGPNeighborAddressFamilyData struct {
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
+	RoutePolicyIn                                      types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                                     types.String `tfsdk:"route_policy_out"`
 }
 
 func (data RouterBGPNeighborAddressFamily) getPath() string {
@@ -99,6 +103,12 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 		if data.EncapsulationTypeSrv6.ValueBool() {
 			body, _ = sjson.Set(body, "encapsulation-type.srv6", map[string]string{})
 		}
+	}
+	if !data.RoutePolicyIn.IsNull() && !data.RoutePolicyIn.IsUnknown() {
+		body, _ = sjson.Set(body, "route-policy.in", data.RoutePolicyIn.ValueString())
+	}
+	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
+		body, _ = sjson.Set(body, "route-policy.out", data.RoutePolicyOut.ValueString())
 	}
 	return body
 }
@@ -158,6 +168,16 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	} else {
 		data.EncapsulationTypeSrv6 = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() && !data.RoutePolicyIn.IsNull() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	} else {
+		data.RoutePolicyIn = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() && !data.RoutePolicyOut.IsNull() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	} else {
+		data.RoutePolicyOut = types.StringNull()
+	}
 }
 
 func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
@@ -191,6 +211,12 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	} else {
 		data.EncapsulationTypeSrv6 = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
 }
 
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
@@ -212,6 +238,12 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 	}
 	if !state.EncapsulationTypeSrv6.IsNull() && data.EncapsulationTypeSrv6.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation-type/srv6", state.getPath()))
+	}
+	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
+	}
+	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
 	}
 	return deletedItems
 }
@@ -258,6 +290,12 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	}
 	if !data.EncapsulationTypeSrv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation-type/srv6", data.getPath()))
+	}
+	if !data.RoutePolicyIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
+	}
+	if !data.RoutePolicyOut.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
 	}
 	return deletePaths
 }

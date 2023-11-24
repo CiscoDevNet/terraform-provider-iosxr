@@ -12,8 +12,10 @@ resource "iosxr_router_bgp_address_family" "example" {
   label_mode_per_vrf                      = false
   redistribute_connected                  = true
   redistribute_connected_metric           = 10
+  redistribute_connected_route_policy     = "ROUTE_POLICY_1"
   redistribute_static                     = true
   redistribute_static_metric              = 10
+  redistribute_static_route_policy        = "ROUTE_POLICY_1"
   aggregate_addresses = [
     {
       address       = "10.0.0.0"
@@ -25,8 +27,9 @@ resource "iosxr_router_bgp_address_family" "example" {
   ]
   networks = [
     {
-      address    = "10.1.0.0"
-      masklength = 16
+      address      = "10.1.0.0"
+      masklength   = 16
+      route_policy = "ROUTE_POLICY_1"
     }
   ]
   redistribute_isis = [
@@ -40,6 +43,7 @@ resource "iosxr_router_bgp_address_family" "example" {
       level_two_one_inter_area     = false
       level_one_inter_area         = false
       metric                       = 100
+      route_policy                 = "ROUTE_POLICY_1"
     }
   ]
   redistribute_ospf = [
@@ -52,6 +56,7 @@ resource "iosxr_router_bgp_address_family" "example" {
       match_external_nssa_external = false
       match_nssa_external          = false
       metric                       = 100
+      route_policy                 = "ROUTE_POLICY_1"
     }
   ]
 }

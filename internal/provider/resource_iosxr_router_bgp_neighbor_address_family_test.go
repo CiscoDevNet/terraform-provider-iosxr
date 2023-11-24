@@ -35,6 +35,8 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type_srv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -86,6 +88,14 @@ resource "iosxr_gnmi" "PreReq0" {
 	]
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+	}
+}
+
 `
 
 func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
@@ -93,7 +103,7 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	neighbor_address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -109,7 +119,9 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	config += `	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	encapsulation_type_srv6 = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
+	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -17,14 +17,21 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   as_number                               = "65001"
   vrf_name                                = "VRF1"
   af_name                                 = "ipv4-unicast"
+  additional_paths_send                   = true
+  additional_paths_receive                = true
+  additional_paths_selection_route_policy = "ROUTE_POLICY_1"
+  advertise_best_external                 = true
+  allocate_label_all                      = true
   maximum_paths_ebgp_multipath            = 10
   maximum_paths_ibgp_multipath            = 10
   label_mode_per_ce                       = false
   label_mode_per_vrf                      = false
   redistribute_connected                  = true
   redistribute_connected_metric           = 10
+  redistribute_connected_route_policy     = "ROUTE_POLICY_1"
   redistribute_static                     = true
   redistribute_static_metric              = 10
+  redistribute_static_route_policy        = "ROUTE_POLICY_1"
   segment_routing_srv6_locator            = "LocAlgo11"
   segment_routing_srv6_alloc_mode_per_vrf = true
   aggregate_addresses = [
@@ -38,8 +45,9 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   ]
   networks = [
     {
-      address    = "10.1.0.0"
-      masklength = 16
+      address      = "10.1.0.0"
+      masklength   = 16
+      route_policy = "ROUTE_POLICY_1"
     }
   ]
   redistribute_ospf = [
@@ -52,6 +60,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       match_external_nssa_external = false
       match_nssa_external          = false
       metric                       = 100
+      route_policy                 = "ROUTE_POLICY_1"
     }
   ]
 }
@@ -69,7 +78,13 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 
 ### Optional
 
+- `additional_paths_receive` (Boolean) Additional paths Receive capability
+- `additional_paths_selection_route_policy` (String) Route-policy for additional paths selection
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `advertise_best_external` (Boolean) Advertise best-external path
 - `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
+- `allocate_label_all` (Boolean) Allocate labels for all prefixes
+- `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -85,10 +100,12 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
+- `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF/OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
+- `redistribute_static_route_policy` (String) Route policy reference
 - `segment_routing_srv6_alloc_mode_per_vrf` (Boolean) Set per VRF label mode
 - `segment_routing_srv6_locator` (String) Specify locator
 
@@ -121,6 +138,10 @@ Required:
 - `masklength` (Number) Network in prefix/length format (prefix part)
   - Range: `0`-`128`
 
+Optional:
+
+- `route_policy` (String) Route-policy to modify the attributes
+
 
 <a id="nestedatt--redistribute_ospf"></a>
 ### Nested Schema for `redistribute_ospf`
@@ -139,6 +160,7 @@ Optional:
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
   - Range: `0`-`4294967295`
+- `route_policy` (String) Route policy reference
 
 ## Import
 

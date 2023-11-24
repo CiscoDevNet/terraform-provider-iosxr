@@ -35,7 +35,13 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 
 ### Read-Only
 
+- `additional_paths_receive` (Boolean) Additional paths Receive capability
+- `additional_paths_selection_route_policy` (String) Route-policy for additional paths selection
+- `additional_paths_send` (Boolean) Additional paths Send capability
+- `advertise_best_external` (Boolean) Advertise best-external path
 - `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
+- `allocate_label_all` (Boolean) Allocate labels for all prefixes
+- `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `id` (String) The path of the retrieved object.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
@@ -45,9 +51,11 @@ data "iosxr_router_bgp_vrf_address_family" "example" {
 - `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
+- `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF/OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
+- `redistribute_static_route_policy` (String) Route policy reference
 - `segment_routing_srv6_alloc_mode_per_vrf` (Boolean) Set per VRF label mode
 - `segment_routing_srv6_locator` (String) Specify locator
 
@@ -70,6 +78,7 @@ Read-Only:
 
 - `address` (String) IPv6 network and mask or masklength
 - `masklength` (Number) Network in prefix/length format (prefix part)
+- `route_policy` (String) Route-policy to modify the attributes
 
 
 <a id="nestedatt--redistribute_ospf"></a>
@@ -84,4 +93,5 @@ Read-Only:
 - `match_internal_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
+- `route_policy` (String) Route policy reference
 - `router_tag` (String) Open Shortest Path First (OSPF)

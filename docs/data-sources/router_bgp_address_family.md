@@ -51,10 +51,12 @@ data "iosxr_router_bgp_address_family" "example" {
 - `nexthop_trigger_delay_non_critical` (Number) For non-critical notification
 - `redistribute_connected` (Boolean) Connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
+- `redistribute_connected_route_policy` (String) Route policy reference
 - `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
 - `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF or OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
 - `redistribute_static` (Boolean) Static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
+- `redistribute_static_route_policy` (String) Route policy reference
 
 <a id="nestedatt--aggregate_addresses"></a>
 ### Nested Schema for `aggregate_addresses`
@@ -75,6 +77,7 @@ Read-Only:
 
 - `address` (String) IPv6 network and mask or masklength
 - `masklength` (Number) Network in prefix/length format (prefix part)
+- `route_policy` (String) Route-policy to modify the attributes
 
 
 <a id="nestedatt--redistribute_isis"></a>
@@ -91,6 +94,7 @@ Read-Only:
 - `level_two` (Boolean) Redistribute ISIS level 2 ISIS routes
 - `level_two_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
 - `metric` (Number) Metric for redistributed routes
+- `route_policy` (String) Route policy reference
 
 
 <a id="nestedatt--redistribute_ospf"></a>
@@ -105,4 +109,5 @@ Read-Only:
 - `match_internal_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
 - `metric` (Number) Metric for redistributed routes
+- `route_policy` (String) Route policy reference
 - `router_tag` (String) Open Shortest Path First (OSPF)

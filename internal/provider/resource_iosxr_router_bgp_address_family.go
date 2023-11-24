@@ -172,6 +172,13 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
 				Optional:            true,
@@ -181,6 +188,13 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
+				},
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
 				},
 			},
 			"aggregate_addresses": schema.ListNestedAttribute{
@@ -228,6 +242,13 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 128),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
 							},
 						},
 					},
@@ -281,6 +302,13 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 								int64validator.Between(0, 4294967295),
 							},
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
 					},
 				},
 			},
@@ -326,6 +354,13 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
 							},
 						},
 					},

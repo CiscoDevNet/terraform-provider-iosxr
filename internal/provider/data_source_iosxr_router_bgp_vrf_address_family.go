@@ -74,6 +74,30 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Enter Address Family command mode",
 				Required:            true,
 			},
+			"additional_paths_send": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Send capability",
+				Computed:            true,
+			},
+			"additional_paths_receive": schema.BoolAttribute{
+				MarkdownDescription: "Additional paths Receive capability",
+				Computed:            true,
+			},
+			"additional_paths_selection_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route-policy for additional paths selection",
+				Computed:            true,
+			},
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: "Allocate label for unlabeled paths too",
+				Computed:            true,
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: "Advertise best-external path",
+				Computed:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: "Allocate labels for all prefixes",
+				Computed:            true,
+			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
 				MarkdownDescription: "eBGP-multipath",
 				Computed:            true,
@@ -102,12 +126,20 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Metric for redistributed routes",
 				Computed:            true,
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: "Static routes",
 				Computed:            true,
 			},
 			"redistribute_static_metric": schema.Int64Attribute{
 				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
 				Computed:            true,
 			},
 			"segment_routing_srv6_locator": schema.StringAttribute{
@@ -159,6 +191,10 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 							MarkdownDescription: "Network in prefix/length format (prefix part)",
 							Computed:            true,
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route-policy to modify the attributes",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -197,6 +233,10 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 						},
 						"metric": schema.Int64Attribute{
 							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
 					},

@@ -16,6 +16,12 @@ description: |-
 - Add `v3_sha_encryption` and `v3_aes_encryption` attributes to `iosxr_snmp_server` resource and data source
 - Add `fast_reroute_per_prefix` and `fast_reroute_per_prefix_ti_lfa` attributes to `iosxr_router_isis_interface_address_family` resource and data source
 - Add `reuse_connection` provider attribute
+- Add `redistribute_connected_route_policy` and `redistribute_static_route_policy` attributes to `iosxr_router_bgp_address_family` resource and data source
+- Add `networks.route_policy` and `redistribute_isis.route_policy` attributes to `iosxr_router_bgp_address_family` resource and data source
+- Add `additional_paths`, `allocate_label` and `advertise_best_external` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
+- Add `redistribute_connected_route_policy` and `redistribute_static_route_policy` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
+- Add `networks.route_policy` and `redistribute_isis.route_policy` attributes to `iosxr_router_bgp_vrf_address_family` resource and data source
+- Add `route_policy_in` and `route_policy_out` attributes to `iosxr_router_bgp_neighbor_address_family` resource and data source
 
 ## 0.3.1
 

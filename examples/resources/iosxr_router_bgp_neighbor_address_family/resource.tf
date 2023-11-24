@@ -8,4 +8,6 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
   next_hop_self_inheritance_disable                         = true
   encapsulation_type_srv6                                   = true
+  route_policy_in                                           = "ROUTE_POLICY_1"
+  route_policy_out                                          = "ROUTE_POLICY_1"
 }

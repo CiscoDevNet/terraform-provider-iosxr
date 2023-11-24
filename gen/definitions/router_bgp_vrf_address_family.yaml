@@ -9,6 +9,19 @@ attributes:
     example: VRF1
   - yang_name: af-name
     example: ipv4-unicast
+  - yang_name: additional-paths/send
+    example: true
+  - yang_name: additional-paths/receive
+    example: true
+  - yang_name: additional-paths/selection/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: allocate-label/all/unlabeled-path
+    example: true
+    exclude_test: true
+  - yang_name: advertise/best-external
+    example: true
+  - yang_name: allocate-label/all
+    example: true
   - yang_name: maximum-paths/ebgp/multipath
     delete_parent: true
     example: 10
@@ -30,10 +43,14 @@ attributes:
     example: true
   - yang_name: redistribute/connected/metric
     example: 10
+  - yang_name: redistribute/connected/route-policy
+    example: ROUTE_POLICY_1
   - yang_name: redistribute/static
     example: true
   - yang_name: redistribute/static/metric
     example: 10
+  - yang_name: redistribute/static/route-policy
+    example: ROUTE_POLICY_1
   - yang_name: segment-routing/srv6/locator
     example: LocAlgo11
   - yang_name: segment-routing/srv6/alloc/mode/per-vrf
@@ -64,6 +81,8 @@ attributes:
       - yang_name: masklength
         id: true
         example: 16
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
   - yang_name: redistribute/ospf
     tf_name: redistribute_ospf
     type: List
@@ -85,7 +104,16 @@ attributes:
         example: false
       - yang_name: metric
         example: 100
+      - yang_name: route-policy
+        example: ROUTE_POLICY_1
+
 test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
       - name: as-number

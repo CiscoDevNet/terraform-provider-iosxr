@@ -40,8 +40,10 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "label_mode_per_vrf", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_connected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_connected_metric", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_connected_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_static_metric", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_static_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "aggregate_addresses.0.address", "10.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "aggregate_addresses.0.masklength", "8"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "aggregate_addresses.0.as_set", "false"))
@@ -49,6 +51,7 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "aggregate_addresses.0.summary_only", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "networks.0.address", "10.1.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "networks.0.masklength", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "networks.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.instance_name", "P1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_one", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_one_two", "true"))
@@ -58,6 +61,7 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_two_one_inter_area", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.level_one_inter_area", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_isis.0.route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.router_tag", "OSPF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.match_internal", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.match_internal_external", "true"))
@@ -66,6 +70,7 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.match_external_nssa_external", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.match_nssa_external", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.route_policy", "ROUTE_POLICY_1"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -130,8 +135,10 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `	label_mode_per_vrf = false` + "\n"
 	config += `	redistribute_connected = true` + "\n"
 	config += `	redistribute_connected_metric = 10` + "\n"
+	config += `	redistribute_connected_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	redistribute_static = true` + "\n"
 	config += `	redistribute_static_metric = 10` + "\n"
+	config += `	redistribute_static_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	aggregate_addresses = [{` + "\n"
 	config += `		address = "10.0.0.0"` + "\n"
 	config += `		masklength = 8` + "\n"
@@ -142,6 +149,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `	networks = [{` + "\n"
 	config += `		address = "10.1.0.0"` + "\n"
 	config += `		masklength = 16` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	redistribute_isis = [{` + "\n"
 	config += `		instance_name = "P1"` + "\n"
@@ -153,6 +161,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `		level_two_one_inter_area = false` + "\n"
 	config += `		level_one_inter_area = false` + "\n"
 	config += `		metric = 100` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	redistribute_ospf = [{` + "\n"
 	config += `		router_tag = "OSPF1"` + "\n"
@@ -163,6 +172,7 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `		match_external_nssa_external = false` + "\n"
 	config += `		match_nssa_external = false` + "\n"
 	config += `		metric = 100` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"

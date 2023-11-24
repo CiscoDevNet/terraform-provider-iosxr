@@ -98,6 +98,14 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "SRv6 encapsulation",
 				Computed:            true,
 			},
+			"route_policy_in": schema.StringAttribute{
+				MarkdownDescription: "Apply route policy to inbound routes",
+				Computed:            true,
+			},
+			"route_policy_out": schema.StringAttribute{
+				MarkdownDescription: "Apply route policy to outbound routes",
+				Computed:            true,
+			},
 		},
 	}
 }

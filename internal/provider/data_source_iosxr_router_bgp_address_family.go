@@ -130,12 +130,20 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Metric for redistributed routes",
 				Computed:            true,
 			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
 			"redistribute_static": schema.BoolAttribute{
 				MarkdownDescription: "Static routes",
 				Computed:            true,
 			},
 			"redistribute_static_metric": schema.Int64Attribute{
 				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
 				Computed:            true,
 			},
 			"aggregate_addresses": schema.ListNestedAttribute{
@@ -177,6 +185,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 						"masklength": schema.Int64Attribute{
 							MarkdownDescription: "Network in prefix/length format (prefix part)",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route-policy to modify the attributes",
 							Computed:            true,
 						},
 					},
@@ -223,6 +235,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Metric for redistributed routes",
 							Computed:            true,
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -261,6 +277,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 						"metric": schema.Int64Attribute{
 							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
 							Computed:            true,
 						},
 					},

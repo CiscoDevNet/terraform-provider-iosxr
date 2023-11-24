@@ -23,6 +23,8 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
   next_hop_self_inheritance_disable                         = true
   encapsulation_type_srv6                                   = true
+  route_policy_in                                           = "ROUTE_POLICY_1"
+  route_policy_out                                          = "ROUTE_POLICY_1"
 }
 ```
 
@@ -45,6 +47,8 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 - `encapsulation_type_srv6` (Boolean) SRv6 encapsulation
 - `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_policy_in` (String) Apply route policy to inbound routes
+- `route_policy_out` (String) Apply route policy to outbound routes
 - `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 

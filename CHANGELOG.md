@@ -6,6 +6,7 @@
 - Add `segment_routing_mpls` and `segment_routing_sr_prefer` attributes to `iosxr_router_ospf` resource and data source
 - Add `v3_sha_encryption` and `v3_aes_encryption` attributes to `iosxr_snmp_server` resource and data source
 - Add `fast_reroute_per_prefix` and `fast_reroute_per_prefix_ti_lfa` attributes to `iosxr_router_isis_interface_address_family` resource and data source
+- Add `reuse_connection` provider attribute
 
 ## 0.3.1
 

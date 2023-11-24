@@ -52,6 +52,8 @@ const (
 
 type Client struct {
 	Devices map[string]*Device
+	// Reuse connection
+	ReuseConnection bool
 	// Maximum number of retries
 	MaxRetries int
 	// Minimum delay between two retries
@@ -73,10 +75,11 @@ type SetOperation struct {
 	Operation SetOperationType
 }
 
-func NewClient() Client {
+func NewClient(reuseConnection bool) Client {
 	devices := make(map[string]*Device)
 	return Client{
 		Devices:            devices,
+		ReuseConnection:    reuseConnection,
 		MaxRetries:         DefaultMaxRetries,
 		BackoffMinDelay:    DefaultBackoffMinDelay,
 		BackoffMaxDelay:    DefaultBackoffMaxDelay,
@@ -108,6 +111,17 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 			"Unable to create target:\n\n"+err.Error(),
 		)
 		return diags
+	}
+
+	if c.ReuseConnection {
+		err = t.CreateGNMIClient(ctx)
+		if err != nil {
+			diags.AddError(
+				"Unable to create gNMI client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return diags
+		}
 	}
 
 	c.Devices[device] = &Device{}
@@ -147,17 +161,19 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 	var setResp *gnmi.SetResponse
 	for attempts := 0; ; attempts++ {
 		c.Devices[device].SetMutex.Lock()
-		err = target.CreateGNMIClient(ctx)
-		if err != nil {
-			if ok := c.Backoff(ctx, attempts); !ok {
-				diags.AddError(
-					"Unable to create gNMI client",
-					"Unable to create gNMI client:\n\n"+err.Error(),
-				)
-				return nil, diags
-			} else {
-				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
-				continue
+		if !c.ReuseConnection {
+			err = target.CreateGNMIClient(ctx)
+			if err != nil {
+				if ok := c.Backoff(ctx, attempts); !ok {
+					diags.AddError(
+						"Unable to create gNMI client",
+						"Unable to create gNMI client:\n\n"+err.Error(),
+					)
+					return nil, diags
+				} else {
+					tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+					continue
+				}
 			}
 		}
 		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
@@ -166,7 +182,9 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		setResp, err = target.Set(tCtx, setReq)
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
 		c.Devices[device].SetMutex.Unlock()
-		target.Close()
+		if !c.ReuseConnection {
+			target.Close()
+		}
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
 				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))
@@ -201,23 +219,27 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 	var getResp *gnmi.GetResponse
 	for attempts := 0; ; attempts++ {
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
-		err = target.CreateGNMIClient(ctx)
-		if err != nil {
-			if ok := c.Backoff(ctx, attempts); !ok {
-				diags.AddError(
-					"Unable to create gNMI client",
-					"Unable to create gNMI client:\n\n"+err.Error(),
-				)
-				return nil, diags
-			} else {
-				tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
-				continue
+		if !c.ReuseConnection {
+			err = target.CreateGNMIClient(ctx)
+			if err != nil {
+				if ok := c.Backoff(ctx, attempts); !ok {
+					diags.AddError(
+						"Unable to create gNMI client",
+						"Unable to create gNMI client:\n\n"+err.Error(),
+					)
+					return nil, diags
+				} else {
+					tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
+					continue
+				}
 			}
 		}
 		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
 		defer cancel()
 		getResp, err = target.Get(tCtx, getReq)
-		target.Close()
+		if !c.ReuseConnection {
+			target.Close()
+		}
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {

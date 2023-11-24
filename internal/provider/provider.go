@@ -50,6 +50,7 @@ type providerData struct {
 	Certificate       types.String         `tfsdk:"certificate"`
 	Key               types.String         `tfsdk:"key"`
 	CaCertificate     types.String         `tfsdk:"ca_certificate"`
+	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
 }
 
@@ -97,6 +98,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"ca_certificate": schema.StringAttribute{
 				MarkdownDescription: "TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.",
+				Optional:            true,
+			},
+			"reuse_connection": schema.BoolAttribute{
+				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
 			"devices": schema.ListNestedAttribute{
@@ -299,7 +304,28 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		caCertificate = config.CaCertificate.ValueString()
 	}
 
-	client := client.NewClient()
+	var reuseConnection bool
+	if config.ReuseConnection.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as reuse_connection",
+		)
+		return
+	}
+
+	if config.ReuseConnection.IsNull() {
+		reuseConnectionStr := os.Getenv("IOSXR_REUSE_CONNECTION")
+		if reuseConnectionStr == "" {
+			reuseConnection = true
+		} else {
+			reuseConnection, _ = strconv.ParseBool(reuseConnectionStr)
+		}
+	} else {
+		reuseConnection = config.ReuseConnection.ValueBool()
+	}
+
+	client := client.NewClient(reuseConnection)
 
 	diags = client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
 	resp.Diagnostics.Append(diags...)

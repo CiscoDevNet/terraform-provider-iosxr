@@ -1,3 +1,7 @@
+## 0.3.2 (unreleased)
+
+- Add `route_policy_in` and `route_policy_out` attributes to `iosxr_bgp_neighbor_group` resource and data source
+
 ## 0.3.1
 
 - Make various BGP neighbor attributes optional

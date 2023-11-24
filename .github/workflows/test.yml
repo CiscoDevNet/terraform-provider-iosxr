@@ -17,14 +17,6 @@ permissions:
   contents: read
 
 jobs:
-  consecutiveness:
-    name: Consecutiveness
-    runs-on: ubuntu-latest
-    steps:
-      - uses: mktcode/consecutive-workflow-action@0b779df0b7f31f656194b3aa004cc29dd406393b
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
   # Ensure project builds before running testing matrix
   build:
     name: Build

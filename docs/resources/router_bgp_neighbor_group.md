@@ -31,6 +31,8 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       next_hop_self_inheritance_disable          = true
       route_reflector_client                     = true
       route_reflector_client_inheritance_disable = true
+      route_policy_in                            = "ROUTE_POLICY_1"
+      route_policy_out                           = "ROUTE_POLICY_1"
     }
   ]
 }
@@ -81,6 +83,8 @@ Required:
 Optional:
 
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `route_policy_in` (String) Apply route policy to inbound routes
+- `route_policy_out` (String) Apply route policy to outbound routes
 - `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported

@@ -139,6 +139,14 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Prevent route-reflector-client from being inherited from the parent",
 							Computed:            true,
 						},
+						"route_policy_in": schema.StringAttribute{
+							MarkdownDescription: "Apply route policy to inbound routes",
+							Computed:            true,
+						},
+						"route_policy_out": schema.StringAttribute{
+							MarkdownDescription: "Apply route policy to outbound routes",
+							Computed:            true,
+						},
 					},
 				},
 			},

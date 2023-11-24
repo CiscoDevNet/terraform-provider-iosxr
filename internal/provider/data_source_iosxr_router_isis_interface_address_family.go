@@ -78,7 +78,15 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Sub address family name",
 				Required:            true,
 			},
-			"fast_reroute_per_prefix_levels": schema.ListNestedAttribute{
+			"fast_reroute_computation_per_prefix_computation": schema.BoolAttribute{
+				MarkdownDescription: "Prefix dependent computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_ti_lfa": schema.BoolAttribute{
+				MarkdownDescription: "Enable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix": schema.ListNestedAttribute{
 				MarkdownDescription: "Enable EPCFRR LFA for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

@@ -59,6 +59,8 @@ data "iosxr_router_ospf" "example" {
 - `redistribute_static_metric_type` (String) OSPF exterior metric type for redistributed routes
 - `redistribute_static_tag` (Number) Set tag for routes redistributed into OSPF
 - `router_id` (String) configure this node
+- `segment_routing_mpls` (Boolean) SR using MPLS dataplane
+- `segment_routing_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
 
 <a id="nestedatt--areas"></a>
 ### Nested Schema for `areas`

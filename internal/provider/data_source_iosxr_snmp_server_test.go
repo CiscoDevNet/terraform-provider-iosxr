@@ -55,6 +55,8 @@ func TestAccDataSourceIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.user_name", "USER1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_ipv4", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "users.0.v3_systemowner", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.group_name", "GROUP12"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_priv", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_snmp_server.test", "groups.0.v3_read", "VIEW1"))
@@ -115,6 +117,8 @@ func testAccDataSourceIosxrSNMPServerConfig() string {
 	config += `		user_name = "USER1"` + "\n"
 	config += `		group_name = "GROUP1"` + "\n"
 	config += `		v3_auth_md5_encryption_aes = "073C05626E2A4841141D"` + "\n"
+	config += `		v3_ipv4 = "ACL1"` + "\n"
+	config += `		v3_systemowner = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	groups = [{` + "\n"
 	config += `		group_name = "GROUP12"` + "\n"

@@ -36,6 +36,9 @@ data "iosxr_router_ospf_area_interface" "example" {
 ### Read-Only
 
 - `cost` (Number) Interface cost
+- `fast_reroute_per_prefix_ti_lfa_enable` (Boolean) Enable TI LFA computation
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
 - `id` (String) The path of the retrieved object.
 - `network_broadcast` (Boolean) Specify OSPF broadcast multi-access network
 - `network_non_broadcast` (Boolean) Specify OSPF NBMA network
@@ -43,4 +46,19 @@ data "iosxr_router_ospf_area_interface" "example" {
 - `network_point_to_point` (Boolean) Specify OSPF point-to-point network
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
+- `prefix_sid_algorithms` (Attributes List) Algorithm Specific Prefix SID Configuration (see [below for nested schema](#nestedatt--prefix_sid_algorithms))
+- `prefix_sid_strict_spf_index_sid_index` (Number) SID Index
 - `priority` (Number) Router priority
+
+<a id="nestedatt--prefix_sid_algorithms"></a>
+### Nested Schema for `prefix_sid_algorithms`
+
+Read-Only:
+
+- `absolute_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `absolute_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `absolute_sid_label` (Number) SID value
+- `algorithm_number` (Number) Algorithm Specific Prefix SID Configuration
+- `index_explicit_null` (Boolean) Force penultimate hop to send explicit-null label
+- `index_n_flag_clear` (Boolean) Not a node SID (e.g. for anycast SID use)
+- `index_sid_index` (Number) SID Index

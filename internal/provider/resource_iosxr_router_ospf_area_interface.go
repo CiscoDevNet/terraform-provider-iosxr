@@ -140,6 +140,76 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Disable passive").String,
 				Optional:            true,
 			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
+				Optional:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"prefix_sid_strict_spf_index_sid_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 1048575),
+				},
+			},
+			"prefix_sid_algorithms": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Algorithm Specific Prefix SID Configuration").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Algorithm Specific Prefix SID Configuration").AddIntegerRangeDescription(128, 255).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(128, 255),
+							},
+						},
+						"index_sid_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1048575),
+							},
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+							Optional:            true,
+						},
+						"index_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+							Optional:            true,
+						},
+						"absolute_sid_label": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(16000, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(16000, 1048575),
+							},
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Force penultimate hop to send explicit-null label").String,
+							Optional:            true,
+						},
+						"absolute_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Not a node SID (e.g. for anycast SID use)").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

@@ -29,6 +29,8 @@ resource "iosxr_snmp_server" "example" {
       user_name                  = "USER1"
       group_name                 = "GROUP1"
       v3_auth_md5_encryption_aes = "073C05626E2A4841141D"
+      v3_ipv4                    = "ACL1"
+      v3_systemowner             = true
     }
   ]
   groups = [

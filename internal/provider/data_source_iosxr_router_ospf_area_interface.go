@@ -106,6 +106,58 @@ func (d *RouterOSPFAreaInterfaceDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Disable passive",
 				Computed:            true,
 			},
+			"fast_reroute_per_prefix_ti_lfa_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable TI LFA computation",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: "Set preference order among tiebreakers",
+				Computed:            true,
+			},
+			"prefix_sid_strict_spf_index_sid_index": schema.Int64Attribute{
+				MarkdownDescription: "SID Index",
+				Computed:            true,
+			},
+			"prefix_sid_algorithms": schema.ListNestedAttribute{
+				MarkdownDescription: "Algorithm Specific Prefix SID Configuration",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"algorithm_number": schema.Int64Attribute{
+							MarkdownDescription: "Algorithm Specific Prefix SID Configuration",
+							Computed:            true,
+						},
+						"index_sid_index": schema.Int64Attribute{
+							MarkdownDescription: "SID Index",
+							Computed:            true,
+						},
+						"index_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Force penultimate hop to send explicit-null label",
+							Computed:            true,
+						},
+						"index_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+							Computed:            true,
+						},
+						"absolute_sid_label": schema.Int64Attribute{
+							MarkdownDescription: "SID value",
+							Computed:            true,
+						},
+						"absolute_explicit_null": schema.BoolAttribute{
+							MarkdownDescription: "Force penultimate hop to send explicit-null label",
+							Computed:            true,
+						},
+						"absolute_n_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: "Not a node SID (e.g. for anycast SID use)",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

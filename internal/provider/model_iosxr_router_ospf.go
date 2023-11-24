@@ -58,6 +58,8 @@ type RouterOSPF struct {
 	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
 	AutoCostReferenceBandwidth            types.Int64                  `tfsdk:"auto_cost_reference_bandwidth"`
 	AutoCostDisable                       types.Bool                   `tfsdk:"auto_cost_disable"`
+	SegmentRoutingMpls                    types.Bool                   `tfsdk:"segment_routing_mpls"`
+	SegmentRoutingSrPrefer                types.Bool                   `tfsdk:"segment_routing_sr_prefer"`
 	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
 	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
 	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
@@ -91,6 +93,8 @@ type RouterOSPFData struct {
 	DefaultInformationOriginateMetricType types.Int64                  `tfsdk:"default_information_originate_metric_type"`
 	AutoCostReferenceBandwidth            types.Int64                  `tfsdk:"auto_cost_reference_bandwidth"`
 	AutoCostDisable                       types.Bool                   `tfsdk:"auto_cost_disable"`
+	SegmentRoutingMpls                    types.Bool                   `tfsdk:"segment_routing_mpls"`
+	SegmentRoutingSrPrefer                types.Bool                   `tfsdk:"segment_routing_sr_prefer"`
 	Areas                                 []RouterOSPFAreas            `tfsdk:"areas"`
 	RedistributeBgp                       []RouterOSPFRedistributeBgp  `tfsdk:"redistribute_bgp"`
 	RedistributeIsis                      []RouterOSPFRedistributeIsis `tfsdk:"redistribute_isis"`
@@ -223,6 +227,16 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.IsUnknown() {
 		if data.AutoCostDisable.ValueBool() {
 			body, _ = sjson.Set(body, "auto-cost.disable", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingMpls.IsNull() && !data.SegmentRoutingMpls.IsUnknown() {
+		if data.SegmentRoutingMpls.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.mpls", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingSrPrefer.IsNull() && !data.SegmentRoutingSrPrefer.IsUnknown() {
+		if data.SegmentRoutingSrPrefer.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.sr-prefer", map[string]string{})
 		}
 	}
 	if len(data.Areas) > 0 {
@@ -467,6 +481,24 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.AutoCostDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls"); !data.SegmentRoutingMpls.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingMpls = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingMpls = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingMpls = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); !data.SegmentRoutingSrPrefer.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingSrPrefer = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingSrPrefer = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingSrPrefer = types.BoolNull()
 	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}
@@ -762,6 +794,16 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.AutoCostDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrPrefer = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
 		data.Areas = make([]RouterOSPFAreas, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -926,6 +968,12 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	}
 	if !state.AutoCostDisable.IsNull() && data.AutoCostDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-cost/disable", state.getPath()))
+	}
+	if !state.SegmentRoutingMpls.IsNull() && data.SegmentRoutingMpls.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/mpls", state.getPath()))
+	}
+	if !state.SegmentRoutingSrPrefer.IsNull() && data.SegmentRoutingSrPrefer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/sr-prefer", state.getPath()))
 	}
 	for i := range state.Areas {
 		keys := [...]string{"area-id"}
@@ -1121,6 +1169,12 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.AutoCostDisable.IsNull() && !data.AutoCostDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-cost/disable", data.getPath()))
 	}
+	if !data.SegmentRoutingMpls.IsNull() && !data.SegmentRoutingMpls.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/mpls", data.getPath()))
+	}
+	if !data.SegmentRoutingSrPrefer.IsNull() && !data.SegmentRoutingSrPrefer.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/sr-prefer", data.getPath()))
+	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}
 		keyValues := [...]string{data.Areas[i].AreaId.ValueString()}
@@ -1244,6 +1298,12 @@ func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.AutoCostDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-cost/disable", data.getPath()))
+	}
+	if !data.SegmentRoutingMpls.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/mpls", data.getPath()))
+	}
+	if !data.SegmentRoutingSrPrefer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/sr-prefer", data.getPath()))
 	}
 	for i := range data.Areas {
 		keys := [...]string{"area-id"}

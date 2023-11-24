@@ -38,6 +38,8 @@ resource "iosxr_router_ospf" "example" {
   default_information_originate_metric_type = 1
   auto_cost_reference_bandwidth             = 100000
   auto_cost_disable                         = false
+  segment_routing_mpls                      = true
+  segment_routing_sr_prefer                 = true
   areas = [
     {
       area_id = "0"
@@ -123,6 +125,8 @@ resource "iosxr_router_ospf" "example" {
 - `redistribute_static_tag` (Number) Set tag for routes redistributed into OSPF
   - Range: `0`-`4294967295`
 - `router_id` (String) configure this node
+- `segment_routing_mpls` (Boolean) SR using MPLS dataplane
+- `segment_routing_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
 
 ### Read-Only
 

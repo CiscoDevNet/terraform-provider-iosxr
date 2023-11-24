@@ -25,3 +25,38 @@ attributes:
     example: false
   - yang_name: passive/disable
     example: true
+  - yang_name: fast-reroute/per-prefix/ti-lfa/enable
+    example: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    example: 22
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    example: 33
+  - yang_name: prefix-sid/strict-spf/index/sid-index
+    example: 3000
+    optional: true
+    delete_parent: true
+    exclude_test: true   
+    ## prefix-sid only support for Loopback interface
+    
+  - yang_name: prefix-sid/algorithms/algorithm
+    tf_name: prefix_sid_algorithms
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: algorithm-number
+        id: true
+        example: 233
+      - yang_name: index/sid-index
+        example: 1048
+      - yang_name: index/explicit-null
+        example: false
+      - yang_name: index/n-flag-clear
+        example: false
+      - yang_name: absolute/sid-label
+        example: 17000
+      - yang_name: absolute/explicit-null
+        example: true
+        exclude_test: true
+      - yang_name: absolute/n-flag-clear
+        example: true
+        exclude_test: true

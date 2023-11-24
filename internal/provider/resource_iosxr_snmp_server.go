@@ -385,6 +385,48 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
 						},
+						"v3_auth_sha_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_auth_sha_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_128_encryption_default": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an default ENCRYPTED authentication password").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"v3_priv_aes_aes_128_encryption_aes": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies an aes-128 ENCRYPTED authentication password").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-zA-Z]+`), ""),
+							},
+						},
+						"v3_ipv4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of Access-list").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 32),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							},
+						},
+						"v3_systemowner": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("System Owner permissions for MIB objects").String,
+							Optional:            true,
+						},
 					},
 				},
 			},

@@ -45,6 +45,9 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 - `bfd_multiplier` (Number) Detect multiplier
 - `id` (String) The path of the retrieved object.
 - `remote_as` (String) bgp as-number
+- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_interval` (Number) BGP timers
+- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
 - `update_source` (String) Source of routing updates
 
 <a id="nestedatt--address_families"></a>

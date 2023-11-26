@@ -35,6 +35,9 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       route_policy_out                           = "ROUTE_POLICY_1"
     }
   ]
+  timers_keepalive_interval          = 5
+  timers_holdtime                    = "3"
+  timers_minimum_acceptable_holdtime = "3"
 }
 ```
 
@@ -45,6 +48,9 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 
 - `as_number` (String) bgp as-number
 - `name` (String) Specify a Neighbor-group
+- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_interval` (Number) BGP timers
+  - Range: `0`-`65535`
 
 ### Optional
 
@@ -66,6 +72,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `remote_as` (String) bgp as-number
+- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
 - `update_source` (String) Source of routing updates
 
 ### Read-Only

@@ -36,11 +36,22 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 ### Read-Only
 
 - `advertise_vpnv4_unicast_enable_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
+- `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `encapsulation_type_srv6` (Boolean) SRv6 encapsulation
 - `id` (String) The path of the retrieved object.
 - `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
+- `maximum_prefix_discard_extra_paths` (Boolean) Discard extra paths when limit is exceeded
+- `maximum_prefix_limit` (Number) Maximum number of prefixes to accept from this peer
+- `maximum_prefix_restart` (Number) Restart time interval
+- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
+- `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
+- `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
+- `send_community_ebgp` (Boolean) Send community attribute to this external neighbor
+- `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
+- `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported

@@ -17,6 +17,8 @@ attributes:
     example: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
     example: true
+  - yang_name: next-hop-self
+    example: true
   - yang_name: next-hop-self/inheritance-disable
     example: true
   - yang_name: encapsulation-type/srv6
@@ -25,6 +27,27 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
+  - yang_name: soft-reconfiguration/inbound/always
+    example: true
+  - yang_name: send-community-ebgp
+    example: true
+  - yang_name: send-community-ebgp/inheritance-disable
+    example: true
+  - yang_name: maximum-prefix/prefix-limit
+    tf_name: maximum_prefix_limit
+    example: 1248576
+  - yang_name: maximum-prefix/threshold
+    example: 80
+  - yang_name: maximum-prefix/restart
+    example: 5
+  - yang_name: maximum-prefix/discard-extra-paths
+    example: true
+  - yang_name: maximum-prefix/warning-only
+    example: true
+  - yang_name: default-originate/route-policy
+    example: ROUTE_POLICY_1
+  - yang_name: default-originate/inheritance-disable
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]

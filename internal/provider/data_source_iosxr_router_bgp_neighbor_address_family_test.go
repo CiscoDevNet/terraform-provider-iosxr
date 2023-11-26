@@ -31,10 +31,21 @@ func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type_srv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "send_community_ebgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_restart", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_discard_extra_paths", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_inheritance_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -96,10 +107,21 @@ func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
 	config += `	route_reflector_client = true` + "\n"
 	config += `	route_reflector_client_inheritance_disable = true` + "\n"
 	config += `	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true` + "\n"
+	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	encapsulation_type_srv6 = true` + "\n"
 	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	soft_reconfiguration_inbound_always = true` + "\n"
+	config += `	send_community_ebgp = true` + "\n"
+	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
+	config += `	maximum_prefix_limit = 1248576` + "\n"
+	config += `	maximum_prefix_threshold = 80` + "\n"
+	config += `	maximum_prefix_restart = 5` + "\n"
+	config += `	maximum_prefix_discard_extra_paths = true` + "\n"
+	config += `	maximum_prefix_warning_only = true` + "\n"
+	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	default_originate_inheritance_disable = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

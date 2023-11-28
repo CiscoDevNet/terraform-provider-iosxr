@@ -1,8 +1,6 @@
 module github.com/CiscoDevNet/terraform-provider-iosxr
 
-go 1.21
-
-toolchain go1.21.3
+go 1.20
 
 require (
 	github.com/hashicorp/terraform-plugin-docs v0.16.0

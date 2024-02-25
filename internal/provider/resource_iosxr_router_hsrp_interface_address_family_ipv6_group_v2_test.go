@@ -44,7 +44,7 @@ func TestAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "track_interfaces.0.priority_decrement", "244"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "addresses.0.address", "2001:db8:cafe:2100::bad1:1010"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "address_link_local_autoconfig_legacy_compatible", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "address_link_local_ipv6_address", "fe80::240:d0ff:fe48:4672"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -58,7 +58,7 @@ func TestAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=4055]",
+		ImportStateId: "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/3]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=4055]",
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -69,7 +69,7 @@ func TestAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2(t *testing.T) {
 
 func testAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "test" {` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/3"` + "\n"
 	config += `	group_id = 4055` + "\n"
 	config += `}` + "\n"
 	return config
@@ -77,7 +77,7 @@ func testAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config_minimum() str
 
 func testAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config_all() string {
 	config := `resource "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "test" {` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/3"` + "\n"
 	config += `	group_id = 4055` + "\n"
 	config += `	name = "gp2"` + "\n"
 	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
@@ -100,7 +100,7 @@ func testAccIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config_all() string 
 	config += `	addresses = [{` + "\n"
 	config += `		address = "2001:db8:cafe:2100::bad1:1010"` + "\n"
 	config += `		}]` + "\n"
-	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
+	config += `	address_link_local_ipv6_address = "fe80::240:d0ff:fe48:4672"` + "\n"
 	config += `}` + "\n"
 	return config
 }

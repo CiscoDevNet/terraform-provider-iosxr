@@ -48,6 +48,7 @@ attributes:
       - yang_name: algorithm-number
         id: true
         example: 233
+        optional: true
       - yang_name: index/sid-index
         example: 1048
       - yang_name: index/explicit-null
@@ -57,6 +58,7 @@ attributes:
       - yang_name: absolute/sid-label
         example: 17000
         exclude_test: true
+        optional: true
       - yang_name: absolute/explicit-null
         example: true
         exclude_test: true

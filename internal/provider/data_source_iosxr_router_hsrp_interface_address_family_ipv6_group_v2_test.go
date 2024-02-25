@@ -42,7 +42,7 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2(t *testin
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "track_interfaces.0.track_name", "GigabitEthernet0/0/0/4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "track_interfaces.0.priority_decrement", "244"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "addresses.0.address", "2001:db8:cafe:2100::bad1:1010"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "address_link_local_autoconfig_legacy_compatible", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test", "address_link_local_ipv6_address", "fe80::240:d0ff:fe48:4672"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -58,7 +58,7 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2(t *testin
 func testAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config() string {
 	config := `resource "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/3"` + "\n"
 	config += `	group_id = 4055` + "\n"
 	config += `	name = "gp2"` + "\n"
 	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
@@ -81,12 +81,12 @@ func testAccDataSourceIosxrRouterHSRPInterfaceAddressFamilyIPv6GroupV2Config() s
 	config += `	addresses = [{` + "\n"
 	config += `		address = "2001:db8:cafe:2100::bad1:1010"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
+	config += `	address_link_local_ipv6_address = "fe80::240:d0ff:fe48:4672"` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "test" {
-			interface_name = "GigabitEthernet0/0/0/2"
+			interface_name = "GigabitEthernet0/0/0/3"
 			group_id = 4055
 			depends_on = [iosxr_router_hsrp_interface_address_family_ipv6_group_v2.test]
 		}

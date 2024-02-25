@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interfac
 doc_category: HSRP
 attributes:
   - yang_name: interface-name
-    example: GigabitEthernet0/0/0/2
+    example: GigabitEthernet0/0/0/3
   - yang_name: group-number-version-2-id
     tf_name: group_id
     id: true
@@ -56,6 +56,6 @@ attributes:
         example: 2001:db8:cafe:2100::bad1:1010
   - yang_name: address/link-local/autoconfig/legacy-compatible
     example: true
+    exclude_test: true
   - yang_name: address/link-local/ipv6-address
     example: fe80::240:d0ff:fe48:4672
-    exclude_test: true

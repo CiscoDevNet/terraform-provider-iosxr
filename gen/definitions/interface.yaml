@@ -191,6 +191,10 @@ attributes:
     optional: true
     exclude_test: true
     example: 8
+  - yang_name: Cisco-IOS-XR-um-cdp-cfg:cdp
+    tf_name: cdp
+    exclude_test: true
+    example: true
   - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown
     exclude_test: true
     example: true

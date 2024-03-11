@@ -41,6 +41,7 @@ data "iosxr_interface" "example" {
 - `bundle_minimum_active_links` (Number) Set the number of active links needed to bring up this bundle
 - `bundle_port_priority` (Number) Priority for this port. Lower value is higher priority.
 - `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
+- `cdp` (Boolean) Enable CDP on an interface
 - `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
 - `description` (String) Set description for this interface
 - `encapsulation_dot1q_vlan_id` (Number) Configure first (outer) VLAN ID on the subinterface

@@ -394,6 +394,10 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(1, 64),
 				},
 			},
+			"cdp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CDP on an interface").String,
+				Optional:            true,
+			},
 			"bundle_shutdown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Bring all links in the bundle down to Standby state").String,
 				Optional:            true,

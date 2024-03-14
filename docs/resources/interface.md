@@ -98,6 +98,7 @@ resource "iosxr_interface" "example" {
 - `bundle_port_priority` (Number) Priority for this port. Lower value is higher priority.
   - Range: `1`-`65535`
 - `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
+- `cdp` (Boolean) Enable CDP on an interface
 - `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
   - Range: `1`-`45`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.

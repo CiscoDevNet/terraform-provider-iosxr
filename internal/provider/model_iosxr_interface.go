@@ -84,6 +84,7 @@ type Interface struct {
 	Ipv6Addresses                                    []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
 	BundleMinimumActiveLinks                         types.Int64                               `tfsdk:"bundle_minimum_active_links"`
 	BundleMaximumActiveLinks                         types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	Cdp                                              types.Bool                                `tfsdk:"cdp"`
 	BundleShutdown                                   types.Bool                                `tfsdk:"bundle_shutdown"`
 	BundleLoadBalancingHashSrcIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
 	BundleLoadBalancingHashDstIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
@@ -153,6 +154,7 @@ type InterfaceData struct {
 	Ipv6Addresses                                    []InterfaceIpv6Addresses                  `tfsdk:"ipv6_addresses"`
 	BundleMinimumActiveLinks                         types.Int64                               `tfsdk:"bundle_minimum_active_links"`
 	BundleMaximumActiveLinks                         types.Int64                               `tfsdk:"bundle_maximum_active_links"`
+	Cdp                                              types.Bool                                `tfsdk:"cdp"`
 	BundleShutdown                                   types.Bool                                `tfsdk:"bundle_shutdown"`
 	BundleLoadBalancingHashSrcIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_src_ip"`
 	BundleLoadBalancingHashDstIp                     types.Bool                                `tfsdk:"bundle_load_balancing_hash_dst_ip"`
@@ -390,6 +392,11 @@ func (data Interface) toBody(ctx context.Context) string {
 	}
 	if !data.BundleMaximumActiveLinks.IsNull() && !data.BundleMaximumActiveLinks.IsUnknown() {
 		body, _ = sjson.Set(body, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.maximum-active.links.maximum-number", strconv.FormatInt(data.BundleMaximumActiveLinks.ValueInt64(), 10))
+	}
+	if !data.Cdp.IsNull() && !data.Cdp.IsUnknown() {
+		if data.Cdp.ValueBool() {
+			body, _ = sjson.Set(body, "Cisco-IOS-XR-um-cdp-cfg:cdp", map[string]string{})
+		}
 	}
 	if !data.BundleShutdown.IsNull() && !data.BundleShutdown.IsUnknown() {
 		if data.BundleShutdown.ValueBool() {
@@ -924,6 +931,15 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BundleMaximumActiveLinks = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-cdp-cfg:cdp"); !data.Cdp.IsNull() {
+		if value.Exists() {
+			data.Cdp = types.BoolValue(true)
+		} else {
+			data.Cdp = types.BoolValue(false)
+		}
+	} else {
+		data.Cdp = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.shutdown"); !data.BundleShutdown.IsNull() {
 		if value.Exists() {
 			data.BundleShutdown = types.BoolValue(true)
@@ -1438,6 +1454,11 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.maximum-active.links.maximum-number"); value.Exists() {
 		data.BundleMaximumActiveLinks = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-cdp-cfg:cdp"); value.Exists() {
+		data.Cdp = types.BoolValue(true)
+	} else {
+		data.Cdp = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-if-bundle-cfg:bundle.shutdown"); value.Exists() {
 		data.BundleShutdown = types.BoolValue(true)
 	} else {
@@ -1800,6 +1821,9 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 	if !state.BundleMaximumActiveLinks.IsNull() && data.BundleMaximumActiveLinks.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/maximum-active/links/maximum-number", state.getPath()))
 	}
+	if !state.Cdp.IsNull() && data.Cdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-cdp-cfg:cdp", state.getPath()))
+	}
 	if !state.BundleShutdown.IsNull() && data.BundleShutdown.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", state.getPath()))
 	}
@@ -2159,6 +2183,9 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
+	if !data.Cdp.IsNull() && !data.Cdp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-cdp-cfg:cdp", data.getPath()))
+	}
 	if !data.BundleShutdown.IsNull() && !data.BundleShutdown.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", data.getPath()))
 	}
@@ -2404,6 +2431,9 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.BundleMaximumActiveLinks.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/maximum-active/links/maximum-number", data.getPath()))
+	}
+	if !data.Cdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-cdp-cfg:cdp", data.getPath()))
 	}
 	if !data.BundleShutdown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-if-bundle-cfg:bundle/shutdown", data.getPath()))

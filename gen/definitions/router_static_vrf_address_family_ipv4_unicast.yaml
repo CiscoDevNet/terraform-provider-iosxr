@@ -5,12 +5,9 @@ doc_category: Routing
 attributes:
   - yang_name: vrf-name
     example: VRF2
-    id: true
   - yang_name: prefix-address
-    id: true
     example: 100.0.1.0
   - yang_name: prefix-length
-    id: true
     example: 24
   - yang_name: nexthop-interfaces/nexthop-interface
     tf_name: nexthop_interfaces

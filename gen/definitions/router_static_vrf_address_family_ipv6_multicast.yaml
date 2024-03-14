@@ -5,7 +5,6 @@ doc_category: Routing
 attributes:
   - yang_name: vrf-name
     example: VRF2
-    id: true
   - yang_name: prefix-address
     example: "1::"
   - yang_name: prefix-length

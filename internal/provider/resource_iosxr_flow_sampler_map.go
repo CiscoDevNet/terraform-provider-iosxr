@@ -278,5 +278,6 @@ func (r *FlowSamplerMapResource) ImportState(ctx context.Context, req resource.I
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[0])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), value0)...)
 }

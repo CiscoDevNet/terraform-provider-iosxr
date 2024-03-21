@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -457,7 +458,12 @@ func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resou
 
 	{{- range $index, $attr := .Attributes}}
 	{{- if or $attr.Reference $attr.Id}}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{$attr.TfName}}"), idParts[{{$index}}])...)
+		{{- if eq $attr.Type "Int64"}}
+	value{{$index}}, _ := strconv.Atoi(idParts[{{$index}}])
+		{{- else}}
+	value{{$index}} := idParts[{{$index}}]
+		{{- end}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{$attr.TfName}}"), value{{$index}})...)
 	{{- end}}
 	{{- end}}
 	{{- else}}

@@ -311,6 +311,8 @@ func (r *SNMPServerVRFHostResource) ImportState(ctx context.Context, req resourc
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), value1)...)
 }

@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
@@ -656,6 +657,8 @@ func (r *RouterStaticIPv6UnicastResource) ImportState(ctx context.Context, req r
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_address"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_length"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_address"), value0)...)
+	value1, _ := strconv.Atoi(idParts[1])
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_length"), value1)...)
 }

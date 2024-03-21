@@ -470,6 +470,8 @@ func (r *L2VPNXconnectGroupP2PResource) ImportState(ctx context.Context, req res
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("p2p_xconnect_name"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_name"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("p2p_xconnect_name"), value1)...)
 }

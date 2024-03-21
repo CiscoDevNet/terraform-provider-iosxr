@@ -348,6 +348,8 @@ func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resou
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value1)...)
 }

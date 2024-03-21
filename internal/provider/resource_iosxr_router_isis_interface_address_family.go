@@ -408,8 +408,12 @@ func (r *RouterISISInterfaceAddressFamilyResource) ImportState(ctx context.Conte
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), idParts[2])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("saf_name"), idParts[3])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value1)...)
+	value2 := idParts[2]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value2)...)
+	value3 := idParts[3]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("saf_name"), value3)...)
 }

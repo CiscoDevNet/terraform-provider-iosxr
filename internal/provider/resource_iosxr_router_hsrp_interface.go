@@ -318,5 +318,6 @@ func (r *RouterHSRPInterfaceResource) ImportState(ctx context.Context, req resou
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[0])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value0)...)
 }

@@ -347,5 +347,6 @@ func (r *LoggingVRFResource) ImportState(ctx context.Context, req resource.Impor
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), idParts[0])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), value0)...)
 }

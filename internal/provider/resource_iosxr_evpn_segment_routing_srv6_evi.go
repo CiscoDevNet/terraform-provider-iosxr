@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
@@ -418,5 +419,6 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) ImportState(ctx context.Context, req
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vpn_id"), idParts[0])...)
+	value0, _ := strconv.Atoi(idParts[0])
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vpn_id"), value0)...)
 }

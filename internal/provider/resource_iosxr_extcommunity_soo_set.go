@@ -266,5 +266,6 @@ func (r *ExtcommunitySOOSetResource) ImportState(ctx context.Context, req resour
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("set_name"), idParts[0])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("set_name"), value0)...)
 }

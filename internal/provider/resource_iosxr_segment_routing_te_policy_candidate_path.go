@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
@@ -328,6 +329,8 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) ImportState(ctx context.Co
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("policy_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path_index"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("policy_name"), value0)...)
+	value1, _ := strconv.Atoi(idParts[1])
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path_index"), value1)...)
 }

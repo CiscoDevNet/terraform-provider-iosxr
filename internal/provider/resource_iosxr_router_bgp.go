@@ -546,5 +546,6 @@ func (r *RouterBGPResource) ImportState(ctx context.Context, req resource.Import
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("as_number"), idParts[0])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("as_number"), value0)...)
 }

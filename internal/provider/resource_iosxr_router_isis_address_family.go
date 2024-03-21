@@ -555,7 +555,10 @@ func (r *RouterISISAddressFamilyResource) ImportState(ctx context.Context, req r
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("saf_name"), idParts[2])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value1)...)
+	value2 := idParts[2]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("saf_name"), value2)...)
 }

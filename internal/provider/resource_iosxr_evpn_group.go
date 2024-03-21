@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
@@ -291,5 +292,6 @@ func (r *EVPNGroupResource) ImportState(ctx context.Context, req resource.Import
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), idParts[0])...)
+	value0, _ := strconv.Atoi(idParts[0])
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), value0)...)
 }

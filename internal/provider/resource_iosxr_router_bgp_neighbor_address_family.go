@@ -325,7 +325,10 @@ func (r *RouterBGPNeighborAddressFamilyResource) ImportState(ctx context.Context
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("as_number"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("neighbor_address"), idParts[1])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), idParts[2])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("as_number"), value0)...)
+	value1 := idParts[1]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("neighbor_address"), value1)...)
+	value2 := idParts[2]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value2)...)
 }

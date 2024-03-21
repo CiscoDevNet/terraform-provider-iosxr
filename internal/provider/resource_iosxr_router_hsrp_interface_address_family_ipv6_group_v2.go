@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
@@ -434,6 +435,8 @@ func (r *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Resource) ImportState(ctx co
 		)
 		return
 	}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), idParts[1])...)
+	value0 := idParts[0]
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value0)...)
+	value1, _ := strconv.Atoi(idParts[1])
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), value1)...)
 }

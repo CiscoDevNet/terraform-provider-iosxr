@@ -10,6 +10,7 @@ description: |-
 ## 0.4.0 (unreleased)
 
 - BREAKING CHANGE: Refactor resource import functionality to use a comma separated list of key attribute values instead of a gNMI path
+- Add support for empty YANG containers to the `iosxr_gnmi` resource using the `<EMPTY>` keyword
 
 ## 0.3.2
 

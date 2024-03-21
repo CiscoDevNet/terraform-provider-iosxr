@@ -65,7 +65,7 @@ resource "iosxr_gnmi" "domain_host" {
 
 ### Optional
 
-- `attributes` (Map of String) Map of key-value pairs which represents the attributes and its values.
+- `attributes` (Map of String) Map of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value.
 - `delete` (Boolean) Delete object during destroy operation. Default value is `true`.
 - `device` (String) A device name from the provider configuration.
 - `lists` (Attributes List) YANG lists. (see [below for nested schema](#nestedatt--lists))
@@ -83,7 +83,7 @@ Required:
 
 Optional:
 
-- `items` (List of Map of String) List of maps of key-value pairs which represents the attributes and its values.
+- `items` (List of Map of String) List of maps of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value.
 - `key` (String) YANG list key attribute(s). In case of multiple keys, those should be separated by a comma (`,`).
 - `values` (List of String) YANG leaf-list values.
 

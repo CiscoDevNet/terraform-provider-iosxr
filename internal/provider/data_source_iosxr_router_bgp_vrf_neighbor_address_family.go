@@ -94,6 +94,10 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				MarkdownDescription: "Prevent default-originate being inherited from a parent group",
 				Computed:            true,
 			},
+			"next_hop_self": schema.BoolAttribute{
+				MarkdownDescription: "Disable the next hop calculation for this neighbor",
+				Computed:            true,
+			},
 			"next_hop_self_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: "Prevent next-hop-self from being inherited from the parent",
 				Computed:            true,

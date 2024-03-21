@@ -21,6 +21,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   route_policy_in                         = "ROUTE_POLICY_1"
   route_policy_out                        = "ROUTE_POLICY_1"
   default_originate_route_policy          = "ROUTE_POLICY_1"
+  next_hop_self                           = true
   next_hop_self_inheritance_disable       = true
   soft_reconfiguration_inbound_always     = true
   send_community_ebgp_inheritance_disable = true
@@ -46,6 +47,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes

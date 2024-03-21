@@ -48,6 +48,8 @@ attributes:
         example: ipv4-labeled-unicast
       - yang_name: soft-reconfiguration/inbound/always
         example: true
+      - yang_name: next-hop-self
+        example: true
       - yang_name: next-hop-self/inheritance-disable
         example: true
       - yang_name: route-reflector-client

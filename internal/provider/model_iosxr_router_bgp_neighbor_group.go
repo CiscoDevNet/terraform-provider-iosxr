@@ -77,6 +77,7 @@ type RouterBGPNeighborGroupData struct {
 type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
 	SoftReconfigurationInboundAlways       types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	NextHopSelf                            types.Bool   `tfsdk:"next_hop_self"`
 	NextHopSelfInheritanceDisable          types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	RouteReflectorClient                   types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
@@ -156,6 +157,11 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			if !item.SoftReconfigurationInboundAlways.IsNull() && !item.SoftReconfigurationInboundAlways.IsUnknown() {
 				if item.SoftReconfigurationInboundAlways.ValueBool() {
 					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"soft-reconfiguration.inbound.always", map[string]string{})
+				}
+			}
+			if !item.NextHopSelf.IsNull() && !item.NextHopSelf.IsUnknown() {
+				if item.NextHopSelf.ValueBool() {
+					body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"next-hop-self", map[string]string{})
 				}
 			}
 			if !item.NextHopSelfInheritanceDisable.IsNull() && !item.NextHopSelfInheritanceDisable.IsUnknown() {
@@ -293,6 +299,15 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].SoftReconfigurationInboundAlways = types.BoolNull()
 		}
+		if value := r.Get("next-hop-self"); !data.AddressFamilies[i].NextHopSelf.IsNull() {
+			if value.Exists() {
+				data.AddressFamilies[i].NextHopSelf = types.BoolValue(true)
+			} else {
+				data.AddressFamilies[i].NextHopSelf = types.BoolValue(false)
+			}
+		} else {
+			data.AddressFamilies[i].NextHopSelf = types.BoolNull()
+		}
 		if value := r.Get("next-hop-self.inheritance-disable"); !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() {
 			if value.Exists() {
 				data.AddressFamilies[i].NextHopSelfInheritanceDisable = types.BoolValue(true)
@@ -402,6 +417,11 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
 			}
+			if cValue := v.Get("next-hop-self"); cValue.Exists() {
+				item.NextHopSelf = types.BoolValue(true)
+			} else {
+				item.NextHopSelf = types.BoolValue(false)
+			}
 			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
 				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
 			} else {
@@ -491,6 +511,11 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
 			} else {
 				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
+			}
+			if cValue := v.Get("next-hop-self"); cValue.Exists() {
+				item.NextHopSelf = types.BoolValue(true)
+			} else {
+				item.NextHopSelf = types.BoolValue(false)
 			}
 			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
 				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
@@ -589,6 +614,9 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				if !state.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && data.AddressFamilies[j].SoftReconfigurationInboundAlways.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", state.getPath(), keyString))
 				}
+				if !state.AddressFamilies[i].NextHopSelf.IsNull() && data.AddressFamilies[j].NextHopSelf.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", state.getPath(), keyString))
+				}
 				if !state.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && data.AddressFamilies[j].NextHopSelfInheritanceDisable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", state.getPath(), keyString))
 				}
@@ -646,6 +674,9 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		}
 		if !data.AddressFamilies[i].SoftReconfigurationInboundAlways.IsNull() && !data.AddressFamilies[i].SoftReconfigurationInboundAlways.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/soft-reconfiguration/inbound/always", data.getPath(), keyString))
+		}
+		if !data.AddressFamilies[i].NextHopSelf.IsNull() && !data.AddressFamilies[i].NextHopSelf.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self", data.getPath(), keyString))
 		}
 		if !data.AddressFamilies[i].NextHopSelfInheritanceDisable.IsNull() && !data.AddressFamilies[i].NextHopSelfInheritanceDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/next-hop-self/inheritance-disable", data.getPath(), keyString))

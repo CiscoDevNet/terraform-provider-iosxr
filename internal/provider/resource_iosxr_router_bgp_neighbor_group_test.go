@@ -39,6 +39,7 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_inheritance_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
@@ -112,6 +113,7 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"
+	config += `		next_hop_self = true` + "\n"
 	config += `		next_hop_self_inheritance_disable = true` + "\n"
 	config += `		route_reflector_client = true` + "\n"
 	config += `		route_reflector_client_inheritance_disable = true` + "\n"

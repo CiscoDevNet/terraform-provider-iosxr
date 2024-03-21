@@ -171,6 +171,10 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 							MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
 							Optional:            true,
 						},
+						"next_hop_self": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable the next hop calculation for this neighbor").String,
+							Optional:            true,
+						},
 						"next_hop_self_inheritance_disable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
 							Optional:            true,

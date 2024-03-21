@@ -28,6 +28,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
     {
       af_name                                    = "ipv4-labeled-unicast"
       soft_reconfiguration_inbound_always        = true
+      next_hop_self                              = true
       next_hop_self_inheritance_disable          = true
       route_reflector_client                     = true
       route_reflector_client_inheritance_disable = true
@@ -89,6 +90,7 @@ Required:
 
 Optional:
 
+- `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes

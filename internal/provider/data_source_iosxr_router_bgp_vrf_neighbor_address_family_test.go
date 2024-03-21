@@ -30,6 +30,7 @@ func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
@@ -123,6 +124,7 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
 	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
 	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	soft_reconfiguration_inbound_always = true` + "\n"
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"

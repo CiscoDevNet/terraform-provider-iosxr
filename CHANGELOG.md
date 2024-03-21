@@ -7,6 +7,8 @@
 - Add `iosxr_router_static_vrf_ipv4_multicast` resource and data source
 - Add `iosxr_router_static_vrf_ipv6_unicast` resource and data source
 - Add `iosxr_router_static_vrf_ipv6_multicast` resource and data source
+- Add `next_hop_self` to `iosxr_router_bgp_neighbor_group` resource and data source
+- Add `next_hop_self` to `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
 
 ## 0.4.0
 

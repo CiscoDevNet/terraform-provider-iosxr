@@ -6,6 +6,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   route_policy_in                         = "ROUTE_POLICY_1"
   route_policy_out                        = "ROUTE_POLICY_1"
   default_originate_route_policy          = "ROUTE_POLICY_1"
+  next_hop_self                           = true
   next_hop_self_inheritance_disable       = true
   soft_reconfiguration_inbound_always     = true
   send_community_ebgp_inheritance_disable = true

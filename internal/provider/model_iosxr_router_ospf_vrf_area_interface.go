@@ -183,6 +183,45 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 	}
 }
 
+func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
+		data.NetworkBroadcast = types.BoolValue(true)
+	} else {
+		data.NetworkBroadcast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.non-broadcast"); value.Exists() {
+		data.NetworkNonBroadcast = types.BoolValue(true)
+	} else {
+		data.NetworkNonBroadcast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.point-to-point"); value.Exists() {
+		data.NetworkPointToPoint = types.BoolValue(true)
+	} else {
+		data.NetworkPointToPoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.point-to-multipoint"); value.Exists() {
+		data.NetworkPointToMultipoint = types.BoolValue(true)
+	} else {
+		data.NetworkPointToMultipoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cost"); value.Exists() {
+		data.Cost = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	} else {
+		data.PassiveEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	} else {
+		data.PassiveDisable = types.BoolValue(false)
+	}
+}
+
 func (data *RouterOSPFVRFAreaInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast = types.BoolValue(true)

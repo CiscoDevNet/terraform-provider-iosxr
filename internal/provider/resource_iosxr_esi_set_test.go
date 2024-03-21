@@ -43,7 +43,8 @@ func TestAccIosxrESISet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_esi_set.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/esi-sets/esi-set[set-name=POLICYSET]",
+		ImportStateId: "POLICYSET",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -50,5 +50,5 @@ resource "iosxr_segment_routing" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_segment_routing.example "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+terraform import iosxr_segment_routing.example ""
 ```

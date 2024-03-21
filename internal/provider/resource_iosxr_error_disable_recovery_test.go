@@ -61,7 +61,8 @@ func TestAccIosxrErrorDisableRecovery(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_error_disable_recovery.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

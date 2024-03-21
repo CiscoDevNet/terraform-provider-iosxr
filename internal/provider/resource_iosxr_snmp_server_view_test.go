@@ -44,7 +44,8 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_snmp_server_view.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=VIEW12]",
+		ImportStateId: "VIEW12",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

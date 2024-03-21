@@ -54,7 +54,8 @@ func TestAccIosxrDomainVRF(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_domain_vrf.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=TEST-VRF]",
+		ImportStateId: "TEST-VRF",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -84,7 +84,8 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_bgp_address_family.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv4-unicast]",
+		ImportStateId: "65001,ipv4-unicast",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

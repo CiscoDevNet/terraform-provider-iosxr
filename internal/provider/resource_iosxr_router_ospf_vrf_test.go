@@ -81,7 +81,8 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_ospf_vrf.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]",
+		ImportStateId: "OSPF1,VRF1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

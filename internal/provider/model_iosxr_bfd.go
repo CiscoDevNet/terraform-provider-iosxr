@@ -495,6 +495,142 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *BFD) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "echo.disable"); value.Exists() {
+		data.EchoDisable = types.BoolValue(true)
+	} else {
+		data.EchoDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() {
+		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "echo.latency.detect.count"); value.Exists() {
+		data.EchoLatencyDetectCount = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "echo.startup.validate.force"); value.Exists() {
+		data.EchoStartupValidateForce = types.BoolValue(true)
+	} else {
+		data.EchoStartupValidateForce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "echo.ipv4.source"); value.Exists() {
+		data.EchoIpv4Source = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() {
+		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
+		data.TrapSinglehopPreMapped = types.BoolValue(true)
+	} else {
+		data.TrapSinglehopPreMapped = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "multipath.include.locations.location"); value.Exists() {
+		data.MultipathLocations = make([]BFDMultipathLocations, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BFDMultipathLocations{}
+			if cValue := v.Get("location-name"); cValue.Exists() {
+				item.LocationName = types.StringValue(cValue.String())
+			}
+			data.MultipathLocations = append(data.MultipathLocations, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() {
+		data.MultihopTtlDropThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.initial-wait"); value.Exists() {
+		data.DampeningInitialWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.secondary-wait"); value.Exists() {
+		data.DampeningSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.maximum-wait"); value.Exists() {
+		data.DampeningMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.threshold"); value.Exists() {
+		data.DampeningThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.extensions.down-monitoring"); value.Exists() {
+		data.DampeningExtensionsDownMonitoring = types.BoolValue(true)
+	} else {
+		data.DampeningExtensionsDownMonitoring = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "dampening.disable"); value.Exists() {
+		data.DampeningDisable = types.BoolValue(true)
+	} else {
+		data.DampeningDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "dampening.bundle-member.l3-only-mode"); value.Exists() {
+		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(true)
+	} else {
+		data.DampeningBundleMemberL3OnlyMode = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "dampening.bundle-member.initial-wait"); value.Exists() {
+		data.DampeningBundleMemberInitialWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.bundle-member.secondary-wait"); value.Exists() {
+		data.DampeningBundleMemberSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dampening.bundle-member.maximum-wait"); value.Exists() {
+		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.inherit"); value.Exists() {
+		data.BundleCoexistenceBobBlbInherit = types.BoolValue(true)
+	} else {
+		data.BundleCoexistenceBobBlbInherit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.logical"); value.Exists() {
+		data.BundleCoexistenceBobBlbLogical = types.BoolValue(true)
+	} else {
+		data.BundleCoexistenceBobBlbLogical = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]BFDInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := BFDInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("echo.disable"); cValue.Exists() {
+				item.EchoDisable = types.BoolValue(true)
+			} else {
+				item.EchoDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("echo.ipv4.source"); cValue.Exists() {
+				item.EchoIpv4Source = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
+				item.Ipv6ChecksumDisable = types.BoolValue(true)
+			} else {
+				item.Ipv6ChecksumDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("disable"); cValue.Exists() {
+				item.Disable = types.BoolValue(true)
+			} else {
+				item.Disable = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-address"); cValue.Exists() {
+				item.LocalAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tx-interval"); cValue.Exists() {
+				item.TxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("rx-interval"); cValue.Exists() {
+				item.RxInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("multiplier"); cValue.Exists() {
+				item.Multiplier = types.Int64Value(cValue.Int())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "ipv6.checksum.disable"); value.Exists() {
+		data.Ipv6ChecksumDisable = types.BoolValue(true)
+	} else {
+		data.Ipv6ChecksumDisable = types.BoolValue(false)
+	}
+}
+
 func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "echo.disable"); value.Exists() {
 		data.EchoDisable = types.BoolValue(true)

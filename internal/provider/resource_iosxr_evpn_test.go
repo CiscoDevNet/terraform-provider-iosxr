@@ -42,7 +42,8 @@ func TestAccIosxrEVPN(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_evpn.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -48,7 +48,8 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_segment_routing_v6.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-cfg:srv6",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

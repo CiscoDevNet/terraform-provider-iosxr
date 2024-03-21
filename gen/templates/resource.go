@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -317,6 +318,12 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
+	import_ := false
+	if state.Id.ValueString() == "" {
+		import_ = true
+		state.Id = types.StringValue(state.getPath())
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
@@ -325,7 +332,12 @@ func (r *{{camelCase .Name}}Resource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	state.updateFromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+	if import_ {
+		state.fromBody(ctx, respBody)
+	} else {
+		state.updateFromBody(ctx, respBody)
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
@@ -433,5 +445,28 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 }
 
 func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	{{- if gt (importParts .Attributes) 0}}
+	idParts := strings.Split(req.ID, ",")
+
+	if len(idParts) != {{importParts .Attributes}} {
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("Expected import identifier with format: {{range $index, $attr := .Attributes}}{{if or $attr.Reference $attr.Id}}{{if $index}},{{end}}<{{$attr.TfName}}>{{end}}{{end}}. Got: %q", req.ID),
+		)
+		return
+	}
+
+	{{- range $index, $attr := .Attributes}}
+	{{- if or $attr.Reference $attr.Id}}
+		{{- if eq $attr.Type "Int64"}}
+	value{{$index}}, _ := strconv.Atoi(idParts[{{$index}}])
+		{{- else}}
+	value{{$index}} := idParts[{{$index}}]
+		{{- end}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{$attr.TfName}}"), value{{$index}})...)
+	{{- end}}
+	{{- end}}
+	{{- else}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "")...)
+	{{- end}}
 }

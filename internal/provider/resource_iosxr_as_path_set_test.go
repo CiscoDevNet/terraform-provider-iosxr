@@ -43,7 +43,8 @@ func TestAccIosxrASPathSet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_as_path_set.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/as-path-sets/as-path-set[set-name=TEST1]",
+		ImportStateId: "TEST1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

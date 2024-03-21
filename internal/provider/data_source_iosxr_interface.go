@@ -294,6 +294,10 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Set the maximum number of active links in this bundle",
 				Computed:            true,
 			},
+			"cdp": schema.BoolAttribute{
+				MarkdownDescription: "Enable CDP on an interface",
+				Computed:            true,
+			},
 			"bundle_shutdown": schema.BoolAttribute{
 				MarkdownDescription: "Bring all links in the bundle down to Standby state",
 				Computed:            true,

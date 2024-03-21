@@ -178,6 +178,46 @@ func (data *Logging) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *Logging) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "trap"); value.Exists() {
+		data.Trap = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.display-location"); value.Exists() {
+		data.EventsDisplayLocation = types.BoolValue(true)
+	} else {
+		data.EventsDisplayLocation = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-logging-events-cfg:events.level"); value.Exists() {
+		data.EventsLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "console"); value.Exists() {
+		data.Console = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "monitor"); value.Exists() {
+		data.Monitor = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "buffered.logging-buffer-size"); value.Exists() {
+		data.BufferedLoggingBufferSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "buffered.level"); value.Exists() {
+		data.BufferedLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "facility.level"); value.Exists() {
+		data.FacilityLevel = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hostnameprefix"); value.Exists() {
+		data.Hostnameprefix = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "suppress.duplicates"); value.Exists() {
+		data.SuppressDuplicates = types.BoolValue(true)
+	} else {
+		data.SuppressDuplicates = types.BoolValue(false)
+	}
+}
+
 func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())

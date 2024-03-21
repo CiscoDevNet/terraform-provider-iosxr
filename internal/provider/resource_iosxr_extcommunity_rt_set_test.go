@@ -43,7 +43,8 @@ func TestAccIosxrExtcommunityRTSet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_extcommunity_rt_set.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-rt-sets/extended-community-rt-set[set-name=ROUTE1]",
+		ImportStateId: "ROUTE1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

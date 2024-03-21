@@ -47,7 +47,8 @@ func TestAccIosxrFlowSamplerMap(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_flow_sampler_map.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/sampler-maps/sampler-map[sampler-map-name=sampler_map1]",
+		ImportStateId: "sampler_map1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

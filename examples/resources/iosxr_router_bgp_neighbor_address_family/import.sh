@@ -1,1 +1,1 @@
-terraform import iosxr_router_bgp_neighbor_address_family.example "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbors/neighbor[neighbor-address=10.1.1.2]/address-families/address-family[af-name=vpnv4-unicast]"
+terraform import iosxr_router_bgp_neighbor_address_family.example "<as_number>,<neighbor_address>,<af_name>"

@@ -167,6 +167,42 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.source-address"); value.Exists() {
+		data.EncapsulationSourceAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "locators.locators.locator"); value.Exists() {
+		data.Locators = make([]SegmentRoutingV6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingV6Locators{}
+			if cValue := v.Get("locator-enable"); cValue.Exists() {
+				item.LocatorEnable = types.BoolValue(true)
+			} else {
+				item.LocatorEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("micro-segment.behavior"); cValue.Exists() {
+				item.MicroSegmentBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix.prefix-length"); cValue.Exists() {
+				item.PrefixLength = types.Int64Value(cValue.Int())
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
+	}
+}
+
 func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)

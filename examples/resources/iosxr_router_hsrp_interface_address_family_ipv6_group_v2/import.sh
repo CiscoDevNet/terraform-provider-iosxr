@@ -1,1 +1,1 @@
-terraform import iosxr_router_hsrp_interface_address_family_ipv6_group_v2.example "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=4055]"
+terraform import iosxr_router_hsrp_interface_address_family_ipv6_group_v2.example "<interface_name>,<group_id>"

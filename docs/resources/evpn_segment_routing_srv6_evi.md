@@ -126,5 +126,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_evpn_segment_routing_srv6_evi.example "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=1235]"
+terraform import iosxr_evpn_segment_routing_srv6_evi.example "<vpn_id>"
 ```

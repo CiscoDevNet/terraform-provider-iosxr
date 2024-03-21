@@ -200,6 +200,49 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
+		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LoggingVRFHostIpv4Addresses{}
+			if cValue := v.Get("ipv4-address"); cValue.Exists() {
+				item.Ipv4Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv4Addresses = append(data.HostIpv4Addresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "host-ipv6-addresses.host-ipv6-address"); value.Exists() {
+		data.HostIpv6Addresses = make([]LoggingVRFHostIpv6Addresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LoggingVRFHostIpv6Addresses{}
+			if cValue := v.Get("ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("severity"); cValue.Exists() {
+				item.Severity = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("port"); cValue.Exists() {
+				item.Port = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("operator"); cValue.Exists() {
+				item.Operator = types.StringValue(cValue.String())
+			}
+			data.HostIpv6Addresses = append(data.HostIpv6Addresses, item)
+			return true
+		})
+	}
+}
+
 func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)

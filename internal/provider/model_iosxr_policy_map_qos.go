@@ -352,6 +352,100 @@ func (data *PolicyMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *PolicyMapQoS) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "class"); value.Exists() {
+		data.Classes = make([]PolicyMapQoSClasses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PolicyMapQoSClasses{}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("set.mpls.experimental.topmost"); cValue.Exists() {
+				item.SetMplsExperimentalTopmost = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("set.dscp"); cValue.Exists() {
+				item.SetDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority.level"); cValue.Exists() {
+				item.PriorityLevel = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("queue-limits.queue-limit"); cValue.Exists() {
+				item.QueueLimits = make([]PolicyMapQoSClassesQueueLimits, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := PolicyMapQoSClassesQueueLimits{}
+					if ccValue := cv.Get("value"); ccValue.Exists() {
+						cItem.Value = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("unit"); ccValue.Exists() {
+						cItem.Unit = types.StringValue(ccValue.String())
+					}
+					item.QueueLimits = append(item.QueueLimits, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("service-policy.name"); cValue.Exists() {
+				item.ServicePolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.value"); cValue.Exists() {
+				item.PoliceRateValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.rate.unit"); cValue.Exists() {
+				item.PoliceRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("police.conform-action.transmit"); cValue.Exists() {
+				item.PoliceConformActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceConformActionTransmit = types.BoolValue(false)
+			}
+			if cValue := v.Get("police.conform-action.drop"); cValue.Exists() {
+				item.PoliceConformActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceConformActionDrop = types.BoolValue(false)
+			}
+			if cValue := v.Get("police.exceed-action.transmit"); cValue.Exists() {
+				item.PoliceExceedActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceExceedActionTransmit = types.BoolValue(false)
+			}
+			if cValue := v.Get("police.exceed-action.drop"); cValue.Exists() {
+				item.PoliceExceedActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceExceedActionDrop = types.BoolValue(false)
+			}
+			if cValue := v.Get("police.violate-action.transmit"); cValue.Exists() {
+				item.PoliceViolateActionTransmit = types.BoolValue(true)
+			} else {
+				item.PoliceViolateActionTransmit = types.BoolValue(false)
+			}
+			if cValue := v.Get("police.violate-action.drop"); cValue.Exists() {
+				item.PoliceViolateActionDrop = types.BoolValue(true)
+			} else {
+				item.PoliceViolateActionDrop = types.BoolValue(false)
+			}
+			if cValue := v.Get("shape.average.rate.value"); cValue.Exists() {
+				item.ShapeAverageRateValue = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shape.average.rate.unit"); cValue.Exists() {
+				item.ShapeAverageRateUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-remaining.unit"); cValue.Exists() {
+				item.BandwidthRemainingUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bandwidth-remaining.value"); cValue.Exists() {
+				item.BandwidthRemainingValue = types.StringValue(cValue.String())
+			}
+			data.Classes = append(data.Classes, item)
+			return true
+		})
+	}
+}
+
 func (data *PolicyMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

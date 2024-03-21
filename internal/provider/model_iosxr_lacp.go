@@ -76,6 +76,15 @@ func (data *LACP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *LACP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mac"); value.Exists() {
+		data.Mac = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+}
+
 func (data *LACPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac"); value.Exists() {
 		data.Mac = types.StringValue(value.String())

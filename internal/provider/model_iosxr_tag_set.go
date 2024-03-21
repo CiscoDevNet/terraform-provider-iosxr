@@ -69,6 +69,12 @@ func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *TagSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
+		data.RplTagSet = types.StringValue(value.String())
+	}
+}
+
 func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
 		data.RplTagSet = types.StringValue(value.String())

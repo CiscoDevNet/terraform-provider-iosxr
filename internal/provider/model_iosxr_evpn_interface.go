@@ -195,6 +195,50 @@ func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
+		data.CoreIsolationGroup = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-1"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroBytes1 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-23"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroBytes23 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-45"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroBytes45 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-67"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroBytes67 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-89"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroBytes89 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
+		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.all-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeAllActive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.port-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModePortActive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleActive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ethernet-segment.load-balancing-mode.single-flow-active"); value.Exists() {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(true)
+	} else {
+		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
+	}
+}
+
 func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())

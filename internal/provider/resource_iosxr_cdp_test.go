@@ -46,7 +46,8 @@ func TestAccIosxrCDP(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_cdp.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-cdp-cfg:/cdp",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

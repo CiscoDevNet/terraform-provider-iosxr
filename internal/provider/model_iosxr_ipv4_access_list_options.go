@@ -92,6 +92,20 @@ func (data *IPv4AccessListOptions) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
+func (data *IPv4AccessListOptions) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
+		data.LogUpdateThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log-update.rate"); value.Exists() {
+		data.LogUpdateRate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "icmp-off"); value.Exists() {
+		data.IcmpOff = types.BoolValue(true)
+	} else {
+		data.IcmpOff = types.BoolValue(false)
+	}
+}
+
 func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "log-update.threshold"); value.Exists() {
 		data.LogUpdateThreshold = types.Int64Value(value.Int())

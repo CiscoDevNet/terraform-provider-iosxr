@@ -72,7 +72,8 @@ func TestAccIosxrBFD(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_bfd.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

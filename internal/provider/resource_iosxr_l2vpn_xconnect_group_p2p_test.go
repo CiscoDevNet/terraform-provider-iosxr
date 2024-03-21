@@ -47,7 +47,8 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_l2vpn_xconnect_group_p2p.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]/p2ps/p2p[p2p-xconnect-name=XC]",
+		ImportStateId: "P2P,XC",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -134,6 +134,37 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
+		data.MatchAny = types.BoolValue(true)
+	} else {
+		data.MatchAny = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "match.dscp.value"); value.Exists() {
+		data.MatchDscp = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchDscp = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.mpls.experimental.topmost.label"); value.Exists() {
+		data.MatchMplsExperimentalTopmost = helpers.GetInt64List(value.Array())
+	} else {
+		data.MatchMplsExperimentalTopmost = types.ListNull(types.Int64Type)
+	}
+	if value := gjson.GetBytes(res, "match.qos-group.id"); value.Exists() {
+		data.MatchQosGroup = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchQosGroup = types.ListNull(types.StringType)
+	}
+	if value := gjson.GetBytes(res, "match.traffic-class.id"); value.Exists() {
+		data.MatchTrafficClass = helpers.GetStringList(value.Array())
+	} else {
+		data.MatchTrafficClass = types.ListNull(types.StringType)
+	}
+}
+
 func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)

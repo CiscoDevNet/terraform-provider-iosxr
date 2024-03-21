@@ -49,7 +49,8 @@ func TestAccIosxrTelnet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_telnet.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-telnet-cfg:/telnet",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

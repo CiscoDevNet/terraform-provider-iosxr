@@ -206,6 +206,52 @@ func (data *Telnet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *Telnet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
+		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.client.source-interface"); value.Exists() {
+		data.Ipv6ClientSourceInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]TelnetVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TelnetVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.server.max-servers"); cValue.Exists() {
+				item.Ipv4ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv4.server.access-list"); cValue.Exists() {
+				item.Ipv4ServerAccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.server.max-servers"); cValue.Exists() {
+				item.Ipv6ServerMaxServers = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ipv6.server.access-list"); cValue.Exists() {
+				item.Ipv6ServerAccessList = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf-dscp"); value.Exists() {
+		data.VrfsDscp = make([]TelnetVrfsDscp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := TelnetVrfsDscp{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.dscp"); cValue.Exists() {
+				item.Ipv4Dscp = types.Int64Value(cValue.Int())
+			}
+			data.VrfsDscp = append(data.VrfsDscp, item)
+			return true
+		})
+	}
+}
+
 func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
 		data.Ipv4ClientSourceInterface = types.StringValue(value.String())

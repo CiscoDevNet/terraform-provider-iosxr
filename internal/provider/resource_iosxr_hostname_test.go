@@ -42,7 +42,8 @@ func TestAccIosxrHostname(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_hostname.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-hostname-cfg:/hostname",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

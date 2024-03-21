@@ -51,7 +51,8 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_l2vpn_pw_class.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=PWC1]",
+		ImportStateId: "PWC1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

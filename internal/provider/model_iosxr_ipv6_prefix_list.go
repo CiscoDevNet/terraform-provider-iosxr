@@ -166,6 +166,41 @@ func (data *IPv6PrefixList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *IPv6PrefixList) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
+		data.Sequences = make([]IPv6PrefixListSequences, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPv6PrefixListSequences{}
+			if cValue := v.Get("sequence-number"); cValue.Exists() {
+				item.SequenceNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("remark"); cValue.Exists() {
+				item.Remark = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permission"); cValue.Exists() {
+				item.Permission = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("prefix"); cValue.Exists() {
+				item.Prefix = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("mask"); cValue.Exists() {
+				item.Mask = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("match-prefix-length.eq"); cValue.Exists() {
+				item.MatchPrefixLengthEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("match-prefix-length.ge"); cValue.Exists() {
+				item.MatchPrefixLengthGe = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("match-prefix-length.le"); cValue.Exists() {
+				item.MatchPrefixLengthLe = types.Int64Value(cValue.Int())
+			}
+			data.Sequences = append(data.Sequences, item)
+			return true
+		})
+	}
+}
+
 func (data *IPv6PrefixListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6PrefixListSequences, 0)

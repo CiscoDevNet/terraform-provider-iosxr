@@ -69,6 +69,12 @@ func (data *PrefixSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *PrefixSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-prefix-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *PrefixSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-prefix-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

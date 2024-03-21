@@ -425,6 +425,111 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
+func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNXconnectGroupP2PInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.ipv4s.ipv4"); value.Exists() {
+		data.Ipv4Neighbors = make([]L2VPNXconnectGroupP2PIpv4Neighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv4Neighbors{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv4Neighbors = append(data.Ipv4Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.ipv6s.ipv6"); value.Exists() {
+		data.Ipv6Neighbors = make([]L2VPNXconnectGroupP2PIpv6Neighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PIpv6Neighbors{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("pw-id"); cValue.Exists() {
+				item.PwId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.Ipv6Neighbors = append(data.Ipv6Neighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.evpn.evi.targets.target"); value.Exists() {
+		data.EvpnTargetNeighbors = make([]L2VPNXconnectGroupP2PEvpnTargetNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnTargetNeighbors{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("remote-ac-id"); cValue.Exists() {
+				item.RemoteAcId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnTargetNeighbors = append(data.EvpnTargetNeighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.evpn.evi.services.service"); value.Exists() {
+		data.EvpnServiceNeighbors = make([]L2VPNXconnectGroupP2PEvpnServiceNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PEvpnServiceNeighbors{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("pw-class"); cValue.Exists() {
+				item.PwClass = types.StringValue(cValue.String())
+			}
+			data.EvpnServiceNeighbors = append(data.EvpnServiceNeighbors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "neighbor.evpn.evi.segment-routing-services.service"); value.Exists() {
+		data.NeighborEvpnEviSegmentRoutingServices = make([]L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("service-id"); cValue.Exists() {
+				item.ServiceId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("segment-routing.srv6.locator"); cValue.Exists() {
+				item.SegmentRoutingSrv6Locator = types.StringValue(cValue.String())
+			}
+			data.NeighborEvpnEviSegmentRoutingServices = append(data.NeighborEvpnEviSegmentRoutingServices, item)
+			return true
+		})
+	}
+}
+
 func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

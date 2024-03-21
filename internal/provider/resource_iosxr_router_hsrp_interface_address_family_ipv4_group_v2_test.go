@@ -52,7 +52,8 @@ func TestAccIosxrRouterHSRPInterfaceAddressFamilyIPv4GroupV2(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_hsrp_interface_address_family_ipv4_group_v2.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=2345]",
+		ImportStateId: "GigabitEthernet0/0/0/1,2345",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

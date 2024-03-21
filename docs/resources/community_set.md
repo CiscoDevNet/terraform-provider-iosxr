@@ -40,5 +40,5 @@ resource "iosxr_community_set" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_community_set.example "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/community-sets/community-set[set-name=TEST11]"
+terraform import iosxr_community_set.example "<set_name>"
 ```

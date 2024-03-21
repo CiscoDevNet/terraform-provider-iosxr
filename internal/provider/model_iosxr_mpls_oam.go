@@ -124,6 +124,30 @@ func (data *MPLSOAM) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *MPLSOAM) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "oam"); value.Exists() {
+		data.Oam = types.BoolValue(true)
+	} else {
+		data.Oam = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.disable-vendor-extension"); value.Exists() {
+		data.OamEchoDisableVendorExtension = types.BoolValue(true)
+	} else {
+		data.OamEchoDisableVendorExtension = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.echo.reply-mode.control-channel.allow-reverse-lsp"); value.Exists() {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(true)
+	} else {
+		data.OamEchoReplyModeControlChannelAllowReverseLsp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "oam.dpm.pps"); value.Exists() {
+		data.OamDpmPps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "oam.dpm.interval"); value.Exists() {
+		data.OamDpmInterval = types.Int64Value(value.Int())
+	}
+}
+
 func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "oam"); value.Exists() {
 		data.Oam = types.BoolValue(true)

@@ -196,6 +196,52 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *IPv6) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() {
+		data.HopLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "icmp.error-interval.interval-time"); value.Exists() {
+		data.IcmpErrorInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "icmp.error-interval.bucket-size"); value.Exists() {
+		data.IcmpErrorIntervalBucketSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "source-route"); value.Exists() {
+		data.SourceRoute = types.BoolValue(true)
+	} else {
+		data.SourceRoute = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "assembler.timeout"); value.Exists() {
+		data.AssemblerTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "assembler.max-packets"); value.Exists() {
+		data.AssemblerMaxPackets = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "assembler.reassembler-drop.enable"); value.Exists() {
+		data.AssemblerReassemblerDropEnable = types.BoolValue(true)
+	} else {
+		data.AssemblerReassemblerDropEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "assembler.frag-hdr-incomplete.enable"); value.Exists() {
+		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(true)
+	} else {
+		data.AssemblerFragHdrIncompleteEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "assembler.overlap-frag-drop.enable"); value.Exists() {
+		data.AssemblerOverlapFragDropEnable = types.BoolValue(true)
+	} else {
+		data.AssemblerOverlapFragDropEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "path-mtu.enable"); value.Exists() {
+		data.PathMtuEnable = types.BoolValue(true)
+	} else {
+		data.PathMtuEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "path-mtu.timeout"); value.Exists() {
+		data.PathMtuTimeout = types.Int64Value(value.Int())
+	}
+}
+
 func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())

@@ -148,6 +148,34 @@ func (data *SegmentRoutingTEPolicyCandidatePath) updateFromBody(ctx context.Cont
 	}
 }
 
+func (data *SegmentRoutingTEPolicyCandidatePath) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
+		data.PathInfos = make([]SegmentRoutingTEPolicyCandidatePathPathInfos, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingTEPolicyCandidatePathPathInfos{}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("pcep"); cValue.Exists() {
+				item.Pcep = types.BoolValue(true)
+			} else {
+				item.Pcep = types.BoolValue(false)
+			}
+			if cValue := v.Get("metric.metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("hop-type"); cValue.Exists() {
+				item.HopType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("segment-list-name"); cValue.Exists() {
+				item.SegmentListName = types.StringValue(cValue.String())
+			}
+			data.PathInfos = append(data.PathInfos, item)
+			return true
+		})
+	}
+}
+
 func (data *SegmentRoutingTEPolicyCandidatePathData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
 		data.PathInfos = make([]SegmentRoutingTEPolicyCandidatePathPathInfos, 0)

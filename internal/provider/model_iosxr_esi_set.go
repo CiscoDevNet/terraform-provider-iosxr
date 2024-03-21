@@ -69,6 +69,12 @@ func (data *ESISet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *ESISet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "esi-set-as-text"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ESISetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "esi-set-as-text"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

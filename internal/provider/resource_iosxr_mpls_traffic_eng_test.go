@@ -42,7 +42,8 @@ func TestAccIosxrMPLSTrafficEng(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_mpls_traffic_eng.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-mpls-te-cfg:/mpls",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

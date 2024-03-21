@@ -1,1 +1,1 @@
-terraform import iosxr_segment_routing_te_policy_candidate_path.example "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%!d(string=100)]"
+terraform import iosxr_segment_routing_te_policy_candidate_path.example "<policy_name>,<path_index>"

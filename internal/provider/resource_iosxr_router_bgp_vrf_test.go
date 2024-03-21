@@ -72,7 +72,8 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_bgp_vrf.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]",
+		ImportStateId: "65001,VRF2",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -143,6 +143,34 @@ func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
+func (data *RouterHSRPInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
+		data.HsrpUseBia = types.BoolValue(true)
+	} else {
+		data.HsrpUseBia = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.redirects.disable"); value.Exists() {
+		data.HsrpRedirectsDisable = types.BoolValue(true)
+	} else {
+		data.HsrpRedirectsDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.minimum"); value.Exists() {
+		data.HsrpDelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.delay.reload"); value.Exists() {
+		data.HsrpDelayReload = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.minimum-interval"); value.Exists() {
+		data.HsrpBfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.bfd.multiplier"); value.Exists() {
+		data.HsrpBfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "hsrp.mac-refresh"); value.Exists() {
+		data.HsrpMacRefresh = types.Int64Value(value.Int())
+	}
+}
+
 func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)

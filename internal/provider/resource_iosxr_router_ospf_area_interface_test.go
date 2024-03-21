@@ -53,7 +53,8 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_ospf_area_interface.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]",
+		ImportStateId: "OSPF1,0,GigabitEthernet0/0/0/1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

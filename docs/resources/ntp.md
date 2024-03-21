@@ -401,5 +401,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_ntp.example "Cisco-IOS-XR-um-ntp-cfg:/ntp"
+terraform import iosxr_ntp.example ""
 ```

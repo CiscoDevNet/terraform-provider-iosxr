@@ -176,6 +176,43 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	}
 }
 
+func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.inheritance-disable"); value.Exists() {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
+	}
+}
+
 func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
 		data.RoutePolicyIn = types.StringValue(value.String())

@@ -110,5 +110,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_hsrp_interface_address_family_ipv4_group_v1.example "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=123]"
+terraform import iosxr_router_hsrp_interface_address_family_ipv4_group_v1.example "<interface_name>,<group_id>"
 ```

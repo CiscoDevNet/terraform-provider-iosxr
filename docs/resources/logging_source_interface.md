@@ -51,5 +51,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_logging_source_interface.example "Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=Loopback0]"
+terraform import iosxr_logging_source_interface.example "<name>"
 ```

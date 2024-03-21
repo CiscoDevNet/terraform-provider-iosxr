@@ -81,5 +81,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_telnet.example "Cisco-IOS-XR-um-telnet-cfg:/telnet"
+terraform import iosxr_telnet.example ""
 ```

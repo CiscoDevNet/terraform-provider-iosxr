@@ -80,6 +80,15 @@ func (data *FlowSamplerMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *FlowSamplerMap) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "random"); value.Exists() {
+		data.Random = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "out-of"); value.Exists() {
+		data.OutOf = types.Int64Value(value.Int())
+	}
+}
+
 func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "random"); value.Exists() {
 		data.Random = types.Int64Value(value.Int())

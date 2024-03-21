@@ -1,1 +1,1 @@
-terraform import iosxr_router_vrrp_interface_address_family_ipv4.example "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-family/ipv4/vrrps/vrrp[vrrp-id=%!d(string=123)][version=%!d(string=2)]"
+terraform import iosxr_router_vrrp_interface_address_family_ipv4.example "<interface_name>,<vrrp_id>,<version>"

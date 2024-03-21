@@ -43,7 +43,8 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_logging_source_interface.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=Loopback0]",
+		ImportStateId: "Loopback0",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

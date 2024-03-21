@@ -134,6 +134,30 @@ func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
+		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerViewMibViewFamilies{}
+			if cValue := v.Get("mib-view-family-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("included"); cValue.Exists() {
+				item.Included = types.BoolValue(true)
+			} else {
+				item.Included = types.BoolValue(false)
+			}
+			if cValue := v.Get("excluded"); cValue.Exists() {
+				item.Excluded = types.BoolValue(true)
+			} else {
+				item.Excluded = types.BoolValue(false)
+			}
+			data.MibViewFamilies = append(data.MibViewFamilies, item)
+			return true
+		})
+	}
+}
+
 func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)

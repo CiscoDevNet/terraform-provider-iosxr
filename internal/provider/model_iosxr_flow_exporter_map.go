@@ -226,6 +226,59 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *FlowExporterMap) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() {
+		data.DestinationIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "destination.ipv6-address"); value.Exists() {
+		data.DestinationIpv6Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "destination.vrf"); value.Exists() {
+		data.DestinationVrf = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source"); value.Exists() {
+		data.Source = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "dscp"); value.Exists() {
+		data.Dscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "packet-length"); value.Exists() {
+		data.PacketLength = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "transport.udp"); value.Exists() {
+		data.TransportUdp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dfbit.set"); value.Exists() {
+		data.DfbitSet = types.BoolValue(true)
+	} else {
+		data.DfbitSet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "version.export-format"); value.Exists() {
+		data.VersionExportFormat = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "version.template.data.timeout"); value.Exists() {
+		data.VersionTemplateDataTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.template.options.timeout"); value.Exists() {
+		data.VersionTemplateOptionsTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.template.timeout"); value.Exists() {
+		data.VersionTemplateTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.interface-table.timeout"); value.Exists() {
+		data.VersionOptionsInterfaceTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.sampler-table.timeout"); value.Exists() {
+		data.VersionOptionsSamplerTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.class-table.timeout"); value.Exists() {
+		data.VersionOptionsClassTableTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "version.options.vrf-table.timeout"); value.Exists() {
+		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
+	}
+}
+
 func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())

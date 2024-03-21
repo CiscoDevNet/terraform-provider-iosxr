@@ -69,6 +69,12 @@ func (data *RoutePolicy) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RoutePolicy) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-route-policy"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *RoutePolicyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-route-policy"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

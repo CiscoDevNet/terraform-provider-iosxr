@@ -1,1 +1,1 @@
-terraform import iosxr_router_static_ipv6_unicast.example "Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv6/unicast/prefixes/prefix[prefix-address=1::][prefix-length=%!d(string=64)]"
+terraform import iosxr_router_static_ipv6_unicast.example "<prefix_address>,<prefix_length>"

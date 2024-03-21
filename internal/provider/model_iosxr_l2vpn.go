@@ -151,6 +151,36 @@ func (data *L2VPN) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *L2VPN) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-mac"); value.Exists() {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstMac = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "load-balancing.flow.src-dst-ip"); value.Exists() {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(true)
+	} else {
+		data.LoadBalancingFlowSrcDstIp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "xconnect.groups.group"); value.Exists() {
+		data.XconnectGroups = make([]L2VPNXconnectGroups, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNXconnectGroups{}
+			if cValue := v.Get("group-name"); cValue.Exists() {
+				item.GroupName = types.StringValue(cValue.String())
+			}
+			data.XconnectGroups = append(data.XconnectGroups, item)
+			return true
+		})
+	}
+}
+
 func (data *L2VPNData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

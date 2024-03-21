@@ -52,7 +52,8 @@ func TestAccIosxrLogging(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_logging.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

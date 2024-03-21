@@ -88,7 +88,8 @@ func TestAccIosxrNTP(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_ntp.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-ntp-cfg:/ntp",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

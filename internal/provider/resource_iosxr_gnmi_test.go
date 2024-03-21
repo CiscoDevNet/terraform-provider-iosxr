@@ -70,6 +70,12 @@ func TestAccIosxrGnmi(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.values.0", "1.2.3.4"),
 				),
 			},
+			{
+				Config: testAccIosxrGnmiConfig_yangEmpty(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.redistribute/static", "<EMPTY>"),
+				),
+			},
 		},
 	})
 }
@@ -130,6 +136,18 @@ func testAccIosxrGnmiConfig_leafList() string {
 				values = ["1.2.3.4"]
 			}
 		]
+	}
+	`
+}
+
+func testAccIosxrGnmiConfig_yangEmpty() string {
+	return `
+	resource "iosxr_gnmi" "test" {
+		path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv6-unicast]"
+		attributes = {
+			"af-name" = "ipv6-unicast"
+			"redistribute/static" = "<EMPTY>"
+		}
 	}
 	`
 }

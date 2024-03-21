@@ -259,6 +259,72 @@ func (data *KeyChain) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *KeyChain) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "keys.key"); value.Exists() {
+		data.Keys = make([]KeyChainKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := KeyChainKeys{}
+			if cValue := v.Get("key-name"); cValue.Exists() {
+				item.KeyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("key-string.password"); cValue.Exists() {
+				item.KeyStringPassword = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("cryptographic-algorithm"); cValue.Exists() {
+				item.CryptographicAlgorithm = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.hour"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.minute"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.second"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.day-of-month"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.month"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("accept-lifetime.start-time.year"); cValue.Exists() {
+				item.AcceptLifetimeStartTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("accept-lifetime.infinite"); cValue.Exists() {
+				item.AcceptLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.AcceptLifetimeInfinite = types.BoolValue(false)
+			}
+			if cValue := v.Get("send-lifetime.start-time.hour"); cValue.Exists() {
+				item.SendLifetimeStartTimeHour = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("send-lifetime.start-time.minute"); cValue.Exists() {
+				item.SendLifetimeStartTimeMinute = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("send-lifetime.start-time.second"); cValue.Exists() {
+				item.SendLifetimeStartTimeSecond = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("send-lifetime.start-time.day-of-month"); cValue.Exists() {
+				item.SendLifetimeStartTimeDayOfMonth = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("send-lifetime.start-time.month"); cValue.Exists() {
+				item.SendLifetimeStartTimeMonth = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("send-lifetime.start-time.year"); cValue.Exists() {
+				item.SendLifetimeStartTimeYear = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("send-lifetime.infinite"); cValue.Exists() {
+				item.SendLifetimeInfinite = types.BoolValue(true)
+			} else {
+				item.SendLifetimeInfinite = types.BoolValue(false)
+			}
+			data.Keys = append(data.Keys, item)
+			return true
+		})
+	}
+}
+
 func (data *KeyChainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "keys.key"); value.Exists() {
 		data.Keys = make([]KeyChainKeys, 0)

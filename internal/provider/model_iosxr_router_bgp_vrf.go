@@ -491,6 +491,144 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rd.auto"); value.Exists() {
+		data.RdAuto = types.BoolValue(true)
+	} else {
+		data.RdAuto = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.as-number"); value.Exists() {
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.two-byte-as.index"); value.Exists() {
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.as-number"); value.Exists() {
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.four-byte-as.index"); value.Exists() {
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.ipv4-address"); value.Exists() {
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "rd.ip-address.index"); value.Exists() {
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
+		data.DefaultMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
+		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
+		data.TimersBgpHoldtime = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]RouterBGPVRFNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPVRFNeighbors{}
+			if cValue := v.Get("neighbor-address"); cValue.Exists() {
+				item.NeighborAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("remote-as"); cValue.Exists() {
+				item.RemoteAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-seconds"); cValue.Exists() {
+				item.AdvertisementIntervalSeconds = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-milliseconds"); cValue.Exists() {
+				item.AdvertisementIntervalMilliseconds = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ignore-connected-check"); cValue.Exists() {
+				item.IgnoreConnectedCheck = types.BoolValue(true)
+			} else {
+				item.IgnoreConnectedCheck = types.BoolValue(false)
+			}
+			if cValue := v.Get("ebgp-multihop.maximum-hop-count"); cValue.Exists() {
+				item.EbgpMultihopMaximumHopCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.minimum-interval"); cValue.Exists() {
+				item.BfdMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.multiplier"); cValue.Exists() {
+				item.BfdMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
+				item.BfdFastDetect = types.BoolValue(true)
+			} else {
+				item.BfdFastDetect = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.strict-mode"); cValue.Exists() {
+				item.BfdFastDetectStrictMode = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictMode = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.disable"); cValue.Exists() {
+				item.BfdFastDetectDisable = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.as-number"); cValue.Exists() {
+				item.LocalAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("local-as.no-prepend"); cValue.Exists() {
+				item.LocalAsNoPrepend = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrepend = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.no-prepend.replace-as"); cValue.Exists() {
+				item.LocalAsReplaceAs = types.BoolValue(true)
+			} else {
+				item.LocalAsReplaceAs = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.no-prepend.replace-as.dual-as"); cValue.Exists() {
+				item.LocalAsDualAs = types.BoolValue(true)
+			} else {
+				item.LocalAsDualAs = types.BoolValue(false)
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.Password = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("timers.keepalive-interval"); cValue.Exists() {
+				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timers.holdtime"); cValue.Exists() {
+				item.TimersHoldtime = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("update-source"); cValue.Exists() {
+				item.UpdateSource = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ttl-security"); cValue.Exists() {
+				item.TtlSecurity = types.BoolValue(true)
+			} else {
+				item.TtlSecurity = types.BoolValue(false)
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rd.auto"); value.Exists() {
 		data.RdAuto = types.BoolValue(true)

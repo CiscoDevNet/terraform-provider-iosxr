@@ -43,7 +43,8 @@ func TestAccIosxrExtcommunityOpaqueSet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_extcommunity_opaque_set.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=BLUE]",
+		ImportStateId: "BLUE",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

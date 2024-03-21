@@ -59,5 +59,5 @@ resource "iosxr_service_timestamps" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_service_timestamps.example "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
+terraform import iosxr_service_timestamps.example ""
 ```

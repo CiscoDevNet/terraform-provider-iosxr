@@ -256,6 +256,69 @@ func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte
 	}
 }
 
+func (data *ErrorDisableRecovery) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() {
+		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-discovery-timeout.interval"); value.Exists() {
+		data.LinkOamDiscoveryTimeoutInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-capabilities-conflict.interval"); value.Exists() {
+		data.LinkOamCapabilitiesConflictInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-miswired.interval"); value.Exists() {
+		data.LinkOamMiswiredInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-link-fault.interval"); value.Exists() {
+		data.LinkOamLinkFaultInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-dying-gasp.interval"); value.Exists() {
+		data.LinkOamDyingGaspInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-critical-event.interval"); value.Exists() {
+		data.LinkOamCriticalEventInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-threshold-breached.interval"); value.Exists() {
+		data.LinkOamThresholdBreachedInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "stp-bpdu-guard.interval"); value.Exists() {
+		data.StpBpduGuardInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "stp-legacy-bpdu.interval"); value.Exists() {
+		data.StpLegacyBpduInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cluster-udld.interval"); value.Exists() {
+		data.ClusterUdldInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cluster-minlinks.interval"); value.Exists() {
+		data.ClusterMinlinksInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "udld-unidirectional.interval"); value.Exists() {
+		data.UdldUnidirectionalInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "udld-neighbor-mismatch.interval"); value.Exists() {
+		data.UdldNeighborMismatchInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "udld-timeout.interval"); value.Exists() {
+		data.UdldTimeoutInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "udld-loopback.interval"); value.Exists() {
+		data.UdldLoopbackInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pvrst-pvid-mismatch.interval"); value.Exists() {
+		data.PvrstPvidMismatchInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "l2vpn-bport-mac-move.interval"); value.Exists() {
+		data.L2vpnBportMacMoveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ot-track-state-change.interval"); value.Exists() {
+		data.OtTrackStateChangeInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "link-oam-dampening.interval"); value.Exists() {
+		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
+	}
+}
+
 func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())

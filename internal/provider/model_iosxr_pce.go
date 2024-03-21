@@ -206,6 +206,51 @@ func (data *PCE) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *PCE) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() {
+		data.AddressIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address.ipv6"); value.Exists() {
+		data.AddressIpv6 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "state-sync.ipv4s.ipv4"); value.Exists() {
+		data.StateSyncIpv4s = make([]PCEStateSyncIpv4s, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEStateSyncIpv4s{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.StateSyncIpv4s = append(data.StateSyncIpv4s, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "peer-filter.ipv4.access-list"); value.Exists() {
+		data.PeerFilterIpv4AccessList = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "api.authentication.digest"); value.Exists() {
+		data.ApiAuthenticationDigest = types.BoolValue(true)
+	} else {
+		data.ApiAuthenticationDigest = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "api.sibling.ipv4"); value.Exists() {
+		data.ApiSiblingIpv4 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "api.users.user"); value.Exists() {
+		data.ApiUsers = make([]PCEApiUsers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := PCEApiUsers{}
+			if cValue := v.Get("user-name"); cValue.Exists() {
+				item.UserName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.PasswordEncrypted = types.StringValue(cValue.String())
+			}
+			data.ApiUsers = append(data.ApiUsers, item)
+			return true
+		})
+	}
+}
+
 func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4"); value.Exists() {
 		data.AddressIpv4 = types.StringValue(value.String())

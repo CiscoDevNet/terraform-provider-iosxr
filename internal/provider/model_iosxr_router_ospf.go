@@ -702,6 +702,202 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
+		data.MplsLdpSync = types.BoolValue(true)
+	} else {
+		data.MplsLdpSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-interval"); value.Exists() {
+		data.HelloInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "dead-interval"); value.Exists() {
+		data.DeadInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mtu-ignore.enable"); value.Exists() {
+		data.MtuIgnoreEnable = types.BoolValue(true)
+	} else {
+		data.MtuIgnoreEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mtu-ignore.disable"); value.Exists() {
+		data.MtuIgnoreDisable = types.BoolValue(true)
+	} else {
+		data.MtuIgnoreDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	} else {
+		data.PassiveEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	} else {
+		data.PassiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected"); value.Exists() {
+		data.RedistributeConnected = types.BoolValue(true)
+	} else {
+		data.RedistributeConnected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.tag"); value.Exists() {
+		data.RedistributeConnectedTag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.connected.metric-type"); value.Exists() {
+		data.RedistributeConnectedMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static"); value.Exists() {
+		data.RedistributeStatic = types.BoolValue(true)
+	} else {
+		data.RedistributeStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.tag"); value.Exists() {
+		data.RedistributeStaticTag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "redistribute.static.metric-type"); value.Exists() {
+		data.RedistributeStaticMetricType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.always"); value.Exists() {
+		data.DefaultInformationOriginateAlways = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginateAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-information.originate.metric-type"); value.Exists() {
+		data.DefaultInformationOriginateMetricType = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "auto-cost.reference-bandwidth"); value.Exists() {
+		data.AutoCostReferenceBandwidth = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "auto-cost.disable"); value.Exists() {
+		data.AutoCostDisable = types.BoolValue(true)
+	} else {
+		data.AutoCostDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls"); value.Exists() {
+		data.SegmentRoutingMpls = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.sr-prefer"); value.Exists() {
+		data.SegmentRoutingSrPrefer = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "areas.area"); value.Exists() {
+		data.Areas = make([]RouterOSPFAreas, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFAreas{}
+			if cValue := v.Get("area-id"); cValue.Exists() {
+				item.AreaId = types.StringValue(cValue.String())
+			}
+			data.Areas = append(data.Areas, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.bgp.as"); value.Exists() {
+		data.RedistributeBgp = make([]RouterOSPFRedistributeBgp, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeBgp{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeBgp = append(data.RedistributeBgp, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+		data.RedistributeIsis = make([]RouterOSPFRedistributeIsis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeIsis{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("level-1"); cValue.Exists() {
+				item.Level1 = types.BoolValue(true)
+			} else {
+				item.Level1 = types.BoolValue(false)
+			}
+			if cValue := v.Get("level-2"); cValue.Exists() {
+				item.Level2 = types.BoolValue(true)
+			} else {
+				item.Level2 = types.BoolValue(false)
+			}
+			if cValue := v.Get("level-1-2"); cValue.Exists() {
+				item.Level12 = types.BoolValue(true)
+			} else {
+				item.Level12 = types.BoolValue(false)
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.ospf"); value.Exists() {
+		data.RedistributeOspf = make([]RouterOSPFRedistributeOspf, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFRedistributeOspf{}
+			if cValue := v.Get("instance-name"); cValue.Exists() {
+				item.InstanceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("match.internal"); cValue.Exists() {
+				item.MatchInternal = types.BoolValue(true)
+			} else {
+				item.MatchInternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.external"); cValue.Exists() {
+				item.MatchExternal = types.BoolValue(true)
+			} else {
+				item.MatchExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("match.nssa-external"); cValue.Exists() {
+				item.MatchNssaExternal = types.BoolValue(true)
+			} else {
+				item.MatchNssaExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("metric-type"); cValue.Exists() {
+				item.MetricType = types.StringValue(cValue.String())
+			}
+			data.RedistributeOspf = append(data.RedistributeOspf, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)

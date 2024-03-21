@@ -124,6 +124,26 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
+		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVRFHostUnencryptedStrings{}
+			if cValue := v.Get("community-string"); cValue.Exists() {
+				item.CommunityString = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("udp-port"); cValue.Exists() {
+				item.UdpPort = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version.v3.security-level"); cValue.Exists() {
+				item.VersionV3SecurityLevel = types.StringValue(cValue.String())
+			}
+			data.UnencryptedStrings = append(data.UnencryptedStrings, item)
+			return true
+		})
+	}
+}
+
 func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
 		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)

@@ -25,8 +25,13 @@ import (
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
+)
+
+const (
+	EMPTY_TAG string = "<EMPTY>"
 )
 
 type Gnmi struct {
@@ -64,7 +69,12 @@ func (data Gnmi) toBody(ctx context.Context) string {
 
 	for attr, value := range attributes {
 		attr = strings.ReplaceAll(attr, "/", ".")
-		body, _ = sjson.Set(body, attr, value)
+		tflog.Debug(ctx, fmt.Sprintf("Setting attribute %s to %s", attr, value))
+		if value == EMPTY_TAG {
+			body, _ = sjson.Set(body, attr, map[string]interface{}{})
+		} else {
+			body, _ = sjson.Set(body, attr, value)
+		}
 	}
 
 	for i := range data.Lists {
@@ -77,7 +87,11 @@ func (data Gnmi) toBody(ctx context.Context) string {
 				attrs := ""
 				for attr, value := range listAttributes {
 					attr = strings.ReplaceAll(attr, "/", ".")
-					attrs, _ = sjson.Set(attrs, attr, value)
+					if value == EMPTY_TAG {
+						attrs, _ = sjson.Set(attrs, attr, map[string]interface{}{})
+					} else {
+						attrs, _ = sjson.Set(attrs, attr, value)
+					}
 				}
 				body, _ = sjson.SetRaw(body, listName+".-1", attrs)
 			}
@@ -107,10 +121,9 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 	for attr := range attributes {
 		attrPath := strings.ReplaceAll(attr, "/", ".")
 		value := gjson.GetBytes(res, attrPath)
-		if !value.Exists() ||
-			(value.IsObject() && len(value.Map()) == 0) ||
-			value.Raw == "[null]" {
-
+		if value.IsObject() && len(value.Map()) == 0 {
+			attributes[attr] = types.StringValue(EMPTY_TAG)
+		} else if !value.Exists() || value.Raw == "[null]" {
 			if !helpers.Contains(keys, attr) {
 				attributes[attr] = types.StringValue("")
 			}
@@ -166,10 +179,9 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 				for attr := range listAttributes {
 					attrPath := strings.ReplaceAll(attr, "/", ".")
 					value := r.Get(attrPath)
-					if !value.Exists() ||
-						(value.IsObject() && len(value.Map()) == 0) ||
-						value.Raw == "[null]" {
-
+					if value.IsObject() && len(value.Map()) == 0 {
+						listAttributes[attr] = types.StringValue(EMPTY_TAG)
+					} else if !value.Exists() || value.Raw == "[null]" {
 						listAttributes[attr] = types.StringValue("")
 					} else {
 						listAttributes[attr] = types.StringValue(value.String())

@@ -50,7 +50,8 @@ func TestAccIosxrLoggingVRF(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_logging_vrf.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=default]",
+		ImportStateId: "default",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

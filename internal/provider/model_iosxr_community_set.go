@@ -69,6 +69,12 @@ func (data *CommunitySet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *CommunitySet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *CommunitySetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-community-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

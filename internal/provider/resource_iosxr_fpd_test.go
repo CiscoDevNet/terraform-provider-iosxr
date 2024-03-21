@@ -48,7 +48,8 @@ func TestAccIosxrFPD(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_fpd.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-fpd-cfg:/fpd",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

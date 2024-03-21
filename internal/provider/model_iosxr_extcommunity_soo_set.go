@@ -69,6 +69,12 @@ func (data *ExtcommunitySOOSet) updateFromBody(ctx context.Context, res []byte) 
 	}
 }
 
+func (data *ExtcommunitySOOSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-extended-community-soo-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ExtcommunitySOOSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-soo-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

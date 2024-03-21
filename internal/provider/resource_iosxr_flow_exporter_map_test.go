@@ -61,7 +61,8 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_flow_exporter_map.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=TEST]",
+		ImportStateId: "TEST",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

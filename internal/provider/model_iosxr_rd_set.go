@@ -69,6 +69,12 @@ func (data *RDSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RDSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rplrd-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *RDSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rplrd-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

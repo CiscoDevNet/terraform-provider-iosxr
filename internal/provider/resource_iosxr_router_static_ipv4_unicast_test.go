@@ -82,7 +82,8 @@ func TestAccIosxrRouterStaticIPv4Unicast(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_static_ipv4_unicast.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=100.0.1.0][prefix-length=%!d(string=24)]",
+		ImportStateId: "100.0.1.0,24",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

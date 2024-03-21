@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.4.0
+
+- BREAKING CHANGE: Refactor resource import functionality to use a comma separated list of key attribute values instead of a gNMI path
+- Add support for empty YANG containers to the `iosxr_gnmi` resource using the `<EMPTY>` keyword
+
 ## 0.3.2
 
 - Add `route_policy_in` and `route_policy_out` attributes to `iosxr_bgp_neighbor_group` resource and data source
@@ -29,7 +34,6 @@ description: |-
 - Make `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` and `on_startup_advertise_as_overloaded_time_to_advertise` attributes of `iosxr_router_isis` resource optional
 - Make `make_before_break_delay` attribute of `iosxr_mpls_ldp` resource optional
 - Make various `iosxr_key_chain` resource attributes optional
-
 
 ## 0.3.0
 

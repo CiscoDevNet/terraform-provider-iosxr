@@ -65,5 +65,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_segment_routing_v6.example "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-cfg:srv6"
+terraform import iosxr_segment_routing_v6.example ""
 ```

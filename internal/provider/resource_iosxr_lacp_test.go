@@ -43,7 +43,8 @@ func TestAccIosxrLACP(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_lacp.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-lacp-cfg:/lacp/system",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

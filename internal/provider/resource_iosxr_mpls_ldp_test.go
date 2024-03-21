@@ -58,7 +58,8 @@ func TestAccIosxrMPLSLDP(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_mpls_ldp.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

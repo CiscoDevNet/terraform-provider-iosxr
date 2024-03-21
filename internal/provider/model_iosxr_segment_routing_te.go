@@ -512,6 +512,149 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
+		data.LoggingPcepPeerStatus = types.BoolValue(true)
+	} else {
+		data.LoggingPcepPeerStatus = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "logging.policy-status"); value.Exists() {
+		data.LoggingPolicyStatus = types.BoolValue(true)
+	} else {
+		data.LoggingPolicyStatus = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pcc.report-all"); value.Exists() {
+		data.PccReportAll = types.BoolValue(true)
+	} else {
+		data.PccReportAll = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "pcc.source-address"); value.Exists() {
+		data.PccSourceAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "pcc.delegation-timeout"); value.Exists() {
+		data.PccDelegationTimeout = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pcc.dead-timer-interval"); value.Exists() {
+		data.PccDeadTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pcc.initiated-state-interval"); value.Exists() {
+		data.PccInitiatedState = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pcc.initiated-orphan-interval"); value.Exists() {
+		data.PccInitiatedOrphan = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "pcc.pce-peers.pce-peer"); value.Exists() {
+		data.PcePeers = make([]SegmentRoutingTEPcePeers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingTEPcePeers{}
+			if cValue := v.Get("pce-address"); cValue.Exists() {
+				item.PceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("precedence"); cValue.Exists() {
+				item.Precedence = types.Int64Value(cValue.Int())
+			}
+			data.PcePeers = append(data.PcePeers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "on-demand-colors.on-demand-color"); value.Exists() {
+		data.OnDemandColors = make([]SegmentRoutingTEOnDemandColors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingTEOnDemandColors{}
+			if cValue := v.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-anycast"); cValue.Exists() {
+				item.DynamicAnycastSidInclusion = types.BoolValue(true)
+			} else {
+				item.DynamicAnycastSidInclusion = types.BoolValue(false)
+			}
+			if cValue := v.Get("on-demand-color-dyn-mpls.on-demand-color-dyn-mpls-metric.metric-type"); cValue.Exists() {
+				item.DynamicMetricType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("color"); cValue.Exists() {
+				item.Color = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("srv6.enable"); cValue.Exists() {
+				item.Srv6Enable = types.BoolValue(true)
+			} else {
+				item.Srv6Enable = types.BoolValue(false)
+			}
+			if cValue := v.Get("srv6.locator.locator-name"); cValue.Exists() {
+				item.Srv6LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("srv6.locator.behavior"); cValue.Exists() {
+				item.Srv6LocatorBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("srv6.locator.binding-sid-type"); cValue.Exists() {
+				item.Srv6LocatorBindingSidType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-address.source-address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-address.ip-address-type"); cValue.Exists() {
+				item.SourceAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("effective-metric.enable"); cValue.Exists() {
+				item.EffectiveMetricEnable = types.BoolValue(true)
+			} else {
+				item.EffectiveMetricEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("effective-metric.metric-value-type.metric-value"); cValue.Exists() {
+				item.EffectiveMetricValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("effective-metric.metric-value-type.metric-type"); cValue.Exists() {
+				item.EffectiveMetricType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("constraint.segments.protection-type"); cValue.Exists() {
+				item.ConstraintSegmentsProtectionType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("constraint.segments.sid-algorithm"); cValue.Exists() {
+				item.ConstraintSegmentsSidAlgorithm = types.Int64Value(cValue.Int())
+			}
+			data.OnDemandColors = append(data.OnDemandColors, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "policies.policy"); value.Exists() {
+		data.Policies = make([]SegmentRoutingTEPolicies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingTEPolicies{}
+			if cValue := v.Get("policy-name"); cValue.Exists() {
+				item.PolicyName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("srv6.enable"); cValue.Exists() {
+				item.Srv6Enable = types.BoolValue(true)
+			} else {
+				item.Srv6Enable = types.BoolValue(false)
+			}
+			if cValue := v.Get("srv6.locator.locator-name"); cValue.Exists() {
+				item.Srv6LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("srv6.locator.binding-sid-type"); cValue.Exists() {
+				item.Srv6LocatorBindingSidType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("srv6.locator.behavior"); cValue.Exists() {
+				item.Srv6LocatorBehavior = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-address.source-address"); cValue.Exists() {
+				item.SourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("source-address.ip-address-type"); cValue.Exists() {
+				item.SourceAddressType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policy-color-endpoint.color"); cValue.Exists() {
+				item.PolicyColorEndpointColor = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("policy-color-endpoint.end-point-type"); cValue.Exists() {
+				item.PolicyColorEndpointType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("policy-color-endpoint.end-point-address"); cValue.Exists() {
+				item.PolicyColorEndpointAddress = types.StringValue(cValue.String())
+			}
+			data.Policies = append(data.Policies, item)
+			return true
+		})
+	}
+}
+
 func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
 		data.LoggingPcepPeerStatus = types.BoolValue(true)

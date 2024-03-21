@@ -230,6 +230,63 @@ func (data *LLDP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *LLDP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "holdtime"); value.Exists() {
+		data.Holdtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timer"); value.Exists() {
+		data.Timer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "reinit"); value.Exists() {
+		data.Reinit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "subinterfaces.enable"); value.Exists() {
+		data.SubinterfacesEnable = types.BoolValue(true)
+	} else {
+		data.SubinterfacesEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "management.enable"); value.Exists() {
+		data.ManagementEnable = types.BoolValue(true)
+	} else {
+		data.ManagementEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "priorityaddr.enable"); value.Exists() {
+		data.PriorityaddrEnable = types.BoolValue(true)
+	} else {
+		data.PriorityaddrEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "extended-show-width.enable"); value.Exists() {
+		data.ExtendedShowWidthEnable = types.BoolValue(true)
+	} else {
+		data.ExtendedShowWidthEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlv-select.management-address.disable"); value.Exists() {
+		data.TlvSelectManagementAddressDisable = types.BoolValue(true)
+	} else {
+		data.TlvSelectManagementAddressDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlv-select.port-description.disable"); value.Exists() {
+		data.TlvSelectPortDescriptionDisable = types.BoolValue(true)
+	} else {
+		data.TlvSelectPortDescriptionDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlv-select.system-capabilities.disable"); value.Exists() {
+		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(true)
+	} else {
+		data.TlvSelectSystemCapabilitiesDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlv-select.system-description.disable"); value.Exists() {
+		data.TlvSelectSystemDescriptionDisable = types.BoolValue(true)
+	} else {
+		data.TlvSelectSystemDescriptionDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "tlv-select.system-name.disable"); value.Exists() {
+		data.TlvSelectSystemNameDisable = types.BoolValue(true)
+	} else {
+		data.TlvSelectSystemNameDisable = types.BoolValue(false)
+	}
+}
+
 func (data *LLDPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "holdtime"); value.Exists() {
 		data.Holdtime = types.Int64Value(value.Int())

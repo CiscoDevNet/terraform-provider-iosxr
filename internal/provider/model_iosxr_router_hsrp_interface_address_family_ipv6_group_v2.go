@@ -49,6 +49,7 @@ type RouterHSRPInterfaceAddressFamilyIPv6GroupV2 struct {
 	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
 	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
 	Addresses                                  []RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalAutoconfig                 types.Bool                                                   `tfsdk:"address_link_local_autoconfig"`
 	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                                   `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
 	AddressLinkLocalIpv6Address                types.String                                                 `tfsdk:"address_link_local_ipv6_address"`
 }
@@ -71,6 +72,7 @@ type RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data struct {
 	TrackObjects                               []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackObjects    `tfsdk:"track_objects"`
 	TrackInterfaces                            []RouterHSRPInterfaceAddressFamilyIPv6GroupV2TrackInterfaces `tfsdk:"track_interfaces"`
 	Addresses                                  []RouterHSRPInterfaceAddressFamilyIPv6GroupV2Addresses       `tfsdk:"addresses"`
+	AddressLinkLocalAutoconfig                 types.Bool                                                   `tfsdk:"address_link_local_autoconfig"`
 	AddressLinkLocalAutoconfigLegacyCompatible types.Bool                                                   `tfsdk:"address_link_local_autoconfig_legacy_compatible"`
 	AddressLinkLocalIpv6Address                types.String                                                 `tfsdk:"address_link_local_ipv6_address"`
 }
@@ -128,6 +130,11 @@ func (data RouterHSRPInterfaceAddressFamilyIPv6GroupV2) toBody(ctx context.Conte
 	}
 	if !data.BfdFastDetectPeerInterface.IsNull() && !data.BfdFastDetectPeerInterface.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.fast-detect.peer.interface", data.BfdFastDetectPeerInterface.ValueString())
+	}
+	if !data.AddressLinkLocalAutoconfig.IsNull() && !data.AddressLinkLocalAutoconfig.IsUnknown() {
+		if data.AddressLinkLocalAutoconfig.ValueBool() {
+			body, _ = sjson.Set(body, "address.link-local.autoconfig", map[string]string{})
+		}
 	}
 	if !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && !data.AddressLinkLocalAutoconfigLegacyCompatible.IsUnknown() {
 		if data.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
@@ -318,6 +325,15 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) updateFromBody(ctx cont
 			data.Addresses[i].Address = types.StringNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "address.link-local.autoconfig"); !data.AddressLinkLocalAutoconfig.IsNull() {
+		if value.Exists() {
+			data.AddressLinkLocalAutoconfig = types.BoolValue(true)
+		} else {
+			data.AddressLinkLocalAutoconfig = types.BoolValue(false)
+		}
+	} else {
+		data.AddressLinkLocalAutoconfig = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
 		if value.Exists() {
 			data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
@@ -404,6 +420,11 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) fromBody(ctx context.Co
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "address.link-local.autoconfig"); value.Exists() {
+		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
+	} else {
+		data.AddressLinkLocalAutoconfig = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
 	} else {
@@ -483,6 +504,11 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2Data) fromBody(ctx contex
 			data.Addresses = append(data.Addresses, item)
 			return true
 		})
+	}
+	if value := gjson.GetBytes(res, "address.link-local.autoconfig"); value.Exists() {
+		data.AddressLinkLocalAutoconfig = types.BoolValue(true)
+	} else {
+		data.AddressLinkLocalAutoconfig = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address.link-local.autoconfig.legacy-compatible"); value.Exists() {
 		data.AddressLinkLocalAutoconfigLegacyCompatible = types.BoolValue(true)
@@ -622,6 +648,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getDeletedItems(ctx con
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address/globals/global%v", state.getPath(), keyString))
 		}
 	}
+	if !state.AddressLinkLocalAutoconfig.IsNull() && data.AddressLinkLocalAutoconfig.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/link-local/autoconfig", state.getPath()))
+	}
 	if !state.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/link-local/autoconfig/legacy-compatible", state.getPath()))
 	}
@@ -656,6 +685,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getEmptyLeafsDelete(ctx
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	if !data.AddressLinkLocalAutoconfig.IsNull() && !data.AddressLinkLocalAutoconfig.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/link-local/autoconfig", data.getPath()))
 	}
 	if !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() && !data.AddressLinkLocalAutoconfigLegacyCompatible.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/link-local/autoconfig/legacy-compatible", data.getPath()))
@@ -724,6 +756,9 @@ func (data *RouterHSRPInterfaceAddressFamilyIPv6GroupV2) getDeletePaths(ctx cont
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/globals/global%v", data.getPath(), keyString))
+	}
+	if !data.AddressLinkLocalAutoconfig.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/link-local/autoconfig", data.getPath()))
 	}
 	if !data.AddressLinkLocalAutoconfigLegacyCompatible.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/link-local/autoconfig/legacy-compatible", data.getPath()))

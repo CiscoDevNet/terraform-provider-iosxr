@@ -154,6 +154,10 @@ func (d *RouterHSRPInterfaceAddressFamilyIPv6GroupV2DataSource) Schema(ctx conte
 					},
 				},
 			},
+			"address_link_local_autoconfig": schema.BoolAttribute{
+				MarkdownDescription: "Autoconfigure the HSRP IPv6 linklocal address",
+				Computed:            true,
+			},
 			"address_link_local_autoconfig_legacy_compatible": schema.BoolAttribute{
 				MarkdownDescription: "Autoconfigure for Legacy compatibility (with IOS/NX-OS)",
 				Computed:            true,

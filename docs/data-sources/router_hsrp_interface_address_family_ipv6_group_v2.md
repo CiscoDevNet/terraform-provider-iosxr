@@ -33,6 +33,7 @@ data "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "example" {
 
 ### Read-Only
 
+- `address_link_local_autoconfig` (Boolean) Autoconfigure the HSRP IPv6 linklocal address
 - `address_link_local_autoconfig_legacy_compatible` (Boolean) Autoconfigure for Legacy compatibility (with IOS/NX-OS)
 - `address_link_local_ipv6_address` (String) HSRP IPv6 linklocal address
 - `addresses` (Attributes List) Global HSRP IPv6 address (see [below for nested schema](#nestedatt--addresses))

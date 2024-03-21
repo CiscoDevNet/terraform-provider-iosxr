@@ -54,6 +54,8 @@ attributes:
       - yang_name: address
         id: true
         example: 2001:db8:cafe:2100::bad1:1010
+  - yang_name: address/link-local/autoconfig
+    example: true
   - yang_name: address/link-local/autoconfig/legacy-compatible
     example: true
   - yang_name: address/link-local/ipv6-address

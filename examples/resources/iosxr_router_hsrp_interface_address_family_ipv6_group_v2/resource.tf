@@ -28,5 +28,6 @@ resource "iosxr_router_hsrp_interface_address_family_ipv6_group_v2" "example" {
       address = "2001:db8:cafe:2100::bad1:1010"
     }
   ]
+  address_link_local_autoconfig                   = true
   address_link_local_autoconfig_legacy_compatible = true
 }

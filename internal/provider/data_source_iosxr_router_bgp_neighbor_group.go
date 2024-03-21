@@ -150,6 +150,18 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 					},
 				},
 			},
+			"timers_keepalive_interval": schema.Int64Attribute{
+				MarkdownDescription: "BGP timers",
+				Computed:            true,
+			},
+			"timers_holdtime": schema.StringAttribute{
+				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+				Computed:            true,
+			},
+			"timers_minimum_acceptable_holdtime": schema.StringAttribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
+				Computed:            true,
+			},
 		},
 	}
 }

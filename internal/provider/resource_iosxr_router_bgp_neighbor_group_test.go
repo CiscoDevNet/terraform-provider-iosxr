@@ -44,6 +44,9 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "timers_keepalive_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "timers_holdtime", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_group.test", "timers_minimum_acceptable_holdtime", "3"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -89,6 +92,8 @@ func testAccIosxrRouterBGPNeighborGroupConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_neighbor_group" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
+	config += `	timers_keepalive_interval = 5` + "\n"
+	config += `	timers_holdtime = "3"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -115,6 +120,9 @@ func testAccIosxrRouterBGPNeighborGroupConfig_all() string {
 	config += `		route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `		route_policy_out = "ROUTE_POLICY_1"` + "\n"
 	config += `		}]` + "\n"
+	config += `	timers_keepalive_interval = 5` + "\n"
+	config += `	timers_holdtime = "3"` + "\n"
+	config += `	timers_minimum_acceptable_holdtime = "3"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

@@ -22,6 +22,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -39,10 +40,21 @@ type RouterBGPNeighborAddressFamily struct {
 	RouteReflectorClient                               types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable             types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
+	NextHopSelf                                        types.Bool   `tfsdk:"next_hop_self"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
 	RoutePolicyIn                                      types.String `tfsdk:"route_policy_in"`
 	RoutePolicyOut                                     types.String `tfsdk:"route_policy_out"`
+	SoftReconfigurationInboundAlways                   types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	SendCommunityEbgp                                  types.Bool   `tfsdk:"send_community_ebgp"`
+	SendCommunityEbgpInheritanceDisable                types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	MaximumPrefixLimit                                 types.Int64  `tfsdk:"maximum_prefix_limit"`
+	MaximumPrefixThreshold                             types.Int64  `tfsdk:"maximum_prefix_threshold"`
+	MaximumPrefixRestart                               types.Int64  `tfsdk:"maximum_prefix_restart"`
+	MaximumPrefixDiscardExtraPaths                     types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
+	MaximumPrefixWarningOnly                           types.Bool   `tfsdk:"maximum_prefix_warning_only"`
+	DefaultOriginateRoutePolicy                        types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable                 types.Bool   `tfsdk:"default_originate_inheritance_disable"`
 }
 
 type RouterBGPNeighborAddressFamilyData struct {
@@ -55,10 +67,21 @@ type RouterBGPNeighborAddressFamilyData struct {
 	RouteReflectorClient                               types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable             types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 	AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_enable_re_originated_stitching_rt"`
+	NextHopSelf                                        types.Bool   `tfsdk:"next_hop_self"`
 	NextHopSelfInheritanceDisable                      types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationTypeSrv6                              types.Bool   `tfsdk:"encapsulation_type_srv6"`
 	RoutePolicyIn                                      types.String `tfsdk:"route_policy_in"`
 	RoutePolicyOut                                     types.String `tfsdk:"route_policy_out"`
+	SoftReconfigurationInboundAlways                   types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	SendCommunityEbgp                                  types.Bool   `tfsdk:"send_community_ebgp"`
+	SendCommunityEbgpInheritanceDisable                types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	MaximumPrefixLimit                                 types.Int64  `tfsdk:"maximum_prefix_limit"`
+	MaximumPrefixThreshold                             types.Int64  `tfsdk:"maximum_prefix_threshold"`
+	MaximumPrefixRestart                               types.Int64  `tfsdk:"maximum_prefix_restart"`
+	MaximumPrefixDiscardExtraPaths                     types.Bool   `tfsdk:"maximum_prefix_discard_extra_paths"`
+	MaximumPrefixWarningOnly                           types.Bool   `tfsdk:"maximum_prefix_warning_only"`
+	DefaultOriginateRoutePolicy                        types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable                 types.Bool   `tfsdk:"default_originate_inheritance_disable"`
 }
 
 func (data RouterBGPNeighborAddressFamily) getPath() string {
@@ -94,6 +117,11 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt", map[string]string{})
 		}
 	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.IsUnknown() {
+		if data.NextHopSelf.ValueBool() {
+			body, _ = sjson.Set(body, "next-hop-self", map[string]string{})
+		}
+	}
 	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.IsUnknown() {
 		if data.NextHopSelfInheritanceDisable.ValueBool() {
 			body, _ = sjson.Set(body, "next-hop-self.inheritance-disable", map[string]string{})
@@ -109,6 +137,48 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
 		body, _ = sjson.Set(body, "route-policy.out", data.RoutePolicyOut.ValueString())
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
+		if data.SoftReconfigurationInboundAlways.ValueBool() {
+			body, _ = sjson.Set(body, "soft-reconfiguration.inbound.always", map[string]string{})
+		}
+	}
+	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.IsUnknown() {
+		if data.SendCommunityEbgp.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-ebgp", map[string]string{})
+		}
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.IsUnknown() {
+		if data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "send-community-ebgp.inheritance-disable", map[string]string{})
+		}
+	}
+	if !data.MaximumPrefixLimit.IsNull() && !data.MaximumPrefixLimit.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.prefix-limit", strconv.FormatInt(data.MaximumPrefixLimit.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixThreshold.IsNull() && !data.MaximumPrefixThreshold.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.threshold", strconv.FormatInt(data.MaximumPrefixThreshold.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixRestart.IsNull() && !data.MaximumPrefixRestart.IsUnknown() {
+		body, _ = sjson.Set(body, "maximum-prefix.restart", strconv.FormatInt(data.MaximumPrefixRestart.ValueInt64(), 10))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.IsUnknown() {
+		if data.MaximumPrefixDiscardExtraPaths.ValueBool() {
+			body, _ = sjson.Set(body, "maximum-prefix.discard-extra-paths", map[string]string{})
+		}
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.IsUnknown() {
+		if data.MaximumPrefixWarningOnly.ValueBool() {
+			body, _ = sjson.Set(body, "maximum-prefix.warning-only", map[string]string{})
+		}
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() && !data.DefaultOriginateRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "default-originate.route-policy", data.DefaultOriginateRoutePolicy.ValueString())
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.IsUnknown() {
+		if data.DefaultOriginateInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "default-originate.inheritance-disable", map[string]string{})
+		}
 	}
 	return body
 }
@@ -150,6 +220,15 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	} else {
 		data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "next-hop-self"); !data.NextHopSelf.IsNull() {
+		if value.Exists() {
+			data.NextHopSelf = types.BoolValue(true)
+		} else {
+			data.NextHopSelf = types.BoolValue(false)
+		}
+	} else {
+		data.NextHopSelf = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); !data.NextHopSelfInheritanceDisable.IsNull() {
 		if value.Exists() {
 			data.NextHopSelfInheritanceDisable = types.BoolValue(true)
@@ -177,6 +256,80 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 		data.RoutePolicyOut = types.StringValue(value.String())
 	} else {
 		data.RoutePolicyOut = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
+		if value.Exists() {
+			data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+		} else {
+			data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+		}
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); !data.SendCommunityEbgp.IsNull() {
+		if value.Exists() {
+			data.SendCommunityEbgp = types.BoolValue(true)
+		} else {
+			data.SendCommunityEbgp = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityEbgp = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.prefix-limit"); value.Exists() && !data.MaximumPrefixLimit.IsNull() {
+		data.MaximumPrefixLimit = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixLimit = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.threshold"); value.Exists() && !data.MaximumPrefixThreshold.IsNull() {
+		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixThreshold = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() && !data.MaximumPrefixRestart.IsNull() {
+		data.MaximumPrefixRestart = types.Int64Value(value.Int())
+	} else {
+		data.MaximumPrefixRestart = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); !data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		if value.Exists() {
+			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
+		} else {
+			data.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); !data.MaximumPrefixWarningOnly.IsNull() {
+		if value.Exists() {
+			data.MaximumPrefixWarningOnly = types.BoolValue(true)
+		} else {
+			data.MaximumPrefixWarningOnly = types.BoolValue(false)
+		}
+	} else {
+		data.MaximumPrefixWarningOnly = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() && !data.DefaultOriginateRoutePolicy.IsNull() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	} else {
+		data.DefaultOriginateRoutePolicy = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); !data.DefaultOriginateInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolNull()
 	}
 }
 
@@ -240,6 +393,11 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	} else {
 		data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	} else {
+		data.NextHopSelf = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
 		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
@@ -255,6 +413,48 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	}
 	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+		data.SendCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.prefix-limit"); value.Exists() {
+		data.MaximumPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.threshold"); value.Exists() {
+		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() {
+		data.MaximumPrefixRestart = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); value.Exists() {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
+	} else {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); value.Exists() {
+		data.MaximumPrefixWarningOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPrefixWarningOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
 }
 
@@ -272,6 +472,9 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 	if !state.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", state.getPath()))
 	}
+	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
+	}
 	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
 	}
@@ -283,6 +486,36 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 	}
 	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
+	}
+	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
+	}
+	if !state.SendCommunityEbgp.IsNull() && data.SendCommunityEbgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp", state.getPath()))
+	}
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.MaximumPrefixLimit.IsNull() && data.MaximumPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/prefix-limit", state.getPath()))
+	}
+	if !state.MaximumPrefixThreshold.IsNull() && data.MaximumPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/threshold", state.getPath()))
+	}
+	if !state.MaximumPrefixRestart.IsNull() && data.MaximumPrefixRestart.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/restart", state.getPath()))
+	}
+	if !state.MaximumPrefixDiscardExtraPaths.IsNull() && data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", state.getPath()))
+	}
+	if !state.MaximumPrefixWarningOnly.IsNull() && data.MaximumPrefixWarningOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/warning-only", state.getPath()))
+	}
+	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/route-policy", state.getPath()))
+	}
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/inheritance-disable", state.getPath()))
 	}
 	return deletedItems
 }
@@ -301,11 +534,32 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 	if !data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", data.getPath()))
 	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	}
 	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
 	}
 	if !data.EncapsulationTypeSrv6.IsNull() && !data.EncapsulationTypeSrv6.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation-type/srv6", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", data.getPath()))
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix/warning-only", data.getPath()))
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/inheritance-disable", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -324,6 +578,9 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	if !data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", data.getPath()))
 	}
+	if !data.NextHopSelf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	}
 	if !data.NextHopSelfInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
 	}
@@ -335,6 +592,36 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	}
 	if !data.RoutePolicyOut.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.MaximumPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/prefix-limit", data.getPath()))
+	}
+	if !data.MaximumPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/threshold", data.getPath()))
+	}
+	if !data.MaximumPrefixRestart.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/restart", data.getPath()))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", data.getPath()))
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/warning-only", data.getPath()))
+	}
+	if !data.DefaultOriginateRoutePolicy.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/route-policy", data.getPath()))
+	}
+	if !data.DefaultOriginateInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/inheritance-disable", data.getPath()))
 	}
 	return deletePaths
 }

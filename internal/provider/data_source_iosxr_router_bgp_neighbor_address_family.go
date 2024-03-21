@@ -90,6 +90,10 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Advertise re-originated and local routes with stitching Route-Targets",
 				Computed:            true,
 			},
+			"next_hop_self": schema.BoolAttribute{
+				MarkdownDescription: "Disable the next hop calculation for this neighbor",
+				Computed:            true,
+			},
 			"next_hop_self_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: "Prevent next-hop-self from being inherited from the parent",
 				Computed:            true,
@@ -104,6 +108,46 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 			},
 			"route_policy_out": schema.StringAttribute{
 				MarkdownDescription: "Apply route policy to outbound routes",
+				Computed:            true,
+			},
+			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
+				MarkdownDescription: "Always use soft reconfig, even if route refresh is supported",
+				Computed:            true,
+			},
+			"send_community_ebgp": schema.BoolAttribute{
+				MarkdownDescription: "Send community attribute to this external neighbor",
+				Computed:            true,
+			},
+			"send_community_ebgp_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent send-community-ebgp from being inherited from the parent",
+				Computed:            true,
+			},
+			"maximum_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: "Maximum number of prefixes to accept from this peer",
+				Computed:            true,
+			},
+			"maximum_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: "Threshold value (%) at which to generate a warning msg",
+				Computed:            true,
+			},
+			"maximum_prefix_restart": schema.Int64Attribute{
+				MarkdownDescription: "Restart time interval",
+				Computed:            true,
+			},
+			"maximum_prefix_discard_extra_paths": schema.BoolAttribute{
+				MarkdownDescription: "Discard extra paths when limit is exceeded",
+				Computed:            true,
+			},
+			"maximum_prefix_warning_only": schema.BoolAttribute{
+				MarkdownDescription: "Only give warning message when limit is exceeded",
+				Computed:            true,
+			},
+			"default_originate_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to specify criteria to originate default",
+				Computed:            true,
+			},
+			"default_originate_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent default-originate being inherited from a parent group",
 				Computed:            true,
 			},
 		},

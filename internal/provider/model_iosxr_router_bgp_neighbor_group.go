@@ -48,6 +48,9 @@ type RouterBGPNeighborGroup struct {
 	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
 	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
+	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
+	TimersMinimumAcceptableHoldtime   types.String                            `tfsdk:"timers_minimum_acceptable_holdtime"`
 }
 
 type RouterBGPNeighborGroupData struct {
@@ -67,6 +70,9 @@ type RouterBGPNeighborGroupData struct {
 	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
 	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
+	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
+	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
+	TimersMinimumAcceptableHoldtime   types.String                            `tfsdk:"timers_minimum_acceptable_holdtime"`
 }
 type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
@@ -131,6 +137,15 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 		if data.BfdFastDetectInheritanceDisable.ValueBool() {
 			body, _ = sjson.Set(body, "bfd.fast-detect.inheritance-disable", map[string]string{})
 		}
+	}
+	if !data.TimersKeepaliveInterval.IsNull() && !data.TimersKeepaliveInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.keepalive-interval", strconv.FormatInt(data.TimersKeepaliveInterval.ValueInt64(), 10))
+	}
+	if !data.TimersHoldtime.IsNull() && !data.TimersHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.holdtime", data.TimersHoldtime.ValueString())
+	}
+	if !data.TimersMinimumAcceptableHoldtime.IsNull() && !data.TimersMinimumAcceptableHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.minimum-acceptable-holdtime", data.TimersMinimumAcceptableHoldtime.ValueString())
 	}
 	if len(data.AddressFamilies) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
@@ -316,6 +331,21 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamilies[i].RoutePolicyOut = types.StringNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	} else {
+		data.TimersKeepaliveInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() && !data.TimersHoldtime.IsNull() {
+		data.TimersHoldtime = types.StringValue(value.String())
+	} else {
+		data.TimersHoldtime = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() && !data.TimersMinimumAcceptableHoldtime.IsNull() {
+		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
+	} else {
+		data.TimersMinimumAcceptableHoldtime = types.StringNull()
+	}
 }
 
 func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
@@ -478,6 +508,15 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
+		data.TimersHoldtime = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
+	}
 }
 
 func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
@@ -563,6 +602,15 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
+	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/keepalive-interval", state.getPath()))
+	}
+	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/holdtime", state.getPath()))
+	}
+	if !state.TimersMinimumAcceptableHoldtime.IsNull() && data.TimersMinimumAcceptableHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/minimum-acceptable-holdtime", state.getPath()))
+	}
 	return deletedItems
 }
 
@@ -647,6 +695,15 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
+	}
+	if !data.TimersKeepaliveInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/keepalive-interval", data.getPath()))
+	}
+	if !data.TimersHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
+	}
+	if !data.TimersMinimumAcceptableHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/minimum-acceptable-holdtime", data.getPath()))
 	}
 	return deletePaths
 }

@@ -26,6 +26,7 @@ import (
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
+	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -113,6 +114,10 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
 				Optional:            true,
 			},
+			"next_hop_self": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable the next hop calculation for this neighbor").String,
+				Optional:            true,
+			},
 			"next_hop_self_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
 				Optional:            true,
@@ -134,6 +139,58 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
+			},
+			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
+				Optional:            true,
+			},
+			"send_community_ebgp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send community attribute to this external neighbor").String,
+				Optional:            true,
+			},
+			"send_community_ebgp_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-ebgp from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"maximum_prefix_limit": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of prefixes to accept from this peer").AddIntegerRangeDescription(1, 4294967295).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"maximum_prefix_threshold": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
+				Required:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 100),
+				},
+			},
+			"maximum_prefix_restart": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Restart time interval").AddIntegerRangeDescription(1, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 65535),
+				},
+			},
+			"maximum_prefix_discard_extra_paths": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Discard extra paths when limit is exceeded").String,
+				Optional:            true,
+			},
+			"maximum_prefix_warning_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
+				Optional:            true,
+			},
+			"default_originate_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria to originate default").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"default_originate_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent default-originate being inherited from a parent group").String,
+				Optional:            true,
 			},
 		},
 	}

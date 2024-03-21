@@ -20,4 +20,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       route_policy_out                           = "ROUTE_POLICY_1"
     }
   ]
+  timers_keepalive_interval          = 5
+  timers_holdtime                    = "3"
+  timers_minimum_acceptable_holdtime = "3"
 }

@@ -58,6 +58,15 @@ attributes:
         example: ROUTE_POLICY_1
       - yang_name: route-policy/out
         example: ROUTE_POLICY_1
+  - yang_name: timers/keepalive-interval
+    optional: true
+    example: 5
+  - yang_name: timers/holdtime
+    optional: true
+    example: 3
+  - yang_name: timers/minimum-acceptable-holdtime
+    example: 3
+
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:

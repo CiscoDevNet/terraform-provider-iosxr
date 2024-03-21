@@ -11,6 +11,7 @@ description: |-
 
 - Add `next_hop_self`, `soft_reconfiguration_inbound_always`, `send_community_ebgp`, `send_community_ebgp_inheritance_disable`, `maximum_prefix_limit`, `maximum_prefix_threshold`, `maximum_prefix_restart`, `maximum_prefix_discard_extra_paths`, `maximum_prefix_warning_only`, `default_originate_route_policy` and `default_originate_inheritance_disable` attributes to `iosxr_router_bgp_neighbor_address_family` resource and data source
 - Add `timers_keepalive_interval`, `timers_holdtime` and `timers_minimum_acceptable_holdtime` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
+- Make `index_sid_index` and `absolute_sid_label` attribute of `iosxr_router_ospf_area_interface` resource optional
 
 ## 0.4.0
 

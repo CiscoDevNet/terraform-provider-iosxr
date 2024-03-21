@@ -180,7 +180,7 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 						},
 						"index_sid_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("SID Index").AddIntegerRangeDescription(0, 1048575).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 1048575),
 							},
@@ -195,7 +195,7 @@ func (r *RouterOSPFAreaInterfaceResource) Schema(ctx context.Context, req resour
 						},
 						"absolute_sid_label": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("SID value").AddIntegerRangeDescription(16000, 1048575).String,
-							Required:            true,
+							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(16000, 1048575),
 							},

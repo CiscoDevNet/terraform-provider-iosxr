@@ -49,12 +49,14 @@ attributes:
         id: true
         example: 233
       - yang_name: index/sid-index
+        optional: true
         example: 1048
       - yang_name: index/explicit-null
         example: false
       - yang_name: index/n-flag-clear
         example: false
       - yang_name: absolute/sid-label
+        optional: true
         example: 17000
         exclude_test: true
       - yang_name: absolute/explicit-null

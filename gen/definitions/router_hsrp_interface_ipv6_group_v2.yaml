@@ -1,0 +1,63 @@
+---
+name: Router HSRP Interface IPv6 Group V2
+path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv6/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]
+doc_category: HSRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/2
+  - yang_name: group-number-version-2-id
+    tf_name: group_id
+    id: true
+    example: 4055
+  - yang_name: name
+    example: gp2
+  - yang_name: mac-address
+    example: 00:01:00:02:00:02
+  - yang_name: timers/hold-time
+    example: 10
+  - yang_name: timers/hold-time2
+    example: 20
+  - yang_name: timers/msec
+    example: 100
+  - yang_name: timers/msec2
+    example: 300
+  - yang_name: preempt/delay
+    example: 256
+  - yang_name: priority
+    example: 244
+  - yang_name: bfd/fast-detect/peer/ipv6
+    example: fe80::240:d0ff:fe48:4672
+  - yang_name: bfd/fast-detect/peer/interface
+    example: GigabitEthernet0/0/0/3
+  - yang_name: track-objects/track-object
+    tf_name: track_objects
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: TOBJ2
+      - yang_name: priority-decrement
+        example: 10
+  - yang_name: track-interfaces/track-interface
+    tf_name: track_interfaces
+    type: List
+    attributes:
+      - yang_name: track-name
+        id: true
+        example: GigabitEthernet0/0/0/4
+      - yang_name: priority-decrement
+        example: 244
+  - yang_name: address/globals/global
+    tf_name: addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001:db8:cafe:2100::bad1:1010
+  - yang_name: address/link-local/autoconfig
+    example: true
+  - yang_name: address/link-local/autoconfig/legacy-compatible
+    example: true
+  - yang_name: address/link-local/ipv6-address
+    example: fe80::240:d0ff:fe48:4672
+    exclude_test: true

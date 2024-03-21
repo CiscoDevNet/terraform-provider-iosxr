@@ -1,0 +1,62 @@
+---
+name: Router VRRP Interface IPv4
+path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]/address-family/ipv4/vrrps/vrrp[vrrp-id=%d][version=%d]
+doc_category: VRRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: vrrp-id
+    example: 123
+  - yang_name: version
+    example: 2
+  - yang_name: address
+    example: 1.1.1.1
+  - yang_name: priority
+    example: 250
+  - yang_name: name
+    example: TEST
+  - yang_name: text-authentication
+    example: 7
+  - yang_name: secondary-addresses/secondary-address
+    tf_name: secondary_addresses
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2.2.2.2
+  - yang_name: timer/advertisement-time-in-seconds
+    tf_name: timer_advertisement_seconds
+    example: 123
+  - yang_name: timer/advertisement-time-in-milliseconds
+    tf_name: timer_advertisement_milliseconds
+    example: 100
+    exclude_test: true
+  - yang_name: timer/force
+    example: false
+  - yang_name: preempt/disable
+    example: false
+  - yang_name: preempt/delay
+    example: 255
+  - yang_name: accept-mode/disable
+    example: false
+  - yang_name: track/interfaces/interface
+    tf_name: track_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: priority-decrement
+        example: 12
+  - yang_name: track/objects/object
+    tf_name: track_objects
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: OBJECT
+      - yang_name: priority-decrement
+        example: 22
+  - yang_name: bfd/fast-detect/peer/ipv4
+    example: 33.33.33.3

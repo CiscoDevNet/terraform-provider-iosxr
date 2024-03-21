@@ -19,6 +19,11 @@ description: |-
 - Add `next_hop_self` to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `next_hop_self` to `iosxr_router_bgp_vrf_neighbor_address_family` resource and data source
 - Add `address_link_local_autoconfig` attribute to `iosxr_hsrp_interface_address_family_ipv6_group_v2` resource and data source
+- BREAKING CHANGE: Rename `iosxr_router_hsrp_interface_address_family_ipv4_group_v1` resource and data source to `iosxr_router_hsrp_interface_ipv4_group_v1`
+- BREAKING CHANGE: Rename `iosxr_router_hsrp_interface_address_family_ipv4_group_v2` resource and data source to `iosxr_router_hsrp_interface_ipv4_group_v2`
+- BREAKING CHANGE: Rename `iosxr_router_hsrp_interface_address_family_ipv6_group_v2` resource and data source to `iosxr_router_hsrp_interface_ipv6_group_v2`
+- BREAKING CHANGE: Rename `iosxr_router_vrrp_interface_address_family_ipv4` resource and data source to `iosxr_router_vrrp_interface_ipv4`
+- BREAKING CHANGE: Rename `iosxr_router_vrrp_interface_address_family_ipv6` resource and data source to `iosxr_router_vrrp_interface_ipv6`
 
 ## 0.4.0
 

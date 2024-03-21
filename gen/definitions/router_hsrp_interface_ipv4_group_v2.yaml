@@ -1,0 +1,67 @@
+---
+name: Router HSRP Interface IPv4 Group V2
+path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-2s/group-number-version-2[group-number-version-2-id=%v]
+doc_category: HSRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: group-number-version-2-id
+    tf_name: group_id
+    example: 2345
+  - yang_name: address/ipv4-address
+    tf_name: address
+    example: 33.33.33.3
+  - yang_name: address/learn
+    example: false
+  - yang_name: priority
+    example: 133
+  - yang_name: mac-address
+    example: 40.41.42
+    exclude_test: true
+  - yang_name: name
+    example: NAME22
+  - yang_name: preempt/delay
+    example: 3100
+  - yang_name: timers/msec
+    example: 100
+    exclude_test: true
+  - yang_name: timers/msec2
+    example: 234
+    exclude_test: true
+  - yang_name: timers/hold-time
+    example: 22
+    exclude_test: true
+  - yang_name: timers/hold-time2
+    example: 234
+    exclude_test: true
+  - yang_name: bfd/fast-detect/peer/ipv4
+    example: 45.45.45.4
+  - yang_name: bfd/fast-detect/peer/interface
+    example: GigabitEthernet0/0/0/9
+    exclude_test: true
+  - yang_name: address/secondary-ipv4-addresses/secondary-ipv4-address
+    tf_name: secondary_ipv4_addresses
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.10.1.2
+  - yang_name: track-interfaces/track-interface
+    tf_name: track_interfaces
+    type: List
+    attributes:
+      - yang_name: track-name
+        id: true
+        example: GigabitEthernet0/0/0/7
+      - yang_name: priority-decrement
+        example: 66
+  - yang_name: track-objects/track-object
+    tf_name: track_objects
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: OBJECT2
+      - yang_name: priority-decrement
+        example: 77

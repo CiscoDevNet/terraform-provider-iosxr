@@ -1,0 +1,63 @@
+---
+name: Router VRRP Interface IPv6
+path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]/address-family/ipv6/vrrps/vrrp[vrrp-id=%d]
+doc_category: VRRP
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/2
+  - yang_name: vrrp-id
+    example: 124
+  - yang_name: address/global/global-address/address
+    tf_name: global_addresses
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+  - yang_name: address/linklocal/linklocal-address
+    tf_name: address_linklocal
+    example: 2::2
+    exclude_test: true
+  - yang_name: address/linklocal/autoconfig
+    tf_name: address_linklocal_autoconfig
+    example: true
+  - yang_name: priority
+    example: 250
+  - yang_name: name
+    example: TEST2
+  - yang_name: timer/advertisement-time-in-seconds
+    tf_name: timer_advertisement_seconds
+    example: 10
+  - yang_name: timer/advertisement-time-in-milliseconds
+    tf_name: timer_advertisement_milliseconds
+    example: 100
+    exclude_test: true
+  - yang_name: timer/force
+    example: true
+  - yang_name: preempt/disable
+    example: false
+  - yang_name: preempt/delay
+    example: 255
+  - yang_name: accept-mode/disable
+    example: true
+  - yang_name: track/interfaces/interface
+    tf_name: track_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/5
+      - yang_name: priority-decrement
+        example: 12
+  - yang_name: track/objects/object
+    tf_name: track_objects
+    type: List
+    attributes:
+      - yang_name: object-name
+        id: true
+        example: OBJECT
+      - yang_name: priority-decrement
+        example: 22
+  - yang_name: bfd/fast-detect/peer/ipv6
+    example: 3::3

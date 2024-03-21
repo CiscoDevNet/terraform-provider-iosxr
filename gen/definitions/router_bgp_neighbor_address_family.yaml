@@ -35,8 +35,10 @@ attributes:
     example: true
   - yang_name: maximum-prefix/prefix-limit
     tf_name: maximum_prefix_limit
+    optional: true
     example: 1248576
   - yang_name: maximum-prefix/threshold
+    optional: true
     example: 80
   - yang_name: maximum-prefix/restart
     example: 5

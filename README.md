@@ -37,27 +37,7 @@ This Terraform Provider is available to install automatically via `terraform ini
 [install it as a plugin.](https://www.terraform.io/docs/plugins/basics.html#installing-a-plugin)
 After placing it into your plugins directory,  run `terraform init` to initialize it.
 
-TIPS:
-- [proxmox-guide](https://registry.terraform.io/providers/wearespindle/proxmox/latest/docs/guides/installation#copy-executables-to-plugin-directory-terraform-013)
-- [Terraform, new filesystem layout](https://github.com/hashicorp/terraform/blob/guide-v0.13-beta/draft-upgrade-guide.md#new-filesystem-layout-for-local-copies-of-providers)
-
 Additional documentation, including available resources and their arguments/attributes can be found on the [Terraform documentation website](https://registry.terraform.io/providers/CiscoDevNet/iosxr/latest/docs).
-
-
-Or adjust the steps below
-
-```bash
-
-PLUGIN_ARCH=darwin_amd64 # Adjust
-PLUGIN_VERSION=0.3.3 # Adjust
-
-PLUGIN_PATH=~/.terraform.d/plugins/registry.terraform.io/ciscodevnet/iosxr/${PLUGIN_VERSION}/${PLUGIN_ARCH}
-
-mkdir -p ${PLUGIN_PATH}
-
-go build -o ${PLUGIN_PATH}/terraform-provider-iosxr
-
-```
 
 ## Developing the Provider
 

@@ -250,5 +250,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_static_vrf_ipv6_unicast.example "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]/address-family/ipv6/unicast/prefixes/prefix[prefix-address=1::][prefix-length=%!d(string=64)]"
+terraform import iosxr_router_static_vrf_ipv6_unicast.example "<vrf_name>,<prefix_address>,<prefix_length>"
 ```

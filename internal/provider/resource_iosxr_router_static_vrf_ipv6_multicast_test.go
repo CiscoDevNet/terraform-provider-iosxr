@@ -82,7 +82,8 @@ func TestAccIosxrRouterStaticVRFIPv6Multicast(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_static_vrf_ipv6_multicast.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]/address-family/ipv6/multicast/prefixes/prefix[prefix-address=1::][prefix-length=%!d(string=64)]",
+		ImportStateId: "VRF2,1::,64",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

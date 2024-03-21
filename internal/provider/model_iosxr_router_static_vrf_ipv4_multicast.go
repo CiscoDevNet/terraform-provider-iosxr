@@ -738,6 +738,212 @@ func (data *RouterStaticVRFIPv4Multicast) updateFromBody(ctx context.Context, re
 	}
 }
 
+func (data *RouterStaticVRFIPv4Multicast) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
+		data.NexthopInterfaces = make([]RouterStaticVRFIPv4MulticastNexthopInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv4MulticastNexthopInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaces = append(data.NexthopInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-interface-addresses.nexthop-interface-address"); value.Exists() {
+		data.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv4MulticastNexthopInterfaceAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv4MulticastNexthopInterfaceAddresses{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopInterfaceAddresses = append(data.NexthopInterfaceAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nexthop-addresses.nexthop-address"); value.Exists() {
+		data.NexthopAddresses = make([]RouterStaticVRFIPv4MulticastNexthopAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv4MulticastNexthopAddresses{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("distance-metric"); cValue.Exists() {
+				item.DistanceMetric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permanent"); cValue.Exists() {
+				item.Permanent = types.BoolValue(true)
+			} else {
+				item.Permanent = types.BoolValue(false)
+			}
+			if cValue := v.Get("track"); cValue.Exists() {
+				item.Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			data.NexthopAddresses = append(data.NexthopAddresses, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]RouterStaticVRFIPv4MulticastVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterStaticVRFIPv4MulticastVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("nexthop-interfaces.nexthop-interface"); cValue.Exists() {
+				item.NexthopInterfaces = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaces = append(item.NexthopInterfaces, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-interface-addresses.nexthop-interface-address"); cValue.Exists() {
+				item.NexthopInterfaceAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv4MulticastVrfsNexthopInterfaceAddresses{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("nexthop-addresses.nexthop-address"); cValue.Exists() {
+				item.NexthopAddresses = make([]RouterStaticVRFIPv4MulticastVrfsNexthopAddresses, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := RouterStaticVRFIPv4MulticastVrfsNexthopAddresses{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("description"); ccValue.Exists() {
+						cItem.Description = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("tag"); ccValue.Exists() {
+						cItem.Tag = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("distance-metric"); ccValue.Exists() {
+						cItem.DistanceMetric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("permanent"); ccValue.Exists() {
+						cItem.Permanent = types.BoolValue(true)
+					} else {
+						cItem.Permanent = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("track"); ccValue.Exists() {
+						cItem.Track = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("metric"); ccValue.Exists() {
+						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					item.NexthopAddresses = append(item.NexthopAddresses, cItem)
+					return true
+				})
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterStaticVRFIPv4MulticastData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticVRFIPv4MulticastNexthopInterfaces, 0)

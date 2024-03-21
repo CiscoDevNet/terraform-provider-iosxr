@@ -1,1 +1,1 @@
-terraform import iosxr_router_static_vrf_ipv4_multicast.example "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]/address-family/ipv4/multicast/prefixes/prefix[prefix-address=100.0.1.0][prefix-length=%!d(string=24)]"
+terraform import iosxr_router_static_vrf_ipv4_multicast.example "<vrf_name>,<prefix_address>,<prefix_length>"

@@ -43,5 +43,5 @@ resource "iosxr_fpd" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_fpd.example "Cisco-IOS-XR-um-fpd-cfg:/fpd"
+terraform import iosxr_fpd.example ""
 ```

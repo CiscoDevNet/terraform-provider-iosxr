@@ -318,6 +318,82 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 }
 
+func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "fast-reroute.computation.per-prefix-computation"); value.Exists() {
+		data.FastReroutePerPrefix = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefix = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.ti-lfa"); value.Exists() {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.per-prefix.levels.level"); value.Exists() {
+		data.FastReroutePerPrefixLevels = make([]RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceAddressFamilyFastReroutePerPrefixLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ti-lfa"); cValue.Exists() {
+				item.TiLfa = types.BoolValue(true)
+			} else {
+				item.TiLfa = types.BoolValue(false)
+			}
+			data.FastReroutePerPrefixLevels = append(data.FastReroutePerPrefixLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "tag.interface-tag"); value.Exists() {
+		data.Tag = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.sid.absolute.sid-value"); value.Exists() {
+		data.PrefixSidAbsolute = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.sid.n-flag-clear"); value.Exists() {
+		data.PrefixSidNFlagClear = types.BoolValue(true)
+	} else {
+		data.PrefixSidNFlagClear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.prefix.route-policy"); value.Exists() {
+		data.AdvertisePrefixRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.sid.index.sid-index"); value.Exists() {
+		data.PrefixSidIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.absolute.sid-value"); value.Exists() {
+		data.PrefixSidStrictSpfAbsolute = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "metric.default-metric"); value.Exists() {
+		data.Metric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "metric.maximum"); value.Exists() {
+		data.MetricMaximum = types.BoolValue(true)
+	} else {
+		data.MetricMaximum = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric.levels.level"); value.Exists() {
+		data.MetricLevels = make([]RouterISISInterfaceAddressFamilyMetricLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaceAddressFamilyMetricLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("default-metric"); cValue.Exists() {
+				item.Metric = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maximum"); cValue.Exists() {
+				item.Maximum = types.BoolValue(true)
+			} else {
+				item.Maximum = types.BoolValue(false)
+			}
+			data.MetricLevels = append(data.MetricLevels, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.computation.per-prefix-computation"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)

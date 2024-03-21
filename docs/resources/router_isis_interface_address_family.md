@@ -109,5 +109,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_isis_interface_address_family.example "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
+terraform import iosxr_router_isis_interface_address_family.example "<process_id>,<interface_name>,<af_name>,<saf_name>"
 ```

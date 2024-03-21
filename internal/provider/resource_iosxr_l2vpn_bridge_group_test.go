@@ -42,7 +42,8 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_l2vpn_bridge_group.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]",
+		ImportStateId: "BG123",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

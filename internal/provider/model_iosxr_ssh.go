@@ -179,6 +179,45 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SSH) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
+		data.ServerDscp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server.logging"); value.Exists() {
+		data.ServerLogging = types.BoolValue(true)
+	} else {
+		data.ServerLogging = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "server.rate-limit"); value.Exists() {
+		data.ServerRateLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server.session-limit"); value.Exists() {
+		data.ServerSessionLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "server.v2"); value.Exists() {
+		data.ServerV2 = types.BoolValue(true)
+	} else {
+		data.ServerV2 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "server.vrfs.vrf"); value.Exists() {
+		data.ServerVrfs = make([]SSHServerVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SSHServerVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.access-list"); cValue.Exists() {
+				item.Ipv4AccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.access-list"); cValue.Exists() {
+				item.Ipv6AccessList = types.StringValue(cValue.String())
+			}
+			data.ServerVrfs = append(data.ServerVrfs, item)
+			return true
+		})
+	}
+}
+
 func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())

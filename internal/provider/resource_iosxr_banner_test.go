@@ -43,7 +43,8 @@ func TestAccIosxrBanner(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_banner.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-banner-cfg:/banners/banner[banner-type=login]",
+		ImportStateId: "login",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

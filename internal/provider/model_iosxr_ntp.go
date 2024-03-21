@@ -1642,6 +1642,484 @@ func (data *NTP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *NTP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
+		data.Ipv4Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv4.precedence"); value.Exists() {
+		data.Ipv4Precedence = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.dscp"); value.Exists() {
+		data.Ipv6Dscp = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ipv6.precedence"); value.Exists() {
+		data.Ipv6Precedence = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv6.peer"); value.Exists() {
+		data.AccessGroupIpv6Peer = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv6.query-only"); value.Exists() {
+		data.AccessGroupIpv6QueryOnly = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv6.serve"); value.Exists() {
+		data.AccessGroupIpv6Serve = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv6.serve-only"); value.Exists() {
+		data.AccessGroupIpv6ServeOnly = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv4.peer"); value.Exists() {
+		data.AccessGroupIpv4Peer = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv4.query-only"); value.Exists() {
+		data.AccessGroupIpv4QueryOnly = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv4.serve"); value.Exists() {
+		data.AccessGroupIpv4Serve = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.ipv4.serve-only"); value.Exists() {
+		data.AccessGroupIpv4ServeOnly = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "access-group.vrfs.vrf"); value.Exists() {
+		data.AccessGroupVrfs = make([]NTPAccessGroupVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPAccessGroupVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.peer"); cValue.Exists() {
+				item.Ipv6Peer = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.query-only"); cValue.Exists() {
+				item.Ipv6QueryOnly = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.serve"); cValue.Exists() {
+				item.Ipv6Serve = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6.serve-only"); cValue.Exists() {
+				item.Ipv6ServeOnly = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.peer"); cValue.Exists() {
+				item.Ipv4Peer = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.query-only"); cValue.Exists() {
+				item.Ipv4QueryOnly = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.serve"); cValue.Exists() {
+				item.Ipv4Serve = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.serve-only"); cValue.Exists() {
+				item.Ipv4ServeOnly = types.StringValue(cValue.String())
+			}
+			data.AccessGroupVrfs = append(data.AccessGroupVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "authenticate"); value.Exists() {
+		data.Authenticate = types.BoolValue(true)
+	} else {
+		data.Authenticate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "authentication-keys.authentication-key"); value.Exists() {
+		data.AuthenticationKeys = make([]NTPAuthenticationKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPAuthenticationKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("md5.encrypted"); cValue.Exists() {
+				item.Md5Encrypted = types.StringValue(cValue.String())
+			}
+			data.AuthenticationKeys = append(data.AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "broadcastdelay"); value.Exists() {
+		data.Broadcastdelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "max-associations"); value.Exists() {
+		data.MaxAssociations = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "trusted-keys.trusted-key"); value.Exists() {
+		data.TrustedKeys = make([]NTPTrustedKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPTrustedKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			data.TrustedKeys = append(data.TrustedKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "update-calendar"); value.Exists() {
+		data.UpdateCalendar = types.BoolValue(true)
+	} else {
+		data.UpdateCalendar = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log-internal-sync"); value.Exists() {
+		data.LogInternalSync = types.BoolValue(true)
+	} else {
+		data.LogInternalSync = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "source.interface-name"); value.Exists() {
+		data.SourceInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "source.vrfs.vrf"); value.Exists() {
+		data.SourceVrfs = make([]NTPSourceVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPSourceVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.SourceVrfs = append(data.SourceVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		data.Passive = types.BoolValue(true)
+	} else {
+		data.Passive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cmac-authentication-keys.cmac-authentication-key"); value.Exists() {
+		data.CmacAuthenticationKeys = make([]NTPCmacAuthenticationKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPCmacAuthenticationKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("cmac.encrypted"); cValue.Exists() {
+				item.CmacEncrypted = types.StringValue(cValue.String())
+			}
+			data.CmacAuthenticationKeys = append(data.CmacAuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hmac-sha1-authentication-keys.hmac-sha1-authentication-key"); value.Exists() {
+		data.HmacSha1AuthenticationKeys = make([]NTPHmacSha1AuthenticationKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPHmacSha1AuthenticationKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hmac-sha1.encrypted"); cValue.Exists() {
+				item.HmacSha1Encrypted = types.StringValue(cValue.String())
+			}
+			data.HmacSha1AuthenticationKeys = append(data.HmacSha1AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "hmac-sha2-authentication-keys.hmac-sha2-authentication-key"); value.Exists() {
+		data.HmacSha2AuthenticationKeys = make([]NTPHmacSha2AuthenticationKeys, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPHmacSha2AuthenticationKeys{}
+			if cValue := v.Get("key-number"); cValue.Exists() {
+				item.KeyNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("hmac-sha2.encrypted"); cValue.Exists() {
+				item.HmacSha2Encrypted = types.StringValue(cValue.String())
+			}
+			data.HmacSha2AuthenticationKeys = append(data.HmacSha2AuthenticationKeys, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]NTPInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("broadcast.destination"); cValue.Exists() {
+				item.BroadcastDestination = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("broadcast.key"); cValue.Exists() {
+				item.BroadcastKey = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("broadcast.version"); cValue.Exists() {
+				item.BroadcastVersion = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("disable"); cValue.Exists() {
+				item.Disable = types.BoolValue(true)
+			} else {
+				item.Disable = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interfaces.vrfs.vrf"); value.Exists() {
+		data.InterfaceVrfs = make([]NTPInterfaceVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPInterfaceVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("interface"); cValue.Exists() {
+				item.Interfaces = make([]NTPInterfaceVrfsInterfaces, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := NTPInterfaceVrfsInterfaces{}
+					if ccValue := cv.Get("interface-name"); ccValue.Exists() {
+						cItem.InterfaceName = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("broadcast-client"); ccValue.Exists() {
+						cItem.BroadcastClient = types.BoolValue(true)
+					} else {
+						cItem.BroadcastClient = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("broadcast.destination"); ccValue.Exists() {
+						cItem.BroadcastDestination = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("broadcast.key"); ccValue.Exists() {
+						cItem.BroadcastKey = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("broadcast.version"); ccValue.Exists() {
+						cItem.BroadcastVersion = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("disable"); ccValue.Exists() {
+						cItem.Disable = types.BoolValue(true)
+					} else {
+						cItem.Disable = types.BoolValue(false)
+					}
+					item.Interfaces = append(item.Interfaces, cItem)
+					return true
+				})
+			}
+			data.InterfaceVrfs = append(data.InterfaceVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "primary.stratum-number"); value.Exists() {
+		data.PrimaryStratumNumber = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "primary.primary-reference-clock"); value.Exists() {
+		data.PrimaryReferenceClock = types.BoolValue(true)
+	} else {
+		data.PrimaryReferenceClock = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "peer-server.ipv4.ipv4-peer-server"); value.Exists() {
+		data.Ipv4PeersServers = make([]NTPIpv4PeersServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPIpv4PeersServers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := v.Get("burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := v.Get("iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			data.Ipv4PeersServers = append(data.Ipv4PeersServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "peer-server.ipv6.ipv6-peer-server"); value.Exists() {
+		data.Ipv6PeersServers = make([]NTPIpv6PeersServers, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPIpv6PeersServers{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("type"); cValue.Exists() {
+				item.Type = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("version"); cValue.Exists() {
+				item.Version = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("key"); cValue.Exists() {
+				item.Key = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("minpoll"); cValue.Exists() {
+				item.Minpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maxpoll"); cValue.Exists() {
+				item.Maxpoll = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("prefer"); cValue.Exists() {
+				item.Prefer = types.BoolValue(true)
+			} else {
+				item.Prefer = types.BoolValue(false)
+			}
+			if cValue := v.Get("burst"); cValue.Exists() {
+				item.Burst = types.BoolValue(true)
+			} else {
+				item.Burst = types.BoolValue(false)
+			}
+			if cValue := v.Get("iburst"); cValue.Exists() {
+				item.Iburst = types.BoolValue(true)
+			} else {
+				item.Iburst = types.BoolValue(false)
+			}
+			if cValue := v.Get("source"); cValue.Exists() {
+				item.Source = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv6-address"); cValue.Exists() {
+				item.Ipv6Address = types.StringValue(cValue.String())
+			}
+			data.Ipv6PeersServers = append(data.Ipv6PeersServers, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "peer-server.vrfs.vrf"); value.Exists() {
+		data.PeersServersVrfs = make([]NTPPeersServersVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := NTPPeersServersVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ipv4.ipv4-peer-server"); cValue.Exists() {
+				item.Ipv4PeersServers = make([]NTPPeersServersVrfsIpv4PeersServers, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := NTPPeersServersVrfsIpv4PeersServers{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					item.Ipv4PeersServers = append(item.Ipv4PeersServers, cItem)
+					return true
+				})
+			}
+			if cValue := v.Get("ipv6.ipv6-peer-server"); cValue.Exists() {
+				item.Ipv6PeersServers = make([]NTPPeersServersVrfsIpv6PeersServers, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := NTPPeersServersVrfsIpv6PeersServers{}
+					if ccValue := cv.Get("address"); ccValue.Exists() {
+						cItem.Address = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("type"); ccValue.Exists() {
+						cItem.Type = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("version"); ccValue.Exists() {
+						cItem.Version = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("key"); ccValue.Exists() {
+						cItem.Key = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("minpoll"); ccValue.Exists() {
+						cItem.Minpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("maxpoll"); ccValue.Exists() {
+						cItem.Maxpoll = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("prefer"); ccValue.Exists() {
+						cItem.Prefer = types.BoolValue(true)
+					} else {
+						cItem.Prefer = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("burst"); ccValue.Exists() {
+						cItem.Burst = types.BoolValue(true)
+					} else {
+						cItem.Burst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("iburst"); ccValue.Exists() {
+						cItem.Iburst = types.BoolValue(true)
+					} else {
+						cItem.Iburst = types.BoolValue(false)
+					}
+					if ccValue := cv.Get("source"); ccValue.Exists() {
+						cItem.Source = types.StringValue(ccValue.String())
+					}
+					if ccValue := cv.Get("ipv6-address"); ccValue.Exists() {
+						cItem.Ipv6Address = types.StringValue(ccValue.String())
+					}
+					item.Ipv6PeersServers = append(item.Ipv6PeersServers, cItem)
+					return true
+				})
+			}
+			data.PeersServersVrfs = append(data.PeersServersVrfs, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "admin-plane.version"); value.Exists() {
+		data.AdminPlaneVersion = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "admin-plane.key"); value.Exists() {
+		data.AdminPlaneKey = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "admin-plane.minpoll"); value.Exists() {
+		data.AdminPlaneMinpoll = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "admin-plane.maxpoll"); value.Exists() {
+		data.AdminPlaneMaxpoll = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "admin-plane.prefer"); value.Exists() {
+		data.AdminPlanePrefer = types.BoolValue(true)
+	} else {
+		data.AdminPlanePrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "admin-plane.burst"); value.Exists() {
+		data.AdminPlaneBurst = types.BoolValue(true)
+	} else {
+		data.AdminPlaneBurst = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "admin-plane.iburst"); value.Exists() {
+		data.AdminPlaneIburst = types.BoolValue(true)
+	} else {
+		data.AdminPlaneIburst = types.BoolValue(false)
+	}
+}
+
 func (data *NTPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.dscp"); value.Exists() {
 		data.Ipv4Dscp = types.StringValue(value.String())

@@ -100,7 +100,8 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_{{snakeCase $name}}.test",
 		ImportState:   true,
-		ImportStateId: "{{getExamplePath .Path .Attributes}}",
+		ImportStateId: "{{range $index, $attr := .Attributes}}{{if or $attr.Reference $attr.Id}}{{if $index}},{{end}}{{$attr.Example}}{{end}}{{end}}",
+		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

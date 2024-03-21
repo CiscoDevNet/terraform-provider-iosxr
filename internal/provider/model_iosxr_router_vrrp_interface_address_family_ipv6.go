@@ -310,6 +310,81 @@ func (data *RouterVRRPInterfaceAddressFamilyIPv6) updateFromBody(ctx context.Con
 	}
 }
 
+func (data *RouterVRRPInterfaceAddressFamilyIPv6) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "address.global.global-address.address"); value.Exists() {
+		data.GlobalAddresses = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() {
+		data.AddressLinklocal = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address.linklocal.autoconfig"); value.Exists() {
+		data.AddressLinklocalAutoconfig = types.BoolValue(true)
+	} else {
+		data.AddressLinklocalAutoconfig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "name"); value.Exists() {
+		data.Name = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "timer.advertisement-time-in-seconds"); value.Exists() {
+		data.TimerAdvertisementSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timer.advertisement-time-in-milliseconds"); value.Exists() {
+		data.TimerAdvertisementMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timer.force"); value.Exists() {
+		data.TimerForce = types.BoolValue(true)
+	} else {
+		data.TimerForce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preempt.disable"); value.Exists() {
+		data.PreemptDisable = types.BoolValue(true)
+	} else {
+		data.PreemptDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "preempt.delay"); value.Exists() {
+		data.PreemptDelay = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "accept-mode.disable"); value.Exists() {
+		data.AcceptModeDisable = types.BoolValue(true)
+	} else {
+		data.AcceptModeDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "track.interfaces.interface"); value.Exists() {
+		data.TrackInterfaces = make([]RouterVRRPInterfaceAddressFamilyIPv6TrackInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterVRRPInterfaceAddressFamilyIPv6TrackInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackInterfaces = append(data.TrackInterfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "track.objects.object"); value.Exists() {
+		data.TrackObjects = make([]RouterVRRPInterfaceAddressFamilyIPv6TrackObjects, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterVRRPInterfaceAddressFamilyIPv6TrackObjects{}
+			if cValue := v.Get("object-name"); cValue.Exists() {
+				item.ObjectName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("priority-decrement"); cValue.Exists() {
+				item.PriorityDecrement = types.Int64Value(cValue.Int())
+			}
+			data.TrackObjects = append(data.TrackObjects, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.peer.ipv6"); value.Exists() {
+		data.BfdFastDetectPeerIpv6 = types.StringValue(value.String())
+	}
+}
+
 func (data *RouterVRRPInterfaceAddressFamilyIPv6Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.global.global-address.address"); value.Exists() {
 		data.GlobalAddresses = types.StringValue(value.String())

@@ -92,5 +92,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_ospf_area_interface.example "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+terraform import iosxr_router_ospf_area_interface.example "<process_name>,<area_id>,<interface_name>"
 ```

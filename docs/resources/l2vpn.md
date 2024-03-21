@@ -56,5 +56,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_l2vpn.example "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+terraform import iosxr_l2vpn.example ""
 ```

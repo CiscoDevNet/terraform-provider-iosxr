@@ -71,6 +71,14 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
+		data.TrafficEng = types.BoolValue(true)
+	} else {
+		data.TrafficEng = types.BoolValue(false)
+	}
+}
+
 func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)

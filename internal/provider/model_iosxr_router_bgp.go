@@ -797,6 +797,241 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-metric"); value.Exists() {
+		data.DefaultMetric = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nsr.disable"); value.Exists() {
+		data.NsrDisable = types.BoolValue(true)
+	} else {
+		data.NsrDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.redistribute-internal"); value.Exists() {
+		data.BgpRedistributeInternal = types.BoolValue(true)
+	} else {
+		data.BgpRedistributeInternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locator = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.keepalive-interval"); value.Exists() {
+		data.TimersBgpKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.holdtime"); value.Exists() {
+		data.TimersBgpHoldtime = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "timers.bgp.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersBgpMinimumAcceptableHoldtime = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bgp.router-id"); value.Exists() {
+		data.BgpRouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bgp.graceful-restart.graceful-reset"); value.Exists() {
+		data.BgpGracefulRestartGracefulReset = types.BoolValue(true)
+	} else {
+		data.BgpGracefulRestartGracefulReset = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ibgp.policy.out.enforce-modifications"); value.Exists() {
+		data.IbgpPolicyOutEnforceModifications = types.BoolValue(true)
+	} else {
+		data.IbgpPolicyOutEnforceModifications = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.log.neighbor.changes.detail"); value.Exists() {
+		data.BgpLogNeighborChangesDetail = types.BoolValue(true)
+	} else {
+		data.BgpLogNeighborChangesDetail = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.sr-policy"); value.Exists() {
+		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(true)
+	} else {
+		data.NexthopValidationColorExtcommSrPolicy = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nexthop.validation.color-extcomm.disable"); value.Exists() {
+		data.NexthopValidationColorExtcommDisable = types.BoolValue(true)
+	} else {
+		data.NexthopValidationColorExtcommDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.ignore"); value.Exists() {
+		data.BgpBestpathAsPathIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAsPathIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.as-path.multipath-relax"); value.Exists() {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAsPathMultipathRelax = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.cost-community.ignore"); value.Exists() {
+		data.BgpBestpathCostCommunityIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathCostCommunityIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.compare-routerid"); value.Exists() {
+		data.BgpBestpathCompareRouterid = types.BoolValue(true)
+	} else {
+		data.BgpBestpathCompareRouterid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.aigp.ignore"); value.Exists() {
+		data.BgpBestpathAigpIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathAigpIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.ignore"); value.Exists() {
+		data.BgpBestpathIgpMetricIgnore = types.BoolValue(true)
+	} else {
+		data.BgpBestpathIgpMetricIgnore = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.igp-metric.sr-policy"); value.Exists() {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(true)
+	} else {
+		data.BgpBestpathIgpMetricSrPolicy = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.always"); value.Exists() {
+		data.BgpBestpathMedAlways = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.confed"); value.Exists() {
+		data.BgpBestpathMedConfed = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedConfed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.med.missing-as-worst"); value.Exists() {
+		data.BgpBestpathMedMissingAsWorst = types.BoolValue(true)
+	} else {
+		data.BgpBestpathMedMissingAsWorst = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.use.validity"); value.Exists() {
+		data.BgpBestpathOriginAsUseValidity = types.BoolValue(true)
+	} else {
+		data.BgpBestpathOriginAsUseValidity = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.origin-as.allow.invalid"); value.Exists() {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(true)
+	} else {
+		data.BgpBestpathOriginAsAllowInvalid = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.prefer"); value.Exists() {
+		data.BgpBestpathSrPolicyPrefer = types.BoolValue(true)
+	} else {
+		data.BgpBestpathSrPolicyPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bgp.bestpath.sr-policy.force"); value.Exists() {
+		data.BgpBestpathSrPolicyForce = types.BoolValue(true)
+	} else {
+		data.BgpBestpathSrPolicyForce = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "neighbors.neighbor"); value.Exists() {
+		data.Neighbors = make([]RouterBGPNeighbors, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPNeighbors{}
+			if cValue := v.Get("neighbor-address"); cValue.Exists() {
+				item.NeighborAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("remote-as"); cValue.Exists() {
+				item.RemoteAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("description"); cValue.Exists() {
+				item.Description = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("use.neighbor-group"); cValue.Exists() {
+				item.UseNeighborGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-seconds"); cValue.Exists() {
+				item.AdvertisementIntervalSeconds = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertisement-interval.time-in-milliseconds"); cValue.Exists() {
+				item.AdvertisementIntervalMilliseconds = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("ignore-connected-check"); cValue.Exists() {
+				item.IgnoreConnectedCheck = types.BoolValue(true)
+			} else {
+				item.IgnoreConnectedCheck = types.BoolValue(false)
+			}
+			if cValue := v.Get("ebgp-multihop.maximum-hop-count"); cValue.Exists() {
+				item.EbgpMultihopMaximumHopCount = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.minimum-interval"); cValue.Exists() {
+				item.BfdMinimumInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.multiplier"); cValue.Exists() {
+				item.BfdMultiplier = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("bfd.fast-detect"); cValue.Exists() {
+				item.BfdFastDetect = types.BoolValue(true)
+			} else {
+				item.BfdFastDetect = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.strict-mode"); cValue.Exists() {
+				item.BfdFastDetectStrictMode = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectStrictMode = types.BoolValue(false)
+			}
+			if cValue := v.Get("bfd.fast-detect.inheritance-disable"); cValue.Exists() {
+				item.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.as-number"); cValue.Exists() {
+				item.LocalAs = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("local-as.no-prepend"); cValue.Exists() {
+				item.LocalAsNoPrepend = types.BoolValue(true)
+			} else {
+				item.LocalAsNoPrepend = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.no-prepend.replace-as"); cValue.Exists() {
+				item.LocalAsReplaceAs = types.BoolValue(true)
+			} else {
+				item.LocalAsReplaceAs = types.BoolValue(false)
+			}
+			if cValue := v.Get("local-as.no-prepend.replace-as.dual-as"); cValue.Exists() {
+				item.LocalAsDualAs = types.BoolValue(true)
+			} else {
+				item.LocalAsDualAs = types.BoolValue(false)
+			}
+			if cValue := v.Get("password.encrypted"); cValue.Exists() {
+				item.Password = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			if cValue := v.Get("timers.keepalive-interval"); cValue.Exists() {
+				item.TimersKeepaliveInterval = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("timers.holdtime"); cValue.Exists() {
+				item.TimersHoldtime = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("timers.minimum-acceptable-holdtime"); cValue.Exists() {
+				item.TimersMinimumAcceptableHoldtime = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("update-source"); cValue.Exists() {
+				item.UpdateSource = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ttl-security"); cValue.Exists() {
+				item.TtlSecurity = types.BoolValue(true)
+			} else {
+				item.TtlSecurity = types.BoolValue(false)
+			}
+			data.Neighbors = append(data.Neighbors, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)

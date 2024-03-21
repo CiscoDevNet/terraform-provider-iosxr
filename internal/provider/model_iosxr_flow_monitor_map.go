@@ -869,6 +869,258 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *FlowMonitorMap) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "exporters.exporter"); value.Exists() {
+		data.Exporters = make([]FlowMonitorMapExporters, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := FlowMonitorMapExporters{}
+			if cValue := v.Get("exporter-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Exporters = append(data.Exporters, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "option.outphysint"); value.Exists() {
+		data.OptionOutphysint = types.BoolValue(true)
+	} else {
+		data.OptionOutphysint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "option.filtered"); value.Exists() {
+		data.OptionFiltered = types.BoolValue(true)
+	} else {
+		data.OptionFiltered = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "option.bgpattr"); value.Exists() {
+		data.OptionBgpattr = types.BoolValue(true)
+	} else {
+		data.OptionBgpattr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "option.outbundlemember"); value.Exists() {
+		data.OptionOutbundlemember = types.BoolValue(true)
+	} else {
+		data.OptionOutbundlemember = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4"); value.Exists() {
+		data.RecordIpv4 = types.BoolValue(true)
+	} else {
+		data.RecordIpv4 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.destination"); value.Exists() {
+		data.RecordIpv4Destination = types.BoolValue(true)
+	} else {
+		data.RecordIpv4Destination = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.destination-tos"); value.Exists() {
+		data.RecordIpv4DestinationTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4DestinationTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.as"); value.Exists() {
+		data.RecordIpv4As = types.BoolValue(true)
+	} else {
+		data.RecordIpv4As = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.protocol-port"); value.Exists() {
+		data.RecordIpv4ProtocolPort = types.BoolValue(true)
+	} else {
+		data.RecordIpv4ProtocolPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.prefix"); value.Exists() {
+		data.RecordIpv4Prefix = types.BoolValue(true)
+	} else {
+		data.RecordIpv4Prefix = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.source-prefix"); value.Exists() {
+		data.RecordIpv4SourcePrefix = types.BoolValue(true)
+	} else {
+		data.RecordIpv4SourcePrefix = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.destination-prefix"); value.Exists() {
+		data.RecordIpv4DestinationPrefix = types.BoolValue(true)
+	} else {
+		data.RecordIpv4DestinationPrefix = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.as-tos"); value.Exists() {
+		data.RecordIpv4AsTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4AsTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.protocol-port-tos"); value.Exists() {
+		data.RecordIpv4ProtocolPortTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4ProtocolPortTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.prefix-tos"); value.Exists() {
+		data.RecordIpv4PrefixTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4PrefixTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.source-prefix-tos"); value.Exists() {
+		data.RecordIpv4SourcePrefixTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4SourcePrefixTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.destination-prefix-tos"); value.Exists() {
+		data.RecordIpv4DestinationPrefixTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4DestinationPrefixTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.prefix-port"); value.Exists() {
+		data.RecordIpv4PrefixPort = types.BoolValue(true)
+	} else {
+		data.RecordIpv4PrefixPort = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.bgp-nexthop-tos"); value.Exists() {
+		data.RecordIpv4BgpNexthopTos = types.BoolValue(true)
+	} else {
+		data.RecordIpv4BgpNexthopTos = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.peer-as"); value.Exists() {
+		data.RecordIpv4PeerAs = types.BoolValue(true)
+	} else {
+		data.RecordIpv4PeerAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv4.gtp"); value.Exists() {
+		data.RecordIpv4Gtp = types.BoolValue(true)
+	} else {
+		data.RecordIpv4Gtp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv6"); value.Exists() {
+		data.RecordIpv6 = types.BoolValue(true)
+	} else {
+		data.RecordIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv6.destination"); value.Exists() {
+		data.RecordIpv6Destination = types.BoolValue(true)
+	} else {
+		data.RecordIpv6Destination = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv6.peer-as"); value.Exists() {
+		data.RecordIpv6PeerAs = types.BoolValue(true)
+	} else {
+		data.RecordIpv6PeerAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.ipv6.gtp"); value.Exists() {
+		data.RecordIpv6Gtp = types.BoolValue(true)
+	} else {
+		data.RecordIpv6Gtp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls"); value.Exists() {
+		data.RecordMpls = types.BoolValue(true)
+	} else {
+		data.RecordMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls.ipv4-fields"); value.Exists() {
+		data.RecordMplsIpv4Fields = types.BoolValue(true)
+	} else {
+		data.RecordMplsIpv4Fields = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls.ipv6-fields"); value.Exists() {
+		data.RecordMplsIpv6Fields = types.BoolValue(true)
+	} else {
+		data.RecordMplsIpv6Fields = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls.ipv4-ipv6-fields"); value.Exists() {
+		data.RecordMplsIpv4Ipv6Fields = types.BoolValue(true)
+	} else {
+		data.RecordMplsIpv4Ipv6Fields = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.mpls.labels"); value.Exists() {
+		data.RecordMplsLabels = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "record.map-t"); value.Exists() {
+		data.RecordMapT = types.BoolValue(true)
+	} else {
+		data.RecordMapT = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.sflow"); value.Exists() {
+		data.RecordSflow = types.BoolValue(true)
+	} else {
+		data.RecordSflow = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.datalink-record"); value.Exists() {
+		data.RecordDatalinkRecord = types.BoolValue(true)
+	} else {
+		data.RecordDatalinkRecord = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.default-rtp"); value.Exists() {
+		data.RecordDefaultRtp = types.BoolValue(true)
+	} else {
+		data.RecordDefaultRtp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "record.default-mdi"); value.Exists() {
+		data.RecordDefaultMdi = types.BoolValue(true)
+	} else {
+		data.RecordDefaultMdi = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cache.entries"); value.Exists() {
+		data.CacheEntries = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cache.timeout.active"); value.Exists() {
+		data.CacheTimeoutActive = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cache.timeout.inactive"); value.Exists() {
+		data.CacheTimeoutInactive = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cache.timeout.update"); value.Exists() {
+		data.CacheTimeoutUpdate = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cache.timeout.rate-limit"); value.Exists() {
+		data.CacheTimeoutRateLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "cache.permanent"); value.Exists() {
+		data.CachePermanent = types.BoolValue(true)
+	} else {
+		data.CachePermanent = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cache.immediate"); value.Exists() {
+		data.CacheImmediate = types.BoolValue(true)
+	} else {
+		data.CacheImmediate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hw-cache.timeout.inactive"); value.Exists() {
+		data.HwCacheTimeoutInactive = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sflow.options"); value.Exists() {
+		data.SflowOptions = types.BoolValue(true)
+	} else {
+		data.SflowOptions = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sflow.options.extended-router"); value.Exists() {
+		data.SflowOptionsExtendedRouter = types.BoolValue(true)
+	} else {
+		data.SflowOptionsExtendedRouter = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sflow.options.extended-gateway"); value.Exists() {
+		data.SflowOptionsExtendedGateway = types.BoolValue(true)
+	} else {
+		data.SflowOptionsExtendedGateway = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sflow.options.extended-ipv4-tunnel-egress"); value.Exists() {
+		data.SflowOptionsExtendedIpv4TunnelEgress = types.BoolValue(true)
+	} else {
+		data.SflowOptionsExtendedIpv4TunnelEgress = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sflow.options.extended-ipv6-tunnel-egress"); value.Exists() {
+		data.SflowOptionsExtendedIpv6TunnelEgress = types.BoolValue(true)
+	} else {
+		data.SflowOptionsExtendedIpv6TunnelEgress = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "sflow.options.if-counters.polling-interval"); value.Exists() {
+		data.SflowOptionsIfCountersPollingInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sflow.options.sample-header.size"); value.Exists() {
+		data.SflowOptionsSampleHeaderSize = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "sflow.options.input.ifindex"); value.Exists() {
+		data.SflowOptionsInputIfindex = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "sflow.options.output.ifindex"); value.Exists() {
+		data.SflowOptionsOutputIfindex = types.StringValue(value.String())
+	}
+}
+
 func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "exporters.exporter"); value.Exists() {
 		data.Exporters = make([]FlowMonitorMapExporters, 0)

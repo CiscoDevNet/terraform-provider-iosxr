@@ -40,5 +40,5 @@ resource "iosxr_lacp" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_lacp.example "Cisco-IOS-XR-um-lacp-cfg:/lacp/system"
+terraform import iosxr_lacp.example ""
 ```

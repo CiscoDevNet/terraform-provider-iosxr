@@ -69,6 +69,12 @@ func (data *ExtcommunityCostSet) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
+func (data *ExtcommunityCostSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-extended-community-cost-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ExtcommunityCostSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-cost-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

@@ -98,7 +98,8 @@ func TestAccIosxrFlowMonitorMap(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_flow_monitor_map.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=monitor_map1]",
+		ImportStateId: "monitor_map1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

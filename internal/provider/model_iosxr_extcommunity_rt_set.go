@@ -69,6 +69,12 @@ func (data *ExtcommunityRTSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *ExtcommunityRTSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-extended-community-rt-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ExtcommunityRTSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-rt-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

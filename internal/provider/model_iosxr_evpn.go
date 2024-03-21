@@ -65,6 +65,12 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *EVPN) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
+		data.SourceInterface = types.StringValue(value.String())
+	}
+}
+
 func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())

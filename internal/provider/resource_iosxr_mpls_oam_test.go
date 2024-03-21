@@ -46,7 +46,8 @@ func TestAccIosxrMPLSOAM(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_mpls_oam.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-mpls-oam-cfg:/mpls",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

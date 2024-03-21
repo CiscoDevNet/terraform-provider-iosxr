@@ -43,7 +43,8 @@ func TestAccIosxrRoutePolicy(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_route_policy.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]",
+		ImportStateId: "ROUTE_POLICY_1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

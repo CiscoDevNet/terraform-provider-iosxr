@@ -43,7 +43,8 @@ func TestAccIosxrExtcommunityCostSet(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_extcommunity_cost_set.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-cost-sets/extended-community-cost-set[set-name=COST2]",
+		ImportStateId: "COST2",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

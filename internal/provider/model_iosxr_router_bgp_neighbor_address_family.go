@@ -180,6 +180,45 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	}
 }
 
+func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)
+	} else {
+		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client"); value.Exists() {
+		data.RouteReflectorClient = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClient = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-reflector-client.inheritance-disable"); value.Exists() {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
+		data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.NextHopSelfInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation-type.srv6"); value.Exists() {
+		data.EncapsulationTypeSrv6 = types.BoolValue(true)
+	} else {
+		data.EncapsulationTypeSrv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "route-policy.in"); value.Exists() {
+		data.RoutePolicyIn = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
+		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+}
+
 func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt.re-originate.stitching-rt"); value.Exists() {
 		data.ImportStitchingRtReOriginateStitchingRt = types.BoolValue(true)

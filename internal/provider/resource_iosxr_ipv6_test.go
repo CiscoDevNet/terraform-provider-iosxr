@@ -52,7 +52,8 @@ func TestAccIosxrIPv6(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_ipv6.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-ipv6-cfg:/ipv6",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

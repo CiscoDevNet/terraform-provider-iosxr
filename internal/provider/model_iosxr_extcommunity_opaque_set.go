@@ -69,6 +69,12 @@ func (data *ExtcommunityOpaqueSet) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
+func (data *ExtcommunityOpaqueSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ExtcommunityOpaqueSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

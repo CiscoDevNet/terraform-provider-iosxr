@@ -104,6 +104,20 @@ func (data *EVPNGroup) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *EVPNGroup) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "core.interface"); value.Exists() {
+		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNGroupCoreInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.CoreInterfaces = append(data.CoreInterfaces, item)
+			return true
+		})
+	}
+}
+
 func (data *EVPNGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core.interface"); value.Exists() {
 		data.CoreInterfaces = make([]EVPNGroupCoreInterfaces, 0)

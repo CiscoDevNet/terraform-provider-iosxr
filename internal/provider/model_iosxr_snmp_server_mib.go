@@ -87,6 +87,19 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
+		data.IfmibIfaliasLong = types.BoolValue(true)
+	} else {
+		data.IfmibIfaliasLong = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex.persist"); value.Exists() {
+		data.IfindexPersist = types.BoolValue(true)
+	} else {
+		data.IfindexPersist = types.BoolValue(false)
+	}
+}
+
 func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
 		data.IfmibIfaliasLong = types.BoolValue(true)

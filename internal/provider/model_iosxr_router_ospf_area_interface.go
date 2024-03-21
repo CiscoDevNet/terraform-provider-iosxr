@@ -348,6 +348,96 @@ func (data *RouterOSPFAreaInterface) updateFromBody(ctx context.Context, res []b
 	}
 }
 
+func (data *RouterOSPFAreaInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
+		data.NetworkBroadcast = types.BoolValue(true)
+	} else {
+		data.NetworkBroadcast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.non-broadcast"); value.Exists() {
+		data.NetworkNonBroadcast = types.BoolValue(true)
+	} else {
+		data.NetworkNonBroadcast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.point-to-point"); value.Exists() {
+		data.NetworkPointToPoint = types.BoolValue(true)
+	} else {
+		data.NetworkPointToPoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "network.point-to-multipoint"); value.Exists() {
+		data.NetworkPointToMultipoint = types.BoolValue(true)
+	} else {
+		data.NetworkPointToMultipoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "cost"); value.Exists() {
+		data.Cost = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "priority"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "passive.enable"); value.Exists() {
+		data.PassiveEnable = types.BoolValue(true)
+	} else {
+		data.PassiveEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive.disable"); value.Exists() {
+		data.PassiveDisable = types.BoolValue(true)
+	} else {
+		data.PassiveDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.ti-lfa.enable"); value.Exists() {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixTiLfa = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.srlg-disjoint.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerSrlgDisjoint = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.tiebreaker.node-protecting.index"); value.Exists() {
+		data.FastReroutePerPrefixTiebreakerNodeProtecting = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.strict-spf.index.sid-index"); value.Exists() {
+		data.PrefixSidStrictSpfIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "prefix-sid.algorithms.algorithm"); value.Exists() {
+		data.PrefixSidAlgorithms = make([]RouterOSPFAreaInterfacePrefixSidAlgorithms, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterOSPFAreaInterfacePrefixSidAlgorithms{}
+			if cValue := v.Get("algorithm-number"); cValue.Exists() {
+				item.AlgorithmNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.sid-index"); cValue.Exists() {
+				item.IndexSidIndex = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index.explicit-null"); cValue.Exists() {
+				item.IndexExplicitNull = types.BoolValue(true)
+			} else {
+				item.IndexExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("index.n-flag-clear"); cValue.Exists() {
+				item.IndexNFlagClear = types.BoolValue(true)
+			} else {
+				item.IndexNFlagClear = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.sid-label"); cValue.Exists() {
+				item.AbsoluteSidLabel = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("absolute.explicit-null"); cValue.Exists() {
+				item.AbsoluteExplicitNull = types.BoolValue(true)
+			} else {
+				item.AbsoluteExplicitNull = types.BoolValue(false)
+			}
+			if cValue := v.Get("absolute.n-flag-clear"); cValue.Exists() {
+				item.AbsoluteNFlagClear = types.BoolValue(true)
+			} else {
+				item.AbsoluteNFlagClear = types.BoolValue(false)
+			}
+			data.PrefixSidAlgorithms = append(data.PrefixSidAlgorithms, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterOSPFAreaInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast = types.BoolValue(true)

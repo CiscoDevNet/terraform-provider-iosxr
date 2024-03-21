@@ -1,1 +1,1 @@
-terraform import iosxr_vrf.example "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF3]"
+terraform import iosxr_vrf.example "<vrf_name>"

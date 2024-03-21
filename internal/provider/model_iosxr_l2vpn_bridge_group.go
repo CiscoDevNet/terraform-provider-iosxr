@@ -59,6 +59,9 @@ func (data L2VPNBridgeGroup) toBody(ctx context.Context) string {
 func (data *L2VPNBridgeGroup) updateFromBody(ctx context.Context, res []byte) {
 }
 
+func (data *L2VPNBridgeGroup) fromBody(ctx context.Context, res []byte) {
+}
+
 func (data *L2VPNBridgeGroupData) fromBody(ctx context.Context, res []byte) {
 }
 

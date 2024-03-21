@@ -238,6 +238,29 @@ func HasId(attributes []YamlConfigAttribute) bool {
 	return false
 }
 
+// Templating helper function to return true if reference included in attributes
+func HasReference(attributes []YamlConfigAttribute) bool {
+	for _, attr := range attributes {
+		if attr.Reference {
+			return true
+		}
+	}
+	return false
+}
+
+// Templating helper function to return number of import parts
+func ImportParts(attributes []YamlConfigAttribute) int {
+	parts := 0
+	for _, attr := range attributes {
+		if attr.Reference {
+			parts += 1
+		} else if attr.Id {
+			parts += 1
+		}
+	}
+	return parts
+}
+
 // Templating helper function to get example dn
 func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
 	a := make([]interface{}, 0, len(attributes))
@@ -275,6 +298,8 @@ var functions = template.FuncMap{
 	"camelCase":             CamelCase,
 	"snakeCase":             SnakeCase,
 	"hasId":                 HasId,
+	"hasReference":          HasReference,
+	"importParts":           ImportParts,
 	"getExamplePath":        GetExamplePath,
 	"isLast":                IsLast,
 	"sprintf":               fmt.Sprintf,

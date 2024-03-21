@@ -1022,6 +1022,303 @@ func (data *VRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *VRF) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "vpn.id"); value.Exists() {
+		data.VpnId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast"); value.Exists() {
+		data.AddressFamilyIpv4Unicast = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv4Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.AddressFamilyIpv4UnicastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.AddressFamilyIpv4UnicastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.multicast"); value.Exists() {
+		data.AddressFamilyIpv4Multicast = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv4Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.flowspec"); value.Exists() {
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv4Flowspec = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast"); value.Exists() {
+		data.AddressFamilyIpv6Unicast = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv6Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-policy"); value.Exists() {
+		data.AddressFamilyIpv6UnicastImportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-policy"); value.Exists() {
+		data.AddressFamilyIpv6UnicastExportRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.multicast"); value.Exists() {
+		data.AddressFamilyIpv6Multicast = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv6Multicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.flowspec"); value.Exists() {
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(true)
+	} else {
+		data.AddressFamilyIpv6Flowspec = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.as-number"); value.Exists() {
+		data.RdTwoByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.two-byte-as.index"); value.Exists() {
+		data.RdTwoByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.as-number"); value.Exists() {
+		data.RdFourByteAsAsNumber = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.four-byte-as.index"); value.Exists() {
+		data.RdFourByteAsIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.ipv4-address"); value.Exists() {
+		data.RdIpAddressIpv4Address = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-router-bgp-cfg:rd.ip-address.index"); value.Exists() {
+		data.RdIpAddressIndex = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat = make([]VRFAddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat = make([]VRFAddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat = make([]VRFAddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv4.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"); value.Exists() {
+		data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat = make([]VRFAddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv4UnicastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat = make([]VRFAddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:import.route-target.ip-addresse-rts.ip-address-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat = make([]VRFAddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastImportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.two-byte-as-rts.two-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat = make([]VRFAddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetTwoByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.four-byte-as-rts.four-byte-as-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat = make([]VRFAddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat{}
+			if cValue := v.Get("as-number"); cValue.Exists() {
+				item.AsNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetFourByteAsFormat, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "address-family.ipv6.unicast.Cisco-IOS-XR-um-router-bgp-cfg:export.route-target.ip-addresse-rts.ip-address-rt"); value.Exists() {
+		data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat = make([]VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := VRFAddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat{}
+			if cValue := v.Get("ip-address"); cValue.Exists() {
+				item.IpAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("index"); cValue.Exists() {
+				item.Index = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("stitching"); cValue.Exists() {
+				item.Stitching = types.BoolValue(cValue.Bool())
+			} else {
+				item.Stitching = types.BoolValue(false)
+			}
+			data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat = append(data.AddressFamilyIpv6UnicastExportRouteTargetIpAddressFormat, item)
+			return true
+		})
+	}
+}
+
 func (data *VRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

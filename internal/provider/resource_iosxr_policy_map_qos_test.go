@@ -49,7 +49,8 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_policy_map_qos.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]",
+		ImportStateId: "PM1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -48,7 +48,8 @@ func TestAccIosxrPCE(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_pce.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-pce-cfg:/pce",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

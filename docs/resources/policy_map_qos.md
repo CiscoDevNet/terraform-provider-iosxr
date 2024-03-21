@@ -98,5 +98,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_policy_map_qos.example "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PM1]"
+terraform import iosxr_policy_map_qos.example "<policy_map_name>"
 ```

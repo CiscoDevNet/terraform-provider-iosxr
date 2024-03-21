@@ -1,1 +1,1 @@
-terraform import iosxr_ipv4_prefix_list.example "Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=LIST1]"
+terraform import iosxr_ipv4_prefix_list.example "<prefix_list_name>"

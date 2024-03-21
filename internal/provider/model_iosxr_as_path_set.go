@@ -69,6 +69,12 @@ func (data *ASPathSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *ASPathSet) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "rplas-path-set"); value.Exists() {
+		data.Rpl = types.StringValue(value.String())
+	}
+}
+
 func (data *ASPathSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rplas-path-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())

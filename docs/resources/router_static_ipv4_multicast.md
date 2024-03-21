@@ -248,5 +248,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_static_ipv4_multicast.example "Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/multicast/prefixes/prefix[prefix-address=100.0.1.0][prefix-length=%!d(string=24)]"
+terraform import iosxr_router_static_ipv4_multicast.example "<prefix_address>,<prefix_length>"
 ```

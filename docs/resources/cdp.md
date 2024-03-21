@@ -47,5 +47,5 @@ resource "iosxr_cdp" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_cdp.example "Cisco-IOS-XR-um-cdp-cfg:/cdp"
+terraform import iosxr_cdp.example ""
 ```

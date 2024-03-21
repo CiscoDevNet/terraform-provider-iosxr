@@ -268,6 +268,74 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
+		data.EncapsulationMpls = types.BoolValue(true)
+	} else {
+		data.EncapsulationMpls = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.ethernet"); value.Exists() {
+		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsTransportModeEthernet = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.vlan"); value.Exists() {
+		data.EncapsulationMplsTransportModeVlan = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsTransportModeVlan = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.transport-mode.passthrough"); value.Exists() {
+		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsTransportModePassthrough = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.pw-label"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingPwLabel = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmit = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.transmit.static"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelReceive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.receive.static"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelBoth = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.both.static"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelBothStatic = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "encapsulation.mpls.load-balancing.flow-label.code.one7.disable"); value.Exists() {
+		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(true)
+	} else {
+		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(false)
+	}
+}
+
 func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)

@@ -63,5 +63,5 @@ resource "iosxr_ipv6" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_ipv6.example "Cisco-IOS-XR-um-ipv6-cfg:/ipv6"
+terraform import iosxr_ipv6.example ""
 ```

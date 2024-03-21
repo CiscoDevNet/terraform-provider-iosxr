@@ -78,7 +78,8 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_isis_address_family.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv6][saf-name=unicast]",
+		ImportStateId: "P1,ipv6,unicast",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

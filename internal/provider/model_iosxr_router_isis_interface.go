@@ -225,6 +225,59 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
+func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
+		data.CircuitType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hello-padding.disable"); value.Exists() {
+		data.HelloPaddingDisable = types.BoolValue(true)
+	} else {
+		data.HelloPaddingDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-padding.sometimes"); value.Exists() {
+		data.HelloPaddingSometimes = types.BoolValue(true)
+	} else {
+		data.HelloPaddingSometimes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "priority.priority-value"); value.Exists() {
+		data.Priority = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "point-to-point"); value.Exists() {
+		data.PointToPoint = types.BoolValue(true)
+	} else {
+		data.PointToPoint = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "passive"); value.Exists() {
+		data.Passive = types.BoolValue(true)
+	} else {
+		data.Passive = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "suppressed"); value.Exists() {
+		data.Suppressed = types.BoolValue(true)
+	} else {
+		data.Suppressed = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "shutdown"); value.Exists() {
+		data.Shutdown = types.BoolValue(true)
+	} else {
+		data.Shutdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "hello-password.text.encrypted"); value.Exists() {
+		data.HelloPasswordText = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hello-password.hmac-md5.encrypted"); value.Exists() {
+		data.HelloPasswordHmacMd5 = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "hello-password.keychain.keychain-name"); value.Exists() {
+		data.HelloPasswordKeychain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
+		data.BfdFastDetectIpv6 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv6 = types.BoolValue(false)
+	}
+}
+
 func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "circuit-type"); value.Exists() {
 		data.CircuitType = types.StringValue(value.String())

@@ -381,6 +381,105 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
+		data.RouterId = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamilies = make([]MPLSLDPAddressFamilies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPAddressFamilies{}
+			if cValue := v.Get("af-name"); cValue.Exists() {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("label.local.allocate.for.access-list"); cValue.Exists() {
+				item.LabelLocalAllocateForAccessList = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("label.local.allocate.for.host-routes"); cValue.Exists() {
+				item.LabelLocalAllocateForHostRoutes = types.BoolValue(true)
+			} else {
+				item.LabelLocalAllocateForHostRoutes = types.BoolValue(false)
+			}
+			data.AddressFamilies = append(data.AddressFamilies, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]MPLSLDPInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "capabilities.sac.ipv4-disable"); value.Exists() {
+		data.CapabilitiesSacIpv4Disable = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSacIpv4Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capabilities.sac.ipv6-disable"); value.Exists() {
+		data.CapabilitiesSacIpv6Disable = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSacIpv6Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capabilities.sac.fec128-disable"); value.Exists() {
+		data.CapabilitiesSacFec128Disable = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSacFec128Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "capabilities.sac.fec129-disable"); value.Exists() {
+		data.CapabilitiesSacFec129Disable = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSacFec129Disable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-session-up"); value.Exists() {
+		data.IgpSyncDelayOnSessionUp = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "igp.sync.delay.on-proc-restart"); value.Exists() {
+		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mldp.logging.notifications"); value.Exists() {
+		data.MldpLoggingNotifications = types.BoolValue(true)
+	} else {
+		data.MldpLoggingNotifications = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mldp.address-families.address-family"); value.Exists() {
+		data.MldpAddressFamilies = make([]MPLSLDPMldpAddressFamilies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := MPLSLDPMldpAddressFamilies{}
+			if cValue := v.Get("af-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("make-before-break.delay.forwarding-delay"); cValue.Exists() {
+				item.MakeBeforeBreakDelay = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("forwarding.recursive"); cValue.Exists() {
+				item.ForwardingRecursive = types.BoolValue(true)
+			} else {
+				item.ForwardingRecursive = types.BoolValue(false)
+			}
+			if cValue := v.Get("forwarding.recursive.route-policy"); cValue.Exists() {
+				item.ForwardingRecursiveRoutePolicy = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("recursive-fec.enable"); cValue.Exists() {
+				item.RecursiveFec = types.BoolValue(true)
+			} else {
+				item.RecursiveFec = types.BoolValue(false)
+			}
+			data.MldpAddressFamilies = append(data.MldpAddressFamilies, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "session.protection"); value.Exists() {
+		data.SessionProtection = types.BoolValue(true)
+	} else {
+		data.SessionProtection = types.BoolValue(false)
+	}
+}
+
 func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "router-id"); value.Exists() {
 		data.RouterId = types.StringValue(value.String())

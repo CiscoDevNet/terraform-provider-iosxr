@@ -57,7 +57,8 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_bgp_neighbor_group.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/neighbor-groups/neighbor-group[neighbor-group-name=GROUP1]",
+		ImportStateId: "65001,GROUP1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

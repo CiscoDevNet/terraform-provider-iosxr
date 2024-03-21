@@ -43,7 +43,8 @@ func TestAccIosxrSNMPServerMIB(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_snmp_server_mib.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

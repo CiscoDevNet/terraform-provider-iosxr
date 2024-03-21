@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -218,6 +219,12 @@ func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
+	import_ := false
+	if state.Id.ValueString() == "" {
+		import_ = true
+		state.Id = types.StringValue(state.getPath())
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
@@ -226,7 +233,12 @@ func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.Rea
 		return
 	}
 
-	state.updateFromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+	if import_ {
+		state.fromBody(ctx, respBody)
+	} else {
+		state.updateFromBody(ctx, respBody)
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
@@ -327,5 +339,15 @@ func (r *RouterISISInterfaceResource) Delete(ctx context.Context, req resource.D
 }
 
 func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	idParts := strings.Split(req.ID, ",")
+
+	if len(idParts) != 2 {
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("Expected import identifier with format: <process_id>,<interface_name>. Got: %q", req.ID),
+		)
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[1])...)
 }

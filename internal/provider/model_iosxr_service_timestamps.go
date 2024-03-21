@@ -278,6 +278,79 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.datetime.localtime"); value.Exists() {
+		data.DebugDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.datetime.msec"); value.Exists() {
+		data.DebugDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeMsec = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.datetime.show-timezone"); value.Exists() {
+		data.DebugDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.datetime.year"); value.Exists() {
+		data.DebugDatetimeYear = types.BoolValue(true)
+	} else {
+		data.DebugDatetimeYear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.uptime"); value.Exists() {
+		data.DebugUptime = types.BoolValue(true)
+	} else {
+		data.DebugUptime = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "debug.disable"); value.Exists() {
+		data.DebugDisable = types.BoolValue(true)
+	} else {
+		data.DebugDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.datetime.localtime-only"); value.Exists() {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltimeOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.datetime.localtime"); value.Exists() {
+		data.LogDatetimeLocaltime = types.BoolValue(true)
+	} else {
+		data.LogDatetimeLocaltime = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.datetime.msec"); value.Exists() {
+		data.LogDatetimeMsec = types.BoolValue(true)
+	} else {
+		data.LogDatetimeMsec = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.datetime.show-timezone"); value.Exists() {
+		data.LogDatetimeShowTimezone = types.BoolValue(true)
+	} else {
+		data.LogDatetimeShowTimezone = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.datetime.year"); value.Exists() {
+		data.LogDatetimeYear = types.BoolValue(true)
+	} else {
+		data.LogDatetimeYear = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.uptime"); value.Exists() {
+		data.LogUptime = types.BoolValue(true)
+	} else {
+		data.LogUptime = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.disable"); value.Exists() {
+		data.LogDisable = types.BoolValue(true)
+	} else {
+		data.LogDisable = types.BoolValue(false)
+	}
+}
+
 func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
 		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)

@@ -756,6 +756,218 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
+		data.IsType = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded"); value.Exists() {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.advertise-as-overloaded.time-to-advertise"); value.Exists() {
+		data.SetOverloadBitOnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.external"); value.Exists() {
+		data.SetOverloadBitAdvertiseExternal = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitAdvertiseExternal = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit.advertise.interlevel"); value.Exists() {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(true)
+	} else {
+		data.SetOverloadBitAdvertiseInterlevel = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "set-overload-bit-levels.level"); value.Exists() {
+		data.SetOverloadBitLevels = make([]RouterISISSetOverloadBitLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISSetOverloadBitLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("on-startup.advertise-as-overloaded"); cValue.Exists() {
+				item.OnStartupAdvertiseAsOverloaded = types.BoolValue(true)
+			} else {
+				item.OnStartupAdvertiseAsOverloaded = types.BoolValue(false)
+			}
+			if cValue := v.Get("on-startup.advertise-as-overloaded.time-to-advertise"); cValue.Exists() {
+				item.OnStartupAdvertiseAsOverloadedTimeToAdvertise = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
+				item.OnStartupWaitForBgp = types.BoolValue(true)
+			} else {
+				item.OnStartupWaitForBgp = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertise.external"); cValue.Exists() {
+				item.AdvertiseExternal = types.BoolValue(true)
+			} else {
+				item.AdvertiseExternal = types.BoolValue(false)
+			}
+			if cValue := v.Get("advertise.interlevel"); cValue.Exists() {
+				item.AdvertiseInterlevel = types.BoolValue(true)
+			} else {
+				item.AdvertiseInterlevel = types.BoolValue(false)
+			}
+			data.SetOverloadBitLevels = append(data.SetOverloadBitLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nsr"); value.Exists() {
+		data.Nsr = types.BoolValue(true)
+	} else {
+		data.Nsr = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.cisco"); value.Exists() {
+		data.NsfCisco = types.BoolValue(true)
+	} else {
+		data.NsfCisco = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.ietf"); value.Exists() {
+		data.NsfIetf = types.BoolValue(true)
+	} else {
+		data.NsfIetf = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "nsf.lifetime"); value.Exists() {
+		data.NsfLifetime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-timer"); value.Exists() {
+		data.NsfInterfaceTimer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "nsf.interface-expires"); value.Exists() {
+		data.NsfInterfaceExpires = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.maximum-wait"); value.Exists() {
+		data.LspGenIntervalMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.initial-wait"); value.Exists() {
+		data.LspGenIntervalInitialWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-gen-interval.secondary-wait"); value.Exists() {
+		data.LspGenIntervalSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-refresh-interval.lsp-refresh-interval-time"); value.Exists() {
+		data.LspRefreshInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "max-lsp-lifetime.max-lsp-lifetime"); value.Exists() {
+		data.MaxLspLifetime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "lsp-password.keychain.keychain-name"); value.Exists() {
+		data.LspPasswordKeychain = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
+		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.throttle"); value.Exists() {
+		data.DistributeLinkStateThrottle = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "distribute.link-state.level"); value.Exists() {
+		data.DistributeLinkStateLevel = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "affinity-maps.affinity-map"); value.Exists() {
+		data.AffinityMaps = make([]RouterISISAffinityMaps, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAffinityMaps{}
+			if cValue := v.Get("affinity-map-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("bit-position"); cValue.Exists() {
+				item.BitPosition = types.Int64Value(cValue.Int())
+			}
+			data.AffinityMaps = append(data.AffinityMaps, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "flex-algos.flex-algo"); value.Exists() {
+		data.FlexAlgos = make([]RouterISISFlexAlgos, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISFlexAlgos{}
+			if cValue := v.Get("algorithm-number"); cValue.Exists() {
+				item.AlgorithmNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("advertise-definition"); cValue.Exists() {
+				item.AdvertiseDefinition = types.BoolValue(true)
+			} else {
+				item.AdvertiseDefinition = types.BoolValue(false)
+			}
+			if cValue := v.Get("metric-type.delay"); cValue.Exists() {
+				item.MetricTypeDelay = types.BoolValue(true)
+			} else {
+				item.MetricTypeDelay = types.BoolValue(false)
+			}
+			data.FlexAlgos = append(data.FlexAlgos, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "nets.net"); value.Exists() {
+		data.Nets = make([]RouterISISNets, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISNets{}
+			if cValue := v.Get("net-id"); cValue.Exists() {
+				item.NetId = types.StringValue(cValue.String())
+			}
+			data.Nets = append(data.Nets, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]RouterISISInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("circuit-type"); cValue.Exists() {
+				item.CircuitType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("hello-padding.disable"); cValue.Exists() {
+				item.HelloPaddingDisable = types.BoolValue(true)
+			} else {
+				item.HelloPaddingDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("hello-padding.sometimes"); cValue.Exists() {
+				item.HelloPaddingSometimes = types.BoolValue(true)
+			} else {
+				item.HelloPaddingSometimes = types.BoolValue(false)
+			}
+			if cValue := v.Get("priority.priority-value"); cValue.Exists() {
+				item.Priority = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("point-to-point"); cValue.Exists() {
+				item.PointToPoint = types.BoolValue(true)
+			} else {
+				item.PointToPoint = types.BoolValue(false)
+			}
+			if cValue := v.Get("passive"); cValue.Exists() {
+				item.Passive = types.BoolValue(true)
+			} else {
+				item.Passive = types.BoolValue(false)
+			}
+			if cValue := v.Get("suppressed"); cValue.Exists() {
+				item.Suppressed = types.BoolValue(true)
+			} else {
+				item.Suppressed = types.BoolValue(false)
+			}
+			if cValue := v.Get("shutdown"); cValue.Exists() {
+				item.Shutdown = types.BoolValue(true)
+			} else {
+				item.Shutdown = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())

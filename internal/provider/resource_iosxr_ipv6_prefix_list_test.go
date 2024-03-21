@@ -50,7 +50,8 @@ func TestAccIosxrIPv6PrefixList(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_ipv6_prefix_list.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-ipv6-prefix-list-cfg:/ipv6/prefix-lists/prefix-list[prefix-list-name=LIST1]",
+		ImportStateId: "LIST1",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

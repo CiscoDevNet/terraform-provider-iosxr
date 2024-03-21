@@ -119,6 +119,29 @@ func (data *FPD) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *FPD) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
+		data.AutoUpgradeEnable = types.BoolValue(true)
+	} else {
+		data.AutoUpgradeEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "auto-upgrade.disable"); value.Exists() {
+		data.AutoUpgradeDisable = types.BoolValue(true)
+	} else {
+		data.AutoUpgradeDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "auto-reload.enable"); value.Exists() {
+		data.AutoReloadEnable = types.BoolValue(true)
+	} else {
+		data.AutoReloadEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "auto-reload.disable"); value.Exists() {
+		data.AutoReloadDisable = types.BoolValue(true)
+	} else {
+		data.AutoReloadDisable = types.BoolValue(false)
+	}
+}
+
 func (data *FPDData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "auto-upgrade.enable"); value.Exists() {
 		data.AutoUpgradeEnable = types.BoolValue(true)

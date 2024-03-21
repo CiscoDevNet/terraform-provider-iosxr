@@ -43,7 +43,8 @@ func TestAccIosxrIPv4AccessListOptions(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_ipv4_access_list_options.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-list-options",
+		ImportStateId: "",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

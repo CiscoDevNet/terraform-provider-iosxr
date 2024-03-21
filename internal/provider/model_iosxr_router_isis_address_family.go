@@ -759,6 +759,216 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	}
 }
 
+func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
+		data.MetricStyleNarrow = types.BoolValue(true)
+	} else {
+		data.MetricStyleNarrow = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
+		data.MetricStyleWide = types.BoolValue(true)
+	} else {
+		data.MetricStyleWide = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric-style.transition"); value.Exists() {
+		data.MetricStyleTransition = types.BoolValue(true)
+	} else {
+		data.MetricStyleTransition = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric-style.levels.level"); value.Exists() {
+		data.MetricStyleLevels = make([]RouterISISAddressFamilyMetricStyleLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMetricStyleLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("narrow"); cValue.Exists() {
+				item.Narrow = types.BoolValue(true)
+			} else {
+				item.Narrow = types.BoolValue(false)
+			}
+			if cValue := v.Get("wide"); cValue.Exists() {
+				item.Wide = types.BoolValue(true)
+			} else {
+				item.Wide = types.BoolValue(false)
+			}
+			if cValue := v.Get("transition"); cValue.Exists() {
+				item.Transition = types.BoolValue(true)
+			} else {
+				item.Transition = types.BoolValue(false)
+			}
+			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() {
+		data.RouterIdInterfaceName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "router-id.ip-address"); value.Exists() {
+		data.RouterIdIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
+		data.DefaultInformationOriginate = types.BoolValue(true)
+	} else {
+		data.DefaultInformationOriginate = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.delay-interval"); value.Exists() {
+		data.FastRerouteDelayInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit.critical"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimitCritical = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLinkPriorityLimitCritical = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit.high"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimitHigh = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLinkPriorityLimitHigh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-link.priority-limit.medium"); value.Exists() {
+		data.FastReroutePerLinkPriorityLimitMedium = types.BoolValue(true)
+	} else {
+		data.FastReroutePerLinkPriorityLimitMedium = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit.critical"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimitCritical = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixPriorityLimitCritical = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit.high"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimitHigh = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixPriorityLimitHigh = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "fast-reroute.per-prefix.priority-limit.medium"); value.Exists() {
+		data.FastReroutePerPrefixPriorityLimitMedium = types.BoolValue(true)
+	} else {
+		data.FastReroutePerPrefixPriorityLimitMedium = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.protected"); value.Exists() {
+		data.MicroloopAvoidanceProtected = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidanceProtected = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "microloop.avoidance.segment-routing"); value.Exists() {
+		data.MicroloopAvoidanceSegmentRouting = types.BoolValue(true)
+	} else {
+		data.MicroloopAvoidanceSegmentRouting = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.passive-only"); value.Exists() {
+		data.AdvertisePassiveOnly = types.BoolValue(true)
+	} else {
+		data.AdvertisePassiveOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.link.attributes"); value.Exists() {
+		data.AdvertiseLinkAttributes = types.BoolValue(true)
+	} else {
+		data.AdvertiseLinkAttributes = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.ldp.auto-config"); value.Exists() {
+		data.MplsLdpAutoConfig = types.BoolValue(true)
+	} else {
+		data.MplsLdpAutoConfig = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.ip-address"); value.Exists() {
+		data.MplsTrafficEngRouterIdIpAddress = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.router-id.interface"); value.Exists() {
+		data.MplsTrafficEngRouterIdInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.level-1-2"); value.Exists() {
+		data.MplsTrafficEngLevel12 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel12 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.level-1"); value.Exists() {
+		data.MplsTrafficEngLevel1 = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "mpls.traffic-eng.level-2-only"); value.Exists() {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(true)
+	} else {
+		data.MplsTrafficEngLevel2Only = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "spf-interval.maximum-wait.maximum-wait-time"); value.Exists() {
+		data.SpfIntervalMaximumWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "spf-interval.initial-wait.initial-wait-time"); value.Exists() {
+		data.SpfIntervalInitialWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "spf-interval.secondary-wait.secondary-wait-time"); value.Exists() {
+		data.SpfIntervalSecondaryWait = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "spf.prefix-priority.prefix-priority"); value.Exists() {
+		data.SpfPrefixPriorities = make([]RouterISISAddressFamilySpfPrefixPriorities, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySpfPrefixPriorities{}
+			if cValue := v.Get("priority"); cValue.Exists() {
+				item.Priority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("tag"); cValue.Exists() {
+				item.Tag = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("access-list-name"); cValue.Exists() {
+				item.AccessListName = types.StringValue(cValue.String())
+			}
+			data.SpfPrefixPriorities = append(data.SpfPrefixPriorities, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.mpls.sr-prefer"); value.Exists() {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(value.Bool())
+	} else {
+		data.SegmentRoutingMplsSrPrefer = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes.maximum-prefixes"); value.Exists() {
+		data.MaximumRedistributedPrefixes = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-redistributed-prefixes.levels.level"); value.Exists() {
+		data.MaximumRedistributedPrefixesLevels = make([]RouterISISAddressFamilyMaximumRedistributedPrefixesLevels, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyMaximumRedistributedPrefixesLevels{}
+			if cValue := v.Get("level-id"); cValue.Exists() {
+				item.LevelId = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("maximum-prefixes"); cValue.Exists() {
+				item.MaximumPrefixes = types.Int64Value(cValue.Int())
+			}
+			data.MaximumRedistributedPrefixesLevels = append(data.MaximumRedistributedPrefixesLevels, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "redistribute.isis"); value.Exists() {
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilyRedistributeIsis{}
+			if cValue := v.Get("instance-id"); cValue.Exists() {
+				item.InstanceId = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("route-policy"); cValue.Exists() {
+				item.RoutePolicy = types.StringValue(cValue.String())
+			}
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locators = make([]RouterISISAddressFamilySegmentRoutingSrv6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("level"); cValue.Exists() {
+				item.Level = types.Int64Value(cValue.Int())
+			}
+			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
 		data.MetricStyleNarrow = types.BoolValue(true)

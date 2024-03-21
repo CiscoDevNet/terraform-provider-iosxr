@@ -64,6 +64,12 @@ func (data *Hostname) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *Hostname) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
+		data.SystemNetworkName = types.StringValue(value.String())
+	}
+}
+
 func (data *HostnameData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "system-network-name"); value.Exists() {
 		data.SystemNetworkName = types.StringValue(value.String())

@@ -1453,6 +1453,470 @@ func (data *IPv6AccessList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *IPv6AccessList) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
+		data.Sequences = make([]IPv6AccessListSequences, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := IPv6AccessListSequences{}
+			if cValue := v.Get("sequence-number"); cValue.Exists() {
+				item.SequenceNumber = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("remark"); cValue.Exists() {
+				item.Remark = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.protocol"); cValue.Exists() {
+				item.PermitProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.eq"); cValue.Exists() {
+				item.PermitEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.precedence"); cValue.Exists() {
+				item.PermitPrecedence = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.fragment-type"); cValue.Exists() {
+				item.PermitFragmentType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.counter"); cValue.Exists() {
+				item.PermitCounter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.capture"); cValue.Exists() {
+				item.PermitCapture = types.BoolValue(true)
+			} else {
+				item.PermitCapture = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.range.start-protocol"); cValue.Exists() {
+				item.PermitRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.range.end-protocol"); cValue.Exists() {
+				item.PermitRangeEndProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.address"); cValue.Exists() {
+				item.PermitSourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.wildcard-mask"); cValue.Exists() {
+				item.PermitSourceWildcardMask = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.prefix-length"); cValue.Exists() {
+				item.PermitSourcePrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.source.any"); cValue.Exists() {
+				item.PermitSourceAny = types.BoolValue(true)
+			} else {
+				item.PermitSourceAny = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.source.host"); cValue.Exists() {
+				item.PermitSourceHost = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.net-group"); cValue.Exists() {
+				item.PermitSourceNetGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port-group"); cValue.Exists() {
+				item.PermitSourcePortGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.eq"); cValue.Exists() {
+				item.PermitSourcePortEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.gt"); cValue.Exists() {
+				item.PermitSourcePortGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.lt"); cValue.Exists() {
+				item.PermitSourcePortLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.neq"); cValue.Exists() {
+				item.PermitSourcePortNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.range.start-value"); cValue.Exists() {
+				item.PermitSourcePortRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.source.port.range.end-value"); cValue.Exists() {
+				item.PermitSourcePortRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.address"); cValue.Exists() {
+				item.PermitDestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.wildcard-mask"); cValue.Exists() {
+				item.PermitDestinationWildcardMask = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.prefix-length"); cValue.Exists() {
+				item.PermitDestinationPrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.destination.any"); cValue.Exists() {
+				item.PermitDestinationAny = types.BoolValue(true)
+			} else {
+				item.PermitDestinationAny = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.destination.host"); cValue.Exists() {
+				item.PermitDestinationHost = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.net-group"); cValue.Exists() {
+				item.PermitDestinationNetGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port-group"); cValue.Exists() {
+				item.PermitDestinationPortGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.eq"); cValue.Exists() {
+				item.PermitDestinationPortEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.gt"); cValue.Exists() {
+				item.PermitDestinationPortGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.lt"); cValue.Exists() {
+				item.PermitDestinationPortLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.neq"); cValue.Exists() {
+				item.PermitDestinationPortNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.range.start-value"); cValue.Exists() {
+				item.PermitDestinationPortRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.destination.port.range.end-value"); cValue.Exists() {
+				item.PermitDestinationPortRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.icmp.message-type-name"); cValue.Exists() {
+				item.PermitIcmpMessageTypeName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.icmp.message-type"); cValue.Exists() {
+				item.PermitIcmpMessageType = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.icmp.message-code"); cValue.Exists() {
+				item.PermitIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.dscp.dscp-value"); cValue.Exists() {
+				item.PermitDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.eq"); cValue.Exists() {
+				item.PermitDscpEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.gt"); cValue.Exists() {
+				item.PermitDscpGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.lt"); cValue.Exists() {
+				item.PermitDscpLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.neq"); cValue.Exists() {
+				item.PermitDscpNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.range.start-value"); cValue.Exists() {
+				item.PermitDscpRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.dscp.range.end-value"); cValue.Exists() {
+				item.PermitDscpRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.packet-length.eq"); cValue.Exists() {
+				item.PermitPacketLengthEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.packet-length.gt"); cValue.Exists() {
+				item.PermitPacketLengthGt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.packet-length.lt"); cValue.Exists() {
+				item.PermitPacketLengthLt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.packet-length.neq"); cValue.Exists() {
+				item.PermitPacketLengthNeq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.packet-length.range.start-value"); cValue.Exists() {
+				item.PermitPacketLengthRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.packet-length.range.end-value"); cValue.Exists() {
+				item.PermitPacketLengthRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.eq"); cValue.Exists() {
+				item.PermitTtlEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.gt"); cValue.Exists() {
+				item.PermitTtlGt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.lt"); cValue.Exists() {
+				item.PermitTtlLt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.neq"); cValue.Exists() {
+				item.PermitTtlNeq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.range.start-value"); cValue.Exists() {
+				item.PermitTtlRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.ttl.range.end-value"); cValue.Exists() {
+				item.PermitTtlRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.police.value"); cValue.Exists() {
+				item.PermitPoliceValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.police.unit"); cValue.Exists() {
+				item.PermitPoliceUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.police.peak-rate"); cValue.Exists() {
+				item.PermitPolicePeakRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.police.peak-unit"); cValue.Exists() {
+				item.PermitPolicePeakUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.police.priority"); cValue.Exists() {
+				item.PermitPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop1.ipv6"); cValue.Exists() {
+				item.PermitNexthop1Ipv6 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop1.track"); cValue.Exists() {
+				item.PermitNexthop1Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop1.vrf"); cValue.Exists() {
+				item.PermitNexthop1Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop2.ipv6"); cValue.Exists() {
+				item.PermitNexthop2Ipv6 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop2.track"); cValue.Exists() {
+				item.PermitNexthop2Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop2.vrf"); cValue.Exists() {
+				item.PermitNexthop2Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop3.ipv6"); cValue.Exists() {
+				item.PermitNexthop3Ipv6 = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop3.track"); cValue.Exists() {
+				item.PermitNexthop3Track = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.nexthop3.vrf"); cValue.Exists() {
+				item.PermitNexthop3Vrf = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("permit.log"); cValue.Exists() {
+				item.PermitLog = types.BoolValue(true)
+			} else {
+				item.PermitLog = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.log-input"); cValue.Exists() {
+				item.PermitLogInput = types.BoolValue(true)
+			} else {
+				item.PermitLogInput = types.BoolValue(false)
+			}
+			if cValue := v.Get("permit.set.qos-group"); cValue.Exists() {
+				item.PermitSetQosGroup = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("permit.set.ttl"); cValue.Exists() {
+				item.PermitSetTtl = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.protocol"); cValue.Exists() {
+				item.DenyProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.eq"); cValue.Exists() {
+				item.DenyEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.precedence"); cValue.Exists() {
+				item.DenyPrecedence = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.fragment-type"); cValue.Exists() {
+				item.DenyFragmentType = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.counter"); cValue.Exists() {
+				item.DenyCounter = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.capture"); cValue.Exists() {
+				item.DenyCapture = types.BoolValue(true)
+			} else {
+				item.DenyCapture = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-off"); cValue.Exists() {
+				item.DenyIcmpOff = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOff = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.icmp-on"); cValue.Exists() {
+				item.DenyIcmpOn = types.BoolValue(true)
+			} else {
+				item.DenyIcmpOn = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.range.start-protocol"); cValue.Exists() {
+				item.DenyRangeStartProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.range.end-protocol"); cValue.Exists() {
+				item.DenyRangeEndProtocol = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.address"); cValue.Exists() {
+				item.DenySourceAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.wildcard-mask"); cValue.Exists() {
+				item.DenySourceWildcardMask = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.prefix-length"); cValue.Exists() {
+				item.DenySourcePrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.source.any"); cValue.Exists() {
+				item.DenySourceAny = types.BoolValue(true)
+			} else {
+				item.DenySourceAny = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.source.host"); cValue.Exists() {
+				item.DenySourceHost = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.net-group"); cValue.Exists() {
+				item.DenySourceNetGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port-group"); cValue.Exists() {
+				item.DenySourcePortGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.eq"); cValue.Exists() {
+				item.DenySourcePortEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.gt"); cValue.Exists() {
+				item.DenySourcePortGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.lt"); cValue.Exists() {
+				item.DenySourcePortLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.neq"); cValue.Exists() {
+				item.DenySourcePortNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.range.start-value"); cValue.Exists() {
+				item.DenySourcePortRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.source.port.range.end-value"); cValue.Exists() {
+				item.DenySourcePortRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.address"); cValue.Exists() {
+				item.DenyDestinationAddress = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.wildcard-mask"); cValue.Exists() {
+				item.DenyDestinationWildcardMask = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.prefix-length"); cValue.Exists() {
+				item.DenyDestinationPrefixLength = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.destination.any"); cValue.Exists() {
+				item.DenyDestinationAny = types.BoolValue(true)
+			} else {
+				item.DenyDestinationAny = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.destination.host"); cValue.Exists() {
+				item.DenyDestinationHost = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.net-group"); cValue.Exists() {
+				item.DenyDestinationNetGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port-group"); cValue.Exists() {
+				item.DenyDestinationPortGroup = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.eq"); cValue.Exists() {
+				item.DenyDestinationPortEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.gt"); cValue.Exists() {
+				item.DenyDestinationPortGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.lt"); cValue.Exists() {
+				item.DenyDestinationPortLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.neq"); cValue.Exists() {
+				item.DenyDestinationPortNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.range.start-value"); cValue.Exists() {
+				item.DenyDestinationPortRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.destination.port.range.end-value"); cValue.Exists() {
+				item.DenyDestinationPortRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.icmp.message-type-name"); cValue.Exists() {
+				item.DenyIcmpMessageTypeName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.icmp.message-type"); cValue.Exists() {
+				item.DenyIcmpMessageType = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.icmp.message-code"); cValue.Exists() {
+				item.DenyIcmpMessageCode = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.dscp.dscp-value"); cValue.Exists() {
+				item.DenyDscp = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.eq"); cValue.Exists() {
+				item.DenyDscpEq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.gt"); cValue.Exists() {
+				item.DenyDscpGt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.lt"); cValue.Exists() {
+				item.DenyDscpLt = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.neq"); cValue.Exists() {
+				item.DenyDscpNeq = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.range.start-value"); cValue.Exists() {
+				item.DenyDscpRangeStart = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.dscp.range.end-value"); cValue.Exists() {
+				item.DenyDscpRangeEnd = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.packet-length.eq"); cValue.Exists() {
+				item.DenyPacketLengthEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.packet-length.gt"); cValue.Exists() {
+				item.DenyPacketLengthGt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.packet-length.lt"); cValue.Exists() {
+				item.DenyPacketLengthLt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.packet-length.neq"); cValue.Exists() {
+				item.DenyPacketLengthNeq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.packet-length.range.start-value"); cValue.Exists() {
+				item.DenyPacketLengthRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.packet-length.range.end-value"); cValue.Exists() {
+				item.DenyPacketLengthRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.eq"); cValue.Exists() {
+				item.DenyTtlEq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.gt"); cValue.Exists() {
+				item.DenyTtlGt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.lt"); cValue.Exists() {
+				item.DenyTtlLt = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.neq"); cValue.Exists() {
+				item.DenyTtlNeq = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.range.start-value"); cValue.Exists() {
+				item.DenyTtlRangeStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.ttl.range.end-value"); cValue.Exists() {
+				item.DenyTtlRangeEnd = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.police.value"); cValue.Exists() {
+				item.DenyPoliceValue = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.police.unit"); cValue.Exists() {
+				item.DenyPoliceUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.police.peak-rate"); cValue.Exists() {
+				item.DenyPolicePeakRate = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.police.peak-unit"); cValue.Exists() {
+				item.DenyPolicePeakUnit = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.police.priority"); cValue.Exists() {
+				item.DenyPolicePriority = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("deny.log"); cValue.Exists() {
+				item.DenyLog = types.BoolValue(true)
+			} else {
+				item.DenyLog = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.log-input"); cValue.Exists() {
+				item.DenyLogInput = types.BoolValue(true)
+			} else {
+				item.DenyLogInput = types.BoolValue(false)
+			}
+			if cValue := v.Get("deny.set.qos-group"); cValue.Exists() {
+				item.DenySetQosGroup = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("deny.set.ttl"); cValue.Exists() {
+				item.DenySetTtl = types.Int64Value(cValue.Int())
+			}
+			data.Sequences = append(data.Sequences, item)
+			return true
+		})
+	}
+}
+
 func (data *IPv6AccessListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv6AccessListSequences, 0)

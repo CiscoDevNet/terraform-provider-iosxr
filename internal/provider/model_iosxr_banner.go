@@ -69,6 +69,12 @@ func (data *Banner) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *Banner) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "line"); value.Exists() {
+		data.Line = types.StringValue(value.String())
+	}
+}
+
 func (data *BannerData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "line"); value.Exists() {
 		data.Line = types.StringValue(value.String())

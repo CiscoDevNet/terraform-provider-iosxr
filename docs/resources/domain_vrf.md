@@ -119,5 +119,5 @@ Required:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_domain_vrf.example "Cisco-IOS-XR-um-domain-cfg:/domain/vrfs/vrf[vrf-name=TEST-VRF]"
+terraform import iosxr_domain_vrf.example "<vrf_name>"
 ```

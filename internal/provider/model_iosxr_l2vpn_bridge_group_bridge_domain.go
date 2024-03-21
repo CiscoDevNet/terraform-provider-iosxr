@@ -317,6 +317,79 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 	}
 }
 
+func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
+		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainEvis{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.Evis = append(data.Evis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vnis.vni"); value.Exists() {
+		data.Vnis = make([]L2VPNBridgeGroupBridgeDomainVnis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainVnis{}
+			if cValue := v.Get("vni-id"); cValue.Exists() {
+				item.VniId = types.Int64Value(cValue.Int())
+			}
+			data.Vnis = append(data.Vnis, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "mtu"); value.Exists() {
+		data.Mtu = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.broadcast.pps"); value.Exists() {
+		data.StormControlBroadcastPps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.broadcast.kbps"); value.Exists() {
+		data.StormControlBroadcastKbps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.multicast.pps"); value.Exists() {
+		data.StormControlMulticastPps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.multicast.kbps"); value.Exists() {
+		data.StormControlMulticastKbps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.pps"); value.Exists() {
+		data.StormControlUnknownUnicastPps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "storm-control.unknown-unicast.kbps"); value.Exists() {
+		data.StormControlUnknownUnicastKbps = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
+		data.Interfaces = make([]L2VPNBridgeGroupBridgeDomainInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("split-horizon.group"); cValue.Exists() {
+				item.SplitHorizonGroup = types.BoolValue(true)
+			} else {
+				item.SplitHorizonGroup = types.BoolValue(false)
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing-srv6-evis.evi"); value.Exists() {
+		data.SegmentRoutingSrv6Evis = make([]L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := L2VPNBridgeGroupBridgeDomainSegmentRoutingSrv6Evis{}
+			if cValue := v.Get("vpn-id"); cValue.Exists() {
+				item.VpnId = types.Int64Value(cValue.Int())
+			}
+			data.SegmentRoutingSrv6Evis = append(data.SegmentRoutingSrv6Evis, item)
+			return true
+		})
+	}
+}
+
 func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)

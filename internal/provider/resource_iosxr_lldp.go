@@ -191,6 +191,12 @@ func (r *LLDPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
+	import_ := false
+	if state.Id.ValueString() == "" {
+		import_ = true
+		state.Id = types.StringValue(state.getPath())
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
@@ -199,7 +205,12 @@ func (r *LLDPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	state.updateFromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+	if import_ {
+		state.fromBody(ctx, respBody)
+	} else {
+		state.updateFromBody(ctx, respBody)
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
 
@@ -300,5 +311,5 @@ func (r *LLDPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *LLDPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "")...)
 }

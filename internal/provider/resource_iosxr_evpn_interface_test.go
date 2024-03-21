@@ -65,7 +65,8 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_evpn_interface.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=Bundle-Ether12]",
+		ImportStateId: "Bundle-Ether12",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

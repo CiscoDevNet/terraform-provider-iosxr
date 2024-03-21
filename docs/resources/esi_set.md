@@ -40,5 +40,5 @@ resource "iosxr_esi_set" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_esi_set.example "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/esi-sets/esi-set[set-name=POLICYSET]"
+terraform import iosxr_esi_set.example "<set_name>"
 ```

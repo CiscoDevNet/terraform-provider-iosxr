@@ -59,7 +59,8 @@ func TestAccIosxrKeyChain(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_key_chain.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=KEY11]",
+		ImportStateId: "KEY11",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -103,6 +103,20 @@ func (data *LoggingSourceInterface) updateFromBody(ctx context.Context, res []by
 	}
 }
 
+func (data *LoggingSourceInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]LoggingSourceInterfaceVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := LoggingSourceInterfaceVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
+}
+
 func (data *LoggingSourceInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LoggingSourceInterfaceVrfs, 0)

@@ -124,6 +124,30 @@ func (data *CDP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *CDP) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "holdtime"); value.Exists() {
+		data.Holdtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timer"); value.Exists() {
+		data.Timer = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "advertise.v1"); value.Exists() {
+		data.AdvertiseV1 = types.BoolValue(true)
+	} else {
+		data.AdvertiseV1 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "log.adjacency.changes"); value.Exists() {
+		data.LogAdjacencyChanges = types.BoolValue(true)
+	} else {
+		data.LogAdjacencyChanges = types.BoolValue(false)
+	}
+}
+
 func (data *CDPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "enable"); value.Exists() {
 		data.Enable = types.BoolValue(true)

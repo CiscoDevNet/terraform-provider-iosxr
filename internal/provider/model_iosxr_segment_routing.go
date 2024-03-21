@@ -96,6 +96,21 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
+		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "global-block.upper-bound"); value.Exists() {
+		data.GlobalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "local-block.lower-bound"); value.Exists() {
+		data.LocalBlockLowerBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
+		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+}
+
 func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())

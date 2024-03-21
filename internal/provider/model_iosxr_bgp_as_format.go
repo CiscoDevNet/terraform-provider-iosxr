@@ -86,6 +86,19 @@ func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
+		data.Asdot = types.BoolValue(true)
+	} else {
+		data.Asdot = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
+		data.Asplain = types.BoolValue(true)
+	} else {
+		data.Asplain = types.BoolValue(false)
+	}
+}
+
 func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
 		data.Asdot = types.BoolValue(true)

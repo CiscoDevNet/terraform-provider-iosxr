@@ -55,7 +55,8 @@ func TestAccIosxrRouterVRRPInterfaceAddressFamilyIPv6(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_vrrp_interface_address_family_ipv6.test",
 		ImportState:   true,
-		ImportStateId: "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]/address-family/ipv6/vrrps/vrrp[vrrp-id=%!d(string=124)]",
+		ImportStateId: "GigabitEthernet0/0/0/2,124",
+		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },

@@ -318,6 +318,87 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	}
 }
 
+func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
+		data.RemoteAs = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
+		data.UpdateSource = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() {
+		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() {
+		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() {
+		data.AoKeyChainName = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ao.include-tcp-options.enable"); value.Exists() {
+		data.AoIncludeTcpOptionsEnable = types.BoolValue(true)
+	} else {
+		data.AoIncludeTcpOptionsEnable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect"); value.Exists() {
+		data.BfdFastDetect = types.BoolValue(true)
+	} else {
+		data.BfdFastDetect = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.strict-mode"); value.Exists() {
+		data.BfdFastDetectStrictMode = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectStrictMode = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); value.Exists() {
+		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
+		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterBGPNeighborGroupAddressFamilies{}
+			if cValue := v.Get("af-name"); cValue.Exists() {
+				item.AfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("soft-reconfiguration.inbound.always"); cValue.Exists() {
+				item.SoftReconfigurationInboundAlways = types.BoolValue(true)
+			} else {
+				item.SoftReconfigurationInboundAlways = types.BoolValue(false)
+			}
+			if cValue := v.Get("next-hop-self.inheritance-disable"); cValue.Exists() {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.NextHopSelfInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-reflector-client"); cValue.Exists() {
+				item.RouteReflectorClient = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClient = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-reflector-client.inheritance-disable"); cValue.Exists() {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(true)
+			} else {
+				item.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
+			}
+			if cValue := v.Get("route-policy.in"); cValue.Exists() {
+				item.RoutePolicyIn = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("route-policy.out"); cValue.Exists() {
+				item.RoutePolicyOut = types.StringValue(cValue.String())
+			}
+			data.AddressFamilies = append(data.AddressFamilies, item)
+			return true
+		})
+	}
+}
+
 func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())

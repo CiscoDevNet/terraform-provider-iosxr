@@ -111,6 +111,24 @@ func (data *RouterVRRPInterface) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
+func (data *RouterVRRPInterface) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() {
+		data.MacRefresh = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay.minimum"); value.Exists() {
+		data.DelayMinimum = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "delay.reload"); value.Exists() {
+		data.DelayReload = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	}
+}
+
 func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mac-refresh"); value.Exists() {
 		data.MacRefresh = types.Int64Value(value.Int())

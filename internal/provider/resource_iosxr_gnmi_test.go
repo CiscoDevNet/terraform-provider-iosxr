@@ -143,7 +143,7 @@ func testAccIosxrGnmiConfig_leafList() string {
 func testAccIosxrGnmiConfig_yangEmpty() string {
 	return `
 	resource "iosxr_gnmi" "test" {
-		path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=10]/address-families/address-family[af-name=ipv6-unicast]"
+		path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv6-unicast]"
 		attributes = {
 			"af-name" = "ipv6-unicast"
 			"redistribute/static" = "<EMPTY>"

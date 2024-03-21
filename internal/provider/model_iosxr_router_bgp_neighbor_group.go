@@ -427,6 +427,15 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
+		data.TimersHoldtime = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
+	}
 }
 
 func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
@@ -603,13 +612,13 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		}
 	}
 	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/keepalive-interval", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
 	}
 	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/holdtime", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
 	}
 	if !state.TimersMinimumAcceptableHoldtime.IsNull() && data.TimersMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/minimum-acceptable-holdtime", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
 	}
 	return deletedItems
 }
@@ -697,13 +706,13 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
 	}
 	if !data.TimersKeepaliveInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/keepalive-interval", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
 	}
 	if !data.TimersHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
 	}
 	if !data.TimersMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/minimum-acceptable-holdtime", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
 	}
 	return deletePaths
 }

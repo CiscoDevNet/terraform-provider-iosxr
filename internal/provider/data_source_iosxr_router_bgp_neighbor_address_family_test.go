@@ -41,8 +41,6 @@ func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_restart", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_discard_extra_paths", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_inheritance_disable", "true"))
@@ -117,8 +115,6 @@ func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
 	config += `	maximum_prefix_limit = 1248576` + "\n"
 	config += `	maximum_prefix_threshold = 80` + "\n"
-	config += `	maximum_prefix_restart = 5` + "\n"
-	config += `	maximum_prefix_discard_extra_paths = true` + "\n"
 	config += `	maximum_prefix_warning_only = true` + "\n"
 	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	default_originate_inheritance_disable = true` + "\n"

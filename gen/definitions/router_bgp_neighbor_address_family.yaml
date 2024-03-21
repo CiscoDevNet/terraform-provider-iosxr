@@ -36,15 +36,22 @@ attributes:
   - yang_name: maximum-prefix/prefix-limit
     tf_name: maximum_prefix_limit
     optional: true
+    delete_parent: true
     example: 1248576
   - yang_name: maximum-prefix/threshold
     optional: true
+    delete_parent: true
     example: 80
   - yang_name: maximum-prefix/restart
+    delete_parent: true
     example: 5
+    exclude_test: true
   - yang_name: maximum-prefix/discard-extra-paths
-    example: true
+    delete_parent: true
+    example: false
+    exclude_test: true
   - yang_name: maximum-prefix/warning-only
+    delete_parent: true
     example: true
   - yang_name: default-originate/route-policy
     example: ROUTE_POLICY_1

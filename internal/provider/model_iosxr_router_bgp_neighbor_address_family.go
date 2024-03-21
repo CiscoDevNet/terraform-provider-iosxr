@@ -354,6 +354,11 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 	} else {
 		data.AdvertiseVpnv4UnicastEnableReOriginatedStitchingRt = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "next-hop-self"); value.Exists() {
+		data.NextHopSelf = types.BoolValue(true)
+	} else {
+		data.NextHopSelf = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "next-hop-self.inheritance-disable"); value.Exists() {
 		data.NextHopSelfInheritanceDisable = types.BoolValue(true)
 	} else {
@@ -369,6 +374,48 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 	}
 	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInboundAlways = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp"); value.Exists() {
+		data.SendCommunityEbgp = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgp = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "send-community-ebgp.inheritance-disable"); value.Exists() {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.prefix-limit"); value.Exists() {
+		data.MaximumPrefixLimit = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.threshold"); value.Exists() {
+		data.MaximumPrefixThreshold = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.restart"); value.Exists() {
+		data.MaximumPrefixRestart = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.discard-extra-paths"); value.Exists() {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolValue(true)
+	} else {
+		data.MaximumPrefixDiscardExtraPaths = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "maximum-prefix.warning-only"); value.Exists() {
+		data.MaximumPrefixWarningOnly = types.BoolValue(true)
+	} else {
+		data.MaximumPrefixWarningOnly = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "default-originate.route-policy"); value.Exists() {
+		data.DefaultOriginateRoutePolicy = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "default-originate.inheritance-disable"); value.Exists() {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
 }
 
@@ -497,19 +544,19 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
 	}
 	if !state.MaximumPrefixLimit.IsNull() && data.MaximumPrefixLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/prefix-limit", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
 	if !state.MaximumPrefixThreshold.IsNull() && data.MaximumPrefixThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/threshold", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
 	if !state.MaximumPrefixRestart.IsNull() && data.MaximumPrefixRestart.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/restart", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
 	if !state.MaximumPrefixDiscardExtraPaths.IsNull() && data.MaximumPrefixDiscardExtraPaths.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
 	if !state.MaximumPrefixWarningOnly.IsNull() && data.MaximumPrefixWarningOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix/warning-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/route-policy", state.getPath()))
@@ -603,19 +650,19 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
 	}
 	if !data.MaximumPrefixLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/prefix-limit", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.MaximumPrefixThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/threshold", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.MaximumPrefixRestart.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/restart", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.MaximumPrefixDiscardExtraPaths.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.MaximumPrefixWarningOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix/warning-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.DefaultOriginateRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/route-policy", data.getPath()))

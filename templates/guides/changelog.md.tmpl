@@ -7,6 +7,11 @@ description: |-
 
 # Changelog
 
+## 0.4.1 (unreleased)
+
+- Add `next_hop_self`, `soft_reconfiguration_inbound_always`, `send_community_ebgp`, `send_community_ebgp_inheritance_disable`, `maximum_prefix_limit`, `maximum_prefix_threshold`, `maximum_prefix_restart`, `maximum_prefix_discard_extra_paths`, `maximum_prefix_warning_only`, `default_originate_route_policy` and `default_originate_inheritance_disable` attributes to `iosxr_router_bgp_neighbor_address_family` resource and data source
+- Add `timers_keepalive_interval`, `timers_holdtime` and `timers_minimum_acceptable_holdtime` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
+
 ## 0.4.0
 
 - BREAKING CHANGE: Refactor resource import functionality to use a comma separated list of key attribute values instead of a gNMI path
@@ -14,7 +19,7 @@ description: |-
 
 ## 0.3.2
 
-- Add `route_policy_in` and `route_policy_out` attributes to `iosxr_bgp_neighbor_group` resource and data source
+- Add `route_policy_in` and `route_policy_out` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `fast_reroute_per_prefix_ti_lfa` and `fast_reroute_node_protecting_srlg_disjoint` attributes to `iosxr_router_ospf_area_interface` resource and data source
 - Add `prefix_sid_strict_spf` and `prefix_sid_algorithm` attributes to `iosxr_router_ospf_area_interface` resource and data source
 - Add `segment_routing_mpls` and `segment_routing_sr_prefer` attributes to `iosxr_router_ospf` resource and data source

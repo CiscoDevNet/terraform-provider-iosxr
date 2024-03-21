@@ -43,8 +43,6 @@ func TestAccIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_restart", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_discard_extra_paths", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_neighbor_address_family.test", "default_originate_inheritance_disable", "true"))
@@ -115,8 +113,6 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_minimum() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	neighbor_address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	maximum_prefix_limit = 1248576` + "\n"
-	config += `	maximum_prefix_threshold = 80` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -141,8 +137,6 @@ func testAccIosxrRouterBGPNeighborAddressFamilyConfig_all() string {
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
 	config += `	maximum_prefix_limit = 1248576` + "\n"
 	config += `	maximum_prefix_threshold = 80` + "\n"
-	config += `	maximum_prefix_restart = 5` + "\n"
-	config += `	maximum_prefix_discard_extra_paths = true` + "\n"
 	config += `	maximum_prefix_warning_only = true` + "\n"
 	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	default_originate_inheritance_disable = true` + "\n"

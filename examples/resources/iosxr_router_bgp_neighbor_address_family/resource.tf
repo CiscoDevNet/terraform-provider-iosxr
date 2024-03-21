@@ -16,8 +16,6 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   send_community_ebgp_inheritance_disable                   = true
   maximum_prefix_limit                                      = 1248576
   maximum_prefix_threshold                                  = 80
-  maximum_prefix_restart                                    = 5
-  maximum_prefix_discard_extra_paths                        = true
   maximum_prefix_warning_only                               = true
   default_originate_route_policy                            = "ROUTE_POLICY_1"
   default_originate_inheritance_disable                     = true

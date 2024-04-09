@@ -49,6 +49,8 @@ attributes:
     optional: true
     delete_parent: true
     example: 20
+  - yang_name: bgp/router-id
+    example: 22.22.22.22
   - yang_name: bfd/minimum-interval
     example: 10
   - yang_name: bfd/multiplier
@@ -62,6 +64,8 @@ attributes:
         example: 10.1.1.2
       - yang_name: remote-as
         example: 65002
+      - yang_name: use/neighbor-group
+        example: GROUP1
       - yang_name: description
         example: My Neighbor Description
       - yang_name: advertisement-interval/time-in-seconds

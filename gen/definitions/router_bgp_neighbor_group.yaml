@@ -11,6 +11,8 @@ attributes:
     example: GROUP1
   - yang_name: remote-as
     example: 65001
+  - yang_name: description
+    example: My Neighbor Group Description
   - yang_name: update-source
     example: Loopback0
   - yang_name: advertisement-interval/time-in-seconds
@@ -39,6 +41,17 @@ attributes:
     example: false
   - yang_name: bfd/fast-detect/inheritance-disable
     example: false
+  - yang_name: local-as/as-number
+    tf_name: local_as
+    example: 65003
+  - yang_name: local-as/no-prepend
+    example: true
+  - yang_name: local-as/no-prepend/replace-as
+    tf_name: local_as_replace_as
+    example: true
+  - yang_name: local-as/no-prepend/replace-as/dual-as
+    tf_name: local_as_dual_as
+    example: true
   - yang_name: address-families/address-family
     tf_name: address_families
     type: List

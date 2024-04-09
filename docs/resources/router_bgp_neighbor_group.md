@@ -17,6 +17,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   as_number                           = "65001"
   name                                = "GROUP1"
   remote_as                           = "65001"
+  description                         = "My Neighbor Group Description"
   update_source                       = "Loopback0"
   advertisement_interval_seconds      = 10
   bfd_minimum_interval                = 3
@@ -24,6 +25,10 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   bfd_fast_detect                     = true
   bfd_fast_detect_strict_mode         = false
   bfd_fast_detect_inheritance_disable = false
+  local_as                            = "65003"
+  local_as_no_prepend                 = true
+  local_as_replace_as                 = true
+  local_as_dual_as                    = true
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"
@@ -68,7 +73,12 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   - Range: `2`-`16`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
+- `description` (String) Neighbor specific description
 - `device` (String) A device name from the provider configuration.
+- `local_as` (String) bgp as-number
+- `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
+- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
 - `remote_as` (String) bgp as-number
 - `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
 - `timers_keepalive_interval` (Number) BGP timers

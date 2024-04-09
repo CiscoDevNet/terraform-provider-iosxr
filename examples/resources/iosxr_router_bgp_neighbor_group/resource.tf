@@ -2,6 +2,7 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   as_number                           = "65001"
   name                                = "GROUP1"
   remote_as                           = "65001"
+  description                         = "My Neighbor Group Description"
   update_source                       = "Loopback0"
   advertisement_interval_seconds      = 10
   bfd_minimum_interval                = 3
@@ -9,6 +10,10 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   bfd_fast_detect                     = true
   bfd_fast_detect_strict_mode         = false
   bfd_fast_detect_inheritance_disable = false
+  local_as                            = "65003"
+  local_as_no_prepend                 = true
+  local_as_replace_as                 = true
+  local_as_dual_as                    = true
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"

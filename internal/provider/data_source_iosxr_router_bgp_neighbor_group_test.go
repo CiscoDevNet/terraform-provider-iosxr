@@ -28,6 +28,7 @@ import (
 func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "remote_as", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "description", "My Neighbor Group Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "update_source", "Loopback0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "advertisement_interval_seconds", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_minimum_interval", "3"))
@@ -35,6 +36,10 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_strict_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_inheritance_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as", "65003"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_no_prepend", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_replace_as", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_dual_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self", "true"))
@@ -82,6 +87,7 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	name = "GROUP1"` + "\n"
 	config += `	remote_as = "65001"` + "\n"
+	config += `	description = "My Neighbor Group Description"` + "\n"
 	config += `	update_source = "Loopback0"` + "\n"
 	config += `	advertisement_interval_seconds = 10` + "\n"
 	config += `	bfd_minimum_interval = 3` + "\n"
@@ -89,6 +95,10 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = false` + "\n"
 	config += `	bfd_fast_detect_inheritance_disable = false` + "\n"
+	config += `	local_as = "65003"` + "\n"
+	config += `	local_as_no_prepend = true` + "\n"
+	config += `	local_as_replace_as = true` + "\n"
+	config += `	local_as_dual_as = true` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"

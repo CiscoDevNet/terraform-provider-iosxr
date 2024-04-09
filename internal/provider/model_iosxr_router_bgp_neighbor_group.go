@@ -37,6 +37,7 @@ type RouterBGPNeighborGroup struct {
 	AsNumber                          types.String                            `tfsdk:"as_number"`
 	Name                              types.String                            `tfsdk:"name"`
 	RemoteAs                          types.String                            `tfsdk:"remote_as"`
+	Description                       types.String                            `tfsdk:"description"`
 	UpdateSource                      types.String                            `tfsdk:"update_source"`
 	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
 	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
@@ -47,6 +48,10 @@ type RouterBGPNeighborGroup struct {
 	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	LocalAs                           types.String                            `tfsdk:"local_as"`
+	LocalAsNoPrepend                  types.Bool                              `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                  types.Bool                              `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                     types.Bool                              `tfsdk:"local_as_dual_as"`
 	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
 	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
@@ -59,6 +64,7 @@ type RouterBGPNeighborGroupData struct {
 	AsNumber                          types.String                            `tfsdk:"as_number"`
 	Name                              types.String                            `tfsdk:"name"`
 	RemoteAs                          types.String                            `tfsdk:"remote_as"`
+	Description                       types.String                            `tfsdk:"description"`
 	UpdateSource                      types.String                            `tfsdk:"update_source"`
 	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
 	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
@@ -69,6 +75,10 @@ type RouterBGPNeighborGroupData struct {
 	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
 	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
 	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
+	LocalAs                           types.String                            `tfsdk:"local_as"`
+	LocalAsNoPrepend                  types.Bool                              `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                  types.Bool                              `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                     types.Bool                              `tfsdk:"local_as_dual_as"`
 	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
 	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
@@ -100,6 +110,9 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	}
 	if !data.RemoteAs.IsNull() && !data.RemoteAs.IsUnknown() {
 		body, _ = sjson.Set(body, "remote-as", data.RemoteAs.ValueString())
+	}
+	if !data.Description.IsNull() && !data.Description.IsUnknown() {
+		body, _ = sjson.Set(body, "description", data.Description.ValueString())
 	}
 	if !data.UpdateSource.IsNull() && !data.UpdateSource.IsUnknown() {
 		body, _ = sjson.Set(body, "update-source", data.UpdateSource.ValueString())
@@ -137,6 +150,24 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.IsUnknown() {
 		if data.BfdFastDetectInheritanceDisable.ValueBool() {
 			body, _ = sjson.Set(body, "bfd.fast-detect.inheritance-disable", map[string]string{})
+		}
+	}
+	if !data.LocalAs.IsNull() && !data.LocalAs.IsUnknown() {
+		body, _ = sjson.Set(body, "local-as.as-number", data.LocalAs.ValueString())
+	}
+	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.IsUnknown() {
+		if data.LocalAsNoPrepend.ValueBool() {
+			body, _ = sjson.Set(body, "local-as.no-prepend", map[string]string{})
+		}
+	}
+	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.IsUnknown() {
+		if data.LocalAsReplaceAs.ValueBool() {
+			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as", map[string]string{})
+		}
+	}
+	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.IsUnknown() {
+		if data.LocalAsDualAs.ValueBool() {
+			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as.dual-as", map[string]string{})
 		}
 	}
 	if !data.TimersKeepaliveInterval.IsNull() && !data.TimersKeepaliveInterval.IsUnknown() {
@@ -195,6 +226,11 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		data.RemoteAs = types.StringValue(value.String())
 	} else {
 		data.RemoteAs = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
+		data.Description = types.StringValue(value.String())
+	} else {
+		data.Description = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() && !data.UpdateSource.IsNull() {
 		data.UpdateSource = types.StringValue(value.String())
@@ -261,6 +297,38 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		}
 	} else {
 		data.BfdFastDetectInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
+		data.LocalAs = types.StringValue(value.String())
+	} else {
+		data.LocalAs = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend"); !data.LocalAsNoPrepend.IsNull() {
+		if value.Exists() {
+			data.LocalAsNoPrepend = types.BoolValue(true)
+		} else {
+			data.LocalAsNoPrepend = types.BoolValue(false)
+		}
+	} else {
+		data.LocalAsNoPrepend = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); !data.LocalAsReplaceAs.IsNull() {
+		if value.Exists() {
+			data.LocalAsReplaceAs = types.BoolValue(true)
+		} else {
+			data.LocalAsReplaceAs = types.BoolValue(false)
+		}
+	} else {
+		data.LocalAsReplaceAs = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); !data.LocalAsDualAs.IsNull() {
+		if value.Exists() {
+			data.LocalAsDualAs = types.BoolValue(true)
+		} else {
+			data.LocalAsDualAs = types.BoolValue(false)
+		}
+	} else {
+		data.LocalAsDualAs = types.BoolNull()
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -367,6 +435,9 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
 	}
@@ -404,6 +475,24 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
+		data.LocalAs = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	} else {
+		data.LocalAsNoPrepend = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	} else {
+		data.LocalAsReplaceAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	} else {
+		data.LocalAsDualAs = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
@@ -462,6 +551,9 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "description"); value.Exists() {
+		data.Description = types.StringValue(value.String())
+	}
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
 	}
@@ -499,6 +591,24 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
+		data.LocalAs = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
+		data.LocalAsNoPrepend = types.BoolValue(true)
+	} else {
+		data.LocalAsNoPrepend = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
+		data.LocalAsReplaceAs = types.BoolValue(true)
+	} else {
+		data.LocalAsReplaceAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
+		data.LocalAsDualAs = types.BoolValue(true)
+	} else {
+		data.LocalAsDualAs = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
@@ -558,6 +668,9 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	if !state.RemoteAs.IsNull() && data.RemoteAs.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remote-as", state.getPath()))
 	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
 	if !state.UpdateSource.IsNull() && data.UpdateSource.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/update-source", state.getPath()))
 	}
@@ -587,6 +700,18 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	}
 	if !state.BfdFastDetectInheritanceDisable.IsNull() && data.BfdFastDetectInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", state.getPath()))
+	}
+	if !state.LocalAs.IsNull() && data.LocalAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as-number", state.getPath()))
+	}
+	if !state.LocalAsNoPrepend.IsNull() && data.LocalAsNoPrepend.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend", state.getPath()))
+	}
+	if !state.LocalAsReplaceAs.IsNull() && data.LocalAsReplaceAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend/replace-as", state.getPath()))
+	}
+	if !state.LocalAsDualAs.IsNull() && data.LocalAsDualAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", state.getPath()))
 	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -665,6 +790,15 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
 	}
+	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend", data.getPath()))
+	}
+	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend/replace-as", data.getPath()))
+	}
+	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", data.getPath()))
+	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
@@ -696,6 +830,9 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	if !data.RemoteAs.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remote-as", data.getPath()))
 	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
 	if !data.UpdateSource.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/update-source", data.getPath()))
 	}
@@ -725,6 +862,18 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	}
 	if !data.BfdFastDetectInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
+	}
+	if !data.LocalAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as-number", data.getPath()))
+	}
+	if !data.LocalAsNoPrepend.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend", data.getPath()))
+	}
+	if !data.LocalAsReplaceAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend/replace-as", data.getPath()))
+	}
+	if !data.LocalAsDualAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}

@@ -8,12 +8,14 @@ resource "iosxr_router_bgp_vrf" "example" {
   default_metric                = 125
   timers_bgp_keepalive_interval = 5
   timers_bgp_holdtime           = "20"
+  bgp_router_id                 = "22.22.22.22"
   bfd_minimum_interval          = 10
   bfd_multiplier                = 4
   neighbors = [
     {
       neighbor_address                = "10.1.1.2"
       remote_as                       = "65002"
+      use_neighbor_group              = "GROUP1"
       description                     = "My Neighbor Description"
       advertisement_interval_seconds  = 10
       ignore_connected_check          = true

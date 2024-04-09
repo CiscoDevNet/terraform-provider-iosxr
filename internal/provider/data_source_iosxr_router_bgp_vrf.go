@@ -114,6 +114,10 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
 				Computed:            true,
 			},
+			"bgp_router_id": schema.StringAttribute{
+				MarkdownDescription: "Configure Router-id",
+				Computed:            true,
+			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: "Hello interval",
 				Computed:            true,
@@ -133,6 +137,10 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 						},
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: "bgp as-number",
+							Computed:            true,
+						},
+						"use_neighbor_group": schema.StringAttribute{
+							MarkdownDescription: "Inherit configuration from a neighbor-group",
 							Computed:            true,
 						},
 						"description": schema.StringAttribute{

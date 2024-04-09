@@ -156,6 +156,14 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
 				Optional:            true,
 			},
+			"bgp_router_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure Router-id").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
+			},
 			"bfd_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
 				Optional:            true,
@@ -182,6 +190,13 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 						"remote_as": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
 							Optional:            true,
+						},
+						"use_neighbor_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration from a neighbor-group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
 						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Neighbor specific description").String,

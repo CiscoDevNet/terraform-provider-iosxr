@@ -90,6 +90,17 @@ resource "iosxr_gnmi" "PreReq0" {
 	attributes = {
 		"as-number" = "65001"
 	}
+	lists = [
+		{
+			name = "neighbor-groups/neighbor-group"
+			key = "neighbor-group-name"
+			items = [
+				{
+					"neighbor-group-name" = "GROUP1"
+				},
+			]
+		},
+	]
 }
 
 `

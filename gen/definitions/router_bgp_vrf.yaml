@@ -125,3 +125,10 @@ test_prerequisites:
     attributes:
       - name: as-number
         value: 65001
+    lists:
+      - name: neighbor-groups/neighbor-group
+        key: neighbor-group-name
+        items:
+          - attributes:
+              - name: neighbor-group-name
+                value: GROUP1

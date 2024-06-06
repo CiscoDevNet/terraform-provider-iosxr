@@ -1,3 +1,8 @@
+## 0.5.1 (unreleased)
+
+- Add `description`, `local_as`, `local_as_dual_as`, `local_as_no_prepend` and `local_as_replace_as` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
+- Add `bgp_router_id` and `use_neighbor_group` attributes to `iosxr_router_bgp_vrf` resource and data source
+
 ## 0.5.0
 
 - Add `next_hop_self`, `soft_reconfiguration_inbound_always`, `send_community_ebgp`, `send_community_ebgp_inheritance_disable`, `maximum_prefix_limit`, `maximum_prefix_threshold`, `maximum_prefix_restart`, `maximum_prefix_discard_extra_paths`, `maximum_prefix_warning_only`, `default_originate_route_policy` and `default_originate_inheritance_disable` attributes to `iosxr_router_bgp_neighbor_address_family` resource and data source

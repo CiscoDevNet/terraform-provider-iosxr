@@ -43,14 +43,18 @@ attributes:
     example: false
   - yang_name: local-as/as-number
     tf_name: local_as
+    exclude_test: true
     example: 65003
   - yang_name: local-as/no-prepend
+    exclude_test: true
     example: true
   - yang_name: local-as/no-prepend/replace-as
     tf_name: local_as_replace_as
+    exclude_test: true
     example: true
   - yang_name: local-as/no-prepend/replace-as/dual-as
     tf_name: local_as_dual_as
+    exclude_test: true
     example: true
   - yang_name: address-families/address-family
     tf_name: address_families

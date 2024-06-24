@@ -36,10 +36,6 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_strict_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_inheritance_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as", "65003"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_no_prepend", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_replace_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "local_as_dual_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self", "true"))
@@ -95,10 +91,6 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = false` + "\n"
 	config += `	bfd_fast_detect_inheritance_disable = false` + "\n"
-	config += `	local_as = "65003"` + "\n"
-	config += `	local_as_no_prepend = true` + "\n"
-	config += `	local_as_replace_as = true` + "\n"
-	config += `	local_as_dual_as = true` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"

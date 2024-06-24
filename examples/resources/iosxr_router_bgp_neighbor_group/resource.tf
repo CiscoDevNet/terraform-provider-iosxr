@@ -10,10 +10,6 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   bfd_fast_detect                     = true
   bfd_fast_detect_strict_mode         = false
   bfd_fast_detect_inheritance_disable = false
-  local_as                            = "65003"
-  local_as_no_prepend                 = true
-  local_as_replace_as                 = true
-  local_as_dual_as                    = true
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"

@@ -7,7 +7,7 @@ description: |-
 
 # Changelog
 
-## 0.5.1 (unreleased)
+## 0.5.1
 
 - Add `description`, `local_as`, `local_as_dual_as`, `local_as_no_prepend` and `local_as_replace_as` attributes to `iosxr_router_bgp_neighbor_group` resource and data source
 - Add `bgp_router_id` and `use_neighbor_group` attributes to `iosxr_router_bgp_vrf` resource and data source

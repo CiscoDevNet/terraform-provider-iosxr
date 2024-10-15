@@ -1,4 +1,4 @@
-## 0.5.2 (unreleased)
+## 0.5.2
 
 - Implement workaround for issue related to interpreting dotted decimal AS number notation, [link](https://github.com/CiscoDevNet/terraform-provider-iosxr/issues/263)
 - Add `use_af_group` attribute to `iosxr_router_bgp_neighbor_group` resource and data source

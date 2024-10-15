@@ -79,6 +79,9 @@ attributes:
         example: ROUTE_POLICY_1
       - yang_name: route-policy/out
         example: ROUTE_POLICY_1
+      - yang_name: use/af-group
+        example: ROUTE_POLICY_1
+        exclude_test: true
   - yang_name: timers/keepalive-interval
     optional: true
     delete_parent: true

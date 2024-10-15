@@ -224,6 +224,13 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
+						"use_af_group": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inherit configuration for this address-family from an af-group").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
 					},
 				},
 			},

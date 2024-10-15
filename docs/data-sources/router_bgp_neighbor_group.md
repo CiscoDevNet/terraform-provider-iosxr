@@ -68,3 +68,4 @@ Read-Only:
 - `route_reflector_client` (Boolean) Configure a neighbor as Route Reflector client
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
+- `use_af_group` (String) Inherit configuration for this address-family from an af-group

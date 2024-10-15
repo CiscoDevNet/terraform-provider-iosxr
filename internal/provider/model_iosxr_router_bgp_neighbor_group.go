@@ -93,6 +93,7 @@ type RouterBGPNeighborGroupAddressFamilies struct {
 	RouteReflectorClientInheritanceDisable types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
 	RoutePolicyIn                          types.String `tfsdk:"route_policy_in"`
 	RoutePolicyOut                         types.String `tfsdk:"route_policy_out"`
+	UseAfGroup                             types.String `tfsdk:"use_af_group"`
 }
 
 func (data RouterBGPNeighborGroup) getPath() string {
@@ -215,6 +216,9 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			}
 			if !item.RoutePolicyOut.IsNull() && !item.RoutePolicyOut.IsUnknown() {
 				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"route-policy.out", item.RoutePolicyOut.ValueString())
+			}
+			if !item.UseAfGroup.IsNull() && !item.UseAfGroup.IsUnknown() {
+				body, _ = sjson.Set(body, "address-families.address-family"+"."+strconv.Itoa(index)+"."+"use.af-group", item.UseAfGroup.ValueString())
 			}
 		}
 	}
@@ -413,6 +417,11 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		} else {
 			data.AddressFamilies[i].RoutePolicyOut = types.StringNull()
 		}
+		if value := r.Get("use.af-group"); value.Exists() && !data.AddressFamilies[i].UseAfGroup.IsNull() {
+			data.AddressFamilies[i].UseAfGroup = types.StringValue(value.String())
+		} else {
+			data.AddressFamilies[i].UseAfGroup = types.StringNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
 		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
@@ -532,6 +541,9 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("route-policy.out"); cValue.Exists() {
 				item.RoutePolicyOut = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("use.af-group"); cValue.Exists() {
+				item.UseAfGroup = types.StringValue(cValue.String())
+			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
@@ -648,6 +660,9 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 			if cValue := v.Get("route-policy.out"); cValue.Exists() {
 				item.RoutePolicyOut = types.StringValue(cValue.String())
 			}
+			if cValue := v.Get("use.af-group"); cValue.Exists() {
+				item.UseAfGroup = types.StringValue(cValue.String())
+			}
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
@@ -756,6 +771,9 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 				}
 				if !state.AddressFamilies[i].RoutePolicyOut.IsNull() && data.AddressFamilies[j].RoutePolicyOut.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/route-policy/out", state.getPath(), keyString))
+				}
+				if !state.AddressFamilies[i].UseAfGroup.IsNull() && data.AddressFamilies[j].UseAfGroup.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/use/af-group", state.getPath(), keyString))
 				}
 				break
 			}

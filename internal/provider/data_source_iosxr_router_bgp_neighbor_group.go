@@ -171,6 +171,10 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Apply route policy to outbound routes",
 							Computed:            true,
 						},
+						"use_af_group": schema.StringAttribute{
+							MarkdownDescription: "Inherit configuration for this address-family from an af-group",
+							Computed:            true,
+						},
 					},
 				},
 			},

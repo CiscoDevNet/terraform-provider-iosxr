@@ -113,12 +113,12 @@ type YamlConfig struct {
 }
 
 type YamlConfigAttribute struct {
-	YangName  string `yaml:"yang_name"`
-	YangScope string `yaml:"yang_scope"`
-	TfName    string `yaml:"tf_name"`
-	XPath     string `yaml:"xpath"`
-	Type      string `yaml:"type"`
-	// "empty", "presence" or "boolean"
+	YangName        string                `yaml:"yang_name"`
+	YangScope       string                `yaml:"yang_scope"`
+	TfName          string                `yaml:"tf_name"`
+	XPath           string                `yaml:"xpath"`
+	Type            string                `yaml:"type"`
+	ReadRaw         bool                  `yaml:"read_raw"`
 	TypeYangBool    string                `yaml:"type_yang_bool"`
 	Id              bool                  `yaml:"id"`
 	Reference       bool                  `yaml:"reference"`

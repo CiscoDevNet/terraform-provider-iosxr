@@ -66,6 +66,7 @@ attributes:
     attributes:
       - yang_name: as-number
         id: true
+        read_raw: true
         example: 65001
       - yang_name: tag
         example: 3

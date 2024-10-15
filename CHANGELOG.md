@@ -1,3 +1,7 @@
+## 0.5.2 (unreleased)
+
+- Implement workaround for issue related to interpreting dotted decimal AS number notation, [link](https://github.com/CiscoDevNet/terraform-provider-iosxr/issues/263)
+
 ## 0.5.1
 
 - Add `description`, `local_as`, `local_as_dual_as`, `local_as_no_prepend` and `local_as_replace_as` attributes to `iosxr_router_bgp_neighbor_group` resource and data source

@@ -20,6 +20,7 @@ attribute:
   tf_name: str(required=False)
   xpath: str(required=False)
   type: enum('String', 'Int64', 'Bool', 'List', 'StringList', 'Int64List', required=False)
+  read_raw: bool(required=False)
   type_yang_bool: enum('empty', 'presence', 'boolean', required=False)
   id: bool(required=False)
   reference: bool(required=False)

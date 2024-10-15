@@ -239,7 +239,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	}
 	{{- else if eq .Type "String"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{toGoName .TfName}}.IsNull() {
-		data.{{toGoName .TfName}} = types.StringValue(value.String())
+		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	} else {
 		data.{{toGoName .TfName}} = types.StringNull()
 	}
@@ -308,7 +308,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 		}
 		{{- else if eq .Type "String"}}
 		if value := r.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() {
-			data.{{$list}}[i].{{toGoName .TfName}} = types.StringValue(value.String())
+			data.{{$list}}[i].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 		} else {
 			data.{{$list}}[i].{{toGoName .TfName}} = types.StringNull()
 		}
@@ -377,7 +377,7 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 			}
 			{{- else if eq .Type "String"}}
 			if value := cr.Get("{{toJsonPath .YangName .XPath}}"); value.Exists() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() {
-				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringValue(value.String())
+				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 			} else {
 				data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}} = types.StringNull()
 			}
@@ -426,7 +426,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	}
 	{{- else if eq .Type "String"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
-		data.{{toGoName .TfName}} = types.StringValue(value.String())
+		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	}
 	{{- else if eq .Type "StringList"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
@@ -463,7 +463,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
-				item.{{toGoName .TfName}} = types.StringValue(cValue.String())
+				item.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cValue.Raw{{else}}cValue.String(){{end}})
 			}
 			{{- else if eq .Type "StringList"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
@@ -500,7 +500,7 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 					}
 					{{- else if eq .Type "String"}}
 					if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = types.StringValue(ccValue.String())
+						cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
 					}
 					{{- else if eq .Type "StringList"}}
 					if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {
@@ -553,7 +553,7 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	}
 	{{- else if eq .Type "String"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
-		data.{{toGoName .TfName}} = types.StringValue(value.String())
+		data.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}value.Raw{{else}}value.String(){{end}})
 	}
 	{{- else if eq .Type "StringList"}}
 	if value := gjson.GetBytes(res, "{{toJsonPath .YangName .XPath}}"); value.Exists() {
@@ -590,7 +590,7 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 			}
 			{{- else if eq .Type "String"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
-				item.{{toGoName .TfName}} = types.StringValue(cValue.String())
+				item.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}cValue.Raw{{else}}cValue.String(){{end}})
 			}
 			{{- else if eq .Type "StringList"}}
 			if cValue := v.Get("{{toJsonPath .YangName .XPath}}"); cValue.Exists() {
@@ -627,7 +627,7 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 					}
 					{{- else if eq .Type "String"}}
 					if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {
-						cItem.{{toGoName .TfName}} = types.StringValue(ccValue.String())
+						cItem.{{toGoName .TfName}} = types.StringValue({{if .ReadRaw}}ccValue.Raw{{else}}ccValue.String(){{end}})
 					}
 					{{- else if eq .Type "StringList"}}
 					if ccValue := cv.Get("{{toJsonPath .YangName .XPath}}"); ccValue.Exists() {

@@ -4,6 +4,7 @@ path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neig
 doc_category: BGP
 attributes:
   - yang_name: as-number
+    read_raw: true
     example: 65001
   - yang_name: neighbor-address
     example: 10.1.1.2

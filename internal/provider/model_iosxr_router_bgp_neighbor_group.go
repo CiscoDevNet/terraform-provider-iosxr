@@ -223,7 +223,7 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 
 func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() && !data.RemoteAs.IsNull() {
-		data.RemoteAs = types.StringValue(value.String())
+		data.RemoteAs = types.StringValue(value.Raw)
 	} else {
 		data.RemoteAs = types.StringNull()
 	}
@@ -433,7 +433,7 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 
 func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
-		data.RemoteAs = types.StringValue(value.String())
+		data.RemoteAs = types.StringValue(value.Raw)
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -549,7 +549,7 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
-		data.RemoteAs = types.StringValue(value.String())
+		data.RemoteAs = types.StringValue(value.Raw)
 	}
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())

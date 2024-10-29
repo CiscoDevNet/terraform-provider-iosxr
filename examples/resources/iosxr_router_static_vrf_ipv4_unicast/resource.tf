@@ -14,13 +14,15 @@ resource "iosxr_router_static_vrf_ipv4_unicast" "example" {
   ]
   nexthop_interface_addresses = [
     {
-      interface_name  = "GigabitEthernet0/0/0/2"
-      address         = "11.11.11.1"
-      description     = "interface-description"
-      tag             = 103
-      distance_metric = 144
-      permanent       = true
-      metric          = 10
+      interface_name                   = "GigabitEthernet0/0/0/2"
+      address                          = "11.11.11.1"
+      description                      = "interface-description"
+      tag                              = 103
+      distance_metric                  = 144
+      permanent                        = true
+      metric                           = 10
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
     }
   ]
   nexthop_addresses = [

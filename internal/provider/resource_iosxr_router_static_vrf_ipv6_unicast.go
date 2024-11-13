@@ -226,6 +226,20 @@ func (r *RouterStaticVRFIPv6UnicastResource) Schema(ctx context.Context, req res
 								int64validator.Between(1, 16777214),
 							},
 						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 30000),
+							},
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 10),
+							},
+						},
 					},
 				},
 			},

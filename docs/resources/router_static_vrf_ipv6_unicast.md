@@ -29,13 +29,15 @@ resource "iosxr_router_static_vrf_ipv6_unicast" "example" {
   ]
   nexthop_interface_addresses = [
     {
-      interface_name  = "GigabitEthernet0/0/0/2"
-      address         = "2::2"
-      description     = "interface-description"
-      tag             = 103
-      distance_metric = 144
-      permanent       = true
-      metric          = 10
+      interface_name                   = "GigabitEthernet0/0/0/2"
+      address                          = "2::2"
+      description                      = "interface-description"
+      tag                              = 103
+      distance_metric                  = 144
+      permanent                        = true
+      metric                           = 10
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
     }
   ]
   nexthop_addresses = [
@@ -141,6 +143,10 @@ Required:
 
 Optional:
 
+- `bfd_fast_detect_minimum_interval` (Number) Hello interval
+  - Range: `3`-`30000`
+- `bfd_fast_detect_multiplier` (Number) Detect multiplier
+  - Range: `1`-`10`
 - `description` (String) description of the static route
 - `distance_metric` (Number) Distance metric for this route
   - Range: `1`-`254`

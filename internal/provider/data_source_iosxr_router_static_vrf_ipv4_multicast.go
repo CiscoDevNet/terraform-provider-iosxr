@@ -147,6 +147,14 @@ func (d *RouterStaticVRFIPv4MulticastDataSource) Schema(ctx context.Context, req
 							MarkdownDescription: "Set metric for this route",
 							Computed:            true,
 						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval",
+							Computed:            true,
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Detect multiplier",
+							Computed:            true,
+						},
 					},
 				},
 			},

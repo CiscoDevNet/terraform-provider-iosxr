@@ -98,14 +98,16 @@ type RouterStaticVRFIPv6MulticastVrfsNexthopInterfaces struct {
 	Metric         types.Int64  `tfsdk:"metric"`
 }
 type RouterStaticVRFIPv6MulticastVrfsNexthopInterfaceAddresses struct {
-	InterfaceName  types.String `tfsdk:"interface_name"`
-	Address        types.String `tfsdk:"address"`
-	Description    types.String `tfsdk:"description"`
-	Tag            types.Int64  `tfsdk:"tag"`
-	DistanceMetric types.Int64  `tfsdk:"distance_metric"`
-	Permanent      types.Bool   `tfsdk:"permanent"`
-	Track          types.String `tfsdk:"track"`
-	Metric         types.Int64  `tfsdk:"metric"`
+	InterfaceName                types.String `tfsdk:"interface_name"`
+	Address                      types.String `tfsdk:"address"`
+	Description                  types.String `tfsdk:"description"`
+	Tag                          types.Int64  `tfsdk:"tag"`
+	DistanceMetric               types.Int64  `tfsdk:"distance_metric"`
+	Permanent                    types.Bool   `tfsdk:"permanent"`
+	Track                        types.String `tfsdk:"track"`
+	Metric                       types.Int64  `tfsdk:"metric"`
+	BfdFastDetectMinimumInterval types.Int64  `tfsdk:"bfd_fast_detect_minimum_interval"`
+	BfdFastDetectMultiplier      types.Int64  `tfsdk:"bfd_fast_detect_multiplier"`
 }
 type RouterStaticVRFIPv6MulticastVrfsNexthopAddresses struct {
 	Address        types.String `tfsdk:"address"`
@@ -282,6 +284,12 @@ func (data RouterStaticVRFIPv6Multicast) toBody(ctx context.Context) string {
 					}
 					if !citem.Metric.IsNull() && !citem.Metric.IsUnknown() {
 						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"metric", strconv.FormatInt(citem.Metric.ValueInt64(), 10))
+					}
+					if !citem.BfdFastDetectMinimumInterval.IsNull() && !citem.BfdFastDetectMinimumInterval.IsUnknown() {
+						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"bfd.fast-detect.minimum-interval", strconv.FormatInt(citem.BfdFastDetectMinimumInterval.ValueInt64(), 10))
+					}
+					if !citem.BfdFastDetectMultiplier.IsNull() && !citem.BfdFastDetectMultiplier.IsUnknown() {
+						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"nexthop-interface-addresses.nexthop-interface-address"+"."+strconv.Itoa(cindex)+"."+"bfd.fast-detect.multiplier", strconv.FormatInt(citem.BfdFastDetectMultiplier.ValueInt64(), 10))
 					}
 				}
 			}
@@ -671,6 +679,16 @@ func (data *RouterStaticVRFIPv6Multicast) updateFromBody(ctx context.Context, re
 			} else {
 				data.Vrfs[i].NexthopInterfaceAddresses[ci].Metric = types.Int64Null()
 			}
+			if value := cr.Get("bfd.fast-detect.minimum-interval"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval.IsNull() {
+				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Value(value.Int())
+			} else {
+				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval = types.Int64Null()
+			}
+			if value := cr.Get("bfd.fast-detect.multiplier"); value.Exists() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier.IsNull() {
+				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Value(value.Int())
+			} else {
+				data.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier = types.Int64Null()
+			}
 		}
 		for ci := range data.Vrfs[i].NexthopAddresses {
 			keys := [...]string{"address"}
@@ -903,6 +921,12 @@ func (data *RouterStaticVRFIPv6Multicast) fromBody(ctx context.Context, res []by
 					if ccValue := cv.Get("metric"); ccValue.Exists() {
 						cItem.Metric = types.Int64Value(ccValue.Int())
 					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
+					}
 					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
 					return true
 				})
@@ -1108,6 +1132,12 @@ func (data *RouterStaticVRFIPv6MulticastData) fromBody(ctx context.Context, res 
 					}
 					if ccValue := cv.Get("metric"); ccValue.Exists() {
 						cItem.Metric = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.minimum-interval"); ccValue.Exists() {
+						cItem.BfdFastDetectMinimumInterval = types.Int64Value(ccValue.Int())
+					}
+					if ccValue := cv.Get("bfd.fast-detect.multiplier"); ccValue.Exists() {
+						cItem.BfdFastDetectMultiplier = types.Int64Value(ccValue.Int())
 					}
 					item.NexthopInterfaceAddresses = append(item.NexthopInterfaceAddresses, cItem)
 					return true
@@ -1419,6 +1449,12 @@ func (data *RouterStaticVRFIPv6Multicast) getDeletedItems(ctx context.Context, s
 							}
 							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].Metric.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].Metric.IsNull() {
 								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/metric", state.getPath(), keyString, ckeyString))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMinimumInterval.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMinimumInterval.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/minimum-interval", state.getPath(), keyString, ckeyString))
+							}
+							if !state.Vrfs[i].NexthopInterfaceAddresses[ci].BfdFastDetectMultiplier.IsNull() && data.Vrfs[j].NexthopInterfaceAddresses[cj].BfdFastDetectMultiplier.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/bfd/fast-detect/multiplier", state.getPath(), keyString, ckeyString))
 							}
 							break
 						}

@@ -43,6 +43,8 @@ func TestAccIosxrRouterStaticVRFIPv4Multicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_interface_addresses.0.distance_metric", "144"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_interface_addresses.0.permanent", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_interface_addresses.0.metric", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_interface_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_interface_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_addresses.0.address", "100.0.2.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_addresses.0.description", "ip-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_static_vrf_ipv4_multicast.test", "nexthop_addresses.0.tag", "104"))
@@ -122,6 +124,8 @@ func testAccIosxrRouterStaticVRFIPv4MulticastConfig_all() string {
 	config += `		distance_metric = 144` + "\n"
 	config += `		permanent = true` + "\n"
 	config += `		metric = 10` + "\n"
+	config += `		bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `		bfd_fast_detect_multiplier = 3` + "\n"
 	config += `		}]` + "\n"
 	config += `	nexthop_addresses = [{` + "\n"
 	config += `		address = "100.0.2.0"` + "\n"

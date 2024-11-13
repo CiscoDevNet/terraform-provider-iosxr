@@ -122,6 +122,10 @@ attributes:
             exclude_test: true
           - yang_name: metric
             example: 10
+          - yang_name: bfd/fast-detect/minimum-interval
+            example: 100
+          - yang_name: bfd/fast-detect/multiplier
+            example: 3
       - yang_name: nexthop-addresses/nexthop-address
         tf_name: nexthop_addresses
         type: List

@@ -4,7 +4,6 @@ path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-n
 doc_category: BGP
 attributes:
   - yang_name: as-number
-    read_raw: true
     example: 65001
   - yang_name: vrf-name
     example: VRF2
@@ -64,8 +63,7 @@ attributes:
         id: true
         example: 10.1.1.2
       - yang_name: remote-as
-        read_raw: true
-        example: "65002.100"
+        example: 65002
       - yang_name: use/neighbor-group
         example: GROUP1
       - yang_name: description
@@ -97,7 +95,6 @@ attributes:
         example: false
       - yang_name: local-as/as-number
         tf_name: local_as
-        read_raw: true
         example: 65003
       - yang_name: local-as/no-prepend
         example: true

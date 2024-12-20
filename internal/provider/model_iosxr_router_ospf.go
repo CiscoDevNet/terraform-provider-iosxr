@@ -553,7 +553,7 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 			},
 		)
 		if value := r.Get("as-number"); value.Exists() && !data.RedistributeBgp[i].AsNumber.IsNull() {
-			data.RedistributeBgp[i].AsNumber = types.StringValue(value.Raw)
+			data.RedistributeBgp[i].AsNumber = types.StringValue(value.String())
 		} else {
 			data.RedistributeBgp[i].AsNumber = types.StringNull()
 		}
@@ -820,7 +820,7 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeBgp{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber = types.StringValue(cValue.Raw)
+				item.AsNumber = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
@@ -1016,7 +1016,7 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterOSPFRedistributeBgp{}
 			if cValue := v.Get("as-number"); cValue.Exists() {
-				item.AsNumber = types.StringValue(cValue.Raw)
+				item.AsNumber = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())

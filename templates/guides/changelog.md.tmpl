@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.5.3 (unreleased)
+
+- Revert workaround for issue related to interpreting dotted decimal AS number notation, as a fix has been implemented in recent XR versions, e.g. 24.2.2
+
 ## 0.5.2
 
 - Implement workaround for issue related to interpreting dotted decimal AS number notation, [link](https://github.com/CiscoDevNet/terraform-provider-iosxr/issues/263)

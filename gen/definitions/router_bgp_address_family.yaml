@@ -4,7 +4,6 @@ path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/address-famili
 doc_category: BGP
 attributes:
   - yang_name: as-number
-    read_raw: true
     example: 65001
   - yang_name: af-name
     example: ipv4-unicast

@@ -38,7 +38,7 @@ func TestAccDataSourceIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.neighbor_address", "10.1.1.2"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.remote_as", "65002.100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.remote_as", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.use_neighbor_group", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.description", "My Neighbor Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf.test", "neighbors.0.advertisement_interval_seconds", "10"))
@@ -109,7 +109,7 @@ func testAccDataSourceIosxrRouterBGPVRFConfig() string {
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	neighbors = [{` + "\n"
 	config += `		neighbor_address = "10.1.1.2"` + "\n"
-	config += `		remote_as = "65002.100"` + "\n"
+	config += `		remote_as = "65002"` + "\n"
 	config += `		use_neighbor_group = "GROUP1"` + "\n"
 	config += `		description = "My Neighbor Description"` + "\n"
 	config += `		advertisement_interval_seconds = 10` + "\n"

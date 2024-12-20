@@ -4,14 +4,12 @@ path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-group
 doc_category: BGP
 attributes:
   - yang_name: as-number
-    read_raw: true
     example: 65001
   - yang_name: neighbor-group-name
     tf_name: name
     id: true
     example: GROUP1
   - yang_name: remote-as
-    read_raw: true
     example: 65001
   - yang_name: description
     example: My Neighbor Group Description

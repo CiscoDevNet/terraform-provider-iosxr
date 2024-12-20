@@ -29,7 +29,7 @@ resource "iosxr_router_bgp_vrf" "example" {
   neighbors = [
     {
       neighbor_address                = "10.1.1.2"
-      remote_as                       = "65002.100"
+      remote_as                       = "65002"
       use_neighbor_group              = "GROUP1"
       description                     = "My Neighbor Description"
       advertisement_interval_seconds  = 10

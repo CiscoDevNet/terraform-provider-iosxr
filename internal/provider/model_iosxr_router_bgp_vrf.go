@@ -362,7 +362,7 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].NeighborAddress = types.StringNull()
 		}
 		if value := r.Get("remote-as"); value.Exists() && !data.Neighbors[i].RemoteAs.IsNull() {
-			data.Neighbors[i].RemoteAs = types.StringValue(value.Raw)
+			data.Neighbors[i].RemoteAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].RemoteAs = types.StringNull()
 		}
@@ -438,7 +438,7 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 			data.Neighbors[i].BfdFastDetectDisable = types.BoolNull()
 		}
 		if value := r.Get("local-as.as-number"); value.Exists() && !data.Neighbors[i].LocalAs.IsNull() {
-			data.Neighbors[i].LocalAs = types.StringValue(value.Raw)
+			data.Neighbors[i].LocalAs = types.StringValue(value.String())
 		} else {
 			data.Neighbors[i].LocalAs = types.StringNull()
 		}
@@ -565,7 +565,7 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 				item.NeighborAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("remote-as"); cValue.Exists() {
-				item.RemoteAs = types.StringValue(cValue.Raw)
+				item.RemoteAs = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("use.neighbor-group"); cValue.Exists() {
 				item.UseNeighborGroup = types.StringValue(cValue.String())
@@ -609,7 +609,7 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 				item.BfdFastDetectDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-as.as-number"); cValue.Exists() {
-				item.LocalAs = types.StringValue(cValue.Raw)
+				item.LocalAs = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("local-as.no-prepend"); cValue.Exists() {
 				item.LocalAsNoPrepend = types.BoolValue(true)
@@ -709,7 +709,7 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 				item.NeighborAddress = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("remote-as"); cValue.Exists() {
-				item.RemoteAs = types.StringValue(cValue.Raw)
+				item.RemoteAs = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("use.neighbor-group"); cValue.Exists() {
 				item.UseNeighborGroup = types.StringValue(cValue.String())
@@ -753,7 +753,7 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 				item.BfdFastDetectDisable = types.BoolValue(false)
 			}
 			if cValue := v.Get("local-as.as-number"); cValue.Exists() {
-				item.LocalAs = types.StringValue(cValue.Raw)
+				item.LocalAs = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("local-as.no-prepend"); cValue.Exists() {
 				item.LocalAsNoPrepend = types.BoolValue(true)

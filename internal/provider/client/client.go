@@ -26,8 +26,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	pf_path "github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/openconfig/gnmi/proto/gnmi"
 	"github.com/openconfig/gnmic/api"
@@ -87,9 +85,7 @@ func NewClient(reuseConnection bool) Client {
 	}
 }
 
-func (c *Client) AddTarget(ctx context.Context, device, host, username, password, certificate, key, caCertificate string, verifyCertificate, Tls bool) diag.Diagnostics {
-	var diags diag.Diagnostics
-
+func (c *Client) AddTarget(ctx context.Context, device, host, username, password, certificate, key, caCertificate string, verifyCertificate, Tls bool) error {
 	if !strings.Contains(host, ":") {
 		host = host + ":57400"
 	}
@@ -106,21 +102,13 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 		api.Insecure(!Tls),
 	)
 	if err != nil {
-		diags.AddError(
-			"Unable to create target",
-			"Unable to create target:\n\n"+err.Error(),
-		)
-		return diags
+		return fmt.Errorf("Unable to create target: %w", err)
 	}
 
 	if c.ReuseConnection {
 		err = t.CreateGNMIClient(ctx)
 		if err != nil {
-			diags.AddError(
-				"Unable to create gNMI client",
-				"Unable to create gNMI client:\n\n"+err.Error(),
-			)
-			return diags
+			return fmt.Errorf("Unable to create gNMI client: %w", err)
 		}
 	}
 
@@ -131,12 +119,9 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 	return nil
 }
 
-func (c *Client) Set(ctx context.Context, device string, operations ...SetOperation) (*gnmi.SetResponse, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
+func (c *Client) Set(ctx context.Context, device string, operations ...SetOperation) (*gnmi.SetResponse, error) {
 	if _, ok := c.Devices[device]; !ok {
-		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
-		return nil, diags
+		return nil, fmt.Errorf("Device '%s' does not exist in provider configuration.", device)
 	}
 
 	target := c.Devices[device].Target
@@ -154,8 +139,7 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 
 	setReq, err := api.NewSetRequest(ops...)
 	if err != nil {
-		diags.AddError("Client Error", fmt.Sprintf("Failed to create set request, got error: %s", err))
-		return nil, diags
+		return nil, fmt.Errorf("Failed to create set request, got error: %w", err)
 	}
 
 	var setResp *gnmi.SetResponse
@@ -165,11 +149,7 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 			err = target.CreateGNMIClient(ctx)
 			if err != nil {
 				if ok := c.Backoff(ctx, attempts); !ok {
-					diags.AddError(
-						"Unable to create gNMI client",
-						"Unable to create gNMI client:\n\n"+err.Error(),
-					)
-					return nil, diags
+					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
 				} else {
 					tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
 					continue
@@ -187,8 +167,7 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		}
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
-				diags.AddError("Client Error", fmt.Sprintf("Set request failed, got error: %s", err))
-				return nil, diags
+				return nil, fmt.Errorf("Set request failed, got error: %w", err)
 			} else {
 				tflog.Error(ctx, fmt.Sprintf("gNMI set request failed: %s, retries: %v", err, attempts))
 				continue
@@ -200,20 +179,16 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 	return setResp, nil
 }
 
-func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetResponse, diag.Diagnostics) {
-	var diags diag.Diagnostics
-
+func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetResponse, error) {
 	if _, ok := c.Devices[device]; !ok {
-		diags.AddAttributeError(pf_path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", device))
-		return nil, diags
+		return nil, fmt.Errorf("Device '%s' does not exist in provider configuration.", device)
 	}
 
 	target := c.Devices[device].Target
 
 	getReq, err := api.NewGetRequest(api.Path(path), api.Encoding("json_ietf"))
 	if err != nil {
-		diags.AddError("Client Error", fmt.Sprintf("Failed to create get request, got error: %s", err))
-		return nil, diags
+		return nil, fmt.Errorf("Failed to create get request, got error: %w", err)
 	}
 
 	var getResp *gnmi.GetResponse
@@ -223,11 +198,7 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 			err = target.CreateGNMIClient(ctx)
 			if err != nil {
 				if ok := c.Backoff(ctx, attempts); !ok {
-					diags.AddError(
-						"Unable to create gNMI client",
-						"Unable to create gNMI client:\n\n"+err.Error(),
-					)
-					return nil, diags
+					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
 				} else {
 					tflog.Error(ctx, fmt.Sprintf("Unable to create gNMI client: %s, retries: %v", err.Error(), attempts))
 					continue
@@ -243,8 +214,7 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
-				diags.AddError("Client Error", fmt.Sprintf("Get request failed, got error: %s", err))
-				return nil, diags
+				return nil, fmt.Errorf(("Get request failed, got error: %w"), err)
 			} else {
 				tflog.Error(ctx, fmt.Sprintf("gNMI get request failed: %s, retries: %v", err, attempts))
 				continue

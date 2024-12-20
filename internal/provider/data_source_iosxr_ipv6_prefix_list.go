@@ -130,9 +130,9 @@ func (d *IPv6PrefixListDataSource) Read(ctx context.Context, req datasource.Read
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
-	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	getResp, err := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 		return
 	}
 

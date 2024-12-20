@@ -172,9 +172,9 @@ func (r *IPv6Resource) Create(ctx context.Context, req resource.CreateRequest, r
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 
@@ -204,9 +204,9 @@ func (r *IPv6Resource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 		return
 	}
 
@@ -262,9 +262,9 @@ func (r *IPv6Resource) Update(ctx context.Context, req resource.UpdateRequest, r
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 
@@ -304,9 +304,9 @@ func (r *IPv6Resource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		}
 	}
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 

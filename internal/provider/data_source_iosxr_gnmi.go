@@ -95,9 +95,9 @@ func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.ValueString()))
 
-	getResp, diags := d.client.Get(ctx, config.Device.ValueString(), config.Path.ValueString())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	getResp, err := d.client.Get(ctx, config.Device.ValueString(), config.Path.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 		return
 	}
 

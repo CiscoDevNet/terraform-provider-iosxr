@@ -163,9 +163,9 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 	if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
 		body := plan.toBody(ctx)
 
-		_, diags = r.client.Set(ctx, plan.Device.ValueString(), client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
+		_, err := r.client.Set(ctx, plan.Device.ValueString(), client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
 		}
 	}
@@ -190,9 +190,9 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 		return
 	}
 
@@ -241,9 +241,9 @@ func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 
@@ -266,9 +266,9 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if state.Delete.ValueBool() {
-		_, diags = r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.Path.ValueString(), Body: "", Operation: client.Delete})
-		resp.Diagnostics.Append(diags...)
-		if resp.Diagnostics.HasError() {
+		_, err := r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.Path.ValueString(), Body: "", Operation: client.Delete})
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
 		}
 	}

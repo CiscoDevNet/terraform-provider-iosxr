@@ -122,9 +122,9 @@ func (r *L2VPNBridgeGroupResource) Create(ctx context.Context, req resource.Crea
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 
@@ -154,9 +154,9 @@ func (r *L2VPNBridgeGroupResource) Read(ctx context.Context, req resource.ReadRe
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
-	getResp, diags := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 		return
 	}
 
@@ -212,9 +212,9 @@ func (r *L2VPNBridgeGroupResource) Update(ctx context.Context, req resource.Upda
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, diags = r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 
@@ -254,9 +254,9 @@ func (r *L2VPNBridgeGroupResource) Delete(ctx context.Context, req resource.Dele
 		}
 	}
 
-	_, diags = r.client.Set(ctx, state.Device.ValueString(), ops...)
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
+	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
 

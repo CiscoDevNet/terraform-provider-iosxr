@@ -327,12 +327,17 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 	client := client.NewClient(reuseConnection)
 
-	diags = client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
+	err := client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
+	if err != nil {
+		resp.Diagnostics.AddError("Unable to add target", err.Error())
+	}
 	resp.Diagnostics.Append(diags...)
 
 	for _, device := range config.Devices {
-		diags = client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
-		resp.Diagnostics.Append(diags...)
+		err := client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to add target", err.Error())
+		}
 	}
 
 	resp.DataSourceData = &client

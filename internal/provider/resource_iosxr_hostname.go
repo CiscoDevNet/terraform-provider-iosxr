@@ -23,6 +23,7 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
@@ -146,8 +147,13 @@ func (r *HostnameResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-		return
+		if strings.Contains(err.Error(), "Requested element(s) not found") {
+			resp.State.RemoveResource(ctx)
+			return
+		} else {
+			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			return
+		}
 	}
 
 	respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()

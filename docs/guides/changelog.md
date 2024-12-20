@@ -10,6 +10,7 @@ description: |-
 ## 0.5.3 (unreleased)
 
 - Revert workaround for issue related to interpreting dotted decimal AS number notation, as a fix has been implemented in recent XR versions, e.g. 24.2.2
+- Handle state refresh when objects have been removed, [link](https://github.com/CiscoDevNet/terraform-provider-iosxr/issues/273)
 
 ## 0.5.2
 

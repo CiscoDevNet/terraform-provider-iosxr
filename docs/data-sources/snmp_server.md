@@ -28,6 +28,7 @@ data "iosxr_snmp_server" "example" {
 
 - `communities` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--communities))
 - `contact` (String) Text for mib Object sysContact
+- `contexts` (Attributes List) Context Name (see [below for nested schema](#nestedatt--contexts))
 - `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
 - `id` (String) The path of the retrieved object.
 - `location` (String) Text for mib Object sysLocation
@@ -73,6 +74,7 @@ data "iosxr_snmp_server" "example" {
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
 - `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
 - `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
+- `vrfs` (Attributes List) VRF name (see [below for nested schema](#nestedatt--vrfs))
 
 <a id="nestedatt--communities"></a>
 ### Nested Schema for `communities`
@@ -87,6 +89,14 @@ Read-Only:
 - `sdrowner` (Boolean) SDR Owner permissions for MIB Objects
 - `systemowner` (Boolean) System Owner permissions for MIB objects
 - `view` (String) Restrict this community to a named view
+
+
+<a id="nestedatt--contexts"></a>
+### Nested Schema for `contexts`
+
+Read-Only:
+
+- `context_name` (String) Context Name
 
 
 <a id="nestedatt--groups"></a>
@@ -119,3 +129,12 @@ Read-Only:
 - `v3_priv_aes_aes_128_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
 - `v3_priv_aes_aes_128_encryption_default` (String) Specifies an default ENCRYPTED authentication password
 - `v3_systemowner` (Boolean) System Owner permissions for MIB objects
+
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Read-Only:
+
+- `context` (String) SNMP Context Name
+- `vrf_name` (String) VRF name

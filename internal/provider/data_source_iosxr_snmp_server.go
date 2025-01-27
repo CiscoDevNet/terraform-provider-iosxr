@@ -234,6 +234,34 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
+			"contexts": schema.ListNestedAttribute{
+				MarkdownDescription: "Context Name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"context_name": schema.StringAttribute{
+							MarkdownDescription: "Context Name",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "VRF name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "VRF name",
+							Computed:            true,
+						},
+						"context": schema.StringAttribute{
+							MarkdownDescription: "SNMP Context Name",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"users": schema.ListNestedAttribute{
 				MarkdownDescription: "Name of the user",
 				Computed:            true,

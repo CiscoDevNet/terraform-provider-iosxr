@@ -39,6 +39,17 @@ resource "iosxr_snmp_server" "example" {
   traps_isis_authentication_failure = "enable"
   traps_bgp_cbgp2_updown            = true
   traps_bgp_bgp4_mib_updown         = true
+  contexts = [
+    {
+      context_name = "CONT-NAME1"
+    }
+  ]
+  vrfs = [
+    {
+      vrf_name = "VRF1"
+      context  = "CONT-VRF-VRF1"
+    }
+  ]
   users = [
     {
       user_name                  = "USER1"
@@ -82,6 +93,7 @@ resource "iosxr_snmp_server" "example" {
 
 - `communities` (Attributes List) The UNENCRYPTED (cleartext) community string (see [below for nested schema](#nestedatt--communities))
 - `contact` (String) Text for mib Object sysContact
+- `contexts` (Attributes List) Context Name (see [below for nested schema](#nestedatt--contexts))
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
@@ -167,6 +179,7 @@ resource "iosxr_snmp_server" "example" {
 - `traps_snmp_linkup` (Boolean) Enable SNMPv2-MIB linkUp traps
 - `traps_system` (Boolean) Enable SNMP SYSTEMMIB-MIB traps
 - `users` (Attributes List) Name of the user (see [below for nested schema](#nestedatt--users))
+- `vrfs` (Attributes List) VRF name (see [below for nested schema](#nestedatt--vrfs))
 
 ### Read-Only
 
@@ -188,6 +201,14 @@ Optional:
 - `sdrowner` (Boolean) SDR Owner permissions for MIB Objects
 - `systemowner` (Boolean) System Owner permissions for MIB objects
 - `view` (String) Restrict this community to a named view
+
+
+<a id="nestedatt--contexts"></a>
+### Nested Schema for `contexts`
+
+Required:
+
+- `context_name` (String) Context Name
 
 
 <a id="nestedatt--groups"></a>
@@ -226,6 +247,18 @@ Optional:
 - `v3_priv_aes_aes_128_encryption_aes` (String) Specifies an aes-128 ENCRYPTED authentication password
 - `v3_priv_aes_aes_128_encryption_default` (String) Specifies an default ENCRYPTED authentication password
 - `v3_systemowner` (Boolean) System Owner permissions for MIB objects
+
+
+<a id="nestedatt--vrfs"></a>
+### Nested Schema for `vrfs`
+
+Required:
+
+- `vrf_name` (String) VRF name
+
+Optional:
+
+- `context` (String) SNMP Context Name
 
 ## Import
 

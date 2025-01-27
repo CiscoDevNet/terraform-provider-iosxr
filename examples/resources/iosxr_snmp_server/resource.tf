@@ -24,6 +24,17 @@ resource "iosxr_snmp_server" "example" {
   traps_isis_authentication_failure = "enable"
   traps_bgp_cbgp2_updown            = true
   traps_bgp_bgp4_mib_updown         = true
+  contexts = [
+    {
+      context_name = "CONT-NAME1"
+    }
+  ]
+  vrfs = [
+    {
+      vrf_name = "VRF1"
+      context  = "CONT-VRF-VRF1"
+    }
+  ]
   users = [
     {
       user_name                  = "USER1"

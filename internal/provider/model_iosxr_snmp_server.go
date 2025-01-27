@@ -77,6 +77,8 @@ type SNMPServer struct {
 	TrapsIsisLspErrorDetected           types.String            `tfsdk:"traps_isis_lsp_error_detected"`
 	TrapsBgpCbgp2Updown                 types.Bool              `tfsdk:"traps_bgp_cbgp2_updown"`
 	TrapsBgpBgp4MibUpdown               types.Bool              `tfsdk:"traps_bgp_bgp4_mib_updown"`
+	Contexts                            []SNMPServerContexts    `tfsdk:"contexts"`
+	Vrfs                                []SNMPServerVrfs        `tfsdk:"vrfs"`
 	Users                               []SNMPServerUsers       `tfsdk:"users"`
 	Groups                              []SNMPServerGroups      `tfsdk:"groups"`
 	Communities                         []SNMPServerCommunities `tfsdk:"communities"`
@@ -128,9 +130,18 @@ type SNMPServerData struct {
 	TrapsIsisLspErrorDetected           types.String            `tfsdk:"traps_isis_lsp_error_detected"`
 	TrapsBgpCbgp2Updown                 types.Bool              `tfsdk:"traps_bgp_cbgp2_updown"`
 	TrapsBgpBgp4MibUpdown               types.Bool              `tfsdk:"traps_bgp_bgp4_mib_updown"`
+	Contexts                            []SNMPServerContexts    `tfsdk:"contexts"`
+	Vrfs                                []SNMPServerVrfs        `tfsdk:"vrfs"`
 	Users                               []SNMPServerUsers       `tfsdk:"users"`
 	Groups                              []SNMPServerGroups      `tfsdk:"groups"`
 	Communities                         []SNMPServerCommunities `tfsdk:"communities"`
+}
+type SNMPServerContexts struct {
+	ContextName types.String `tfsdk:"context_name"`
+}
+type SNMPServerVrfs struct {
+	VrfName types.String `tfsdk:"vrf_name"`
+	Context types.String `tfsdk:"context"`
 }
 type SNMPServerUsers struct {
 	UserName                         types.String `tfsdk:"user_name"`
@@ -344,6 +355,25 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 	if !data.TrapsBgpBgp4MibUpdown.IsNull() && !data.TrapsBgpBgp4MibUpdown.IsUnknown() {
 		if data.TrapsBgpBgp4MibUpdown.ValueBool() {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.bgp4-mib-updown", map[string]string{})
+		}
+	}
+	if len(data.Contexts) > 0 {
+		body, _ = sjson.Set(body, "context.contexts.context", []interface{}{})
+		for index, item := range data.Contexts {
+			if !item.ContextName.IsNull() && !item.ContextName.IsUnknown() {
+				body, _ = sjson.Set(body, "context.contexts.context"+"."+strconv.Itoa(index)+"."+"context-name", item.ContextName.ValueString())
+			}
+		}
+	}
+	if len(data.Vrfs) > 0 {
+		body, _ = sjson.Set(body, "vrfs.vrf", []interface{}{})
+		for index, item := range data.Vrfs {
+			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
+			}
+			if !item.Context.IsNull() && !item.Context.IsUnknown() {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"contexts.context.context-name", item.Context.ValueString())
+			}
 		}
 	}
 	if len(data.Users) > 0 {
@@ -754,6 +784,69 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpBgp4MibUpdown = types.BoolNull()
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].ContextName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "context.contexts.context").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("context-name"); value.Exists() && !data.Contexts[i].ContextName.IsNull() {
+			data.Contexts[i].ContextName = types.StringValue(value.String())
+		} else {
+			data.Contexts[i].ContextName = types.StringNull()
+		}
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "vrfs.vrf").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("vrf-name"); value.Exists() && !data.Vrfs[i].VrfName.IsNull() {
+			data.Vrfs[i].VrfName = types.StringValue(value.String())
+		} else {
+			data.Vrfs[i].VrfName = types.StringNull()
+		}
+		if value := r.Get("contexts.context.context-name"); value.Exists() && !data.Vrfs[i].Context.IsNull() {
+			data.Vrfs[i].Context = types.StringValue(value.String())
+		} else {
+			data.Vrfs[i].Context = types.StringNull()
+		}
+	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}
 		keyValues := [...]string{data.Users[i].UserName.ValueString()}
@@ -1154,6 +1247,31 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpBgp4MibUpdown = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.ContextName = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]SNMPServerVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("contexts.context.context-name"); cValue.Exists() {
+				item.Context = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "users.user"); value.Exists() {
 		data.Users = make([]SNMPServerUsers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -1442,6 +1560,31 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpBgp4MibUpdown = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "context.contexts.context"); value.Exists() {
+		data.Contexts = make([]SNMPServerContexts, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerContexts{}
+			if cValue := v.Get("context-name"); cValue.Exists() {
+				item.ContextName = types.StringValue(cValue.String())
+			}
+			data.Contexts = append(data.Contexts, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
+		data.Vrfs = make([]SNMPServerVrfs, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SNMPServerVrfs{}
+			if cValue := v.Get("vrf-name"); cValue.Exists() {
+				item.VrfName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("contexts.context.context-name"); cValue.Exists() {
+				item.Context = types.StringValue(cValue.String())
+			}
+			data.Vrfs = append(data.Vrfs, item)
+			return true
+		})
+	}
 	if value := gjson.GetBytes(res, "users.user"); value.Exists() {
 		data.Users = make([]SNMPServerUsers, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
@@ -1689,6 +1832,69 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 	if !state.TrapsBgpBgp4MibUpdown.IsNull() && data.TrapsBgpBgp4MibUpdown.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown", state.getPath()))
 	}
+	for i := range state.Contexts {
+		keys := [...]string{"context-name"}
+		stateKeyValues := [...]string{state.Contexts[i].ContextName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Contexts[i].ContextName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Contexts {
+			found = true
+			if state.Contexts[i].ContextName.ValueString() != data.Contexts[j].ContextName.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/context/contexts/context%v", state.getPath(), keyString))
+		}
+	}
+	for i := range state.Vrfs {
+		keys := [...]string{"vrf-name"}
+		stateKeyValues := [...]string{state.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Vrfs[i].VrfName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Vrfs {
+			found = true
+			if state.Vrfs[i].VrfName.ValueString() != data.Vrfs[j].VrfName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Vrfs[i].Context.IsNull() && data.Vrfs[j].Context.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/contexts/context", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v", state.getPath(), keyString))
+		}
+	}
 	for i := range state.Users {
 		keys := [...]string{"user-name"}
 		stateKeyValues := [...]string{state.Users[i].UserName.ValueString()}
@@ -1916,6 +2122,22 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.TrapsBgpBgp4MibUpdown.IsNull() && !data.TrapsBgpBgp4MibUpdown.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown", data.getPath()))
 	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].ContextName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}
 		keyValues := [...]string{data.Users[i].UserName.ValueString()}
@@ -2091,6 +2313,26 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.TrapsBgpBgp4MibUpdown.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown", data.getPath()))
+	}
+	for i := range data.Contexts {
+		keys := [...]string{"context-name"}
+		keyValues := [...]string{data.Contexts[i].ContextName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/context/contexts/context%v", data.getPath(), keyString))
+	}
+	for i := range data.Vrfs {
+		keys := [...]string{"vrf-name"}
+		keyValues := [...]string{data.Vrfs[i].VrfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/vrfs/vrf%v", data.getPath(), keyString))
 	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}

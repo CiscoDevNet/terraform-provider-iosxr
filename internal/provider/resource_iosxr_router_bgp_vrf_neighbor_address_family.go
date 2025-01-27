@@ -150,6 +150,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-ebgp from being inherited from the parent").String,
 				Optional:            true,
 			},
+			"remove_private_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from outbound updates").String,
+				Optional:            true,
+			},
 			"remove_private_as_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
 				Optional:            true,

@@ -25,6 +25,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   next_hop_self_inheritance_disable       = true
   soft_reconfiguration_inbound_always     = true
   send_community_ebgp_inheritance_disable = true
+  remove_private_as                       = true
   remove_private_as_inheritance_disable   = true
 }
 ```
@@ -49,6 +50,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `device` (String) A device name from the provider configuration.
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `remove_private_as` (Boolean) Remove private AS number from outbound updates
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes

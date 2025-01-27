@@ -10,5 +10,6 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   next_hop_self_inheritance_disable       = true
   soft_reconfiguration_inbound_always     = true
   send_community_ebgp_inheritance_disable = true
+  remove_private_as                       = true
   remove_private_as_inheritance_disable   = true
 }

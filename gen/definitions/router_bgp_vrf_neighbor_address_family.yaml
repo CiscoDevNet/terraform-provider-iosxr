@@ -28,6 +28,8 @@ attributes:
     example: true
   - yang_name: send-community-ebgp/inheritance-disable
     example: true
+  - yang_name: remove-private-as
+    example: true
   - yang_name: remove-private-as/inheritance-disable
     example: true
 

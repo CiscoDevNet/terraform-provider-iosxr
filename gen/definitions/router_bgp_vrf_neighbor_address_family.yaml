@@ -32,6 +32,18 @@ attributes:
     example: true
   - yang_name: remove-private-as/inheritance-disable
     example: true
+  - yang_name: remove-private-as/entire-aspath
+    example: true
+  - yang_name: remove-private-as/internal
+    example: true
+  - yang_name: remove-private-as/internal/inheritance-disable
+    example: true
+  - yang_name: remove-private-as-inbound
+    example: true
+  - yang_name: remove-private-as-inbound/entire-aspath
+    example: true
+  - yang_name: remove-private-as-inbound/inheritance-disable
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as

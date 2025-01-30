@@ -38,6 +38,12 @@ func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_entire_aspath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_internal", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_internal_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_entire_aspath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_inheritance_disable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -154,6 +160,12 @@ func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
 	config += `	remove_private_as = true` + "\n"
 	config += `	remove_private_as_inheritance_disable = true` + "\n"
+	config += `	remove_private_as_entire_aspath = true` + "\n"
+	config += `	remove_private_as_internal = true` + "\n"
+	config += `	remove_private_as_internal_inheritance_disable = true` + "\n"
+	config += `	remove_private_as_inbound = true` + "\n"
+	config += `	remove_private_as_inbound_entire_aspath = true` + "\n"
+	config += `	remove_private_as_inbound_inheritance_disable = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config

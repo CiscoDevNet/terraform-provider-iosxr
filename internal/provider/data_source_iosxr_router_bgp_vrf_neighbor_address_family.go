@@ -118,6 +118,30 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
 				Computed:            true,
 			},
+			"remove_private_as_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: "remove only if all ASes in the path are private",
+				Computed:            true,
+			},
+			"remove_private_as_internal": schema.BoolAttribute{
+				MarkdownDescription: "remove only if all ASes in the path are private",
+				Computed:            true,
+			},
+			"remove_private_as_internal_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
+				Computed:            true,
+			},
+			"remove_private_as_inbound": schema.BoolAttribute{
+				MarkdownDescription: "Remove private AS number from inbound updates",
+				Computed:            true,
+			},
+			"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: "remove only if all ASes in the path are private",
+				Computed:            true,
+			},
+			"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
+				Computed:            true,
+			},
 		},
 	}
 }

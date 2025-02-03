@@ -32,7 +32,11 @@ resource "iosxr_snmp_server" "example" {
   vrfs = [
     {
       vrf_name = "VRF1"
-      context  = "CONT-VRF-VRF1"
+      contexts = [
+        {
+          context_name = "CONT-VRF-VRF1"
+        }
+      ]
     }
   ]
   users = [

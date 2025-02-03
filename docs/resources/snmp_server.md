@@ -47,7 +47,11 @@ resource "iosxr_snmp_server" "example" {
   vrfs = [
     {
       vrf_name = "VRF1"
-      context  = "CONT-VRF-VRF1"
+      contexts = [
+        {
+          context_name = "CONT-VRF-VRF1"
+        }
+      ]
     }
   ]
   users = [
@@ -258,7 +262,14 @@ Required:
 
 Optional:
 
-- `context` (String) SNMP Context Name
+- `contexts` (Attributes List) SNMP Context Name (see [below for nested schema](#nestedatt--vrfs--contexts))
+
+<a id="nestedatt--vrfs--contexts"></a>
+### Nested Schema for `vrfs.contexts`
+
+Required:
+
+- `context_name` (String) SNMP Context Name
 
 ## Import
 

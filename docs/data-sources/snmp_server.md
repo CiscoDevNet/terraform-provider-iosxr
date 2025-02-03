@@ -136,5 +136,12 @@ Read-Only:
 
 Read-Only:
 
-- `context` (String) SNMP Context Name
+- `contexts` (Attributes List) SNMP Context Name (see [below for nested schema](#nestedatt--vrfs--contexts))
 - `vrf_name` (String) VRF name
+
+<a id="nestedatt--vrfs--contexts"></a>
+### Nested Schema for `vrfs.contexts`
+
+Read-Only:
+
+- `context_name` (String) SNMP Context Name

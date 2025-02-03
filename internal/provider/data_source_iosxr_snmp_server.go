@@ -255,9 +255,17 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "VRF name",
 							Computed:            true,
 						},
-						"context": schema.StringAttribute{
+						"contexts": schema.ListNestedAttribute{
 							MarkdownDescription: "SNMP Context Name",
 							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"context_name": schema.StringAttribute{
+										MarkdownDescription: "SNMP Context Name",
+										Computed:            true,
+									},
+								},
+							},
 						},
 					},
 				},

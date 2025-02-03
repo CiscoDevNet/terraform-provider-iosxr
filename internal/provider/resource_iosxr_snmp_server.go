@@ -380,12 +380,20 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
 							},
 						},
-						"context": schema.StringAttribute{
+						"contexts": schema.ListNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("SNMP Context Name").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"context_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("SNMP Context Name").String,
+										Required:            true,
+										Validators: []validator.String{
+											stringvalidator.LengthBetween(1, 32),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+										},
+									},
+								},
 							},
 						},
 					},

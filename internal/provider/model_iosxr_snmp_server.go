@@ -140,8 +140,8 @@ type SNMPServerContexts struct {
 	ContextName types.String `tfsdk:"context_name"`
 }
 type SNMPServerVrfs struct {
-	VrfName types.String `tfsdk:"vrf_name"`
-	Context types.String `tfsdk:"context"`
+	VrfName  types.String             `tfsdk:"vrf_name"`
+	Contexts []SNMPServerVrfsContexts `tfsdk:"contexts"`
 }
 type SNMPServerUsers struct {
 	UserName                         types.String `tfsdk:"user_name"`
@@ -174,6 +174,9 @@ type SNMPServerCommunities struct {
 	Systemowner types.Bool   `tfsdk:"systemowner"`
 	Ipv4        types.String `tfsdk:"ipv4"`
 	Ipv6        types.String `tfsdk:"ipv6"`
+}
+type SNMPServerVrfsContexts struct {
+	ContextName types.String `tfsdk:"context_name"`
 }
 
 func (data SNMPServer) getPath() string {
@@ -371,8 +374,13 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			if !item.VrfName.IsNull() && !item.VrfName.IsUnknown() {
 				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"vrf-name", item.VrfName.ValueString())
 			}
-			if !item.Context.IsNull() && !item.Context.IsUnknown() {
-				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"contexts.context.context-name", item.Context.ValueString())
+			if len(item.Contexts) > 0 {
+				body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"contexts.context", []interface{}{})
+				for cindex, citem := range item.Contexts {
+					if !citem.ContextName.IsNull() && !citem.ContextName.IsUnknown() {
+						body, _ = sjson.Set(body, "vrfs.vrf"+"."+strconv.Itoa(index)+"."+"contexts.context"+"."+strconv.Itoa(cindex)+"."+"context-name", citem.ContextName.ValueString())
+					}
+				}
 			}
 		}
 	}
@@ -841,10 +849,34 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Vrfs[i].VrfName = types.StringNull()
 		}
-		if value := r.Get("contexts.context.context-name"); value.Exists() && !data.Vrfs[i].Context.IsNull() {
-			data.Vrfs[i].Context = types.StringValue(value.String())
-		} else {
-			data.Vrfs[i].Context = types.StringNull()
+		for ci := range data.Vrfs[i].Contexts {
+			keys := [...]string{"context-name"}
+			keyValues := [...]string{data.Vrfs[i].Contexts[ci].ContextName.ValueString()}
+
+			var cr gjson.Result
+			r.Get("contexts.context").ForEach(
+				func(_, v gjson.Result) bool {
+					found := false
+					for ik := range keys {
+						if v.Get(keys[ik]).String() == keyValues[ik] {
+							found = true
+							continue
+						}
+						found = false
+						break
+					}
+					if found {
+						cr = v
+						return false
+					}
+					return true
+				},
+			)
+			if value := cr.Get("context-name"); value.Exists() && !data.Vrfs[i].Contexts[ci].ContextName.IsNull() {
+				data.Vrfs[i].Contexts[ci].ContextName = types.StringValue(value.String())
+			} else {
+				data.Vrfs[i].Contexts[ci].ContextName = types.StringNull()
+			}
 		}
 	}
 	for i := range data.Users {
@@ -1265,8 +1297,16 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("vrf-name"); cValue.Exists() {
 				item.VrfName = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("contexts.context.context-name"); cValue.Exists() {
-				item.Context = types.StringValue(cValue.String())
+			if cValue := v.Get("contexts.context"); cValue.Exists() {
+				item.Contexts = make([]SNMPServerVrfsContexts, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := SNMPServerVrfsContexts{}
+					if ccValue := cv.Get("context-name"); ccValue.Exists() {
+						cItem.ContextName = types.StringValue(ccValue.String())
+					}
+					item.Contexts = append(item.Contexts, cItem)
+					return true
+				})
 			}
 			data.Vrfs = append(data.Vrfs, item)
 			return true
@@ -1578,8 +1618,16 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("vrf-name"); cValue.Exists() {
 				item.VrfName = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("contexts.context.context-name"); cValue.Exists() {
-				item.Context = types.StringValue(cValue.String())
+			if cValue := v.Get("contexts.context"); cValue.Exists() {
+				item.Contexts = make([]SNMPServerVrfsContexts, 0)
+				cValue.ForEach(func(ck, cv gjson.Result) bool {
+					cItem := SNMPServerVrfsContexts{}
+					if ccValue := cv.Get("context-name"); ccValue.Exists() {
+						cItem.ContextName = types.StringValue(ccValue.String())
+					}
+					item.Contexts = append(item.Contexts, cItem)
+					return true
+				})
 			}
 			data.Vrfs = append(data.Vrfs, item)
 			return true
@@ -1885,8 +1933,35 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 				found = false
 			}
 			if found {
-				if !state.Vrfs[i].Context.IsNull() && data.Vrfs[j].Context.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/contexts/context", state.getPath(), keyString))
+				for ci := range state.Vrfs[i].Contexts {
+					ckeys := [...]string{"context-name"}
+					cstateKeyValues := [...]string{state.Vrfs[i].Contexts[ci].ContextName.ValueString()}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Vrfs[i].Contexts[ci].ContextName.ValueString()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Vrfs[j].Contexts {
+						found = true
+						if state.Vrfs[i].Contexts[ci].ContextName.ValueString() != data.Vrfs[j].Contexts[cj].ContextName.ValueString() {
+							found = false
+						}
+						if found {
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/vrfs/vrf%v/contexts/context%v", state.getPath(), keyString, ckeyString))
+					}
 				}
 				break
 			}
@@ -2136,6 +2211,14 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		for ci := range data.Vrfs[i].Contexts {
+			ckeys := [...]string{"context-name"}
+			ckeyValues := [...]string{data.Vrfs[i].Contexts[ci].ContextName.ValueString()}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
 		}
 	}
 	for i := range data.Users {

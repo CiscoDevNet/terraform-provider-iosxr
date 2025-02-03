@@ -140,10 +140,13 @@ attributes:
       - yang_name: vrf-name
         example: VRF1
         id: true
-      - yang_name: contexts/context/context-name
-        tf_name: context
-        example: CONT-VRF-VRF1
-        delete_parent: true
+      - yang_name: contexts/context
+        tf_name: contexts
+        type: List
+        attributes:
+          - yang_name: context-name
+            id: true
+            example: CONT-VRF-VRF1
   - yang_name: users/user
     tf_name: users
     type: List

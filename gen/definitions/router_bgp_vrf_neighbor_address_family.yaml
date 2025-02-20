@@ -28,7 +28,21 @@ attributes:
     example: true
   - yang_name: send-community-ebgp/inheritance-disable
     example: true
+  - yang_name: remove-private-as
+    example: true
   - yang_name: remove-private-as/inheritance-disable
+    example: true
+  - yang_name: remove-private-as/entire-aspath
+    example: true
+  - yang_name: remove-private-as/internal
+    example: true
+  - yang_name: remove-private-as/internal/inheritance-disable
+    example: true
+  - yang_name: remove-private-as-inbound
+    example: true
+  - yang_name: remove-private-as-inbound/entire-aspath
+    example: true
+  - yang_name: remove-private-as-inbound/inheritance-disable
     example: true
 
 test_prerequisites:

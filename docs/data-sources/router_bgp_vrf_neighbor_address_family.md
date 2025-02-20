@@ -42,7 +42,14 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `id` (String) The path of the retrieved object.
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `remove_private_as` (Boolean) Remove private AS number from outbound updates
+- `remove_private_as_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound` (Boolean) Remove private AS number from inbound updates
+- `remove_private_as_inbound_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
+- `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_internal_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent

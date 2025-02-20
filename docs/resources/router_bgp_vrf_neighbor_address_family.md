@@ -14,18 +14,25 @@ This resource can manage the Router BGP VRF Neighbor Address Family configuratio
 
 ```terraform
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
-  as_number                               = "65001"
-  vrf_name                                = "VRF1"
-  neighbor_address                        = "10.1.1.2"
-  af_name                                 = "ipv4-unicast"
-  route_policy_in                         = "ROUTE_POLICY_1"
-  route_policy_out                        = "ROUTE_POLICY_1"
-  default_originate_route_policy          = "ROUTE_POLICY_1"
-  next_hop_self                           = true
-  next_hop_self_inheritance_disable       = true
-  soft_reconfiguration_inbound_always     = true
-  send_community_ebgp_inheritance_disable = true
-  remove_private_as_inheritance_disable   = true
+  as_number                                      = "65001"
+  vrf_name                                       = "VRF1"
+  neighbor_address                               = "10.1.1.2"
+  af_name                                        = "ipv4-unicast"
+  route_policy_in                                = "ROUTE_POLICY_1"
+  route_policy_out                               = "ROUTE_POLICY_1"
+  default_originate_route_policy                 = "ROUTE_POLICY_1"
+  next_hop_self                                  = true
+  next_hop_self_inheritance_disable              = true
+  soft_reconfiguration_inbound_always            = true
+  send_community_ebgp_inheritance_disable        = true
+  remove_private_as                              = true
+  remove_private_as_inheritance_disable          = true
+  remove_private_as_entire_aspath                = true
+  remove_private_as_internal                     = true
+  remove_private_as_internal_inheritance_disable = true
+  remove_private_as_inbound                      = true
+  remove_private_as_inbound_entire_aspath        = true
+  remove_private_as_inbound_inheritance_disable  = true
 }
 ```
 
@@ -49,7 +56,14 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `device` (String) A device name from the provider configuration.
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
+- `remove_private_as` (Boolean) Remove private AS number from outbound updates
+- `remove_private_as_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound` (Boolean) Remove private AS number from inbound updates
+- `remove_private_as_inbound_entire_aspath` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
+- `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
+- `remove_private_as_internal_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent

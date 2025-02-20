@@ -20,6 +20,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -192,8 +193,13 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 
 	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-		return
+		if strings.Contains(err.Error(), "Requested element(s) not found") {
+			resp.State.RemoveResource(ctx)
+			return
+		} else {
+			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			return
+		}
 	}
 
 	diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())

@@ -111,9 +111,11 @@ attributes:
         example: false
       - yang_name: timers/keepalive-interval
         optional: true
+        delete_parent: true
         example: 5
       - yang_name: timers/holdtime
         optional: true
+        delete_parent: true
         example: 20
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1

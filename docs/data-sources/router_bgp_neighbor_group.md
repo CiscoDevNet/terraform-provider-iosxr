@@ -25,7 +25,7 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `name` (String) Specify a Neighbor-group
+- `name` (String) Neighbor-group name
 
 ### Optional
 
@@ -35,24 +35,32 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
-- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
-- `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
+- `advertisement_interval_seconds` (Number) time in seconds
+- `ao_inheritance_disable` (Boolean) Prevent keychain from being inherited from parent
+- `ao_key_chain_accept_ao_mismatch_connection` (Boolean) Accept new connection even if AO mismatched
+- `ao_key_chain_include_tcp_options` (String) Include/Exclude other TCP options in the header. Required when ao_key_chain_name_name is specified
+- `ao_key_chain_name_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection
-- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
-- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `description` (String) Neighbor specific description
 - `id` (String) The path of the retrieved object.
-- `local_as` (String) bgp as-number
-- `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as` (String) AS number
+- `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
-- `remote_as` (String) bgp as-number
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
-- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
+- `password` (String) Specifies an ENCRYPTED password will follow
+- `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `remote_as` (String) Set remote AS
+- `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+- `timers_holdtime_number` (Number) Holdtime value
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_keepalive_interval` (Number) Keepalive interval
+- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
+- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
 - `update_source` (String) Source of routing updates
 
 <a id="nestedatt--address_families"></a>

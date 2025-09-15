@@ -82,7 +82,7 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Schema(ctx context.Context
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 59),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -133,7 +133,7 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Schema(ctx context.Context
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

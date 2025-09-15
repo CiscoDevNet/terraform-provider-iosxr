@@ -15,6 +15,21 @@ This resource can manage the EVPN configuration.
 ```terraform
 resource "iosxr_evpn" "example" {
   source_interface = "Loopback0"
+  interfaces = [
+    {
+      interface_name            = "GigabitEthernet0/0/0/1"
+      ethernet_segment_enable   = true
+      ethernet_segment_esi_zero = "01.02.03.04.05.06.07.08.09"
+    }
+  ]
+  segment_routing_srv6 = true
+  segment_routing_srv6_locators = [
+    {
+      locator_name                        = "LOC1"
+      usid_allocation_wide_local_id_block = true
+    }
+  ]
+  segment_routing_srv6_usid_allocation_wide_local_id_block = true
 }
 ```
 
@@ -26,11 +41,39 @@ resource "iosxr_evpn" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
+- `segment_routing_srv6` (Boolean) SRv6 configuration for EVPN
+- `segment_routing_srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
+- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--interfaces"></a>
+### Nested Schema for `interfaces`
+
+Required:
+
+- `interface_name` (String) Specify interface name
+
+Optional:
+
+- `ethernet_segment_enable` (Boolean) Ethernet Segment configuration commands
+- `ethernet_segment_esi_zero` (String) 9-octet ESI value, xx.xx.xx.xx.xx.xx.xx.xx.xx
+
+
+<a id="nestedatt--segment_routing_srv6_locators"></a>
+### Nested Schema for `segment_routing_srv6_locators`
+
+Required:
+
+- `locator_name` (String) Default locator to use for EVPN SID allocation
+
+Optional:
+
+- `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
 
 ## Import
 

@@ -102,7 +102,7 @@ func (r *RouterHSRPInterfaceIPv6GroupV2Resource) Schema(ctx context.Context, req
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"mac_address": schema.StringAttribute{
@@ -180,7 +180,7 @@ func (r *RouterHSRPInterfaceIPv6GroupV2Resource) Schema(ctx context.Context, req
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 800),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"priority_decrement": schema.Int64Attribute{

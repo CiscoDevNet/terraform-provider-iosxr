@@ -26,10 +26,10 @@ data "iosxr_router_isis_interface_address_family" "example" {
 
 ### Required
 
-- `af_name` (String) Address family name
-- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `af_name` (String) af-name
+- `interface_name` (String) Interface to configure
 - `process_id` (String) Process ID
-- `saf_name` (String) Sub address family name
+- `saf_name` (String) saf-name
 
 ### Optional
 
@@ -37,27 +37,54 @@ data "iosxr_router_isis_interface_address_family" "example" {
 
 ### Read-Only
 
+- `adjacency_sid_absolutes` (Attributes List) Specify the absolute value of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_absolutes))
+- `adjacency_sid_indices` (Attributes List) Specify the index of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_indices))
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
-- `fast_reroute_per_prefix` (Boolean) Prefix dependent computation
-- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
-- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
+- `advertise_prefix_route_policy_levels` (Attributes List) Set advertisement for one level only (see [below for nested schema](#nestedatt--advertise_prefix_route_policy_levels))
+- `fast_reroute_enable_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_enable_levels))
+- `fast_reroute_per_link` (Boolean) per-link
+- `fast_reroute_per_prefix` (Boolean) per-prefix
 - `id` (String) The path of the retrieved object.
-- `metric` (Number) Default metric
+- `metric_default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
-- `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
-- `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
-- `prefix_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
-- `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
 - `tag` (Number) Set interface tag
 
-<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
-### Nested Schema for `fast_reroute_per_prefix_levels`
+<a id="nestedatt--adjacency_sid_absolutes"></a>
+### Nested Schema for `adjacency_sid_absolutes`
 
 Read-Only:
 
-- `level_id` (Number) Enable EPCFRR LFA for one level only
-- `ti_lfa` (Boolean) Enable TI LFA computation
+- `absolute_number` (Number) The Adjacency Segment ID value
+- `protected` (Boolean) Protect Adjacency SID
+
+
+<a id="nestedatt--adjacency_sid_indices"></a>
+### Nested Schema for `adjacency_sid_indices`
+
+Read-Only:
+
+- `index_number` (Number) The Adjacency Segment ID index
+- `protected` (Boolean) Protect Adjacency SID
+
+
+<a id="nestedatt--advertise_prefix_route_policy_levels"></a>
+### Nested Schema for `advertise_prefix_route_policy_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set advertisement at this level only
+- `route_policy` (String) Filter routes based on a route policy
+
+
+<a id="nestedatt--fast_reroute_enable_levels"></a>
+### Nested Schema for `fast_reroute_enable_levels`
+
+Read-Only:
+
+- `level_number` (Number) Configure FRR for one level only
+- `per_link` (Boolean) per-link
+- `per_prefix` (Boolean) per-prefix
 
 
 <a id="nestedatt--metric_levels"></a>
@@ -65,6 +92,6 @@ Read-Only:
 
 Read-Only:
 
-- `level_id` (Number) Set metric for one level only
-- `maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
-- `metric` (Number) Default metric
+- `default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
+- `level_number` (Number) Set metric at this level only
+- `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF

@@ -14,26 +14,22 @@ This resource can manage the Router ISIS configuration.
 
 ```terraform
 resource "iosxr_router_isis" "example" {
-  process_id                                                            = "P1"
-  is_type                                                               = "level-1"
-  set_overload_bit_on_startup_advertise_as_overloaded                   = true
-  set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10
-  set_overload_bit_on_startup_wait_for_bgp                              = false
-  set_overload_bit_advertise_external                                   = true
-  set_overload_bit_advertise_interlevel                                 = true
+  process_id                            = "P1"
+  is_type                               = "level-1"
+  set_overload_bit                      = true
+  set_overload_bit_on_startup_seconds   = 300
+  set_overload_bit_advertise_external   = true
+  set_overload_bit_advertise_interlevel = true
   set_overload_bit_levels = [
     {
-      level_id                                             = 1
-      on_startup_advertise_as_overloaded                   = true
-      on_startup_advertise_as_overloaded_time_to_advertise = 10
-      on_startup_wait_for_bgp                              = false
-      advertise_external                                   = true
-      advertise_interlevel                                 = true
+      level_number            = 1
+      on_startup_time_seconds = 300
+      advertise_external      = true
+      advertise_interlevel    = true
     }
   ]
   nsr                               = true
-  nsf_cisco                         = true
-  nsf_ietf                          = false
+  nsf_ietf                          = true
   nsf_lifetime                      = 10
   nsf_interface_timer               = 5
   nsf_interface_expires             = 2
@@ -43,7 +39,7 @@ resource "iosxr_router_isis" "example" {
   lsp_gen_interval_secondary_wait   = 200
   lsp_refresh_interval              = 65000
   max_lsp_lifetime                  = 65535
-  lsp_password_keychain             = "ISIS-KEY"
+  lsp_password_text_encrypted       = "060506324F41584B564B0F49584B"
   distribute_link_state_instance_id = 32
   affinity_maps = [
     {
@@ -53,9 +49,9 @@ resource "iosxr_router_isis" "example" {
   ]
   flex_algos = [
     {
-      algorithm_number     = 128
+      flex_algo_number     = 128
       advertise_definition = true
-      metric_type_delay    = true
+      metric_type          = "delay"
     }
   ]
   nets = [
@@ -65,15 +61,17 @@ resource "iosxr_router_isis" "example" {
   ]
   interfaces = [
     {
-      interface_name          = "GigabitEthernet0/0/0/1"
-      circuit_type            = "level-1"
-      hello_padding_disable   = true
-      hello_padding_sometimes = false
-      priority                = 10
-      point_to_point          = false
-      passive                 = false
-      suppressed              = false
-      shutdown                = false
+      interface_name = "GigabitEthernet0/0/0/1"
+      circuit_type   = "level-1"
+      hello_padding  = "always"
+      priority_levels = [
+        {
+          level_number = 1
+          priority     = 10
+        }
+      ]
+      point_to_point = false
+      state          = "passive"
     }
   ]
 }
@@ -103,20 +101,33 @@ resource "iosxr_router_isis" "example" {
 - `is_type` (String) Area type (level)
   - Choices: `level-1`, `level-1-2`, `level-2-only`
 - `log_adjacency_changes` (Boolean) Enable logging adjacency state changes
-- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP
+- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP [50]
   - Range: `0`-`120000`
-- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP
+- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP [5000]
   - Range: `0`-`120000`
-- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
+- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP [200]
   - Range: `0`-`120000`
-- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
+- `lsp_password_accept_encrypted` (String) Specifies a password will follow
+- `lsp_password_accept_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_accept_levels))
+- `lsp_password_hmac_md5_enable_poi` (Boolean) Enable purge originator identification
+- `lsp_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `lsp_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_hmac_md5_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `lsp_password_keychain_enable_poi` (Boolean) Enable purge originator identification
+- `lsp_password_keychain_name` (String) Specifies a Key Chain name will follow
+- `lsp_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_keychain_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `lsp_password_text_enable_poi` (Boolean) Enable purge originator identification - only valid with cryptographic authentication
+- `lsp_password_text_encrypted` (String) Specifies an encrypted password will follow
+- `lsp_password_text_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_text_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
   - Range: `1`-`65535`
 - `max_lsp_lifetime` (Number) Set maximum LSP lifetime
   - Range: `1`-`65535`
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
-- `nsf_cisco` (Boolean) Cisco Proprietary NSF restart
-- `nsf_ietf` (Boolean) IETF NSF restar
+- `nsf_cisco` (Boolean) Checkpoint NSF restart
+- `nsf_ietf` (Boolean) IETF NSF restart
 - `nsf_interface_expires` (Number) # of times T1 can expire waiting for the restart ACK
   - Range: `1`-`10`
 - `nsf_interface_timer` (Number) Timer used to wait for a restart ACK (seconds)
@@ -124,11 +135,11 @@ resource "iosxr_router_isis" "example" {
 - `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
   - Range: `5`-`300`
 - `nsr` (Boolean) Enable NSR
+- `set_overload_bit` (Boolean) Signal other routers not to use us in SPF
 - `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
-- `set_overload_bit_on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
-- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
@@ -143,7 +154,7 @@ Required:
 
 - `bit_position` (Number) Bit position for affinity attribute value
   - Range: `0`-`255`
-- `name` (String) Affinity map configuration
+- `name` (String) Affinity attribute name
 
 
 <a id="nestedatt--flex_algos"></a>
@@ -151,13 +162,13 @@ Required:
 
 Required:
 
-- `algorithm_number` (Number) Flex Algorithm definition
+- `flex_algo_number` (Number) Algorithm number
   - Range: `128`-`255`
 
 Optional:
 
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
-- `metric_type_delay` (Boolean) Use delay as metric
+- `metric_type` (String) Flex-Algo metric type - can be 'delay', 'te', or integer 128-255
 
 
 <a id="nestedatt--interfaces"></a>
@@ -165,20 +176,39 @@ Optional:
 
 Required:
 
-- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `interface_name` (String) Interface to configure
 
 Optional:
 
 - `circuit_type` (String) Configure circuit type for interface
   - Choices: `level-1`, `level-1-2`, `level-2-only`
-- `hello_padding_disable` (Boolean) Disable hello-padding
-- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
-- `passive` (Boolean) Do not establish adjacencies over this interface
+- `hello_padding` (String) Add padding to IS-IS hello packets
+  - Choices: `adaptive`, `always`, `disable`, `sometimes`
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
+- `priority_levels` (Attributes List) Set priority for one level only (see [below for nested schema](#nestedatt--interfaces--priority_levels))
+- `state` (String) Do not establish adjacencies over this interface
+  - Choices: `passive`, `shutdown`, `suppressed`
+
+<a id="nestedatt--interfaces--priority_levels"></a>
+### Nested Schema for `interfaces.priority_levels`
+
+Required:
+
+- `level_number` (Number) Set priority for this level only
+  - Range: `1`-`2`
 - `priority` (Number) Set priority for Designated Router election
   - Range: `0`-`127`
-- `shutdown` (Boolean) Shutdown IS-IS on this interface
-- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+
+
+
+<a id="nestedatt--lsp_password_accept_levels"></a>
+### Nested Schema for `lsp_password_accept_levels`
+
+Required:
+
+- `encrypted` (String) Specifies a password will follow
+- `level_number` (Number) Set lsp-password for LSPs/SNPs at this level only
+  - Range: `1`-`2`
 
 
 <a id="nestedatt--nets"></a>
@@ -186,7 +216,7 @@ Optional:
 
 Required:
 
-- `net_id` (String) A Network Entity Title (NET) for this process
+- `net_id` (String) NET (XX.XXXX. ... .XXXX.XX)
 
 
 <a id="nestedatt--set_overload_bit_levels"></a>
@@ -194,15 +224,14 @@ Required:
 
 Required:
 
-- `level_id` (Number) Set overload-bit for one level only
+- `level_number` (Number) Level
   - Range: `1`-`2`
 
 Optional:
 
 - `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
-- `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
-- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_time_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 

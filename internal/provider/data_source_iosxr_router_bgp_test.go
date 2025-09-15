@@ -32,9 +32,10 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nsr_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_redistribute_internal", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "segment_routing_srv6_locator", "locator11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "segment_routing_srv6_usid_allocation_wide_local_id_block", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_keepalive_interval", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_holdtime", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_minimum_acceptable_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_holdtime_number", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "timers_bgp_holdtime_minimum_acceptable_holdtime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_router_id", "22.22.22.22"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_graceful_restart_graceful_reset", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "ibgp_policy_out_enforce_modifications", "true"))
@@ -42,22 +43,16 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nexthop_validation_color_extcomm_sr_policy", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "nexthop_validation_color_extcomm_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_as_path_ignore", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_as_path_multipath_relax", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_cost_community_ignore", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_compare_routerid", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_aigp_ignore", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_igp_metric_ignore", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_igp_metric_sr_policy", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_med_always", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_med_confed", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_med_missing_as_worst", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_origin_as_use_validity", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_origin_as_allow_invalid", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_sr_policy_prefer", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_sr_policy_force", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.neighbor_address", "10.1.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "bgp_bestpath_sr_policy_prefer", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.address", "10.1.1.2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.remote_as", "65002"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.description", "My Neighbor Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.use_neighbor_group", "GROUP1"))
@@ -68,16 +63,11 @@ func TestAccDataSourceIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.bfd_fast_detect_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.local_as", "65003"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.local_as_no_prepend", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.local_as_replace_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.local_as_dual_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.password", "12341C2713181F13253920"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.shutdown", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_keepalive_interval", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_minimum_acceptable_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_keepalive_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime_number", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.timers_holdtime_minimum_acceptable_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp.test", "neighbors.0.ttl_security", "false"))
 	resource.Test(t, resource.TestCase{
@@ -122,9 +112,10 @@ func testAccDataSourceIosxrRouterBGPConfig() string {
 	config += `	nsr_disable = false` + "\n"
 	config += `	bgp_redistribute_internal = true` + "\n"
 	config += `	segment_routing_srv6_locator = "locator11"` + "\n"
+	config += `	segment_routing_srv6_usid_allocation_wide_local_id_block = true` + "\n"
 	config += `	timers_bgp_keepalive_interval = 5` + "\n"
-	config += `	timers_bgp_holdtime = "20"` + "\n"
-	config += `	timers_bgp_minimum_acceptable_holdtime = "10"` + "\n"
+	config += `	timers_bgp_holdtime_number = 20` + "\n"
+	config += `	timers_bgp_holdtime_minimum_acceptable_holdtime = 10` + "\n"
 	config += `	bgp_router_id = "22.22.22.22"` + "\n"
 	config += `	bgp_graceful_restart_graceful_reset = true` + "\n"
 	config += `	ibgp_policy_out_enforce_modifications = true` + "\n"
@@ -132,23 +123,17 @@ func testAccDataSourceIosxrRouterBGPConfig() string {
 	config += `	bfd_minimum_interval = 10` + "\n"
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	nexthop_validation_color_extcomm_sr_policy = true` + "\n"
-	config += `	nexthop_validation_color_extcomm_disable = true` + "\n"
-	config += `	bgp_bestpath_as_path_ignore = true` + "\n"
 	config += `	bgp_bestpath_as_path_multipath_relax = true` + "\n"
 	config += `	bgp_bestpath_cost_community_ignore = true` + "\n"
 	config += `	bgp_bestpath_compare_routerid = true` + "\n"
 	config += `	bgp_bestpath_aigp_ignore = true` + "\n"
-	config += `	bgp_bestpath_igp_metric_ignore = true` + "\n"
 	config += `	bgp_bestpath_igp_metric_sr_policy = true` + "\n"
-	config += `	bgp_bestpath_med_always = true` + "\n"
-	config += `	bgp_bestpath_med_confed = true` + "\n"
 	config += `	bgp_bestpath_med_missing_as_worst = true` + "\n"
 	config += `	bgp_bestpath_origin_as_use_validity = true` + "\n"
 	config += `	bgp_bestpath_origin_as_allow_invalid = true` + "\n"
-	config += `	bgp_bestpath_sr_policy_prefer = false` + "\n"
-	config += `	bgp_bestpath_sr_policy_force = true` + "\n"
+	config += `	bgp_bestpath_sr_policy_prefer = true` + "\n"
 	config += `	neighbors = [{` + "\n"
-	config += `		neighbor_address = "10.1.1.2"` + "\n"
+	config += `		address = "10.1.1.2"` + "\n"
 	config += `		remote_as = "65002"` + "\n"
 	config += `		description = "My Neighbor Description"` + "\n"
 	config += `		use_neighbor_group = "GROUP1"` + "\n"
@@ -159,16 +144,11 @@ func testAccDataSourceIosxrRouterBGPConfig() string {
 	config += `		bfd_multiplier = 4` + "\n"
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bfd_fast_detect_strict_mode = false` + "\n"
-	config += `		bfd_fast_detect_inheritance_disable = true` + "\n"
-	config += `		local_as = "65003"` + "\n"
-	config += `		local_as_no_prepend = true` + "\n"
-	config += `		local_as_replace_as = true` + "\n"
-	config += `		local_as_dual_as = true` + "\n"
 	config += `		password = "12341C2713181F13253920"` + "\n"
 	config += `		shutdown = false` + "\n"
-	config += `		timers_keepalive_interval = 5` + "\n"
-	config += `		timers_holdtime = "20"` + "\n"
-	config += `		timers_minimum_acceptable_holdtime = "10"` + "\n"
+	config += `		timers_keepalive_interval = 10` + "\n"
+	config += `		timers_holdtime_number = 20` + "\n"
+	config += `		timers_holdtime_minimum_acceptable_holdtime = 20` + "\n"
 	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		ttl_security = false` + "\n"
 	config += `	}]` + "\n"

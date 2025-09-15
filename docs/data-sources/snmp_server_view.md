@@ -32,7 +32,7 @@ data "iosxr_snmp_server_view" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `mib_view_families` (Attributes List) (see [below for nested schema](#nestedatt--mib_view_families))
+- `mib_view_families` (Attributes List) MIB view family (see [below for nested schema](#nestedatt--mib_view_families))
 
 <a id="nestedatt--mib_view_families"></a>
 ### Nested Schema for `mib_view_families`

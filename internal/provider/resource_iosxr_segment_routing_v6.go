@@ -97,7 +97,7 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 58),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"micro_segment_behavior": schema.StringAttribute{
@@ -116,6 +116,46 @@ func (r *SegmentRoutingV6Resource) Schema(ctx context.Context, req resource.Sche
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(32, 112),
+							},
+						},
+					},
+				},
+			},
+			"formats": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure a SRv6 format").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Format name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"format_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable a SRv6 format").String,
+							Optional:            true,
+						},
+						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start of LIB").AddIntegerRangeDescription(57344, 57344).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(57344, 57344),
+							},
+						},
+						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Start of Explicit LIB").AddIntegerRangeDescription(57444, 65279).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(57444, 65279),
+							},
+						},
+						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify uSID WLIB explicit range").AddIntegerRangeDescription(65520, 65527).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(65520, 65527),
 							},
 						},
 					},

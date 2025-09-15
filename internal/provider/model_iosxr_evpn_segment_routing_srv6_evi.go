@@ -42,7 +42,7 @@ type EVPNSegmentRoutingSRv6EVI struct {
 	BgpRouteTargetExportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
 	AdvertiseMac                          types.Bool                                                       `tfsdk:"advertise_mac"`
-	Locator                               types.String                                                     `tfsdk:"locator"`
+	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
 }
 
 type EVPNSegmentRoutingSRv6EVIData struct {
@@ -57,7 +57,7 @@ type EVPNSegmentRoutingSRv6EVIData struct {
 	BgpRouteTargetExportFourByteAsFormat  []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportFourByteAsFormat  `tfsdk:"bgp_route_target_export_four_byte_as_format"`
 	BgpRouteTargetExportIpv4AddressFormat []EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat `tfsdk:"bgp_route_target_export_ipv4_address_format"`
 	AdvertiseMac                          types.Bool                                                       `tfsdk:"advertise_mac"`
-	Locator                               types.String                                                     `tfsdk:"locator"`
+	Locators                              []EVPNSegmentRoutingSRv6EVILocators                              `tfsdk:"locators"`
 }
 type EVPNSegmentRoutingSRv6EVIBgpRouteTargetImportTwoByteAsFormat struct {
 	AsNumber       types.Int64 `tfsdk:"as_number"`
@@ -83,6 +83,10 @@ type EVPNSegmentRoutingSRv6EVIBgpRouteTargetExportIpv4AddressFormat struct {
 	Ipv4Address    types.String `tfsdk:"ipv4_address"`
 	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
 }
+type EVPNSegmentRoutingSRv6EVILocators struct {
+	LocatorName                    types.String `tfsdk:"locator_name"`
+	UsidAllocationWideLocalIdBlock types.Bool   `tfsdk:"usid_allocation_wide_local_id_block"`
+}
 
 func (data EVPNSegmentRoutingSRv6EVI) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]", data.VpnId.ValueInt64())
@@ -104,9 +108,6 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context) string {
 		if data.AdvertiseMac.ValueBool() {
 			body, _ = sjson.Set(body, "advertise-mac", map[string]string{})
 		}
-	}
-	if !data.Locator.IsNull() && !data.Locator.IsUnknown() {
-		body, _ = sjson.Set(body, "locator", data.Locator.ValueString())
 	}
 	if len(data.BgpRouteTargetImportTwoByteAsFormat) > 0 {
 		body, _ = sjson.Set(body, "bgp.route-target.import.two-byte-as-rts.two-byte-as-rt", []interface{}{})
@@ -171,6 +172,19 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context) string {
 			}
 			if !item.AssignedNumber.IsNull() && !item.AssignedNumber.IsUnknown() {
 				body, _ = sjson.Set(body, "bgp.route-target.export.ipv4-address-rts.ipv4-address-rt"+"."+strconv.Itoa(index)+"."+"assigned-number", strconv.FormatInt(item.AssignedNumber.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.Locators) > 0 {
+		body, _ = sjson.Set(body, "locators.locator", []interface{}{})
+		for index, item := range data.Locators {
+			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
+				body, _ = sjson.Set(body, "locators.locator"+"."+strconv.Itoa(index)+"."+"locator-name", item.LocatorName.ValueString())
+			}
+			if !item.UsidAllocationWideLocalIdBlock.IsNull() && !item.UsidAllocationWideLocalIdBlock.IsUnknown() {
+				if item.UsidAllocationWideLocalIdBlock.ValueBool() {
+					body, _ = sjson.Set(body, "locators.locator"+"."+strconv.Itoa(index)+"."+"usid.allocation.wide-local-id-block", map[string]string{})
+				}
 			}
 		}
 	}
@@ -396,10 +410,43 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 	} else {
 		data.AdvertiseMac = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "locator"); value.Exists() && !data.Locator.IsNull() {
-		data.Locator = types.StringValue(value.String())
-	} else {
-		data.Locator = types.StringNull()
+	for i := range data.Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "locators.locator").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("locator-name"); value.Exists() && !data.Locators[i].LocatorName.IsNull() {
+			data.Locators[i].LocatorName = types.StringValue(value.String())
+		} else {
+			data.Locators[i].LocatorName = types.StringNull()
+		}
+		if value := r.Get("usid.allocation.wide-local-id-block"); !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			if value.Exists() {
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+		} else {
+			data.Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
 	}
 }
 
@@ -496,8 +543,21 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res []byte)
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "locator"); value.Exists() {
-		data.Locator = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "locators.locator"); value.Exists() {
+		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVILocators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
 	}
 }
 
@@ -594,8 +654,21 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []b
 	} else {
 		data.AdvertiseMac = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "locator"); value.Exists() {
-		data.Locator = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "locators.locator"); value.Exists() {
+		data.Locators = make([]EVPNSegmentRoutingSRv6EVILocators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSRv6EVILocators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+			data.Locators = append(data.Locators, item)
+			return true
+		})
 	}
 }
 
@@ -823,8 +896,38 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 	if !state.AdvertiseMac.IsNull() && data.AdvertiseMac.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise-mac", state.getPath()))
 	}
-	if !state.Locator.IsNull() && data.Locator.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/locator", state.getPath()))
+	for i := range state.Locators {
+		keys := [...]string{"locator-name"}
+		stateKeyValues := [...]string{state.Locators[i].LocatorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Locators[i].LocatorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Locators {
+			found = true
+			if state.Locators[i].LocatorName.ValueString() != data.Locators[j].LocatorName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locator%v", state.getPath(), keyString))
+		}
 	}
 	return deletedItems
 }
@@ -881,6 +984,17 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context) 
 	}
 	if !data.AdvertiseMac.IsNull() && !data.AdvertiseMac.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise-mac", data.getPath()))
+	}
+	for i := range data.Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/locators/locator%v/usid/allocation/wide-local-id-block", data.getPath(), keyString))
+		}
 	}
 	return emptyLeafsDelete
 }
@@ -953,8 +1067,15 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []str
 	if !data.AdvertiseMac.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise-mac", data.getPath()))
 	}
-	if !data.Locator.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/locator", data.getPath()))
+	for i := range data.Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Locators[i].LocatorName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locator%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

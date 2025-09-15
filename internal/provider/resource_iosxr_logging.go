@@ -126,10 +126,10 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"facility_level": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp").String,
+				MarkdownDescription: helpers.NewAttributeDescription("configure this node").AddStringEnumDescription("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("auth", "cron", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "lpr", "mail", "news", "sys10", "sys11", "sys12", "sys13", "sys14", "sys9", "syslog", "user", "uucp"),
+					stringvalidator.OneOf("all", "audit", "auth", "authpriv", "console", "daemon", "kern", "local0", "local1", "local2", "local3", "local4", "local5", "local6", "local7", "mail", "ntp", "syslog", "user"),
 				},
 			},
 			"hostnameprefix": schema.StringAttribute{
@@ -137,7 +137,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"suppress_duplicates": schema.BoolAttribute{

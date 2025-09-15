@@ -102,6 +102,10 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 					int64validator.Between(15001, 1048575),
 				},
 			},
+			"enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable SR").String,
+				Optional:            true,
+			},
 		},
 	}
 }

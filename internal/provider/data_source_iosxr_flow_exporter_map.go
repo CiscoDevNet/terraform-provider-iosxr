@@ -63,7 +63,7 @@ func (d *FlowExporterMapDataSource) Schema(ctx context.Context, req datasource.S
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Exporter map name - maximum 32 characters",
+				MarkdownDescription: "Exporter map name",
 				Required:            true,
 			},
 			"destination_ipv4_address": schema.StringAttribute{
@@ -79,7 +79,7 @@ func (d *FlowExporterMapDataSource) Schema(ctx context.Context, req datasource.S
 				Computed:            true,
 			},
 			"source": schema.StringAttribute{
-				MarkdownDescription: "Source interface",
+				MarkdownDescription: "Source interface whose address can be used as source address for export packets",
 				Computed:            true,
 			},
 			"dscp": schema.Int64Attribute{

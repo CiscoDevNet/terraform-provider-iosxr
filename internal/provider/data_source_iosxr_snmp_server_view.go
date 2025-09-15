@@ -67,7 +67,7 @@ func (d *SNMPServerViewDataSource) Schema(ctx context.Context, req datasource.Sc
 				Required:            true,
 			},
 			"mib_view_families": schema.ListNestedAttribute{
-				MarkdownDescription: "",
+				MarkdownDescription: "MIB view family",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

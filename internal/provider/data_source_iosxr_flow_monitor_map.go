@@ -63,7 +63,7 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Monitor map name - maximum 32 characters",
+				MarkdownDescription: "Monitor map name",
 				Required:            true,
 			},
 			"exporters": schema.ListNestedAttribute{
@@ -115,7 +115,7 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"record_ipv4_prefix": schema.BoolAttribute{
-				MarkdownDescription: "Prefix based agregation",
+				MarkdownDescription: "Prefix based aggregation",
 				Computed:            true,
 			},
 			"record_ipv4_source_prefix": schema.BoolAttribute{

@@ -28,14 +28,13 @@ import (
 func TestAccDataSourceIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_ti_lfa", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.level_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix_levels.0.ti_lfa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_enable_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "fast_reroute_enable_levels.0.per_prefix", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "metric", "500"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "metric_levels.0.level_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "metric_levels.0.maximum", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.route_policy", "ROUTE_POLICY_2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface_address_family.test", "metric_default_metric", "500"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -57,6 +56,14 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_2]"
+	attributes = {
+		"route-policy-name" = "ROUTE_POLICY_2"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_2\n  pass\nend-policy\n"
+	}
+}
+
 `
 
 func testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig() string {
@@ -67,19 +74,18 @@ func testAccDataSourceIosxrRouterISISInterfaceAddressFamilyConfig() string {
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
 	config += `	fast_reroute_per_prefix = true` + "\n"
-	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
-	config += `	fast_reroute_per_prefix_levels = [{` + "\n"
-	config += `		level_id = 1` + "\n"
-	config += `		ti_lfa = true` + "\n"
+	config += `	fast_reroute_enable_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		per_prefix = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	tag = 100` + "\n"
 	config += `	advertise_prefix_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	metric = 500` + "\n"
-	config += `	metric_levels = [{` + "\n"
-	config += `		level_id = 1` + "\n"
-	config += `		maximum = true` + "\n"
+	config += `	advertise_prefix_route_policy_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		route_policy = "ROUTE_POLICY_2"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	metric_default_metric = 500` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -102,27 +102,52 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"segment_routing_srv6_locator": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure locator name").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify locator").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 1024),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Wide LIB allocation").String,
+				Optional:            true,
+			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Keepalive interval").AddIntegerRangeDescription(0, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
-			"timers_bgp_holdtime": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
+			"timers_bgp_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_bgp_minimum_acceptable_holdtime": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.").String,
+			"timers_bgp_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor within zero container").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 65535),
+				},
+			},
+			"timers_bgp_holdtime_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holdtime value").AddIntegerRangeDescription(3, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 65535),
+				},
+			},
+			"timers_bgp_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
+				Optional:            true,
+			},
+			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 65535),
+				},
 			},
 			"bgp_router_id": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure Router-id").String,
@@ -163,15 +188,15 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable next-hop reachability validation for color-extcomm path").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Disable next-hop reachability validation for color-extcomm paths").String,
 				Optional:            true,
 			},
 			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Ignore as-path length").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Indicates a ignore node is configured.").String,
 				Optional:            true,
 			},
 			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Relax as-path check for multipath selection").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Indicates a multipath-relax node is configured.").String,
 				Optional:            true,
 			},
 			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
@@ -195,11 +220,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"bgp_bestpath_med_always": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allow comparing MED from different neighbors").String,
-				Optional:            true,
-			},
-			"bgp_bestpath_med_confed": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compare MED among confederation paths").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Treat missing MED as the least preferred one").String,
 				Optional:            true,
 			},
 			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
@@ -223,16 +244,16 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"neighbors": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a neighbor router").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"neighbor_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
 							Required:            true,
 						},
 						"remote_as": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Set remote AS").String,
 							Optional:            true,
 						},
 						"description": schema.StringAttribute{
@@ -250,7 +271,7 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 							},
 						},
 						"advertisement_interval_seconds": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Minimum interval between sending BGP routing updates").AddIntegerRangeDescription(0, 600).String,
+							MarkdownDescription: helpers.NewAttributeDescription("time in seconds").AddIntegerRangeDescription(0, 600).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 600),
@@ -293,54 +314,60 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 							Optional:            true,
 						},
 						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hold down neighbor session until BFD session is up").String,
+							MarkdownDescription: helpers.NewAttributeDescription("(Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)").String,
 							Optional:            true,
 						},
-						"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+						"bfd_fast_detect_disable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prevent bfd settings from being inherited from the parent").String,
-							Optional:            true,
-						},
-						"local_as": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
-							Optional:            true,
-						},
-						"local_as_no_prepend": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
-							Optional:            true,
-						},
-						"local_as_replace_as": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
-							Optional:            true,
-						},
-						"local_as_dual_as": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
 							Optional:            true,
 						},
 						"password": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies an ENCRYPTED password will follow").String,
 							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
-							},
+						},
+						"password_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prevent password from being inherited from parent").String,
+							Optional:            true,
 						},
 						"shutdown": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Administratively shut down this neighbor").String,
 							Optional:            true,
 						},
 						"timers_keepalive_interval": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("BGP timers").AddIntegerRangeDescription(0, 65535).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Keepalive interval").AddIntegerRangeDescription(0, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"timers_holdtime": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Holdtime. Set 0 to disable keepalives/hold time.").String,
+						"timers_zero": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within zero container").String,
 							Optional:            true,
 						},
-						"timers_minimum_acceptable_holdtime": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.").String,
+						"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor within zero container").AddIntegerRangeDescription(3, 65535).String,
 							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 65535),
+							},
+						},
+						"timers_holdtime_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holdtime value").AddIntegerRangeDescription(3, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 65535),
+							},
+						},
+						"timers_holdtime_zero": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within holdtime container").String,
+							Optional:            true,
+						},
+						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(3, 65535),
+							},
 						},
 						"update_source": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Source of routing updates").String,

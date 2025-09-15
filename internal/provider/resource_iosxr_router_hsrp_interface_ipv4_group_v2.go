@@ -128,7 +128,7 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Schema(ctx context.Context, req
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"preempt_delay": schema.Int64Attribute{
@@ -229,7 +229,7 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Schema(ctx context.Context, req
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 800),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"priority_decrement": schema.Int64Attribute{

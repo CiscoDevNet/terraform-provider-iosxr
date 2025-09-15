@@ -14,62 +14,52 @@ This resource can manage the Router BGP configuration.
 
 ```terraform
 resource "iosxr_router_bgp" "example" {
-  as_number                                  = "65001"
-  default_information_originate              = true
-  default_metric                             = 125
-  nsr_disable                                = false
-  bgp_redistribute_internal                  = true
-  segment_routing_srv6_locator               = "locator11"
-  timers_bgp_keepalive_interval              = 5
-  timers_bgp_holdtime                        = "20"
-  timers_bgp_minimum_acceptable_holdtime     = "10"
-  bgp_router_id                              = "22.22.22.22"
-  bgp_graceful_restart_graceful_reset        = true
-  ibgp_policy_out_enforce_modifications      = true
-  bgp_log_neighbor_changes_detail            = true
-  bfd_minimum_interval                       = 10
-  bfd_multiplier                             = 4
-  nexthop_validation_color_extcomm_sr_policy = true
-  nexthop_validation_color_extcomm_disable   = true
-  bgp_bestpath_as_path_ignore                = true
-  bgp_bestpath_as_path_multipath_relax       = true
-  bgp_bestpath_cost_community_ignore         = true
-  bgp_bestpath_compare_routerid              = true
-  bgp_bestpath_aigp_ignore                   = true
-  bgp_bestpath_igp_metric_ignore             = true
-  bgp_bestpath_igp_metric_sr_policy          = true
-  bgp_bestpath_med_always                    = true
-  bgp_bestpath_med_confed                    = true
-  bgp_bestpath_med_missing_as_worst          = true
-  bgp_bestpath_origin_as_use_validity        = true
-  bgp_bestpath_origin_as_allow_invalid       = true
-  bgp_bestpath_sr_policy_prefer              = false
-  bgp_bestpath_sr_policy_force               = true
+  as_number                                                = "65001"
+  default_information_originate                            = true
+  default_metric                                           = 125
+  nsr_disable                                              = false
+  bgp_redistribute_internal                                = true
+  segment_routing_srv6_locator                             = "locator11"
+  segment_routing_srv6_usid_allocation_wide_local_id_block = true
+  timers_bgp_keepalive_interval                            = 5
+  timers_bgp_holdtime_number                               = 20
+  timers_bgp_holdtime_minimum_acceptable_holdtime          = 10
+  bgp_router_id                                            = "22.22.22.22"
+  bgp_graceful_restart_graceful_reset                      = true
+  ibgp_policy_out_enforce_modifications                    = true
+  bgp_log_neighbor_changes_detail                          = true
+  bfd_minimum_interval                                     = 10
+  bfd_multiplier                                           = 4
+  nexthop_validation_color_extcomm_sr_policy               = true
+  bgp_bestpath_as_path_multipath_relax                     = true
+  bgp_bestpath_cost_community_ignore                       = true
+  bgp_bestpath_compare_routerid                            = true
+  bgp_bestpath_aigp_ignore                                 = true
+  bgp_bestpath_igp_metric_sr_policy                        = true
+  bgp_bestpath_med_missing_as_worst                        = true
+  bgp_bestpath_origin_as_use_validity                      = true
+  bgp_bestpath_origin_as_allow_invalid                     = true
+  bgp_bestpath_sr_policy_prefer                            = true
   neighbors = [
     {
-      neighbor_address                    = "10.1.1.2"
-      remote_as                           = "65002"
-      description                         = "My Neighbor Description"
-      use_neighbor_group                  = "GROUP1"
-      advertisement_interval_seconds      = 10
-      ignore_connected_check              = true
-      ebgp_multihop_maximum_hop_count     = 10
-      bfd_minimum_interval                = 10
-      bfd_multiplier                      = 4
-      bfd_fast_detect                     = true
-      bfd_fast_detect_strict_mode         = false
-      bfd_fast_detect_inheritance_disable = true
-      local_as                            = "65003"
-      local_as_no_prepend                 = true
-      local_as_replace_as                 = true
-      local_as_dual_as                    = true
-      password                            = "12341C2713181F13253920"
-      shutdown                            = false
-      timers_keepalive_interval           = 5
-      timers_holdtime                     = "20"
-      timers_minimum_acceptable_holdtime  = "10"
-      update_source                       = "GigabitEthernet0/0/0/1"
-      ttl_security                        = false
+      address                                     = "10.1.1.2"
+      remote_as                                   = "65002"
+      description                                 = "My Neighbor Description"
+      use_neighbor_group                          = "GROUP1"
+      advertisement_interval_seconds              = 10
+      ignore_connected_check                      = true
+      ebgp_multihop_maximum_hop_count             = 10
+      bfd_minimum_interval                        = 10
+      bfd_multiplier                              = 4
+      bfd_fast_detect                             = true
+      bfd_fast_detect_strict_mode                 = false
+      password                                    = "12341C2713181F13253920"
+      shutdown                                    = false
+      timers_keepalive_interval                   = 10
+      timers_holdtime_number                      = 20
+      timers_holdtime_minimum_acceptable_holdtime = 20
+      update_source                               = "GigabitEthernet0/0/0/1"
+      ttl_security                                = false
     }
   ]
 }
@@ -89,14 +79,13 @@ resource "iosxr_router_bgp" "example" {
 - `bfd_multiplier` (Number) Detect multiplier
   - Range: `2`-`16`
 - `bgp_bestpath_aigp_ignore` (Boolean) Ignore AIGP attribute
-- `bgp_bestpath_as_path_ignore` (Boolean) Ignore as-path length
-- `bgp_bestpath_as_path_multipath_relax` (Boolean) Relax as-path check for multipath selection
+- `bgp_bestpath_as_path_ignore` (Boolean) Indicates a ignore node is configured.
+- `bgp_bestpath_as_path_multipath_relax` (Boolean) Indicates a multipath-relax node is configured.
 - `bgp_bestpath_compare_routerid` (Boolean) Compare router-id for identical EBGP paths
 - `bgp_bestpath_cost_community_ignore` (Boolean) Ignore cost-community comparison
 - `bgp_bestpath_igp_metric_ignore` (Boolean) Ignore IGP metric during path comparison
 - `bgp_bestpath_igp_metric_sr_policy` (Boolean) Use next-hop admin/metric from SR policy at Next Hop metric comparison stage
-- `bgp_bestpath_med_always` (Boolean) Allow comparing MED from different neighbors
-- `bgp_bestpath_med_confed` (Boolean) Compare MED among confederation paths
+- `bgp_bestpath_med_always` (Boolean) Treat missing MED as the least preferred one
 - `bgp_bestpath_med_missing_as_worst` (Boolean) Treat missing MED as the least preferred one
 - `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `bgp_bestpath_origin_as_use_validity` (Boolean) BGP bestpath selection will use origin-AS validity
@@ -113,15 +102,22 @@ resource "iosxr_router_bgp" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
-- `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
-- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
+- `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
+- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm paths
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
-- `segment_routing_srv6_locator` (String) Configure locator name
-- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_bgp_keepalive_interval` (Number) BGP timers
+- `segment_routing_srv6_locator` (String) Specify locator
+- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
+- `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_bgp_holdtime_number` (Number) Holdtime value
+  - Range: `3`-`65535`
+- `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_bgp_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `timers_bgp_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+  - Range: `3`-`65535`
 
 ### Read-Only
 
@@ -132,17 +128,17 @@ resource "iosxr_router_bgp" "example" {
 
 Required:
 
-- `neighbor_address` (String) Neighbor address
+- `address` (String) IPaddress
 
 Optional:
 
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
   - Range: `0`-`999`
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+- `advertisement_interval_seconds` (Number) time in seconds
   - Range: `0`-`600`
 - `bfd_fast_detect` (Boolean) Enable Fast detection
-- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
-- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
@@ -151,17 +147,20 @@ Optional:
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
-- `local_as` (String) bgp as-number
-- `local_as_dual_as` (Boolean) Dual-AS mode
-- `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
 - `password` (String) Specifies an ENCRYPTED password will follow
-- `remote_as` (String) bgp as-number
+- `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
+- `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_holdtime_number` (Number) Holdtime value
+  - Range: `3`-`65535`
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
+- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+  - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

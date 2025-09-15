@@ -34,14 +34,13 @@ data "iosxr_router_bgp" "example" {
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `bgp_bestpath_aigp_ignore` (Boolean) Ignore AIGP attribute
-- `bgp_bestpath_as_path_ignore` (Boolean) Ignore as-path length
-- `bgp_bestpath_as_path_multipath_relax` (Boolean) Relax as-path check for multipath selection
+- `bgp_bestpath_as_path_ignore` (Boolean) Indicates a ignore node is configured.
+- `bgp_bestpath_as_path_multipath_relax` (Boolean) Indicates a multipath-relax node is configured.
 - `bgp_bestpath_compare_routerid` (Boolean) Compare router-id for identical EBGP paths
 - `bgp_bestpath_cost_community_ignore` (Boolean) Ignore cost-community comparison
 - `bgp_bestpath_igp_metric_ignore` (Boolean) Ignore IGP metric during path comparison
 - `bgp_bestpath_igp_metric_sr_policy` (Boolean) Use next-hop admin/metric from SR policy at Next Hop metric comparison stage
-- `bgp_bestpath_med_always` (Boolean) Allow comparing MED from different neighbors
-- `bgp_bestpath_med_confed` (Boolean) Compare MED among confederation paths
+- `bgp_bestpath_med_always` (Boolean) Treat missing MED as the least preferred one
 - `bgp_bestpath_med_missing_as_worst` (Boolean) Treat missing MED as the least preferred one
 - `bgp_bestpath_origin_as_allow_invalid` (Boolean) BGP bestpath selection will allow 'invalid' origin-AS
 - `bgp_bestpath_origin_as_use_validity` (Boolean) BGP bestpath selection will use origin-AS validity
@@ -55,41 +54,45 @@ data "iosxr_router_bgp" "example" {
 - `default_metric` (Number) default redistributed metric
 - `ibgp_policy_out_enforce_modifications` (Boolean) Allow policy to modify all attributes
 - `id` (String) The path of the retrieved object.
-- `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
-- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm path
+- `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
+- `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm paths
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
-- `segment_routing_srv6_locator` (String) Configure locator name
-- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_bgp_keepalive_interval` (Number) BGP timers
-- `timers_bgp_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `segment_routing_srv6_locator` (String) Specify locator
+- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
+- `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+- `timers_bgp_holdtime_number` (Number) Holdtime value
+- `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_interval` (Number) Keepalive interval
+- `timers_bgp_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
 
 Read-Only:
 
+- `address` (String) IPaddress
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+- `advertisement_interval_seconds` (Number) time in seconds
 - `bfd_fast_detect` (Boolean) Enable Fast detection
-- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
-- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
 - `bfd_minimum_interval` (Number) Hello interval
 - `bfd_multiplier` (Number) Detect multiplier
 - `description` (String) Neighbor specific description
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
-- `local_as` (String) bgp as-number
-- `local_as_dual_as` (Boolean) Dual-AS mode
-- `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
-- `neighbor_address` (String) Neighbor address
 - `password` (String) Specifies an ENCRYPTED password will follow
-- `remote_as` (String) bgp as-number
+- `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
-- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+- `timers_holdtime_number` (Number) Holdtime value
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_keepalive_interval` (Number) Keepalive interval
+- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
+- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

@@ -7,32 +7,59 @@ attributes:
     example: P1
   - yang_name: is-type
     example: level-1
-  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded
+  - yang_name: set-overload-bit
     example: true
-  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded/time-to-advertise
+  - yang_name: set-overload-bit/on-startup/time-to-advertise/time-to-advertise-number
+    tf_name: set_overload_bit_on_startup_seconds
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
-    example: 10
+    min_int: 5
+    max_int: 86400
+    example: 300
+    description: "Time in seconds to advertise ourself as overloaded after reboot"
   - yang_name: set-overload-bit/on-startup/wait-for-bgp
-    example: false
+    tf_name: set_overload_bit_on_startup_wait_for_bgp
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Set overload bit on startup until BGP signals convergence, or timeout"
   - yang_name: set-overload-bit/advertise/external
     example: true
   - yang_name: set-overload-bit/advertise/interlevel
     example: true
-  - yang_name: set-overload-bit-levels/level
+  - yang_name: set-overload-bit-levels/set-overload-bit-level
     tf_name: set_overload_bit_levels
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: level-number
         id: true
         example: 1
-      - yang_name: on-startup/advertise-as-overloaded
-        example: true
-      - yang_name: on-startup/advertise-as-overloaded/time-to-advertise
+      - yang_name: on-startup/time-to-advertise/time-to-advertise-number
+        tf_name: on_startup_time_seconds
+        type: Int64
+        no_augment_config: true
         optional: true
-        example: 10
+        delete_parent: true
+        min_int: 5
+        max_int: 86400
+        example: 300
+        description: "Time in seconds to advertise ourself as overloaded after reboot"
       - yang_name: on-startup/wait-for-bgp
-        example: false
+        tf_name: on_startup_wait_for_bgp
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Set overload bit on startup until BGP signals convergence, or timeout"
       - yang_name: advertise/external
         example: true
       - yang_name: advertise/interlevel
@@ -40,9 +67,24 @@ attributes:
   - yang_name: nsr
     example: true
   - yang_name: nsf/cisco
+    tf_name: nsf_cisco
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     example: true
+    description: "Checkpoint NSF restart"
+    exclude_test: true
   - yang_name: nsf/ietf
-    example: false
+    tf_name: nsf_ietf
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    example: true
+    description: "IETF NSF restart"
   - yang_name: nsf/lifetime
     example: 10
   - yang_name: nsf/interface-timer
@@ -57,17 +99,128 @@ attributes:
     example: 50
   - yang_name: lsp-gen-interval/secondary-wait
     example: 200
-  - yang_name: lsp-refresh-interval/lsp-refresh-interval-time
+  - yang_name: lsp-refresh-interval
     tf_name: lsp_refresh_interval
     example: 65000
-  - yang_name: max-lsp-lifetime/max-lsp-lifetime
-    tf_name: max_lsp_lifetime
+  - yang_name: max-lsp-lifetime
     example: 65535
-  - yang_name: lsp-password/keychain/keychain-name
-    tf_name: lsp_password_keychain
+  - yang_name: lsp-password/accept/encrypted
+    exclude_test: true
+    example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/accept-levels/accept-level
+    tf_name: lsp_password_accept_levels
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: encrypted
+        example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/lsp-password-option/text/password-options/encrypted
+    tf_name: lsp_password_text_encrypted
+    type: String
+    no_augment_config: true
     optional: true
-    no_delete: true
-    example: ISIS-KEY
+    example: "060506324F41584B564B0F49584B"
+    description: "Specifies an encrypted password will follow"
+  - yang_name: lsp-password/lsp-password-option/text/password-options/send-only
+    tf_name: lsp_password_text_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: lsp-password/lsp-password-option/text/password-options/snp/send-only
+    tf_name: lsp_password_text_snp_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Authenticate outgoing SNPs, no check on incoming SNPs"
+  - yang_name: lsp-password/lsp-password-option/text/password-options/enable-poi
+    tf_name: lsp_password_text_enable_poi
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Enable purge originator identification - only valid with cryptographic authentication"
+  - yang_name: lsp-password/lsp-password-option/hmac-md5/password-options/encrypted
+    tf_name: lsp_password_hmac_md5_encrypted
+    type: String
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: "060506324F41584B564B0F49584B"
+    description: "Specifies a password will follow"
+  - yang_name: lsp-password/lsp-password-option/hmac-md5/password-options/send-only
+    tf_name: lsp_password_hmac_md5_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only
+    tf_name: lsp_password_hmac_md5_snp_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Authenticate outgoing SNPs, no check on incoming SNPs"
+  - yang_name: lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi
+    tf_name: lsp_password_hmac_md5_enable_poi
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Enable purge originator identification"
+  - yang_name: lsp-password/lsp-password-option/keychain/keychain-name
+    tf_name: lsp_password_keychain_name
+    type: String
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: "ISIS-KEY"
+    description: "Specifies a Key Chain name will follow"
+  - yang_name: lsp-password/lsp-password-option/keychain/send-only
+    tf_name: lsp_password_keychain_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: lsp-password/lsp-password-option/keychain/snp/send-only
+    tf_name: lsp_password_keychain_snp_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Authenticate outgoing SNPs, no check on incoming SNPs"
+  - yang_name: lsp-password/lsp-password-option/keychain/enable-poi
+    tf_name: lsp_password_keychain_enable_poi
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Enable purge originator identification"
   - yang_name: distribute/link-state/instance-id
     example: 32
   - yang_name: distribute/link-state/throttle
@@ -80,23 +233,28 @@ attributes:
     tf_name: affinity_maps
     type: List
     attributes:
-      - yang_name: affinity-map-name
+      - yang_name: affinity-attribute-name
         tf_name: name
         id: true
         example: 22
       - yang_name: bit-position
         example: 4
-  - yang_name: flex-algos/flex-algo
+  - yang_name: flex-algoes/flex-algo
     tf_name: flex_algos
     type: List
     attributes:
-      - yang_name: algorithm-number
+      - yang_name: flex-algo-number
         id: true
         example: 128
       - yang_name: advertise-definition
         example: true
-      - yang_name: metric-type/delay
-        example: true
+      - yang_name: metric-type
+        tf_name: metric_type
+        type: String
+        no_augment_config: true
+        optional: true
+        example: "delay"
+        description: "Flex-Algo metric type - can be 'delay', 'te', or integer 128-255"
   - yang_name: nets/net
     tf_name: nets
     type: List
@@ -113,18 +271,18 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: circuit-type
         example: level-1
-      - yang_name: hello-padding/disable
-        example: true
-      - yang_name: hello-padding/sometimes
-        example: false
-      - yang_name: priority/priority-value
-        tf_name: priority
-        example: 10
+      - yang_name: hello-padding
+        example: "always"
+      - yang_name: priority-levels/priority-level
+        tf_name: priority_levels
+        type: List
+        attributes:
+          - yang_name: level-number
+            id: true
+            example: 1
+          - yang_name: priority
+            example: 10
       - yang_name: point-to-point
         example: false
-      - yang_name: passive
-        example: false
-      - yang_name: suppressed
-        example: false
-      - yang_name: shutdown
-        example: false
+      - yang_name: state
+        example: "passive"

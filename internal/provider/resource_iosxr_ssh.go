@@ -94,10 +94,10 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				},
 			},
 			"server_session_limit": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd session-limit of service requests").AddIntegerRangeDescription(1, 110).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Cisco sshd session-limit of service requests").AddIntegerRangeDescription(1, 150).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 110),
+					int64validator.Between(1, 150),
 				},
 			},
 			"server_v2": schema.BoolAttribute{
@@ -118,7 +118,7 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
 							},
 						},
@@ -127,7 +127,7 @@ func (r *SSHResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][-_.:a-z0-9A-Z]*`), ""),
 							},
 						},

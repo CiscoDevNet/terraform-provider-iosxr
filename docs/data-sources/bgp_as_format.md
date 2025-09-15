@@ -26,6 +26,5 @@ data "iosxr_bgp_as_format" "example" {
 
 ### Read-Only
 
-- `asdot` (Boolean) AS Dot format
-- `asplain` (Boolean) AS Plain format
+- `as_format` (String) Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)
 - `id` (String) The path of the retrieved object.

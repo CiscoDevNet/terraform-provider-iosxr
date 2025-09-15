@@ -110,7 +110,7 @@ func (r *TelnetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"ipv6_server_max_servers": schema.Int64Attribute{
@@ -125,7 +125,7 @@ func (r *TelnetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

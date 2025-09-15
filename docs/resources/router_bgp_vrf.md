@@ -14,42 +14,43 @@ This resource can manage the Router BGP VRF configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf" "example" {
-  as_number                     = "65001"
-  vrf_name                      = "VRF2"
-  rd_auto                       = false
-  rd_ip_address_ipv4_address    = "14.14.14.14"
-  rd_ip_address_index           = 3
-  default_information_originate = true
-  default_metric                = 125
-  timers_bgp_keepalive_interval = 5
-  timers_bgp_holdtime           = "20"
-  bgp_router_id                 = "22.22.22.22"
-  bfd_minimum_interval          = 10
-  bfd_multiplier                = 4
+  as_number                                       = "65001"
+  vrf_name                                        = "VRF2"
+  default_information_originate                   = true
+  default_metric                                  = 125
+  rd_auto                                         = true
+  timers_bgp_keepalive_interval                   = 5
+  timers_bgp_holdtime_number                      = 20
+  timers_bgp_holdtime_minimum_acceptable_holdtime = 10
+  bgp_router_id                                   = "22.22.22.22"
+  bfd_minimum_interval                            = 10
+  bfd_multiplier                                  = 4
   neighbors = [
     {
-      neighbor_address                = "10.1.1.2"
-      remote_as                       = "65002"
-      use_neighbor_group              = "GROUP1"
-      description                     = "My Neighbor Description"
-      advertisement_interval_seconds  = 10
-      ignore_connected_check          = true
-      ebgp_multihop_maximum_hop_count = 10
-      bfd_minimum_interval            = 10
-      bfd_multiplier                  = 4
-      bfd_fast_detect                 = true
-      bfd_fast_detect_strict_mode     = false
-      bfd_fast_detect_disable         = false
-      local_as                        = "65003"
-      local_as_no_prepend             = true
-      local_as_replace_as             = true
-      local_as_dual_as                = true
-      password                        = "12341C2713181F13253920"
-      shutdown                        = false
-      timers_keepalive_interval       = 5
-      timers_holdtime                 = "20"
-      update_source                   = "GigabitEthernet0/0/0/1"
-      ttl_security                    = false
+      address                                     = "10.1.1.2"
+      remote_as                                   = "65002"
+      description                                 = "My Neighbor Description"
+      use_neighbor_group                          = "GROUP1"
+      advertisement_interval_seconds              = 10
+      ignore_connected_check                      = true
+      ebgp_multihop_maximum_hop_count             = 10
+      bfd_minimum_interval                        = 10
+      bfd_multiplier                              = 4
+      bfd_fast_detect                             = true
+      bfd_fast_detect_strict_mode                 = false
+      bfd_fast_detect_disable                     = false
+      local_as                                    = "65003"
+      local_as_no_prepend                         = true
+      local_as_no_prepend_replace_as              = true
+      local_as_no_prepend_replace_as_dual_as      = true
+      password                                    = "12341C2713181F13253920"
+      password_inheritance_disable                = false
+      shutdown                                    = false
+      timers_keepalive_interval                   = 10
+      timers_holdtime_number                      = 20
+      timers_holdtime_minimum_acceptable_holdtime = 20
+      update_source                               = "GigabitEthernet0/0/0/1"
+      ttl_security                                = false
     }
   ]
 }
@@ -61,7 +62,7 @@ resource "iosxr_router_bgp_vrf" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `vrf_name` (String) Specify a vrf name
+- `vrf_name` (String) VRF name - maximum length 32 characters
 
 ### Optional
 
@@ -76,20 +77,27 @@ resource "iosxr_router_bgp_vrf" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `neighbors` (Attributes List) Neighbor address (see [below for nested schema](#nestedatt--neighbors))
+- `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
 - `rd_auto` (Boolean) Automatic route distinguisher
-- `rd_four_byte_as_as_number` (String) 4-byte AS number
-- `rd_four_byte_as_index` (Number) ASN2:index (hex or decimal format)
-  - Range: `0`-`4294967295`
-- `rd_ip_address_index` (Number) IPv4Address:index (hex or decimal format)
+- `rd_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
   - Range: `0`-`65535`
-- `rd_ip_address_ipv4_address` (String) configure this node
-- `rd_two_byte_as_as_number` (String) bgp as-number
+- `rd_four_byte_as_number` (String) 4-byte AS number in asplain format
+- `rd_ipv4_address_address` (String) IPv4 address
+- `rd_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
+  - Range: `0`-`65535`
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
   - Range: `0`-`4294967295`
-- `timers_bgp_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_bgp_keepalive_interval` (Number) BGP timers
+- `rd_two_byte_as_number` (String) 2-byte AS number
+- `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_bgp_holdtime_number` (Number) Holdtime value
+  - Range: `3`-`65535`
+- `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
+- `timers_bgp_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+  - Range: `3`-`65535`
 
 ### Read-Only
 
@@ -100,17 +108,17 @@ resource "iosxr_router_bgp_vrf" "example" {
 
 Required:
 
-- `neighbor_address` (String) Neighbor address
+- `address` (String) IPaddress
 
 Optional:
 
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
   - Range: `0`-`999`
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+- `advertisement_interval_seconds` (Number) time in seconds
   - Range: `0`-`600`
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
-- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
@@ -119,16 +127,25 @@ Optional:
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
   - Range: `1`-`255`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
-- `local_as` (String) bgp as-number
-- `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as` (String) AS number
+- `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
 - `password` (String) Specifies an ENCRYPTED password will follow
-- `remote_as` (String) bgp as-number
+- `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
+- `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_holdtime_number` (Number) Holdtime value
+  - Range: `3`-`65535`
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
+- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
+- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+  - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

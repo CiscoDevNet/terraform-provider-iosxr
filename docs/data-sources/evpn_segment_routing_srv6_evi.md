@@ -40,7 +40,7 @@ data "iosxr_evpn_segment_routing_srv6_evi" "example" {
 - `bgp_route_target_import_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--bgp_route_target_import_two_byte_as_format))
 - `description` (String) Description for this EVPN Instance
 - `id` (String) The path of the retrieved object.
-- `locator` (String) EVI locator to use for EVPN SID allocation
+- `locators` (Attributes List) EVI locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--locators))
 
 <a id="nestedatt--bgp_route_target_export_four_byte_as_format"></a>
 ### Nested Schema for `bgp_route_target_export_four_byte_as_format`
@@ -94,3 +94,12 @@ Read-Only:
 
 - `as_number` (Number) Two Byte AS Number
 - `assigned_number` (Number) AS:nn (hex or decimal format)
+
+
+<a id="nestedatt--locators"></a>
+### Nested Schema for `locators`
+
+Read-Only:
+
+- `locator_name` (String) EVI locator to use for EVPN SID allocation
+- `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator

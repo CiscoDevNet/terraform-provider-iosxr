@@ -71,14 +71,14 @@ func (r *ExtcommunityRTSetResource) Schema(ctx context.Context, req resource.Sch
 				MarkdownDescription: helpers.NewAttributeDescription("Set name").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Extended Community RT Set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a extcommunity-set rt. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a extcommunity-set rt by its name and a rt set is an extcommunity set used to store BGP Route Target (RT) extended community type communities.  extcommunity-set rt a_rt_set 1.2.3.4:666 1234:666, 1.2.3.4:777, 4567:777 end-set  Note: The extcommunity-set rt entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the extcommunity-set rt definition.").String,
 				Required:            true,
 			},
 		},

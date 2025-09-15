@@ -80,7 +80,7 @@ resource "iosxr_flow_monitor_map" "example" {
 
 ### Required
 
-- `name` (String) Monitor map name - maximum 32 characters
+- `name` (String) Monitor map name
 
 ### Optional
 
@@ -117,7 +117,7 @@ resource "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_destination_tos` (Boolean) IPv4 Destination Based NetFlow Accounting TOS
 - `record_ipv4_gtp` (Boolean) IPV4 gtp record format
 - `record_ipv4_peer_as` (Boolean) Record peer AS
-- `record_ipv4_prefix` (Boolean) Prefix based agregation
+- `record_ipv4_prefix` (Boolean) Prefix based aggregation
 - `record_ipv4_prefix_port` (Boolean) Prefix port based aggregation
 - `record_ipv4_prefix_tos` (Boolean) Prefix TOS based aggregation
 - `record_ipv4_protocol_port` (Boolean) Protocol-Port based aggregation
@@ -148,7 +148,7 @@ resource "iosxr_flow_monitor_map" "example" {
 - `sflow_options_output_ifindex` (String) Specify ifindex related options
   - Choices: `physical`
 - `sflow_options_sample_header_size` (Number) Specify maximum sample-header size to be exported
-  - Range: `128`-`200`
+  - Range: `128`-`343`
 
 ### Read-Only
 

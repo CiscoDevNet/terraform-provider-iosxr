@@ -40,24 +40,37 @@ data "iosxr_router_isis" "example" {
 - `interfaces` (Attributes List) Enter the IS-IS interface configuration submode (see [below for nested schema](#nestedatt--interfaces))
 - `is_type` (String) Area type (level)
 - `log_adjacency_changes` (Boolean) Enable logging adjacency state changes
-- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP
-- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP
-- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP
-- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
+- `lsp_gen_interval_initial_wait` (Number) Initial delay before generating an LSP [50]
+- `lsp_gen_interval_maximum_wait` (Number) Maximum delay before generating an LSP [5000]
+- `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP [200]
+- `lsp_password_accept_encrypted` (String) Specifies a password will follow
+- `lsp_password_accept_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_accept_levels))
+- `lsp_password_hmac_md5_enable_poi` (Boolean) Enable purge originator identification
+- `lsp_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `lsp_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_hmac_md5_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `lsp_password_keychain_enable_poi` (Boolean) Enable purge originator identification
+- `lsp_password_keychain_name` (String) Specifies a Key Chain name will follow
+- `lsp_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_keychain_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `lsp_password_text_enable_poi` (Boolean) Enable purge originator identification - only valid with cryptographic authentication
+- `lsp_password_text_encrypted` (String) Specifies an encrypted password will follow
+- `lsp_password_text_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_text_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
 - `max_lsp_lifetime` (Number) Set maximum LSP lifetime
 - `nets` (Attributes List) A Network Entity Title (NET) for this process (see [below for nested schema](#nestedatt--nets))
-- `nsf_cisco` (Boolean) Cisco Proprietary NSF restart
-- `nsf_ietf` (Boolean) IETF NSF restar
+- `nsf_cisco` (Boolean) Checkpoint NSF restart
+- `nsf_ietf` (Boolean) IETF NSF restart
 - `nsf_interface_expires` (Number) # of times T1 can expire waiting for the restart ACK
 - `nsf_interface_timer` (Number) Timer used to wait for a restart ACK (seconds)
 - `nsf_lifetime` (Number) Maximum route lifetime following restart (seconds)
 - `nsr` (Boolean) Enable NSR
+- `set_overload_bit` (Boolean) Signal other routers not to use us in SPF
 - `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
-- `set_overload_bit_on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
-- `set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
 - `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
 <a id="nestedatt--affinity_maps"></a>
@@ -66,7 +79,7 @@ data "iosxr_router_isis" "example" {
 Read-Only:
 
 - `bit_position` (Number) Bit position for affinity attribute value
-- `name` (String) Affinity map configuration
+- `name` (String) Affinity attribute name
 
 
 <a id="nestedatt--flex_algos"></a>
@@ -75,8 +88,8 @@ Read-Only:
 Read-Only:
 
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
-- `algorithm_number` (Number) Flex Algorithm definition
-- `metric_type_delay` (Boolean) Use delay as metric
+- `flex_algo_number` (Number) Algorithm number
+- `metric_type` (String) Flex-Algo metric type - can be 'delay', 'te', or integer 128-255
 
 
 <a id="nestedatt--interfaces"></a>
@@ -85,14 +98,29 @@ Read-Only:
 Read-Only:
 
 - `circuit_type` (String) Configure circuit type for interface
-- `hello_padding_disable` (Boolean) Disable hello-padding
-- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
-- `interface_name` (String) Enter the IS-IS interface configuration submode
-- `passive` (Boolean) Do not establish adjacencies over this interface
+- `hello_padding` (String) Add padding to IS-IS hello packets
+- `interface_name` (String) Interface to configure
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
+- `priority_levels` (Attributes List) Set priority for one level only (see [below for nested schema](#nestedatt--interfaces--priority_levels))
+- `state` (String) Do not establish adjacencies over this interface
+
+<a id="nestedatt--interfaces--priority_levels"></a>
+### Nested Schema for `interfaces.priority_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set priority for this level only
 - `priority` (Number) Set priority for Designated Router election
-- `shutdown` (Boolean) Shutdown IS-IS on this interface
-- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+
+
+
+<a id="nestedatt--lsp_password_accept_levels"></a>
+### Nested Schema for `lsp_password_accept_levels`
+
+Read-Only:
+
+- `encrypted` (String) Specifies a password will follow
+- `level_number` (Number) Set lsp-password for LSPs/SNPs at this level only
 
 
 <a id="nestedatt--nets"></a>
@@ -100,7 +128,7 @@ Read-Only:
 
 Read-Only:
 
-- `net_id` (String) A Network Entity Title (NET) for this process
+- `net_id` (String) NET (XX.XXXX. ... .XXXX.XX)
 
 
 <a id="nestedatt--set_overload_bit_levels"></a>
@@ -110,7 +138,6 @@ Read-Only:
 
 - `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
-- `level_id` (Number) Set overload-bit for one level only
-- `on_startup_advertise_as_overloaded` (Boolean) Time in seconds to advertise ourself as overloaded after reboot
-- `on_startup_advertise_as_overloaded_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `level_number` (Number) Level
+- `on_startup_time_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout

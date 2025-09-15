@@ -9,37 +9,154 @@ attributes:
     example: GigabitEthernet0/0/0/1
   - yang_name: circuit-type
     example: level-1
-  - yang_name: hello-padding/disable
-    example: true
-  - yang_name: hello-padding/sometimes
-    example: false
-  - yang_name: priority/priority-value
-    tf_name: priority
+  - yang_name: hello-padding
+    example: "disable"
+  - yang_name: hello-padding-levels/hello-padding-level
+    tf_name: hello_padding_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: hello-padding
+        example: "always"
+  - yang_name: priority
     example: 10
+  - yang_name: priority-levels/priority-level
+    tf_name: priority_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority
+        example: 64
   - yang_name: point-to-point
     example: false
-  - yang_name: passive
-    example: false
-  - yang_name: suppressed
-    example: false
-  - yang_name: shutdown
-    example: false
-  - yang_name: hello-password/text/encrypted
-    tf_name: hello_password_text
+  - yang_name: state
+    example: "passive"
+  - yang_name: hello-password/accepts/encrypted
+    exclude_test: true
+    example: "060506324F41584B564B0F49584B"
+  - yang_name: hello-password/accepts-levels/accepts-level
+    tf_name: hello_password_accepts_levels
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: encrypted
+        example: "060506324F41584B564B0F49584B"
+  # hello-password/hello-password-options/text choice case container auto-detected by generator
+  # hello-password/hello-password-options/hmac-md5 choice case container auto-detected by generator
+  # hello-password/hello-password-options/keychain choice case container auto-detected by generator
+  - yang_name: hello-password/hello-password-options/text/hello-password-options/encrypted
+    tf_name: hello_password_text_encrypted
+    type: String
+    no_augment_config: true
+    optional: true
+    example: "060506324F41584B564B0F49584B"
+    description: "Specifies an encrypted password will follow"
+  - yang_name: hello-password/hello-password-options/text/hello-password-options/send-only
+    tf_name: hello_password_text_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
     optional: true
     exclude_test: true
-    no_delete: true
-    example: password123
-  - yang_name: hello-password/hmac-md5/encrypted
-    tf_name: hello_password_hmac_md5
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: hello-password/hello-password-options/hmac-md5/password-options/encrypted
+    tf_name: hello_password_hmac_md5_encrypted
+    type: String
+    no_augment_config: true
     optional: true
     exclude_test: true
-    no_delete: true
-    example: password123
-  - yang_name: hello-password/keychain/keychain-name
-    tf_name: hello_password_keychain
+    example: "060506324F41584B564B0F49584B"
+    description: "Specifies a password will follow"
+  - yang_name: hello-password/hello-password-options/hmac-md5/password-options/send-only
+    tf_name: hello_password_hmac_md5_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
     optional: true
-    no_delete: true
-    example: KEY_CHAIN_1
+    exclude_test: true
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: hello-password/hello-password-options/keychain/keychain-name
+    tf_name: hello_password_keychain_name
+    type: String
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: "ISIS-KEY"
+    description: "Specifies a Key Chain name will follow"
+  - yang_name: hello-password/hello-password-options/keychain/send-only
+    tf_name: hello_password_keychain_send_only
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Specify SNP packets authentication mode"
+  - yang_name: hello-password-levels/hello-password-level
+    tf_name: hello_password_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: text/hello-password-options/encrypted
+        tf_name: text_encrypted
+        type: String
+        no_augment_config: true
+        optional: true
+        example: "060506324F41584B564B0F49584B"
+        description: "Specifies a password will follow"
+      - yang_name: text/hello-password-options/send-only
+        tf_name: text_send_only
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Do not require authentication of incoming IIHs"
+      - yang_name: hmac-md5/hello-password-options/encrypted
+        tf_name: hmac_md5_encrypted
+        type: String
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: "060506324F41584B564B0F49584B"
+        description: "Specifies a password will follow"
+      - yang_name: hmac-md5/hello-password-options/send-only
+        tf_name: hmac_md5_send_only
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Do not require authentication of incoming IIHs"
+      - yang_name: keychain/keychain-name
+        tf_name: keychain_name
+        type: String
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: "KEY_CHAIN_1"
+        description: "The Key Chain name"
+      - yang_name: keychain/send-only
+        tf_name: keychain_send_only
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Do not require authentication of incoming IIHs"
   - yang_name: bfd/fast-detect/ipv6
     example: true

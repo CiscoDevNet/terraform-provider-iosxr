@@ -33,200 +33,230 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/flowspec
     example: true
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/as-number
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/two-byte-as-number
+    tf_name: rd_two_byte_as_number
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
     example: 123
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/index
+    description: "2-byte AS number"
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/asn2-index
+    tf_name: rd_two_byte_as_index
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
+    min_int: 0
+    max_int: 4294967295
     example: 123
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/as-number
+    description: "ASN2:index (hex or decimal format)"
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/four-byte-as-number
+    tf_name: rd_four_byte_as_number
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
     example: 65001
     exclude_test: true
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/index
+    description: "4-byte AS number in asplain format"
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/asn4-index
+    tf_name: rd_four_byte_as_index
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
+    min_int: 0
+    max_int: 65535
     example: 1
     exclude_test: true
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/ipv4-address
+    description: "ASN4:index (hex or decimal format)"
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/address
+    tf_name: rd_ipv4_address
+    type: String
+    no_augment_config: true
     optional: true
     delete_parent: true
     example: 1.2.3.4
     exclude_test: true
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ip-address/index
+    description: "IPv4 address"
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/ipv4address-index
+    tf_name: rd_ipv4_address_index
+    type: Int64
+    no_augment_config: true
     optional: true
     delete_parent: true
+    min_int: 0
+    max_int: 65535
     example: 1
     exclude_test: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt
+    description: "IPv4Address:index (hex or decimal format)"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: address_family_ipv4_unicast_import_route_target_two_byte_as_format
     type: List
     attributes:
-      - yang_name: as-number
+      - yang_name: two-byte-as-number
         id: true
         example: 1
-      - yang_name: index
+      - yang_name: asn2-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: address_family_ipv4_unicast_import_route_target_four_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: four-byte-as-number
         id: true
         example: 100000
-      - yang_name: index
+      - yang_name: asn4-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt
+        example: "enable"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: address_family_ipv4_unicast_import_route_target_ip_address_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: ip-address
+      - yang_name: ipv4-address
         id: true
         example: 1.1.1.1
-      - yang_name: index
+      - yang_name: ipv4-address-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: address_family_ipv4_unicast_export_route_target_two_byte_as_format
     type: List
     attributes:
-      - yang_name: as-number
+      - yang_name: two-byte-as-number
         id: true
         example: 1
-      - yang_name: index
+      - yang_name: asn2-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: address_family_ipv4_unicast_export_route_target_four_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: four-byte-as-number
         id: true
         example: 100000
-      - yang_name: index
+      - yang_name: asn4-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt
+        example: "enable"
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: address_family_ipv4_unicast_export_route_target_ip_address_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: ip-address
+      - yang_name: ipv4-address
         id: true
         example: 1.1.1.1
-      - yang_name: index
+      - yang_name: ipv4-address-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-rts/two-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: address_family_ipv6_unicast_import_route_target_two_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: two-byte-as-number
         id: true
         example: 1
-      - yang_name: index
+      - yang_name: asn2-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-rts/four-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: address_family_ipv6_unicast_import_route_target_four_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: four-byte-as-number
         id: true
         example: 100000
-      - yang_name: index
+      - yang_name: asn4-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: address_family_ipv6_unicast_import_route_target_ip_address_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: ip-address
+      - yang_name: ipv4-address
         id: true
         example: 1.1.1.1
-      - yang_name: index
+      - yang_name: ipv4-address-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-rts/two-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: address_family_ipv6_unicast_export_route_target_two_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: two-byte-as-number
         id: true
         example: 1
-      - yang_name: index
+      - yang_name: asn2-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-rts/four-byte-as-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: address_family_ipv6_unicast_export_route_target_four_byte_as_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: as-number
+      - yang_name: four-byte-as-number
         id: true
         example: 100000
-      - yang_name: index
+      - yang_name: asn4-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
-  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ip-addresse-rts/ip-address-rt
+        example: "enable"
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: address_family_ipv6_unicast_export_route_target_ip_address_format
     type: List
     exclude_example: true
     attributes:
-      - yang_name: ip-address
+      - yang_name: ipv4-address
         id: true
         example: 1.1.1.1
-      - yang_name: index
+      - yang_name: ipv4-address-index
         id: true
         example: 1
       - yang_name: stitching
         id: true
-        example: true
+        example: "enable"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]

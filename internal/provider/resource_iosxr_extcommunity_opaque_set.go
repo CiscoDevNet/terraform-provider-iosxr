@@ -71,14 +71,14 @@ func (r *ExtcommunityOpaqueSetResource) Schema(ctx context.Context, req resource
 				MarkdownDescription: helpers.NewAttributeDescription("Set name").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Extended Community Opaque Set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a extcommunity-set opaque. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a extcommunity-set opaque by its name and a opaque set is an extcommunity set configurations used to allows embedding arbitrary, non-interpreted data, This can be used for various custom routing policies.  extcommunity-set opaque opaqueSet 874239872 end-set  Note: The extcommunity-set opaque entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the extcommunity-set opaque definition.").String,
 				Required:            true,
 			},
 		},

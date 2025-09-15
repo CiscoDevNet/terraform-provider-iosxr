@@ -24,7 +24,7 @@ resource "iosxr_tag_set" "example" {
 
 ### Required
 
-- `rpl_tag_set` (String) Tag Set
+- `rpl_tag_set` (String) Configures a tag-set. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a tag-set by its name and a tag-set holds tag values for set or matching against the BGP tag attribute.  tag-set tag_set 8726, 1276 end-set  Note: The tag-set entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the tag-set definition.
 - `set_name` (String) Set name
 
 ### Optional

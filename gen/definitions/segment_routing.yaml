@@ -15,3 +15,5 @@ attributes:
   - yang_name: local-block/upper-bound
     delete_parent: true
     example: 15999
+  - yang_name: enable
+    example: true

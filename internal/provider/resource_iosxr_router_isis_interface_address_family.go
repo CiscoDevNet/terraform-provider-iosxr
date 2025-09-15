@@ -80,13 +80,14 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 36),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"interface_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enter the IS-IS interface configuration submode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface to configure").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
@@ -96,7 +97,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				},
 			},
 			"af_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Address family name").AddStringEnumDescription("ipv4", "ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("ipv4", "ipv6"),
@@ -106,7 +107,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				},
 			},
 			"saf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sub address family name").AddStringEnumDescription("multicast", "unicast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("multicast", "unicast"),
@@ -116,27 +117,31 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				},
 			},
 			"fast_reroute_per_prefix": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prefix dependent computation").String,
+				MarkdownDescription: helpers.NewAttributeDescription("per-prefix").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_ti_lfa": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("per-link").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_levels": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").String,
+			"fast_reroute_enable_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("enable").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable EPCFRR LFA for one level only").AddIntegerRangeDescription(1, 2).String,
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Configure FRR for one level only").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
 						},
-						"ti_lfa": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable TI LFA computation").String,
+						"per_prefix": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("per-prefix").String,
+							Optional:            true,
+						},
+						"per_link": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("per-link").String,
 							Optional:            true,
 						},
 					},
@@ -149,16 +154,43 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"prefix_sid_absolute": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Prefix Segement ID").AddIntegerRangeDescription(16000, 1048575).String,
+			"adjacency_sid_indices": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the index of Adjacency Segement ID").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048575),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"index_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The Adjacency Segment ID index").AddIntegerRangeDescription(0, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 1048575),
+							},
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protect Adjacency SID").String,
+							Optional:            true,
+						},
+					},
 				},
 			},
-			"prefix_sid_n_flag_clear": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Clear N-flag for the prefix-SID ").String,
+			"adjacency_sid_absolutes": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Adjacency Segement ID").String,
 				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"absolute_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The Adjacency Segment ID value").AddIntegerRangeDescription(16000, 1048575).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(16000, 1048575),
+							},
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Protect Adjacency SID").String,
+							Optional:            true,
+						},
+					},
+				},
 			},
 			"advertise_prefix_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Filter routes based on a route policy").String,
@@ -167,22 +199,30 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"prefix_sid_index": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the index of Prefix Segement ID").AddIntegerRangeDescription(0, 1048575).String,
+			"advertise_prefix_route_policy_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set advertisement for one level only").String,
 				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(0, 1048575),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set advertisement at this level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Filter routes based on a route policy").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
 				},
 			},
-			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify the absolute value of Prefix Segement ID").AddIntegerRangeDescription(16000, 1048575).String,
-				Optional:            true,
-				Validators: []validator.Int64{
-					int64validator.Between(16000, 1048575),
-				},
-			},
-			"metric": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Default metric").AddIntegerRangeDescription(1, 16777214).String,
+			"metric_default_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default metric: <1-63> for narrow, <1-16777214> for wide").AddIntegerRangeDescription(1, 16777214).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16777214),
@@ -197,21 +237,21 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set metric for one level only").AddIntegerRangeDescription(1, 2).String,
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set metric at this level only").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
 						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Default metric").AddIntegerRangeDescription(1, 16777214).String,
+						"default_metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default metric: <1-63> for narrow, <1-16777214> for wide").AddIntegerRangeDescription(1, 16777214).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 16777214),
 							},
 						},
-						"maximum": schema.BoolAttribute{
+						"metric_maximum": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Maximum wide metric. All routers will exclude this link from their SPF").String,
 							Optional:            true,
 						},

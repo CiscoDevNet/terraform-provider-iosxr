@@ -82,7 +82,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -151,7 +151,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -214,7 +214,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -284,7 +284,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -307,7 +307,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"nexthop_interfaces": schema.ListNestedAttribute{
@@ -352,7 +352,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{
@@ -415,7 +415,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{
@@ -471,7 +471,7 @@ func (r *RouterStaticVRFIPv4MulticastResource) Schema(ctx context.Context, req r
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{

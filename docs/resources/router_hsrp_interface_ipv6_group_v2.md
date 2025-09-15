@@ -15,11 +15,9 @@ This resource can manage the Router HSRP Interface IPv6 Group V2 configuration.
 ```terraform
 resource "iosxr_router_hsrp_interface_ipv6_group_v2" "example" {
   interface_name                 = "GigabitEthernet0/0/0/2"
-  group_id                       = 4055
+  group_id                       = 4000
   name                           = "gp2"
   mac_address                    = "00:01:00:02:00:02"
-  timers_hold_time               = 10
-  timers_hold_time2              = 20
   timers_msec                    = 100
   timers_msec2                   = 300
   preempt_delay                  = 256

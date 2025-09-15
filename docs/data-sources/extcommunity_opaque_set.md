@@ -32,4 +32,4 @@ data "iosxr_extcommunity_opaque_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Extended Community Opaque Set
+- `rpl` (String) Configures a extcommunity-set opaque. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a extcommunity-set opaque by its name and a opaque set is an extcommunity set configurations used to allows embedding arbitrary, non-interpreted data, This can be used for various custom routing policies.  extcommunity-set opaque opaqueSet 874239872 end-set  Note: The extcommunity-set opaque entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the extcommunity-set opaque definition.

@@ -37,6 +37,7 @@ type SegmentRoutingV6 struct {
 	Enable                     types.Bool                 `tfsdk:"enable"`
 	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
 	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
+	Formats                    []SegmentRoutingV6Formats  `tfsdk:"formats"`
 }
 
 type SegmentRoutingV6Data struct {
@@ -45,6 +46,7 @@ type SegmentRoutingV6Data struct {
 	Enable                     types.Bool                 `tfsdk:"enable"`
 	EncapsulationSourceAddress types.String               `tfsdk:"encapsulation_source_address"`
 	Locators                   []SegmentRoutingV6Locators `tfsdk:"locators"`
+	Formats                    []SegmentRoutingV6Formats  `tfsdk:"formats"`
 }
 type SegmentRoutingV6Locators struct {
 	LocatorEnable        types.Bool   `tfsdk:"locator_enable"`
@@ -52,6 +54,13 @@ type SegmentRoutingV6Locators struct {
 	MicroSegmentBehavior types.String `tfsdk:"micro_segment_behavior"`
 	Prefix               types.String `tfsdk:"prefix"`
 	PrefixLength         types.Int64  `tfsdk:"prefix_length"`
+}
+type SegmentRoutingV6Formats struct {
+	Name                                  types.String `tfsdk:"name"`
+	FormatEnable                          types.Bool   `tfsdk:"format_enable"`
+	UsidLocalIdBlockRangesLibStart        types.Int64  `tfsdk:"usid_local_id_block_ranges_lib_start"`
+	UsidLocalIdBlockRangesExplictLibStart types.Int64  `tfsdk:"usid_local_id_block_ranges_explict_lib_start"`
+	UsidWideLocalIdBlockExplicitRange     types.Int64  `tfsdk:"usid_wide_local_id_block_explicit_range"`
 }
 
 func (data SegmentRoutingV6) getPath() string {
@@ -91,6 +100,28 @@ func (data SegmentRoutingV6) toBody(ctx context.Context) string {
 			}
 			if !item.PrefixLength.IsNull() && !item.PrefixLength.IsUnknown() {
 				body, _ = sjson.Set(body, "locators.locators.locator"+"."+strconv.Itoa(index)+"."+"prefix.prefix-length", strconv.FormatInt(item.PrefixLength.ValueInt64(), 10))
+			}
+		}
+	}
+	if len(data.Formats) > 0 {
+		body, _ = sjson.Set(body, "formats.formats.format", []interface{}{})
+		for index, item := range data.Formats {
+			if !item.Name.IsNull() && !item.Name.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"name", item.Name.ValueString())
+			}
+			if !item.FormatEnable.IsNull() && !item.FormatEnable.IsUnknown() {
+				if item.FormatEnable.ValueBool() {
+					body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"format-enable", map[string]string{})
+				}
+			}
+			if !item.UsidLocalIdBlockRangesLibStart.IsNull() && !item.UsidLocalIdBlockRangesLibStart.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesLibStart.ValueInt64(), 10))
+			}
+			if !item.UsidLocalIdBlockRangesExplictLibStart.IsNull() && !item.UsidLocalIdBlockRangesExplictLibStart.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.local-id-block-ranges.explict-lib-start", strconv.FormatInt(item.UsidLocalIdBlockRangesExplictLibStart.ValueInt64(), 10))
+			}
+			if !item.UsidWideLocalIdBlockExplicitRange.IsNull() && !item.UsidWideLocalIdBlockExplicitRange.IsUnknown() {
+				body, _ = sjson.Set(body, "formats.formats.format"+"."+strconv.Itoa(index)+"."+"usid.wide-local-id-block-explicit-range", strconv.FormatInt(item.UsidWideLocalIdBlockExplicitRange.ValueInt64(), 10))
 			}
 		}
 	}
@@ -165,6 +196,59 @@ func (data *SegmentRoutingV6) updateFromBody(ctx context.Context, res []byte) {
 			data.Locators[i].PrefixLength = types.Int64Null()
 		}
 	}
+	for i := range data.Formats {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Formats[i].Name.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "formats.formats.format").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("name"); value.Exists() && !data.Formats[i].Name.IsNull() {
+			data.Formats[i].Name = types.StringValue(value.String())
+		} else {
+			data.Formats[i].Name = types.StringNull()
+		}
+		if value := r.Get("format-enable"); !data.Formats[i].FormatEnable.IsNull() {
+			if value.Exists() {
+				data.Formats[i].FormatEnable = types.BoolValue(true)
+			} else {
+				data.Formats[i].FormatEnable = types.BoolValue(false)
+			}
+		} else {
+			data.Formats[i].FormatEnable = types.BoolNull()
+		}
+		if value := r.Get("usid.local-id-block-ranges.lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() {
+			data.Formats[i].UsidLocalIdBlockRangesLibStart = types.Int64Value(value.Int())
+		} else {
+			data.Formats[i].UsidLocalIdBlockRangesLibStart = types.Int64Null()
+		}
+		if value := r.Get("usid.local-id-block-ranges.explict-lib-start"); value.Exists() && !data.Formats[i].UsidLocalIdBlockRangesExplictLibStart.IsNull() {
+			data.Formats[i].UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(value.Int())
+		} else {
+			data.Formats[i].UsidLocalIdBlockRangesExplictLibStart = types.Int64Null()
+		}
+		if value := r.Get("usid.wide-local-id-block-explicit-range"); value.Exists() && !data.Formats[i].UsidWideLocalIdBlockExplicitRange.IsNull() {
+			data.Formats[i].UsidWideLocalIdBlockExplicitRange = types.Int64Value(value.Int())
+		} else {
+			data.Formats[i].UsidWideLocalIdBlockExplicitRange = types.Int64Null()
+		}
+	}
 }
 
 func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
@@ -201,6 +285,31 @@ func (data *SegmentRoutingV6) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "formats.formats.format"); value.Exists() {
+		data.Formats = make([]SegmentRoutingV6Formats, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingV6Formats{}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("format-enable"); cValue.Exists() {
+				item.FormatEnable = types.BoolValue(true)
+			} else {
+				item.FormatEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("usid.local-id-block-ranges.explict-lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("usid.wide-local-id-block-explicit-range"); cValue.Exists() {
+				item.UsidWideLocalIdBlockExplicitRange = types.Int64Value(cValue.Int())
+			}
+			data.Formats = append(data.Formats, item)
+			return true
+		})
+	}
 }
 
 func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
@@ -234,6 +343,31 @@ func (data *SegmentRoutingV6Data) fromBody(ctx context.Context, res []byte) {
 				item.PrefixLength = types.Int64Value(cValue.Int())
 			}
 			data.Locators = append(data.Locators, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "formats.formats.format"); value.Exists() {
+		data.Formats = make([]SegmentRoutingV6Formats, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := SegmentRoutingV6Formats{}
+			if cValue := v.Get("name"); cValue.Exists() {
+				item.Name = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("format-enable"); cValue.Exists() {
+				item.FormatEnable = types.BoolValue(true)
+			} else {
+				item.FormatEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("usid.local-id-block-ranges.lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("usid.local-id-block-ranges.explict-lib-start"); cValue.Exists() {
+				item.UsidLocalIdBlockRangesExplictLibStart = types.Int64Value(cValue.Int())
+			}
+			if cValue := v.Get("usid.wide-local-id-block-explicit-range"); cValue.Exists() {
+				item.UsidWideLocalIdBlockExplicitRange = types.Int64Value(cValue.Int())
+			}
+			data.Formats = append(data.Formats, item)
 			return true
 		})
 	}
@@ -289,6 +423,48 @@ func (data *SegmentRoutingV6) getDeletedItems(ctx context.Context, state Segment
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/locators/locators/locator%v", state.getPath(), keyString))
 		}
 	}
+	for i := range state.Formats {
+		keys := [...]string{"name"}
+		stateKeyValues := [...]string{state.Formats[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Formats[i].Name.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Formats {
+			found = true
+			if state.Formats[i].Name.ValueString() != data.Formats[j].Name.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Formats[i].FormatEnable.IsNull() && data.Formats[j].FormatEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/format-enable", state.getPath(), keyString))
+				}
+				if !state.Formats[i].UsidLocalIdBlockRangesLibStart.IsNull() && data.Formats[j].UsidLocalIdBlockRangesLibStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/usid/local-id-block-ranges/lib-start", state.getPath(), keyString))
+				}
+				if !state.Formats[i].UsidLocalIdBlockRangesExplictLibStart.IsNull() && data.Formats[j].UsidLocalIdBlockRangesExplictLibStart.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/usid/local-id-block-ranges/explict-lib-start", state.getPath(), keyString))
+				}
+				if !state.Formats[i].UsidWideLocalIdBlockExplicitRange.IsNull() && data.Formats[j].UsidWideLocalIdBlockExplicitRange.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v/usid/wide-local-id-block-explicit-range", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/formats/formats/format%v", state.getPath(), keyString))
+		}
+	}
 	return deletedItems
 }
 
@@ -306,6 +482,17 @@ func (data *SegmentRoutingV6) getEmptyLeafsDelete(ctx context.Context) []string 
 		}
 		if !data.Locators[i].LocatorEnable.IsNull() && !data.Locators[i].LocatorEnable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/locators/locators/locator%v/locator-enable", data.getPath(), keyString))
+		}
+	}
+	for i := range data.Formats {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Formats[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Formats[i].FormatEnable.IsNull() && !data.Formats[i].FormatEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/formats/formats/format%v/format-enable", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete
@@ -328,6 +515,16 @@ func (data *SegmentRoutingV6) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/locators/locators/locator%v", data.getPath(), keyString))
+	}
+	for i := range data.Formats {
+		keys := [...]string{"name"}
+		keyValues := [...]string{data.Formats[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/formats/formats/format%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

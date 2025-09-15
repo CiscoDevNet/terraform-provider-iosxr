@@ -107,7 +107,7 @@ func (r *L2VPNResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

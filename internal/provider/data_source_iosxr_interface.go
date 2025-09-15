@@ -123,7 +123,7 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 			},
 			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
-				MarkdownDescription: "End of VLAN range",
+				MarkdownDescription: "Single VLAN id or start of VLAN range",
 				Computed:            true,
 			},
 			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
@@ -194,7 +194,7 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
-			"ipv4_access_group_ingress_compress_level": schema.Int64Attribute{
+			"ipv4_access_group_ingress_compress": schema.Int64Attribute{
 				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},
@@ -210,7 +210,7 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
-			"ipv4_access_group_egress_compress_level": schema.Int64Attribute{
+			"ipv4_access_group_egress_compress": schema.Int64Attribute{
 				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},
@@ -234,11 +234,11 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
-			"ipv6_access_group_ingress_compress_level": schema.Int64Attribute{
+			"ipv6_access_group_ingress_compress": schema.Int64Attribute{
 				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},
-			"ipv6_access_group_egress_acl1": schema.StringAttribute{
+			"ipv6_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: "Access-list name",
 				Computed:            true,
 			},
@@ -246,7 +246,7 @@ func (d *InterfaceDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Per interface statistics in hardware",
 				Computed:            true,
 			},
-			"ipv6_access_group_egress_compress_level": schema.Int64Attribute{
+			"ipv6_access_group_egress_compress": schema.Int64Attribute{
 				MarkdownDescription: "Specify ACL compression in hardware",
 				Computed:            true,
 			},

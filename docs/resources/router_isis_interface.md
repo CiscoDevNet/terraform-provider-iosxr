@@ -14,18 +14,33 @@ This resource can manage the Router ISIS Interface configuration.
 
 ```terraform
 resource "iosxr_router_isis_interface" "example" {
-  process_id              = "P1"
-  interface_name          = "GigabitEthernet0/0/0/1"
-  circuit_type            = "level-1"
-  hello_padding_disable   = true
-  hello_padding_sometimes = false
-  priority                = 10
-  point_to_point          = false
-  passive                 = false
-  suppressed              = false
-  shutdown                = false
-  hello_password_keychain = "KEY_CHAIN_1"
-  bfd_fast_detect_ipv6    = true
+  process_id     = "P1"
+  interface_name = "GigabitEthernet0/0/0/1"
+  circuit_type   = "level-1"
+  hello_padding  = "disable"
+  hello_padding_levels = [
+    {
+      level_number  = 1
+      hello_padding = "always"
+    }
+  ]
+  priority = 10
+  priority_levels = [
+    {
+      level_number = 1
+      priority     = 64
+    }
+  ]
+  point_to_point                = false
+  state                         = "passive"
+  hello_password_text_encrypted = "060506324F41584B564B0F49584B"
+  hello_password_levels = [
+    {
+      level_number   = 1
+      text_encrypted = "060506324F41584B564B0F49584B"
+    }
+  ]
+  bfd_fast_detect_ipv6 = true
 }
 ```
 
@@ -34,7 +49,7 @@ resource "iosxr_router_isis_interface" "example" {
 
 ### Required
 
-- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `interface_name` (String) Interface to configure
 - `process_id` (String) Process ID
 
 ### Optional
@@ -45,21 +60,77 @@ resource "iosxr_router_isis_interface" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `hello_padding_disable` (Boolean) Disable hello-padding
-- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
-- `hello_password_hmac_md5` (String) The encrypted LSP/SNP password
-- `hello_password_keychain` (String) Specifies a Key Chain name will follow
-- `hello_password_text` (String) The encrypted LSP/SNP password
-- `passive` (Boolean) Do not establish adjacencies over this interface
+- `hello_padding` (String) Add padding to IS-IS hello packets
+  - Choices: `adaptive`, `always`, `disable`, `sometimes`
+- `hello_padding_levels` (Attributes List) Set hello-padding for one level only (see [below for nested schema](#nestedatt--hello_padding_levels))
+- `hello_password_accepts_encrypted` (String) Specifies a password will follow
+- `hello_password_accepts_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_accepts_levels))
+- `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `hello_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_keychain_name` (String) Specifies a Key Chain name will follow
+- `hello_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_levels))
+- `hello_password_text_encrypted` (String) Specifies an encrypted password will follow
+- `hello_password_text_send_only` (Boolean) Specify SNP packets authentication mode
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
   - Range: `0`-`127`
-- `shutdown` (Boolean) Shutdown IS-IS on this interface
-- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+- `priority_levels` (Attributes List) Set priority for one level only (see [below for nested schema](#nestedatt--priority_levels))
+- `state` (String) Do not establish adjacencies over this interface
+  - Choices: `passive`, `shutdown`, `suppressed`
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--hello_padding_levels"></a>
+### Nested Schema for `hello_padding_levels`
+
+Required:
+
+- `hello_padding` (String) hello-padding
+  - Choices: `adaptive`, `always`, `disable`, `sometimes`
+- `level_number` (Number) Set hello-padding for IIHs at this level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--hello_password_accepts_levels"></a>
+### Nested Schema for `hello_password_accepts_levels`
+
+Required:
+
+- `encrypted` (String) Specifies a password will follow
+- `level_number` (Number) Set hello-password for IIHs at this level only
+  - Range: `1`-`2`
+
+
+<a id="nestedatt--hello_password_levels"></a>
+### Nested Schema for `hello_password_levels`
+
+Required:
+
+- `level_number` (Number) Set hello-password for one level only
+  - Range: `1`-`2`
+
+Optional:
+
+- `hmac_md5_encrypted` (String) Specifies a password will follow
+- `hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `keychain_name` (String) The Key Chain name
+- `keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `text_encrypted` (String) Specifies a password will follow
+- `text_send_only` (Boolean) Do not require authentication of incoming IIHs
+
+
+<a id="nestedatt--priority_levels"></a>
+### Nested Schema for `priority_levels`
+
+Required:
+
+- `level_number` (Number) Set priority for this level only
+  - Range: `1`-`2`
+- `priority` (Number) Set priority for Designated Router election
+  - Range: `0`-`127`
 
 ## Import
 

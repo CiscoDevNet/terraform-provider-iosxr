@@ -67,11 +67,11 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				Required:            true,
 			},
 			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: "Specify a vrf name",
+				MarkdownDescription: "VRF name - maximum length 32 characters",
 				Required:            true,
 			},
-			"neighbor_address": schema.StringAttribute{
-				MarkdownDescription: "Neighbor address",
+			"address": schema.StringAttribute{
+				MarkdownDescription: "IPaddress",
 				Required:            true,
 			},
 			"af_name": schema.StringAttribute{
@@ -111,35 +111,31 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				Computed:            true,
 			},
 			"remove_private_as": schema.BoolAttribute{
-				MarkdownDescription: "Remove private AS number from outbound updates",
-				Computed:            true,
-			},
-			"remove_private_as_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
-				Computed:            true,
-			},
-			"remove_private_as_entire_aspath": schema.BoolAttribute{
-				MarkdownDescription: "remove only if all ASes in the path are private",
-				Computed:            true,
-			},
-			"remove_private_as_internal": schema.BoolAttribute{
-				MarkdownDescription: "remove only if all ASes in the path are private",
-				Computed:            true,
-			},
-			"remove_private_as_internal_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
+				MarkdownDescription: "Remove private AS numbers from outbound updates",
 				Computed:            true,
 			},
 			"remove_private_as_inbound": schema.BoolAttribute{
-				MarkdownDescription: "Remove private AS number from inbound updates",
-				Computed:            true,
-			},
-			"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
-				MarkdownDescription: "remove only if all ASes in the path are private",
+				MarkdownDescription: "Remove private AS numbers from inbound updates",
 				Computed:            true,
 			},
 			"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: "Prevent remove-private-AS from being inherited from the parent",
+				MarkdownDescription: "Prevent inbound remove-private-as from being inherited",
+				Computed:            true,
+			},
+			"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: "Remove entire AS path for inbound updates",
+				Computed:            true,
+			},
+			"remove_private_as_outbound_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: "Remove entire AS path for outbound updates",
+				Computed:            true,
+			},
+			"remove_private_as_outbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent outbound remove-private-as from being inherited",
+				Computed:            true,
+			},
+			"remove_private_as_outbound_internal": schema.BoolAttribute{
+				MarkdownDescription: "Remove private AS numbers from internal outbound updates",
 				Computed:            true,
 			},
 		},

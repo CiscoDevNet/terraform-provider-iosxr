@@ -112,7 +112,7 @@ attributes:
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
     example: true
-  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
     example: 0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
     tf_name: ipv4_access_group_egress_acl
@@ -123,7 +123,7 @@ attributes:
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
     example: true
-  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
     optional: true
@@ -144,16 +144,16 @@ attributes:
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
     example: true
-  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress-level
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
     example: 0
-  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name-1/name
-    tf_name: ipv6_access_group_egress_acl1
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
+    tf_name: ipv6_access_group_egress_acl
     optional: true
     delete_parent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
     example: true
-  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress-level
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address
@@ -291,6 +291,7 @@ attributes:
       - yang_name: sampler-map-name
         id: true
         example: SMAP1
+
 test_prerequisites:
   - path: Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]
     attributes:

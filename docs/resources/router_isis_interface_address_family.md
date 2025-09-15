@@ -14,27 +14,26 @@ This resource can manage the Router ISIS Interface Address Family configuration.
 
 ```terraform
 resource "iosxr_router_isis_interface_address_family" "example" {
-  process_id                     = "P1"
-  interface_name                 = "GigabitEthernet0/0/0/1"
-  af_name                        = "ipv4"
-  saf_name                       = "unicast"
-  fast_reroute_per_prefix        = true
-  fast_reroute_per_prefix_ti_lfa = true
-  fast_reroute_per_prefix_levels = [
+  process_id              = "P1"
+  interface_name          = "GigabitEthernet0/0/0/1"
+  af_name                 = "ipv4"
+  saf_name                = "unicast"
+  fast_reroute_per_prefix = true
+  fast_reroute_enable_levels = [
     {
-      level_id = 1
-      ti_lfa   = true
+      level_number = 1
+      per_prefix   = true
     }
   ]
   tag                           = 100
   advertise_prefix_route_policy = "ROUTE_POLICY_1"
-  metric                        = 500
-  metric_levels = [
+  advertise_prefix_route_policy_levels = [
     {
-      level_id = 1
-      maximum  = true
+      level_number = 1
+      route_policy = "ROUTE_POLICY_2"
     }
   ]
+  metric_default_metric = 500
 }
 ```
 
@@ -43,33 +42,29 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 
 ### Required
 
-- `af_name` (String) Address family name
+- `af_name` (String) af-name
   - Choices: `ipv4`, `ipv6`
-- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `interface_name` (String) Interface to configure
 - `process_id` (String) Process ID
-- `saf_name` (String) Sub address family name
+- `saf_name` (String) saf-name
   - Choices: `multicast`, `unicast`
 
 ### Optional
 
+- `adjacency_sid_absolutes` (Attributes List) Specify the absolute value of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_absolutes))
+- `adjacency_sid_indices` (Attributes List) Specify the index of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_indices))
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
+- `advertise_prefix_route_policy_levels` (Attributes List) Set advertisement for one level only (see [below for nested schema](#nestedatt--advertise_prefix_route_policy_levels))
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `fast_reroute_per_prefix` (Boolean) Prefix dependent computation
-- `fast_reroute_per_prefix_levels` (Attributes List) Enable EPCFRR LFA for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_levels))
-- `fast_reroute_per_prefix_ti_lfa` (Boolean) Enable TI LFA computation
-- `metric` (Number) Default metric
+- `fast_reroute_enable_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_enable_levels))
+- `fast_reroute_per_link` (Boolean) per-link
+- `fast_reroute_per_prefix` (Boolean) per-prefix
+- `metric_default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
-- `prefix_sid_absolute` (Number) Specify the absolute value of Prefix Segement ID
-  - Range: `16000`-`1048575`
-- `prefix_sid_index` (Number) Specify the index of Prefix Segement ID
-  - Range: `0`-`1048575`
-- `prefix_sid_n_flag_clear` (Boolean) Clear N-flag for the prefix-SID
-- `prefix_sid_strict_spf_absolute` (Number) Specify the absolute value of Prefix Segement ID
-  - Range: `16000`-`1048575`
 - `tag` (Number) Set interface tag
   - Range: `1`-`4294967295`
 
@@ -77,17 +72,57 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 
 - `id` (String) The path of the object.
 
-<a id="nestedatt--fast_reroute_per_prefix_levels"></a>
-### Nested Schema for `fast_reroute_per_prefix_levels`
+<a id="nestedatt--adjacency_sid_absolutes"></a>
+### Nested Schema for `adjacency_sid_absolutes`
 
 Required:
 
-- `level_id` (Number) Enable EPCFRR LFA for one level only
+- `absolute_number` (Number) The Adjacency Segment ID value
+  - Range: `16000`-`1048575`
+
+Optional:
+
+- `protected` (Boolean) Protect Adjacency SID
+
+
+<a id="nestedatt--adjacency_sid_indices"></a>
+### Nested Schema for `adjacency_sid_indices`
+
+Required:
+
+- `index_number` (Number) The Adjacency Segment ID index
+  - Range: `0`-`1048575`
+
+Optional:
+
+- `protected` (Boolean) Protect Adjacency SID
+
+
+<a id="nestedatt--advertise_prefix_route_policy_levels"></a>
+### Nested Schema for `advertise_prefix_route_policy_levels`
+
+Required:
+
+- `level_number` (Number) Set advertisement at this level only
   - Range: `1`-`2`
 
 Optional:
 
-- `ti_lfa` (Boolean) Enable TI LFA computation
+- `route_policy` (String) Filter routes based on a route policy
+
+
+<a id="nestedatt--fast_reroute_enable_levels"></a>
+### Nested Schema for `fast_reroute_enable_levels`
+
+Required:
+
+- `level_number` (Number) Configure FRR for one level only
+  - Range: `1`-`2`
+
+Optional:
+
+- `per_link` (Boolean) per-link
+- `per_prefix` (Boolean) per-prefix
 
 
 <a id="nestedatt--metric_levels"></a>
@@ -95,14 +130,14 @@ Optional:
 
 Required:
 
-- `level_id` (Number) Set metric for one level only
+- `level_number` (Number) Set metric at this level only
   - Range: `1`-`2`
 
 Optional:
 
-- `maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
-- `metric` (Number) Default metric
+- `default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
+- `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
 
 ## Import
 

@@ -15,7 +15,7 @@ This data source can read the Router ISIS Address Family configuration.
 ```terraform
 data "iosxr_router_isis_address_family" "example" {
   process_id = "P1"
-  af_name    = "ipv6"
+  af_name    = "ipv4"
   saf_name   = "unicast"
 }
 ```
@@ -25,9 +25,9 @@ data "iosxr_router_isis_address_family" "example" {
 
 ### Required
 
-- `af_name` (String) Address family name
+- `af_name` (String) af-name
 - `process_id` (String) Process ID
-- `saf_name` (String) Sub address family name
+- `saf_name` (String) saf-name
 
 ### Optional
 
@@ -39,44 +39,118 @@ data "iosxr_router_isis_address_family" "example" {
 - `advertise_passive_only` (Boolean) Advertise prefixes of passive interfaces only
 - `default_information_originate` (Boolean) Distribute a default route
 - `fast_reroute_delay_interval` (Number) Delay before running FRR computation
-- `fast_reroute_per_link_priority_limit_critical` (Boolean) Compute for critical priority prefixes only
-- `fast_reroute_per_link_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
-- `fast_reroute_per_link_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
-- `fast_reroute_per_prefix_priority_limit_critical` (Boolean) Compute for critical priority prefixes only
-- `fast_reroute_per_prefix_priority_limit_high` (Boolean) Compute for critical & high priority prefixes
-- `fast_reroute_per_prefix_priority_limit_medium` (Boolean) Compute for critical, high & medium priority prefixes
+- `fast_reroute_per_link_priority_limit` (String) Limit backup computation upto the prefix priority
+- `fast_reroute_per_link_priority_limit_levels` (Attributes List) Set priority-limit for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_link_priority_limit_levels))
+- `fast_reroute_per_link_use_candidate_only` (Boolean) Exclude all interfaces from computation
+- `fast_reroute_per_prefix_load_sharing_disable` (Boolean) Disable load sharing
+- `fast_reroute_per_prefix_load_sharing_disable_levels` (Attributes List) Disable load sharing for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels))
+- `fast_reroute_per_prefix_priority_limit` (String) Limit backup computation upto the prefix priority
+- `fast_reroute_per_prefix_priority_limit_levels` (Attributes List) Set priority-limit for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_priority_limit_levels))
+- `fast_reroute_per_prefix_remote_lfa_prefix_list` (String) Filter PQ node router ID based on prefix list
+- `fast_reroute_per_prefix_remote_lfa_prefix_list_levels` (Attributes List) Enable router ID filtering for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_remote_lfa_prefix_list_levels))
+- `fast_reroute_per_prefix_srlg_protection_weighted_global` (Boolean) Weighted global SRLG protection
+- `fast_reroute_per_prefix_srlg_protection_weighted_global_levels` (Attributes List) Set SRLG protection type for one level only (see [below for nested schema](#nestedatt--fast_reroute_per_prefix_srlg_protection_weighted_global_levels))
+- `fast_reroute_per_prefix_tiebreaker_downstream_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_lc_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_node_protecting_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_primary_path_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_secondary_path_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index` (Number) Set preference order among tiebreakers
+- `fast_reroute_per_prefix_use_candidate_only` (Boolean) Exclude all interfaces from computation
 - `id` (String) The path of the retrieved object.
 - `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
 - `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
-- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
+- `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
 - `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
-- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
-- `microloop_avoidance_protected` (Boolean) Enable microloop avoidance for only protected prefixes
-- `microloop_avoidance_segment_routing` (Boolean) Enable segment routing microloop avoidance
+- `metric_style_wide_transition` (Boolean) Accept both styles of TLVs during transition
+- `microloop_avoidance_enable` (Boolean) Enable local microloop avoidance
+- `microloop_avoidance_enable_protected` (Boolean) Enable microloop avoidance for only protected prefixes
+- `microloop_avoidance_enable_segment_routing_route_policy` (String) Provide Uloop protection based on a route policy
+- `microloop_avoidance_rib_update_delay` (Number) Delay in milliseconds
 - `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
 - `mpls_traffic_eng_level_1` (Boolean) Enable mpls traffic-eng at level 1
 - `mpls_traffic_eng_level_1_2` (Boolean) Enable mpls traffic-eng at both level 1 and 2
 - `mpls_traffic_eng_level_2_only` (Boolean) Enable mpls traffic-eng at level 2
-- `mpls_traffic_eng_router_id_interface` (String)
-- `mpls_traffic_eng_router_id_ip_address` (String) configure this node
-- `redistribute_isis` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
+- `mpls_traffic_eng_router_id_interface_name` (String) Router ID interface
+- `mpls_traffic_eng_router_id_ipv4_address` (String) Router ID IPv4 address
+- `redistribute_isis_processes` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_isis_processes))
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
+- `segment_routing_mpls_enable` (Boolean) Enable Segment Routing using MPLS encapsulation
 - `segment_routing_mpls_sr_prefer` (Boolean) Prefer segment routing labels over LDP labels
 - `segment_routing_srv6_locators` (Attributes List) Enter SRv6 Locator submode (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
-- `spf_interval_initial_wait` (Number) Initial delay before running a route calculation
-- `spf_interval_maximum_wait` (Number) Maximum delay before running a route calculation
-- `spf_interval_secondary_wait` (Number) Secondary delay before running a route calculation
-- `spf_prefix_priorities` (Attributes List) Configure a prefix priority list (see [below for nested schema](#nestedatt--spf_prefix_priorities))
+- `spf_interval_ietf` (Boolean) Use RFC 8405 backoff algorithm
+- `spf_interval_ietf_holddown_interval` (Number) Holddown interval for running a route calculation [10000]
+- `spf_interval_ietf_initial_wait` (Number) Initial delay before running a route calculation [50]
+- `spf_interval_ietf_learn_interval` (Number) Time To Learn interval for running a route calculation [500]
+- `spf_interval_ietf_long_wait` (Number) Long delay before running a route calculation [5000]
+- `spf_interval_ietf_short_wait` (Number) Short delay before running a route calculation [200]
+- `spf_interval_initial_wait` (Number) Initial delay before running a route calculation [50]
+- `spf_interval_levels` (Attributes List) Set SPF interval for one level only (see [below for nested schema](#nestedatt--spf_interval_levels))
+- `spf_interval_maximum_wait` (Number) Maximum delay before running a route calculation [5000]
+- `spf_interval_secondary_wait` (Number) Secondary delay before running a route calculation [200]
+- `spf_prefix_priority_critical_levels` (Attributes List) Specify critical priority prefixes (see [below for nested schema](#nestedatt--spf_prefix_priority_critical_levels))
+- `spf_prefix_priority_critical_prefixlist_name` (String) Prefix-list name
+- `spf_prefix_priority_critical_tag` (Number) Specify a tag to indicate priority
+- `spf_prefix_priority_high_levels` (Attributes List) Specify high priority prefixes (see [below for nested schema](#nestedatt--spf_prefix_priority_high_levels))
+- `spf_prefix_priority_high_prefixlist_name` (String) Prefix-list name
+- `spf_prefix_priority_high_tag` (Number) Specify a tag to indicate priority
+- `spf_prefix_priority_medium_levels` (Attributes List) Specify medium priority prefixes (see [below for nested schema](#nestedatt--spf_prefix_priority_medium_levels))
+- `spf_prefix_priority_medium_prefixlist_name` (String) Prefix-list name
+- `spf_prefix_priority_medium_tag` (Number) Specify a tag to indicate priority
+
+<a id="nestedatt--fast_reroute_per_link_priority_limit_levels"></a>
+### Nested Schema for `fast_reroute_per_link_priority_limit_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
+- `priority_limit` (String) Limit backup computation upto the prefix priority
+
+
+<a id="nestedatt--fast_reroute_per_prefix_load_sharing_disable_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_load_sharing_disable_levels`
+
+Read-Only:
+
+- `level_number` (Number) Disable load sharing for one level only
+
+
+<a id="nestedatt--fast_reroute_per_prefix_priority_limit_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_priority_limit_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
+- `priority_limit` (String) Limit backup computation upto the prefix priority
+
+
+<a id="nestedatt--fast_reroute_per_prefix_remote_lfa_prefix_list_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_remote_lfa_prefix_list_levels`
+
+Read-Only:
+
+- `level_number` (Number) Enable router ID filtering for one level only
+- `prefix_list` (String) Filter PQ node router ID based on prefix list
+
+
+<a id="nestedatt--fast_reroute_per_prefix_srlg_protection_weighted_global_levels"></a>
+### Nested Schema for `fast_reroute_per_prefix_srlg_protection_weighted_global_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set SRLG protection type for one level only
+
 
 <a id="nestedatt--maximum_redistributed_prefixes_levels"></a>
 ### Nested Schema for `maximum_redistributed_prefixes_levels`
 
 Read-Only:
 
-- `level_id` (Number) Set maximum redistributed prefixes for one level only
-- `maximum_prefixes` (Number) Maximum number of redistributed prefixes
+- `level_number` (Number) Set maximum redistributed prefixes for one level only
+- `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
 
 
 <a id="nestedatt--metric_style_levels"></a>
@@ -84,18 +158,22 @@ Read-Only:
 
 Read-Only:
 
-- `level_id` (Number) Set metric-style for one level only
-- `narrow` (Boolean) Use old style of TLVs with narrow metric
-- `transition` (Boolean) Send and accept both styles of TLVs during transition
-- `wide` (Boolean) Use new style of TLVs to carry wider metric
+- `level_number` (Number) Level
+- `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
+- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
+- `metric_style_wide_transition` (Boolean) Accept both styles of TLVs during transition
 
 
-<a id="nestedatt--redistribute_isis"></a>
-### Nested Schema for `redistribute_isis`
+<a id="nestedatt--redistribute_isis_processes"></a>
+### Nested Schema for `redistribute_isis_processes`
 
 Read-Only:
 
-- `instance_id` (String) IS-IS
+- `down_flag_clear` (Boolean) Set the up/down bit to 0 in prefix advertisements
+- `isis_string` (String) IS-IS instance identifier
+- `metric` (Number) Metric for redistributed routes
+- `metric_type` (String) IS-IS metric type for redistributed routes
+- `redistribute_route_level` (String) Redistribute routes into both levels
 - `route_policy` (String) Route policy reference
 
 
@@ -105,14 +183,73 @@ Read-Only:
 Read-Only:
 
 - `level` (Number) Advertise the locator only in the specified level
-- `locator_name` (String) Enter SRv6 Locator submode
+- `locator_string` (String) Locator name
+- `metric` (Number) Advertise the locator metric for a given level
+- `metric_levels` (Attributes List) Set Metric for one level only (see [below for nested schema](#nestedatt--segment_routing_srv6_locators--metric_levels))
+- `tag` (Number) Advertise the locator tag for a given level
+- `tag_levels` (Attributes List) Set Tag for one level only (see [below for nested schema](#nestedatt--segment_routing_srv6_locators--tag_levels))
 
-
-<a id="nestedatt--spf_prefix_priorities"></a>
-### Nested Schema for `spf_prefix_priorities`
+<a id="nestedatt--segment_routing_srv6_locators--metric_levels"></a>
+### Nested Schema for `segment_routing_srv6_locators.metric_levels`
 
 Read-Only:
 
-- `access_list_name` (String) Access-list name
-- `priority` (String) prefix priority
+- `level_number` (Number) Set Metric for one level only
+- `metric` (Number) Srv6 locator metric
+
+
+<a id="nestedatt--segment_routing_srv6_locators--tag_levels"></a>
+### Nested Schema for `segment_routing_srv6_locators.tag_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set Tag for one level only
+- `tag` (Number) Srv6 locator tag
+
+
+
+<a id="nestedatt--spf_interval_levels"></a>
+### Nested Schema for `spf_interval_levels`
+
+Read-Only:
+
+- `ietf` (Boolean) Use RFC 8405 backoff algorithm
+- `ietf_holddown_interval` (Number) Holddown interval for running a route calculation [10000]
+- `ietf_initial_wait` (Number) Initial delay before running a route calculation [50]
+- `ietf_learn_interval` (Number) Time To Learn interval for running a route calculation [500]
+- `ietf_long_wait` (Number) Long delay before running a route calculation [5000]
+- `ietf_short_wait` (Number) Short delay before running a route calculation [200]
+- `initial_wait` (Number) Initial delay before running a route calculation [50]
+- `level_number` (Number) Level
+- `maximum_wait` (Number) Maximum delay before running a route calculation [5000]
+- `secondary_wait` (Number) Secondary delay before running a route calculation [200]
+
+
+<a id="nestedatt--spf_prefix_priority_critical_levels"></a>
+### Nested Schema for `spf_prefix_priority_critical_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
+- `prefixlist_name` (String) Prefix-list name
+- `tag` (Number) Specify a tag to indicate priority
+
+
+<a id="nestedatt--spf_prefix_priority_high_levels"></a>
+### Nested Schema for `spf_prefix_priority_high_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
+- `prefixlist_name` (String) Prefix-list name
+- `tag` (Number) Specify a tag to indicate priority
+
+
+<a id="nestedatt--spf_prefix_priority_medium_levels"></a>
+### Nested Schema for `spf_prefix_priority_medium_levels`
+
+Read-Only:
+
+- `level_number` (Number) Level
+- `prefixlist_name` (String) Prefix-list name
 - `tag` (Number) Specify a tag to indicate priority

@@ -14,16 +14,16 @@ This resource can manage the BFD configuration.
 
 ```terraform
 resource "iosxr_bfd" "example" {
-  echo_disable                                           = true
-  echo_latency_detect_percentage                         = 200
-  echo_latency_detect_count                              = 10
-  echo_startup_validate_force                            = true
-  echo_ipv4_source                                       = "10.1.1.1"
-  echo_ipv4_bundle_per_member_preferred_minimum_interval = 200
-  trap_singlehop_pre_mapped                              = true
+  echo_disable                                 = true
+  echo_latency_detect_percentage               = 200
+  echo_latency_detect_count                    = 10
+  echo_startup_validate_force                  = true
+  echo_ipv4_source                             = "10.1.1.1"
+  echo_ipv4_bundle_per_member_minimum_interval = 200
+  trap_singlehop_pre_mapped                    = true
   multipath_locations = [
     {
-      location_name = "0/0/CPU0"
+      location_id = "0/0/CPU0"
     }
   ]
   multihop_ttl_drop_threshold            = 200
@@ -37,12 +37,11 @@ resource "iosxr_bfd" "example" {
   dampening_bundle_member_initial_wait   = 5184
   dampening_bundle_member_secondary_wait = 6184
   dampening_bundle_member_maximum_wait   = 7184
-  bundle_coexistence_bob_blb_inherit     = false
-  bundle_coexistence_bob_blb_logical     = true
+  bundle_coexistence_bob_blb             = "inherit"
   interfaces = [
     {
       interface_name        = "GigabitEthernet0/0/0/0"
-      echo_disable          = true
+      echo_disable          = "enable"
       echo_ipv4_source      = "12.1.1.1"
       ipv6_checksum_disable = true
       disable               = true
@@ -61,8 +60,8 @@ resource "iosxr_bfd" "example" {
 
 ### Optional
 
-- `bundle_coexistence_bob_blb_inherit` (Boolean) Use inheritence mechanism
-- `bundle_coexistence_bob_blb_logical` (Boolean) Use BFD logical Bundle natively
+- `bundle_coexistence_bob_blb` (String) Coexistence for BoB and BLB
+  - Choices: `inherit`, `logical`
 - `dampening_bundle_member_initial_wait` (Number) Initial delay before bringing up session
   - Range: `1`-`518400000`
 - `dampening_bundle_member_l3_only_mode` (Boolean) Apply immediate dampening and only when failure is L3 specific
@@ -84,9 +83,9 @@ resource "iosxr_bfd" "example" {
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
 - `echo_disable` (Boolean) Disable BFD echo mode
-- `echo_ipv4_bundle_per_member_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
+- `echo_ipv4_bundle_per_member_minimum_interval` (Number) Set the preferred minimum interval for the BFD session
   - Range: `15`-`2000`
-- `echo_ipv4_source` (String) BFD echo source IP address
+- `echo_ipv4_source` (String) Echo IPv4 source address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down
   - Range: `1`-`10`
 - `echo_latency_detect_percentage` (Number) Percentage of detection time to consider as bad latency
@@ -108,13 +107,14 @@ resource "iosxr_bfd" "example" {
 
 Required:
 
-- `interface_name` (String) Configure BFD on an interface
+- `interface_name` (String) Select an interface to configure
 
 Optional:
 
 - `disable` (Boolean) Disable BFD for this interface
-- `echo_disable` (Boolean) Disable BFD echo mode for this interface
-- `echo_ipv4_source` (String) BFD echo source IP address
+- `echo_disable` (String) Disable BFD echo mode for this interface
+  - Choices: `disable`, `enable`
+- `echo_ipv4_source` (String) Echo IPv4 source address
 - `ipv6_checksum_disable` (Boolean) Disable BFD ipv6 checksum mode for this interface
 - `local_address` (String) Local address to be used by BFD for this interface
 - `multiplier` (Number) BFD multiplier for this interface
@@ -130,7 +130,7 @@ Optional:
 
 Required:
 
-- `location_name` (String) Specify a location
+- `location_id` (String) Fully qualified location specification
 
 ## Import
 

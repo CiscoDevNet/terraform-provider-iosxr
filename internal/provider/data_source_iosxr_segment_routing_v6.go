@@ -98,6 +98,34 @@ func (d *SegmentRoutingV6DataSource) Schema(ctx context.Context, req datasource.
 					},
 				},
 			},
+			"formats": schema.ListNestedAttribute{
+				MarkdownDescription: "Configure a SRv6 format",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"name": schema.StringAttribute{
+							MarkdownDescription: "Format name",
+							Computed:            true,
+						},
+						"format_enable": schema.BoolAttribute{
+							MarkdownDescription: "Enable a SRv6 format",
+							Computed:            true,
+						},
+						"usid_local_id_block_ranges_lib_start": schema.Int64Attribute{
+							MarkdownDescription: "Start of LIB",
+							Computed:            true,
+						},
+						"usid_local_id_block_ranges_explict_lib_start": schema.Int64Attribute{
+							MarkdownDescription: "Start of Explicit LIB",
+							Computed:            true,
+						},
+						"usid_wide_local_id_block_explicit_range": schema.Int64Attribute{
+							MarkdownDescription: "Specify uSID WLIB explicit range",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

@@ -80,7 +80,7 @@ func (r *RouterOSPFVRFAreaInterfaceResource) Schema(ctx context.Context, req res
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -91,7 +91,7 @@ func (r *RouterOSPFVRFAreaInterfaceResource) Schema(ctx context.Context, req res
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

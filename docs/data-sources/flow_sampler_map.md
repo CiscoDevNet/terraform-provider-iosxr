@@ -23,7 +23,7 @@ data "iosxr_flow_sampler_map" "example" {
 
 ### Required
 
-- `name` (String) Sampler map name - maximum 32 characters
+- `name` (String) Sampler map name
 
 ### Optional
 

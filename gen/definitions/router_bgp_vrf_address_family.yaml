@@ -6,55 +6,226 @@ attributes:
   - yang_name: as-number
     example: 65001
   - yang_name: vrf-name
+    reference: true
     example: VRF1
   - yang_name: af-name
     example: ipv4-unicast
   - yang_name: additional-paths/send
     example: true
+  - yang_name: additional-paths/send/disable
+    example: true
   - yang_name: additional-paths/receive
     example: true
-  - yang_name: additional-paths/selection/route-policy
-    example: ROUTE_POLICY_1
-  - yang_name: allocate-label/all/unlabeled-path
+  - yang_name: additional-paths/receive/disable
     example: true
+  - yang_name: additional-paths/selection/route-policy
+    tf_name: additional_paths_selection_route_policy
+    type: String
+    no_augment_config: true
+    optional: true
+    example: "ADDITIONAL_PATHS_SELECTION_POLICY"
+    delete_parent: true
+    description: "Route-policy for additional paths selection"
+  - yang_name: additional-paths/selection/disable
+    tf_name: additional_paths_selection_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     exclude_test: true
+    example: true
+    delete_parent: true
+    description: "Disable additional paths selection"
+  - yang_name: allocate-label/all
+    tf_name: allocate_label_all
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Allocate labels for all prefixes"
+  - yang_name: allocate-label/all/unlabeled-path
+    tf_name: allocate_label_all_unlabeled_path
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Allocate label for unlabeled paths too (within all mode)"
+  - yang_name: allocate-label/route-policy/route-policy-name
+    tf_name: allocate_label_route_policy_name
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    example: "ALLOCATE_LABEL_POLICY"
+    description: "Route policy name for label allocation"
+  - yang_name: allocate-label/route-policy/unlabeled-path
+    tf_name: allocate_label_route_policy_unlabeled_path
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Allocate label for unlabeled paths too (within route-policy mode)"
   - yang_name: advertise/best-external
     example: true
-  - yang_name: allocate-label/all
-    example: true
-  - yang_name: maximum-paths/ebgp/multipath
+  - yang_name: maximum-paths/ebgp/ebgp-number
     delete_parent: true
-    example: 10
-    optional: true
-  - yang_name: maximum-paths/eibgp/multipath
-    delete_parent: true
-    example: 10
     optional: true
     exclude_test: true
-  - yang_name: maximum-paths/ibgp/multipath
+    example: 10
+  - yang_name: maximum-paths/ebgp/selective
+    exclude_test: true
+    example: false
+  - yang_name: maximum-paths/ebgp/route-policy
+    exclude_test: true
+    example: "MULTIPATH_POLICY"
+  - yang_name: maximum-paths/ibgp/ibgp-number
     delete_parent: true
     optional: true
+    exclude_test: true
     example: 10
+  - yang_name: maximum-paths/ibgp/unequal-cost/deterministic
+    exclude_test: true
+    example: false
+  - yang_name: maximum-paths/ibgp/selective
+    exclude_test: true
+    example: false
+  - yang_name: maximum-paths/ibgp/route-policy
+    exclude_test: true
+    example: "MULTIPATH_POLICY"
+  - yang_name: maximum-paths/eibgp/eibgp-number
+    delete_parent: true
+    optional: true
+    exclude_test: true
+    example: 10
+  - yang_name: maximum-paths/eibgp/equal-cost
+    exclude_test: true
+    example: true
+  - yang_name: maximum-paths/eibgp/selective
+    exclude_test: true
+    example: true
+  - yang_name: maximum-paths/eibgp/route-policy
+    exclude_test: true
+    example: "MULTIPATH_POLICY"
+  - yang_name: maximum-paths/unique-nexthop-check-disable
+    exclude_test: true
+    example: true
+  - yang_name: label/mode/per-prefix
+    tf_name: label_mode_per_prefix
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true 
+    exclude_test: true
+    example: true
+    description: "Set per prefix label mode"
   - yang_name: label/mode/per-ce
-    example: false
+    tf_name: label_mode_per_ce
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Set per CE label mode"
   - yang_name: label/mode/per-vrf
-    example: false
-  - yang_name: redistribute/connected
+    tf_name: label_mode_per_vrf
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     example: true
-  - yang_name: redistribute/connected/metric
-    example: 10
-  - yang_name: redistribute/connected/route-policy
-    example: ROUTE_POLICY_1
-  - yang_name: redistribute/static
+    description: "Set per VRF label mode"
+  - yang_name: label/mode/per-vrf-46
+    tf_name: label_mode_per_vrf_46
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
     example: true
-  - yang_name: redistribute/static/metric
-    example: 10
-  - yang_name: redistribute/static/route-policy
-    example: ROUTE_POLICY_1
+    description: "Set per VRF 46 label mode"
+  - yang_name: label/mode/route-policy
+    tf_name: label_mode_route_policy
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: "LABEL_MODE_POLICY"
+    description: "Route policy name for label allocation mode"
+  - yang_name: label/mode/per-nexthop-received-label
+    tf_name: label_mode_per_nexthop_received_label
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Set label mode per nexthop and received label"
+  - yang_name: label/mode/per-nexthop-received-label/allocate-secondary-label
+    tf_name: label_mode_per_nexthop_received_label_allocate_secondary_label
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Allocate secondary label to avoid label oscillation in symmetric PIC deployments"
   - yang_name: segment-routing/srv6/locator
     example: LocAlgo11
-  - yang_name: segment-routing/srv6/alloc/mode/per-vrf
+  - yang_name: segment-routing/srv6/alloc/mode/per-ce
+    tf_name: segment_routing_srv6_alloc_mode_per_ce
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
     example: true
+    description: "Set SRv6 per CE SID mode"
+  - yang_name: segment-routing/srv6/alloc/mode/per-vrf
+    tf_name: segment_routing_srv6_alloc_mode_per_vrf
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Set SRv6 per VRF SID mode"
+  - yang_name: segment-routing/srv6/alloc/mode/per-vrf-46
+    tf_name: segment_routing_srv6_alloc_mode_per_vrf_46
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Set SRv6 per VRF 46 SID mode"
+  - yang_name: segment-routing/srv6/alloc/mode/route-policy
+    tf_name: segment_routing_srv6_alloc_mode_route_policy
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: "SRV6_ALLOC_POLICY"
+    description: "Use a route policy to determine the SID allocation mode and locator"
   - yang_name: aggregate-addresses/aggregate-address
     tf_name: aggregate_addresses
     type: List
@@ -62,15 +233,23 @@ attributes:
       - yang_name: address
         id: true
         example: 10.0.0.0
-      - yang_name: masklength
+      - yang_name: address-prefix
+        tf_name: address_prefix
         id: true
         example: 8
       - yang_name: as-set
-        example: false
+        example: true
       - yang_name: as-confed-set
         example: false
       - yang_name: summary-only
-        example: false
+        example: true
+      - yang_name: route-policy
+        exclude_test: true
+        example: ROUTE_POLICY_1
+      - yang_name: description
+        example: "Aggregate route description"
+      - yang_name: set-tag
+        example: 100
   - yang_name: networks/network
     tf_name: networks
     type: List
@@ -78,47 +257,871 @@ attributes:
       - yang_name: address
         id: true
         example: 10.1.0.0
-      - yang_name: masklength
+      - yang_name: address-prefix
+        tf_name: address_prefix
         id: true
         example: 16
       - yang_name: route-policy
+        tf_name: route_policy
+        type: String
+        no_augment_config: true
+        optional: true
+        delete_parent: true
         example: ROUTE_POLICY_1
-  - yang_name: redistribute/ospf
+        description: "Route-policy to modify the attributes"
+      - yang_name: backdoor
+        tf_name: backdoor
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Specify a BGP backdoor route"
+      - yang_name: multipath
+        tf_name: multipath
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        exclude_test: true
+        description: "Enable installation of multiple paths from RIB"
+  - yang_name: redistribute/ospfs/ospf
     tf_name: redistribute_ospf
     type: List
     attributes:
-      - yang_name: router-tag
+      - yang_name: ospf-router-tag
         id: true
-        example: OSPF1
+        example: "1"
+        description: "OSPF router tag"
       - yang_name: match/internal
+        tf_name: redistribute_ospf_match_internal
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
         example: true
-      - yang_name: match/internal/external
-        example: true
-      - yang_name: match/internal/nssa-external
-        example: false
+        description: "Redistribute OSPF internal routes"
       - yang_name: match/external
-        example: false
-      - yang_name: match/external/nssa-external
-        example: false
+        tf_name: redistribute_ospf_match_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPF external routes"
       - yang_name: match/nssa-external
-        example: false
+        tf_name: redistribute_ospf_match_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPF NSSA external routes"
+      - yang_name: match/internal/external
+        tf_name: redistribute_ospf_match_internal_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPF external routes (within internal)"
+      - yang_name: match/internal/external/one
+        tf_name: redistribute_ospf_match_internal_external_type_1
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 1 routes (within internal)"
+      - yang_name: match/internal/external/one/nssa-external
+        tf_name: redistribute_ospf_match_internal_external_type_1_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external/one)"
+      - yang_name: match/internal/external/one/nssa-external/one
+        tf_name: redistribute_ospf_match_internal_external_type_1_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external/one)"
+      - yang_name: match/internal/external/one/nssa-external/two
+        tf_name: redistribute_ospf_match_internal_external_type_1_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external/one)"
+      - yang_name: match/internal/external/two
+        tf_name: redistribute_ospf_match_internal_external_type_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 2 routes (within internal)"
+      - yang_name: match/internal/external/two/nssa-external
+        tf_name: redistribute_ospf_match_internal_external_type_2_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external/two)"
+      - yang_name: match/internal/external/two/nssa-external/one
+        tf_name: redistribute_ospf_match_internal_external_type_2_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external/two)"
+      - yang_name: match/internal/external/two/nssa-external/two
+        tf_name: redistribute_ospf_match_internal_external_type_2_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external/two)"
+      - yang_name: match/internal/external/nssa-external
+        tf_name: redistribute_ospf_match_internal_external_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external)"
+      - yang_name: match/internal/external/nssa-external/one
+        tf_name: redistribute_ospf_match_internal_external_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external)"
+      - yang_name: match/internal/external/nssa-external/two
+        tf_name: redistribute_ospf_match_internal_external_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external)"
+      - yang_name: match/internal/nssa-external
+        tf_name: redistribute_ospf_match_internal_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal)"
+      - yang_name: match/internal/nssa-external/one
+        tf_name: redistribute_ospf_match_internal_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal)"
+      - yang_name: match/internal/nssa-external/two
+        tf_name: redistribute_ospf_match_internal_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal)"
+      - yang_name: match/external/one
+        tf_name: redistribute_ospf_match_external_type_1
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 1 routes"
+      - yang_name: match/external/one/nssa-external
+        tf_name: redistribute_ospf_match_external_type_1_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external/one)"
+      - yang_name: match/external/one/nssa-external/one
+        tf_name: redistribute_ospf_match_external_type_1_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external/one)"
+      - yang_name: match/external/one/nssa-external/two
+        tf_name: redistribute_ospf_match_external_type_1_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external/one)"
+      - yang_name: match/external/two
+        tf_name: redistribute_ospf_match_external_type_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 2 routes"
+      - yang_name: match/external/two/nssa-external
+        tf_name: redistribute_ospf_match_external_type_2_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external/two)"
+      - yang_name: match/external/two/nssa-external/one
+        tf_name: redistribute_ospf_match_external_type_2_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external/two)"
+      - yang_name: match/external/two/nssa-external/two
+        tf_name: redistribute_ospf_match_external_type_2_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external/two)"
+      - yang_name: match/external/nssa-external
+        tf_name: redistribute_ospf_match_external_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external)"
+      - yang_name: match/external/nssa-external/one
+        tf_name: redistribute_ospf_match_external_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external)"
+      - yang_name: match/external/nssa-external/two
+        tf_name: redistribute_ospf_match_external_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external)"
+      - yang_name: match/nssa-external/one
+        tf_name: redistribute_ospf_match_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes"
+      - yang_name: match/nssa-external/two
+        tf_name: redistribute_ospf_match_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes"
       - yang_name: metric
         example: 100
+      - yang_name: multipath
+        example: true
       - yang_name: route-policy
-        example: ROUTE_POLICY_1
+        example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/ospfv3s/ospfv3
+    tf_name: redistribute_ospfv3
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: ospfv3-router-tag
+        id: true
+        example: "2"
+        description: "OSPFv3 router tag"
+      - yang_name: match/internal
+        tf_name: redistribute_ospfv3_match_internal
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPFv3 internal routes"
+      - yang_name: match/external
+        tf_name: redistribute_ospfv3_match_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPFv3 external routes"
+      - yang_name: match/nssa-external
+        tf_name: redistribute_ospfv3_match_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPFv3 NSSA external routes"
+      - yang_name: match/internal/external
+        tf_name: redistribute_ospfv3_match_internal_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute OSPFv3 external routes (within internal)"
+      - yang_name: match/internal/external/one
+        tf_name: redistribute_ospfv3_match_internal_external_type_1
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 1 routes (within internal)"
+      - yang_name: match/internal/external/one/nssa-external
+        tf_name: redistribute_ospfv3_match_internal_external_type_1_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external/one)"
+      - yang_name: match/internal/external/one/nssa-external/one
+        tf_name: redistribute_ospfv3_match_internal_external_type_1_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        exclude_test: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external/one)"
+      - yang_name: match/internal/external/one/nssa-external/two
+        tf_name: redistribute_ospfv3_match_internal_external_type_1_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external/one)"
+      - yang_name: match/internal/external/two
+        tf_name: redistribute_ospfv3_match_internal_external_type_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 2 routes (within internal)"
+      - yang_name: match/internal/external/two/nssa-external
+        tf_name: redistribute_ospfv3_match_internal_external_type_2_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external/two)"
+      - yang_name: match/internal/external/two/nssa-external/one
+        tf_name: redistribute_ospfv3_match_internal_external_type_2_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external/two)"
+      - yang_name: match/internal/external/two/nssa-external/two
+        tf_name: redistribute_ospfv3_match_internal_external_type_2_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external/two)"
+      - yang_name: match/internal/external/nssa-external
+        tf_name: redistribute_ospfv3_match_internal_external_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal/external)"
+      - yang_name: match/internal/external/nssa-external/one
+        tf_name: redistribute_ospfv3_match_internal_external_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal/external)"
+      - yang_name: match/internal/external/nssa-external/two
+        tf_name: redistribute_ospfv3_match_internal_external_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal/external)"
+      - yang_name: match/internal/nssa-external
+        tf_name: redistribute_ospfv3_match_internal_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within internal)"
+      - yang_name: match/internal/nssa-external/one
+        tf_name: redistribute_ospfv3_match_internal_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within internal)"
+      - yang_name: match/internal/nssa-external/two
+        tf_name: redistribute_ospfv3_match_internal_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within internal)"
+      - yang_name: match/external/one
+        tf_name: redistribute_ospfv3_match_external_type_1
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 1 routes"
+      - yang_name: match/external/one/nssa-external
+        tf_name: redistribute_ospfv3_match_external_type_1_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external/one)"
+      - yang_name: match/external/one/nssa-external/one
+        tf_name: redistribute_ospfv3_match_external_type_1_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external/one)"
+      - yang_name: match/external/one/nssa-external/two
+        tf_name: redistribute_ospfv3_match_external_type_1_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external/one)"
+      - yang_name: match/external/two
+        tf_name: redistribute_ospfv3_match_external_type_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute external type 2 routes"
+      - yang_name: match/external/two/nssa-external
+        tf_name: redistribute_ospfv3_match_external_type_2_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external/two)"
+      - yang_name: match/external/two/nssa-external/one
+        tf_name: redistribute_ospfv3_match_external_type_2_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external/two)"
+      - yang_name: match/external/two/nssa-external/two
+        tf_name: redistribute_ospfv3_match_external_type_2_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external/two)"
+      - yang_name: match/external/nssa-external
+        tf_name: redistribute_ospfv3_match_external_nssa_external
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external routes (within external)"
+      - yang_name: match/external/nssa-external/one
+        tf_name: redistribute_ospfv3_match_external_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes (within external)"
+      - yang_name: match/external/nssa-external/two
+        tf_name: redistribute_ospfv3_match_external_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes (within external)"
+      - yang_name: match/nssa-external/one
+        tf_name: redistribute_ospfv3_match_nssa_external_type_1
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 1 routes"
+      - yang_name: match/nssa-external/two
+        tf_name: redistribute_ospfv3_match_nssa_external_type_2
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute NSSA external type 2 routes"
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/eigrps/eigrp
+    tf_name: redistribute_eigrp
+    type: List
+    attributes:
+      - yang_name: eigrp-name
+        id: true
+        example: "EIGRP1"
+        description: "EIGRP instance name"
+      - yang_name: match/internal
+        tf_name: redistribute_eigrp_internal
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        example: true
+        description: "Redistribute EIGRP internal routes"
+      - yang_name: match/internal/external
+        tf_name: redistribute_eigrp_internal_external
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        description: "Redistribute EIGRP external routes (within internal)"
+      - yang_name: match/external
+        tf_name: redistribute_eigrp_external
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute EIGRP external routes"
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    type: List
+    attributes:
+      - yang_name: isis-name
+        id: true
+        example: "ISIS1"
+        description: "ISIS instance name"
+      - yang_name: level/one
+        tf_name: redistribute_isis_level_1
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 1 routes"
+      - yang_name: level/one/level/two
+        tf_name: redistribute_isis_level_1_level_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 2 routes (within level 1)"
+      - yang_name: level/one/level/two/level/one-inter-area
+        tf_name: redistribute_isis_level_1_level_2_level_1_inter_area
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        description: "Redistribute ISIS level 1 inter-area routes (within level 1/level 2)"
+      - yang_name: level/one/level/one-inter-area
+        tf_name: redistribute_isis_level_1_level_1_inter_area
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 1 inter-area routes (within level 1)"
+      - yang_name: level/two
+        tf_name: redistribute_isis_level_2
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 2 routes"
+      - yang_name: level/two/level/one-inter-area
+        tf_name: redistribute_isis_level_2_level_1_inter_area
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 1 inter-area routes (within level 2)"
+      - yang_name: level/one-inter-area
+        tf_name: redistribute_isis_level_1_inter_area
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Redistribute ISIS level 1 inter-area routes"
+      - yang_name: metric
+        example: 100
+      - yang_name: multipath
+        example: true
+      - yang_name: route-policy
+        example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/connected
+    example: true
+  - yang_name: redistribute/connected/metric
+    example: 100
+  - yang_name: redistribute/connected/multipath
+    example: true
+  - yang_name: redistribute/connected/route-policy
+    example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/static
+    example: true
+  - yang_name: redistribute/static/metric
+    example: 100
+  - yang_name: redistribute/static/multipath
+    example: true
+  - yang_name: redistribute/static/route-policy
+    example: "REDISTRIBUTE_POLICY"
+  - yang_name: redistribute/rip
+    example: true
+  - yang_name: redistribute/rip/metric
+    example: 100
+  - yang_name: redistribute/rip/multipath
+    example: true
+  - yang_name: redistribute/rip/route-policy
+    example: "REDISTRIBUTE_POLICY"
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
-    attributes:
-      - name: route-policy-name
-        value: ROUTE_POLICY_1
-      - name: rpl-route-policy
-        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: ROUTE_POLICY_1
+              - name: rpl-route-policy
+                value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: ADDITIONAL_PATHS_SELECTION_POLICY
+              - name: rpl-route-policy
+                value: "route-policy ADDITIONAL_PATHS_SELECTION_POLICY\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: ALLOCATE_LABEL_POLICY
+              - name: rpl-route-policy
+                value: "route-policy ALLOCATE_LABEL_POLICY\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: MULTIPATH_POLICY
+              - name: rpl-route-policy
+                value: "route-policy MULTIPATH_POLICY\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: REDISTRIBUTE_POLICY
+              - name: rpl-route-policy
+                value: "route-policy REDISTRIBUTE_POLICY\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: LABEL_MODE_POLICY
+              - name: rpl-route-policy
+                value: "route-policy LABEL_MODE_POLICY\\n  pass\\nend-policy\\n"
+          - attributes:
+              - name: route-policy-name
+                value: SRv6_ALLOC_POLICY
+              - name: rpl-route-policy
+                value: "route-policy SRv6_ALLOC_POLICY\\n  pass\\nend-policy\\n"
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
-      - name: as-number
+      - name: two-byte-as-number
         value: 1
-      - name: index
+      - name: asn2-index
         value: 1
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:

@@ -23,7 +23,7 @@ data "iosxr_flow_monitor_map" "example" {
 
 ### Required
 
-- `name` (String) Monitor map name - maximum 32 characters
+- `name` (String) Monitor map name
 
 ### Optional
 
@@ -58,7 +58,7 @@ data "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_destination_tos` (Boolean) IPv4 Destination Based NetFlow Accounting TOS
 - `record_ipv4_gtp` (Boolean) IPV4 gtp record format
 - `record_ipv4_peer_as` (Boolean) Record peer AS
-- `record_ipv4_prefix` (Boolean) Prefix based agregation
+- `record_ipv4_prefix` (Boolean) Prefix based aggregation
 - `record_ipv4_prefix_port` (Boolean) Prefix port based aggregation
 - `record_ipv4_prefix_tos` (Boolean) Prefix TOS based aggregation
 - `record_ipv4_protocol_port` (Boolean) Protocol-Port based aggregation

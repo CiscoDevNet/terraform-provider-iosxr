@@ -72,7 +72,7 @@ func (r *HostnameResource) Schema(ctx context.Context, req resource.SchemaReques
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 253),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9_.-]+`), ""),
 				},
 			},

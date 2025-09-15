@@ -32,6 +32,7 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "global_block_upper_bound", "29999"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_lower_bound", "15000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "local_block_upper_bound", "15999"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing.test", "enable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -71,6 +72,7 @@ func testAccIosxrSegmentRoutingConfig_all() string {
 	config += `	global_block_upper_bound = 29999` + "\n"
 	config += `	local_block_lower_bound = 15000` + "\n"
 	config += `	local_block_upper_bound = 15999` + "\n"
+	config += `	enable = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

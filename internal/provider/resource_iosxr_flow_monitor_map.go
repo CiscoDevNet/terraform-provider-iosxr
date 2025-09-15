@@ -69,11 +69,11 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Monitor map name - maximum 32 characters").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Monitor map name").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -88,8 +88,8 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 							MarkdownDescription: helpers.NewAttributeDescription("Specify flow exporter map name").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.LengthBetween(1, 90),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -132,7 +132,7 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				Optional:            true,
 			},
 			"record_ipv4_prefix": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prefix based agregation").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix based aggregation").String,
 				Optional:            true,
 			},
 			"record_ipv4_source_prefix": schema.BoolAttribute{
@@ -316,10 +316,10 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"sflow_options_sample_header_size": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify maximum sample-header size to be exported").AddIntegerRangeDescription(128, 200).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify maximum sample-header size to be exported").AddIntegerRangeDescription(128, 343).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(128, 200),
+					int64validator.Between(128, 343),
 				},
 			},
 			"sflow_options_input_ifindex": schema.StringAttribute{

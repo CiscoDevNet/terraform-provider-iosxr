@@ -50,9 +50,6 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_sensor", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_fru_ctrl", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_failure", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp2_updown", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_bgp4_mib_updown", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.user_name", "USER1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"))
@@ -127,9 +124,6 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `	traps_l2vpn_vc_down = true` + "\n"
 	config += `	traps_sensor = true` + "\n"
 	config += `	traps_fru_ctrl = true` + "\n"
-	config += `	traps_isis_authentication_failure = "enable"` + "\n"
-	config += `	traps_bgp_cbgp2_updown = true` + "\n"
-	config += `	traps_bgp_bgp4_mib_updown = true` + "\n"
 	config += `	users = [{` + "\n"
 	config += `		user_name = "USER1"` + "\n"
 	config += `		group_name = "GROUP1"` + "\n"

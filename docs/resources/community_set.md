@@ -24,7 +24,7 @@ resource "iosxr_community_set" "example" {
 
 ### Required
 
-- `rpl` (String) Community Set
+- `rpl` (String) Configures a community-set. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a community-set by its name and a community-set holds community values for set or matching against the BGP community attribute. A community is a 32-bit quantity. Integer community values must be split in half and expressed as two unsigned decimal integers in the range from 0 to 65535, separated by a colon. Single 32-bit community values are not allowed.  community-set comSet 12:34, 12:56, 12:78, internet end-set  Note: The community-set entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the community-set definition.
 - `set_name` (String) Set name
 
 ### Optional

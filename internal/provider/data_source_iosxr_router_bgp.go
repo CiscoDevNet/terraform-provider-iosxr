@@ -83,19 +83,35 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 			},
 			"segment_routing_srv6_locator": schema.StringAttribute{
-				MarkdownDescription: "Configure locator name",
+				MarkdownDescription: "Specify locator",
+				Computed:            true,
+			},
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Wide LIB allocation",
 				Computed:            true,
 			},
 			"timers_bgp_keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: "BGP timers",
+				MarkdownDescription: "Keepalive interval",
 				Computed:            true,
 			},
-			"timers_bgp_holdtime": schema.StringAttribute{
-				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+			"timers_bgp_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_minimum_acceptable_holdtime": schema.StringAttribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
+			"timers_bgp_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_number": schema.Int64Attribute{
+				MarkdownDescription: "Holdtime value",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
 			"bgp_router_id": schema.StringAttribute{
@@ -127,15 +143,15 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 			},
 			"nexthop_validation_color_extcomm_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm path",
+				MarkdownDescription: "Disable next-hop reachability validation for color-extcomm paths",
 				Computed:            true,
 			},
 			"bgp_bestpath_as_path_ignore": schema.BoolAttribute{
-				MarkdownDescription: "Ignore as-path length",
+				MarkdownDescription: "Indicates a ignore node is configured.",
 				Computed:            true,
 			},
 			"bgp_bestpath_as_path_multipath_relax": schema.BoolAttribute{
-				MarkdownDescription: "Relax as-path check for multipath selection",
+				MarkdownDescription: "Indicates a multipath-relax node is configured.",
 				Computed:            true,
 			},
 			"bgp_bestpath_cost_community_ignore": schema.BoolAttribute{
@@ -159,11 +175,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 			},
 			"bgp_bestpath_med_always": schema.BoolAttribute{
-				MarkdownDescription: "Allow comparing MED from different neighbors",
-				Computed:            true,
-			},
-			"bgp_bestpath_med_confed": schema.BoolAttribute{
-				MarkdownDescription: "Compare MED among confederation paths",
+				MarkdownDescription: "Treat missing MED as the least preferred one",
 				Computed:            true,
 			},
 			"bgp_bestpath_med_missing_as_worst": schema.BoolAttribute{
@@ -187,16 +199,16 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Computed:            true,
 			},
 			"neighbors": schema.ListNestedAttribute{
-				MarkdownDescription: "Neighbor address",
+				MarkdownDescription: "Specify a neighbor router",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"neighbor_address": schema.StringAttribute{
-							MarkdownDescription: "Neighbor address",
+						"address": schema.StringAttribute{
+							MarkdownDescription: "IPaddress",
 							Computed:            true,
 						},
 						"remote_as": schema.StringAttribute{
-							MarkdownDescription: "bgp as-number",
+							MarkdownDescription: "Set remote AS",
 							Computed:            true,
 						},
 						"description": schema.StringAttribute{
@@ -208,7 +220,7 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:            true,
 						},
 						"advertisement_interval_seconds": schema.Int64Attribute{
-							MarkdownDescription: "Minimum interval between sending BGP routing updates",
+							MarkdownDescription: "time in seconds",
 							Computed:            true,
 						},
 						"advertisement_interval_milliseconds": schema.Int64Attribute{
@@ -236,31 +248,19 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:            true,
 						},
 						"bfd_fast_detect_strict_mode": schema.BoolAttribute{
-							MarkdownDescription: "Hold down neighbor session until BFD session is up",
+							MarkdownDescription: "(Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)",
 							Computed:            true,
 						},
-						"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+						"bfd_fast_detect_disable": schema.BoolAttribute{
 							MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
-							Computed:            true,
-						},
-						"local_as": schema.StringAttribute{
-							MarkdownDescription: "bgp as-number",
-							Computed:            true,
-						},
-						"local_as_no_prepend": schema.BoolAttribute{
-							MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
-							Computed:            true,
-						},
-						"local_as_replace_as": schema.BoolAttribute{
-							MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
-							Computed:            true,
-						},
-						"local_as_dual_as": schema.BoolAttribute{
-							MarkdownDescription: "Dual-AS mode",
 							Computed:            true,
 						},
 						"password": schema.StringAttribute{
 							MarkdownDescription: "Specifies an ENCRYPTED password will follow",
+							Computed:            true,
+						},
+						"password_inheritance_disable": schema.BoolAttribute{
+							MarkdownDescription: "Prevent password from being inherited from parent",
 							Computed:            true,
 						},
 						"shutdown": schema.BoolAttribute{
@@ -268,15 +268,27 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							Computed:            true,
 						},
 						"timers_keepalive_interval": schema.Int64Attribute{
-							MarkdownDescription: "BGP timers",
+							MarkdownDescription: "Keepalive interval",
 							Computed:            true,
 						},
-						"timers_holdtime": schema.StringAttribute{
-							MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
+						"timers_zero": schema.BoolAttribute{
+							MarkdownDescription: "Disable keepalives/hold time within zero container",
 							Computed:            true,
 						},
-						"timers_minimum_acceptable_holdtime": schema.StringAttribute{
-							MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
+						"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+							Computed:            true,
+						},
+						"timers_holdtime_number": schema.Int64Attribute{
+							MarkdownDescription: "Holdtime value",
+							Computed:            true,
+						},
+						"timers_holdtime_zero": schema.BoolAttribute{
+							MarkdownDescription: "Disable keepalives/hold time within holdtime container",
+							Computed:            true,
+						},
+						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
 						"update_source": schema.StringAttribute{

@@ -7,12 +7,16 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
       assigned_number = 1
     }
   ]
-  bgp_route_target_export_ipv4_address_format = [
+  bgp_route_target_export_two_byte_as_format = [
     {
-      ipv4_address    = "1.1.1.1"
+      as_number       = 1
       assigned_number = 1
     }
   ]
   advertise_mac = true
-  locator       = "LOC12"
+  locators = [
+    {
+      locator_name = "LOC12"
+    }
+  ]
 }

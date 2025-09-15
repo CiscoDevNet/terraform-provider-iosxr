@@ -63,7 +63,7 @@ func (d *IPv4PrefixListDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"prefix_list_name": schema.StringAttribute{
-				MarkdownDescription: "Name of a prefix list - maximum 32 characters",
+				MarkdownDescription: "Name of a prefix list - maximum 128 characters",
 				Required:            true,
 			},
 			"sequences": schema.ListNestedAttribute{

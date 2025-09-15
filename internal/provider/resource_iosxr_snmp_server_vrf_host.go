@@ -80,7 +80,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -112,7 +112,7 @@ func (r *SNMPServerVRFHostResource) Schema(ctx context.Context, req resource.Sch
 							Default:             stringdefault.StaticString("default"),
 						},
 						"version_v3_security_level": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("auth", "noauth", "priv").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Security level").AddStringEnumDescription("auth", "noauth", "priv").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.OneOf("auth", "noauth", "priv"),

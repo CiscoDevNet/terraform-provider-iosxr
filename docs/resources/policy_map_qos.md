@@ -42,7 +42,7 @@ resource "iosxr_policy_map_qos" "example" {
 
 ### Optional
 
-- `classes` (Attributes List) (see [below for nested schema](#nestedatt--classes))
+- `classes` (Attributes List) QoS policy-map (see [below for nested schema](#nestedatt--classes))
 - `description` (String) Set description for this policy-map
 - `device` (String) A device name from the provider configuration.
 
@@ -82,7 +82,7 @@ Optional:
   - Range: `0`-`7`
 - `shape_average_rate_unit` (String) Shape rate unit
   - Choices: `bps`, `cellsps`, `gbps`, `kbps`, `mbps`, `per-million`, `per-thousand`, `percent`
-- `shape_average_rate_value` (String)
+- `shape_average_rate_value` (String) Value of Shape rate
 
 <a id="nestedatt--classes--queue_limits"></a>
 ### Nested Schema for `classes.queue_limits`

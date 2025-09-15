@@ -69,11 +69,11 @@ func (r *IPv6PrefixListResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"prefix_list_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Name of a prefix list - maximum 32 characters").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Name of a prefix list - maximum 128 characters").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

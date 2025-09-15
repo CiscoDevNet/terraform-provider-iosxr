@@ -20,7 +20,6 @@
 package provider
 
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -29,24 +28,7 @@ import (
 func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "core_isolation_group", "11"))
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_1", "01"))
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_23", "0100"))
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_45", "0100"))
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_67", "0100"))
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_bytes_89", "0100"))
-	}
-	if os.Getenv("IOSXR_VERSION_7_9_1") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_esi", "01.00.01.01.00.00.00.01.1"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_identifier_type_zero_esi", "01.00.01.01.00.00.00.01.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_all_active", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_port_active", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_interface.test", "ethernet_segment_load_balancing_mode_single_active", "true"))
@@ -68,24 +50,7 @@ func testAccDataSourceIosxrEVPNInterfaceConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
 	config += `	core_isolation_group = 11` + "\n"
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_bytes_1 = "01"` + "\n"
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_bytes_23 = "0100"` + "\n"
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_bytes_45 = "0100"` + "\n"
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_bytes_67 = "0100"` + "\n"
-	}
-	if os.Getenv("IOSXR_VERSION_7_6_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_bytes_89 = "0100"` + "\n"
-	}
-	if os.Getenv("IOSXR_VERSION_7_9_1") != "" {
-		config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"
-	}
+	config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_all_active = false` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_port_active = false` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_single_active = true` + "\n"

@@ -43,7 +43,7 @@ resource "iosxr_ssh" "example" {
 - `server_rate_limit` (Number) Cisco sshd rate-limit of service requests
   - Range: `1`-`600`
 - `server_session_limit` (Number) Cisco sshd session-limit of service requests
-  - Range: `1`-`110`
+  - Range: `1`-`150`
 - `server_v2` (Boolean) Cisco sshd protocol version 2
 - `server_vrfs` (Attributes List) Cisco sshd VRF name (see [below for nested schema](#nestedatt--server_vrfs))
 

@@ -32,4 +32,4 @@ data "iosxr_extcommunity_soo_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Extended Community SOO Set
+- `rpl` (String) Configures a extcommunity-set soo. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a extcommunity-set soo by its name and a soo set is an extcommunity set used to store BGP Site-of-Origin (SoO) extended community type communities.  extcommunity-set soo a_soo_set 1.1.1.1:100, 100:200 end-set  Note: The extcommunity-set soo entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the extcommunity-set soo definition.

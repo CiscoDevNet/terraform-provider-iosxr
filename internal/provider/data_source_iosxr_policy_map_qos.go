@@ -71,7 +71,7 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 				Computed:            true,
 			},
 			"classes": schema.ListNestedAttribute{
-				MarkdownDescription: "",
+				MarkdownDescription: "QoS policy-map",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -148,7 +148,7 @@ func (d *PolicyMapQoSDataSource) Schema(ctx context.Context, req datasource.Sche
 							Computed:            true,
 						},
 						"shape_average_rate_value": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "Value of Shape rate",
 							Computed:            true,
 						},
 						"shape_average_rate_unit": schema.StringAttribute{

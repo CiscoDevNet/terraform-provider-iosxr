@@ -32,4 +32,4 @@ data "iosxr_extcommunity_cost_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Extended Community Cost Set
+- `rpl` (String) Configures a extcommunity-set cost. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a extcommunity-set cost by its name and a cost set is an extcommunity set used to store cost EIGRP Cost Community type extended community type communities.  extcommunity-set cost a_cost_set IGP:1:10 end-set  Note: The extcommunity-set cost entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the extcommunity-set cost definition.

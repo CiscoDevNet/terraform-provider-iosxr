@@ -80,7 +80,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -205,10 +205,10 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"auto_cost_reference_bandwidth": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 4294967).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 2147483647).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967),
+					int64validator.Between(1, 2147483647),
 				},
 			},
 			"auto_cost_disable": schema.BoolAttribute{

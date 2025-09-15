@@ -32,4 +32,4 @@ data "iosxr_as_path_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) ASPath Set
+- `rpl` (String) Configures an as-path-set. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines an as-path-set by its name and includes a list of autonomous system (AS) numbers that form the set. The AS path set is used in route policy expressions to match AS path attributes in BGP routing updates. Each AS number in the set represents an autonomous system number that can be matched against the AS path of a BGP route.  as-path-set aspathSet 12345, 67890 end-set  Note: The as-path entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the as-path-set definition.

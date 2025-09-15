@@ -30,21 +30,38 @@ func TestAccDataSourceIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.as_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locator", "LOC12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
+				Config: testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]"
+	attributes = {
+		"locator-name" = "LOC1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"ethernet-segment/identifier/type/zero/esi" = "01.02.03.04.05.06.07.08.09"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
@@ -54,12 +71,15 @@ func testAccDataSourceIosxrEVPNSegmentRoutingSRv6EVIConfig() string {
 	config += `		as_number = 1` + "\n"
 	config += `		assigned_number = 1` + "\n"
 	config += `	}]` + "\n"
-	config += `	bgp_route_target_export_ipv4_address_format = [{` + "\n"
-	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `	bgp_route_target_export_two_byte_as_format = [{` + "\n"
+	config += `		as_number = 1` + "\n"
 	config += `		assigned_number = 1` + "\n"
 	config += `	}]` + "\n"
 	config += `	advertise_mac = true` + "\n"
-	config += `	locator = "LOC12"` + "\n"
+	config += `	locators = [{` + "\n"
+	config += `		locator_name = "LOC12"` + "\n"
+	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

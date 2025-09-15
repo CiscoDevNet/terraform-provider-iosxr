@@ -80,6 +80,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 36),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -92,11 +93,11 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
-			"set_overload_bit_on_startup_advertise_as_overloaded": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").String,
+			"set_overload_bit": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Signal other routers not to use us in SPF").String,
 				Optional:            true,
 			},
-			"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+			"set_overload_bit_on_startup_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
 				Optional:            true,
 				Validators: []validator.Int64{
@@ -120,18 +121,14 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set overload-bit for one level only").AddIntegerRangeDescription(1, 2).String,
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
 						},
-						"on_startup_advertise_as_overloaded": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").String,
-							Optional:            true,
-						},
-						"on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+						"on_startup_time_seconds": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -158,11 +155,11 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"nsf_cisco": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Cisco Proprietary NSF restart").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Checkpoint NSF restart").String,
 				Optional:            true,
 			},
 			"nsf_ietf": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IETF NSF restar").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IETF NSF restart").String,
 				Optional:            true,
 			},
 			"nsf_lifetime": schema.Int64Attribute{
@@ -191,21 +188,21 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"lsp_gen_interval_maximum_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before generating an LSP [5000]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
 				},
 			},
 			"lsp_gen_interval_initial_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before generating an LSP [50]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
 				},
 			},
 			"lsp_gen_interval_secondary_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before generating an LSP").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before generating an LSP [200]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
@@ -225,12 +222,82 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					int64validator.Between(1, 65535),
 				},
 			},
-			"lsp_password_keychain": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
+			"lsp_password_accept_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 1024),
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
+			},
+			"lsp_password_accept_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set lsp-password for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set lsp-password for LSPs/SNPs at this level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"lsp_password_text_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies an encrypted password will follow").String,
+				Optional:            true,
+			},
+			"lsp_password_text_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				Optional:            true,
+			},
+			"lsp_password_text_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Authenticate outgoing SNPs, no check on incoming SNPs").String,
+				Optional:            true,
+			},
+			"lsp_password_text_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification - only valid with cryptographic authentication").String,
+				Optional:            true,
+			},
+			"lsp_password_hmac_md5_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+				Optional:            true,
+			},
+			"lsp_password_hmac_md5_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				Optional:            true,
+			},
+			"lsp_password_hmac_md5_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Authenticate outgoing SNPs, no check on incoming SNPs").String,
+				Optional:            true,
+			},
+			"lsp_password_hmac_md5_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
+				Optional:            true,
+			},
+			"lsp_password_keychain_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
+				Optional:            true,
+			},
+			"lsp_password_keychain_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				Optional:            true,
+			},
+			"lsp_password_keychain_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Authenticate outgoing SNPs, no check on incoming SNPs").String,
+				Optional:            true,
+			},
+			"lsp_password_keychain_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
+				Optional:            true,
 			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set distribution process instance identifier").AddIntegerRangeDescription(32, 4294967295).String,
@@ -259,11 +326,11 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Affinity map configuration").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Affinity attribute name").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"bit_position": schema.Int64Attribute{
@@ -281,8 +348,8 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"algorithm_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Flex Algorithm definition").AddIntegerRangeDescription(128, 255).String,
+						"flex_algo_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Algorithm number").AddIntegerRangeDescription(128, 255).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(128, 255),
@@ -292,8 +359,8 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 							MarkdownDescription: helpers.NewAttributeDescription("Advertise the Flex-Algo Definition").String,
 							Optional:            true,
 						},
-						"metric_type_delay": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use delay as metric").String,
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flex-Algo metric type - can be 'delay', 'te', or integer 128-255").String,
 							Optional:            true,
 						},
 					},
@@ -305,7 +372,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"net_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("A Network Entity Title (NET) for this process").String,
+							MarkdownDescription: helpers.NewAttributeDescription("NET (XX.XXXX. ... .XXXX.XX)").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
@@ -320,7 +387,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enter the IS-IS interface configuration submode").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Interface to configure").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
@@ -333,36 +400,45 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 								stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 							},
 						},
-						"hello_padding_disable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disable hello-padding").String,
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "always", "disable", "sometimes").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("adaptive", "always", "disable", "sometimes"),
+							},
 						},
-						"hello_padding_sometimes": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enable hello-padding during adjacency formation only").String,
+						"priority_levels": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set priority for one level only").String,
 							Optional:            true,
-						},
-						"priority": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 127),
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"level_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set priority for this level only").AddIntegerRangeDescription(1, 2).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 2),
+										},
+									},
+									"priority": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 127),
+										},
+									},
+								},
 							},
 						},
 						"point_to_point": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Treat active LAN interface as point-to-point").String,
 							Optional:            true,
 						},
-						"passive": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").String,
+						"state": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").AddStringEnumDescription("passive", "shutdown", "suppressed").String,
 							Optional:            true,
-						},
-						"suppressed": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Do not advertise connected prefixes of this interface").String,
-							Optional:            true,
-						},
-						"shutdown": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Shutdown IS-IS on this interface").String,
-							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("passive", "shutdown", "suppressed"),
+							},
 						},
 					},
 				},

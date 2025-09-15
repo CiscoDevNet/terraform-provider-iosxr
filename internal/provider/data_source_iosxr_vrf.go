@@ -114,44 +114,44 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Flowspec sub address family",
 				Computed:            true,
 			},
-			"rd_two_byte_as_as_number": schema.StringAttribute{
-				MarkdownDescription: "bgp as-number",
+			"rd_two_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 			},
 			"rd_two_byte_as_index": schema.Int64Attribute{
 				MarkdownDescription: "ASN2:index (hex or decimal format)",
 				Computed:            true,
 			},
-			"rd_four_byte_as_as_number": schema.StringAttribute{
-				MarkdownDescription: "4-byte AS number",
+			"rd_four_byte_as_number": schema.Int64Attribute{
+				MarkdownDescription: "4-byte AS number in asplain format",
 				Computed:            true,
 			},
 			"rd_four_byte_as_index": schema.Int64Attribute{
-				MarkdownDescription: "ASN2:index (hex or decimal format)",
+				MarkdownDescription: "ASN4:index (hex or decimal format)",
 				Computed:            true,
 			},
-			"rd_ip_address_ipv4_address": schema.StringAttribute{
-				MarkdownDescription: "configure this node",
+			"rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: "IPv4 address",
 				Computed:            true,
 			},
-			"rd_ip_address_index": schema.Int64Attribute{
+			"rd_ipv4_address_index": schema.Int64Attribute{
 				MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 				Computed:            true,
 			},
 			"address_family_ipv4_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Two Byte AS Number Route Target",
+				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Two Byte AS Number",
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: "ASN2:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -159,19 +159,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Four Byte AS number Route Target",
+				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Four Byte AS number",
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: "ASN2:index (hex or decimal format)",
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -179,19 +179,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv4_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: "IP address",
+				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: "IP address",
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -199,19 +199,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Two Byte AS Number Route Target",
+				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Two Byte AS Number",
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: "ASN2:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -219,19 +219,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Four Byte AS number Route Target",
+				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Four Byte AS number",
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: "ASN2:index (hex or decimal format)",
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -239,19 +239,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv4_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: "IP address",
+				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: "IP address",
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -259,19 +259,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Two Byte AS Number Route Target",
+				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Two Byte AS Number",
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: "ASN2:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -279,19 +279,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Four Byte AS number Route Target",
+				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Four Byte AS number",
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: "ASN2:index (hex or decimal format)",
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -299,19 +299,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: "IP address",
+				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: "IP address",
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -319,19 +319,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Two Byte AS Number Route Target",
+				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Two Byte AS Number",
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "2-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: "ASN2:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -339,19 +339,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: "Four Byte AS number Route Target",
+				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: "Four Byte AS number",
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: "4-byte AS number",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: "ASN2:index (hex or decimal format)",
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: "ASN4:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},
@@ -359,19 +359,19 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				},
 			},
 			"address_family_ipv6_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: "IP address",
+				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: "IP address",
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 							Computed:            true,
 						},
-						"stitching": schema.BoolAttribute{
+						"stitching": schema.StringAttribute{
 							MarkdownDescription: "These are stitching RTs",
 							Computed:            true,
 						},

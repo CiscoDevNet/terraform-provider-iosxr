@@ -14,9 +14,9 @@ This data source can read the Router BGP Neighbor Address Family configuration.
 
 ```terraform
 data "iosxr_router_bgp_neighbor_address_family" "example" {
-  as_number        = "65001"
-  neighbor_address = "10.1.1.2"
-  af_name          = "vpnv4-unicast"
+  as_number = "65001"
+  address   = "10.1.1.2"
+  af_name   = "vpnv4-unicast"
 }
 ```
 
@@ -25,9 +25,9 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Required
 
+- `address` (String) IPaddress
 - `af_name` (String) Enter Address Family command mode
 - `as_number` (String) bgp as-number
-- `neighbor_address` (String) Neighbor address
 
 ### Optional
 
@@ -38,13 +38,17 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `advertise_vpnv4_unicast_enable_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
-- `encapsulation_type_srv6` (Boolean) SRv6 encapsulation
+- `encapsulation_type` (String) Specify encapsulation type
 - `id` (String) The path of the retrieved object.
+- `import` (Boolean) Import options for neighbor address-family routes
+- `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
+- `import_stitching_rt` (Boolean) Import routes using stitching RTs
+- `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes
 - `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `maximum_prefix_discard_extra_paths` (Boolean) Discard extra paths when limit is exceeded
-- `maximum_prefix_limit` (Number) Maximum number of prefixes to accept from this peer
+- `maximum_prefix_limit` (Number) maximum no. of prefix limit
 - `maximum_prefix_restart` (Number) Restart time interval
-- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
+- `maximum_prefix_threshold_value` (Number) Threshold value (%) at which to generate a warning msg
 - `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent

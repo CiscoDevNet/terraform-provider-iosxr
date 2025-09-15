@@ -46,7 +46,7 @@ resource "iosxr_logging" "example" {
 - `events_level` (String) Log all events with equal or higher (lower level) severity
   - Choices: `alerts`, `critical`, `emergencies`, `errors`, `informational`, `notifications`, `warnings`
 - `facility_level` (String) configure this node
-  - Choices: `auth`, `cron`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `lpr`, `mail`, `news`, `sys10`, `sys11`, `sys12`, `sys13`, `sys14`, `sys9`, `syslog`, `user`, `uucp`
+  - Choices: `all`, `audit`, `auth`, `authpriv`, `console`, `daemon`, `kern`, `local0`, `local1`, `local2`, `local3`, `local4`, `local5`, `local6`, `local7`, `mail`, `ntp`, `syslog`, `user`
 - `hostnameprefix` (String) Hostname prefix to add on msgs to servers
 - `ipv4_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `monitor` (String) Set monitor logging

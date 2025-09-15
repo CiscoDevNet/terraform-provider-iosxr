@@ -66,6 +66,50 @@ func (d *EVPNDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 				MarkdownDescription: "Configure EVPN router-id implicitly through Loopback Interface",
 				Computed:            true,
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify interface name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: "Specify interface name",
+							Computed:            true,
+						},
+						"ethernet_segment_enable": schema.BoolAttribute{
+							MarkdownDescription: "Ethernet Segment configuration commands",
+							Computed:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: "9-octet ESI value, xx.xx.xx.xx.xx.xx.xx.xx.xx",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_routing_srv6": schema.BoolAttribute{
+				MarkdownDescription: "SRv6 configuration for EVPN",
+				Computed:            true,
+			},
+			"segment_routing_srv6_locators": schema.ListNestedAttribute{
+				MarkdownDescription: "Default locator to use for EVPN SID allocation",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: "Default locator to use for EVPN SID allocation",
+							Computed:            true,
+						},
+						"usid_allocation_wide_local_id_block": schema.BoolAttribute{
+							MarkdownDescription: "Enable uSID wide function knob for the locator",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: "Enable uSID wide function global knob",
+				Computed:            true,
+			},
 		},
 	}
 }

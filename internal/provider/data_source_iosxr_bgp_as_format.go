@@ -62,12 +62,8 @@ func (d *BGPASFormatDataSource) Schema(ctx context.Context, req datasource.Schem
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
-			"asdot": schema.BoolAttribute{
-				MarkdownDescription: "AS Dot format",
-				Computed:            true,
-			},
-			"asplain": schema.BoolAttribute{
-				MarkdownDescription: "AS Plain format",
+			"as_format": schema.StringAttribute{
+				MarkdownDescription: "Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)",
 				Computed:            true,
 			},
 		},

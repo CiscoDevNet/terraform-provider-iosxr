@@ -32,7 +32,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -172,183 +171,96 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable SNMP entity FRU control traps").String,
 				Optional:            true,
 			},
-			"traps_isis_all": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_all": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable all IS-IS traps").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_database_overload": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_database_overload": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisDatabaseOverload").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_manual_address_drops": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_manual_address_drops": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisManualAddressDrops").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_corrupted_lsp_detected": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_corrupted_lsp_detected": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisCorruptedLSPDetected").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_attempt_to_exceed_max_sequence": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAttemptToExceedMaxSequence").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_id_len_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_id_len_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisIDLenMismatch").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_max_area_addresses_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_max_area_addresses_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisMaxAreaAddressesMismatch").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_own_lsp_purge": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_own_lsp_purge": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisOwnLSPPurge").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_sequence_number_skip": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_sequence_number_skip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisSequenceNumberSkip").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_authentication_type_failure": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_authentication_type_failure": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationTypeFailure").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_authentication_failure": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_authentication_failure": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAuthenticationFailure").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_version_skew": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_version_skew": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisVersionSkew").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_area_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_area_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAreaMismatch").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_rejected_adjacency": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_rejected_adjacency": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisRejectedAdjacency").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_lsp_too_large_to_propagate": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_lsp_too_large_to_propagate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPTooLargeToPropagate").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_orig_lsp_buff_size_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisOrigLSPBuffSizeMismatch").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_protocols_supported_mismatch": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_protocols_supported_mismatch": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisProtocolsSupportedMismatch").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_adjacency_change": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_adjacency_change": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisAdjacencyChange").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_isis_lsp_error_detected": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").AddStringEnumDescription("disable", "enable").AddDefaultValueDescription("disable").String,
+			"traps_isis_lsp_error_detected": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("isisLspErrorDetected").String,
 				Optional:            true,
-				Computed:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("disable", "enable"),
-				},
-				Default: stringdefault.StaticString("disable"),
 			},
-			"traps_bgp_cbgp2_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_bgp4_mib_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_enable_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP4-MIB and CISCO-BGP4-MIB traps").String,
 				Optional:            true,
 			},
 			"users": schema.ListNestedAttribute{
@@ -368,7 +280,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_auth_md5_encryption_aes": schema.StringAttribute{
@@ -421,7 +333,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_systemowner": schema.BoolAttribute{
@@ -441,7 +353,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 128),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_priv": schema.BoolAttribute{
@@ -453,7 +365,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_write": schema.StringAttribute{
@@ -461,7 +373,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_context": schema.StringAttribute{
@@ -469,7 +381,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_notify": schema.StringAttribute{
@@ -477,7 +389,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_ipv4": schema.StringAttribute{
@@ -485,7 +397,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"v3_ipv6": schema.StringAttribute{
@@ -493,7 +405,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -516,7 +428,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"ro": schema.BoolAttribute{
@@ -540,7 +452,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"ipv6": schema.StringAttribute{
@@ -548,7 +460,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

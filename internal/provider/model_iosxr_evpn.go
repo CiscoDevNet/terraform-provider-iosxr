@@ -22,6 +22,8 @@ package provider
 import (
 	"context"
 	"fmt"
+	"reflect"
+	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/tidwall/gjson"
@@ -29,16 +31,33 @@ import (
 )
 
 type EVPN struct {
-	Device          types.String `tfsdk:"device"`
-	Id              types.String `tfsdk:"id"`
-	DeleteMode      types.String `tfsdk:"delete_mode"`
-	SourceInterface types.String `tfsdk:"source_interface"`
+	Device                                           types.String                     `tfsdk:"device"`
+	Id                                               types.String                     `tfsdk:"id"`
+	DeleteMode                                       types.String                     `tfsdk:"delete_mode"`
+	SourceInterface                                  types.String                     `tfsdk:"source_interface"`
+	Interfaces                                       []EVPNInterfaces                 `tfsdk:"interfaces"`
+	SegmentRoutingSrv6                               types.Bool                       `tfsdk:"segment_routing_srv6"`
+	SegmentRoutingSrv6Locators                       []EVPNSegmentRoutingSrv6Locators `tfsdk:"segment_routing_srv6_locators"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool                       `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
 }
 
 type EVPNData struct {
-	Device          types.String `tfsdk:"device"`
-	Id              types.String `tfsdk:"id"`
-	SourceInterface types.String `tfsdk:"source_interface"`
+	Device                                           types.String                     `tfsdk:"device"`
+	Id                                               types.String                     `tfsdk:"id"`
+	SourceInterface                                  types.String                     `tfsdk:"source_interface"`
+	Interfaces                                       []EVPNInterfaces                 `tfsdk:"interfaces"`
+	SegmentRoutingSrv6                               types.Bool                       `tfsdk:"segment_routing_srv6"`
+	SegmentRoutingSrv6Locators                       []EVPNSegmentRoutingSrv6Locators `tfsdk:"segment_routing_srv6_locators"`
+	SegmentRoutingSrv6UsidAllocationWideLocalIdBlock types.Bool                       `tfsdk:"segment_routing_srv6_usid_allocation_wide_local_id_block"`
+}
+type EVPNInterfaces struct {
+	InterfaceName          types.String `tfsdk:"interface_name"`
+	EthernetSegmentEnable  types.Bool   `tfsdk:"ethernet_segment_enable"`
+	EthernetSegmentEsiZero types.String `tfsdk:"ethernet_segment_esi_zero"`
+}
+type EVPNSegmentRoutingSrv6Locators struct {
+	LocatorName                    types.String `tfsdk:"locator_name"`
+	UsidAllocationWideLocalIdBlock types.Bool   `tfsdk:"usid_allocation_wide_local_id_block"`
 }
 
 func (data EVPN) getPath() string {
@@ -54,6 +73,45 @@ func (data EVPN) toBody(ctx context.Context) string {
 	if !data.SourceInterface.IsNull() && !data.SourceInterface.IsUnknown() {
 		body, _ = sjson.Set(body, "source.interface", data.SourceInterface.ValueString())
 	}
+	if !data.SegmentRoutingSrv6.IsNull() && !data.SegmentRoutingSrv6.IsUnknown() {
+		if data.SegmentRoutingSrv6.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.srv6", map[string]string{})
+		}
+	}
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsUnknown() {
+		if data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+			body, _ = sjson.Set(body, "segment-routing.srv6.usid.allocation.wide-local-id-block", map[string]string{})
+		}
+	}
+	if len(data.Interfaces) > 0 {
+		body, _ = sjson.Set(body, "interface.interface", []interface{}{})
+		for index, item := range data.Interfaces {
+			if !item.InterfaceName.IsNull() && !item.InterfaceName.IsUnknown() {
+				body, _ = sjson.Set(body, "interface.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
+			}
+			if !item.EthernetSegmentEnable.IsNull() && !item.EthernetSegmentEnable.IsUnknown() {
+				if item.EthernetSegmentEnable.ValueBool() {
+					body, _ = sjson.Set(body, "interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment", map[string]string{})
+				}
+			}
+			if !item.EthernetSegmentEsiZero.IsNull() && !item.EthernetSegmentEsiZero.IsUnknown() {
+				body, _ = sjson.Set(body, "interface.interface"+"."+strconv.Itoa(index)+"."+"ethernet-segment.identifier.type.zero.esi", item.EthernetSegmentEsiZero.ValueString())
+			}
+		}
+	}
+	if len(data.SegmentRoutingSrv6Locators) > 0 {
+		body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator", []interface{}{})
+		for index, item := range data.SegmentRoutingSrv6Locators {
+			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-name", item.LocatorName.ValueString())
+			}
+			if !item.UsidAllocationWideLocalIdBlock.IsNull() && !item.UsidAllocationWideLocalIdBlock.IsUnknown() {
+				if item.UsidAllocationWideLocalIdBlock.ValueBool() {
+					body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"usid.allocation.wide-local-id-block", map[string]string{})
+				}
+			}
+		}
+	}
 	return body
 }
 
@@ -63,17 +121,206 @@ func (data *EVPN) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SourceInterface = types.StringNull()
 	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "interface.interface").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("interface-name"); value.Exists() && !data.Interfaces[i].InterfaceName.IsNull() {
+			data.Interfaces[i].InterfaceName = types.StringValue(value.String())
+		} else {
+			data.Interfaces[i].InterfaceName = types.StringNull()
+		}
+		if value := r.Get("ethernet-segment"); !data.Interfaces[i].EthernetSegmentEnable.IsNull() {
+			if value.Exists() {
+				data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(true)
+			} else {
+				data.Interfaces[i].EthernetSegmentEnable = types.BoolValue(false)
+			}
+		} else {
+			data.Interfaces[i].EthernetSegmentEnable = types.BoolNull()
+		}
+		if value := r.Get("ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.Interfaces[i].EthernetSegmentEsiZero.IsNull() {
+			data.Interfaces[i].EthernetSegmentEsiZero = types.StringValue(value.String())
+		} else {
+			data.Interfaces[i].EthernetSegmentEsiZero = types.StringNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6"); !data.SegmentRoutingSrv6.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingSrv6 = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingSrv6 = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingSrv6 = types.BoolNull()
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "segment-routing.srv6.locators.locator").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("locator-name"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].LocatorName.IsNull() {
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringValue(value.String())
+		} else {
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringNull()
+		}
+		if value := r.Get("usid.allocation.wide-local-id-block"); !data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() {
+			if value.Exists() {
+				data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+		} else {
+			data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock = types.BoolNull()
+		}
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+		if value.Exists() {
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+		} else {
+			data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+		}
+	} else {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolNull()
+	}
 }
 
 func (data *EVPN) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
 	}
+	if value := gjson.GetBytes(res, "interface.interface"); value.Exists() {
+		data.Interfaces = make([]EVPNInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ethernet-segment"); cValue.Exists() {
+				item.EthernetSegmentEnable = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("ethernet-segment.identifier.type.zero.esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+		data.SegmentRoutingSrv6 = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locators = make([]EVPNSegmentRoutingSrv6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSrv6Locators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+	}
 }
 
 func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "source.interface"); value.Exists() {
 		data.SourceInterface = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "interface.interface"); value.Exists() {
+		data.Interfaces = make([]EVPNInterfaces, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNInterfaces{}
+			if cValue := v.Get("interface-name"); cValue.Exists() {
+				item.InterfaceName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("ethernet-segment"); cValue.Exists() {
+				item.EthernetSegmentEnable = types.BoolValue(true)
+			} else {
+				item.EthernetSegmentEnable = types.BoolValue(false)
+			}
+			if cValue := v.Get("ethernet-segment.identifier.type.zero.esi"); cValue.Exists() {
+				item.EthernetSegmentEsiZero = types.StringValue(cValue.String())
+			}
+			data.Interfaces = append(data.Interfaces, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6"); value.Exists() {
+		data.SegmentRoutingSrv6 = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.locators.locator"); value.Exists() {
+		data.SegmentRoutingSrv6Locators = make([]EVPNSegmentRoutingSrv6Locators, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := EVPNSegmentRoutingSrv6Locators{}
+			if cValue := v.Get("locator-name"); cValue.Exists() {
+				item.LocatorName = types.StringValue(cValue.String())
+			}
+			if cValue := v.Get("usid.allocation.wide-local-id-block"); cValue.Exists() {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+			} else {
+				item.UsidAllocationWideLocalIdBlock = types.BoolValue(false)
+			}
+			data.SegmentRoutingSrv6Locators = append(data.SegmentRoutingSrv6Locators, item)
+			return true
+		})
+	}
+	if value := gjson.GetBytes(res, "segment-routing.srv6.usid.allocation.wide-local-id-block"); value.Exists() {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(true)
+	} else {
+		data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock = types.BoolValue(false)
 	}
 }
 
@@ -82,11 +329,114 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface", state.getPath()))
 	}
+	for i := range state.Interfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && data.Interfaces[j].EthernetSegmentEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].EthernetSegmentEsiZero.IsNull() && data.Interfaces[j].EthernetSegmentEsiZero.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment/identifier/type/zero/esi", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SegmentRoutingSrv6.IsNull() && data.SegmentRoutingSrv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
+	}
+	for i := range state.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		stateKeyValues := [...]string{state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SegmentRoutingSrv6Locators {
+			found = true
+			if state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString() != data.SegmentRoutingSrv6Locators[j].LocatorName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && data.SegmentRoutingSrv6Locators[j].UsidAllocationWideLocalIdBlock.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
+		}
+	}
+	if !state.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", state.getPath()))
+	}
 	return deletedItems
 }
 
 func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Interfaces[i].EthernetSegmentEnable.IsNull() && !data.Interfaces[i].EthernetSegmentEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", data.getPath(), keyString))
+		}
+	}
+	if !data.SegmentRoutingSrv6.IsNull() && !data.SegmentRoutingSrv6.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6Locators[i].UsidAllocationWideLocalIdBlock.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", data.getPath(), keyString))
+		}
+	}
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() && !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -94,6 +444,32 @@ func (data *EVPN) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.SourceInterface.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface", data.getPath()))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interface/interface%v", data.getPath(), keyString))
+	}
+	if !data.SegmentRoutingSrv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	}
+	for i := range data.SegmentRoutingSrv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
+	}
+	if !data.SegmentRoutingSrv6UsidAllocationWideLocalIdBlock.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
 	}
 	return deletePaths
 }

@@ -80,13 +80,14 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 36),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"af_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Address family name").AddStringEnumDescription("ipv4", "ipv6").String,
+				MarkdownDescription: helpers.NewAttributeDescription("af-name").AddStringEnumDescription("ipv4", "ipv6").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("ipv4", "ipv6"),
@@ -96,7 +97,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"saf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sub address family name").AddStringEnumDescription("multicast", "unicast").String,
+				MarkdownDescription: helpers.NewAttributeDescription("saf-name").AddStringEnumDescription("multicast", "unicast").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("multicast", "unicast"),
@@ -105,12 +106,12 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"metric_style_narrow": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
+			"metric_style_narrow_transition": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 				Optional:            true,
 			},
-			"metric_style_wide": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
+			"metric_style_wide_transition": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 				Optional:            true,
 			},
 			"metric_style_transition": schema.BoolAttribute{
@@ -122,22 +123,22 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Set metric-style for one level only").AddIntegerRangeDescription(1, 2).String,
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
 						},
-						"narrow": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
+						"metric_style_narrow_transition": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
-						"wide": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
+						"metric_style_wide_transition": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
-						"transition": schema.BoolAttribute{
+						"metric_style_transition": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Send and accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
@@ -147,9 +148,6 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 			"router_id_interface_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router ID Interface").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
 			},
 			"router_id_ip_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router ID address").String,
@@ -166,37 +164,209 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					int64validator.Between(100, 60000),
 				},
 			},
-			"fast_reroute_per_link_priority_limit_critical": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical priority prefixes only").String,
+			"fast_reroute_per_prefix_priority_limit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("critical", "high", "medium"),
+				},
+			},
+			"fast_reroute_per_prefix_priority_limit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set priority-limit for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"priority_limit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("critical", "high", "medium"),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_use_candidate_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude all interfaces from computation").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_link_priority_limit_high": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical & high priority prefixes").String,
+			"fast_reroute_per_prefix_srlg_protection_weighted_global": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Weighted global SRLG protection").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_link_priority_limit_medium": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical, high & medium priority prefixes").String,
+			"fast_reroute_per_prefix_srlg_protection_weighted_global_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SRLG protection type for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set SRLG protection type for one level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_remote_lfa_prefix_list": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Filter PQ node router ID based on prefix list").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"fast_reroute_per_prefix_remote_lfa_prefix_list_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable router ID filtering for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable router ID filtering for one level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Filter PQ node router ID based on prefix list").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_load_sharing_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable load sharing").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_priority_limit_critical": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical priority prefixes only").String,
+			"fast_reroute_per_prefix_load_sharing_disable_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable load sharing for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable load sharing for one level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_downstream_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lc_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_node_protecting_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_primary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_secondary_path_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set preference order among tiebreakers").AddIntegerRangeDescription(1, 255).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 255),
+				},
+			},
+			"fast_reroute_per_link_priority_limit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("critical", "high", "medium"),
+				},
+			},
+			"fast_reroute_per_link_priority_limit_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set priority-limit for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"priority_limit": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Limit backup computation upto the prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("critical", "high", "medium"),
+							},
+						},
+					},
+				},
+			},
+			"fast_reroute_per_link_use_candidate_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Exclude all interfaces from computation").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_priority_limit_high": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical & high priority prefixes").String,
+			"microloop_avoidance_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable local microloop avoidance").String,
 				Optional:            true,
 			},
-			"fast_reroute_per_prefix_priority_limit_medium": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Compute for critical, high & medium priority prefixes").String,
-				Optional:            true,
-			},
-			"microloop_avoidance_protected": schema.BoolAttribute{
+			"microloop_avoidance_enable_protected": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable microloop avoidance for only protected prefixes").String,
 				Optional:            true,
 			},
-			"microloop_avoidance_segment_routing": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable segment routing microloop avoidance ").String,
+			"microloop_avoidance_enable_segment_routing_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Provide Uloop protection based on a route policy").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"microloop_avoidance_rib_update_delay": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Delay in milliseconds").AddIntegerRangeDescription(1000, 65535).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1000, 65535),
+				},
 			},
 			"advertise_passive_only": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise prefixes of passive interfaces only").String,
@@ -210,20 +380,13 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Enable LDP IGP interface auto-configuration").String,
 				Optional:            true,
 			},
-			"mpls_traffic_eng_router_id_ip_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
+			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Router ID IPv4 address").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
-				},
 			},
-			"mpls_traffic_eng_router_id_interface": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").String,
+			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Router ID interface").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
-				},
 			},
 			"mpls_traffic_eng_level_1_2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable mpls traffic-eng at both level 1 and 2").String,
@@ -238,36 +401,192 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 			},
 			"spf_interval_maximum_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before running a route calculation").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before running a route calculation [5000]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
 				},
 			},
 			"spf_interval_initial_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before running a route calculation").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before running a route calculation [50]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
 				},
 			},
 			"spf_interval_secondary_wait": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before running a route calculation").AddIntegerRangeDescription(0, 120000).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before running a route calculation [200]").AddIntegerRangeDescription(0, 120000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 120000),
 				},
 			},
-			"spf_prefix_priorities": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure a prefix priority list").String,
+			"spf_interval_ietf": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use RFC 8405 backoff algorithm").String,
+				Optional:            true,
+			},
+			"spf_interval_ietf_initial_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Initial delay before running a route calculation [50]").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"spf_interval_ietf_short_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Short delay before running a route calculation [200]").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"spf_interval_ietf_long_wait": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Long delay before running a route calculation [5000]").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"spf_interval_ietf_learn_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Time To Learn interval for running a route calculation [500]").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"spf_interval_ietf_holddown_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holddown interval for running a route calculation [10000]").AddIntegerRangeDescription(0, 120000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 120000),
+				},
+			},
+			"spf_interval_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set SPF interval for one level only").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"priority": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("prefix priority").AddStringEnumDescription("critical", "high", "medium").String,
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.OneOf("critical", "high", "medium"),
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"maximum_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum delay before running a route calculation [5000]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"initial_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Initial delay before running a route calculation [50]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"secondary_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Secondary delay before running a route calculation [200]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"ietf": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use RFC 8405 backoff algorithm").String,
+							Optional:            true,
+						},
+						"ietf_initial_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Initial delay before running a route calculation [50]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"ietf_short_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Short delay before running a route calculation [200]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"ietf_long_wait": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Long delay before running a route calculation [5000]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"ietf_learn_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Time To Learn interval for running a route calculation [500]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+						"ietf_holddown_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Holddown interval for running a route calculation [10000]").AddIntegerRangeDescription(0, 120000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 120000),
+							},
+						},
+					},
+				},
+			},
+			"spf_prefix_priority_critical_tag": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a tag to indicate priority").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"spf_prefix_priority_critical_prefixlist_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"spf_prefix_priority_high_tag": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a tag to indicate priority").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"spf_prefix_priority_high_prefixlist_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"spf_prefix_priority_medium_tag": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a tag to indicate priority").AddIntegerRangeDescription(1, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 4294967295),
+				},
+			},
+			"spf_prefix_priority_medium_prefixlist_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
+			},
+			"spf_prefix_priority_critical_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify critical priority prefixes").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
 							},
 						},
 						"tag": schema.Int64Attribute{
@@ -277,8 +596,8 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 4294967295),
 							},
 						},
-						"access_list_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
+						"prefixlist_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
@@ -286,6 +605,68 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 						},
 					},
 				},
+			},
+			"spf_prefix_priority_high_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify high priority prefixes").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a tag to indicate priority").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"prefixlist_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+					},
+				},
+			},
+			"spf_prefix_priority_medium_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify medium priority prefixes").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Level").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a tag to indicate priority").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"prefixlist_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+					},
+				},
+			},
+			"segment_routing_mpls_enable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable Segment Routing using MPLS encapsulation").String,
+				Optional:            true,
 			},
 			"segment_routing_mpls_sr_prefer": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefer segment routing labels over LDP labels").String,
@@ -303,14 +684,14 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
+						"level_number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Set maximum redistributed prefixes for one level only").AddIntegerRangeDescription(1, 2).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
 							},
 						},
-						"maximum_prefixes": schema.Int64Attribute{
+						"maximum_redistributed_prefixes": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Maximum number of redistributed prefixes").AddIntegerRangeDescription(1, 28000).String,
 							Required:            true,
 							Validators: []validator.Int64{
@@ -320,16 +701,31 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					},
 				},
 			},
-			"redistribute_isis": schema.ListNestedAttribute{
+			"redistribute_isis_processes": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"instance_id": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
+						"isis_string": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS instance identifier").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"redistribute_route_level": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("level-1", "level-1-2", "level-2"),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 16777215).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 16777215),
 							},
 						},
 						"route_policy": schema.StringAttribute{
@@ -339,6 +735,17 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								stringvalidator.LengthBetween(1, 255),
 							},
 						},
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IS-IS metric type for redistributed routes").AddStringEnumDescription("external", "internal", "rib-metric-as-external", "rib-metric-as-internal").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("external", "internal", "rib-metric-as-external", "rib-metric-as-internal"),
+							},
+						},
+						"down_flag_clear": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set the up/down bit to 0 in prefix advertisements").String,
+							Optional:            true,
+						},
 					},
 				},
 			},
@@ -347,12 +754,12 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"locator_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Enter SRv6 Locator submode").String,
+						"locator_string": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Locator name").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 59),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"level": schema.Int64Attribute{
@@ -360,6 +767,64 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 2),
+							},
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the locator metric for a given level").AddIntegerRangeDescription(1, 16777214).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 16777214),
+							},
+						},
+						"metric_levels": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set Metric for one level only").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"level_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Metric for one level only").AddIntegerRangeDescription(1, 2).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 2),
+										},
+									},
+									"metric": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Srv6 locator metric").AddIntegerRangeDescription(1, 16777214).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 16777214),
+										},
+									},
+								},
+							},
+						},
+						"tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Advertise the locator tag for a given level").AddIntegerRangeDescription(1, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 4294967295),
+							},
+						},
+						"tag_levels": schema.ListNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set Tag for one level only").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"level_number": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Tag for one level only").AddIntegerRangeDescription(1, 2).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 2),
+										},
+									},
+									"tag": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Srv6 locator tag").AddIntegerRangeDescription(1, 4294967295).String,
+										Required:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 4294967295),
+										},
+									},
+								},
 							},
 						},
 					},

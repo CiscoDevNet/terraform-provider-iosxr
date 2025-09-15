@@ -16,6 +16,7 @@ This resource can manage the EVPN Interface configuration.
 resource "iosxr_evpn_interface" "example" {
   interface_name                                          = "Bundle-Ether12"
   core_isolation_group                                    = 11
+  ethernet_segment_identifier_type_zero_esi               = "01.00.01.01.00.00.00.01.1"
   ethernet_segment_load_balancing_mode_all_active         = false
   ethernet_segment_load_balancing_mode_port_active        = false
   ethernet_segment_load_balancing_mode_single_active      = true
@@ -28,6 +29,7 @@ resource "iosxr_evpn_interface" "example" {
 
 ### Required
 
+- `ethernet_segment_identifier_type_zero_esi` (String) ESI value
 - `interface_name` (String) Specify interface name
 
 ### Optional
@@ -37,12 +39,6 @@ resource "iosxr_evpn_interface" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `ethernet_segment_identifier_type_zero_bytes_1` (String) 1st Byte, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_23` (String) 2nd and 3rd Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_45` (String) 4th and 5th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_67` (String) 6th and 7th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_89` (String) 8th and 9th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_esi` (String) ESI value, used instead of `bytes-x` from version 7.8.1`
 - `ethernet_segment_load_balancing_mode_all_active` (Boolean) All-Active load balancing
 - `ethernet_segment_load_balancing_mode_port_active` (Boolean) Port-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_active` (Boolean) Single-Active load balancing

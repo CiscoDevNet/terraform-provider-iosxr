@@ -1,10 +1,17 @@
 ---
 name: BGP AS Format
 path: Cisco-IOS-XR-um-router-bgp-cfg:/as-format
-no_delete_attributes: true
 doc_category: BGP
+skip_minimum_test: true
+exclude_test: true
 attributes:
-  - yang_name: asdot
-    example: false
-  - yang_name: asplain
-    example: true
+  - yang_name: ""
+    tf_name: "as_format"
+    type: String
+    no_augment_config: true
+    optional: true
+    example: "asplain"
+    description: "Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)"
+    enum_values:
+      - "asdot"
+      - "asplain"

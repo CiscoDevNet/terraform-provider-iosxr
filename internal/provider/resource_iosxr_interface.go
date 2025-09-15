@@ -155,7 +155,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 			},
 			"l2transport_encapsulation_dot1q_second_dot1q": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("End of VLAN range").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Single VLAN id or start of VLAN range").String,
 				Optional:            true,
 			},
 			"rewrite_ingress_tag_pop_one": schema.BoolAttribute{
@@ -200,7 +200,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"ipv4_address": schema.StringAttribute{
@@ -245,8 +245,8 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"ipv4_access_group_ingress_hardware_count": schema.BoolAttribute{
@@ -257,19 +257,19 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
-			"ipv4_access_group_ingress_compress_level": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+			"ipv4_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 3),
+					int64validator.Between(0, 4),
 				},
 			},
 			"ipv4_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"ipv4_access_group_egress_hardware_count": schema.BoolAttribute{
@@ -280,11 +280,11 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
-			"ipv4_access_group_egress_compress_level": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+			"ipv4_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 3),
+					int64validator.Between(0, 4),
 				},
 			},
 			"ipv6_verify_unicast_source_reachable_via_type": schema.StringAttribute{
@@ -306,38 +306,38 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"ipv6_access_group_ingress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
-			"ipv6_access_group_ingress_compress_level": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+			"ipv6_access_group_ingress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 3),
+					int64validator.Between(0, 4),
 				},
 			},
-			"ipv6_access_group_egress_acl1": schema.StringAttribute{
+			"ipv6_access_group_egress_acl": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Access-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 128),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"ipv6_access_group_egress_interface_statistics": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Per interface statistics in hardware").String,
 				Optional:            true,
 			},
-			"ipv6_access_group_egress_compress_level": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 3).String,
+			"ipv6_access_group_egress_compress": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify ACL compression in hardware").AddIntegerRangeDescription(0, 4).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 3),
+					int64validator.Between(0, 4),
 				},
 			},
 			"ipv6_link_local_address": schema.StringAttribute{
@@ -442,7 +442,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -458,7 +458,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"sampler_map_name": schema.StringAttribute{
@@ -466,7 +466,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -482,7 +482,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -498,7 +498,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"sampler_map_name": schema.StringAttribute{
@@ -506,7 +506,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -522,7 +522,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -538,7 +538,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"sampler_map_name": schema.StringAttribute{
@@ -546,7 +546,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -562,7 +562,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},
@@ -578,7 +578,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"sampler_map_name": schema.StringAttribute{
@@ -586,7 +586,7 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

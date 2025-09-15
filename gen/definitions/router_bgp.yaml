@@ -15,18 +15,60 @@ attributes:
     example: true
   - yang_name: segment-routing/srv6/locator
     example: locator11
+  - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
+    tf_name: segment_routing_srv6_usid_allocation_wide_local_id_block
+    example: true
   - yang_name: timers/bgp/keepalive-interval
-    optional: true
-    delete_parent: true
     example: 5
-  - yang_name: timers/bgp/holdtime
+  - yang_name: timers/bgp/zero/zero
+    tf_name: timers_bgp_zero
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
     optional: true
-    delete_parent: true
-    example: 20
-  - yang_name: timers/bgp/minimum-acceptable-holdtime
+    exclude_test: true
+    example: true
+    description: "Disable keepalives/hold time"
+  - yang_name: timers/bgp/zero/minimum-acceptable-holdtime
+    tf_name: timers_bgp_zero_minimum_acceptable_holdtime
+    type: Int64
+    no_augment_config: true
     optional: true
-    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    exclude_test: true
     example: 10
+    description: "Minimum acceptable holdtime from neighbor within zero container"
+  - yang_name: timers/bgp/holdtime/holdtime-number
+    tf_name: timers_bgp_holdtime_number
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    example: 20
+    description: "Holdtime value"
+  - yang_name: timers/bgp/holdtime/zero
+    tf_name: timers_bgp_holdtime_zero
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Disable keepalives/hold time"
+  - yang_name: timers/bgp/holdtime/minimum-acceptable-holdtime
+    tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    example: 10
+    description: "Minimum acceptable holdtime from neighbor"
   - yang_name: bgp/router-id
     example: 22.22.22.22
   - yang_name: bgp/graceful-restart/graceful-reset
@@ -42,8 +84,10 @@ attributes:
   - yang_name: nexthop/validation/color-extcomm/sr-policy
     example: true
   - yang_name: nexthop/validation/color-extcomm/disable
+    exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/ignore
+    exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/multipath-relax
     example: true
@@ -54,13 +98,15 @@ attributes:
   - yang_name: bgp/bestpath/aigp/ignore
     example: true
   - yang_name: bgp/bestpath/igp-metric/ignore
+    exclude_test: true
     example: true
   - yang_name: bgp/bestpath/igp-metric/sr-policy
     example: true
   - yang_name: bgp/bestpath/med/always
     example: true
-  - yang_name: bgp/bestpath/med/confed
-    example: true
+    exclude_test: true
+  # - yang_name: bgp/bestpath/med/confed
+  #   example: true
   - yang_name: bgp/bestpath/med/missing-as-worst
     example: true
   - yang_name: bgp/bestpath/origin-as/use/validity
@@ -68,14 +114,27 @@ attributes:
   - yang_name: bgp/bestpath/origin-as/allow/invalid
     example: true
   - yang_name: bgp/bestpath/sr-policy/prefer
-    example: false
-  - yang_name: bgp/bestpath/sr-policy/force
+    tf_name: bgp_bestpath_sr_policy_prefer
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
     example: true
+    optional: true
+    description: "Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible"
+  - yang_name: bgp/bestpath/sr-policy/force
+    tf_name: bgp_bestpath_sr_policy_force
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    exclude_test: true
+    example: true
+    optional: true
+    description: "Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible"
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List
     attributes:
-      - yang_name: neighbor-address
+      - yang_name: address
         id: true
         example: 10.1.1.2
       - yang_name: remote-as
@@ -84,12 +143,11 @@ attributes:
         example: My Neighbor Description
       - yang_name: use/neighbor-group
         example: GROUP1
-      - yang_name: advertisement-interval/time-in-seconds
+      - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
         tf_name: advertisement_interval_seconds
-        optional: true
         delete_parent: true
         example: 10
-      - yang_name: advertisement-interval/time-in-milliseconds
+      - yang_name: advertisement-interval/advertisement-interval-time-in-milliseconds
         tf_name: advertisement_interval_milliseconds
         delete_parent: true
         example: 500
@@ -107,32 +165,88 @@ attributes:
         example: true
       - yang_name: bfd/fast-detect/strict-mode
         example: false
-      - yang_name: bfd/fast-detect/inheritance-disable
-        example: true
-      - yang_name: local-as/as-number
-        tf_name: local_as
-        example: 65003
-      - yang_name: local-as/no-prepend
-        example: true
-      - yang_name: local-as/no-prepend/replace-as
-        tf_name: local_as_replace_as
-        example: true
-      - yang_name: local-as/no-prepend/replace-as/dual-as
-        tf_name: local_as_dual_as
-        example: true
+      - yang_name: bfd/fast-detect/disable
+        exclude_test: true
+        example: false
       - yang_name: password/encrypted
+        type: String
         tf_name: password
+        no_augment_config: true
+        optional: true
         example: 12341C2713181F13253920
+        description: "Specifies an ENCRYPTED password will follow"
+      - yang_name: password/inheritance-disable
+        tf_name: password_inheritance_disable
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        exclude_test: true
+        example: true
+        description: "Prevent password from being inherited from parent"
       - yang_name: shutdown
         example: false
       - yang_name: timers/keepalive-interval
+        tf_name: timers_keepalive_interval
+        type: Int64
+        no_augment_config: true
         optional: true
-        example: 5
-      - yang_name: timers/holdtime
-        optional: true
-        example: 20
-      - yang_name: timers/minimum-acceptable-holdtime
+        delete_parent: true
+        min_int: 0
+        max_int: 65535
         example: 10
+        description: "Keepalive interval"
+      - yang_name: timers/zero/zero
+        tf_name: timers_zero
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Disable keepalives/hold time within zero container"
+      - yang_name: timers/zero/minimum-acceptable-holdtime
+        tf_name: timers_zero_minimum_acceptable_holdtime
+        type: Int64
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        min_int: 3
+        max_int: 65535
+        exclude_test: true
+        example: 10
+        description: "Minimum acceptable holdtime from neighbor within zero container"
+      - yang_name: timers/holdtime/holdtime-number
+        tf_name: timers_holdtime_number
+        type: Int64
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        min_int: 3
+        max_int: 65535
+        example: 20
+        description: "Holdtime value"
+      - yang_name: timers/holdtime/zero
+        tf_name: timers_holdtime_zero
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
+        description: "Disable keepalives/hold time within holdtime container"
+      - yang_name: timers/holdtime/minimum-acceptable-holdtime
+        tf_name: timers_holdtime_minimum_acceptable_holdtime
+        type: Int64
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        min_int: 3
+        max_int: 65535
+        example: 20
+        description: "Minimum acceptable holdtime from neighbor"
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security

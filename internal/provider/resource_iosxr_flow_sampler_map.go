@@ -69,11 +69,11 @@ func (r *FlowSamplerMapResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Sampler map name - maximum 32 characters").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Sampler map name").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.LengthBetween(1, 90),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),

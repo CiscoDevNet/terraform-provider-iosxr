@@ -87,7 +87,7 @@ resource "iosxr_router_ospf" "example" {
 - `areas` (Attributes List) Enter the OSPF area configuration submode (see [below for nested schema](#nestedatt--areas))
 - `auto_cost_disable` (Boolean) Assign OSPF cost based on interface type
 - `auto_cost_reference_bandwidth` (Number) Specify reference bandwidth for OSPF cost computations
-  - Range: `1`-`4294967`
+  - Range: `1`-`2147483647`
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_minimum_interval` (Number) Minimum interval
   - Range: `3`-`30000`

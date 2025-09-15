@@ -15,22 +15,58 @@ attributes:
     example: My Neighbor Group Description
   - yang_name: update-source
     example: Loopback0
-  - yang_name: advertisement-interval/time-in-seconds
+  - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
     tf_name: advertisement_interval_seconds
     optional: true
     delete_parent: true
     example: 10
-  - yang_name: advertisement-interval/time-in-milliseconds
+  - yang_name: advertisement-interval/advertisement-interval-time-in-milliseconds
     tf_name: advertisement_interval_milliseconds
     delete_parent: true
     example: 500
     exclude_test: true
-  - yang_name: ao/key-chain-name
-    example: BGP-GROUP1-CLIENTS
+  - yang_name: ao/key-chain-name/key-chain-name
+    tf_name: ao_key_chain_name_name
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    string_min_length: 1
+    string_max_length: 32
     exclude_test: true
-  - yang_name: ao/include-tcp-options/enable
+    example: "BGP-GROUP1-CLIENTS"
+    description: "Name of the key chain - maximum 32 characters"
+  - yang_name: ao/key-chain-name/include-tcp-options
+    tf_name: ao_key_chain_include_tcp_options
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    enum_values:
+      - "enable"
+      - "disable"
+    example: "enable"
+    exclude_test: true
+    description: "Include/Exclude other TCP options in the header. Required when ao_key_chain_name_name is specified"
+  - yang_name: ao/key-chain-name/accept-ao-mismatch-connection
+    tf_name: ao_key_chain_accept_ao_mismatch_connection
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     example: true
     exclude_test: true
+    description: "Accept new connection even if AO mismatched"
+  - yang_name: ao/inheritance-disable
+    tf_name: ao_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    example: true
+    exclude_test: true
+    description: "Prevent keychain from being inherited from parent"
   - yang_name: bfd/minimum-interval
     example: 3
   - yang_name: bfd/multiplier
@@ -39,23 +75,132 @@ attributes:
     example: true
   - yang_name: bfd/fast-detect/strict-mode
     example: false
-  - yang_name: bfd/fast-detect/inheritance-disable
+  - yang_name: bfd/fast-detect/disable
+    delete_parent: true
     example: false
-  - yang_name: local-as/as-number
+  - yang_name: local-as/inheritance-disable
+    tf_name: local_as_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    exclude_test: true
+    example: true
+    description: "Prevent local AS from being inherited from parent"
+  - yang_name: local-as/as/as-number
     tf_name: local_as
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     exclude_test: true
-    example: 65003
-  - yang_name: local-as/no-prepend
+    example: "65001"
+    description: "AS number"
+  - yang_name: local-as/as/no-prepend
+    tf_name: local_as_no_prepend
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    example: true
+    exclude_test: true
+    description: "Do not prepend local AS to announcements from this neighbor"
+  - yang_name: local-as/as/no-prepend/replace-as
+    tf_name: local_as_no_prepend_replace_as
+    type: Bool
+    type_yang_bool: presence
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     exclude_test: true
     example: true
-  - yang_name: local-as/no-prepend/replace-as
-    tf_name: local_as_replace_as
+    description: "Prepend only local AS to announcements to this neighbor"
+  - yang_name: local-as/as/no-prepend/replace-as/dual-as
+    tf_name: local_as_no_prepend_replace_as_dual_as
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     exclude_test: true
     example: true
-  - yang_name: local-as/no-prepend/replace-as/dual-as
-    tf_name: local_as_dual_as
+    description: "Dual-AS mode"
+  - yang_name: password/encrypted
+    type: String
+    tf_name: password
+    no_augment_config: true
+    optional: true
+    example: 12341C2713181F13253920
+    description: "Specifies an ENCRYPTED password will follow"
+  - yang_name: password/inheritance-disable
+    tf_name: password_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    example: false
+    description: "Prevent password from being inherited from parent"
+  - yang_name: timers/keepalive-interval
+    tf_name: timers_keepalive_interval
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 0
+    max_int: 65535
+    example: 10
+    description: "Keepalive interval"
+  - yang_name: timers/zero/zero
+    tf_name: timers_zero
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     exclude_test: true
     example: true
+    description: "Disable keepalives/hold time within zero container"
+  - yang_name: timers/zero/minimum-acceptable-holdtime
+    tf_name: timers_zero_minimum_acceptable_holdtime
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    exclude_test: true
+    example: 10
+    description: "Minimum acceptable holdtime from neighbor within zero container"
+  - yang_name: timers/holdtime/holdtime-number
+    tf_name: timers_holdtime_number
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    example: 20
+    description: "Holdtime value"
+  - yang_name: timers/holdtime/zero
+    tf_name: timers_holdtime_zero
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Disable keepalives/hold time within holdtime container"
+  - yang_name: timers/holdtime/minimum-acceptable-holdtime
+    tf_name: timers_holdtime_minimum_acceptable_holdtime
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 3
+    max_int: 65535
+    example: 20
+    description: "Minimum acceptable holdtime from neighbor"
   - yang_name: address-families/address-family
     tf_name: address_families
     type: List
@@ -78,19 +223,8 @@ attributes:
       - yang_name: route-policy/out
         example: ROUTE_POLICY_1
       - yang_name: use/af-group
-        example: ROUTE_POLICY_1
+        example: AF_GROUP_1
         exclude_test: true
-  - yang_name: timers/keepalive-interval
-    optional: true
-    delete_parent: true
-    example: 3
-  - yang_name: timers/holdtime
-    optional: true
-    delete_parent: true
-    example: 10
-  - yang_name: timers/minimum-acceptable-holdtime
-    delete_parent: true
-    example: 9
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]

@@ -24,7 +24,7 @@ data "iosxr_router_isis_interface" "example" {
 
 ### Required
 
-- `interface_name` (String) Enter the IS-IS interface configuration submode
+- `interface_name` (String) Interface to configure
 - `process_id` (String) Process ID
 
 ### Optional
@@ -35,14 +35,59 @@ data "iosxr_router_isis_interface" "example" {
 
 - `bfd_fast_detect_ipv6` (Boolean) Address Family
 - `circuit_type` (String) Configure circuit type for interface
-- `hello_padding_disable` (Boolean) Disable hello-padding
-- `hello_padding_sometimes` (Boolean) Enable hello-padding during adjacency formation only
-- `hello_password_hmac_md5` (String) The encrypted LSP/SNP password
-- `hello_password_keychain` (String) Specifies a Key Chain name will follow
-- `hello_password_text` (String) The encrypted LSP/SNP password
+- `hello_padding` (String) Add padding to IS-IS hello packets
+- `hello_padding_levels` (Attributes List) Set hello-padding for one level only (see [below for nested schema](#nestedatt--hello_padding_levels))
+- `hello_password_accepts_encrypted` (String) Specifies a password will follow
+- `hello_password_accepts_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_accepts_levels))
+- `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `hello_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_keychain_name` (String) Specifies a Key Chain name will follow
+- `hello_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_levels))
+- `hello_password_text_encrypted` (String) Specifies an encrypted password will follow
+- `hello_password_text_send_only` (Boolean) Specify SNP packets authentication mode
 - `id` (String) The path of the retrieved object.
-- `passive` (Boolean) Do not establish adjacencies over this interface
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
-- `shutdown` (Boolean) Shutdown IS-IS on this interface
-- `suppressed` (Boolean) Do not advertise connected prefixes of this interface
+- `priority_levels` (Attributes List) Set priority for one level only (see [below for nested schema](#nestedatt--priority_levels))
+- `state` (String) Do not establish adjacencies over this interface
+
+<a id="nestedatt--hello_padding_levels"></a>
+### Nested Schema for `hello_padding_levels`
+
+Read-Only:
+
+- `hello_padding` (String) hello-padding
+- `level_number` (Number) Set hello-padding for IIHs at this level only
+
+
+<a id="nestedatt--hello_password_accepts_levels"></a>
+### Nested Schema for `hello_password_accepts_levels`
+
+Read-Only:
+
+- `encrypted` (String) Specifies a password will follow
+- `level_number` (Number) Set hello-password for IIHs at this level only
+
+
+<a id="nestedatt--hello_password_levels"></a>
+### Nested Schema for `hello_password_levels`
+
+Read-Only:
+
+- `hmac_md5_encrypted` (String) Specifies a password will follow
+- `hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `keychain_name` (String) The Key Chain name
+- `keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `level_number` (Number) Set hello-password for one level only
+- `text_encrypted` (String) Specifies a password will follow
+- `text_send_only` (Boolean) Do not require authentication of incoming IIHs
+
+
+<a id="nestedatt--priority_levels"></a>
+### Nested Schema for `priority_levels`
+
+Read-Only:
+
+- `level_number` (Number) Set priority for this level only
+- `priority` (Number) Set priority for Designated Router election

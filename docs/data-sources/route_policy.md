@@ -32,4 +32,4 @@ data "iosxr_route_policy" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) policy statements
+- `rpl` (String) Configures a route policy, This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a route-policy by its name and a route-policy contains a sequence of policy statements.  route-policy sample [ . . . policy statements . . . ] end-policy  Note: The entire route-policy configuration should be provided as a single string. The 'end-policy' keyword indicates the end of the route-policy definition.

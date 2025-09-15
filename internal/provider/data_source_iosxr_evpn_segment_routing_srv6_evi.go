@@ -170,9 +170,21 @@ func (d *EVPNSegmentRoutingSRv6EVIDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Configure EVPN Instance MAC advertisement",
 				Computed:            true,
 			},
-			"locator": schema.StringAttribute{
+			"locators": schema.ListNestedAttribute{
 				MarkdownDescription: "EVI locator to use for EVPN SID allocation",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: "EVI locator to use for EVPN SID allocation",
+							Computed:            true,
+						},
+						"usid_allocation_wide_local_id_block": schema.BoolAttribute{
+							MarkdownDescription: "Enable uSID wide function knob for the locator",
+							Computed:            true,
+						},
+					},
+				},
 			},
 		},
 	}

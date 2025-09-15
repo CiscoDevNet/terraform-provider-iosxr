@@ -29,8 +29,7 @@ resource "iosxr_ntp" "example" {
       md5_encrypted = "1212000E43"
     }
   ]
-  broadcastdelay   = 10
-  max_associations = 1
+  broadcastdelay = 10
   trusted_keys = [
     {
       key_number = 8

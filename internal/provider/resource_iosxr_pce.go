@@ -112,7 +112,7 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"api_authentication_digest": schema.BoolAttribute{
@@ -144,7 +144,7 @@ func (r *PCEResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 					},

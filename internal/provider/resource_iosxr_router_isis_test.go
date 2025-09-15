@@ -30,20 +30,16 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "process_id", "P1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "is_type", "level-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_advertise_as_overloaded", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_wait_for_bgp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_on_startup_seconds", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_advertise_interlevel", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.level_id", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_advertise_as_overloaded", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_advertise_as_overloaded_time_to_advertise", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_wait_for_bgp", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_time_seconds", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_interlevel", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsr", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_cisco", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_ietf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_ietf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_lifetime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_interface_timer", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_interface_expires", "2"))
@@ -53,23 +49,21 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_gen_interval_secondary_wait", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_refresh_interval", "65000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "max_lsp_lifetime", "65535"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_keychain", "ISIS-KEY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_text_encrypted", "060506324F41584B564B0F49584B"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "distribute_link_state_instance_id", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.name", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.algorithm_number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.flex_algo_number", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.metric_type_delay", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.metric_type", "delay"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nets.0.net_id", "49.0001.2222.2222.2222.00"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.circuit_type", "level-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.hello_padding_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.hello_padding_sometimes", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.hello_padding", "always"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.priority_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.priority_levels.0.priority", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.point_to_point", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.passive", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.suppressed", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "interfaces.0.state", "passive"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -104,22 +98,18 @@ func testAccIosxrRouterISISConfig_all() string {
 	config := `resource "iosxr_router_isis" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	is_type = "level-1"` + "\n"
-	config += `	set_overload_bit_on_startup_advertise_as_overloaded = true` + "\n"
-	config += `	set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10` + "\n"
-	config += `	set_overload_bit_on_startup_wait_for_bgp = false` + "\n"
+	config += `	set_overload_bit = true` + "\n"
+	config += `	set_overload_bit_on_startup_seconds = 300` + "\n"
 	config += `	set_overload_bit_advertise_external = true` + "\n"
 	config += `	set_overload_bit_advertise_interlevel = true` + "\n"
 	config += `	set_overload_bit_levels = [{` + "\n"
-	config += `		level_id = 1` + "\n"
-	config += `		on_startup_advertise_as_overloaded = true` + "\n"
-	config += `		on_startup_advertise_as_overloaded_time_to_advertise = 10` + "\n"
-	config += `		on_startup_wait_for_bgp = false` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		on_startup_time_seconds = 300` + "\n"
 	config += `		advertise_external = true` + "\n"
 	config += `		advertise_interlevel = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	nsr = true` + "\n"
-	config += `	nsf_cisco = true` + "\n"
-	config += `	nsf_ietf = false` + "\n"
+	config += `	nsf_ietf = true` + "\n"
 	config += `	nsf_lifetime = 10` + "\n"
 	config += `	nsf_interface_timer = 5` + "\n"
 	config += `	nsf_interface_expires = 2` + "\n"
@@ -129,16 +119,16 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `	lsp_gen_interval_secondary_wait = 200` + "\n"
 	config += `	lsp_refresh_interval = 65000` + "\n"
 	config += `	max_lsp_lifetime = 65535` + "\n"
-	config += `	lsp_password_keychain = "ISIS-KEY"` + "\n"
+	config += `	lsp_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
 	config += `	distribute_link_state_instance_id = 32` + "\n"
 	config += `	affinity_maps = [{` + "\n"
 	config += `		name = "22"` + "\n"
 	config += `		bit_position = 4` + "\n"
 	config += `		}]` + "\n"
 	config += `	flex_algos = [{` + "\n"
-	config += `		algorithm_number = 128` + "\n"
+	config += `		flex_algo_number = 128` + "\n"
 	config += `		advertise_definition = true` + "\n"
-	config += `		metric_type_delay = true` + "\n"
+	config += `		metric_type = "delay"` + "\n"
 	config += `		}]` + "\n"
 	config += `	nets = [{` + "\n"
 	config += `		net_id = "49.0001.2222.2222.2222.00"` + "\n"
@@ -146,13 +136,13 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		circuit_type = "level-1"` + "\n"
-	config += `		hello_padding_disable = true` + "\n"
-	config += `		hello_padding_sometimes = false` + "\n"
-	config += `		priority = 10` + "\n"
+	config += `		hello_padding = "always"` + "\n"
+	config += `		priority_levels = [{` + "\n"
+	config += `			level_number = 1` + "\n"
+	config += `			priority = 10` + "\n"
+	config += `		}]` + "\n"
 	config += `		point_to_point = false` + "\n"
-	config += `		passive = false` + "\n"
-	config += `		suppressed = false` + "\n"
-	config += `		shutdown = false` + "\n"
+	config += `		state = "passive"` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

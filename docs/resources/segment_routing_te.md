@@ -103,7 +103,7 @@ Optional:
 
 - `constraint_segments_protection_type` (String) Protection Type
   - Choices: `protected-only`, `protected-preferred`, `unprotected-only`, `unprotected-preferred`
-- `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs
+- `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs
   - Range: `0`-`255`
 - `dynamic_anycast_sid_inclusion` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
 - `dynamic_metric_type` (String) Metric Type
@@ -115,7 +115,7 @@ Optional:
   - Range: `0`-`4294967295`
 - `srv6_enable` (Boolean) True only
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
-  - Choices: `ub6-insert-reduced`
+  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced`
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
   - Choices: `srv6-dynamic`
 - `srv6_locator_name` (String) SRv6 locator name
@@ -153,7 +153,7 @@ Optional:
 
 - `srv6_enable` (Boolean) True only
 - `srv6_locator_behavior` (String) SRv6 USID Behavior
-  - Choices: `ub6-insert-reduced`
+  - Choices: `ub6-encaps-reduced`, `ub6-insert-reduced`
 - `srv6_locator_binding_sid_type` (String) Binding Segment ID type
   - Choices: `srv6-dynamic`
 - `srv6_locator_name` (String) SRv6 locator name

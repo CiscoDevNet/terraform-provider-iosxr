@@ -1,24 +1,20 @@
 resource "iosxr_router_isis" "example" {
-  process_id                                                            = "P1"
-  is_type                                                               = "level-1"
-  set_overload_bit_on_startup_advertise_as_overloaded                   = true
-  set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise = 10
-  set_overload_bit_on_startup_wait_for_bgp                              = false
-  set_overload_bit_advertise_external                                   = true
-  set_overload_bit_advertise_interlevel                                 = true
+  process_id                            = "P1"
+  is_type                               = "level-1"
+  set_overload_bit                      = true
+  set_overload_bit_on_startup_seconds   = 300
+  set_overload_bit_advertise_external   = true
+  set_overload_bit_advertise_interlevel = true
   set_overload_bit_levels = [
     {
-      level_id                                             = 1
-      on_startup_advertise_as_overloaded                   = true
-      on_startup_advertise_as_overloaded_time_to_advertise = 10
-      on_startup_wait_for_bgp                              = false
-      advertise_external                                   = true
-      advertise_interlevel                                 = true
+      level_number            = 1
+      on_startup_time_seconds = 300
+      advertise_external      = true
+      advertise_interlevel    = true
     }
   ]
   nsr                               = true
-  nsf_cisco                         = true
-  nsf_ietf                          = false
+  nsf_ietf                          = true
   nsf_lifetime                      = 10
   nsf_interface_timer               = 5
   nsf_interface_expires             = 2
@@ -28,7 +24,7 @@ resource "iosxr_router_isis" "example" {
   lsp_gen_interval_secondary_wait   = 200
   lsp_refresh_interval              = 65000
   max_lsp_lifetime                  = 65535
-  lsp_password_keychain             = "ISIS-KEY"
+  lsp_password_text_encrypted       = "060506324F41584B564B0F49584B"
   distribute_link_state_instance_id = 32
   affinity_maps = [
     {
@@ -38,9 +34,9 @@ resource "iosxr_router_isis" "example" {
   ]
   flex_algos = [
     {
-      algorithm_number     = 128
+      flex_algo_number     = 128
       advertise_definition = true
-      metric_type_delay    = true
+      metric_type          = "delay"
     }
   ]
   nets = [
@@ -50,15 +46,17 @@ resource "iosxr_router_isis" "example" {
   ]
   interfaces = [
     {
-      interface_name          = "GigabitEthernet0/0/0/1"
-      circuit_type            = "level-1"
-      hello_padding_disable   = true
-      hello_padding_sometimes = false
-      priority                = 10
-      point_to_point          = false
-      passive                 = false
-      suppressed              = false
-      shutdown                = false
+      interface_name = "GigabitEthernet0/0/0/1"
+      circuit_type   = "level-1"
+      hello_padding  = "always"
+      priority_levels = [
+        {
+          level_number = 1
+          priority     = 10
+        }
+      ]
+      point_to_point = false
+      state          = "passive"
     }
   ]
 }

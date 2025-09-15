@@ -103,42 +103,96 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 			"additional_paths_selection_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route-policy for additional paths selection").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 255),
-				},
 			},
-			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too").String,
-				Optional:            true,
-			},
-			"advertise_best_external": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+			"additional_paths_selection_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable additional paths selection").String,
 				Optional:            true,
 			},
 			"allocate_label_all": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Allocate labels for all prefixes").String,
 				Optional:            true,
 			},
-			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("eBGP-multipath").AddIntegerRangeDescription(2, 1024).String,
+			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too (within all mode)").String,
+				Optional:            true,
+			},
+			"allocate_label_route_policy_name": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy name for label allocation").String,
+				Optional:            true,
+			},
+			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label for unlabeled paths too (within route-policy mode)").String,
+				Optional:            true,
+			},
+			"advertise_best_external": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Advertise best-external path").String,
+				Optional:            true,
+			},
+			"maximum_paths_ebgp_ebgp_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of paths (limit includes backup path)").AddIntegerRangeDescription(2, 1024).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 1024),
 				},
 			},
-			"maximum_paths_eibgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("eiBGP-multipath").AddIntegerRangeDescription(2, 1024).String,
+			"maximum_paths_ebgp_selective": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths only from marked neighbors").String,
+				Optional:            true,
+			},
+			"maximum_paths_ebgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify ORF and inbound filter").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"maximum_paths_ibgp_ibgp_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of paths (limit includes backup path)").AddIntegerRangeDescription(2, 1024).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 1024),
 				},
 			},
-			"maximum_paths_ibgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("iBGP-multipath").AddIntegerRangeDescription(2, 1024).String,
+			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Deterministic Multipath selection primarily on IGP metric order").String,
+				Optional:            true,
+			},
+			"maximum_paths_ibgp_selective": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths only from marked neighbors").String,
+				Optional:            true,
+			},
+			"maximum_paths_ibgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify ORF and inbound filter").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"maximum_paths_eibgp_eibgp_number": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Number of paths (limit includes backup path)").AddIntegerRangeDescription(2, 1024).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(2, 1024),
 				},
+			},
+			"maximum_paths_eibgp_equal_cost": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Preserve equal nexthop IGP metric criteria for multipath eligiblity between same path-types (iBGP or eBGP)").String,
+				Optional:            true,
+			},
+			"maximum_paths_eibgp_selective": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths only from marked neighbors").String,
+				Optional:            true,
+			},
+			"maximum_paths_eibgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify ORF and inbound filter").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
+			},
+			"maximum_paths_unique_nexthop_check_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable multipath unique nexthop check").String,
+				Optional:            true,
 			},
 			"nexthop_trigger_delay_critical": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("For critical notification").AddIntegerRangeDescription(0, 4294967295).String,
@@ -154,6 +208,10 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"label_mode_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per prefix label mode").String,
+				Optional:            true,
+			},
 			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set per CE label mode").String,
 				Optional:            true,
@@ -161,6 +219,526 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 			"label_mode_per_vrf": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF label mode").String,
 				Optional:            true,
+			},
+			"label_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set per VRF 46 label mode").String,
+				Optional:            true,
+			},
+			"label_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy name for label allocation mode").String,
+				Optional:            true,
+			},
+			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set label mode per nexthop and received label").String,
+				Optional:            true,
+			},
+			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate secondary label to avoid label oscillation in symmetric PIC deployments").String,
+				Optional:            true,
+			},
+			"aggregate_addresses": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure BGP aggregate entries").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
+							Required:            true,
+						},
+						"address_prefix": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 128),
+							},
+						},
+						"as_set": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate AS set path information").String,
+							Optional:            true,
+						},
+						"as_confed_set": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate AS confed set path information").String,
+							Optional:            true,
+						},
+						"summary_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Filter more specific routes from updates").String,
+							Optional:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Aggreate address specific description").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+							},
+						},
+						"set_tag": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set a IGP tag value on the route").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+					},
+				},
+			},
+			"networks": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify a network to announce via BGP").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
+							Required:            true,
+						},
+						"address_prefix": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IP address prefix").AddIntegerRangeDescription(0, 128).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 128),
+							},
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
+							Optional:            true,
+						},
+						"backdoor": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify a BGP backdoor route").String,
+							Optional:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"redistribute_ospf": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ospf_router_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPF router tag").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"redistribute_ospf_match_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_1_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_1_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_2_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_type_2_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_external_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_internal_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_1_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_1_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_2_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_type_2_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_external_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospf_match_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"redistribute_ospfv3": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Open Shortest Path First (OSPFv3)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ospfv3_router_tag": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OSPFv3 router tag").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"redistribute_ospfv3_match_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 NSSA external routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_1_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_1_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_2_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_type_2_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_external_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal/external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_internal_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_1_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_1_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external/one)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_2_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_type_2_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external/two)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_external_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes (within external)").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_nssa_external_type_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+							Optional:            true,
+						},
+						"redistribute_ospfv3_match_nssa_external_type_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"redistribute_eigrp": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol (EIGRP)").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"eigrp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("EIGRP instance name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"redistribute_eigrp_internal": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP internal routes").String,
+							Optional:            true,
+						},
+						"redistribute_eigrp_internal_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP external routes (within internal)").String,
+							Optional:            true,
+						},
+						"redistribute_eigrp_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP external routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
+				},
+			},
+			"redistribute_isis": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"isis_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ISIS instance name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"redistribute_isis_level_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 routes").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_1_level_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 routes (within level 1)").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_1_level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes (within level 1/level 2)").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_1_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes (within level 1)").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 routes").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes (within level 2)").String,
+							Optional:            true,
+						},
+						"redistribute_isis_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+							Optional:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 4294967295),
+							},
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+							Optional:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 255),
+							},
+						},
+					},
+				},
 			},
 			"redistribute_connected": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Connected routes").String,
@@ -172,6 +750,10 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
+			},
+			"redistribute_connected_multipath": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+				Optional:            true,
 			},
 			"redistribute_connected_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
@@ -191,6 +773,10 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 4294967295),
 				},
 			},
+			"redistribute_static_multipath": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
+				Optional:            true,
+			},
 			"redistribute_static_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
 				Optional:            true,
@@ -198,173 +784,26 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"aggregate_addresses": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
+			"redistribute_rip": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol (RIP)").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IPv6 Aggregate address and mask or masklength").String,
-							Required:            true,
-						},
-						"masklength": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 128),
-							},
-						},
-						"as_set": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Generate AS set path information").String,
-							Optional:            true,
-						},
-						"as_confed_set": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Generate AS confed set path information").String,
-							Optional:            true,
-						},
-						"summary_only": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Filter more specific routes from updates").String,
-							Optional:            true,
-						},
-					},
+			},
+			"redistribute_rip_metric": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(0, 4294967295),
 				},
 			},
-			"networks": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
+			"redistribute_rip_multipath": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable installation of multiple paths from RIB").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IPv6 network and mask or masklength").String,
-							Required:            true,
-						},
-						"masklength": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Network in prefix/length format (prefix part)").AddIntegerRangeDescription(0, 128).String,
-							Required:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 128),
-							},
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route-policy to modify the attributes").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 255),
-							},
-						},
-					},
-				},
 			},
-			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+			"redistribute_rip_route_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
 				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"instance_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-						"level_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 routes").String,
-							Optional:            true,
-						},
-						"level_one_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
-							Optional:            true,
-						},
-						"level_one_two_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
-							Optional:            true,
-						},
-						"level_one_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
-							Optional:            true,
-						},
-						"level_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
-							Optional:            true,
-						},
-						"level_two_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
-							Optional:            true,
-						},
-						"level_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
-							Optional:            true,
-						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 4294967295),
-							},
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 255),
-							},
-						},
-					},
-				},
-			},
-			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF or OSPFv3)").String,
-				Optional:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"router_tag": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
-							Required:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 1024),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-							},
-						},
-						"match_internal": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
-							Optional:            true,
-						},
-						"match_internal_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
-							Optional:            true,
-						},
-						"match_internal_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
-							Optional:            true,
-						},
-						"match_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
-							Optional:            true,
-						},
-						"match_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
-							Optional:            true,
-						},
-						"match_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
-							Optional:            true,
-						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Metric for redistributed routes").AddIntegerRangeDescription(0, 4294967295).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(0, 4294967295),
-							},
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Route policy reference").String,
-							Optional:            true,
-							Validators: []validator.String{
-								stringvalidator.LengthBetween(1, 255),
-							},
-						},
-					},
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
 				},
 			},
 		},

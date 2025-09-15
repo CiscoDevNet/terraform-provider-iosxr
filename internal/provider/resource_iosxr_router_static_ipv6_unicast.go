@@ -141,7 +141,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -205,7 +205,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -262,7 +262,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"metric": schema.Int64Attribute{
@@ -285,7 +285,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"nexthop_interfaces": schema.ListNestedAttribute{
@@ -330,7 +330,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{
@@ -394,7 +394,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{
@@ -451,7 +451,7 @@ func (r *RouterStaticIPv6UnicastResource) Schema(ctx context.Context, req resour
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.LengthBetween(1, 32),
-											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+											stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 										},
 									},
 									"metric": schema.Int64Attribute{

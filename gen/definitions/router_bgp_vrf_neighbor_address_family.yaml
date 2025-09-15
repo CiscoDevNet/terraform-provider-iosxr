@@ -1,13 +1,14 @@
 ---
 name: Router BGP VRF Neighbor Address Family
-path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:
   - yang_name: as-number
     example: 65001
   - yang_name: vrf-name
+    reference: true
     example: VRF1
-  - yang_name: neighbor-address
+  - yang_name: address
     example: 10.1.1.2
   - yang_name: af-name
     example: ipv4-unicast
@@ -16,9 +17,22 @@ attributes:
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
   - yang_name: default-originate/route-policy
+    tf_name: default_originate_route_policy
+    type: String
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     example: ROUTE_POLICY_1
+    description: "Route policy to specify criteria to originate default"
   - yang_name: default-originate/inheritance-disable
+    tf_name: default_originate_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
     example: true
+    description: "Prevent default-originate being inherited from a parent group"
     exclude_test: true
   - yang_name: next-hop-self
     example: true
@@ -29,33 +43,71 @@ attributes:
   - yang_name: send-community-ebgp/inheritance-disable
     example: true
   - yang_name: remove-private-as
+    tf_name: remove_private_as
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     example: true
-  - yang_name: remove-private-as/inheritance-disable
+    description: "Remove private AS numbers from outbound updates"
+  - yang_name: remove-private-as/inbound
+    tf_name: remove_private_as_inbound
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    example: true
+    description: "Remove private AS numbers from inbound updates"
+  - yang_name: remove-private-as/inbound/inheritance-disable
+    tf_name: remove_private_as_inbound_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     example: true
     exclude_test: true
-  - yang_name: remove-private-as/entire-aspath
+    description: "Prevent inbound remove-private-as from being inherited"
+  - yang_name: remove-private-as/inbound/entire-aspath
+    tf_name: remove_private_as_inbound_entire_aspath
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     example: true
-  - yang_name: remove-private-as/internal
+    description: "Remove entire AS path for inbound updates"
+  - yang_name: remove-private-as/remove-private-as-outbound/entire-aspath
+    tf_name: remove_private_as_outbound_entire_aspath
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    example: true
+    description: "Remove entire AS path for outbound updates"
+  - yang_name: remove-private-as/remove-private-as-outbound/inheritance-disable
+    tf_name: remove_private_as_outbound_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     example: true
     exclude_test: true
-  - yang_name: remove-private-as/internal/inheritance-disable
+    description: "Prevent outbound remove-private-as from being inherited"
+  - yang_name: remove-private-as/remove-private-as-outbound/internal
+    tf_name: remove_private_as_outbound_internal
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
     example: true
     exclude_test: true
-  - yang_name: remove-private-as-inbound
-    example: true
-    exclude_test: true
-  - yang_name: remove-private-as-inbound/entire-aspath
-    example: true
-    exclude_test: true
-  - yang_name: remove-private-as-inbound/inheritance-disable
-    example: true
+    description: "Remove private AS numbers from internal outbound updates"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
-      - name: as-number
+      - name: two-byte-as-number
         value: 1
-      - name: index
+      - name: asn2-index
         value: 1
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
@@ -81,10 +133,10 @@ test_prerequisites:
               - name: af-name
                 value: ipv4-unicast
       - name: neighbors/neighbor
-        key: neighbor-address
+        key: address
         items:
           - attributes:
-              - name: neighbor-address
+              - name: address
                 value: 10.1.1.2
               - name: remote-as
                 value: 65002

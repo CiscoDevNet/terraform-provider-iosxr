@@ -11,64 +11,119 @@ attributes:
     example: ipv4
   - yang_name: saf-name
     example: unicast
-  - yang_name: fast-reroute/computation/per-prefix-computation
+  - yang_name: fast-reroute/enable/per-prefix
     tf_name: fast_reroute_per_prefix
     example: true
-  - yang_name: fast-reroute/per-prefix/per-prefix/ti-lfa
-    tf_name: fast_reroute_per_prefix_ti_lfa
+  - yang_name: fast-reroute/enable/per-link
+    tf_name: fast_reroute_per_link
     example: true
-  - yang_name: fast-reroute/per-prefix/per-prefix/levels/level
-    tf_name: fast_reroute_per_prefix_levels
+    exclude_test: true
+  - yang_name: fast-reroute/enable-levels/enable-level
+    tf_name: fast_reroute_enable_levels
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: level-number
         id: true
         example: 1
-      - yang_name: ti-lfa
+      - yang_name: per-prefix
         example: true
-  - yang_name: tag/interface-tag
+      - yang_name: per-link
+        example: true
+        exclude_test: true
+  - yang_name: tag
     tf_name: tag
     example: 100
-  - yang_name: prefix-sid/sid/absolute/sid-value
-    tf_name: prefix_sid_absolute
-    example: 16000
-    optional: true
+  - yang_name: adjacency-sid/indices/index
+    tf_name: adjacency_sid_indices
     exclude_test: true
-  - yang_name: prefix-sid/sid/n-flag-clear
-    tf_name: prefix_sid_n_flag_clear
-    example: true
-    exclude_test: true
-  - yang_name: advertise/prefix/route-policy
-    example: ROUTE_POLICY_1
-  - yang_name: prefix-sid/sid/index/sid-index
-    tf_name: prefix_sid_index
-    example: 150
-    exclude_test: true
-    optional: true
-  - yang_name: prefix-sid/strict-spf/absolute/sid-value
-    tf_name: prefix_sid_strict_spf_absolute
-    optional: true
-    exclude_test: true
-    example: 24001
-  - yang_name: metric/default-metric
-    tf_name: metric
-    example: 500
-  - yang_name: metric/maximum
-    example: true
-    exclude_test: true
-  - yang_name: metric/levels/level
-    tf_name: metric_levels
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: index-number
         id: true
-        example: 1
-      - yang_name: default-metric
-        tf_name: metric
-        example: 600
-        exclude_test: true
-      - yang_name: maximum
+        min_int: 0
+        max_int: 1048575
+        example: 100
+        description: "The Adjacency Segment ID index"
+      - yang_name: protected
         example: true
+  - yang_name: adjacency-sid/absolutes/absolute
+    tf_name: adjacency_sid_absolutes
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: absolute-number
+        id: true
+        min_int: 16000
+        max_int: 1048575
+        example: 24200
+        description: "The Adjacency Segment ID value"
+      - yang_name: protected
+        example: true
+  - yang_name: advertise/prefix-advertisement/route-policy
+    tf_name: advertise_prefix_route_policy
+    example: ROUTE_POLICY_1
+  - yang_name: advertise/prefix-advertisement/route-policy-levels/route-policy-level
+    tf_name: advertise_prefix_route_policy_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        min_int: 1
+        max_int: 2
+        example: 1
+        description: "Set advertisement at this level only"
+      - yang_name: route-policy
+        example: ROUTE_POLICY_2
+  - yang_name: metric/default-metric
+    tf_name: metric_default_metric
+    type: Int64
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    min_int: 1
+    max_int: 16777214
+    example: 500
+    description: "Default metric: <1-63> for narrow, <1-16777214> for wide"
+  - yang_name: metric/maximum
+    tf_name: metric_maximum
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+    description: "Maximum wide metric. All routers will exclude this link from their SPF"
+  - yang_name: metric-levels/metric-level
+    tf_name: metric_levels
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        min_int: 1
+        max_int: 2
+        example: 1
+        description: "Set metric at this level only"
+      - yang_name: default-metric
+        tf_name: default_metric
+        type: Int64
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        min_int: 1
+        max_int: 16777214
+        example: 600
+        description: "Default metric: <1-63> for narrow, <1-16777214> for wide"
+      - yang_name: maximum
+        tf_name: metric_maximum
+        type: Bool
+        type_yang_bool: empty
+        no_augment_config: true
+        optional: true
+        delete_parent: true
+        example: true
+        description: "Maximum wide metric. All routers will exclude this link from their SPF"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
@@ -77,3 +132,19 @@ test_prerequisites:
         value: ROUTE_POLICY_1
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_2]
+    attributes:
+      - name: route-policy-name
+        value: ROUTE_POLICY_2
+      - name: rpl-route-policy
+        value: "route-policy ROUTE_POLICY_2\\n  pass\\nend-policy\\n"
+  # - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]
+  #   attributes:
+  #     - name: process-id
+  #       value: P1
+  #     - name: af-name
+  #       value: ipv4
+  #     - name: saf-name
+  #       value: unicast
+  #     - name: segment-routing/mpls/sr-prefer
+  #       value: true

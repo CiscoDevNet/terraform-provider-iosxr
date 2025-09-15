@@ -34,6 +34,11 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.usid_local_id_block_ranges_lib_start", "57344"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.usid_local_id_block_ranges_explict_lib_start", "65024"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.usid_wide_local_id_block_explicit_range", "65527"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -57,6 +62,13 @@ func testAccDataSourceIosxrSegmentRoutingV6Config() string {
 	config += `		micro_segment_behavior = "unode-psp-usd"` + "\n"
 	config += `		prefix = "fccc:0:214::"` + "\n"
 	config += `		prefix_length = 48` + "\n"
+	config += `	}]` + "\n"
+	config += `	formats = [{` + "\n"
+	config += `		name = "usid-f3216"` + "\n"
+	config += `		format_enable = true` + "\n"
+	config += `		usid_local_id_block_ranges_lib_start = 57344` + "\n"
+	config += `		usid_local_id_block_ranges_explict_lib_start = 65024` + "\n"
+	config += `		usid_wide_local_id_block_explicit_range = 65527` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

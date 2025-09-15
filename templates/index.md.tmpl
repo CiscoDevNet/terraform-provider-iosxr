@@ -20,8 +20,7 @@ All resources and data sources have been tested with the following releases.
 
 | Platform | Version |
 | -------- | ------- |
-| XRv 9000 | 7.6.1   |
-| XRv 9000 | 7.9.1   |
+| XRv 9000 | 24.4.2  |
 
 ## Example Usage
 

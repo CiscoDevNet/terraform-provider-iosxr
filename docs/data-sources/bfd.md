@@ -26,8 +26,7 @@ data "iosxr_bfd" "example" {
 
 ### Read-Only
 
-- `bundle_coexistence_bob_blb_inherit` (Boolean) Use inheritence mechanism
-- `bundle_coexistence_bob_blb_logical` (Boolean) Use BFD logical Bundle natively
+- `bundle_coexistence_bob_blb` (String) Coexistence for BoB and BLB
 - `dampening_bundle_member_initial_wait` (Number) Initial delay before bringing up session
 - `dampening_bundle_member_l3_only_mode` (Boolean) Apply immediate dampening and only when failure is L3 specific
 - `dampening_bundle_member_maximum_wait` (Number) Maximum delay before bringing up session
@@ -39,8 +38,8 @@ data "iosxr_bfd" "example" {
 - `dampening_secondary_wait` (Number) Secondary delay before bringing up session
 - `dampening_threshold` (Number) Stability threshold to enable dampening
 - `echo_disable` (Boolean) Disable BFD echo mode
-- `echo_ipv4_bundle_per_member_preferred_minimum_interval` (Number) The preferred minimum interval (in ms) for the BFD session
-- `echo_ipv4_source` (String) BFD echo source IP address
+- `echo_ipv4_bundle_per_member_minimum_interval` (Number) Set the preferred minimum interval for the BFD session
+- `echo_ipv4_source` (String) Echo IPv4 source address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down
 - `echo_latency_detect_percentage` (Number) Percentage of detection time to consider as bad latency
 - `echo_startup_validate_force` (Boolean) Ignore remote 'Required Min Echo RX Interval' setting
@@ -57,9 +56,9 @@ data "iosxr_bfd" "example" {
 Read-Only:
 
 - `disable` (Boolean) Disable BFD for this interface
-- `echo_disable` (Boolean) Disable BFD echo mode for this interface
-- `echo_ipv4_source` (String) BFD echo source IP address
-- `interface_name` (String) Configure BFD on an interface
+- `echo_disable` (String) Disable BFD echo mode for this interface
+- `echo_ipv4_source` (String) Echo IPv4 source address
+- `interface_name` (String) Select an interface to configure
 - `ipv6_checksum_disable` (Boolean) Disable BFD ipv6 checksum mode for this interface
 - `local_address` (String) Local address to be used by BFD for this interface
 - `multiplier` (Number) BFD multiplier for this interface
@@ -72,4 +71,4 @@ Read-Only:
 
 Read-Only:
 
-- `location_name` (String) Specify a location
+- `location_id` (String) Fully qualified location specification

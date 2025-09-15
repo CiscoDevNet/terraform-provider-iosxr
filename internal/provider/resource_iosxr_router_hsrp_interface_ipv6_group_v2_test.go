@@ -28,11 +28,9 @@ import (
 
 func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "group_id", "4055"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "group_id", "4000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_hold_time", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_hold_time2", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec2", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
@@ -59,7 +57,7 @@ func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_router_hsrp_interface_ipv6_group_v2.test",
 		ImportState:   true,
-		ImportStateId: "GigabitEthernet0/0/0/2,4055",
+		ImportStateId: "GigabitEthernet0/0/0/2,4000",
 		Check:         resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
@@ -72,7 +70,7 @@ func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	group_id = 4055` + "\n"
+	config += `	group_id = 4000` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -80,11 +78,9 @@ func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_minimum() string {
 func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_all() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	group_id = 4055` + "\n"
+	config += `	group_id = 4000` + "\n"
 	config += `	name = "gp2"` + "\n"
 	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
-	config += `	timers_hold_time = 10` + "\n"
-	config += `	timers_hold_time2 = 20` + "\n"
 	config += `	timers_msec = 100` + "\n"
 	config += `	timers_msec2 = 300` + "\n"
 	config += `	preempt_delay = 256` + "\n"

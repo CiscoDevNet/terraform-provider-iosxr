@@ -67,11 +67,11 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				Required:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Specify a Neighbor-group",
+				MarkdownDescription: "Neighbor-group name",
 				Required:            true,
 			},
 			"remote_as": schema.StringAttribute{
-				MarkdownDescription: "bgp as-number",
+				MarkdownDescription: "Set remote AS",
 				Computed:            true,
 			},
 			"description": schema.StringAttribute{
@@ -83,19 +83,27 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				Computed:            true,
 			},
 			"advertisement_interval_seconds": schema.Int64Attribute{
-				MarkdownDescription: "Minimum interval between sending BGP routing updates",
+				MarkdownDescription: "time in seconds",
 				Computed:            true,
 			},
 			"advertisement_interval_milliseconds": schema.Int64Attribute{
 				MarkdownDescription: "time in milliseconds",
 				Computed:            true,
 			},
-			"ao_key_chain_name": schema.StringAttribute{
+			"ao_key_chain_name_name": schema.StringAttribute{
 				MarkdownDescription: "Name of the key chain - maximum 32 characters",
 				Computed:            true,
 			},
-			"ao_include_tcp_options_enable": schema.BoolAttribute{
-				MarkdownDescription: "Include other TCP options in the header",
+			"ao_key_chain_include_tcp_options": schema.StringAttribute{
+				MarkdownDescription: "Include/Exclude other TCP options in the header. Required when ao_key_chain_name_name is specified",
+				Computed:            true,
+			},
+			"ao_key_chain_accept_ao_mismatch_connection": schema.BoolAttribute{
+				MarkdownDescription: "Accept new connection even if AO mismatched",
+				Computed:            true,
+			},
+			"ao_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent keychain from being inherited from parent",
 				Computed:            true,
 			},
 			"bfd_minimum_interval": schema.Int64Attribute{
@@ -111,27 +119,63 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				Computed:            true,
 			},
 			"bfd_fast_detect_strict_mode": schema.BoolAttribute{
-				MarkdownDescription: "Hold down neighbor session until BFD session is up",
+				MarkdownDescription: "(Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)",
 				Computed:            true,
 			},
-			"bfd_fast_detect_inheritance_disable": schema.BoolAttribute{
+			"bfd_fast_detect_disable": schema.BoolAttribute{
 				MarkdownDescription: "Prevent bfd settings from being inherited from the parent",
 				Computed:            true,
 			},
+			"local_as_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent local AS from being inherited from parent",
+				Computed:            true,
+			},
 			"local_as": schema.StringAttribute{
-				MarkdownDescription: "bgp as-number",
+				MarkdownDescription: "AS number",
 				Computed:            true,
 			},
 			"local_as_no_prepend": schema.BoolAttribute{
 				MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
 				Computed:            true,
 			},
-			"local_as_replace_as": schema.BoolAttribute{
+			"local_as_no_prepend_replace_as": schema.BoolAttribute{
 				MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
 				Computed:            true,
 			},
-			"local_as_dual_as": schema.BoolAttribute{
+			"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
 				MarkdownDescription: "Dual-AS mode",
+				Computed:            true,
+			},
+			"password": schema.StringAttribute{
+				MarkdownDescription: "Specifies an ENCRYPTED password will follow",
+				Computed:            true,
+			},
+			"password_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: "Prevent password from being inherited from parent",
+				Computed:            true,
+			},
+			"timers_keepalive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Keepalive interval",
+				Computed:            true,
+			},
+			"timers_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time within zero container",
+				Computed:            true,
+			},
+			"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+				Computed:            true,
+			},
+			"timers_holdtime_number": schema.Int64Attribute{
+				MarkdownDescription: "Holdtime value",
+				Computed:            true,
+			},
+			"timers_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time within holdtime container",
+				Computed:            true,
+			},
+			"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
 			"address_families": schema.ListNestedAttribute{
@@ -177,18 +221,6 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 						},
 					},
 				},
-			},
-			"timers_keepalive_interval": schema.Int64Attribute{
-				MarkdownDescription: "BGP timers",
-				Computed:            true,
-			},
-			"timers_holdtime": schema.StringAttribute{
-				MarkdownDescription: "Holdtime. Set 0 to disable keepalives/hold time.",
-				Computed:            true,
-			},
-			"timers_minimum_acceptable_holdtime": schema.StringAttribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.",
-				Computed:            true,
 			},
 		},
 	}

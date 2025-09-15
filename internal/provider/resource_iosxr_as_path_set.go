@@ -71,14 +71,14 @@ func (r *ASPathSetResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Set name").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ASPath Set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures an as-path-set. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines an as-path-set by its name and includes a list of autonomous system (AS) numbers that form the set. The AS path set is used in route policy expressions to match AS path attributes in BGP routing updates. Each AS number in the set represents an autonomous system number that can be matched against the AS path of a BGP route.  as-path-set aspathSet 12345, 67890 end-set  Note: The as-path entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the as-path-set definition.").String,
 				Required:            true,
 			},
 		},

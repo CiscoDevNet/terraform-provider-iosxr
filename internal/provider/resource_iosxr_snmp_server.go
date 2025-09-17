@@ -244,23 +244,23 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"traps_isis_lsp_error_detected": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("isisLspErrorDetected").String,
-				Optional:            true,
-			},
-			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
+				MarkdownDescription: helpers.NewAttributeDescription("isisLSPErrorDetected").String,
 				Optional:            true,
 			},
 			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+			"traps_bgp_enable_updown": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable BGP4-MIB and CISCO-BGP4-MIB traps").String,
+				Optional:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable CISCO-BGP4-MIB v2 up/down traps").String,
 				Optional:            true,
 			},
 			"users": schema.ListNestedAttribute{

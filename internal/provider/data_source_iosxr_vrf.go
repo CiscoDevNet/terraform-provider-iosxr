@@ -114,7 +114,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Flowspec sub address family",
 				Computed:            true,
 			},
-			"rd_two_byte_as_number": schema.Int64Attribute{
+			"rd_two_byte_as_number": schema.StringAttribute{
 				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 			},
@@ -122,7 +122,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "ASN2:index (hex or decimal format)",
 				Computed:            true,
 			},
-			"rd_four_byte_as_number": schema.Int64Attribute{
+			"rd_four_byte_as_number": schema.StringAttribute{
 				MarkdownDescription: "4-byte AS number in asplain format",
 				Computed:            true,
 			},

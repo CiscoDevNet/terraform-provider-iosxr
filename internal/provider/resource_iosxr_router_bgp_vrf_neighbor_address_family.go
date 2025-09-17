@@ -126,6 +126,9 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 			"default_originate_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria to originate default").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
 			},
 			"default_originate_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent default-originate being inherited from a parent group").String,
@@ -147,32 +150,32 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-ebgp from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"remove_private_as": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS numbers from outbound updates").String,
-				Optional:            true,
-			},
 			"remove_private_as_inbound": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS numbers from inbound updates").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from inbound updates").String,
 				Optional:            true,
 			},
 			"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prevent inbound remove-private-as from being inherited").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
 				Optional:            true,
 			},
 			"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove entire AS path for inbound updates").String,
+				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
 				Optional:            true,
 			},
-			"remove_private_as_outbound_entire_aspath": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove entire AS path for outbound updates").String,
+			"remove_private_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from outbound updates").String,
 				Optional:            true,
 			},
-			"remove_private_as_outbound_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prevent outbound remove-private-as from being inherited").String,
+			"remove_private_as_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
 				Optional:            true,
 			},
-			"remove_private_as_outbound_internal": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS numbers from internal outbound updates").String,
+			"remove_private_as_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"remove_private_as_internal": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
 				Optional:            true,
 			},
 		},

@@ -71,7 +71,6 @@ attributes:
         example: 1001
       - yang_name: pw-class
         example: PW_CLASS_1
-        
   - yang_name: neighbor/evpn/evi/segment-routing-services/service
     tf_name: neighbor_evpn_evi_segment_routing_services
     type: List
@@ -83,4 +82,4 @@ attributes:
         id: true
         example: 600
       - yang_name: segment-routing/srv6/locator
-        example: LOC11  
+        example: LOC11

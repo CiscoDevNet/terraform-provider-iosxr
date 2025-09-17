@@ -74,7 +74,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Signal other routers not to use us in SPF",
 				Computed:            true,
 			},
-			"set_overload_bit_on_startup_seconds": schema.Int64Attribute{
+			"set_overload_bit_on_startup_time_to_advertise": schema.Int64Attribute{
 				MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
 				Computed:            true,
 			},
@@ -99,7 +99,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 							MarkdownDescription: "Level",
 							Computed:            true,
 						},
-						"on_startup_time_seconds": schema.Int64Attribute{
+						"on_startup_time_to_advertise": schema.Int64Attribute{
 							MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
 							Computed:            true,
 						},
@@ -170,7 +170,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
-			"lsp_password_accept_levels": schema.ListNestedAttribute{
+			"lsp_password_levels": schema.ListNestedAttribute{
 				MarkdownDescription: "Set lsp-password for one level only",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -187,11 +187,11 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				},
 			},
 			"lsp_password_text_encrypted": schema.StringAttribute{
-				MarkdownDescription: "Specifies an encrypted password will follow",
+				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
 			"lsp_password_text_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "specify SNP packets authentication mode",
 				Computed:            true,
 			},
 			"lsp_password_text_snp_send_only": schema.BoolAttribute{
@@ -199,7 +199,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"lsp_password_text_enable_poi": schema.BoolAttribute{
-				MarkdownDescription: "Enable purge originator identification - only valid with cryptographic authentication",
+				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
 			"lsp_password_hmac_md5_encrypted": schema.StringAttribute{
@@ -207,7 +207,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"lsp_password_hmac_md5_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "specify SNP packets authentication mode",
 				Computed:            true,
 			},
 			"lsp_password_hmac_md5_snp_send_only": schema.BoolAttribute{
@@ -218,12 +218,12 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
-			"lsp_password_keychain_name": schema.StringAttribute{
+			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
 			"lsp_password_keychain_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "specify SNP packets authentication mode",
 				Computed:            true,
 			},
 			"lsp_password_keychain_snp_send_only": schema.BoolAttribute{
@@ -267,7 +267,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"flex_algo_number": schema.Int64Attribute{
+						"number": schema.Int64Attribute{
 							MarkdownDescription: "Algorithm number",
 							Computed:            true,
 						},
@@ -276,7 +276,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 							Computed:            true,
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: "Flex-Algo metric type - can be 'delay', 'te', or integer 128-255",
+							MarkdownDescription: "Metric-type used by flex-algo calculation",
 							Computed:            true,
 						},
 					},

@@ -122,7 +122,7 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Do not establish adjacencies over this interface",
 				Computed:            true,
 			},
-			"hello_password_accepts_encrypted": schema.StringAttribute{
+			"hello_password_accept_encrypted": schema.StringAttribute{
 				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
@@ -143,11 +143,11 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				},
 			},
 			"hello_password_text_encrypted": schema.StringAttribute{
-				MarkdownDescription: "Specifies an encrypted password will follow",
+				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
 			"hello_password_text_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
 			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
@@ -155,15 +155,15 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				Computed:            true,
 			},
 			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
-			"hello_password_keychain_name": schema.StringAttribute{
+			"hello_password_keychain": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
 			"hello_password_keychain_send_only": schema.BoolAttribute{
-				MarkdownDescription: "Specify SNP packets authentication mode",
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
 			"hello_password_levels": schema.ListNestedAttribute{
@@ -192,7 +192,7 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 							Computed:            true,
 						},
 						"keychain_name": schema.StringAttribute{
-							MarkdownDescription: "The Key Chain name",
+							MarkdownDescription: "Specifies a Key Chain name will follow",
 							Computed:            true,
 						},
 						"keychain_send_only": schema.BoolAttribute{
@@ -202,8 +202,20 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 					},
 				},
 			},
+			"bfd_fast_detect_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Address Family",
+				Computed:            true,
+			},
 			"bfd_fast_detect_ipv6": schema.BoolAttribute{
 				MarkdownDescription: "Address Family",
+				Computed:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Hello interval",
+				Computed:            true,
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
 				Computed:            true,
 			},
 		},

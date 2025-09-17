@@ -79,7 +79,7 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"echo_ipv4_source": schema.StringAttribute{
-				MarkdownDescription: "Echo IPv4 source address",
+				MarkdownDescription: "IPv4 address",
 				Computed:            true,
 			},
 			"echo_ipv4_bundle_per_member_minimum_interval": schema.Int64Attribute{
@@ -164,7 +164,7 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 							Computed:            true,
 						},
 						"echo_ipv4_source": schema.StringAttribute{
-							MarkdownDescription: "Echo IPv4 source address",
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
 						"ipv6_checksum_disable": schema.BoolAttribute{

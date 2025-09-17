@@ -43,16 +43,19 @@ type RouterISISInterface struct {
 	PriorityLevels                []RouterISISInterfacePriorityLevels             `tfsdk:"priority_levels"`
 	PointToPoint                  types.Bool                                      `tfsdk:"point_to_point"`
 	State                         types.String                                    `tfsdk:"state"`
-	HelloPasswordAcceptsEncrypted types.String                                    `tfsdk:"hello_password_accepts_encrypted"`
+	HelloPasswordAcceptEncrypted  types.String                                    `tfsdk:"hello_password_accept_encrypted"`
 	HelloPasswordAcceptsLevels    []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
 	HelloPasswordTextEncrypted    types.String                                    `tfsdk:"hello_password_text_encrypted"`
 	HelloPasswordTextSendOnly     types.Bool                                      `tfsdk:"hello_password_text_send_only"`
 	HelloPasswordHmacMd5Encrypted types.String                                    `tfsdk:"hello_password_hmac_md5_encrypted"`
 	HelloPasswordHmacMd5SendOnly  types.Bool                                      `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName     types.String                                    `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychain         types.String                                    `tfsdk:"hello_password_keychain"`
 	HelloPasswordKeychainSendOnly types.Bool                                      `tfsdk:"hello_password_keychain_send_only"`
 	HelloPasswordLevels           []RouterISISInterfaceHelloPasswordLevels        `tfsdk:"hello_password_levels"`
+	BfdFastDetectIpv4             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv4"`
 	BfdFastDetectIpv6             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval            types.Int64                                     `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                 types.Int64                                     `tfsdk:"bfd_multiplier"`
 }
 
 type RouterISISInterfaceData struct {
@@ -67,16 +70,19 @@ type RouterISISInterfaceData struct {
 	PriorityLevels                []RouterISISInterfacePriorityLevels             `tfsdk:"priority_levels"`
 	PointToPoint                  types.Bool                                      `tfsdk:"point_to_point"`
 	State                         types.String                                    `tfsdk:"state"`
-	HelloPasswordAcceptsEncrypted types.String                                    `tfsdk:"hello_password_accepts_encrypted"`
+	HelloPasswordAcceptEncrypted  types.String                                    `tfsdk:"hello_password_accept_encrypted"`
 	HelloPasswordAcceptsLevels    []RouterISISInterfaceHelloPasswordAcceptsLevels `tfsdk:"hello_password_accepts_levels"`
 	HelloPasswordTextEncrypted    types.String                                    `tfsdk:"hello_password_text_encrypted"`
 	HelloPasswordTextSendOnly     types.Bool                                      `tfsdk:"hello_password_text_send_only"`
 	HelloPasswordHmacMd5Encrypted types.String                                    `tfsdk:"hello_password_hmac_md5_encrypted"`
 	HelloPasswordHmacMd5SendOnly  types.Bool                                      `tfsdk:"hello_password_hmac_md5_send_only"`
-	HelloPasswordKeychainName     types.String                                    `tfsdk:"hello_password_keychain_name"`
+	HelloPasswordKeychain         types.String                                    `tfsdk:"hello_password_keychain"`
 	HelloPasswordKeychainSendOnly types.Bool                                      `tfsdk:"hello_password_keychain_send_only"`
 	HelloPasswordLevels           []RouterISISInterfaceHelloPasswordLevels        `tfsdk:"hello_password_levels"`
+	BfdFastDetectIpv4             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv4"`
 	BfdFastDetectIpv6             types.Bool                                      `tfsdk:"bfd_fast_detect_ipv6"`
+	BfdMinimumInterval            types.Int64                                     `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                 types.Int64                                     `tfsdk:"bfd_multiplier"`
 }
 type RouterISISInterfaceHelloPaddingLevels struct {
 	LevelNumber  types.Int64  `tfsdk:"level_number"`
@@ -130,8 +136,8 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 	if !data.State.IsNull() && !data.State.IsUnknown() {
 		body, _ = sjson.Set(body, "state", data.State.ValueString())
 	}
-	if !data.HelloPasswordAcceptsEncrypted.IsNull() && !data.HelloPasswordAcceptsEncrypted.IsUnknown() {
-		body, _ = sjson.Set(body, "hello-password.accepts.encrypted", data.HelloPasswordAcceptsEncrypted.ValueString())
+	if !data.HelloPasswordAcceptEncrypted.IsNull() && !data.HelloPasswordAcceptEncrypted.IsUnknown() {
+		body, _ = sjson.Set(body, "hello-password.accepts.encrypted", data.HelloPasswordAcceptEncrypted.ValueString())
 	}
 	if !data.HelloPasswordTextEncrypted.IsNull() && !data.HelloPasswordTextEncrypted.IsUnknown() {
 		body, _ = sjson.Set(body, "hello-password.hello-password-options.text.hello-password-options.encrypted", data.HelloPasswordTextEncrypted.ValueString())
@@ -142,25 +148,36 @@ func (data RouterISISInterface) toBody(ctx context.Context) string {
 		}
 	}
 	if !data.HelloPasswordHmacMd5Encrypted.IsNull() && !data.HelloPasswordHmacMd5Encrypted.IsUnknown() {
-		body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.password-options.encrypted", data.HelloPasswordHmacMd5Encrypted.ValueString())
+		body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted", data.HelloPasswordHmacMd5Encrypted.ValueString())
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordHmacMd5SendOnly.IsUnknown() {
 		if data.HelloPasswordHmacMd5SendOnly.ValueBool() {
-			body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.password-options.send-only", map[string]string{})
+			body, _ = sjson.Set(body, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only", map[string]string{})
 		}
 	}
-	if !data.HelloPasswordKeychainName.IsNull() && !data.HelloPasswordKeychainName.IsUnknown() {
-		body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.keychain-name", data.HelloPasswordKeychainName.ValueString())
+	if !data.HelloPasswordKeychain.IsNull() && !data.HelloPasswordKeychain.IsUnknown() {
+		body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.keychain-name", data.HelloPasswordKeychain.ValueString())
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() && !data.HelloPasswordKeychainSendOnly.IsUnknown() {
 		if data.HelloPasswordKeychainSendOnly.ValueBool() {
 			body, _ = sjson.Set(body, "hello-password.hello-password-options.keychain.send-only", map[string]string{})
 		}
 	}
+	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.IsUnknown() {
+		if data.BfdFastDetectIpv4.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect.ipv4", map[string]string{})
+		}
+	}
 	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.IsUnknown() {
 		if data.BfdFastDetectIpv6.ValueBool() {
 			body, _ = sjson.Set(body, "bfd.fast-detect.ipv6", map[string]string{})
 		}
+	}
+	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "bfd.minimum-interval", strconv.FormatInt(data.BfdMinimumInterval.ValueInt64(), 10))
+	}
+	if !data.BfdMultiplier.IsNull() && !data.BfdMultiplier.IsUnknown() {
+		body, _ = sjson.Set(body, "bfd.multiplier", strconv.FormatInt(data.BfdMultiplier.ValueInt64(), 10))
 	}
 	if len(data.HelloPaddingLevels) > 0 {
 		body, _ = sjson.Set(body, "hello-padding-levels.hello-padding-level", []interface{}{})
@@ -328,10 +345,10 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.State = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() && !data.HelloPasswordAcceptsEncrypted.IsNull() {
-		data.HelloPasswordAcceptsEncrypted = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() && !data.HelloPasswordAcceptEncrypted.IsNull() {
+		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
 	} else {
-		data.HelloPasswordAcceptsEncrypted = types.StringNull()
+		data.HelloPasswordAcceptEncrypted = types.StringNull()
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
 		keys := [...]string{"level-number"}
@@ -381,12 +398,12 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.encrypted"); value.Exists() && !data.HelloPasswordHmacMd5Encrypted.IsNull() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() && !data.HelloPasswordHmacMd5Encrypted.IsNull() {
 		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
 	} else {
 		data.HelloPasswordHmacMd5Encrypted = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.send-only"); !data.HelloPasswordHmacMd5SendOnly.IsNull() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); !data.HelloPasswordHmacMd5SendOnly.IsNull() {
 		if value.Exists() {
 			data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 		} else {
@@ -395,10 +412,10 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 	} else {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() && !data.HelloPasswordKeychainName.IsNull() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() && !data.HelloPasswordKeychain.IsNull() {
+		data.HelloPasswordKeychain = types.StringValue(value.String())
 	} else {
-		data.HelloPasswordKeychainName = types.StringNull()
+		data.HelloPasswordKeychain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); !data.HelloPasswordKeychainSendOnly.IsNull() {
 		if value.Exists() {
@@ -480,6 +497,15 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 			data.HelloPasswordLevels[i].KeychainSendOnly = types.BoolNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); !data.BfdFastDetectIpv4.IsNull() {
+		if value.Exists() {
+			data.BfdFastDetectIpv4 = types.BoolValue(true)
+		} else {
+			data.BfdFastDetectIpv4 = types.BoolValue(false)
+		}
+	} else {
+		data.BfdFastDetectIpv4 = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); !data.BfdFastDetectIpv6.IsNull() {
 		if value.Exists() {
 			data.BfdFastDetectIpv6 = types.BoolValue(true)
@@ -488,6 +514,16 @@ func (data *RouterISISInterface) updateFromBody(ctx context.Context, res []byte)
 		}
 	} else {
 		data.BfdFastDetectIpv6 = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	} else {
+		data.BfdMinimumInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() && !data.BfdMultiplier.IsNull() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
+	} else {
+		data.BfdMultiplier = types.Int64Null()
 	}
 }
 
@@ -538,7 +574,7 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 		data.State = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() {
-		data.HelloPasswordAcceptsEncrypted = types.StringValue(value.String())
+		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
 		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
@@ -562,16 +598,16 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.encrypted"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
 		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
+		data.HelloPasswordKeychain = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
@@ -613,10 +649,21 @@ func (data *RouterISISInterface) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
+		data.BfdFastDetectIpv4 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv4 = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
 
@@ -667,7 +714,7 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 		data.State = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.accepts.encrypted"); value.Exists() {
-		data.HelloPasswordAcceptsEncrypted = types.StringValue(value.String())
+		data.HelloPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.accepts-levels.accepts-level"); value.Exists() {
 		data.HelloPasswordAcceptsLevels = make([]RouterISISInterfaceHelloPasswordAcceptsLevels, 0)
@@ -691,16 +738,16 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.HelloPasswordTextSendOnly = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.encrypted"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.encrypted"); value.Exists() {
 		data.HelloPasswordHmacMd5Encrypted = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.password-options.send-only"); value.Exists() {
+	if value := gjson.GetBytes(res, "hello-password.hello-password-options.hmac-md5.hello-password-options.send-only"); value.Exists() {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(true)
 	} else {
 		data.HelloPasswordHmacMd5SendOnly = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.keychain-name"); value.Exists() {
-		data.HelloPasswordKeychainName = types.StringValue(value.String())
+		data.HelloPasswordKeychain = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "hello-password.hello-password-options.keychain.send-only"); value.Exists() {
 		data.HelloPasswordKeychainSendOnly = types.BoolValue(true)
@@ -742,10 +789,21 @@ func (data *RouterISISInterfaceData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv4"); value.Exists() {
+		data.BfdFastDetectIpv4 = types.BoolValue(true)
+	} else {
+		data.BfdFastDetectIpv4 = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "bfd.fast-detect.ipv6"); value.Exists() {
 		data.BfdFastDetectIpv6 = types.BoolValue(true)
 	} else {
 		data.BfdFastDetectIpv6 = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
+		data.BfdMinimumInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "bfd.multiplier"); value.Exists() {
+		data.BfdMultiplier = types.Int64Value(value.Int())
 	}
 }
 
@@ -832,7 +890,7 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 	if !state.State.IsNull() && data.State.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/state", state.getPath()))
 	}
-	if !state.HelloPasswordAcceptsEncrypted.IsNull() && data.HelloPasswordAcceptsEncrypted.IsNull() {
+	if !state.HelloPasswordAcceptEncrypted.IsNull() && data.HelloPasswordAcceptEncrypted.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/accepts/encrypted", state.getPath()))
 	}
 	for i := range state.HelloPasswordAcceptsLevels {
@@ -869,22 +927,22 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 		}
 	}
 	if !state.HelloPasswordTextEncrypted.IsNull() && data.HelloPasswordTextEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/encrypted", state.getPath()))
 	}
 	if !state.HelloPasswordTextSendOnly.IsNull() && data.HelloPasswordTextSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/send-only", state.getPath()))
 	}
 	if !state.HelloPasswordHmacMd5Encrypted.IsNull() && data.HelloPasswordHmacMd5Encrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/hmac-md5/password-options/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/encrypted", state.getPath()))
 	}
 	if !state.HelloPasswordHmacMd5SendOnly.IsNull() && data.HelloPasswordHmacMd5SendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/hmac-md5/password-options/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/send-only", state.getPath()))
 	}
-	if !state.HelloPasswordKeychainName.IsNull() && data.HelloPasswordKeychainName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/keychain/keychain-name", state.getPath()))
+	if !state.HelloPasswordKeychain.IsNull() && data.HelloPasswordKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/KEYCHAIN/keychain/keychain-name", state.getPath()))
 	}
 	if !state.HelloPasswordKeychainSendOnly.IsNull() && data.HelloPasswordKeychainSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/keychain/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/KEYCHAIN/keychain/send-only", state.getPath()))
 	}
 	for i := range state.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -910,22 +968,22 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			}
 			if found {
 				if !state.HelloPasswordLevels[i].TextEncrypted.IsNull() && data.HelloPasswordLevels[j].TextEncrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options/encrypted", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/TEXT/text/hello-password-options/encrypted", state.getPath(), keyString))
 				}
 				if !state.HelloPasswordLevels[i].TextSendOnly.IsNull() && data.HelloPasswordLevels[j].TextSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options/send-only", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/TEXT/text/hello-password-options/send-only", state.getPath(), keyString))
 				}
 				if !state.HelloPasswordLevels[i].HmacMd5Encrypted.IsNull() && data.HelloPasswordLevels[j].HmacMd5Encrypted.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options/encrypted", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/hello-password-options/encrypted", state.getPath(), keyString))
 				}
 				if !state.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && data.HelloPasswordLevels[j].HmacMd5SendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options/send-only", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/hello-password-options/send-only", state.getPath(), keyString))
 				}
 				if !state.HelloPasswordLevels[i].KeychainName.IsNull() && data.HelloPasswordLevels[j].KeychainName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain/keychain-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/KEYCHAIN/keychain/keychain-name", state.getPath(), keyString))
 				}
 				if !state.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && data.HelloPasswordLevels[j].KeychainSendOnly.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain/send-only", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/KEYCHAIN/keychain/send-only", state.getPath(), keyString))
 				}
 				break
 			}
@@ -934,8 +992,17 @@ func (data *RouterISISInterface) getDeletedItems(ctx context.Context, state Rout
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v", state.getPath(), keyString))
 		}
 	}
+	if !state.BfdFastDetectIpv4.IsNull() && data.BfdFastDetectIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/ipv4", state.getPath()))
+	}
 	if !state.BfdFastDetectIpv6.IsNull() && data.BfdFastDetectIpv6.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/ipv6", state.getPath()))
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
 	}
 	return deletedItems
 }
@@ -970,13 +1037,13 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 		}
 	}
 	if !data.HelloPasswordTextSendOnly.IsNull() && !data.HelloPasswordTextSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/send-only", data.getPath()))
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() && !data.HelloPasswordHmacMd5SendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/hmac-md5/password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/send-only", data.getPath()))
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() && !data.HelloPasswordKeychainSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/keychain/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/KEYCHAIN/keychain/send-only", data.getPath()))
 	}
 	for i := range data.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -986,14 +1053,17 @@ func (data *RouterISISInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.HelloPasswordLevels[i].TextSendOnly.IsNull() && !data.HelloPasswordLevels[i].TextSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/text/hello-password-options/send-only", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/TEXT/text/hello-password-options/send-only", data.getPath(), keyString))
 		}
 		if !data.HelloPasswordLevels[i].HmacMd5SendOnly.IsNull() && !data.HelloPasswordLevels[i].HmacMd5SendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/hmac-md5/hello-password-options/send-only", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/HMAC-MD5/hmac-md5/hello-password-options/send-only", data.getPath(), keyString))
 		}
 		if !data.HelloPasswordLevels[i].KeychainSendOnly.IsNull() && !data.HelloPasswordLevels[i].KeychainSendOnly.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/keychain/send-only", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v/HELLO-PASSWORD-LEVEL/KEYCHAIN/keychain/send-only", data.getPath(), keyString))
 		}
+	}
+	if !data.BfdFastDetectIpv4.IsNull() && !data.BfdFastDetectIpv4.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/ipv4", data.getPath()))
 	}
 	if !data.BfdFastDetectIpv6.IsNull() && !data.BfdFastDetectIpv6.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/ipv6", data.getPath()))
@@ -1038,7 +1108,7 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 	if !data.State.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/state", data.getPath()))
 	}
-	if !data.HelloPasswordAcceptsEncrypted.IsNull() {
+	if !data.HelloPasswordAcceptEncrypted.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/accepts/encrypted", data.getPath()))
 	}
 	for i := range data.HelloPasswordAcceptsLevels {
@@ -1052,22 +1122,22 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/accepts-levels/accepts-level%v", data.getPath(), keyString))
 	}
 	if !data.HelloPasswordTextEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/encrypted", data.getPath()))
 	}
 	if !data.HelloPasswordTextSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/text/hello-password-options/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/TEXT/text/hello-password-options/send-only", data.getPath()))
 	}
 	if !data.HelloPasswordHmacMd5Encrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/hmac-md5/password-options/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/encrypted", data.getPath()))
 	}
 	if !data.HelloPasswordHmacMd5SendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/hmac-md5/password-options/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/HMAC-MD5/hmac-md5/hello-password-options/send-only", data.getPath()))
 	}
-	if !data.HelloPasswordKeychainName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/keychain/keychain-name", data.getPath()))
+	if !data.HelloPasswordKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/KEYCHAIN/keychain/keychain-name", data.getPath()))
 	}
 	if !data.HelloPasswordKeychainSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/keychain/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password/hello-password-options/HELLO-PASSWORD-OPTIONS/KEYCHAIN/keychain/send-only", data.getPath()))
 	}
 	for i := range data.HelloPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -1079,8 +1149,17 @@ func (data *RouterISISInterface) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hello-password-levels/hello-password-level%v", data.getPath(), keyString))
 	}
+	if !data.BfdFastDetectIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/ipv4", data.getPath()))
+	}
 	if !data.BfdFastDetectIpv6.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/ipv6", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
 	}
 	return deletePaths
 }

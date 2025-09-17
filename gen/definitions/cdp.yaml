@@ -10,6 +10,7 @@ attributes:
   - yang_name: timer
     example: 34
   - yang_name: advertise/v1
+    delete_parent: true
     example: true
   - yang_name: log/adjacency/changes
     example: true

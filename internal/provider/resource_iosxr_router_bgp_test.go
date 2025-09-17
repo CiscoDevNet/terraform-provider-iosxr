@@ -36,8 +36,7 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "segment_routing_srv6_locator", "locator11"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "segment_routing_srv6_usid_allocation_wide_local_id_block", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_keepalive_interval", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_holdtime_number", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_holdtime_minimum_acceptable_holdtime", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "timers_bgp_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_router_id", "22.22.22.22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "bgp_graceful_restart_graceful_reset", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "ibgp_policy_out_enforce_modifications", "true"))
@@ -69,7 +68,6 @@ func TestAccIosxrRouterBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.timers_keepalive_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.timers_holdtime_number", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.timers_holdtime_minimum_acceptable_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp.test", "neighbors.0.ttl_security", "false"))
 	var steps []resource.TestStep
@@ -134,8 +132,7 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `	segment_routing_srv6_locator = "locator11"` + "\n"
 	config += `	segment_routing_srv6_usid_allocation_wide_local_id_block = true` + "\n"
 	config += `	timers_bgp_keepalive_interval = 5` + "\n"
-	config += `	timers_bgp_holdtime_number = 20` + "\n"
-	config += `	timers_bgp_holdtime_minimum_acceptable_holdtime = 10` + "\n"
+	config += `	timers_bgp_holdtime = 20` + "\n"
 	config += `	bgp_router_id = "22.22.22.22"` + "\n"
 	config += `	bgp_graceful_restart_graceful_reset = true` + "\n"
 	config += `	ibgp_policy_out_enforce_modifications = true` + "\n"
@@ -168,7 +165,6 @@ func testAccIosxrRouterBGPConfig_all() string {
 	config += `		shutdown = false` + "\n"
 	config += `		timers_keepalive_interval = 10` + "\n"
 	config += `		timers_holdtime_number = 20` + "\n"
-	config += `		timers_holdtime_minimum_acceptable_holdtime = 20` + "\n"
 	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		ttl_security = false` + "\n"
 	config += `		}]` + "\n"

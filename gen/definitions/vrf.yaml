@@ -33,64 +33,46 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/flowspec
     example: true
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/two-byte-as-number
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/TWO-BYTE-AS/two-byte-as/two-byte-as-number
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/two-byte-as-number
     tf_name: rd_two_byte_as_number
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
+    optional: true
     example: 123
-    description: "2-byte AS number"
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/asn2-index
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/TWO-BYTE-AS/two-byte-as/asn2-index
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/asn2-index
     tf_name: rd_two_byte_as_index
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    min_int: 0
-    max_int: 4294967295
+    optional: true
     example: 123
-    description: "ASN2:index (hex or decimal format)"
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/four-byte-as-number
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/FOUR-BYTE-AS/four-byte-as/four-byte-as-number
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/four-byte-as-number
     tf_name: rd_four_byte_as_number
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
+    optional: true
     example: 65001
     exclude_test: true
-    description: "4-byte AS number in asplain format"
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/asn4-index
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/FOUR-BYTE-AS/four-byte-as/asn4-index
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/asn4-index
     tf_name: rd_four_byte_as_index
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    min_int: 0
-    max_int: 65535
+    optional: true
     example: 1
     exclude_test: true
-    description: "ASN4:index (hex or decimal format)"
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/address
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/IPV4-ADDRESS/ipv4-address/address
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/address
     tf_name: rd_ipv4_address
-    type: String
-    no_augment_config: true
-    optional: true
     delete_parent: true
+    optional: true
     example: 1.2.3.4
     exclude_test: true
-    description: "IPv4 address"
-  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/ipv4address-index
+  - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/IPV4-ADDRESS/ipv4-address/ipv4address-index
+    xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/ipv4address-index
     tf_name: rd_ipv4_address_index
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    min_int: 0
-    max_int: 65535
+    optional: true
     example: 1
     exclude_test: true
-    description: "IPv4Address:index (hex or decimal format)"
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: address_family_ipv4_unicast_import_route_target_two_byte_as_format
     type: List

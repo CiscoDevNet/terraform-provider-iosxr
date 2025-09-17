@@ -62,20 +62,22 @@ data "iosxr_router_isis_address_family" "example" {
 - `maximum_redistributed_prefixes` (Number) Maximum number of redistributed prefixes
 - `maximum_redistributed_prefixes_levels` (Attributes List) Set maximum redistributed prefixes for one level only (see [below for nested schema](#nestedatt--maximum_redistributed_prefixes_levels))
 - `metric_style_levels` (Attributes List) Set metric-style for one level only (see [below for nested schema](#nestedatt--metric_style_levels))
+- `metric_style_narrow` (Boolean) Use old style of TLVs with narrow metric
 - `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
 - `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
+- `metric_style_wide` (Boolean) Use new style of TLVs to carry wider metric
 - `metric_style_wide_transition` (Boolean) Accept both styles of TLVs during transition
-- `microloop_avoidance_enable` (Boolean) Enable local microloop avoidance
-- `microloop_avoidance_enable_protected` (Boolean) Enable microloop avoidance for only protected prefixes
-- `microloop_avoidance_enable_segment_routing_route_policy` (String) Provide Uloop protection based on a route policy
+- `microloop_avoidance` (Boolean) Enable local microloop avoidance
+- `microloop_avoidance_protected` (Boolean) Enable microloop avoidance for only protected prefixes
 - `microloop_avoidance_rib_update_delay` (Number) Delay in milliseconds
+- `microloop_avoidance_segment_routing_route_policy` (String) Provide Uloop protection based on a route policy
 - `mpls_ldp_auto_config` (Boolean) Enable LDP IGP interface auto-configuration
 - `mpls_traffic_eng_level_1` (Boolean) Enable mpls traffic-eng at level 1
 - `mpls_traffic_eng_level_1_2` (Boolean) Enable mpls traffic-eng at both level 1 and 2
 - `mpls_traffic_eng_level_2_only` (Boolean) Enable mpls traffic-eng at level 2
-- `mpls_traffic_eng_router_id_interface_name` (String) Router ID interface
-- `mpls_traffic_eng_router_id_ipv4_address` (String) Router ID IPv4 address
-- `redistribute_isis_processes` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_isis_processes))
+- `mpls_traffic_eng_router_id_interface_name` (String) interface-name
+- `mpls_traffic_eng_router_id_ipv4_address` (String) ipv4-address
+- `redistribute_isis` (Attributes List) IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
 - `router_id_interface_name` (String) Router ID Interface
 - `router_id_ip_address` (String) Router ID address
 - `segment_routing_mpls_enable` (Boolean) Enable Segment Routing using MPLS encapsulation
@@ -159,21 +161,23 @@ Read-Only:
 Read-Only:
 
 - `level_number` (Number) Level
-- `metric_style_narrow_transition` (Boolean) Accept both styles of TLVs during transition
-- `metric_style_transition` (Boolean) Send and accept both styles of TLVs during transition
-- `metric_style_wide_transition` (Boolean) Accept both styles of TLVs during transition
+- `narrow` (Boolean) Use old style of TLVs with narrow metric
+- `narrow_transition` (Boolean) Accept both styles of TLVs during transition
+- `transition` (Boolean) Send and accept both styles of TLVs during transition
+- `wide` (Boolean) Use new style of TLVs to carry wider metric
+- `wide_transition` (Boolean) Accept both styles of TLVs during transition
 
 
-<a id="nestedatt--redistribute_isis_processes"></a>
-### Nested Schema for `redistribute_isis_processes`
+<a id="nestedatt--redistribute_isis"></a>
+### Nested Schema for `redistribute_isis`
 
 Read-Only:
 
 - `down_flag_clear` (Boolean) Set the up/down bit to 0 in prefix advertisements
-- `isis_string` (String) IS-IS instance identifier
+- `instance_id` (String) IS-IS instance identifier
+- `level` (String) Redistribute routes into both levels
 - `metric` (Number) Metric for redistributed routes
 - `metric_type` (String) IS-IS metric type for redistributed routes
-- `redistribute_route_level` (String) Redistribute routes into both levels
 - `route_policy` (String) Route policy reference
 
 
@@ -183,7 +187,7 @@ Read-Only:
 Read-Only:
 
 - `level` (Number) Advertise the locator only in the specified level
-- `locator_string` (String) Locator name
+- `locator_name` (String) Locator name
 - `metric` (Number) Advertise the locator metric for a given level
 - `metric_levels` (Attributes List) Set Metric for one level only (see [below for nested schema](#nestedatt--segment_routing_srv6_locators--metric_levels))
 - `tag` (Number) Advertise the locator tag for a given level

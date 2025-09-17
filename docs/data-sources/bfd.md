@@ -39,7 +39,7 @@ data "iosxr_bfd" "example" {
 - `dampening_threshold` (Number) Stability threshold to enable dampening
 - `echo_disable` (Boolean) Disable BFD echo mode
 - `echo_ipv4_bundle_per_member_minimum_interval` (Number) Set the preferred minimum interval for the BFD session
-- `echo_ipv4_source` (String) Echo IPv4 source address
+- `echo_ipv4_source` (String) IPv4 address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down
 - `echo_latency_detect_percentage` (Number) Percentage of detection time to consider as bad latency
 - `echo_startup_validate_force` (Boolean) Ignore remote 'Required Min Echo RX Interval' setting
@@ -57,7 +57,7 @@ Read-Only:
 
 - `disable` (Boolean) Disable BFD for this interface
 - `echo_disable` (String) Disable BFD echo mode for this interface
-- `echo_ipv4_source` (String) Echo IPv4 source address
+- `echo_ipv4_source` (String) IPv4 address
 - `interface_name` (String) Select an interface to configure
 - `ipv6_checksum_disable` (Boolean) Disable BFD ipv6 checksum mode for this interface
 - `local_address` (String) Local address to be used by BFD for this interface

@@ -4,7 +4,7 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   af_name                 = "ipv4"
   saf_name                = "unicast"
   fast_reroute_per_prefix = true
-  fast_reroute_enable_levels = [
+  fast_reroute_levels = [
     {
       level_number = 1
       per_prefix   = true
@@ -18,5 +18,5 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       route_policy = "ROUTE_POLICY_2"
     }
   ]
-  metric_default_metric = 500
+  metric_default = 500
 }

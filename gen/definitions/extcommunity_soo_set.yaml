@@ -1,6 +1,6 @@
 ---
-name : Extcommunity SOO Set
-path : Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-soo-sets/extended-community-soo-set[set-name=%s]
+name: Extcommunity SOO Set
+path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-soo-sets/extended-community-soo-set[set-name=%s]
 no_delete_attributes: true
 doc_category: Route Policy
 attributes:

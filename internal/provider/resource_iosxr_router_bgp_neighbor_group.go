@@ -125,7 +125,7 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 999),
 				},
 			},
-			"ao_key_chain_name_name": schema.StringAttribute{
+			"ao_key_chain_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Name of the key chain - maximum 32 characters").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -133,10 +133,10 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				},
 			},
 			"ao_key_chain_include_tcp_options": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header. Required when ao_key_chain_name_name is specified").AddStringEnumDescription("enable", "disable").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Include/Exclude other TCP options in the header").AddStringEnumDescription("disable", "enable").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("enable", "disable"),
+					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
 			"ao_key_chain_accept_ao_mismatch_connection": schema.BoolAttribute{
@@ -185,11 +185,11 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
 				Optional:            true,
 			},
-			"local_as_no_prepend_replace_as": schema.BoolAttribute{
+			"local_as_replace_as": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
 				Optional:            true,
 			},
-			"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
+			"local_as_dual_as": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
 				Optional:            true,
 			},
@@ -208,26 +208,26 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(0, 65535),
 				},
 			},
-			"timers_zero": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within zero container").String,
+			"timers_keepalive_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor within zero container").AddIntegerRangeDescription(3, 65535).String,
+			"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
 				},
 			},
-			"timers_holdtime_number": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Holdtime value").AddIntegerRangeDescription(3, 65535).String,
+			"timers_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holdtime").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
 				},
 			},
 			"timers_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within holdtime container").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
 			"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{

@@ -9,52 +9,35 @@ attributes:
     example: 10.1.1.2
   - yang_name: af-name
     example: vpnv4-unicast
-  - yang_name: import
-    example: true
-  - yang_name: import/stitching-rt
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt
+    xpath: import/stitching-rt
     tf_name: import_stitching_rt
-    type: Bool
-    type_yang_bool: presence
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Import routes using stitching RTs"
-  - yang_name: import/stitching-rt/re-originate
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate
+    xpath: import/stitching-rt/re-originate
     tf_name: import_stitching_rt_re_originate
-    type: Bool
-    type_yang_bool: presence
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Re-originate imported routes"
-  - yang_name: import/stitching-rt/re-originate/stitching-rt
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt
+    xpath: import/stitching-rt/re-originate/stitching-rt
     tf_name: import_stitching_rt_re_originate_stitching_rt
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
     example: true
-    description: "Reoriginate imported routes by attaching stitching RTs"
-  - yang_name: import/re-originate
+  - yang_name: import/IMPORT/RE-ORIGINATE/re-originate
+    xpath: import/re-originate
     tf_name: import_re_originate
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Reoriginate imported routes by attaching stitching RTs"
   - yang_name: route-reflector-client
     example: true
   - yang_name: route-reflector-client/inheritance-disable
     example: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
+    tf_name: advertise_vpnv4_unicast_re_originated_stitching_rt
     example: true
   - yang_name: next-hop-self
     example: true
@@ -79,6 +62,7 @@ attributes:
     delete_parent: true
     example: 1248576
   - yang_name: maximum-prefix/threshold-value
+    tf_name: maximum_prefix_threshold
     delete_parent: true
     example: 80
   - yang_name: maximum-prefix/restart
@@ -92,24 +76,21 @@ attributes:
   - yang_name: maximum-prefix/warning-only
     delete_parent: true
     example: true
-  - yang_name: default-originate/route-policy
+  - yang_name: default-originate
+    tf_name: default_originate
+    example: true
+  - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
     tf_name: default_originate_route_policy
-    type: String
-    no_augment_config: true
-    optional: true
+    xpath: default-originate/route-policy
     delete_parent: true
+    exclude_test: true
     example: ROUTE_POLICY_1
-    description: "Route policy to specify criteria to originate default"
-  - yang_name: default-originate/inheritance-disable
+  - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
     tf_name: default_originate_inheritance_disable
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+    xpath: default-originate/inheritance-disable
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Prevent default-originate being inherited from a parent group"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]

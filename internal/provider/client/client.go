@@ -37,7 +37,7 @@ const (
 	DefaultBackoffMinDelay    int     = 4
 	DefaultBackoffMaxDelay    int     = 60
 	DefaultBackoffDelayFactor float64 = 3
-	GnmiTimeout                       = 30 * time.Second
+	GnmiTimeout                       = 15 * time.Second
 )
 
 type SetOperationType string

@@ -11,14 +11,11 @@ attributes:
   - yang_name: echo/latency/detect/count
     example: 10
   - yang_name: echo/startup/validate/force
+    delete_parent: true
     example: true
   - yang_name: echo/ipv4/source/ipv4-address
     tf_name: echo_ipv4_source
-    type: String
-    no_augment_config: true
-    optional: true
     example: 10.1.1.1
-    description: "Echo IPv4 source address"
   - yang_name: echo/ipv4/bundle-per-member/minimum-interval
     tf_name: echo_ipv4_bundle_per_member_minimum_interval
     example: 200
@@ -66,12 +63,9 @@ attributes:
         example: enable
       - yang_name: echo/ipv4/source/ipv4-address
         tf_name: echo_ipv4_source
-        type: String
-        no_augment_config: true
-        optional: true
         example: 12.1.1.1
-        description: "Echo IPv4 source address"
       - yang_name: ipv6/checksum/disable
+        delete_parent: true
         example: true
       - yang_name: disable
         example: true

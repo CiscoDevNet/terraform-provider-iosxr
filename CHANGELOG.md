@@ -1,5 +1,8 @@
 ## 0.6.0 (IOS-XR Version 24.4.2 Compatibility)
 
+- Add 'bfd_fast_detect_ipv4' to 'router_isis_interface' resource and data source
+- Add 'bfd_minimum_interval' to 'router_isis_interface' resource and data source
+- Add 'bfd_multiplier' to 'router_isis_interface' resource and data source
 - Add 'interfaces' (type: List) to 'evpn' resource and data source
 - Add 'ethernet_segment_enable' to 'evpn' resource and data source
 - Add 'ethernet_segment_esi_zero' to 'evpn' resource and data source

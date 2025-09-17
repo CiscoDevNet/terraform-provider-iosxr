@@ -31,10 +31,10 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.ethernet_segment_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "interfaces.0.ethernet_segment_esi_zero", "01.02.03.04.05.06.07.08.09"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "segment_routing_srv6", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "segment_routing_srv6_locators.0.locator_name", "LOC1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "segment_routing_srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "segment_routing_srv6_usid_allocation_wide_local_id_block", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_locators.0.locator_name", "LOC1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_locators.0.usid_allocation_wide_local_id_block", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn.test", "srv6_usid_allocation_wide_local_id_block", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -56,12 +56,12 @@ func testAccDataSourceIosxrEVPNConfig() string {
 	config += `		ethernet_segment_enable = true` + "\n"
 	config += `		ethernet_segment_esi_zero = "01.02.03.04.05.06.07.08.09"` + "\n"
 	config += `	}]` + "\n"
-	config += `	segment_routing_srv6 = true` + "\n"
-	config += `	segment_routing_srv6_locators = [{` + "\n"
+	config += `	srv6 = true` + "\n"
+	config += `	srv6_locators = [{` + "\n"
 	config += `		locator_name = "LOC1"` + "\n"
 	config += `		usid_allocation_wide_local_id_block = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	segment_routing_srv6_usid_allocation_wide_local_id_block = true` + "\n"
+	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
 	config += `}` + "\n"
 
 	config += `

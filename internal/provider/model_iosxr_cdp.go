@@ -184,7 +184,7 @@ func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
 	}
 	if !state.AdvertiseV1.IsNull() && data.AdvertiseV1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/v1", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise", state.getPath()))
 	}
 	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
@@ -218,7 +218,7 @@ func (data *CDP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer", data.getPath()))
 	}
 	if !data.AdvertiseV1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/v1", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise", data.getPath()))
 	}
 	if !data.LogAdjacencyChanges.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))

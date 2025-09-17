@@ -35,12 +35,12 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Read-Only
 
-- `advertise_vpnv4_unicast_enable_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `encapsulation_type` (String) Specify encapsulation type
 - `id` (String) The path of the retrieved object.
-- `import` (Boolean) Import options for neighbor address-family routes
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `import_stitching_rt` (Boolean) Import routes using stitching RTs
 - `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes
@@ -48,7 +48,7 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `maximum_prefix_discard_extra_paths` (Boolean) Discard extra paths when limit is exceeded
 - `maximum_prefix_limit` (Number) maximum no. of prefix limit
 - `maximum_prefix_restart` (Number) Restart time interval
-- `maximum_prefix_threshold_value` (Number) Threshold value (%) at which to generate a warning msg
+- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
 - `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent

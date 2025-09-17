@@ -27,11 +27,10 @@ import (
 
 func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "import", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "import_stitching_rt_re_originate_stitching_rt", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_reflector_client_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_enable_re_originated_stitching_rt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "advertise_vpnv4_unicast_re_originated_stitching_rt", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "encapsulation_type", "srv6"))
@@ -39,9 +38,9 @@ func TestAccDataSourceIosxrRouterBGPNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_limit", "1248576"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold_value", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_threshold", "80"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "maximum_prefix_warning_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_address_family.test", "default_originate", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -99,11 +98,10 @@ func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
 	config += `	as_number = "65001"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "vpnv4-unicast"` + "\n"
-	config += `	import = true` + "\n"
 	config += `	import_stitching_rt_re_originate_stitching_rt = true` + "\n"
 	config += `	route_reflector_client = true` + "\n"
 	config += `	route_reflector_client_inheritance_disable = true` + "\n"
-	config += `	advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true` + "\n"
+	config += `	advertise_vpnv4_unicast_re_originated_stitching_rt = true` + "\n"
 	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	encapsulation_type = "srv6"` + "\n"
@@ -111,9 +109,9 @@ func testAccDataSourceIosxrRouterBGPNeighborAddressFamilyConfig() string {
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
 	config += `	soft_reconfiguration_inbound_always = true` + "\n"
 	config += `	maximum_prefix_limit = 1248576` + "\n"
-	config += `	maximum_prefix_threshold_value = 80` + "\n"
+	config += `	maximum_prefix_threshold = 80` + "\n"
 	config += `	maximum_prefix_warning_only = true` + "\n"
-	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	default_originate = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

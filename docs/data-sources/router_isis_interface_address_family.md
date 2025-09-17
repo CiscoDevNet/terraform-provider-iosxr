@@ -41,11 +41,11 @@ data "iosxr_router_isis_interface_address_family" "example" {
 - `adjacency_sid_indices` (Attributes List) Specify the index of Adjacency Segement ID (see [below for nested schema](#nestedatt--adjacency_sid_indices))
 - `advertise_prefix_route_policy` (String) Filter routes based on a route policy
 - `advertise_prefix_route_policy_levels` (Attributes List) Set advertisement for one level only (see [below for nested schema](#nestedatt--advertise_prefix_route_policy_levels))
-- `fast_reroute_enable_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_enable_levels))
+- `fast_reroute_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_levels))
 - `fast_reroute_per_link` (Boolean) per-link
 - `fast_reroute_per_prefix` (Boolean) per-prefix
 - `id` (String) The path of the retrieved object.
-- `metric_default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
+- `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
 - `tag` (Number) Set interface tag
@@ -77,8 +77,8 @@ Read-Only:
 - `route_policy` (String) Filter routes based on a route policy
 
 
-<a id="nestedatt--fast_reroute_enable_levels"></a>
-### Nested Schema for `fast_reroute_enable_levels`
+<a id="nestedatt--fast_reroute_levels"></a>
+### Nested Schema for `fast_reroute_levels`
 
 Read-Only:
 
@@ -92,6 +92,6 @@ Read-Only:
 
 Read-Only:
 
-- `default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
 - `level_number` (Number) Set metric at this level only
+- `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF

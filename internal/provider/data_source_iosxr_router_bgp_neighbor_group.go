@@ -90,12 +90,12 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "time in milliseconds",
 				Computed:            true,
 			},
-			"ao_key_chain_name_name": schema.StringAttribute{
+			"ao_key_chain_name": schema.StringAttribute{
 				MarkdownDescription: "Name of the key chain - maximum 32 characters",
 				Computed:            true,
 			},
 			"ao_key_chain_include_tcp_options": schema.StringAttribute{
-				MarkdownDescription: "Include/Exclude other TCP options in the header. Required when ao_key_chain_name_name is specified",
+				MarkdownDescription: "Include/Exclude other TCP options in the header",
 				Computed:            true,
 			},
 			"ao_key_chain_accept_ao_mismatch_connection": schema.BoolAttribute{
@@ -138,11 +138,11 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
 				Computed:            true,
 			},
-			"local_as_no_prepend_replace_as": schema.BoolAttribute{
+			"local_as_replace_as": schema.BoolAttribute{
 				MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
 				Computed:            true,
 			},
-			"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
+			"local_as_dual_as": schema.BoolAttribute{
 				MarkdownDescription: "Dual-AS mode",
 				Computed:            true,
 			},
@@ -158,20 +158,20 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Keepalive interval",
 				Computed:            true,
 			},
-			"timers_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time within zero container",
+			"timers_keepalive_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+			"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
-			"timers_holdtime_number": schema.Int64Attribute{
-				MarkdownDescription: "Holdtime value",
+			"timers_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Holdtime",
 				Computed:            true,
 			},
 			"timers_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time within holdtime container",
+				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
 			"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{

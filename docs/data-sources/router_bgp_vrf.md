@@ -47,12 +47,12 @@ data "iosxr_router_bgp_vrf" "example" {
 - `rd_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
 - `rd_two_byte_as_number` (String) 2-byte AS number
+- `timers_bgp_holdtime` (Number) Holdtime
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_bgp_holdtime_number` (Number) Holdtime value
 - `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_interval` (Number) Keepalive interval
-- `timers_bgp_zero` (Boolean) Disable keepalives/hold time
-- `timers_bgp_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+- `timers_bgp_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
@@ -71,20 +71,20 @@ Read-Only:
 - `ebgp_multihop_maximum_hop_count` (Number) maximum hop count
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
 - `local_as` (String) AS number
+- `local_as_dual_as` (Boolean) Dual-AS mode
 - `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
-- `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
+- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
 - `password` (String) Specifies an ENCRYPTED password will follow
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
 - `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
+- `timers_holdtime` (Number) Holdtime
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_holdtime_number` (Number) Holdtime value
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
-- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
-- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+- `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

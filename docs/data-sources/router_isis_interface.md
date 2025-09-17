@@ -33,19 +33,22 @@ data "iosxr_router_isis_interface" "example" {
 
 ### Read-Only
 
+- `bfd_fast_detect_ipv4` (Boolean) Address Family
 - `bfd_fast_detect_ipv6` (Boolean) Address Family
+- `bfd_minimum_interval` (Number) Hello interval
+- `bfd_multiplier` (Number) Detect multiplier
 - `circuit_type` (String) Configure circuit type for interface
 - `hello_padding` (String) Add padding to IS-IS hello packets
 - `hello_padding_levels` (Attributes List) Set hello-padding for one level only (see [below for nested schema](#nestedatt--hello_padding_levels))
-- `hello_password_accepts_encrypted` (String) Specifies a password will follow
+- `hello_password_accept_encrypted` (String) Specifies a password will follow
 - `hello_password_accepts_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_accepts_levels))
 - `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
-- `hello_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
-- `hello_password_keychain_name` (String) Specifies a Key Chain name will follow
-- `hello_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_keychain` (String) Specifies a Key Chain name will follow
+- `hello_password_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `hello_password_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_levels))
-- `hello_password_text_encrypted` (String) Specifies an encrypted password will follow
-- `hello_password_text_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_text_encrypted` (String) Specifies a password will follow
+- `hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `id` (String) The path of the retrieved object.
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
@@ -77,7 +80,7 @@ Read-Only:
 
 - `hmac_md5_encrypted` (String) Specifies a password will follow
 - `hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `keychain_name` (String) The Key Chain name
+- `keychain_name` (String) Specifies a Key Chain name will follow
 - `keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `level_number` (Number) Set hello-password for one level only
 - `text_encrypted` (String) Specifies a password will follow

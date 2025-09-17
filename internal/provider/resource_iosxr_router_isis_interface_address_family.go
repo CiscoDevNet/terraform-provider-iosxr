@@ -124,7 +124,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 				MarkdownDescription: helpers.NewAttributeDescription("per-link").String,
 				Optional:            true,
 			},
-			"fast_reroute_enable_levels": schema.ListNestedAttribute{
+			"fast_reroute_levels": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("enable").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -221,7 +221,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 					},
 				},
 			},
-			"metric_default_metric": schema.Int64Attribute{
+			"metric_default": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Default metric: <1-63> for narrow, <1-16777214> for wide").AddIntegerRangeDescription(1, 16777214).String,
 				Optional:            true,
 				Validators: []validator.Int64{
@@ -244,7 +244,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Schema(ctx context.Context, r
 								int64validator.Between(1, 2),
 							},
 						},
-						"default_metric": schema.Int64Attribute{
+						"metric_default": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Default metric: <1-63> for narrow, <1-16777214> for wide").AddIntegerRangeDescription(1, 16777214).String,
 							Optional:            true,
 							Validators: []validator.Int64{

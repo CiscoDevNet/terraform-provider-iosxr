@@ -106,8 +106,16 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"metric_style_narrow": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
+				Optional:            true,
+			},
 			"metric_style_narrow_transition": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
+				Optional:            true,
+			},
+			"metric_style_wide": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
 				Optional:            true,
 			},
 			"metric_style_wide_transition": schema.BoolAttribute{
@@ -130,15 +138,23 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 2),
 							},
 						},
-						"metric_style_narrow_transition": schema.BoolAttribute{
+						"narrow": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use old style of TLVs with narrow metric").String,
+							Optional:            true,
+						},
+						"narrow_transition": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
-						"metric_style_wide_transition": schema.BoolAttribute{
+						"wide": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Use new style of TLVs to carry wider metric").String,
+							Optional:            true,
+						},
+						"wide_transition": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
-						"metric_style_transition": schema.BoolAttribute{
+						"transition": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Send and accept both styles of TLVs during transition").String,
 							Optional:            true,
 						},
@@ -148,6 +164,9 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 			"router_id_interface_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router ID Interface").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
 			},
 			"router_id_ip_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Router ID address").String,
@@ -346,15 +365,15 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				MarkdownDescription: helpers.NewAttributeDescription("Exclude all interfaces from computation").String,
 				Optional:            true,
 			},
-			"microloop_avoidance_enable": schema.BoolAttribute{
+			"microloop_avoidance": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable local microloop avoidance").String,
 				Optional:            true,
 			},
-			"microloop_avoidance_enable_protected": schema.BoolAttribute{
+			"microloop_avoidance_protected": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable microloop avoidance for only protected prefixes").String,
 				Optional:            true,
 			},
-			"microloop_avoidance_enable_segment_routing_route_policy": schema.StringAttribute{
+			"microloop_avoidance_segment_routing_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Provide Uloop protection based on a route policy").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -381,12 +400,19 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 			},
 			"mpls_traffic_eng_router_id_ipv4_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Router ID IPv4 address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4-address").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
 			},
 			"mpls_traffic_eng_router_id_interface_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Router ID interface").String,
+				MarkdownDescription: helpers.NewAttributeDescription("interface-name").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+				},
 			},
 			"mpls_traffic_eng_level_1_2": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable mpls traffic-eng at both level 1 and 2").String,
@@ -701,12 +727,12 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					},
 				},
 			},
-			"redistribute_isis_processes": schema.ListNestedAttribute{
+			"redistribute_isis": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"isis_string": schema.StringAttribute{
+						"instance_id": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IS-IS instance identifier").String,
 							Required:            true,
 							Validators: []validator.String{
@@ -714,7 +740,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
-						"redistribute_route_level": schema.StringAttribute{
+						"level": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute routes into both levels").AddStringEnumDescription("level-1", "level-1-2", "level-2").String,
 							Optional:            true,
 							Validators: []validator.String{
@@ -754,7 +780,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"locator_string": schema.StringAttribute{
+						"locator_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Locator name").String,
 							Required:            true,
 							Validators: []validator.String{

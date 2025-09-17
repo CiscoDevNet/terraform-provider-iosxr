@@ -733,7 +733,7 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/count", state.getPath()))
 	}
 	if !state.EchoStartupValidateForce.IsNull() && data.EchoStartupValidateForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate/force", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate", state.getPath()))
 	}
 	if !state.EchoIpv4Source.IsNull() && data.EchoIpv4Source.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/source/ipv4-address", state.getPath()))
@@ -840,7 +840,7 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/ipv4/source/ipv4-address", state.getPath(), keyString))
 				}
 				if !state.Interfaces[i].Ipv6ChecksumDisable.IsNull() && data.Interfaces[j].Ipv6ChecksumDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum/disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum", state.getPath(), keyString))
 				}
 				if !state.Interfaces[i].Disable.IsNull() && data.Interfaces[j].Disable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/disable", state.getPath(), keyString))
@@ -930,7 +930,7 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect/count", data.getPath()))
 	}
 	if !data.EchoStartupValidateForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/startup/validate/force", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/startup/validate", data.getPath()))
 	}
 	if !data.EchoIpv4Source.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/source/ipv4-address", data.getPath()))

@@ -94,16 +94,16 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Keepalive interval",
 				Computed:            true,
 			},
-			"timers_bgp_zero": schema.BoolAttribute{
+			"timers_bgp_keepalive_zero": schema.BoolAttribute{
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
-			"timers_bgp_holdtime_number": schema.Int64Attribute{
-				MarkdownDescription: "Holdtime value",
+			"timers_bgp_holdtime": schema.Int64Attribute{
+				MarkdownDescription: "Holdtime",
 				Computed:            true,
 			},
 			"timers_bgp_holdtime_zero": schema.BoolAttribute{
@@ -271,20 +271,20 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Keepalive interval",
 							Computed:            true,
 						},
-						"timers_zero": schema.BoolAttribute{
-							MarkdownDescription: "Disable keepalives/hold time within zero container",
+						"timers_keepalive_zero": schema.BoolAttribute{
+							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
-						"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-							MarkdownDescription: "Minimum acceptable holdtime from neighbor within zero container",
+						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
 						"timers_holdtime_number": schema.Int64Attribute{
-							MarkdownDescription: "Holdtime value",
+							MarkdownDescription: "Holdtime",
 							Computed:            true,
 						},
 						"timers_holdtime_zero": schema.BoolAttribute{
-							MarkdownDescription: "Disable keepalives/hold time within holdtime container",
+							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
 						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{

@@ -56,11 +56,11 @@ data "iosxr_vrf" "example" {
 - `description` (String) A description for the VRF
 - `id` (String) The path of the retrieved object.
 - `rd_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
-- `rd_four_byte_as_number` (Number) 4-byte AS number in asplain format
+- `rd_four_byte_as_number` (String) 4-byte AS number in asplain format
 - `rd_ipv4_address` (String) IPv4 address
 - `rd_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
-- `rd_two_byte_as_number` (Number) 2-byte AS number
+- `rd_two_byte_as_number` (String) 2-byte AS number
 - `vpn_id` (String) VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part
 
 <a id="nestedatt--address_family_ipv4_unicast_export_route_target_four_byte_as_format"></a>

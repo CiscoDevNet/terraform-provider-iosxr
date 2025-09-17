@@ -16,24 +16,18 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
-  - yang_name: default-originate/route-policy
+  - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
     tf_name: default_originate_route_policy
-    type: String
-    no_augment_config: true
-    optional: true
+    xpath: default-originate/route-policy
     delete_parent: true
-    example: ROUTE_POLICY_1
-    description: "Route policy to specify criteria to originate default"
-  - yang_name: default-originate/inheritance-disable
-    tf_name: default_originate_inheritance_disable
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
-    delete_parent: true
-    example: true
-    description: "Prevent default-originate being inherited from a parent group"
     exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
+    tf_name: default_originate_inheritance_disable
+    xpath: default-originate/inheritance-disable
+    delete_parent: true
+    exclude_test: true
+    example: true
   - yang_name: next-hop-self
     example: true
   - yang_name: next-hop-self/inheritance-disable
@@ -42,65 +36,30 @@ attributes:
     example: true
   - yang_name: send-community-ebgp/inheritance-disable
     example: true
-  - yang_name: remove-private-as
-    tf_name: remove_private_as
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
-    example: true
-    description: "Remove private AS numbers from outbound updates"
   - yang_name: remove-private-as/inbound
     tf_name: remove_private_as_inbound
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     example: true
-    description: "Remove private AS numbers from inbound updates"
   - yang_name: remove-private-as/inbound/inheritance-disable
     tf_name: remove_private_as_inbound_inheritance_disable
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     example: true
     exclude_test: true
-    description: "Prevent inbound remove-private-as from being inherited"
   - yang_name: remove-private-as/inbound/entire-aspath
     tf_name: remove_private_as_inbound_entire_aspath
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     example: true
-    description: "Remove entire AS path for inbound updates"
+  - yang_name: remove-private-as/remove-private-as-outbound
+    tf_name: remove_private_as
+    example: true
   - yang_name: remove-private-as/remove-private-as-outbound/entire-aspath
-    tf_name: remove_private_as_outbound_entire_aspath
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+    tf_name: remove_private_as_entire_aspath
     example: true
-    description: "Remove entire AS path for outbound updates"
   - yang_name: remove-private-as/remove-private-as-outbound/inheritance-disable
-    tf_name: remove_private_as_outbound_inheritance_disable
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+    tf_name: remove_private_as_inheritance_disable
     example: true
     exclude_test: true
-    description: "Prevent outbound remove-private-as from being inherited"
   - yang_name: remove-private-as/remove-private-as-outbound/internal
-    tf_name: remove_private_as_outbound_internal
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+    tf_name: remove_private_as_internal
     example: true
     exclude_test: true
-    description: "Remove private AS numbers from internal outbound updates"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as

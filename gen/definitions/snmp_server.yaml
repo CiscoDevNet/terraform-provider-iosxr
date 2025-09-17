@@ -1,3 +1,4 @@
+---
 name: SNMP Server
 path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server
 doc_category: Management
@@ -46,236 +47,124 @@ attributes:
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL/all
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
     tf_name: traps_isis_all
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Enable all IS-IS traps"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/database-overload
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload
     tf_name: traps_isis_database_overload
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisDatabaseOverload"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/manual-address-drops
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops
     tf_name: traps_isis_manual_address_drops
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisManualAddressDrops"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/corrupted-lsp-detected
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected
     tf_name: traps_isis_corrupted_lsp_detected
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisCorruptedLSPDetected"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/attempt-to-exceed-max-sequence
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence
     tf_name: traps_isis_attempt_to_exceed_max_sequence
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisAttemptToExceedMaxSequence"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/id-len-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch
     tf_name: traps_isis_id_len_mismatch
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisIDLenMismatch"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/max-area-addresses-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch
     tf_name: traps_isis_max_area_addresses_mismatch
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisMaxAreaAddressesMismatch"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/own-lsp-purge
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge
     tf_name: traps_isis_own_lsp_purge
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisOwnLSPPurge"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/sequence-number-skip
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip
     tf_name: traps_isis_sequence_number_skip
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisSequenceNumberSkip"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-type-failure
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure
     tf_name: traps_isis_authentication_type_failure
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisAuthenticationTypeFailure"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-failure
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure
     tf_name: traps_isis_authentication_failure
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisAuthenticationFailure"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/version-skew
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew
     tf_name: traps_isis_version_skew
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisVersionSkew"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/area-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch
     tf_name: traps_isis_area_mismatch
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisAreaMismatch"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/rejected-adjacency
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency
     tf_name: traps_isis_rejected_adjacency
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisRejectedAdjacency"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-too-large-to-propagate
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate
     tf_name: traps_isis_lsp_too_large_to_propagate
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisLSPTooLargeToPropagate"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/orig-lsp-buff-size-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch
     tf_name: traps_isis_orig_lsp_buff_size_mismatch
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisOrigLSPBuffSizeMismatch"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/protocols-supported-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch
     tf_name: traps_isis_protocols_supported_mismatch
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisProtocolsSupportedMismatch"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/adjacency-change
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change
     tf_name: traps_isis_adjacency_change
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisAdjacencyChange"
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-error-detected
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
     tf_name: traps_isis_lsp_error_detected
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "isisLspErrorDetected"
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown
-    tf_name: traps_bgp_cbgp_two_updown
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
-    delete_parent: true
-    exclude_test: true
-    example: true
-    description: "Enable CISCO-BGP4-MIB v2 up/down traps"
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE/enable
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable
     tf_name: traps_bgp_cbgp_two_enable
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown
+    tf_name: traps_bgp_cbgp_two_updown
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Enable CISCO-BGP4-MIB v2 traps"
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
     tf_name: traps_bgp_enable_updown
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Enable CISCO-BGP4-MIB v2 up/down traps"
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
     tf_name: traps_bgp_enable_cisco_bgp4_mib
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    exclude_test: true
     example: true
-    description: "Enable BGP4-MIB and CISCO-BGP4-MIB traps"
   - yang_name: users/user
     tf_name: users
     type: List

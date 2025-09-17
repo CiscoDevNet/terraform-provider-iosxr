@@ -1,5 +1,5 @@
 ---
-name : Extcommunity RT Set
+name: Extcommunity RT Set
 path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-rt-sets/extended-community-rt-set[set-name=%s]
 no_delete_attributes: true
 doc_category: Route Policy

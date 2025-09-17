@@ -75,8 +75,8 @@ type SNMPServer struct {
 	TrapsIsisProtocolsSupportedMismatch types.Bool              `tfsdk:"traps_isis_protocols_supported_mismatch"`
 	TrapsIsisAdjacencyChange            types.Bool              `tfsdk:"traps_isis_adjacency_change"`
 	TrapsIsisLspErrorDetected           types.Bool              `tfsdk:"traps_isis_lsp_error_detected"`
-	TrapsBgpCbgpTwoUpdown               types.Bool              `tfsdk:"traps_bgp_cbgp_two_updown"`
 	TrapsBgpCbgpTwoEnable               types.Bool              `tfsdk:"traps_bgp_cbgp_two_enable"`
+	TrapsBgpCbgpTwoUpdown               types.Bool              `tfsdk:"traps_bgp_cbgp_two_updown"`
 	TrapsBgpEnableUpdown                types.Bool              `tfsdk:"traps_bgp_enable_updown"`
 	TrapsBgpEnableCiscoBgp4Mib          types.Bool              `tfsdk:"traps_bgp_enable_cisco_bgp4_mib"`
 	Users                               []SNMPServerUsers       `tfsdk:"users"`
@@ -128,8 +128,8 @@ type SNMPServerData struct {
 	TrapsIsisProtocolsSupportedMismatch types.Bool              `tfsdk:"traps_isis_protocols_supported_mismatch"`
 	TrapsIsisAdjacencyChange            types.Bool              `tfsdk:"traps_isis_adjacency_change"`
 	TrapsIsisLspErrorDetected           types.Bool              `tfsdk:"traps_isis_lsp_error_detected"`
-	TrapsBgpCbgpTwoUpdown               types.Bool              `tfsdk:"traps_bgp_cbgp_two_updown"`
 	TrapsBgpCbgpTwoEnable               types.Bool              `tfsdk:"traps_bgp_cbgp_two_enable"`
+	TrapsBgpCbgpTwoUpdown               types.Bool              `tfsdk:"traps_bgp_cbgp_two_updown"`
 	TrapsBgpEnableUpdown                types.Bool              `tfsdk:"traps_bgp_enable_updown"`
 	TrapsBgpEnableCiscoBgp4Mib          types.Bool              `tfsdk:"traps_bgp_enable_cisco_bgp4_mib"`
 	Users                               []SNMPServerUsers       `tfsdk:"users"`
@@ -378,24 +378,24 @@ func (data SNMPServer) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-isis-cfg:isis.lsp-error-detected", map[string]string{})
 		}
 	}
-	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.IsUnknown() {
-		if data.TrapsBgpCbgpTwoUpdown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown", map[string]string{})
-		}
-	}
 	if !data.TrapsBgpCbgpTwoEnable.IsNull() && !data.TrapsBgpCbgpTwoEnable.IsUnknown() {
 		if data.TrapsBgpCbgpTwoEnable.ValueBool() {
 			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable", map[string]string{})
 		}
 	}
+	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.IsUnknown() {
+		if data.TrapsBgpCbgpTwoUpdown.ValueBool() {
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown", map[string]string{})
+		}
+	}
 	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.IsUnknown() {
 		if data.TrapsBgpEnableUpdown.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib", map[string]string{})
 		}
 	}
 	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.IsUnknown() {
 		if data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
-			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib", map[string]string{})
+			body, _ = sjson.Set(body, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown", map[string]string{})
 		}
 	}
 	if len(data.Users) > 0 {
@@ -864,15 +864,6 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsIsisLspErrorDetected = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); !data.TrapsBgpCbgpTwoUpdown.IsNull() {
-		if value.Exists() {
-			data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
-		} else {
-			data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
-		}
-	} else {
-		data.TrapsBgpCbgpTwoUpdown = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable"); !data.TrapsBgpCbgpTwoEnable.IsNull() {
 		if value.Exists() {
 			data.TrapsBgpCbgpTwoEnable = types.BoolValue(true)
@@ -882,7 +873,16 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpCbgpTwoEnable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); !data.TrapsBgpEnableUpdown.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); !data.TrapsBgpCbgpTwoUpdown.IsNull() {
+		if value.Exists() {
+			data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
+		} else {
+			data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
+		}
+	} else {
+		data.TrapsBgpCbgpTwoUpdown = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); !data.TrapsBgpEnableUpdown.IsNull() {
 		if value.Exists() {
 			data.TrapsBgpEnableUpdown = types.BoolValue(true)
 		} else {
@@ -891,7 +891,7 @@ func (data *SNMPServer) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsBgpEnableUpdown = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
 		if value.Exists() {
 			data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 		} else {
@@ -1328,22 +1328,22 @@ func (data *SNMPServer) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsIsisLspErrorDetected = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
-		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
-	} else {
-		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable"); value.Exists() {
 		data.TrapsBgpCbgpTwoEnable = types.BoolValue(true)
 	} else {
 		data.TrapsBgpCbgpTwoEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
+		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
+	} else {
+		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
 		data.TrapsBgpEnableUpdown = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableUpdown = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(false)
@@ -1664,22 +1664,22 @@ func (data *SNMPServerData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.TrapsIsisLspErrorDetected = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
-		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
-	} else {
-		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.enable"); value.Exists() {
 		data.TrapsBgpCbgpTwoEnable = types.BoolValue(true)
 	} else {
 		data.TrapsBgpCbgpTwoEnable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.cbgp-two.updown"); value.Exists() {
+		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(true)
+	} else {
+		data.TrapsBgpCbgpTwoUpdown = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
 		data.TrapsBgpEnableUpdown = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableUpdown = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.cisco-bgp4-mib"); value.Exists() {
+	if value := gjson.GetBytes(res, "traps.Cisco-IOS-XR-um-router-bgp-cfg:bgp.enable.updown"); value.Exists() {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(true)
 	} else {
 		data.TrapsBgpEnableCiscoBgp4Mib = types.BoolValue(false)
@@ -1869,73 +1869,73 @@ func (data *SNMPServer) getDeletedItems(ctx context.Context, state SNMPServer) [
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl", state.getPath()))
 	}
 	if !state.TrapsIsisAll.IsNull() && data.TrapsIsisAll.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL", state.getPath()))
 	}
 	if !state.TrapsIsisDatabaseOverload.IsNull() && data.TrapsIsisDatabaseOverload.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisManualAddressDrops.IsNull() && data.TrapsIsisManualAddressDrops.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisCorruptedLspDetected.IsNull() && data.TrapsIsisCorruptedLspDetected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisAttemptToExceedMaxSequence.IsNull() && data.TrapsIsisAttemptToExceedMaxSequence.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisIdLenMismatch.IsNull() && data.TrapsIsisIdLenMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisMaxAreaAddressesMismatch.IsNull() && data.TrapsIsisMaxAreaAddressesMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisOwnLspPurge.IsNull() && data.TrapsIsisOwnLspPurge.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisSequenceNumberSkip.IsNull() && data.TrapsIsisSequenceNumberSkip.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisAuthenticationTypeFailure.IsNull() && data.TrapsIsisAuthenticationTypeFailure.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisAuthenticationFailure.IsNull() && data.TrapsIsisAuthenticationFailure.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisVersionSkew.IsNull() && data.TrapsIsisVersionSkew.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisAreaMismatch.IsNull() && data.TrapsIsisAreaMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisRejectedAdjacency.IsNull() && data.TrapsIsisRejectedAdjacency.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisLspTooLargeToPropagate.IsNull() && data.TrapsIsisLspTooLargeToPropagate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisOrigLspBuffSizeMismatch.IsNull() && data.TrapsIsisOrigLspBuffSizeMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisProtocolsSupportedMismatch.IsNull() && data.TrapsIsisProtocolsSupportedMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisAdjacencyChange.IsNull() && data.TrapsIsisAdjacencyChange.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsIsisLspErrorDetected.IsNull() && data.TrapsIsisLspErrorDetected.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", state.getPath()))
-	}
-	if !state.TrapsBgpCbgpTwoUpdown.IsNull() && data.TrapsBgpCbgpTwoUpdown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", state.getPath()))
 	}
 	if !state.TrapsBgpCbgpTwoEnable.IsNull() && data.TrapsBgpCbgpTwoEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE", state.getPath()))
+	}
+	if !state.TrapsBgpCbgpTwoUpdown.IsNull() && data.TrapsBgpCbgpTwoUpdown.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN", state.getPath()))
 	}
 	if !state.TrapsBgpEnableUpdown.IsNull() && data.TrapsBgpEnableUpdown.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB", state.getPath()))
 	}
 	if !state.TrapsBgpEnableCiscoBgp4Mib.IsNull() && data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN", state.getPath()))
 	}
 	for i := range state.Users {
 		keys := [...]string{"user-name"}
@@ -2159,73 +2159,73 @@ func (data *SNMPServer) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl", data.getPath()))
 	}
 	if !data.TrapsIsisAll.IsNull() && !data.TrapsIsisAll.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL/all", data.getPath()))
 	}
 	if !data.TrapsIsisDatabaseOverload.IsNull() && !data.TrapsIsisDatabaseOverload.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/database-overload", data.getPath()))
 	}
 	if !data.TrapsIsisManualAddressDrops.IsNull() && !data.TrapsIsisManualAddressDrops.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/manual-address-drops", data.getPath()))
 	}
 	if !data.TrapsIsisCorruptedLspDetected.IsNull() && !data.TrapsIsisCorruptedLspDetected.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/corrupted-lsp-detected", data.getPath()))
 	}
 	if !data.TrapsIsisAttemptToExceedMaxSequence.IsNull() && !data.TrapsIsisAttemptToExceedMaxSequence.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/attempt-to-exceed-max-sequence", data.getPath()))
 	}
 	if !data.TrapsIsisIdLenMismatch.IsNull() && !data.TrapsIsisIdLenMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/id-len-mismatch", data.getPath()))
 	}
 	if !data.TrapsIsisMaxAreaAddressesMismatch.IsNull() && !data.TrapsIsisMaxAreaAddressesMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/max-area-addresses-mismatch", data.getPath()))
 	}
 	if !data.TrapsIsisOwnLspPurge.IsNull() && !data.TrapsIsisOwnLspPurge.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/own-lsp-purge", data.getPath()))
 	}
 	if !data.TrapsIsisSequenceNumberSkip.IsNull() && !data.TrapsIsisSequenceNumberSkip.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/sequence-number-skip", data.getPath()))
 	}
 	if !data.TrapsIsisAuthenticationTypeFailure.IsNull() && !data.TrapsIsisAuthenticationTypeFailure.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-type-failure", data.getPath()))
 	}
 	if !data.TrapsIsisAuthenticationFailure.IsNull() && !data.TrapsIsisAuthenticationFailure.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-failure", data.getPath()))
 	}
 	if !data.TrapsIsisVersionSkew.IsNull() && !data.TrapsIsisVersionSkew.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/version-skew", data.getPath()))
 	}
 	if !data.TrapsIsisAreaMismatch.IsNull() && !data.TrapsIsisAreaMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/area-mismatch", data.getPath()))
 	}
 	if !data.TrapsIsisRejectedAdjacency.IsNull() && !data.TrapsIsisRejectedAdjacency.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/rejected-adjacency", data.getPath()))
 	}
 	if !data.TrapsIsisLspTooLargeToPropagate.IsNull() && !data.TrapsIsisLspTooLargeToPropagate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-too-large-to-propagate", data.getPath()))
 	}
 	if !data.TrapsIsisOrigLspBuffSizeMismatch.IsNull() && !data.TrapsIsisOrigLspBuffSizeMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/orig-lsp-buff-size-mismatch", data.getPath()))
 	}
 	if !data.TrapsIsisProtocolsSupportedMismatch.IsNull() && !data.TrapsIsisProtocolsSupportedMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/protocols-supported-mismatch", data.getPath()))
 	}
 	if !data.TrapsIsisAdjacencyChange.IsNull() && !data.TrapsIsisAdjacencyChange.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/adjacency-change", data.getPath()))
 	}
 	if !data.TrapsIsisLspErrorDetected.IsNull() && !data.TrapsIsisLspErrorDetected.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected", data.getPath()))
-	}
-	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-error-detected", data.getPath()))
 	}
 	if !data.TrapsBgpCbgpTwoEnable.IsNull() && !data.TrapsBgpCbgpTwoEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE/enable", data.getPath()))
+	}
+	if !data.TrapsBgpCbgpTwoUpdown.IsNull() && !data.TrapsBgpCbgpTwoUpdown.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN/updown", data.getPath()))
 	}
 	if !data.TrapsBgpEnableUpdown.IsNull() && !data.TrapsBgpEnableUpdown.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib", data.getPath()))
 	}
 	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() && !data.TrapsBgpEnableCiscoBgp4Mib.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown", data.getPath()))
 	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}
@@ -2341,73 +2341,73 @@ func (data *SNMPServer) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl", data.getPath()))
 	}
 	if !data.TrapsIsisAll.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL", data.getPath()))
 	}
 	if !data.TrapsIsisDatabaseOverload.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisManualAddressDrops.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisCorruptedLspDetected.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisAttemptToExceedMaxSequence.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisIdLenMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisMaxAreaAddressesMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisOwnLspPurge.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisSequenceNumberSkip.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisAuthenticationTypeFailure.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisAuthenticationFailure.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisVersionSkew.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisAreaMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisRejectedAdjacency.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisLspTooLargeToPropagate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisOrigLspBuffSizeMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisProtocolsSupportedMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisAdjacencyChange.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsIsisLspErrorDetected.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis", data.getPath()))
-	}
-	if !data.TrapsBgpCbgpTwoUpdown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS", data.getPath()))
 	}
 	if !data.TrapsBgpCbgpTwoEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE", data.getPath()))
+	}
+	if !data.TrapsBgpCbgpTwoUpdown.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN", data.getPath()))
 	}
 	if !data.TrapsBgpEnableUpdown.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB", data.getPath()))
 	}
 	if !data.TrapsBgpEnableCiscoBgp4Mib.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN", data.getPath()))
 	}
 	for i := range data.Users {
 		keys := [...]string{"user-name"}

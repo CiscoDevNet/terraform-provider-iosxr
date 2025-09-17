@@ -97,7 +97,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Signal other routers not to use us in SPF").String,
 				Optional:            true,
 			},
-			"set_overload_bit_on_startup_seconds": schema.Int64Attribute{
+			"set_overload_bit_on_startup_time_to_advertise": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
 				Optional:            true,
 				Validators: []validator.Int64{
@@ -128,7 +128,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 								int64validator.Between(1, 2),
 							},
 						},
-						"on_startup_time_seconds": schema.Int64Attribute{
+						"on_startup_time_to_advertise": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Time in seconds to advertise ourself as overloaded after reboot").AddIntegerRangeDescription(5, 86400).String,
 							Optional:            true,
 							Validators: []validator.Int64{
@@ -229,7 +229,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"lsp_password_accept_levels": schema.ListNestedAttribute{
+			"lsp_password_levels": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set lsp-password for one level only").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -252,11 +252,14 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"lsp_password_text_encrypted": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specifies an encrypted password will follow").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
 			},
 			"lsp_password_text_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("specify SNP packets authentication mode").String,
 				Optional:            true,
 			},
 			"lsp_password_text_snp_send_only": schema.BoolAttribute{
@@ -264,15 +267,18 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 			},
 			"lsp_password_text_enable_poi": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification - only valid with cryptographic authentication").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
 				Optional:            true,
 			},
 			"lsp_password_hmac_md5_encrypted": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
 			},
 			"lsp_password_hmac_md5_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("specify SNP packets authentication mode").String,
 				Optional:            true,
 			},
 			"lsp_password_hmac_md5_snp_send_only": schema.BoolAttribute{
@@ -283,12 +289,15 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
 				Optional:            true,
 			},
-			"lsp_password_keychain_name": schema.StringAttribute{
+			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
 			},
 			"lsp_password_keychain_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("specify SNP packets authentication mode").String,
 				Optional:            true,
 			},
 			"lsp_password_keychain_snp_send_only": schema.BoolAttribute{
@@ -348,7 +357,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"flex_algo_number": schema.Int64Attribute{
+						"number": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Algorithm number").AddIntegerRangeDescription(128, 255).String,
 							Required:            true,
 							Validators: []validator.Int64{
@@ -360,7 +369,7 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 							Optional:            true,
 						},
 						"metric_type": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Flex-Algo metric type - can be 'delay', 'te', or integer 128-255").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Metric-type used by flex-algo calculation").String,
 							Optional:            true,
 						},
 					},

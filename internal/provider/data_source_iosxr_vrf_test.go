@@ -116,7 +116,7 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	address_family_ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	address_family_ipv6_multicast = true` + "\n"
 	config += `	address_family_ipv6_flowspec = true` + "\n"
-	config += `	rd_two_byte_as_number = 123` + "\n"
+	config += `	rd_two_byte_as_number = "123"` + "\n"
 	config += `	rd_two_byte_as_index = 123` + "\n"
 	config += `	address_family_ipv4_unicast_import_route_target_two_byte_as_format = [{` + "\n"
 	config += `		two_byte_as_number = 1` + "\n"

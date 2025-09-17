@@ -98,10 +98,6 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"import": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Import options for neighbor address-family routes").String,
-				Optional:            true,
-			},
 			"import_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Import routes using stitching RTs").String,
 				Optional:            true,
@@ -126,7 +122,7 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"advertise_vpnv4_unicast_enable_re_originated_stitching_rt": schema.BoolAttribute{
+			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
 				Optional:            true,
 			},
@@ -178,7 +174,7 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"maximum_prefix_threshold_value": schema.Int64Attribute{
+			"maximum_prefix_threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
 				Required:            true,
 				Validators: []validator.Int64{
@@ -200,9 +196,16 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
 				Optional:            true,
 			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Originate default route to this neighbor").String,
+				Optional:            true,
+			},
 			"default_originate_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria to originate default").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 255),
+				},
 			},
 			"default_originate_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent default-originate being inherited from a parent group").String,

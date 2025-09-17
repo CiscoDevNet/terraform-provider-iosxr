@@ -20,55 +20,35 @@ attributes:
     example: true
   - yang_name: timers/bgp/keepalive-interval
     example: 5
-  - yang_name: timers/bgp/zero/zero
-    tf_name: timers_bgp_zero
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/bgp/zero/zero
+    tf_name: timers_bgp_keepalive_zero
+    delete_parent: true
     exclude_test: true
     example: true
-    description: "Disable keepalives/hold time"
-  - yang_name: timers/bgp/zero/minimum-acceptable-holdtime
-    tf_name: timers_bgp_zero_minimum_acceptable_holdtime
-    type: Int64
-    no_augment_config: true
-    optional: true
-    min_int: 3
-    max_int: 65535
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/bgp/zero/minimum-acceptable-holdtime
+    tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
+    delete_parent: true
     exclude_test: true
     example: 10
-    description: "Minimum acceptable holdtime from neighbor within zero container"
-  - yang_name: timers/bgp/holdtime/holdtime-number
-    tf_name: timers_bgp_holdtime_number
-    type: Int64
-    no_augment_config: true
-    optional: true
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
+    xpath: timers/bgp/holdtime/holdtime-number
+    tf_name: timers_bgp_holdtime
     delete_parent: true
-    min_int: 3
-    max_int: 65535
     example: 20
-    description: "Holdtime value"
-  - yang_name: timers/bgp/holdtime/zero
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/bgp/holdtime/zero
     tf_name: timers_bgp_holdtime_zero
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Disable keepalives/hold time"
-  - yang_name: timers/bgp/holdtime/minimum-acceptable-holdtime
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/bgp/holdtime/minimum-acceptable-holdtime
     tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
-    type: Int64
-    no_augment_config: true
-    optional: true
     delete_parent: true
-    min_int: 3
-    max_int: 65535
-    example: 10
-    description: "Minimum acceptable holdtime from neighbor"
+    exclude_test: true
+    example: 30
   - yang_name: bgp/router-id
     example: 22.22.22.22
   - yang_name: bgp/graceful-restart/graceful-reset
@@ -113,23 +93,15 @@ attributes:
     example: true
   - yang_name: bgp/bestpath/origin-as/allow/invalid
     example: true
-  - yang_name: bgp/bestpath/sr-policy/prefer
+  - yang_name: bgp/bestpath/sr-policy/SR-POLICY/PREFER/prefer
+    xpath: bgp/bestpath/sr-policy/prefer
     tf_name: bgp_bestpath_sr_policy_prefer
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
     example: true
-    optional: true
-    description: "Consider only paths over SR Policy for bestpath selection, eBGP no-color eligible"
-  - yang_name: bgp/bestpath/sr-policy/force
+  - yang_name: bgp/bestpath/sr-policy/SR-POLICY/FORCE/force
+    xpath: bgp/bestpath/sr-policy/force
     tf_name: bgp_bestpath_sr_policy_force
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
     exclude_test: true
     example: true
-    optional: true
-    description: "Consider only paths over SR Policy for bestpath selection, eBGP no-color ineligible"
   - yang_name: neighbors/neighbor
     tf_name: neighbors
     type: List
@@ -188,65 +160,37 @@ attributes:
         example: false
       - yang_name: timers/keepalive-interval
         tf_name: timers_keepalive_interval
-        type: Int64
-        no_augment_config: true
-        optional: true
         delete_parent: true
-        min_int: 0
-        max_int: 65535
         example: 10
-        description: "Keepalive interval"
-      - yang_name: timers/zero/zero
-        tf_name: timers_zero
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
-        optional: true
+      - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
+        xpath: timers/zero/zero
+        tf_name: timers_keepalive_zero
         delete_parent: true
         exclude_test: true
         example: true
-        description: "Disable keepalives/hold time within zero container"
-      - yang_name: timers/zero/minimum-acceptable-holdtime
-        tf_name: timers_zero_minimum_acceptable_holdtime
-        type: Int64
-        no_augment_config: true
-        optional: true
+      - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+        xpath: timers/zero/minimum-acceptable-holdtime
+        tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
         delete_parent: true
-        min_int: 3
-        max_int: 65535
         exclude_test: true
         example: 10
-        description: "Minimum acceptable holdtime from neighbor within zero container"
-      - yang_name: timers/holdtime/holdtime-number
+      - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
+        xpath: timers/holdtime/holdtime-number
         tf_name: timers_holdtime_number
-        type: Int64
-        no_augment_config: true
-        optional: true
         delete_parent: true
-        min_int: 3
-        max_int: 65535
         example: 20
-        description: "Holdtime value"
-      - yang_name: timers/holdtime/zero
+      - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
+        xpath: timers/holdtime/zero
         tf_name: timers_holdtime_zero
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
-        optional: true
         delete_parent: true
         exclude_test: true
         example: true
-        description: "Disable keepalives/hold time within holdtime container"
-      - yang_name: timers/holdtime/minimum-acceptable-holdtime
+      - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+        xpath: timers/holdtime/minimum-acceptable-holdtime
         tf_name: timers_holdtime_minimum_acceptable_holdtime
-        type: Int64
-        no_augment_config: true
-        optional: true
         delete_parent: true
-        min_int: 3
-        max_int: 65535
-        example: 20
-        description: "Minimum acceptable holdtime from neighbor"
+        exclude_test: true
+        example: 30
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1
       - yang_name: ttl-security

@@ -31,13 +31,13 @@ func TestAccIosxrRouterISISInterfaceAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "af_name", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "saf_name", "unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_per_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_enable_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_enable_levels.0.per_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "fast_reroute_levels.0.per_prefix", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "tag", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "advertise_prefix_route_policy_levels.0.route_policy", "ROUTE_POLICY_2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_default_metric", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface_address_family.test", "metric_default", "500"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -98,7 +98,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
 	config += `	fast_reroute_per_prefix = true` + "\n"
-	config += `	fast_reroute_enable_levels = [{` + "\n"
+	config += `	fast_reroute_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
 	config += `		per_prefix = true` + "\n"
 	config += `		}]` + "\n"
@@ -108,7 +108,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `		level_number = 1` + "\n"
 	config += `		route_policy = "ROUTE_POLICY_2"` + "\n"
 	config += `		}]` + "\n"
-	config += `	metric_default_metric = 500` + "\n"
+	config += `	metric_default = 500` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config

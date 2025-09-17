@@ -25,5 +25,8 @@ resource "iosxr_router_isis_interface" "example" {
       text_encrypted = "060506324F41584B564B0F49584B"
     }
   ]
+  bfd_fast_detect_ipv4 = true
   bfd_fast_detect_ipv6 = true
+  bfd_minimum_interval = 50
+  bfd_multiplier       = 3
 }

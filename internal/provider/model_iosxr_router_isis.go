@@ -31,105 +31,105 @@ import (
 )
 
 type RouterISIS struct {
-	Device                            types.String                        `tfsdk:"device"`
-	Id                                types.String                        `tfsdk:"id"`
-	DeleteMode                        types.String                        `tfsdk:"delete_mode"`
-	ProcessId                         types.String                        `tfsdk:"process_id"`
-	IsType                            types.String                        `tfsdk:"is_type"`
-	SetOverloadBit                    types.Bool                          `tfsdk:"set_overload_bit"`
-	SetOverloadBitOnStartupSeconds    types.Int64                         `tfsdk:"set_overload_bit_on_startup_seconds"`
-	SetOverloadBitOnStartupWaitForBgp types.Bool                          `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
-	SetOverloadBitAdvertiseExternal   types.Bool                          `tfsdk:"set_overload_bit_advertise_external"`
-	SetOverloadBitAdvertiseInterlevel types.Bool                          `tfsdk:"set_overload_bit_advertise_interlevel"`
-	SetOverloadBitLevels              []RouterISISSetOverloadBitLevels    `tfsdk:"set_overload_bit_levels"`
-	Nsr                               types.Bool                          `tfsdk:"nsr"`
-	NsfCisco                          types.Bool                          `tfsdk:"nsf_cisco"`
-	NsfIetf                           types.Bool                          `tfsdk:"nsf_ietf"`
-	NsfLifetime                       types.Int64                         `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer                 types.Int64                         `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires               types.Int64                         `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges               types.Bool                          `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait         types.Int64                         `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait         types.Int64                         `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait       types.Int64                         `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval                types.Int64                         `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime                    types.Int64                         `tfsdk:"max_lsp_lifetime"`
-	LspPasswordAcceptEncrypted        types.String                        `tfsdk:"lsp_password_accept_encrypted"`
-	LspPasswordAcceptLevels           []RouterISISLspPasswordAcceptLevels `tfsdk:"lsp_password_accept_levels"`
-	LspPasswordTextEncrypted          types.String                        `tfsdk:"lsp_password_text_encrypted"`
-	LspPasswordTextSendOnly           types.Bool                          `tfsdk:"lsp_password_text_send_only"`
-	LspPasswordTextSnpSendOnly        types.Bool                          `tfsdk:"lsp_password_text_snp_send_only"`
-	LspPasswordTextEnablePoi          types.Bool                          `tfsdk:"lsp_password_text_enable_poi"`
-	LspPasswordHmacMd5Encrypted       types.String                        `tfsdk:"lsp_password_hmac_md5_encrypted"`
-	LspPasswordHmacMd5SendOnly        types.Bool                          `tfsdk:"lsp_password_hmac_md5_send_only"`
-	LspPasswordHmacMd5SnpSendOnly     types.Bool                          `tfsdk:"lsp_password_hmac_md5_snp_send_only"`
-	LspPasswordHmacMd5EnablePoi       types.Bool                          `tfsdk:"lsp_password_hmac_md5_enable_poi"`
-	LspPasswordKeychainName           types.String                        `tfsdk:"lsp_password_keychain_name"`
-	LspPasswordKeychainSendOnly       types.Bool                          `tfsdk:"lsp_password_keychain_send_only"`
-	LspPasswordKeychainSnpSendOnly    types.Bool                          `tfsdk:"lsp_password_keychain_snp_send_only"`
-	LspPasswordKeychainEnablePoi      types.Bool                          `tfsdk:"lsp_password_keychain_enable_poi"`
-	DistributeLinkStateInstanceId     types.Int64                         `tfsdk:"distribute_link_state_instance_id"`
-	DistributeLinkStateThrottle       types.Int64                         `tfsdk:"distribute_link_state_throttle"`
-	DistributeLinkStateLevel          types.Int64                         `tfsdk:"distribute_link_state_level"`
-	AffinityMaps                      []RouterISISAffinityMaps            `tfsdk:"affinity_maps"`
-	FlexAlgos                         []RouterISISFlexAlgos               `tfsdk:"flex_algos"`
-	Nets                              []RouterISISNets                    `tfsdk:"nets"`
-	Interfaces                        []RouterISISInterfaces              `tfsdk:"interfaces"`
+	Device                                 types.String                     `tfsdk:"device"`
+	Id                                     types.String                     `tfsdk:"id"`
+	DeleteMode                             types.String                     `tfsdk:"delete_mode"`
+	ProcessId                              types.String                     `tfsdk:"process_id"`
+	IsType                                 types.String                     `tfsdk:"is_type"`
+	SetOverloadBit                         types.Bool                       `tfsdk:"set_overload_bit"`
+	SetOverloadBitOnStartupTimeToAdvertise types.Int64                      `tfsdk:"set_overload_bit_on_startup_time_to_advertise"`
+	SetOverloadBitOnStartupWaitForBgp      types.Bool                       `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
+	SetOverloadBitAdvertiseExternal        types.Bool                       `tfsdk:"set_overload_bit_advertise_external"`
+	SetOverloadBitAdvertiseInterlevel      types.Bool                       `tfsdk:"set_overload_bit_advertise_interlevel"`
+	SetOverloadBitLevels                   []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                                    types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                               types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                                types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                            types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer                      types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires                    types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges                    types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait              types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait              types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait            types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval                     types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                         types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordAcceptEncrypted             types.String                     `tfsdk:"lsp_password_accept_encrypted"`
+	LspPasswordLevels                      []RouterISISLspPasswordLevels    `tfsdk:"lsp_password_levels"`
+	LspPasswordTextEncrypted               types.String                     `tfsdk:"lsp_password_text_encrypted"`
+	LspPasswordTextSendOnly                types.Bool                       `tfsdk:"lsp_password_text_send_only"`
+	LspPasswordTextSnpSendOnly             types.Bool                       `tfsdk:"lsp_password_text_snp_send_only"`
+	LspPasswordTextEnablePoi               types.Bool                       `tfsdk:"lsp_password_text_enable_poi"`
+	LspPasswordHmacMd5Encrypted            types.String                     `tfsdk:"lsp_password_hmac_md5_encrypted"`
+	LspPasswordHmacMd5SendOnly             types.Bool                       `tfsdk:"lsp_password_hmac_md5_send_only"`
+	LspPasswordHmacMd5SnpSendOnly          types.Bool                       `tfsdk:"lsp_password_hmac_md5_snp_send_only"`
+	LspPasswordHmacMd5EnablePoi            types.Bool                       `tfsdk:"lsp_password_hmac_md5_enable_poi"`
+	LspPasswordKeychain                    types.String                     `tfsdk:"lsp_password_keychain"`
+	LspPasswordKeychainSendOnly            types.Bool                       `tfsdk:"lsp_password_keychain_send_only"`
+	LspPasswordKeychainSnpSendOnly         types.Bool                       `tfsdk:"lsp_password_keychain_snp_send_only"`
+	LspPasswordKeychainEnablePoi           types.Bool                       `tfsdk:"lsp_password_keychain_enable_poi"`
+	DistributeLinkStateInstanceId          types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle            types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel               types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                           []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                              []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                                   []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                             []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 
 type RouterISISData struct {
-	Device                            types.String                        `tfsdk:"device"`
-	Id                                types.String                        `tfsdk:"id"`
-	ProcessId                         types.String                        `tfsdk:"process_id"`
-	IsType                            types.String                        `tfsdk:"is_type"`
-	SetOverloadBit                    types.Bool                          `tfsdk:"set_overload_bit"`
-	SetOverloadBitOnStartupSeconds    types.Int64                         `tfsdk:"set_overload_bit_on_startup_seconds"`
-	SetOverloadBitOnStartupWaitForBgp types.Bool                          `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
-	SetOverloadBitAdvertiseExternal   types.Bool                          `tfsdk:"set_overload_bit_advertise_external"`
-	SetOverloadBitAdvertiseInterlevel types.Bool                          `tfsdk:"set_overload_bit_advertise_interlevel"`
-	SetOverloadBitLevels              []RouterISISSetOverloadBitLevels    `tfsdk:"set_overload_bit_levels"`
-	Nsr                               types.Bool                          `tfsdk:"nsr"`
-	NsfCisco                          types.Bool                          `tfsdk:"nsf_cisco"`
-	NsfIetf                           types.Bool                          `tfsdk:"nsf_ietf"`
-	NsfLifetime                       types.Int64                         `tfsdk:"nsf_lifetime"`
-	NsfInterfaceTimer                 types.Int64                         `tfsdk:"nsf_interface_timer"`
-	NsfInterfaceExpires               types.Int64                         `tfsdk:"nsf_interface_expires"`
-	LogAdjacencyChanges               types.Bool                          `tfsdk:"log_adjacency_changes"`
-	LspGenIntervalMaximumWait         types.Int64                         `tfsdk:"lsp_gen_interval_maximum_wait"`
-	LspGenIntervalInitialWait         types.Int64                         `tfsdk:"lsp_gen_interval_initial_wait"`
-	LspGenIntervalSecondaryWait       types.Int64                         `tfsdk:"lsp_gen_interval_secondary_wait"`
-	LspRefreshInterval                types.Int64                         `tfsdk:"lsp_refresh_interval"`
-	MaxLspLifetime                    types.Int64                         `tfsdk:"max_lsp_lifetime"`
-	LspPasswordAcceptEncrypted        types.String                        `tfsdk:"lsp_password_accept_encrypted"`
-	LspPasswordAcceptLevels           []RouterISISLspPasswordAcceptLevels `tfsdk:"lsp_password_accept_levels"`
-	LspPasswordTextEncrypted          types.String                        `tfsdk:"lsp_password_text_encrypted"`
-	LspPasswordTextSendOnly           types.Bool                          `tfsdk:"lsp_password_text_send_only"`
-	LspPasswordTextSnpSendOnly        types.Bool                          `tfsdk:"lsp_password_text_snp_send_only"`
-	LspPasswordTextEnablePoi          types.Bool                          `tfsdk:"lsp_password_text_enable_poi"`
-	LspPasswordHmacMd5Encrypted       types.String                        `tfsdk:"lsp_password_hmac_md5_encrypted"`
-	LspPasswordHmacMd5SendOnly        types.Bool                          `tfsdk:"lsp_password_hmac_md5_send_only"`
-	LspPasswordHmacMd5SnpSendOnly     types.Bool                          `tfsdk:"lsp_password_hmac_md5_snp_send_only"`
-	LspPasswordHmacMd5EnablePoi       types.Bool                          `tfsdk:"lsp_password_hmac_md5_enable_poi"`
-	LspPasswordKeychainName           types.String                        `tfsdk:"lsp_password_keychain_name"`
-	LspPasswordKeychainSendOnly       types.Bool                          `tfsdk:"lsp_password_keychain_send_only"`
-	LspPasswordKeychainSnpSendOnly    types.Bool                          `tfsdk:"lsp_password_keychain_snp_send_only"`
-	LspPasswordKeychainEnablePoi      types.Bool                          `tfsdk:"lsp_password_keychain_enable_poi"`
-	DistributeLinkStateInstanceId     types.Int64                         `tfsdk:"distribute_link_state_instance_id"`
-	DistributeLinkStateThrottle       types.Int64                         `tfsdk:"distribute_link_state_throttle"`
-	DistributeLinkStateLevel          types.Int64                         `tfsdk:"distribute_link_state_level"`
-	AffinityMaps                      []RouterISISAffinityMaps            `tfsdk:"affinity_maps"`
-	FlexAlgos                         []RouterISISFlexAlgos               `tfsdk:"flex_algos"`
-	Nets                              []RouterISISNets                    `tfsdk:"nets"`
-	Interfaces                        []RouterISISInterfaces              `tfsdk:"interfaces"`
+	Device                                 types.String                     `tfsdk:"device"`
+	Id                                     types.String                     `tfsdk:"id"`
+	ProcessId                              types.String                     `tfsdk:"process_id"`
+	IsType                                 types.String                     `tfsdk:"is_type"`
+	SetOverloadBit                         types.Bool                       `tfsdk:"set_overload_bit"`
+	SetOverloadBitOnStartupTimeToAdvertise types.Int64                      `tfsdk:"set_overload_bit_on_startup_time_to_advertise"`
+	SetOverloadBitOnStartupWaitForBgp      types.Bool                       `tfsdk:"set_overload_bit_on_startup_wait_for_bgp"`
+	SetOverloadBitAdvertiseExternal        types.Bool                       `tfsdk:"set_overload_bit_advertise_external"`
+	SetOverloadBitAdvertiseInterlevel      types.Bool                       `tfsdk:"set_overload_bit_advertise_interlevel"`
+	SetOverloadBitLevels                   []RouterISISSetOverloadBitLevels `tfsdk:"set_overload_bit_levels"`
+	Nsr                                    types.Bool                       `tfsdk:"nsr"`
+	NsfCisco                               types.Bool                       `tfsdk:"nsf_cisco"`
+	NsfIetf                                types.Bool                       `tfsdk:"nsf_ietf"`
+	NsfLifetime                            types.Int64                      `tfsdk:"nsf_lifetime"`
+	NsfInterfaceTimer                      types.Int64                      `tfsdk:"nsf_interface_timer"`
+	NsfInterfaceExpires                    types.Int64                      `tfsdk:"nsf_interface_expires"`
+	LogAdjacencyChanges                    types.Bool                       `tfsdk:"log_adjacency_changes"`
+	LspGenIntervalMaximumWait              types.Int64                      `tfsdk:"lsp_gen_interval_maximum_wait"`
+	LspGenIntervalInitialWait              types.Int64                      `tfsdk:"lsp_gen_interval_initial_wait"`
+	LspGenIntervalSecondaryWait            types.Int64                      `tfsdk:"lsp_gen_interval_secondary_wait"`
+	LspRefreshInterval                     types.Int64                      `tfsdk:"lsp_refresh_interval"`
+	MaxLspLifetime                         types.Int64                      `tfsdk:"max_lsp_lifetime"`
+	LspPasswordAcceptEncrypted             types.String                     `tfsdk:"lsp_password_accept_encrypted"`
+	LspPasswordLevels                      []RouterISISLspPasswordLevels    `tfsdk:"lsp_password_levels"`
+	LspPasswordTextEncrypted               types.String                     `tfsdk:"lsp_password_text_encrypted"`
+	LspPasswordTextSendOnly                types.Bool                       `tfsdk:"lsp_password_text_send_only"`
+	LspPasswordTextSnpSendOnly             types.Bool                       `tfsdk:"lsp_password_text_snp_send_only"`
+	LspPasswordTextEnablePoi               types.Bool                       `tfsdk:"lsp_password_text_enable_poi"`
+	LspPasswordHmacMd5Encrypted            types.String                     `tfsdk:"lsp_password_hmac_md5_encrypted"`
+	LspPasswordHmacMd5SendOnly             types.Bool                       `tfsdk:"lsp_password_hmac_md5_send_only"`
+	LspPasswordHmacMd5SnpSendOnly          types.Bool                       `tfsdk:"lsp_password_hmac_md5_snp_send_only"`
+	LspPasswordHmacMd5EnablePoi            types.Bool                       `tfsdk:"lsp_password_hmac_md5_enable_poi"`
+	LspPasswordKeychain                    types.String                     `tfsdk:"lsp_password_keychain"`
+	LspPasswordKeychainSendOnly            types.Bool                       `tfsdk:"lsp_password_keychain_send_only"`
+	LspPasswordKeychainSnpSendOnly         types.Bool                       `tfsdk:"lsp_password_keychain_snp_send_only"`
+	LspPasswordKeychainEnablePoi           types.Bool                       `tfsdk:"lsp_password_keychain_enable_poi"`
+	DistributeLinkStateInstanceId          types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
+	DistributeLinkStateThrottle            types.Int64                      `tfsdk:"distribute_link_state_throttle"`
+	DistributeLinkStateLevel               types.Int64                      `tfsdk:"distribute_link_state_level"`
+	AffinityMaps                           []RouterISISAffinityMaps         `tfsdk:"affinity_maps"`
+	FlexAlgos                              []RouterISISFlexAlgos            `tfsdk:"flex_algos"`
+	Nets                                   []RouterISISNets                 `tfsdk:"nets"`
+	Interfaces                             []RouterISISInterfaces           `tfsdk:"interfaces"`
 }
 type RouterISISSetOverloadBitLevels struct {
-	LevelNumber          types.Int64 `tfsdk:"level_number"`
-	OnStartupTimeSeconds types.Int64 `tfsdk:"on_startup_time_seconds"`
-	OnStartupWaitForBgp  types.Bool  `tfsdk:"on_startup_wait_for_bgp"`
-	AdvertiseExternal    types.Bool  `tfsdk:"advertise_external"`
-	AdvertiseInterlevel  types.Bool  `tfsdk:"advertise_interlevel"`
+	LevelNumber              types.Int64 `tfsdk:"level_number"`
+	OnStartupTimeToAdvertise types.Int64 `tfsdk:"on_startup_time_to_advertise"`
+	OnStartupWaitForBgp      types.Bool  `tfsdk:"on_startup_wait_for_bgp"`
+	AdvertiseExternal        types.Bool  `tfsdk:"advertise_external"`
+	AdvertiseInterlevel      types.Bool  `tfsdk:"advertise_interlevel"`
 }
-type RouterISISLspPasswordAcceptLevels struct {
+type RouterISISLspPasswordLevels struct {
 	LevelNumber types.Int64  `tfsdk:"level_number"`
 	Encrypted   types.String `tfsdk:"encrypted"`
 }
@@ -138,7 +138,7 @@ type RouterISISAffinityMaps struct {
 	BitPosition types.Int64  `tfsdk:"bit_position"`
 }
 type RouterISISFlexAlgos struct {
-	FlexAlgoNumber      types.Int64  `tfsdk:"flex_algo_number"`
+	Number              types.Int64  `tfsdk:"number"`
 	AdvertiseDefinition types.Bool   `tfsdk:"advertise_definition"`
 	MetricType          types.String `tfsdk:"metric_type"`
 }
@@ -179,8 +179,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "set-overload-bit", map[string]string{})
 		}
 	}
-	if !data.SetOverloadBitOnStartupSeconds.IsNull() && !data.SetOverloadBitOnStartupSeconds.IsUnknown() {
-		body, _ = sjson.Set(body, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number", strconv.FormatInt(data.SetOverloadBitOnStartupSeconds.ValueInt64(), 10))
+	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && !data.SetOverloadBitOnStartupTimeToAdvertise.IsUnknown() {
+		body, _ = sjson.Set(body, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number", strconv.FormatInt(data.SetOverloadBitOnStartupTimeToAdvertise.ValueInt64(), 10))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.IsUnknown() {
 		if data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
@@ -280,8 +280,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.hmac-md5.password-options.enable-poi", map[string]string{})
 		}
 	}
-	if !data.LspPasswordKeychainName.IsNull() && !data.LspPasswordKeychainName.IsUnknown() {
-		body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.keychain-name", data.LspPasswordKeychainName.ValueString())
+	if !data.LspPasswordKeychain.IsNull() && !data.LspPasswordKeychain.IsUnknown() {
+		body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.keychain-name", data.LspPasswordKeychain.ValueString())
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.IsUnknown() {
 		if data.LspPasswordKeychainSendOnly.ValueBool() {
@@ -313,8 +313,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			if !item.OnStartupTimeSeconds.IsNull() && !item.OnStartupTimeSeconds.IsUnknown() {
-				body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"on-startup.time-to-advertise.time-to-advertise-number", strconv.FormatInt(item.OnStartupTimeSeconds.ValueInt64(), 10))
+			if !item.OnStartupTimeToAdvertise.IsNull() && !item.OnStartupTimeToAdvertise.IsUnknown() {
+				body, _ = sjson.Set(body, "set-overload-bit-levels.set-overload-bit-level"+"."+strconv.Itoa(index)+"."+"on-startup.time-to-advertise.time-to-advertise-number", strconv.FormatInt(item.OnStartupTimeToAdvertise.ValueInt64(), 10))
 			}
 			if !item.OnStartupWaitForBgp.IsNull() && !item.OnStartupWaitForBgp.IsUnknown() {
 				if item.OnStartupWaitForBgp.ValueBool() {
@@ -333,9 +333,9 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.LspPasswordAcceptLevels) > 0 {
+	if len(data.LspPasswordLevels) > 0 {
 		body, _ = sjson.Set(body, "lsp-password.accept-levels.accept-level", []interface{}{})
-		for index, item := range data.LspPasswordAcceptLevels {
+		for index, item := range data.LspPasswordLevels {
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body, _ = sjson.Set(body, "lsp-password.accept-levels.accept-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
@@ -358,8 +358,8 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if len(data.FlexAlgos) > 0 {
 		body, _ = sjson.Set(body, "flex-algoes.flex-algo", []interface{}{})
 		for index, item := range data.FlexAlgos {
-			if !item.FlexAlgoNumber.IsNull() && !item.FlexAlgoNumber.IsUnknown() {
-				body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"flex-algo-number", strconv.FormatInt(item.FlexAlgoNumber.ValueInt64(), 10))
+			if !item.Number.IsNull() && !item.Number.IsUnknown() {
+				body, _ = sjson.Set(body, "flex-algoes.flex-algo"+"."+strconv.Itoa(index)+"."+"flex-algo-number", strconv.FormatInt(item.Number.ValueInt64(), 10))
 			}
 			if !item.AdvertiseDefinition.IsNull() && !item.AdvertiseDefinition.IsUnknown() {
 				if item.AdvertiseDefinition.ValueBool() {
@@ -430,10 +430,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.SetOverloadBit = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitOnStartupSeconds.IsNull() {
-		data.SetOverloadBitOnStartupSeconds = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	} else {
-		data.SetOverloadBitOnStartupSeconds = types.Int64Null()
+		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
 		if value.Exists() {
@@ -490,10 +490,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.SetOverloadBitLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitLevels[i].OnStartupTimeSeconds.IsNull() {
-			data.SetOverloadBitLevels[i].OnStartupTimeSeconds = types.Int64Value(value.Int())
+		if value := r.Get("on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() && !data.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() {
+			data.SetOverloadBitLevels[i].OnStartupTimeToAdvertise = types.Int64Value(value.Int())
 		} else {
-			data.SetOverloadBitLevels[i].OnStartupTimeSeconds = types.Int64Null()
+			data.SetOverloadBitLevels[i].OnStartupTimeToAdvertise = types.Int64Null()
 		}
 		if value := r.Get("on-startup.wait-for-bgp"); !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() {
 			if value.Exists() {
@@ -604,9 +604,9 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LspPasswordAcceptEncrypted = types.StringNull()
 	}
-	for i := range data.LspPasswordAcceptLevels {
+	for i := range data.LspPasswordLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "lsp-password.accept-levels.accept-level").ForEach(
@@ -627,15 +627,15 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("level-number"); value.Exists() && !data.LspPasswordAcceptLevels[i].LevelNumber.IsNull() {
-			data.LspPasswordAcceptLevels[i].LevelNumber = types.Int64Value(value.Int())
+		if value := r.Get("level-number"); value.Exists() && !data.LspPasswordLevels[i].LevelNumber.IsNull() {
+			data.LspPasswordLevels[i].LevelNumber = types.Int64Value(value.Int())
 		} else {
-			data.LspPasswordAcceptLevels[i].LevelNumber = types.Int64Null()
+			data.LspPasswordLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("encrypted"); value.Exists() && !data.LspPasswordAcceptLevels[i].Encrypted.IsNull() {
-			data.LspPasswordAcceptLevels[i].Encrypted = types.StringValue(value.String())
+		if value := r.Get("encrypted"); value.Exists() && !data.LspPasswordLevels[i].Encrypted.IsNull() {
+			data.LspPasswordLevels[i].Encrypted = types.StringValue(value.String())
 		} else {
-			data.LspPasswordAcceptLevels[i].Encrypted = types.StringNull()
+			data.LspPasswordLevels[i].Encrypted = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.text.password-options.encrypted"); value.Exists() && !data.LspPasswordTextEncrypted.IsNull() {
@@ -702,10 +702,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychainName.IsNull() {
-		data.LspPasswordKeychainName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() && !data.LspPasswordKeychain.IsNull() {
+		data.LspPasswordKeychain = types.StringValue(value.String())
 	} else {
-		data.LspPasswordKeychainName = types.StringNull()
+		data.LspPasswordKeychain = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); !data.LspPasswordKeychainSendOnly.IsNull() {
 		if value.Exists() {
@@ -785,7 +785,7 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 	for i := range data.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].FlexAlgoNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "flex-algoes.flex-algo").ForEach(
@@ -806,10 +806,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("flex-algo-number"); value.Exists() && !data.FlexAlgos[i].FlexAlgoNumber.IsNull() {
-			data.FlexAlgos[i].FlexAlgoNumber = types.Int64Value(value.Int())
+		if value := r.Get("flex-algo-number"); value.Exists() && !data.FlexAlgos[i].Number.IsNull() {
+			data.FlexAlgos[i].Number = types.Int64Value(value.Int())
 		} else {
-			data.FlexAlgos[i].FlexAlgoNumber = types.Int64Null()
+			data.FlexAlgos[i].Number = types.Int64Null()
 		}
 		if value := r.Get("advertise-definition"); !data.FlexAlgos[i].AdvertiseDefinition.IsNull() {
 			if value.Exists() {
@@ -954,7 +954,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		data.SetOverloadBit = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
-		data.SetOverloadBitOnStartupSeconds = types.Int64Value(value.Int())
+		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
@@ -979,7 +979,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("on-startup.time-to-advertise.time-to-advertise-number"); cValue.Exists() {
-				item.OnStartupTimeSeconds = types.Int64Value(cValue.Int())
+				item.OnStartupTimeToAdvertise = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
@@ -1048,16 +1048,16 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		data.LspPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "lsp-password.accept-levels.accept-level"); value.Exists() {
-		data.LspPasswordAcceptLevels = make([]RouterISISLspPasswordAcceptLevels, 0)
+		data.LspPasswordLevels = make([]RouterISISLspPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISLspPasswordAcceptLevels{}
+			item := RouterISISLspPasswordLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("encrypted"); cValue.Exists() {
 				item.Encrypted = types.StringValue(cValue.String())
 			}
-			data.LspPasswordAcceptLevels = append(data.LspPasswordAcceptLevels, item)
+			data.LspPasswordLevels = append(data.LspPasswordLevels, item)
 			return true
 		})
 	}
@@ -1098,7 +1098,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() {
-		data.LspPasswordKeychainName = types.StringValue(value.String())
+		data.LspPasswordKeychain = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
 		data.LspPasswordKeychainSendOnly = types.BoolValue(true)
@@ -1143,7 +1143,7 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISFlexAlgos{}
 			if cValue := v.Get("flex-algo-number"); cValue.Exists() {
-				item.FlexAlgoNumber = types.Int64Value(cValue.Int())
+				item.Number = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
@@ -1219,7 +1219,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		data.SetOverloadBit = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.time-to-advertise.time-to-advertise-number"); value.Exists() {
-		data.SetOverloadBitOnStartupSeconds = types.Int64Value(value.Int())
+		data.SetOverloadBitOnStartupTimeToAdvertise = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "set-overload-bit.on-startup.wait-for-bgp"); value.Exists() {
 		data.SetOverloadBitOnStartupWaitForBgp = types.BoolValue(true)
@@ -1244,7 +1244,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("on-startup.time-to-advertise.time-to-advertise-number"); cValue.Exists() {
-				item.OnStartupTimeSeconds = types.Int64Value(cValue.Int())
+				item.OnStartupTimeToAdvertise = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("on-startup.wait-for-bgp"); cValue.Exists() {
 				item.OnStartupWaitForBgp = types.BoolValue(true)
@@ -1313,16 +1313,16 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		data.LspPasswordAcceptEncrypted = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "lsp-password.accept-levels.accept-level"); value.Exists() {
-		data.LspPasswordAcceptLevels = make([]RouterISISLspPasswordAcceptLevels, 0)
+		data.LspPasswordLevels = make([]RouterISISLspPasswordLevels, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISLspPasswordAcceptLevels{}
+			item := RouterISISLspPasswordLevels{}
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("encrypted"); cValue.Exists() {
 				item.Encrypted = types.StringValue(cValue.String())
 			}
-			data.LspPasswordAcceptLevels = append(data.LspPasswordAcceptLevels, item)
+			data.LspPasswordLevels = append(data.LspPasswordLevels, item)
 			return true
 		})
 	}
@@ -1363,7 +1363,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		data.LspPasswordHmacMd5EnablePoi = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.keychain-name"); value.Exists() {
-		data.LspPasswordKeychainName = types.StringValue(value.String())
+		data.LspPasswordKeychain = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "lsp-password.lsp-password-option.keychain.send-only"); value.Exists() {
 		data.LspPasswordKeychainSendOnly = types.BoolValue(true)
@@ -1408,7 +1408,7 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISFlexAlgos{}
 			if cValue := v.Get("flex-algo-number"); cValue.Exists() {
-				item.FlexAlgoNumber = types.Int64Value(cValue.Int())
+				item.Number = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("advertise-definition"); cValue.Exists() {
 				item.AdvertiseDefinition = types.BoolValue(true)
@@ -1482,11 +1482,11 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	if !state.SetOverloadBit.IsNull() && data.SetOverloadBit.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit", state.getPath()))
 	}
-	if !state.SetOverloadBitOnStartupSeconds.IsNull() && data.SetOverloadBitOnStartupSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", state.getPath()))
+	if !state.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", state.getPath()))
 	}
 	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP", state.getPath()))
 	}
 	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
@@ -1517,11 +1517,11 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 				found = false
 			}
 			if found {
-				if !state.SetOverloadBitLevels[i].OnStartupTimeSeconds.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeSeconds.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/time-to-advertise", state.getPath(), keyString))
+				if !state.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeToAdvertise.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", state.getPath(), keyString))
 				}
 				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/WAIT-FOR-BGP", state.getPath(), keyString))
 				}
 				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", state.getPath(), keyString))
@@ -1540,10 +1540,10 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
 	}
 	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/NSF/CISCO", state.getPath()))
 	}
 	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/NSF/IETF", state.getPath()))
 	}
 	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
@@ -1575,16 +1575,16 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	if !state.LspPasswordAcceptEncrypted.IsNull() && data.LspPasswordAcceptEncrypted.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept/encrypted", state.getPath()))
 	}
-	for i := range state.LspPasswordAcceptLevels {
+	for i := range state.LspPasswordLevels {
 		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.LspPasswordLevels[i].LevelNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1592,13 +1592,13 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		}
 
 		found := false
-		for j := range data.LspPasswordAcceptLevels {
+		for j := range data.LspPasswordLevels {
 			found = true
-			if state.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64() != data.LspPasswordAcceptLevels[j].LevelNumber.ValueInt64() {
+			if state.LspPasswordLevels[i].LevelNumber.ValueInt64() != data.LspPasswordLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.LspPasswordAcceptLevels[i].Encrypted.IsNull() && data.LspPasswordAcceptLevels[j].Encrypted.IsNull() {
+				if !state.LspPasswordLevels[i].Encrypted.IsNull() && data.LspPasswordLevels[j].Encrypted.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v/encrypted", state.getPath(), keyString))
 				}
 				break
@@ -1609,40 +1609,40 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		}
 	}
 	if !state.LspPasswordTextEncrypted.IsNull() && data.LspPasswordTextEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted", state.getPath()))
 	}
 	if !state.LspPasswordTextSendOnly.IsNull() && data.LspPasswordTextSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", state.getPath()))
 	}
 	if !state.LspPasswordTextSnpSendOnly.IsNull() && data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp", state.getPath()))
 	}
 	if !state.LspPasswordTextEnablePoi.IsNull() && data.LspPasswordTextEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/enable-poi", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5Encrypted.IsNull() && data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5SendOnly.IsNull() && data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5EnablePoi.IsNull() && data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
 	}
-	if !state.LspPasswordKeychainName.IsNull() && data.LspPasswordKeychainName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/keychain-name", state.getPath()))
+	if !state.LspPasswordKeychain.IsNull() && data.LspPasswordKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
 	}
 	if !state.LspPasswordKeychainSendOnly.IsNull() && data.LspPasswordKeychainSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
 	}
 	if !state.LspPasswordKeychainSnpSendOnly.IsNull() && data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp", state.getPath()))
 	}
 	if !state.LspPasswordKeychainEnablePoi.IsNull() && data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
 	}
 	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
@@ -1688,14 +1688,14 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	}
 	for i := range state.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].FlexAlgoNumber.ValueInt64(), 10)}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].Number.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.FlexAlgos[i].FlexAlgoNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.FlexAlgos[i].Number.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1705,7 +1705,7 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		found := false
 		for j := range data.FlexAlgos {
 			found = true
-			if state.FlexAlgos[i].FlexAlgoNumber.ValueInt64() != data.FlexAlgos[j].FlexAlgoNumber.ValueInt64() {
+			if state.FlexAlgos[i].Number.ValueInt64() != data.FlexAlgos[j].Number.ValueInt64() {
 				found = false
 			}
 			if found {
@@ -1836,7 +1836,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup/wait-for-bgp", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp", data.getPath()))
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
@@ -1852,7 +1852,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/wait-for-bgp", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp", data.getPath(), keyString))
 		}
 		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", data.getPath(), keyString))
@@ -1865,48 +1865,48 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getPath()))
 	}
 	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/cisco", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/NSF/CISCO/cisco", data.getPath()))
 	}
 	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/ietf", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/NSF/IETF/ietf", data.getPath()))
 	}
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
 	}
-	for i := range data.LspPasswordAcceptLevels {
+	for i := range data.LspPasswordLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/send-only", data.getPath()))
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp/send-only", data.getPath()))
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/enable-poi", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/send-only", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp/send-only", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/enable-poi", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/send-only", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp/send-only", data.getPath()))
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/enable-poi", data.getPath()))
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
@@ -1918,7 +1918,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	for i := range data.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].FlexAlgoNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -1965,11 +1965,11 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	if !data.SetOverloadBit.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
-	if !data.SetOverloadBitOnStartupSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", data.getPath()))
+	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", data.getPath()))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP", data.getPath()))
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
@@ -1991,10 +1991,10 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
 	}
 	if !data.NsfCisco.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/NSF/CISCO", data.getPath()))
 	}
 	if !data.NsfIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/NSF/IETF", data.getPath()))
 	}
 	if !data.NsfLifetime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
@@ -2026,9 +2026,9 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	if !data.LspPasswordAcceptEncrypted.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept/encrypted", data.getPath()))
 	}
-	for i := range data.LspPasswordAcceptLevels {
+	for i := range data.LspPasswordLevels {
 		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspPasswordAcceptLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {
@@ -2037,40 +2037,40 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", data.getPath(), keyString))
 	}
 	if !data.LspPasswordTextEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted", data.getPath()))
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/enable-poi", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
 	}
-	if !data.LspPasswordKeychainName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/keychain-name", data.getPath()))
+	if !data.LspPasswordKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp", data.getPath()))
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
 	}
 	if !data.DistributeLinkStateInstanceId.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))
@@ -2093,7 +2093,7 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	}
 	for i := range data.FlexAlgos {
 		keys := [...]string{"flex-algo-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].FlexAlgoNumber.ValueInt64(), 10)}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
 
 		keyString := ""
 		for ki := range keys {

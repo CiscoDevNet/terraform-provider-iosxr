@@ -30,6 +30,5 @@ attributes:
       - yang_name: vrf-name
         id: true
         example: TOI
-      - yang_name: ipv4/dscp 
+      - yang_name: ipv4/dscp
         example: 55
-      

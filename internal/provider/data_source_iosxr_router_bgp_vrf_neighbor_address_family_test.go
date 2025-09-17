@@ -29,15 +29,14 @@ func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_entire_aspath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_outbound_entire_aspath", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_entire_aspath", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -126,15 +125,14 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
-	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	soft_reconfiguration_inbound_always = true` + "\n"
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
-	config += `	remove_private_as = true` + "\n"
 	config += `	remove_private_as_inbound = true` + "\n"
 	config += `	remove_private_as_inbound_entire_aspath = true` + "\n"
-	config += `	remove_private_as_outbound_entire_aspath = true` + "\n"
+	config += `	remove_private_as = true` + "\n"
+	config += `	remove_private_as_entire_aspath = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 

@@ -1,3 +1,4 @@
+---
 name: Flow Monitor Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]
 no_delete_attributes: true

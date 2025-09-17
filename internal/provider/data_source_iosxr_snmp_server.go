@@ -223,23 +223,23 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"traps_isis_lsp_error_detected": schema.BoolAttribute{
-				MarkdownDescription: "isisLspErrorDetected",
-				Computed:            true,
-			},
-			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
-				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
+				MarkdownDescription: "isisLSPErrorDetected",
 				Computed:            true,
 			},
 			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 traps",
 				Computed:            true,
 			},
-			"traps_bgp_enable_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
-			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+			"traps_bgp_enable_updown": schema.BoolAttribute{
 				MarkdownDescription: "Enable BGP4-MIB and CISCO-BGP4-MIB traps",
+				Computed:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
 			"users": schema.ListNestedAttribute{

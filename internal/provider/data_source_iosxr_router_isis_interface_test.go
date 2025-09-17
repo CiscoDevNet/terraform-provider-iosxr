@@ -39,7 +39,10 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "hello_password_levels.0.text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_fast_detect_ipv4", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_minimum_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis_interface.test", "bfd_multiplier", "3"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -75,7 +78,10 @@ func testAccDataSourceIosxrRouterISISInterfaceConfig() string {
 	config += `		level_number = 1` + "\n"
 	config += `		text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
 	config += `	}]` + "\n"
+	config += `	bfd_fast_detect_ipv4 = true` + "\n"
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"
+	config += `	bfd_minimum_interval = 50` + "\n"
+	config += `	bfd_multiplier = 3` + "\n"
 	config += `}` + "\n"
 
 	config += `

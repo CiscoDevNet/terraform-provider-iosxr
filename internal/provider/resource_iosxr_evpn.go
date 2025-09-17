@@ -98,17 +98,20 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 						"ethernet_segment_esi_zero": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("9-octet ESI value, xx.xx.xx.xx.xx.xx.xx.xx.xx").String,
-							Optional:            true,
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
 						},
 					},
 				},
 			},
-			"segment_routing_srv6": schema.BoolAttribute{
+			"srv6": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRv6 configuration for EVPN").String,
 				Optional:            true,
 			},
-			"segment_routing_srv6_locators": schema.ListNestedAttribute{
+			"srv6_locators": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -129,7 +132,7 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
-			"segment_routing_srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function global knob").String,
 				Optional:            true,
 			},

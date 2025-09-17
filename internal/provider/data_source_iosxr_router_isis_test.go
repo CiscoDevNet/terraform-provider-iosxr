@@ -29,15 +29,14 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "is_type", "level-1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_on_startup_seconds", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_on_startup_time_to_advertise", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_advertise_interlevel", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_time_seconds", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.on_startup_time_to_advertise", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_interlevel", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsr", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_ietf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_lifetime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_interface_timer", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nsf_interface_expires", "2"))
@@ -51,7 +50,7 @@ func TestAccDataSourceIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "distribute_link_state_instance_id", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.name", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.flex_algo_number", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.number", "128"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.advertise_definition", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "flex_algos.0.metric_type", "delay"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_isis.test", "nets.0.net_id", "49.0001.2222.2222.2222.00"))
@@ -80,17 +79,16 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config += `	process_id = "P1"` + "\n"
 	config += `	is_type = "level-1"` + "\n"
 	config += `	set_overload_bit = true` + "\n"
-	config += `	set_overload_bit_on_startup_seconds = 300` + "\n"
+	config += `	set_overload_bit_on_startup_time_to_advertise = 300` + "\n"
 	config += `	set_overload_bit_advertise_external = true` + "\n"
 	config += `	set_overload_bit_advertise_interlevel = true` + "\n"
 	config += `	set_overload_bit_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
-	config += `		on_startup_time_seconds = 300` + "\n"
+	config += `		on_startup_time_to_advertise = 300` + "\n"
 	config += `		advertise_external = true` + "\n"
 	config += `		advertise_interlevel = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	nsr = true` + "\n"
-	config += `	nsf_ietf = true` + "\n"
 	config += `	nsf_lifetime = 10` + "\n"
 	config += `	nsf_interface_timer = 5` + "\n"
 	config += `	nsf_interface_expires = 2` + "\n"
@@ -107,7 +105,7 @@ func testAccDataSourceIosxrRouterISISConfig() string {
 	config += `		bit_position = 4` + "\n"
 	config += `	}]` + "\n"
 	config += `	flex_algos = [{` + "\n"
-	config += `		flex_algo_number = 128` + "\n"
+	config += `		number = 128` + "\n"
 	config += `		advertise_definition = true` + "\n"
 	config += `		metric_type = "delay"` + "\n"
 	config += `	}]` + "\n"

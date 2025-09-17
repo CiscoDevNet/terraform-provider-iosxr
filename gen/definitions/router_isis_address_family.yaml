@@ -9,34 +9,30 @@ attributes:
     example: ipv4
   - yang_name: saf-name
     example: unicast
-  - yang_name: metric-style/narrow/transition
+  - yang_name: metric-style/METRIC-STYLE/NARROW/narrow
+    xpath: metric-style/narrow
+    tf_name: metric_style_narrow
+    example: true
+    exclude_test: true
+  - yang_name: metric-style/METRIC-STYLE/NARROW/narrow/transition
+    xpath: metric-style/narrow/transition
     tf_name: metric_style_narrow_transition
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     example: true
     exclude_test: true
-    description: "Accept both styles of TLVs during transition"
-  - yang_name: metric-style/wide/transition
+  - yang_name: metric-style/METRIC-STYLE/WIDE/wide
+    xpath: metric-style/wide
+    tf_name: metric_style_wide
+    example: true
+    exclude_test: true
+  - yang_name: metric-style/METRIC-STYLE/WIDE/wide/transition
+    xpath: metric-style/wide/transition
     tf_name: metric_style_wide_transition
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
     example: true
-    exclude_test: true
-    description: "Accept both styles of TLVs during transition"
-  - yang_name: metric-style/transition
+  - yang_name: metric-style/METRIC-STYLE/TRANSITION/transition
+    xpath: metric-style/transition
     tf_name: metric_style_transition
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
-    optional: true
-    delete_parent: true
-    exclude_test: true
     example: true
-    description: "Send and accept both styles of TLVs during transition"
+    exclude_test: true
   - yang_name: metric-style-levels/metric-style-level
     tf_name: metric_style_levels
     exclude_test: true
@@ -45,51 +41,43 @@ attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: metric-style/narrow/transition
-        tf_name: metric_style_narrow_transition
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
-        optional: true
+      - yang_name: METRIC-STYLE/NARROW/narrow
+        xpath: narrow
+        tf_name: narrow
         example: true
         exclude_test: true
-        description: "Accept both styles of TLVs during transition"
-      - yang_name: metric-style/wide/transition
-        tf_name: metric_style_wide_transition
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
-        optional: true
-        exclude_test: true
-        example: true
-        description: "Accept both styles of TLVs during transition"
-      - yang_name: metric-style/transition
-        tf_name: metric_style_transition
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
-        optional: true
-        delete_parent: true
+      - yang_name: METRIC-STYLE/NARROW/narrow/transition
+        xpath: narrow/transition
+        tf_name: narrow_transition
         example: true
         exclude_test: true
-        description: "Send and accept both styles of TLVs during transition"
-  - yang_name: router-id/interface-name
+      - yang_name: METRIC-STYLE/WIDE/wide
+        xpath: wide
+        tf_name: wide
+        example: true
+        exclude_test: true
+      - yang_name: METRIC-STYLE/WIDE/wide/transition
+        xpath: wide/transition
+        tf_name: wide_transition
+        example: true
+      - yang_name: METRIC-STYLE/TRANSITION/transition
+        xpath: transition
+        tf_name: transition
+        example: true
+        exclude_test: true
+  - yang_name: router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: router-id/interface-name
     tf_name: router_id_interface_name
-    type: String
-    no_augment_config: true
     optional: true
     delete_parent: true
     example: GigabitEthernet0/0/0/1
     exclude_test: true
-    description: "Router ID Interface"
-  - yang_name: router-id/ip-address
+  - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
+    xpath: router-id/ip-address
     tf_name: router_id_ip_address
-    type: String
-    no_augment_config: true
     optional: true
     delete_parent: true
     example: "192.168.1.1"
-    description: "Router ID address"
   - yang_name: default-information/originate
     example: true
   - yang_name: fast-reroute/delay-interval
@@ -169,17 +157,15 @@ attributes:
   - yang_name: fast-reroute/per-link/use-candidate-only
     example: true
   - yang_name: microloop/avoidance/enable
+    tf_name: microloop_avoidance
     example: true
     exclude_test: true
   - yang_name: microloop/avoidance/enable/protected
-    tf_name: microloop_avoidance_enable_protected
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
+    tf_name: microloop_avoidance_protected
     optional: true
     example: true
-    description: "Enable microloop avoidance for only protected prefixes"
   - yang_name: microloop/avoidance/enable/segment-routing/route-policy
+    tf_name: microloop_avoidance_segment_routing_route_policy
     example: "ULOOP_POLICY"
     exclude_test: true
   - yang_name: microloop/avoidance/rib-update-delay
@@ -190,48 +176,33 @@ attributes:
     example: true
   - yang_name: mpls/ldp/auto-config
     example: false
-  - yang_name: mpls/traffic-eng/router-id/ipv4-address
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
+    xpath: mpls/traffic-eng/router-id/ipv4-address
     tf_name: mpls_traffic_eng_router_id_ipv4_address
-    type: String
-    no_augment_config: true
-    optional: true
     delete_parent: true
     example: 1.2.3.4
-    description: "Router ID IPv4 address"
-  - yang_name: mpls/traffic-eng/router-id/interface-name
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: mpls/traffic-eng/router-id/interface-name
     tf_name: mpls_traffic_eng_router_id_interface_name
-    type: String
-    no_augment_config: true
-    optional: true
     delete_parent: true
     exclude_test: true
     example: Loopback0
-    description: "Router ID interface"
-  - yang_name: mpls/traffic-eng/traffic-eng-level/level-one-two
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
     tf_name: mpls_traffic_eng_level_1_2
-    type: Bool
-    no_augment_config: true
-    optional: true
-    delete_parent: true
-    example: false
-    description: "Enable mpls traffic-eng at both level 1 and 2"
-  - yang_name: mpls/traffic-eng/traffic-eng-level/level-one
-    tf_name: mpls_traffic_eng_level_1
-    type: Bool
-    no_augment_config: true
-    optional: true
-    delete_parent: true
-    example: false
-    description: "Enable mpls traffic-eng at level 1"
-    exclude_test: true
-  - yang_name: mpls/traffic-eng/traffic-eng-level/level-two-only
-    tf_name: mpls_traffic_eng_level_2_only
-    type: Bool
-    no_augment_config: true
-    optional: true
     delete_parent: true
     example: true
-    description: "Enable mpls traffic-eng at level 2"
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one
+    tf_name: mpls_traffic_eng_level_1
+    delete_parent: true
+    example: false
+    exclude_test: true
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
+    xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
+    tf_name: mpls_traffic_eng_level_2_only
+    delete_parent: true
+    example: true
     exclude_test: true
   - yang_name: spf-interval/maximum-wait
     example: 5000
@@ -288,63 +259,33 @@ attributes:
       - yang_name: ietf/holddown-interval
         example: 10000
         exclude_test: true
-  - yang_name: spf/prefix-priority/critical/tag
+  - yang_name: spf/prefix-priority/critical/CRITICAL/TAG/tag
+    xpath: spf/prefix-priority/critical/tag
     tf_name: spf_prefix_priority_critical_tag
-    type: Int64
-    no_augment_config: true
-    optional: true
-    min_int: 1
-    max_int: 4294967295
     example: 100
-    description: "Specify a tag to indicate priority"
-  - yang_name: spf/prefix-priority/critical/prefixlist-name
+  - yang_name: spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/critical/prefixlist-name
     tf_name: spf_prefix_priority_critical_prefixlist_name
-    type: String
-    no_augment_config: true
-    optional: true
-    string_min_length: 1
-    string_max_length: 1024
     example: "CRITICAL_PREFIXES"
     exclude_test: true
-    description: "Prefix-list name"
-  - yang_name: spf/prefix-priority/high/tag
+  - yang_name: spf/prefix-priority/high/HIGH/TAG/tag
+    xpath: spf/prefix-priority/high/tag
     tf_name: spf_prefix_priority_high_tag
-    type: Int64
-    no_augment_config: true
-    optional: true
-    min_int: 1
-    max_int: 4294967295
     example: 200
-    description: "Specify a tag to indicate priority"
-  - yang_name: spf/prefix-priority/high/prefixlist-name
+  - yang_name: spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/high/prefixlist-name
     tf_name: spf_prefix_priority_high_prefixlist_name
-    type: String
-    no_augment_config: true
-    optional: true
-    string_min_length: 1
-    string_max_length: 1024
     example: "HIGH_PREFIXES"
     exclude_test: true
-    description: "Prefix-list name"
-  - yang_name: spf/prefix-priority/medium/tag
+  - yang_name: spf/prefix-priority/medium/MEDIUM/TAG/tag
+    xpath: spf/prefix-priority/medium/tag
     tf_name: spf_prefix_priority_medium_tag
-    type: Int64
-    no_augment_config: true
-    optional: true
-    min_int: 1
-    max_int: 4294967295
     example: 300
-    description: "Specify a tag to indicate priority"
-  - yang_name: spf/prefix-priority/medium/prefixlist-name
+  - yang_name: spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/medium/prefixlist-name
     tf_name: spf_prefix_priority_medium_prefixlist_name
-    type: String
-    no_augment_config: true
-    optional: true
-    string_min_length: 1
-    string_max_length: 1024
     example: "MEDIUM_PREFIXES"
     exclude_test: true
-    description: "Prefix-list name"
   - yang_name: spf/prefix-priority-critical-levels/prefix-priority-critical-level
     tf_name: spf_prefix_priority_critical_levels
     type: List
@@ -352,25 +293,15 @@ attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: tag
+      - yang_name: PREFIX-PRIORITY-CRITICAL-LEVEL/TAG/tag
+        xpath: tag
         tf_name: tag
-        type: Int64
-        no_augment_config: true
-        optional: true
-        min_int: 1
-        max_int: 4294967295
         example: 100
-        description: "Specify a tag to indicate priority"
-      - yang_name: prefixlist-name
+      - yang_name: PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefixlist-name
         tf_name: prefixlist_name
-        type: String
-        no_augment_config: true
-        optional: true
-        string_min_length: 1
-        string_max_length: 1024
         example: "CRITICAL_L1"
         exclude_test: true
-        description: "Prefix-list name"
   - yang_name: spf/prefix-priority-high-levels/prefix-priority-high-level
     tf_name: spf_prefix_priority_high_levels
     type: List
@@ -378,25 +309,15 @@ attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: tag
+      - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/TAG/tag
+        xpath: tag
         tf_name: tag
-        type: Int64
-        no_augment_config: true
-        optional: true
-        min_int: 1
-        max_int: 4294967295
         example: 200
-        description: "Specify a tag to indicate priority"
-      - yang_name: prefixlist-name
+      - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefixlist-name
         tf_name: prefixlist_name
-        type: String
-        no_augment_config: true
-        optional: true
-        string_min_length: 1
-        string_max_length: 1024
         example: "HIGH_L1"
         exclude_test: true
-        description: "Prefix-list name"
   - yang_name: spf/prefix-priority-medium-levels/prefix-priority-medium-level
     tf_name: spf_prefix_priority_medium_levels
     type: List
@@ -404,25 +325,15 @@ attributes:
       - yang_name: level-number
         id: true
         example: 1
-      - yang_name: tag
+      - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/TAG/tag
+        xpath: tag
         tf_name: tag
-        type: Int64
-        no_augment_config: true
-        optional: true
-        min_int: 1
-        max_int: 4294967295
         example: 300
-        description: "Specify a tag to indicate priority"
-      - yang_name: prefixlist-name
+      - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefixlist-name
         tf_name: prefixlist_name
-        type: String
-        no_augment_config: true
-        optional: true
-        string_min_length: 1
-        string_max_length: 1024
         example: "MEDIUM_L1"
         exclude_test: true
-        description: "Prefix-list name"
   - yang_name: segment-routing/mpls/enable
     example: true
     exclude_test: true
@@ -441,13 +352,15 @@ attributes:
       - yang_name: maximum-redistributed-prefixes
         example: 1000
   - yang_name: redistribute/isis-processes/isis-process
-    tf_name: redistribute_isis_processes
+    tf_name: redistribute_isis
     type: List
     attributes:
       - yang_name: isis-string
+        tf_name: instance_id
         id: true
         example: "CORE"
       - yang_name: redistribute-route-level
+        tf_name: level
         example: "level-2"
       - yang_name: metric
         example: 10
@@ -463,6 +376,7 @@ attributes:
     exclude_test: true
     attributes:
       - yang_name: locator-string
+        tf_name: locator_name
         id: true
         exclude_test: true
         example: "AlgoLocator"

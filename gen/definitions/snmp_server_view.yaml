@@ -1,3 +1,4 @@
+---
 name: SNMP Server View
 path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]
 doc_category: Management

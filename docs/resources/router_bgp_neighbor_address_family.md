@@ -14,24 +14,23 @@ This resource can manage the Router BGP Neighbor Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_address_family" "example" {
-  as_number                                                 = "65001"
-  address                                                   = "10.1.1.2"
-  af_name                                                   = "vpnv4-unicast"
-  import                                                    = true
-  import_stitching_rt_re_originate_stitching_rt             = true
-  route_reflector_client                                    = true
-  route_reflector_client_inheritance_disable                = true
-  advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
-  next_hop_self                                             = true
-  next_hop_self_inheritance_disable                         = true
-  encapsulation_type                                        = "srv6"
-  route_policy_in                                           = "ROUTE_POLICY_1"
-  route_policy_out                                          = "ROUTE_POLICY_1"
-  soft_reconfiguration_inbound_always                       = true
-  maximum_prefix_limit                                      = 1248576
-  maximum_prefix_threshold_value                            = 80
-  maximum_prefix_warning_only                               = true
-  default_originate_route_policy                            = "ROUTE_POLICY_1"
+  as_number                                          = "65001"
+  address                                            = "10.1.1.2"
+  af_name                                            = "vpnv4-unicast"
+  import_stitching_rt_re_originate_stitching_rt      = true
+  route_reflector_client                             = true
+  route_reflector_client_inheritance_disable         = true
+  advertise_vpnv4_unicast_re_originated_stitching_rt = true
+  next_hop_self                                      = true
+  next_hop_self_inheritance_disable                  = true
+  encapsulation_type                                 = "srv6"
+  route_policy_in                                    = "ROUTE_POLICY_1"
+  route_policy_out                                   = "ROUTE_POLICY_1"
+  soft_reconfiguration_inbound_always                = true
+  maximum_prefix_limit                               = 1248576
+  maximum_prefix_threshold                           = 80
+  maximum_prefix_warning_only                        = true
+  default_originate                                  = true
 }
 ```
 
@@ -46,12 +45,13 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 - `as_number` (String) bgp as-number
 - `maximum_prefix_limit` (Number) maximum no. of prefix limit
   - Range: `1`-`4294967295`
-- `maximum_prefix_threshold_value` (Number) Threshold value (%) at which to generate a warning msg
+- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
   - Range: `1`-`100`
 
 ### Optional
 
-- `advertise_vpnv4_unicast_enable_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
@@ -59,7 +59,6 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 - `device` (String) A device name from the provider configuration.
 - `encapsulation_type` (String) Specify encapsulation type
   - Choices: `srv6`, `vxlan`
-- `import` (Boolean) Import options for neighbor address-family routes
 - `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `import_stitching_rt` (Boolean) Import routes using stitching RTs
 - `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes

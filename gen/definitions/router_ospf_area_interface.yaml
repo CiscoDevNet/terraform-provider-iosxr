@@ -39,7 +39,7 @@ attributes:
     example: 3000
     optional: true
     delete_parent: true
-    exclude_test: true   
+    exclude_test: true
   - yang_name: prefix-sid/algorithms/algorithm
     tf_name: prefix_sid_algorithms
     type: List

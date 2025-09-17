@@ -27,7 +27,7 @@ resource "iosxr_vrf" "example" {
   address_family_ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"
   address_family_ipv6_multicast                   = true
   address_family_ipv6_flowspec                    = true
-  rd_two_byte_as_number                           = 123
+  rd_two_byte_as_number                           = "123"
   rd_two_byte_as_index                            = 123
   address_family_ipv4_unicast_import_route_target_two_byte_as_format = [
     {
@@ -83,13 +83,13 @@ resource "iosxr_vrf" "example" {
 - `device` (String) A device name from the provider configuration.
 - `rd_four_byte_as_index` (Number) ASN4:index (hex or decimal format)
   - Range: `0`-`65535`
-- `rd_four_byte_as_number` (Number) 4-byte AS number in asplain format
+- `rd_four_byte_as_number` (String) 4-byte AS number in asplain format
 - `rd_ipv4_address` (String) IPv4 address
 - `rd_ipv4_address_index` (Number) IPv4Address:index (hex or decimal format)
   - Range: `0`-`65535`
 - `rd_two_byte_as_index` (Number) ASN2:index (hex or decimal format)
   - Range: `0`-`4294967295`
-- `rd_two_byte_as_number` (Number) 2-byte AS number
+- `rd_two_byte_as_number` (String) 2-byte AS number
 - `vpn_id` (String) VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part
 
 ### Read-Only

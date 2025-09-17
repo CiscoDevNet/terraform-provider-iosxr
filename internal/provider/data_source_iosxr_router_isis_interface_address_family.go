@@ -86,7 +86,7 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "per-link",
 				Computed:            true,
 			},
-			"fast_reroute_enable_levels": schema.ListNestedAttribute{
+			"fast_reroute_levels": schema.ListNestedAttribute{
 				MarkdownDescription: "enable",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -162,7 +162,7 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 					},
 				},
 			},
-			"metric_default_metric": schema.Int64Attribute{
+			"metric_default": schema.Int64Attribute{
 				MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 				Computed:            true,
 			},
@@ -179,7 +179,7 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 							MarkdownDescription: "Set metric at this level only",
 							Computed:            true,
 						},
-						"default_metric": schema.Int64Attribute{
+						"metric_default": schema.Int64Attribute{
 							MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 							Computed:            true,
 						},

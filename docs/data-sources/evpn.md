@@ -28,10 +28,10 @@ data "iosxr_evpn" "example" {
 
 - `id` (String) The path of the retrieved object.
 - `interfaces` (Attributes List) Specify interface name (see [below for nested schema](#nestedatt--interfaces))
-- `segment_routing_srv6` (Boolean) SRv6 configuration for EVPN
-- `segment_routing_srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--segment_routing_srv6_locators))
-- `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 - `source_interface` (String) Configure EVPN router-id implicitly through Loopback Interface
+- `srv6` (Boolean) SRv6 configuration for EVPN
+- `srv6_locators` (Attributes List) Default locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--srv6_locators))
+- `srv6_usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function global knob
 
 <a id="nestedatt--interfaces"></a>
 ### Nested Schema for `interfaces`
@@ -39,12 +39,12 @@ data "iosxr_evpn" "example" {
 Read-Only:
 
 - `ethernet_segment_enable` (Boolean) Ethernet Segment configuration commands
-- `ethernet_segment_esi_zero` (String) 9-octet ESI value, xx.xx.xx.xx.xx.xx.xx.xx.xx
+- `ethernet_segment_esi_zero` (String) ESI value
 - `interface_name` (String) Specify interface name
 
 
-<a id="nestedatt--segment_routing_srv6_locators"></a>
-### Nested Schema for `segment_routing_srv6_locators`
+<a id="nestedatt--srv6_locators"></a>
+### Nested Schema for `srv6_locators`
 
 Read-Only:
 

@@ -40,7 +40,10 @@ resource "iosxr_router_isis_interface" "example" {
       text_encrypted = "060506324F41584B564B0F49584B"
     }
   ]
+  bfd_fast_detect_ipv4 = true
   bfd_fast_detect_ipv6 = true
+  bfd_minimum_interval = 50
+  bfd_multiplier       = 3
 }
 ```
 
@@ -54,7 +57,12 @@ resource "iosxr_router_isis_interface" "example" {
 
 ### Optional
 
+- `bfd_fast_detect_ipv4` (Boolean) Address Family
 - `bfd_fast_detect_ipv6` (Boolean) Address Family
+- `bfd_minimum_interval` (Number) Hello interval
+  - Range: `3`-`30000`
+- `bfd_multiplier` (Number) Detect multiplier
+  - Range: `2`-`50`
 - `circuit_type` (String) Configure circuit type for interface
   - Choices: `level-1`, `level-1-2`, `level-2-only`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
@@ -63,15 +71,15 @@ resource "iosxr_router_isis_interface" "example" {
 - `hello_padding` (String) Add padding to IS-IS hello packets
   - Choices: `adaptive`, `always`, `disable`, `sometimes`
 - `hello_padding_levels` (Attributes List) Set hello-padding for one level only (see [below for nested schema](#nestedatt--hello_padding_levels))
-- `hello_password_accepts_encrypted` (String) Specifies a password will follow
+- `hello_password_accept_encrypted` (String) Specifies a password will follow
 - `hello_password_accepts_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_accepts_levels))
 - `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
-- `hello_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
-- `hello_password_keychain_name` (String) Specifies a Key Chain name will follow
-- `hello_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_keychain` (String) Specifies a Key Chain name will follow
+- `hello_password_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `hello_password_levels` (Attributes List) Set hello-password for one level only (see [below for nested schema](#nestedatt--hello_password_levels))
-- `hello_password_text_encrypted` (String) Specifies an encrypted password will follow
-- `hello_password_text_send_only` (Boolean) Specify SNP packets authentication mode
+- `hello_password_text_encrypted` (String) Specifies a password will follow
+- `hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `point_to_point` (Boolean) Treat active LAN interface as point-to-point
 - `priority` (Number) Set priority for Designated Router election
   - Range: `0`-`127`
@@ -116,7 +124,7 @@ Optional:
 
 - `hmac_md5_encrypted` (String) Specifies a password will follow
 - `hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `keychain_name` (String) The Key Chain name
+- `keychain_name` (String) Specifies a Key Chain name will follow
 - `keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `text_encrypted` (String) Specifies a password will follow
 - `text_send_only` (Boolean) Do not require authentication of incoming IIHs

@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:t
 doc_category: Segment Routing
 attributes:
   - yang_name: logging/pcep-peer-status
-    example: true     
+    example: true
   - yang_name: logging/policy-status
     example: true
   - yang_name: pcc/report-all
@@ -25,19 +25,18 @@ attributes:
   - yang_name: pcc/pce-peers/pce-peer
     tf_name: pce_peers
     type: List
-    attributes: 
+    attributes:
       - yang_name: pce-address
-        id: true 
+        id: true
         example: 66.66.66.6
       - yang_name: precedence
         example: 122
-        
   - yang_name: on-demand-colors/on-demand-color
     tf_name: on_demand_colors
     type: List
-    attributes: 
+    attributes:
       - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast
-        tf_name: dynamic_anycast_sid_inclusion  
+        tf_name: dynamic_anycast_sid_inclusion
         example: true
       - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-metric/metric-type
         tf_name: dynamic_metric_type
@@ -45,7 +44,7 @@ attributes:
       - yang_name: color
         id: true
         example: 266
-      - yang_name: srv6/enable  
+      - yang_name: srv6/enable
         example: true
         exclude_test: true
       - yang_name: srv6/locator/locator-name
@@ -74,8 +73,6 @@ attributes:
         example: protected-only
       - yang_name: constraint/segments/sid-algorithm
         example: 128
-
-
   - yang_name: policies/policy
     tf_name: policies
     type: List

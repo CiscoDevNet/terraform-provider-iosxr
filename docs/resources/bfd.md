@@ -85,7 +85,7 @@ resource "iosxr_bfd" "example" {
 - `echo_disable` (Boolean) Disable BFD echo mode
 - `echo_ipv4_bundle_per_member_minimum_interval` (Number) Set the preferred minimum interval for the BFD session
   - Range: `15`-`2000`
-- `echo_ipv4_source` (String) Echo IPv4 source address
+- `echo_ipv4_source` (String) IPv4 address
 - `echo_latency_detect_count` (Number) Count of consecutive bad latency packets to take session down
   - Range: `1`-`10`
 - `echo_latency_detect_percentage` (Number) Percentage of detection time to consider as bad latency
@@ -114,7 +114,7 @@ Optional:
 - `disable` (Boolean) Disable BFD for this interface
 - `echo_disable` (String) Disable BFD echo mode for this interface
   - Choices: `disable`, `enable`
-- `echo_ipv4_source` (String) Echo IPv4 source address
+- `echo_ipv4_source` (String) IPv4 address
 - `ipv6_checksum_disable` (Boolean) Disable BFD ipv6 checksum mode for this interface
 - `local_address` (String) Local address to be used by BFD for this interface
 - `multiplier` (Number) BFD multiplier for this interface

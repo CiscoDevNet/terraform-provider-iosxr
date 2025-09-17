@@ -60,12 +60,12 @@ data "iosxr_router_bgp" "example" {
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
 - `segment_routing_srv6_locator` (String) Specify locator
 - `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
+- `timers_bgp_holdtime` (Number) Holdtime
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_bgp_holdtime_number` (Number) Holdtime value
 - `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_interval` (Number) Keepalive interval
-- `timers_bgp_zero` (Boolean) Disable keepalives/hold time
-- `timers_bgp_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+- `timers_bgp_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 
 <a id="nestedatt--neighbors"></a>
 ### Nested Schema for `neighbors`
@@ -88,11 +88,11 @@ Read-Only:
 - `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_holdtime_number` (Number) Holdtime value
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time within holdtime container
+- `timers_holdtime_number` (Number) Holdtime
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
-- `timers_zero` (Boolean) Disable keepalives/hold time within zero container
-- `timers_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor within zero container
+- `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates
 - `use_neighbor_group` (String) Inherit configuration from a neighbor-group

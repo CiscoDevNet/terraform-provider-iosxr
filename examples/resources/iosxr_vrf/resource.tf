@@ -12,7 +12,7 @@ resource "iosxr_vrf" "example" {
   address_family_ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"
   address_family_ipv6_multicast                   = true
   address_family_ipv6_flowspec                    = true
-  rd_two_byte_as_number                           = 123
+  rd_two_byte_as_number                           = "123"
   rd_two_byte_as_index                            = 123
   address_family_ipv4_unicast_import_route_target_two_byte_as_format = [
     {

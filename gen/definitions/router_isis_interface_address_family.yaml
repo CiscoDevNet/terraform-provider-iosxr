@@ -19,7 +19,7 @@ attributes:
     example: true
     exclude_test: true
   - yang_name: fast-reroute/enable-levels/enable-level
-    tf_name: fast_reroute_enable_levels
+    tf_name: fast_reroute_levels
     type: List
     attributes:
       - yang_name: level-number
@@ -40,10 +40,7 @@ attributes:
     attributes:
       - yang_name: index-number
         id: true
-        min_int: 0
-        max_int: 1048575
         example: 100
-        description: "The Adjacency Segment ID index"
       - yang_name: protected
         example: true
   - yang_name: adjacency-sid/absolutes/absolute
@@ -53,10 +50,7 @@ attributes:
     attributes:
       - yang_name: absolute-number
         id: true
-        min_int: 16000
-        max_int: 1048575
         example: 24200
-        description: "The Adjacency Segment ID value"
       - yang_name: protected
         example: true
   - yang_name: advertise/prefix-advertisement/route-policy
@@ -68,32 +62,22 @@ attributes:
     attributes:
       - yang_name: level-number
         id: true
-        min_int: 1
-        max_int: 2
         example: 1
-        description: "Set advertisement at this level only"
       - yang_name: route-policy
         example: ROUTE_POLICY_2
-  - yang_name: metric/default-metric
-    tf_name: metric_default_metric
-    type: Int64
-    no_augment_config: true
+  - yang_name: metric/METRIC/DEFAULT-METRIC/default-metric
+    xpath: metric/default-metric
+    tf_name: metric_default
     optional: true
     delete_parent: true
-    min_int: 1
-    max_int: 16777214
     example: 500
-    description: "Default metric: <1-63> for narrow, <1-16777214> for wide"
-  - yang_name: metric/maximum
+  - yang_name: metric/METRIC/MAXIMUM/maximum
+    xpath: metric/maximum
     tf_name: metric_maximum
-    type: Bool
-    type_yang_bool: empty
-    no_augment_config: true
     optional: true
     delete_parent: true
     exclude_test: true
     example: true
-    description: "Maximum wide metric. All routers will exclude this link from their SPF"
   - yang_name: metric-levels/metric-level
     tf_name: metric_levels
     exclude_test: true
@@ -101,29 +85,19 @@ attributes:
     attributes:
       - yang_name: level-number
         id: true
-        min_int: 1
-        max_int: 2
         example: 1
-        description: "Set metric at this level only"
-      - yang_name: default-metric
-        tf_name: default_metric
-        type: Int64
-        no_augment_config: true
+      - yang_name: METRIC/DEFAULT-METRIC/default-metric
+        xpath: metric-levels/metric-level/default-metric
+        tf_name: metric_default
         optional: true
         delete_parent: true
-        min_int: 1
-        max_int: 16777214
         example: 600
-        description: "Default metric: <1-63> for narrow, <1-16777214> for wide"
-      - yang_name: maximum
+      - yang_name: METRIC/MAXIMUM/maximum
+        xpath: metric-levels/metric-level/maximum
         tf_name: metric_maximum
-        type: Bool
-        type_yang_bool: empty
-        no_augment_config: true
         optional: true
         delete_parent: true
         example: true
-        description: "Maximum wide metric. All routers will exclude this link from their SPF"
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
@@ -138,13 +112,3 @@ test_prerequisites:
         value: ROUTE_POLICY_2
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_2\\n  pass\\nend-policy\\n"
-  # - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]
-  #   attributes:
-  #     - name: process-id
-  #       value: P1
-  #     - name: af-name
-  #       value: ipv4
-  #     - name: saf-name
-  #       value: unicast
-  #     - name: segment-routing/mpls/sr-prefer
-  #       value: true

@@ -2,6 +2,7 @@ resource "iosxr_router_isis_address_family" "example" {
   process_id                             = "P1"
   af_name                                = "ipv4"
   saf_name                               = "unicast"
+  metric_style_wide_transition           = true
   router_id_ip_address                   = "192.168.1.1"
   default_information_originate          = true
   fast_reroute_delay_interval            = 300
@@ -38,13 +39,13 @@ resource "iosxr_router_isis_address_family" "example" {
     }
   ]
   fast_reroute_per_link_use_candidate_only = true
-  microloop_avoidance_enable_protected     = true
+  microloop_avoidance_protected            = true
   microloop_avoidance_rib_update_delay     = 5000
   advertise_passive_only                   = true
   advertise_link_attributes                = true
   mpls_ldp_auto_config                     = false
   mpls_traffic_eng_router_id_ipv4_address  = "1.2.3.4"
-  mpls_traffic_eng_level_1_2               = false
+  mpls_traffic_eng_level_1_2               = true
   spf_interval_maximum_wait                = 5000
   spf_interval_initial_wait                = 50
   spf_interval_secondary_wait              = 200
@@ -85,14 +86,14 @@ resource "iosxr_router_isis_address_family" "example" {
       maximum_redistributed_prefixes = 1000
     }
   ]
-  redistribute_isis_processes = [
+  redistribute_isis = [
     {
-      isis_string              = "CORE"
-      redistribute_route_level = "level-2"
-      metric                   = 10
-      route_policy             = "ROUTE_POLICY_1"
-      metric_type              = "internal"
-      down_flag_clear          = true
+      instance_id     = "CORE"
+      level           = "level-2"
+      metric          = 10
+      route_policy    = "ROUTE_POLICY_1"
+      metric_type     = "internal"
+      down_flag_clear = true
     }
   ]
 }

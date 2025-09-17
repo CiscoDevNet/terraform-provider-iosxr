@@ -29,52 +29,52 @@ import (
 )
 
 type RouterBGPVRFNeighborAddressFamily struct {
-	Device                                    types.String `tfsdk:"device"`
-	Id                                        types.String `tfsdk:"id"`
-	DeleteMode                                types.String `tfsdk:"delete_mode"`
-	AsNumber                                  types.String `tfsdk:"as_number"`
-	VrfName                                   types.String `tfsdk:"vrf_name"`
-	Address                                   types.String `tfsdk:"address"`
-	AfName                                    types.String `tfsdk:"af_name"`
-	RoutePolicyIn                             types.String `tfsdk:"route_policy_in"`
-	RoutePolicyOut                            types.String `tfsdk:"route_policy_out"`
-	DefaultOriginateRoutePolicy               types.String `tfsdk:"default_originate_route_policy"`
-	DefaultOriginateInheritanceDisable        types.Bool   `tfsdk:"default_originate_inheritance_disable"`
-	NextHopSelf                               types.Bool   `tfsdk:"next_hop_self"`
-	NextHopSelfInheritanceDisable             types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
-	SoftReconfigurationInboundAlways          types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
-	SendCommunityEbgpInheritanceDisable       types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
-	RemovePrivateAs                           types.Bool   `tfsdk:"remove_private_as"`
-	RemovePrivateAsInbound                    types.Bool   `tfsdk:"remove_private_as_inbound"`
-	RemovePrivateAsInboundInheritanceDisable  types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
-	RemovePrivateAsInboundEntireAspath        types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
-	RemovePrivateAsOutboundEntireAspath       types.Bool   `tfsdk:"remove_private_as_outbound_entire_aspath"`
-	RemovePrivateAsOutboundInheritanceDisable types.Bool   `tfsdk:"remove_private_as_outbound_inheritance_disable"`
-	RemovePrivateAsOutboundInternal           types.Bool   `tfsdk:"remove_private_as_outbound_internal"`
+	Device                                   types.String `tfsdk:"device"`
+	Id                                       types.String `tfsdk:"id"`
+	DeleteMode                               types.String `tfsdk:"delete_mode"`
+	AsNumber                                 types.String `tfsdk:"as_number"`
+	VrfName                                  types.String `tfsdk:"vrf_name"`
+	Address                                  types.String `tfsdk:"address"`
+	AfName                                   types.String `tfsdk:"af_name"`
+	RoutePolicyIn                            types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                           types.String `tfsdk:"route_policy_out"`
+	DefaultOriginateRoutePolicy              types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable       types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	NextHopSelf                              types.Bool   `tfsdk:"next_hop_self"`
+	NextHopSelfInheritanceDisable            types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	SoftReconfigurationInboundAlways         types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	SendCommunityEbgpInheritanceDisable      types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	RemovePrivateAsInbound                   types.Bool   `tfsdk:"remove_private_as_inbound"`
+	RemovePrivateAsInboundInheritanceDisable types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
+	RemovePrivateAsInboundEntireAspath       types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
+	RemovePrivateAs                          types.Bool   `tfsdk:"remove_private_as"`
+	RemovePrivateAsEntireAspath              types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
+	RemovePrivateAsInheritanceDisable        types.Bool   `tfsdk:"remove_private_as_inheritance_disable"`
+	RemovePrivateAsInternal                  types.Bool   `tfsdk:"remove_private_as_internal"`
 }
 
 type RouterBGPVRFNeighborAddressFamilyData struct {
-	Device                                    types.String `tfsdk:"device"`
-	Id                                        types.String `tfsdk:"id"`
-	AsNumber                                  types.String `tfsdk:"as_number"`
-	VrfName                                   types.String `tfsdk:"vrf_name"`
-	Address                                   types.String `tfsdk:"address"`
-	AfName                                    types.String `tfsdk:"af_name"`
-	RoutePolicyIn                             types.String `tfsdk:"route_policy_in"`
-	RoutePolicyOut                            types.String `tfsdk:"route_policy_out"`
-	DefaultOriginateRoutePolicy               types.String `tfsdk:"default_originate_route_policy"`
-	DefaultOriginateInheritanceDisable        types.Bool   `tfsdk:"default_originate_inheritance_disable"`
-	NextHopSelf                               types.Bool   `tfsdk:"next_hop_self"`
-	NextHopSelfInheritanceDisable             types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
-	SoftReconfigurationInboundAlways          types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
-	SendCommunityEbgpInheritanceDisable       types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
-	RemovePrivateAs                           types.Bool   `tfsdk:"remove_private_as"`
-	RemovePrivateAsInbound                    types.Bool   `tfsdk:"remove_private_as_inbound"`
-	RemovePrivateAsInboundInheritanceDisable  types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
-	RemovePrivateAsInboundEntireAspath        types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
-	RemovePrivateAsOutboundEntireAspath       types.Bool   `tfsdk:"remove_private_as_outbound_entire_aspath"`
-	RemovePrivateAsOutboundInheritanceDisable types.Bool   `tfsdk:"remove_private_as_outbound_inheritance_disable"`
-	RemovePrivateAsOutboundInternal           types.Bool   `tfsdk:"remove_private_as_outbound_internal"`
+	Device                                   types.String `tfsdk:"device"`
+	Id                                       types.String `tfsdk:"id"`
+	AsNumber                                 types.String `tfsdk:"as_number"`
+	VrfName                                  types.String `tfsdk:"vrf_name"`
+	Address                                  types.String `tfsdk:"address"`
+	AfName                                   types.String `tfsdk:"af_name"`
+	RoutePolicyIn                            types.String `tfsdk:"route_policy_in"`
+	RoutePolicyOut                           types.String `tfsdk:"route_policy_out"`
+	DefaultOriginateRoutePolicy              types.String `tfsdk:"default_originate_route_policy"`
+	DefaultOriginateInheritanceDisable       types.Bool   `tfsdk:"default_originate_inheritance_disable"`
+	NextHopSelf                              types.Bool   `tfsdk:"next_hop_self"`
+	NextHopSelfInheritanceDisable            types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
+	SoftReconfigurationInboundAlways         types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
+	SendCommunityEbgpInheritanceDisable      types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
+	RemovePrivateAsInbound                   types.Bool   `tfsdk:"remove_private_as_inbound"`
+	RemovePrivateAsInboundInheritanceDisable types.Bool   `tfsdk:"remove_private_as_inbound_inheritance_disable"`
+	RemovePrivateAsInboundEntireAspath       types.Bool   `tfsdk:"remove_private_as_inbound_entire_aspath"`
+	RemovePrivateAs                          types.Bool   `tfsdk:"remove_private_as"`
+	RemovePrivateAsEntireAspath              types.Bool   `tfsdk:"remove_private_as_entire_aspath"`
+	RemovePrivateAsInheritanceDisable        types.Bool   `tfsdk:"remove_private_as_inheritance_disable"`
+	RemovePrivateAsInternal                  types.Bool   `tfsdk:"remove_private_as_internal"`
 }
 
 func (data RouterBGPVRFNeighborAddressFamily) getPath() string {
@@ -124,11 +124,6 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 			body, _ = sjson.Set(body, "send-community-ebgp.inheritance-disable", map[string]string{})
 		}
 	}
-	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.IsUnknown() {
-		if data.RemovePrivateAs.ValueBool() {
-			body, _ = sjson.Set(body, "remove-private-as", map[string]string{})
-		}
-	}
 	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.IsUnknown() {
 		if data.RemovePrivateAsInbound.ValueBool() {
 			body, _ = sjson.Set(body, "remove-private-as.inbound", map[string]string{})
@@ -144,18 +139,23 @@ func (data RouterBGPVRFNeighborAddressFamily) toBody(ctx context.Context) string
 			body, _ = sjson.Set(body, "remove-private-as.inbound.entire-aspath", map[string]string{})
 		}
 	}
-	if !data.RemovePrivateAsOutboundEntireAspath.IsNull() && !data.RemovePrivateAsOutboundEntireAspath.IsUnknown() {
-		if data.RemovePrivateAsOutboundEntireAspath.ValueBool() {
+	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.IsUnknown() {
+		if data.RemovePrivateAs.ValueBool() {
+			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound", map[string]string{})
+		}
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.IsUnknown() {
+		if data.RemovePrivateAsEntireAspath.ValueBool() {
 			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound.entire-aspath", map[string]string{})
 		}
 	}
-	if !data.RemovePrivateAsOutboundInheritanceDisable.IsNull() && !data.RemovePrivateAsOutboundInheritanceDisable.IsUnknown() {
-		if data.RemovePrivateAsOutboundInheritanceDisable.ValueBool() {
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() && !data.RemovePrivateAsInheritanceDisable.IsUnknown() {
+		if data.RemovePrivateAsInheritanceDisable.ValueBool() {
 			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound.inheritance-disable", map[string]string{})
 		}
 	}
-	if !data.RemovePrivateAsOutboundInternal.IsNull() && !data.RemovePrivateAsOutboundInternal.IsUnknown() {
-		if data.RemovePrivateAsOutboundInternal.ValueBool() {
+	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.IsUnknown() {
+		if data.RemovePrivateAsInternal.ValueBool() {
 			body, _ = sjson.Set(body, "remove-private-as.remove-private-as-outbound.internal", map[string]string{})
 		}
 	}
@@ -223,15 +223,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	} else {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as"); !data.RemovePrivateAs.IsNull() {
-		if value.Exists() {
-			data.RemovePrivateAs = types.BoolValue(true)
-		} else {
-			data.RemovePrivateAs = types.BoolValue(false)
-		}
-	} else {
-		data.RemovePrivateAs = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "remove-private-as.inbound"); !data.RemovePrivateAsInbound.IsNull() {
 		if value.Exists() {
 			data.RemovePrivateAsInbound = types.BoolValue(true)
@@ -259,32 +250,41 @@ func (data *RouterBGPVRFNeighborAddressFamily) updateFromBody(ctx context.Contex
 	} else {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); !data.RemovePrivateAsOutboundEntireAspath.IsNull() {
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); !data.RemovePrivateAs.IsNull() {
 		if value.Exists() {
-			data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(true)
+			data.RemovePrivateAs = types.BoolValue(true)
 		} else {
-			data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(false)
+			data.RemovePrivateAs = types.BoolValue(false)
 		}
 	} else {
-		data.RemovePrivateAsOutboundEntireAspath = types.BoolNull()
+		data.RemovePrivateAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); !data.RemovePrivateAsOutboundInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); !data.RemovePrivateAsEntireAspath.IsNull() {
 		if value.Exists() {
-			data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(true)
+			data.RemovePrivateAsEntireAspath = types.BoolValue(true)
 		} else {
-			data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(false)
+			data.RemovePrivateAsEntireAspath = types.BoolValue(false)
 		}
 	} else {
-		data.RemovePrivateAsOutboundInheritanceDisable = types.BoolNull()
+		data.RemovePrivateAsEntireAspath = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); !data.RemovePrivateAsOutboundInternal.IsNull() {
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); !data.RemovePrivateAsInheritanceDisable.IsNull() {
 		if value.Exists() {
-			data.RemovePrivateAsOutboundInternal = types.BoolValue(true)
+			data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
 		} else {
-			data.RemovePrivateAsOutboundInternal = types.BoolValue(false)
+			data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
 		}
 	} else {
-		data.RemovePrivateAsOutboundInternal = types.BoolNull()
+		data.RemovePrivateAsInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); !data.RemovePrivateAsInternal.IsNull() {
+		if value.Exists() {
+			data.RemovePrivateAsInternal = types.BoolValue(true)
+		} else {
+			data.RemovePrivateAsInternal = types.BoolValue(false)
+		}
+	} else {
+		data.RemovePrivateAsInternal = types.BoolNull()
 	}
 }
 
@@ -323,11 +323,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 	} else {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as"); value.Exists() {
-		data.RemovePrivateAs = types.BoolValue(true)
-	} else {
-		data.RemovePrivateAs = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
 		data.RemovePrivateAsInbound = types.BoolValue(true)
 	} else {
@@ -343,20 +338,25 @@ func (data *RouterBGPVRFNeighborAddressFamily) fromBody(ctx context.Context, res
 	} else {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
-		data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(false)
+		data.RemovePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
-		data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(true)
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(false)
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
-		data.RemovePrivateAsOutboundInternal = types.BoolValue(true)
+		data.RemovePrivateAsInternal = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundInternal = types.BoolValue(false)
+		data.RemovePrivateAsInternal = types.BoolValue(false)
 	}
 }
 
@@ -395,11 +395,6 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 	} else {
 		data.SendCommunityEbgpInheritanceDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as"); value.Exists() {
-		data.RemovePrivateAs = types.BoolValue(true)
-	} else {
-		data.RemovePrivateAs = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "remove-private-as.inbound"); value.Exists() {
 		data.RemovePrivateAsInbound = types.BoolValue(true)
 	} else {
@@ -415,20 +410,25 @@ func (data *RouterBGPVRFNeighborAddressFamilyData) fromBody(ctx context.Context,
 	} else {
 		data.RemovePrivateAsInboundEntireAspath = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
-		data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound"); value.Exists() {
+		data.RemovePrivateAs = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundEntireAspath = types.BoolValue(false)
+		data.RemovePrivateAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.entire-aspath"); value.Exists() {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(true)
+	} else {
+		data.RemovePrivateAsEntireAspath = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.inheritance-disable"); value.Exists() {
-		data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(true)
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundInheritanceDisable = types.BoolValue(false)
+		data.RemovePrivateAsInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "remove-private-as.remove-private-as-outbound.internal"); value.Exists() {
-		data.RemovePrivateAsOutboundInternal = types.BoolValue(true)
+		data.RemovePrivateAsInternal = types.BoolValue(true)
 	} else {
-		data.RemovePrivateAsOutboundInternal = types.BoolValue(false)
+		data.RemovePrivateAsInternal = types.BoolValue(false)
 	}
 }
 
@@ -441,10 +441,10 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", state.getPath()))
 	}
 	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", state.getPath()))
 	}
 	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
@@ -458,9 +458,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
 	}
-	if !state.RemovePrivateAs.IsNull() && data.RemovePrivateAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as", state.getPath()))
-	}
 	if !state.RemovePrivateAsInbound.IsNull() && data.RemovePrivateAsInbound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound", state.getPath()))
 	}
@@ -470,13 +467,16 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 	if !state.RemovePrivateAsInboundEntireAspath.IsNull() && data.RemovePrivateAsInboundEntireAspath.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", state.getPath()))
 	}
-	if !state.RemovePrivateAsOutboundEntireAspath.IsNull() && data.RemovePrivateAsOutboundEntireAspath.IsNull() {
+	if !state.RemovePrivateAs.IsNull() && data.RemovePrivateAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", state.getPath()))
+	}
+	if !state.RemovePrivateAsEntireAspath.IsNull() && data.RemovePrivateAsEntireAspath.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", state.getPath()))
 	}
-	if !state.RemovePrivateAsOutboundInheritanceDisable.IsNull() && data.RemovePrivateAsOutboundInheritanceDisable.IsNull() {
+	if !state.RemovePrivateAsInheritanceDisable.IsNull() && data.RemovePrivateAsInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", state.getPath()))
 	}
-	if !state.RemovePrivateAsOutboundInternal.IsNull() && data.RemovePrivateAsOutboundInternal.IsNull() {
+	if !state.RemovePrivateAsInternal.IsNull() && data.RemovePrivateAsInternal.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", state.getPath()))
 	}
 	return deletedItems
@@ -485,7 +485,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/inheritance-disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
 	}
 	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
@@ -499,9 +499,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.C
 	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
 	}
-	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as", data.getPath()))
-	}
 	if !data.RemovePrivateAsInbound.IsNull() && !data.RemovePrivateAsInbound.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound", data.getPath()))
 	}
@@ -511,13 +508,16 @@ func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.C
 	if !data.RemovePrivateAsInboundEntireAspath.IsNull() && !data.RemovePrivateAsInboundEntireAspath.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundEntireAspath.IsNull() && !data.RemovePrivateAsOutboundEntireAspath.ValueBool() {
+	if !data.RemovePrivateAs.IsNull() && !data.RemovePrivateAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getPath()))
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() && !data.RemovePrivateAsEntireAspath.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundInheritanceDisable.IsNull() && !data.RemovePrivateAsOutboundInheritanceDisable.ValueBool() {
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() && !data.RemovePrivateAsInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundInternal.IsNull() && !data.RemovePrivateAsOutboundInternal.ValueBool() {
+	if !data.RemovePrivateAsInternal.IsNull() && !data.RemovePrivateAsInternal.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getPath()))
 	}
 	return emptyLeafsDelete
@@ -532,10 +532,10 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
 	}
 	if !data.DefaultOriginateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", data.getPath()))
 	}
 	if !data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", data.getPath()))
 	}
 	if !data.NextHopSelf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
@@ -549,9 +549,6 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
 	}
-	if !data.RemovePrivateAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as", data.getPath()))
-	}
 	if !data.RemovePrivateAsInbound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inbound", data.getPath()))
 	}
@@ -561,13 +558,16 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 	if !data.RemovePrivateAsInboundEntireAspath.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/inbound/entire-aspath", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundEntireAspath.IsNull() {
+	if !data.RemovePrivateAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound", data.getPath()))
+	}
+	if !data.RemovePrivateAsEntireAspath.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/entire-aspath", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundInheritanceDisable.IsNull() {
+	if !data.RemovePrivateAsInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/inheritance-disable", data.getPath()))
 	}
-	if !data.RemovePrivateAsOutboundInternal.IsNull() {
+	if !data.RemovePrivateAsInternal.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/remove-private-as/remove-private-as-outbound/internal", data.getPath()))
 	}
 	return deletePaths

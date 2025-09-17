@@ -74,10 +74,6 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Enter Address Family command mode",
 				Required:            true,
 			},
-			"import": schema.BoolAttribute{
-				MarkdownDescription: "Import options for neighbor address-family routes",
-				Computed:            true,
-			},
 			"import_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: "Import routes using stitching RTs",
 				Computed:            true,
@@ -102,7 +98,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Prevent route-reflector-client from being inherited from the parent",
 				Computed:            true,
 			},
-			"advertise_vpnv4_unicast_enable_re_originated_stitching_rt": schema.BoolAttribute{
+			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: "Advertise re-originated and local routes with stitching Route-Targets",
 				Computed:            true,
 			},
@@ -142,7 +138,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "maximum no. of prefix limit",
 				Computed:            true,
 			},
-			"maximum_prefix_threshold_value": schema.Int64Attribute{
+			"maximum_prefix_threshold": schema.Int64Attribute{
 				MarkdownDescription: "Threshold value (%) at which to generate a warning msg",
 				Computed:            true,
 			},
@@ -156,6 +152,10 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 			},
 			"maximum_prefix_warning_only": schema.BoolAttribute{
 				MarkdownDescription: "Only give warning message when limit is exceeded",
+				Computed:            true,
+			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: "Originate default route to this neighbor",
 				Computed:            true,
 			},
 			"default_originate_route_policy": schema.StringAttribute{

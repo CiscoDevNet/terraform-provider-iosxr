@@ -1,20 +1,19 @@
 resource "iosxr_router_isis" "example" {
-  process_id                            = "P1"
-  is_type                               = "level-1"
-  set_overload_bit                      = true
-  set_overload_bit_on_startup_seconds   = 300
-  set_overload_bit_advertise_external   = true
-  set_overload_bit_advertise_interlevel = true
+  process_id                                    = "P1"
+  is_type                                       = "level-1"
+  set_overload_bit                              = true
+  set_overload_bit_on_startup_time_to_advertise = 300
+  set_overload_bit_advertise_external           = true
+  set_overload_bit_advertise_interlevel         = true
   set_overload_bit_levels = [
     {
-      level_number            = 1
-      on_startup_time_seconds = 300
-      advertise_external      = true
-      advertise_interlevel    = true
+      level_number                 = 1
+      on_startup_time_to_advertise = 300
+      advertise_external           = true
+      advertise_interlevel         = true
     }
   ]
   nsr                               = true
-  nsf_ietf                          = true
   nsf_lifetime                      = 10
   nsf_interface_timer               = 5
   nsf_interface_expires             = 2
@@ -34,7 +33,7 @@ resource "iosxr_router_isis" "example" {
   ]
   flex_algos = [
     {
-      flex_algo_number     = 128
+      number               = 128
       advertise_definition = true
       metric_type          = "delay"
     }

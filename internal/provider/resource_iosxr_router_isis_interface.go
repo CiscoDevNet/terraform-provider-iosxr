@@ -172,7 +172,7 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.OneOf("passive", "shutdown", "suppressed"),
 				},
 			},
-			"hello_password_accepts_encrypted": schema.StringAttribute{
+			"hello_password_accept_encrypted": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -202,27 +202,36 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				},
 			},
 			"hello_password_text_encrypted": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specifies an encrypted password will follow").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
 			},
 			"hello_password_text_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 				Optional:            true,
 			},
 			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
 			},
 			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 				Optional:            true,
 			},
-			"hello_password_keychain_name": schema.StringAttribute{
+			"hello_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 1024),
+				},
 			},
 			"hello_password_keychain_send_only": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify SNP packets authentication mode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 				Optional:            true,
 			},
 			"hello_password_levels": schema.ListNestedAttribute{
@@ -240,6 +249,9 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 						"text_encrypted": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
 						},
 						"text_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
@@ -248,14 +260,20 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 						"hmac_md5_encrypted": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
 						},
 						"hmac_md5_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 							Optional:            true,
 						},
 						"keychain_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("The Key Chain name").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
 						},
 						"keychain_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
@@ -264,9 +282,27 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					},
 				},
 			},
+			"bfd_fast_detect_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
+				Optional:            true,
+			},
 			"bfd_fast_detect_ipv6": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
 				Optional:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 30000),
+				},
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 50),
+				},
 			},
 		},
 	}

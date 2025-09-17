@@ -35,8 +35,8 @@ data "iosxr_snmp_server" "example" {
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
-- `traps_bgp_enable_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `traps_bgp_enable_updown` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
 - `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `traps_config` (Boolean) Enable SNMP config traps
 - `traps_copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
@@ -54,7 +54,7 @@ data "iosxr_snmp_server" "example" {
 - `traps_isis_corrupted_lsp_detected` (Boolean) isisCorruptedLSPDetected
 - `traps_isis_database_overload` (Boolean) isisDatabaseOverload
 - `traps_isis_id_len_mismatch` (Boolean) isisIDLenMismatch
-- `traps_isis_lsp_error_detected` (Boolean) isisLspErrorDetected
+- `traps_isis_lsp_error_detected` (Boolean) isisLSPErrorDetected
 - `traps_isis_lsp_too_large_to_propagate` (Boolean) isisLSPTooLargeToPropagate
 - `traps_isis_manual_address_drops` (Boolean) isisManualAddressDrops
 - `traps_isis_max_area_addresses_mismatch` (Boolean) isisMaxAreaAddressesMismatch

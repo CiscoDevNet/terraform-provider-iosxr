@@ -14,22 +14,21 @@ This resource can manage the Router ISIS configuration.
 
 ```terraform
 resource "iosxr_router_isis" "example" {
-  process_id                            = "P1"
-  is_type                               = "level-1"
-  set_overload_bit                      = true
-  set_overload_bit_on_startup_seconds   = 300
-  set_overload_bit_advertise_external   = true
-  set_overload_bit_advertise_interlevel = true
+  process_id                                    = "P1"
+  is_type                                       = "level-1"
+  set_overload_bit                              = true
+  set_overload_bit_on_startup_time_to_advertise = 300
+  set_overload_bit_advertise_external           = true
+  set_overload_bit_advertise_interlevel         = true
   set_overload_bit_levels = [
     {
-      level_number            = 1
-      on_startup_time_seconds = 300
-      advertise_external      = true
-      advertise_interlevel    = true
+      level_number                 = 1
+      on_startup_time_to_advertise = 300
+      advertise_external           = true
+      advertise_interlevel         = true
     }
   ]
   nsr                               = true
-  nsf_ietf                          = true
   nsf_lifetime                      = 10
   nsf_interface_timer               = 5
   nsf_interface_expires             = 2
@@ -49,7 +48,7 @@ resource "iosxr_router_isis" "example" {
   ]
   flex_algos = [
     {
-      flex_algo_number     = 128
+      number               = 128
       advertise_definition = true
       metric_type          = "delay"
     }
@@ -108,18 +107,18 @@ resource "iosxr_router_isis" "example" {
 - `lsp_gen_interval_secondary_wait` (Number) Secondary delay before generating an LSP [200]
   - Range: `0`-`120000`
 - `lsp_password_accept_encrypted` (String) Specifies a password will follow
-- `lsp_password_accept_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_accept_levels))
 - `lsp_password_hmac_md5_enable_poi` (Boolean) Enable purge originator identification
 - `lsp_password_hmac_md5_encrypted` (String) Specifies a password will follow
-- `lsp_password_hmac_md5_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_hmac_md5_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_hmac_md5_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
+- `lsp_password_keychain` (String) Specifies a Key Chain name will follow
 - `lsp_password_keychain_enable_poi` (Boolean) Enable purge originator identification
-- `lsp_password_keychain_name` (String) Specifies a Key Chain name will follow
-- `lsp_password_keychain_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_keychain_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_keychain_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
-- `lsp_password_text_enable_poi` (Boolean) Enable purge originator identification - only valid with cryptographic authentication
-- `lsp_password_text_encrypted` (String) Specifies an encrypted password will follow
-- `lsp_password_text_send_only` (Boolean) Specify SNP packets authentication mode
+- `lsp_password_levels` (Attributes List) Set lsp-password for one level only (see [below for nested schema](#nestedatt--lsp_password_levels))
+- `lsp_password_text_enable_poi` (Boolean) Enable purge originator identification
+- `lsp_password_text_encrypted` (String) Specifies a password will follow
+- `lsp_password_text_send_only` (Boolean) specify SNP packets authentication mode
 - `lsp_password_text_snp_send_only` (Boolean) Authenticate outgoing SNPs, no check on incoming SNPs
 - `lsp_refresh_interval` (Number) Set LSP refresh interval
   - Range: `1`-`65535`
@@ -139,7 +138,7 @@ resource "iosxr_router_isis" "example" {
 - `set_overload_bit_advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `set_overload_bit_advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
 - `set_overload_bit_levels` (Attributes List) Set overload-bit for one level only (see [below for nested schema](#nestedatt--set_overload_bit_levels))
-- `set_overload_bit_on_startup_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `set_overload_bit_on_startup_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `set_overload_bit_on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 
@@ -162,13 +161,13 @@ Required:
 
 Required:
 
-- `flex_algo_number` (Number) Algorithm number
+- `number` (Number) Algorithm number
   - Range: `128`-`255`
 
 Optional:
 
 - `advertise_definition` (Boolean) Advertise the Flex-Algo Definition
-- `metric_type` (String) Flex-Algo metric type - can be 'delay', 'te', or integer 128-255
+- `metric_type` (String) Metric-type used by flex-algo calculation
 
 
 <a id="nestedatt--interfaces"></a>
@@ -201,8 +200,8 @@ Required:
 
 
 
-<a id="nestedatt--lsp_password_accept_levels"></a>
-### Nested Schema for `lsp_password_accept_levels`
+<a id="nestedatt--lsp_password_levels"></a>
+### Nested Schema for `lsp_password_levels`
 
 Required:
 
@@ -231,7 +230,7 @@ Optional:
 
 - `advertise_external` (Boolean) If overload-bit set advertise IP prefixes learned from other protocols
 - `advertise_interlevel` (Boolean) If overload-bit set advertise IP prefixes learned from another ISIS level
-- `on_startup_time_seconds` (Number) Time in seconds to advertise ourself as overloaded after reboot
+- `on_startup_time_to_advertise` (Number) Time in seconds to advertise ourself as overloaded after reboot
   - Range: `5`-`86400`
 - `on_startup_wait_for_bgp` (Boolean) Set overload bit on startup until BGP signals convergence, or timeout
 

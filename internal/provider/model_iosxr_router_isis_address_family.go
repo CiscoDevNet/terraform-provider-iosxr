@@ -37,7 +37,9 @@ type RouterISISAddressFamily struct {
 	ProcessId                                              types.String                                                                    `tfsdk:"process_id"`
 	AfName                                                 types.String                                                                    `tfsdk:"af_name"`
 	SafName                                                types.String                                                                    `tfsdk:"saf_name"`
+	MetricStyleNarrow                                      types.Bool                                                                      `tfsdk:"metric_style_narrow"`
 	MetricStyleNarrowTransition                            types.Bool                                                                      `tfsdk:"metric_style_narrow_transition"`
+	MetricStyleWide                                        types.Bool                                                                      `tfsdk:"metric_style_wide"`
 	MetricStyleWideTransition                              types.Bool                                                                      `tfsdk:"metric_style_wide_transition"`
 	MetricStyleTransition                                  types.Bool                                                                      `tfsdk:"metric_style_transition"`
 	MetricStyleLevels                                      []RouterISISAddressFamilyMetricStyleLevels                                      `tfsdk:"metric_style_levels"`
@@ -64,9 +66,9 @@ type RouterISISAddressFamily struct {
 	FastReroutePerLinkPriorityLimit                        types.String                                                                    `tfsdk:"fast_reroute_per_link_priority_limit"`
 	FastReroutePerLinkPriorityLimitLevels                  []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                  `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
 	FastReroutePerLinkUseCandidateOnly                     types.Bool                                                                      `tfsdk:"fast_reroute_per_link_use_candidate_only"`
-	MicroloopAvoidanceEnable                               types.Bool                                                                      `tfsdk:"microloop_avoidance_enable"`
-	MicroloopAvoidanceEnableProtected                      types.Bool                                                                      `tfsdk:"microloop_avoidance_enable_protected"`
-	MicroloopAvoidanceEnableSegmentRoutingRoutePolicy      types.String                                                                    `tfsdk:"microloop_avoidance_enable_segment_routing_route_policy"`
+	MicroloopAvoidance                                     types.Bool                                                                      `tfsdk:"microloop_avoidance"`
+	MicroloopAvoidanceProtected                            types.Bool                                                                      `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRoutingRoutePolicy            types.String                                                                    `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
 	MicroloopAvoidanceRibUpdateDelay                       types.Int64                                                                     `tfsdk:"microloop_avoidance_rib_update_delay"`
 	AdvertisePassiveOnly                                   types.Bool                                                                      `tfsdk:"advertise_passive_only"`
 	AdvertiseLinkAttributes                                types.Bool                                                                      `tfsdk:"advertise_link_attributes"`
@@ -99,7 +101,7 @@ type RouterISISAddressFamily struct {
 	SegmentRoutingMplsSrPrefer                             types.Bool                                                                      `tfsdk:"segment_routing_mpls_sr_prefer"`
 	MaximumRedistributedPrefixes                           types.Int64                                                                     `tfsdk:"maximum_redistributed_prefixes"`
 	MaximumRedistributedPrefixesLevels                     []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                     `tfsdk:"maximum_redistributed_prefixes_levels"`
-	RedistributeIsisProcesses                              []RouterISISAddressFamilyRedistributeIsisProcesses                              `tfsdk:"redistribute_isis_processes"`
+	RedistributeIsis                                       []RouterISISAddressFamilyRedistributeIsis                                       `tfsdk:"redistribute_isis"`
 	SegmentRoutingSrv6Locators                             []RouterISISAddressFamilySegmentRoutingSrv6Locators                             `tfsdk:"segment_routing_srv6_locators"`
 }
 
@@ -109,7 +111,9 @@ type RouterISISAddressFamilyData struct {
 	ProcessId                                              types.String                                                                    `tfsdk:"process_id"`
 	AfName                                                 types.String                                                                    `tfsdk:"af_name"`
 	SafName                                                types.String                                                                    `tfsdk:"saf_name"`
+	MetricStyleNarrow                                      types.Bool                                                                      `tfsdk:"metric_style_narrow"`
 	MetricStyleNarrowTransition                            types.Bool                                                                      `tfsdk:"metric_style_narrow_transition"`
+	MetricStyleWide                                        types.Bool                                                                      `tfsdk:"metric_style_wide"`
 	MetricStyleWideTransition                              types.Bool                                                                      `tfsdk:"metric_style_wide_transition"`
 	MetricStyleTransition                                  types.Bool                                                                      `tfsdk:"metric_style_transition"`
 	MetricStyleLevels                                      []RouterISISAddressFamilyMetricStyleLevels                                      `tfsdk:"metric_style_levels"`
@@ -136,9 +140,9 @@ type RouterISISAddressFamilyData struct {
 	FastReroutePerLinkPriorityLimit                        types.String                                                                    `tfsdk:"fast_reroute_per_link_priority_limit"`
 	FastReroutePerLinkPriorityLimitLevels                  []RouterISISAddressFamilyFastReroutePerLinkPriorityLimitLevels                  `tfsdk:"fast_reroute_per_link_priority_limit_levels"`
 	FastReroutePerLinkUseCandidateOnly                     types.Bool                                                                      `tfsdk:"fast_reroute_per_link_use_candidate_only"`
-	MicroloopAvoidanceEnable                               types.Bool                                                                      `tfsdk:"microloop_avoidance_enable"`
-	MicroloopAvoidanceEnableProtected                      types.Bool                                                                      `tfsdk:"microloop_avoidance_enable_protected"`
-	MicroloopAvoidanceEnableSegmentRoutingRoutePolicy      types.String                                                                    `tfsdk:"microloop_avoidance_enable_segment_routing_route_policy"`
+	MicroloopAvoidance                                     types.Bool                                                                      `tfsdk:"microloop_avoidance"`
+	MicroloopAvoidanceProtected                            types.Bool                                                                      `tfsdk:"microloop_avoidance_protected"`
+	MicroloopAvoidanceSegmentRoutingRoutePolicy            types.String                                                                    `tfsdk:"microloop_avoidance_segment_routing_route_policy"`
 	MicroloopAvoidanceRibUpdateDelay                       types.Int64                                                                     `tfsdk:"microloop_avoidance_rib_update_delay"`
 	AdvertisePassiveOnly                                   types.Bool                                                                      `tfsdk:"advertise_passive_only"`
 	AdvertiseLinkAttributes                                types.Bool                                                                      `tfsdk:"advertise_link_attributes"`
@@ -171,14 +175,16 @@ type RouterISISAddressFamilyData struct {
 	SegmentRoutingMplsSrPrefer                             types.Bool                                                                      `tfsdk:"segment_routing_mpls_sr_prefer"`
 	MaximumRedistributedPrefixes                           types.Int64                                                                     `tfsdk:"maximum_redistributed_prefixes"`
 	MaximumRedistributedPrefixesLevels                     []RouterISISAddressFamilyMaximumRedistributedPrefixesLevels                     `tfsdk:"maximum_redistributed_prefixes_levels"`
-	RedistributeIsisProcesses                              []RouterISISAddressFamilyRedistributeIsisProcesses                              `tfsdk:"redistribute_isis_processes"`
+	RedistributeIsis                                       []RouterISISAddressFamilyRedistributeIsis                                       `tfsdk:"redistribute_isis"`
 	SegmentRoutingSrv6Locators                             []RouterISISAddressFamilySegmentRoutingSrv6Locators                             `tfsdk:"segment_routing_srv6_locators"`
 }
 type RouterISISAddressFamilyMetricStyleLevels struct {
-	LevelNumber                 types.Int64 `tfsdk:"level_number"`
-	MetricStyleNarrowTransition types.Bool  `tfsdk:"metric_style_narrow_transition"`
-	MetricStyleWideTransition   types.Bool  `tfsdk:"metric_style_wide_transition"`
-	MetricStyleTransition       types.Bool  `tfsdk:"metric_style_transition"`
+	LevelNumber      types.Int64 `tfsdk:"level_number"`
+	Narrow           types.Bool  `tfsdk:"narrow"`
+	NarrowTransition types.Bool  `tfsdk:"narrow_transition"`
+	Wide             types.Bool  `tfsdk:"wide"`
+	WideTransition   types.Bool  `tfsdk:"wide_transition"`
+	Transition       types.Bool  `tfsdk:"transition"`
 }
 type RouterISISAddressFamilyFastReroutePerPrefixPriorityLimitLevels struct {
 	LevelNumber   types.Int64  `tfsdk:"level_number"`
@@ -229,21 +235,21 @@ type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
 	LevelNumber                  types.Int64 `tfsdk:"level_number"`
 	MaximumRedistributedPrefixes types.Int64 `tfsdk:"maximum_redistributed_prefixes"`
 }
-type RouterISISAddressFamilyRedistributeIsisProcesses struct {
-	IsisString             types.String `tfsdk:"isis_string"`
-	RedistributeRouteLevel types.String `tfsdk:"redistribute_route_level"`
-	Metric                 types.Int64  `tfsdk:"metric"`
-	RoutePolicy            types.String `tfsdk:"route_policy"`
-	MetricType             types.String `tfsdk:"metric_type"`
-	DownFlagClear          types.Bool   `tfsdk:"down_flag_clear"`
+type RouterISISAddressFamilyRedistributeIsis struct {
+	InstanceId    types.String `tfsdk:"instance_id"`
+	Level         types.String `tfsdk:"level"`
+	Metric        types.Int64  `tfsdk:"metric"`
+	RoutePolicy   types.String `tfsdk:"route_policy"`
+	MetricType    types.String `tfsdk:"metric_type"`
+	DownFlagClear types.Bool   `tfsdk:"down_flag_clear"`
 }
 type RouterISISAddressFamilySegmentRoutingSrv6Locators struct {
-	LocatorString types.String                                                    `tfsdk:"locator_string"`
-	Level         types.Int64                                                     `tfsdk:"level"`
-	Metric        types.Int64                                                     `tfsdk:"metric"`
-	MetricLevels  []RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels `tfsdk:"metric_levels"`
-	Tag           types.Int64                                                     `tfsdk:"tag"`
-	TagLevels     []RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels    `tfsdk:"tag_levels"`
+	LocatorName  types.String                                                    `tfsdk:"locator_name"`
+	Level        types.Int64                                                     `tfsdk:"level"`
+	Metric       types.Int64                                                     `tfsdk:"metric"`
+	MetricLevels []RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels `tfsdk:"metric_levels"`
+	Tag          types.Int64                                                     `tfsdk:"tag"`
+	TagLevels    []RouterISISAddressFamilySegmentRoutingSrv6LocatorsTagLevels    `tfsdk:"tag_levels"`
 }
 type RouterISISAddressFamilySegmentRoutingSrv6LocatorsMetricLevels struct {
 	LevelNumber types.Int64 `tfsdk:"level_number"`
@@ -270,9 +276,19 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.SafName.IsNull() && !data.SafName.IsUnknown() {
 		body, _ = sjson.Set(body, "saf-name", data.SafName.ValueString())
 	}
+	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.IsUnknown() {
+		if data.MetricStyleNarrow.ValueBool() {
+			body, _ = sjson.Set(body, "metric-style.narrow", map[string]string{})
+		}
+	}
 	if !data.MetricStyleNarrowTransition.IsNull() && !data.MetricStyleNarrowTransition.IsUnknown() {
 		if data.MetricStyleNarrowTransition.ValueBool() {
 			body, _ = sjson.Set(body, "metric-style.narrow.transition", map[string]string{})
+		}
+	}
+	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.IsUnknown() {
+		if data.MetricStyleWide.ValueBool() {
+			body, _ = sjson.Set(body, "metric-style.wide", map[string]string{})
 		}
 	}
 	if !data.MetricStyleWideTransition.IsNull() && !data.MetricStyleWideTransition.IsUnknown() {
@@ -349,18 +365,18 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "fast-reroute.per-link.use-candidate-only", map[string]string{})
 		}
 	}
-	if !data.MicroloopAvoidanceEnable.IsNull() && !data.MicroloopAvoidanceEnable.IsUnknown() {
-		if data.MicroloopAvoidanceEnable.ValueBool() {
+	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.IsUnknown() {
+		if data.MicroloopAvoidance.ValueBool() {
 			body, _ = sjson.Set(body, "microloop.avoidance.enable", map[string]string{})
 		}
 	}
-	if !data.MicroloopAvoidanceEnableProtected.IsNull() && !data.MicroloopAvoidanceEnableProtected.IsUnknown() {
-		if data.MicroloopAvoidanceEnableProtected.ValueBool() {
+	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.IsUnknown() {
+		if data.MicroloopAvoidanceProtected.ValueBool() {
 			body, _ = sjson.Set(body, "microloop.avoidance.enable.protected", map[string]string{})
 		}
 	}
-	if !data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsNull() && !data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsUnknown() {
-		body, _ = sjson.Set(body, "microloop.avoidance.enable.segment-routing.route-policy", data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.ValueString())
+	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsUnknown() {
+		body, _ = sjson.Set(body, "microloop.avoidance.enable.segment-routing.route-policy", data.MicroloopAvoidanceSegmentRoutingRoutePolicy.ValueString())
 	}
 	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() && !data.MicroloopAvoidanceRibUpdateDelay.IsUnknown() {
 		body, _ = sjson.Set(body, "microloop.avoidance.rib-update-delay", strconv.FormatInt(data.MicroloopAvoidanceRibUpdateDelay.ValueInt64(), 10))
@@ -467,19 +483,29 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			if !item.LevelNumber.IsNull() && !item.LevelNumber.IsUnknown() {
 				body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"level-number", strconv.FormatInt(item.LevelNumber.ValueInt64(), 10))
 			}
-			if !item.MetricStyleNarrowTransition.IsNull() && !item.MetricStyleNarrowTransition.IsUnknown() {
-				if item.MetricStyleNarrowTransition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"metric-style.narrow.transition", map[string]string{})
+			if !item.Narrow.IsNull() && !item.Narrow.IsUnknown() {
+				if item.Narrow.ValueBool() {
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"narrow", map[string]string{})
 				}
 			}
-			if !item.MetricStyleWideTransition.IsNull() && !item.MetricStyleWideTransition.IsUnknown() {
-				if item.MetricStyleWideTransition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"metric-style.wide.transition", map[string]string{})
+			if !item.NarrowTransition.IsNull() && !item.NarrowTransition.IsUnknown() {
+				if item.NarrowTransition.ValueBool() {
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"narrow.transition", map[string]string{})
 				}
 			}
-			if !item.MetricStyleTransition.IsNull() && !item.MetricStyleTransition.IsUnknown() {
-				if item.MetricStyleTransition.ValueBool() {
-					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"metric-style.transition", map[string]string{})
+			if !item.Wide.IsNull() && !item.Wide.IsUnknown() {
+				if item.Wide.ValueBool() {
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"wide", map[string]string{})
+				}
+			}
+			if !item.WideTransition.IsNull() && !item.WideTransition.IsUnknown() {
+				if item.WideTransition.ValueBool() {
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"wide.transition", map[string]string{})
+				}
+			}
+			if !item.Transition.IsNull() && !item.Transition.IsUnknown() {
+				if item.Transition.ValueBool() {
+					body, _ = sjson.Set(body, "metric-style-levels.metric-style-level"+"."+strconv.Itoa(index)+"."+"transition", map[string]string{})
 				}
 			}
 		}
@@ -623,14 +649,14 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			}
 		}
 	}
-	if len(data.RedistributeIsisProcesses) > 0 {
+	if len(data.RedistributeIsis) > 0 {
 		body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process", []interface{}{})
-		for index, item := range data.RedistributeIsisProcesses {
-			if !item.IsisString.IsNull() && !item.IsisString.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"isis-string", item.IsisString.ValueString())
+		for index, item := range data.RedistributeIsis {
+			if !item.InstanceId.IsNull() && !item.InstanceId.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"isis-string", item.InstanceId.ValueString())
 			}
-			if !item.RedistributeRouteLevel.IsNull() && !item.RedistributeRouteLevel.IsUnknown() {
-				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.RedistributeRouteLevel.ValueString())
+			if !item.Level.IsNull() && !item.Level.IsUnknown() {
+				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"redistribute-route-level", item.Level.ValueString())
 			}
 			if !item.Metric.IsNull() && !item.Metric.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"metric", strconv.FormatInt(item.Metric.ValueInt64(), 10))
@@ -651,8 +677,8 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if len(data.SegmentRoutingSrv6Locators) > 0 {
 		body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator", []interface{}{})
 		for index, item := range data.SegmentRoutingSrv6Locators {
-			if !item.LocatorString.IsNull() && !item.LocatorString.IsUnknown() {
-				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-string", item.LocatorString.ValueString())
+			if !item.LocatorName.IsNull() && !item.LocatorName.IsUnknown() {
+				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"locator-string", item.LocatorName.ValueString())
 			}
 			if !item.Level.IsNull() && !item.Level.IsUnknown() {
 				body, _ = sjson.Set(body, "segment-routing.srv6.locators.locator"+"."+strconv.Itoa(index)+"."+"level", strconv.FormatInt(item.Level.ValueInt64(), 10))
@@ -691,6 +717,15 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 }
 
 func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); !data.MetricStyleNarrow.IsNull() {
+		if value.Exists() {
+			data.MetricStyleNarrow = types.BoolValue(true)
+		} else {
+			data.MetricStyleNarrow = types.BoolValue(false)
+		}
+	} else {
+		data.MetricStyleNarrow = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); !data.MetricStyleNarrowTransition.IsNull() {
 		if value.Exists() {
 			data.MetricStyleNarrowTransition = types.BoolValue(true)
@@ -699,6 +734,15 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		}
 	} else {
 		data.MetricStyleNarrowTransition = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "metric-style.wide"); !data.MetricStyleWide.IsNull() {
+		if value.Exists() {
+			data.MetricStyleWide = types.BoolValue(true)
+		} else {
+			data.MetricStyleWide = types.BoolValue(false)
+		}
+	} else {
+		data.MetricStyleWide = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "metric-style.wide.transition"); !data.MetricStyleWideTransition.IsNull() {
 		if value.Exists() {
@@ -746,32 +790,50 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.MetricStyleLevels[i].LevelNumber = types.Int64Null()
 		}
-		if value := r.Get("metric-style.narrow.transition"); !data.MetricStyleLevels[i].MetricStyleNarrowTransition.IsNull() {
+		if value := r.Get("narrow"); !data.MetricStyleLevels[i].Narrow.IsNull() {
 			if value.Exists() {
-				data.MetricStyleLevels[i].MetricStyleNarrowTransition = types.BoolValue(true)
+				data.MetricStyleLevels[i].Narrow = types.BoolValue(true)
 			} else {
-				data.MetricStyleLevels[i].MetricStyleNarrowTransition = types.BoolValue(false)
+				data.MetricStyleLevels[i].Narrow = types.BoolValue(false)
 			}
 		} else {
-			data.MetricStyleLevels[i].MetricStyleNarrowTransition = types.BoolNull()
+			data.MetricStyleLevels[i].Narrow = types.BoolNull()
 		}
-		if value := r.Get("metric-style.wide.transition"); !data.MetricStyleLevels[i].MetricStyleWideTransition.IsNull() {
+		if value := r.Get("narrow.transition"); !data.MetricStyleLevels[i].NarrowTransition.IsNull() {
 			if value.Exists() {
-				data.MetricStyleLevels[i].MetricStyleWideTransition = types.BoolValue(true)
+				data.MetricStyleLevels[i].NarrowTransition = types.BoolValue(true)
 			} else {
-				data.MetricStyleLevels[i].MetricStyleWideTransition = types.BoolValue(false)
+				data.MetricStyleLevels[i].NarrowTransition = types.BoolValue(false)
 			}
 		} else {
-			data.MetricStyleLevels[i].MetricStyleWideTransition = types.BoolNull()
+			data.MetricStyleLevels[i].NarrowTransition = types.BoolNull()
 		}
-		if value := r.Get("metric-style.transition"); !data.MetricStyleLevels[i].MetricStyleTransition.IsNull() {
+		if value := r.Get("wide"); !data.MetricStyleLevels[i].Wide.IsNull() {
 			if value.Exists() {
-				data.MetricStyleLevels[i].MetricStyleTransition = types.BoolValue(true)
+				data.MetricStyleLevels[i].Wide = types.BoolValue(true)
 			} else {
-				data.MetricStyleLevels[i].MetricStyleTransition = types.BoolValue(false)
+				data.MetricStyleLevels[i].Wide = types.BoolValue(false)
 			}
 		} else {
-			data.MetricStyleLevels[i].MetricStyleTransition = types.BoolNull()
+			data.MetricStyleLevels[i].Wide = types.BoolNull()
+		}
+		if value := r.Get("wide.transition"); !data.MetricStyleLevels[i].WideTransition.IsNull() {
+			if value.Exists() {
+				data.MetricStyleLevels[i].WideTransition = types.BoolValue(true)
+			} else {
+				data.MetricStyleLevels[i].WideTransition = types.BoolValue(false)
+			}
+		} else {
+			data.MetricStyleLevels[i].WideTransition = types.BoolNull()
+		}
+		if value := r.Get("transition"); !data.MetricStyleLevels[i].Transition.IsNull() {
+			if value.Exists() {
+				data.MetricStyleLevels[i].Transition = types.BoolValue(true)
+			} else {
+				data.MetricStyleLevels[i].Transition = types.BoolValue(false)
+			}
+		} else {
+			data.MetricStyleLevels[i].Transition = types.BoolNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "router-id.interface-name"); value.Exists() && !data.RouterIdInterfaceName.IsNull() {
@@ -1044,28 +1106,28 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); !data.MicroloopAvoidanceEnable.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); !data.MicroloopAvoidance.IsNull() {
 		if value.Exists() {
-			data.MicroloopAvoidanceEnable = types.BoolValue(true)
+			data.MicroloopAvoidance = types.BoolValue(true)
 		} else {
-			data.MicroloopAvoidanceEnable = types.BoolValue(false)
+			data.MicroloopAvoidance = types.BoolValue(false)
 		}
 	} else {
-		data.MicroloopAvoidanceEnable = types.BoolNull()
+		data.MicroloopAvoidance = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); !data.MicroloopAvoidanceEnableProtected.IsNull() {
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); !data.MicroloopAvoidanceProtected.IsNull() {
 		if value.Exists() {
-			data.MicroloopAvoidanceEnableProtected = types.BoolValue(true)
+			data.MicroloopAvoidanceProtected = types.BoolValue(true)
 		} else {
-			data.MicroloopAvoidanceEnableProtected = types.BoolValue(false)
+			data.MicroloopAvoidanceProtected = types.BoolValue(false)
 		}
 	} else {
-		data.MicroloopAvoidanceEnableProtected = types.BoolNull()
+		data.MicroloopAvoidanceProtected = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && !data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsNull() {
-		data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() && !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	} else {
-		data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy = types.StringNull()
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() && !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
@@ -1467,9 +1529,9 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 			data.MaximumRedistributedPrefixesLevels[i].MaximumRedistributedPrefixes = types.Int64Null()
 		}
 	}
-	for i := range data.RedistributeIsisProcesses {
+	for i := range data.RedistributeIsis {
 		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsisProcesses[i].IsisString.ValueString()}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "redistribute.isis-processes.isis-process").ForEach(
@@ -1490,44 +1552,44 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 				return true
 			},
 		)
-		if value := r.Get("isis-string"); value.Exists() && !data.RedistributeIsisProcesses[i].IsisString.IsNull() {
-			data.RedistributeIsisProcesses[i].IsisString = types.StringValue(value.String())
+		if value := r.Get("isis-string"); value.Exists() && !data.RedistributeIsis[i].InstanceId.IsNull() {
+			data.RedistributeIsis[i].InstanceId = types.StringValue(value.String())
 		} else {
-			data.RedistributeIsisProcesses[i].IsisString = types.StringNull()
+			data.RedistributeIsis[i].InstanceId = types.StringNull()
 		}
-		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeIsisProcesses[i].RedistributeRouteLevel.IsNull() {
-			data.RedistributeIsisProcesses[i].RedistributeRouteLevel = types.StringValue(value.String())
+		if value := r.Get("redistribute-route-level"); value.Exists() && !data.RedistributeIsis[i].Level.IsNull() {
+			data.RedistributeIsis[i].Level = types.StringValue(value.String())
 		} else {
-			data.RedistributeIsisProcesses[i].RedistributeRouteLevel = types.StringNull()
+			data.RedistributeIsis[i].Level = types.StringNull()
 		}
-		if value := r.Get("metric"); value.Exists() && !data.RedistributeIsisProcesses[i].Metric.IsNull() {
-			data.RedistributeIsisProcesses[i].Metric = types.Int64Value(value.Int())
+		if value := r.Get("metric"); value.Exists() && !data.RedistributeIsis[i].Metric.IsNull() {
+			data.RedistributeIsis[i].Metric = types.Int64Value(value.Int())
 		} else {
-			data.RedistributeIsisProcesses[i].Metric = types.Int64Null()
+			data.RedistributeIsis[i].Metric = types.Int64Null()
 		}
-		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsisProcesses[i].RoutePolicy.IsNull() {
-			data.RedistributeIsisProcesses[i].RoutePolicy = types.StringValue(value.String())
+		if value := r.Get("route-policy"); value.Exists() && !data.RedistributeIsis[i].RoutePolicy.IsNull() {
+			data.RedistributeIsis[i].RoutePolicy = types.StringValue(value.String())
 		} else {
-			data.RedistributeIsisProcesses[i].RoutePolicy = types.StringNull()
+			data.RedistributeIsis[i].RoutePolicy = types.StringNull()
 		}
-		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsisProcesses[i].MetricType.IsNull() {
-			data.RedistributeIsisProcesses[i].MetricType = types.StringValue(value.String())
+		if value := r.Get("metric-type"); value.Exists() && !data.RedistributeIsis[i].MetricType.IsNull() {
+			data.RedistributeIsis[i].MetricType = types.StringValue(value.String())
 		} else {
-			data.RedistributeIsisProcesses[i].MetricType = types.StringNull()
+			data.RedistributeIsis[i].MetricType = types.StringNull()
 		}
-		if value := r.Get("down-flag-clear"); !data.RedistributeIsisProcesses[i].DownFlagClear.IsNull() {
+		if value := r.Get("down-flag-clear"); !data.RedistributeIsis[i].DownFlagClear.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsisProcesses[i].DownFlagClear = types.BoolValue(true)
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(true)
 			} else {
-				data.RedistributeIsisProcesses[i].DownFlagClear = types.BoolValue(false)
+				data.RedistributeIsis[i].DownFlagClear = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsisProcesses[i].DownFlagClear = types.BoolNull()
+			data.RedistributeIsis[i].DownFlagClear = types.BoolNull()
 		}
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
-		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorString.ValueString()}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "segment-routing.srv6.locators.locator").ForEach(
@@ -1548,10 +1610,10 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 				return true
 			},
 		)
-		if value := r.Get("locator-string"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].LocatorString.IsNull() {
-			data.SegmentRoutingSrv6Locators[i].LocatorString = types.StringValue(value.String())
+		if value := r.Get("locator-string"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].LocatorName.IsNull() {
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringValue(value.String())
 		} else {
-			data.SegmentRoutingSrv6Locators[i].LocatorString = types.StringNull()
+			data.SegmentRoutingSrv6Locators[i].LocatorName = types.StringNull()
 		}
 		if value := r.Get("level"); value.Exists() && !data.SegmentRoutingSrv6Locators[i].Level.IsNull() {
 			data.SegmentRoutingSrv6Locators[i].Level = types.Int64Value(value.Int())
@@ -1640,10 +1702,20 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 }
 
 func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
+		data.MetricStyleNarrow = types.BoolValue(true)
+	} else {
+		data.MetricStyleNarrow = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); value.Exists() {
 		data.MetricStyleNarrowTransition = types.BoolValue(true)
 	} else {
 		data.MetricStyleNarrowTransition = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
+		data.MetricStyleWide = types.BoolValue(true)
+	} else {
+		data.MetricStyleWide = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "metric-style.wide.transition"); value.Exists() {
 		data.MetricStyleWideTransition = types.BoolValue(true)
@@ -1662,20 +1734,30 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("metric-style.narrow.transition"); cValue.Exists() {
-				item.MetricStyleNarrowTransition = types.BoolValue(true)
+			if cValue := v.Get("narrow"); cValue.Exists() {
+				item.Narrow = types.BoolValue(true)
 			} else {
-				item.MetricStyleNarrowTransition = types.BoolValue(false)
+				item.Narrow = types.BoolValue(false)
 			}
-			if cValue := v.Get("metric-style.wide.transition"); cValue.Exists() {
-				item.MetricStyleWideTransition = types.BoolValue(true)
+			if cValue := v.Get("narrow.transition"); cValue.Exists() {
+				item.NarrowTransition = types.BoolValue(true)
 			} else {
-				item.MetricStyleWideTransition = types.BoolValue(false)
+				item.NarrowTransition = types.BoolValue(false)
 			}
-			if cValue := v.Get("metric-style.transition"); cValue.Exists() {
-				item.MetricStyleTransition = types.BoolValue(true)
+			if cValue := v.Get("wide"); cValue.Exists() {
+				item.Wide = types.BoolValue(true)
 			} else {
-				item.MetricStyleTransition = types.BoolValue(false)
+				item.Wide = types.BoolValue(false)
+			}
+			if cValue := v.Get("wide.transition"); cValue.Exists() {
+				item.WideTransition = types.BoolValue(true)
+			} else {
+				item.WideTransition = types.BoolValue(false)
+			}
+			if cValue := v.Get("transition"); cValue.Exists() {
+				item.Transition = types.BoolValue(true)
+			} else {
+				item.Transition = types.BoolValue(false)
 			}
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
@@ -1810,17 +1892,17 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
-		data.MicroloopAvoidanceEnable = types.BoolValue(true)
+		data.MicroloopAvoidance = types.BoolValue(true)
 	} else {
-		data.MicroloopAvoidanceEnable = types.BoolValue(false)
+		data.MicroloopAvoidance = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
-		data.MicroloopAvoidanceEnableProtected = types.BoolValue(true)
+		data.MicroloopAvoidanceProtected = types.BoolValue(true)
 	} else {
-		data.MicroloopAvoidanceEnableProtected = types.BoolValue(false)
+		data.MicroloopAvoidanceProtected = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
-		data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy = types.StringValue(value.String())
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
@@ -2027,14 +2109,14 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
-		data.RedistributeIsisProcesses = make([]RouterISISAddressFamilyRedistributeIsisProcesses, 0)
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyRedistributeIsisProcesses{}
+			item := RouterISISAddressFamilyRedistributeIsis{}
 			if cValue := v.Get("isis-string"); cValue.Exists() {
-				item.IsisString = types.StringValue(cValue.String())
+				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
-				item.RedistributeRouteLevel = types.StringValue(cValue.String())
+				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -2050,7 +2132,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			} else {
 				item.DownFlagClear = types.BoolValue(false)
 			}
-			data.RedistributeIsisProcesses = append(data.RedistributeIsisProcesses, item)
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
 		})
 	}
@@ -2059,7 +2141,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
 			if cValue := v.Get("locator-string"); cValue.Exists() {
-				item.LocatorString = types.StringValue(cValue.String())
+				item.LocatorName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level"); cValue.Exists() {
 				item.Level = types.Int64Value(cValue.Int())
@@ -2105,10 +2187,20 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 }
 
 func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byte) {
+	if value := gjson.GetBytes(res, "metric-style.narrow"); value.Exists() {
+		data.MetricStyleNarrow = types.BoolValue(true)
+	} else {
+		data.MetricStyleNarrow = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "metric-style.narrow.transition"); value.Exists() {
 		data.MetricStyleNarrowTransition = types.BoolValue(true)
 	} else {
 		data.MetricStyleNarrowTransition = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "metric-style.wide"); value.Exists() {
+		data.MetricStyleWide = types.BoolValue(true)
+	} else {
+		data.MetricStyleWide = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "metric-style.wide.transition"); value.Exists() {
 		data.MetricStyleWideTransition = types.BoolValue(true)
@@ -2127,20 +2219,30 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			if cValue := v.Get("level-number"); cValue.Exists() {
 				item.LevelNumber = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("metric-style.narrow.transition"); cValue.Exists() {
-				item.MetricStyleNarrowTransition = types.BoolValue(true)
+			if cValue := v.Get("narrow"); cValue.Exists() {
+				item.Narrow = types.BoolValue(true)
 			} else {
-				item.MetricStyleNarrowTransition = types.BoolValue(false)
+				item.Narrow = types.BoolValue(false)
 			}
-			if cValue := v.Get("metric-style.wide.transition"); cValue.Exists() {
-				item.MetricStyleWideTransition = types.BoolValue(true)
+			if cValue := v.Get("narrow.transition"); cValue.Exists() {
+				item.NarrowTransition = types.BoolValue(true)
 			} else {
-				item.MetricStyleWideTransition = types.BoolValue(false)
+				item.NarrowTransition = types.BoolValue(false)
 			}
-			if cValue := v.Get("metric-style.transition"); cValue.Exists() {
-				item.MetricStyleTransition = types.BoolValue(true)
+			if cValue := v.Get("wide"); cValue.Exists() {
+				item.Wide = types.BoolValue(true)
 			} else {
-				item.MetricStyleTransition = types.BoolValue(false)
+				item.Wide = types.BoolValue(false)
+			}
+			if cValue := v.Get("wide.transition"); cValue.Exists() {
+				item.WideTransition = types.BoolValue(true)
+			} else {
+				item.WideTransition = types.BoolValue(false)
+			}
+			if cValue := v.Get("transition"); cValue.Exists() {
+				item.Transition = types.BoolValue(true)
+			} else {
+				item.Transition = types.BoolValue(false)
 			}
 			data.MetricStyleLevels = append(data.MetricStyleLevels, item)
 			return true
@@ -2275,17 +2377,17 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 		data.FastReroutePerLinkUseCandidateOnly = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable"); value.Exists() {
-		data.MicroloopAvoidanceEnable = types.BoolValue(true)
+		data.MicroloopAvoidance = types.BoolValue(true)
 	} else {
-		data.MicroloopAvoidanceEnable = types.BoolValue(false)
+		data.MicroloopAvoidance = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable.protected"); value.Exists() {
-		data.MicroloopAvoidanceEnableProtected = types.BoolValue(true)
+		data.MicroloopAvoidanceProtected = types.BoolValue(true)
 	} else {
-		data.MicroloopAvoidanceEnableProtected = types.BoolValue(false)
+		data.MicroloopAvoidanceProtected = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.enable.segment-routing.route-policy"); value.Exists() {
-		data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy = types.StringValue(value.String())
+		data.MicroloopAvoidanceSegmentRoutingRoutePolicy = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "microloop.avoidance.rib-update-delay"); value.Exists() {
 		data.MicroloopAvoidanceRibUpdateDelay = types.Int64Value(value.Int())
@@ -2492,14 +2594,14 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 		})
 	}
 	if value := gjson.GetBytes(res, "redistribute.isis-processes.isis-process"); value.Exists() {
-		data.RedistributeIsisProcesses = make([]RouterISISAddressFamilyRedistributeIsisProcesses, 0)
+		data.RedistributeIsis = make([]RouterISISAddressFamilyRedistributeIsis, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
-			item := RouterISISAddressFamilyRedistributeIsisProcesses{}
+			item := RouterISISAddressFamilyRedistributeIsis{}
 			if cValue := v.Get("isis-string"); cValue.Exists() {
-				item.IsisString = types.StringValue(cValue.String())
+				item.InstanceId = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("redistribute-route-level"); cValue.Exists() {
-				item.RedistributeRouteLevel = types.StringValue(cValue.String())
+				item.Level = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -2515,7 +2617,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			} else {
 				item.DownFlagClear = types.BoolValue(false)
 			}
-			data.RedistributeIsisProcesses = append(data.RedistributeIsisProcesses, item)
+			data.RedistributeIsis = append(data.RedistributeIsis, item)
 			return true
 		})
 	}
@@ -2524,7 +2626,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := RouterISISAddressFamilySegmentRoutingSrv6Locators{}
 			if cValue := v.Get("locator-string"); cValue.Exists() {
-				item.LocatorString = types.StringValue(cValue.String())
+				item.LocatorName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level"); cValue.Exists() {
 				item.Level = types.Int64Value(cValue.Int())
@@ -2571,14 +2673,20 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 
 func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
 	deletedItems := make([]string, 0)
+	if !state.MetricStyleNarrow.IsNull() && data.MetricStyleNarrow.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", state.getPath()))
+	}
 	if !state.MetricStyleNarrowTransition.IsNull() && data.MetricStyleNarrowTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow/transition", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", state.getPath()))
+	}
+	if !state.MetricStyleWide.IsNull() && data.MetricStyleWide.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", state.getPath()))
 	}
 	if !state.MetricStyleWideTransition.IsNull() && data.MetricStyleWideTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/wide/transition", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", state.getPath()))
 	}
 	if !state.MetricStyleTransition.IsNull() && data.MetricStyleTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", state.getPath()))
 	}
 	for i := range state.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -2603,14 +2711,20 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 				found = false
 			}
 			if found {
-				if !state.MetricStyleLevels[i].MetricStyleNarrowTransition.IsNull() && data.MetricStyleLevels[j].MetricStyleNarrowTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style/narrow/transition", state.getPath(), keyString))
+				if !state.MetricStyleLevels[i].Narrow.IsNull() && data.MetricStyleLevels[j].Narrow.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow", state.getPath(), keyString))
 				}
-				if !state.MetricStyleLevels[i].MetricStyleWideTransition.IsNull() && data.MetricStyleLevels[j].MetricStyleWideTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style/wide/transition", state.getPath(), keyString))
+				if !state.MetricStyleLevels[i].NarrowTransition.IsNull() && data.MetricStyleLevels[j].NarrowTransition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow/transition", state.getPath(), keyString))
 				}
-				if !state.MetricStyleLevels[i].MetricStyleTransition.IsNull() && data.MetricStyleLevels[j].MetricStyleTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style", state.getPath(), keyString))
+				if !state.MetricStyleLevels[i].Wide.IsNull() && data.MetricStyleLevels[j].Wide.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide", state.getPath(), keyString))
+				}
+				if !state.MetricStyleLevels[i].WideTransition.IsNull() && data.MetricStyleLevels[j].WideTransition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide/transition", state.getPath(), keyString))
+				}
+				if !state.MetricStyleLevels[i].Transition.IsNull() && data.MetricStyleLevels[j].Transition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/TRANSITION/transition", state.getPath(), keyString))
 				}
 				break
 			}
@@ -2620,10 +2734,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 	}
 	if !state.RouterIdInterfaceName.IsNull() && data.RouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/ROUTER-ID/INTERFACE-NAME", state.getPath()))
 	}
 	if !state.RouterIdIpAddress.IsNull() && data.RouterIdIpAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/ROUTER-ID/IP-ADDRESS", state.getPath()))
 	}
 	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
@@ -2832,13 +2946,13 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.FastReroutePerLinkUseCandidateOnly.IsNull() && data.FastReroutePerLinkUseCandidateOnly.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", state.getPath()))
 	}
-	if !state.MicroloopAvoidanceEnable.IsNull() && data.MicroloopAvoidanceEnable.IsNull() {
+	if !state.MicroloopAvoidance.IsNull() && data.MicroloopAvoidance.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable", state.getPath()))
 	}
-	if !state.MicroloopAvoidanceEnableProtected.IsNull() && data.MicroloopAvoidanceEnableProtected.IsNull() {
+	if !state.MicroloopAvoidanceProtected.IsNull() && data.MicroloopAvoidanceProtected.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/protected", state.getPath()))
 	}
-	if !state.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsNull() && data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsNull() {
+	if !state.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() && data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", state.getPath()))
 	}
 	if !state.MicroloopAvoidanceRibUpdateDelay.IsNull() && data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
@@ -2854,19 +2968,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/auto-config", state.getPath()))
 	}
 	if !state.MplsTrafficEngRouterIdIpv4Address.IsNull() && data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS", state.getPath()))
 	}
 	if !state.MplsTrafficEngRouterIdInterfaceName.IsNull() && data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel12.IsNull() && data.MplsTrafficEngLevel12.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel1.IsNull() && data.MplsTrafficEngLevel1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel2Only.IsNull() && data.MplsTrafficEngLevel2Only.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY", state.getPath()))
 	}
 	if !state.SpfIntervalMaximumWait.IsNull() && data.SpfIntervalMaximumWait.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/maximum-wait", state.getPath()))
@@ -2953,22 +3067,22 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 	}
 	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityCriticalPrefixlistName.IsNull() && data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityHighPrefixlistName.IsNull() && data.SpfPrefixPriorityHighPrefixlistName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityMediumPrefixlistName.IsNull() && data.SpfPrefixPriorityMediumPrefixlistName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	for i := range state.SpfPrefixPriorityCriticalLevels {
 		keys := [...]string{"level-number"}
@@ -2994,10 +3108,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixlistName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3030,10 +3144,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityHighLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixlistName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3066,10 +3180,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityMediumLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixlistName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3120,16 +3234,16 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.RedistributeIsisProcesses {
+	for i := range state.RedistributeIsis {
 		keys := [...]string{"isis-string"}
-		stateKeyValues := [...]string{state.RedistributeIsisProcesses[i].IsisString.ValueString()}
+		stateKeyValues := [...]string{state.RedistributeIsis[i].InstanceId.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.RedistributeIsisProcesses[i].IsisString.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.RedistributeIsis[i].InstanceId.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -3137,25 +3251,25 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 
 		found := false
-		for j := range data.RedistributeIsisProcesses {
+		for j := range data.RedistributeIsis {
 			found = true
-			if state.RedistributeIsisProcesses[i].IsisString.ValueString() != data.RedistributeIsisProcesses[j].IsisString.ValueString() {
+			if state.RedistributeIsis[i].InstanceId.ValueString() != data.RedistributeIsis[j].InstanceId.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.RedistributeIsisProcesses[i].RedistributeRouteLevel.IsNull() && data.RedistributeIsisProcesses[j].RedistributeRouteLevel.IsNull() {
+				if !state.RedistributeIsis[i].Level.IsNull() && data.RedistributeIsis[j].Level.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/redistribute-route-level", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsisProcesses[i].Metric.IsNull() && data.RedistributeIsisProcesses[j].Metric.IsNull() {
+				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsisProcesses[i].RoutePolicy.IsNull() && data.RedistributeIsisProcesses[j].RoutePolicy.IsNull() {
+				if !state.RedistributeIsis[i].RoutePolicy.IsNull() && data.RedistributeIsis[j].RoutePolicy.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/route-policy", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsisProcesses[i].MetricType.IsNull() && data.RedistributeIsisProcesses[j].MetricType.IsNull() {
+				if !state.RedistributeIsis[i].MetricType.IsNull() && data.RedistributeIsis[j].MetricType.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/metric-type", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsisProcesses[i].DownFlagClear.IsNull() && data.RedistributeIsisProcesses[j].DownFlagClear.IsNull() {
+				if !state.RedistributeIsis[i].DownFlagClear.IsNull() && data.RedistributeIsis[j].DownFlagClear.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", state.getPath(), keyString))
 				}
 				break
@@ -3167,14 +3281,14 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	}
 	for i := range state.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
-		stateKeyValues := [...]string{state.SegmentRoutingSrv6Locators[i].LocatorString.ValueString()}
+		stateKeyValues := [...]string{state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.SegmentRoutingSrv6Locators[i].LocatorString.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -3184,7 +3298,7 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		found := false
 		for j := range data.SegmentRoutingSrv6Locators {
 			found = true
-			if state.SegmentRoutingSrv6Locators[i].LocatorString.ValueString() != data.SegmentRoutingSrv6Locators[j].LocatorString.ValueString() {
+			if state.SegmentRoutingSrv6Locators[i].LocatorName.ValueString() != data.SegmentRoutingSrv6Locators[j].LocatorName.ValueString() {
 				found = false
 			}
 			if found {
@@ -3275,14 +3389,20 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", data.getPath()))
+	}
 	if !data.MetricStyleNarrowTransition.IsNull() && !data.MetricStyleNarrowTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", data.getPath()))
+	}
+	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", data.getPath()))
 	}
 	if !data.MetricStyleWideTransition.IsNull() && !data.MetricStyleWideTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", data.getPath()))
 	}
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", data.getPath()))
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3291,14 +3411,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.MetricStyleLevels[i].MetricStyleNarrowTransition.IsNull() && !data.MetricStyleLevels[i].MetricStyleNarrowTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style/narrow/transition", data.getPath(), keyString))
+		if !data.MetricStyleLevels[i].Narrow.IsNull() && !data.MetricStyleLevels[i].Narrow.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow", data.getPath(), keyString))
 		}
-		if !data.MetricStyleLevels[i].MetricStyleWideTransition.IsNull() && !data.MetricStyleLevels[i].MetricStyleWideTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style/wide/transition", data.getPath(), keyString))
+		if !data.MetricStyleLevels[i].NarrowTransition.IsNull() && !data.MetricStyleLevels[i].NarrowTransition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow/transition", data.getPath(), keyString))
 		}
-		if !data.MetricStyleLevels[i].MetricStyleTransition.IsNull() && !data.MetricStyleLevels[i].MetricStyleTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/metric-style/transition", data.getPath(), keyString))
+		if !data.MetricStyleLevels[i].Wide.IsNull() && !data.MetricStyleLevels[i].Wide.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide", data.getPath(), keyString))
+		}
+		if !data.MetricStyleLevels[i].WideTransition.IsNull() && !data.MetricStyleLevels[i].WideTransition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide/transition", data.getPath(), keyString))
+		}
+		if !data.MetricStyleLevels[i].Transition.IsNull() && !data.MetricStyleLevels[i].Transition.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/TRANSITION/transition", data.getPath(), keyString))
 		}
 	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
@@ -3356,10 +3482,10 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() && !data.FastReroutePerLinkUseCandidateOnly.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
 	}
-	if !data.MicroloopAvoidanceEnable.IsNull() && !data.MicroloopAvoidanceEnable.ValueBool() {
+	if !data.MicroloopAvoidance.IsNull() && !data.MicroloopAvoidance.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
 	}
-	if !data.MicroloopAvoidanceEnableProtected.IsNull() && !data.MicroloopAvoidanceEnableProtected.ValueBool() {
+	if !data.MicroloopAvoidanceProtected.IsNull() && !data.MicroloopAvoidanceProtected.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
 	}
 	if !data.AdvertisePassiveOnly.IsNull() && !data.AdvertisePassiveOnly.ValueBool() {
@@ -3372,13 +3498,13 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one-two", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-one", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/level-two-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only", data.getPath()))
 	}
 	if !data.SpfIntervalIetf.IsNull() && !data.SpfIntervalIetf.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval/ietf", data.getPath()))
@@ -3432,20 +3558,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.RedistributeIsisProcesses {
+	for i := range data.RedistributeIsis {
 		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsisProcesses[i].IsisString.ValueString()}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.RedistributeIsisProcesses[i].DownFlagClear.IsNull() && !data.RedistributeIsisProcesses[i].DownFlagClear.ValueBool() {
+		if !data.RedistributeIsis[i].DownFlagClear.IsNull() && !data.RedistributeIsis[i].DownFlagClear.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/down-flag-clear", data.getPath(), keyString))
 		}
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
-		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorString.ValueString()}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -3472,14 +3598,20 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 
 func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
+	if !data.MetricStyleNarrow.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", data.getPath()))
+	}
 	if !data.MetricStyleNarrowTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow/transition", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", data.getPath()))
+	}
+	if !data.MetricStyleWide.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", data.getPath()))
 	}
 	if !data.MetricStyleWideTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide/transition", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", data.getPath()))
 	}
 	if !data.MetricStyleTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", data.getPath()))
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3492,10 +3624,10 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v", data.getPath(), keyString))
 	}
 	if !data.RouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ROUTER-ID/INTERFACE-NAME", data.getPath()))
 	}
 	if !data.RouterIdIpAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ROUTER-ID/IP-ADDRESS", data.getPath()))
 	}
 	if !data.DefaultInformationOriginate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
@@ -3595,13 +3727,13 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	if !data.FastReroutePerLinkUseCandidateOnly.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/fast-reroute/per-link/use-candidate-only", data.getPath()))
 	}
-	if !data.MicroloopAvoidanceEnable.IsNull() {
+	if !data.MicroloopAvoidance.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable", data.getPath()))
 	}
-	if !data.MicroloopAvoidanceEnableProtected.IsNull() {
+	if !data.MicroloopAvoidanceProtected.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/protected", data.getPath()))
 	}
-	if !data.MicroloopAvoidanceEnableSegmentRoutingRoutePolicy.IsNull() {
+	if !data.MicroloopAvoidanceSegmentRoutingRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/microloop/avoidance/enable/segment-routing/route-policy", data.getPath()))
 	}
 	if !data.MicroloopAvoidanceRibUpdateDelay.IsNull() {
@@ -3617,19 +3749,19 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
 	}
 	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS", data.getPath()))
 	}
 	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY", data.getPath()))
 	}
 	if !data.SpfIntervalMaximumWait.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/maximum-wait", data.getPath()))
@@ -3669,22 +3801,22 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval-levels/level%v", data.getPath(), keyString))
 	}
 	if !data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityHighTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityHighPrefixlistName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityMediumPrefixlistName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	for i := range data.SpfPrefixPriorityCriticalLevels {
 		keys := [...]string{"level-number"}
@@ -3735,9 +3867,9 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level%v", data.getPath(), keyString))
 	}
-	for i := range data.RedistributeIsisProcesses {
+	for i := range data.RedistributeIsis {
 		keys := [...]string{"isis-string"}
-		keyValues := [...]string{data.RedistributeIsisProcesses[i].IsisString.ValueString()}
+		keyValues := [...]string{data.RedistributeIsis[i].InstanceId.ValueString()}
 
 		keyString := ""
 		for ki := range keys {
@@ -3747,7 +3879,7 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	}
 	for i := range data.SegmentRoutingSrv6Locators {
 		keys := [...]string{"locator-string"}
-		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorString.ValueString()}
+		keyValues := [...]string{data.SegmentRoutingSrv6Locators[i].LocatorName.ValueString()}
 
 		keyString := ""
 		for ki := range keys {

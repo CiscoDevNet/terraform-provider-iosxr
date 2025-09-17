@@ -120,19 +120,19 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 					int64validator.Between(0, 65535),
 				},
 			},
-			"timers_bgp_zero": schema.BoolAttribute{
+			"timers_bgp_keepalive_zero": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_bgp_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor within zero container").AddIntegerRangeDescription(3, 65535).String,
+			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
 				},
 			},
-			"timers_bgp_holdtime_number": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Holdtime value").AddIntegerRangeDescription(3, 65535).String,
+			"timers_bgp_holdtime": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Holdtime").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
@@ -340,26 +340,26 @@ func (r *RouterBGPResource) Schema(ctx context.Context, req resource.SchemaReque
 								int64validator.Between(0, 65535),
 							},
 						},
-						"timers_zero": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within zero container").String,
+						"timers_keepalive_zero": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 							Optional:            true,
 						},
-						"timers_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor within zero container").AddIntegerRangeDescription(3, 65535).String,
+						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(3, 65535),
 							},
 						},
 						"timers_holdtime_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Holdtime value").AddIntegerRangeDescription(3, 65535).String,
+							MarkdownDescription: helpers.NewAttributeDescription("Holdtime").AddIntegerRangeDescription(3, 65535).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(3, 65535),
 							},
 						},
 						"timers_holdtime_zero": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time within holdtime container").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 							Optional:            true,
 						},
 						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{

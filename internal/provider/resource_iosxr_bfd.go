@@ -98,8 +98,12 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 			},
 			"echo_ipv4_source": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Echo IPv4 source address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
 			},
 			"echo_ipv4_bundle_per_member_minimum_interval": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set the preferred minimum interval for the BFD session").AddIntegerRangeDescription(15, 2000).String,
@@ -222,8 +226,12 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							},
 						},
 						"echo_ipv4_source": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Echo IPv4 source address").String,
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+							},
 						},
 						"ipv6_checksum_disable": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Disable BFD ipv6 checksum mode for this interface").String,

@@ -7,60 +7,58 @@ resource "iosxr_router_bgp_address_family" "example" {
   allocate_label_all                            = true
   allocate_label_all_unlabeled_path             = true
   advertise_best_external                       = true
-  maximum_paths_ebgp_ebgp_number                = 10
+  maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_selective                  = true
-  maximum_paths_ibgp_ibgp_number                = 10
+  maximum_paths_ibgp_multipath                  = 10
   maximum_paths_ibgp_unequal_cost_deterministic = true
   maximum_paths_ibgp_selective                  = true
   maximum_paths_unique_nexthop_check_disable    = true
   nexthop_trigger_delay_critical                = 10
   nexthop_trigger_delay_non_critical            = 20
-  label_mode_route_policy                       = "LABEL_MODE_POLICY"
   aggregate_addresses = [
     {
-      address        = "10.0.0.0"
-      address_prefix = 8
-      as_set         = false
-      as_confed_set  = false
-      summary_only   = true
-      route_policy   = "ROUTE_POLICY_1"
-      description    = "Aggregate route description"
-      set_tag        = 100
+      address       = "10.0.0.0"
+      prefix        = 8
+      as_set        = false
+      as_confed_set = false
+      summary_only  = true
+      route_policy  = "ROUTE_POLICY_1"
+      description   = "Aggregate route description"
+      set_tag       = 100
     }
   ]
   networks = [
     {
-      address        = "10.1.0.0"
-      address_prefix = 16
-      route_policy   = "ROUTE_POLICY_1"
+      address      = "10.1.0.0"
+      prefix       = 16
+      route_policy = "ROUTE_POLICY_1"
     }
   ]
   redistribute_ospf = [
     {
-      ospf_router_tag                                                       = "1"
-      redistribute_ospf_match_internal_external_type_1_nssa_external_type_2 = true
-      metric                                                                = 100
-      multipath                                                             = true
-      route_policy                                                          = "REDISTRIBUTE_POLICY"
+      router_tag   = "OSPF1"
+      metric       = 100
+      multipath    = true
+      route_policy = "REDISTRIBUTE_POLICY"
     }
   ]
   redistribute_eigrp = [
     {
-      eigrp_name                           = "EIGRP1"
-      redistribute_eigrp_internal          = true
-      redistribute_eigrp_internal_external = true
-      metric                               = 100
-      multipath                            = true
-      route_policy                         = "REDISTRIBUTE_POLICY"
+      instance_name           = "EIGRP1"
+      match_internal          = true
+      match_internal_external = true
+      metric                  = 100
+      multipath               = true
+      route_policy            = "REDISTRIBUTE_POLICY"
     }
   ]
   redistribute_isis = [
     {
-      isis_name                                            = "ISIS1"
-      redistribute_isis_level_1_level_2_level_1_inter_area = true
-      metric                                               = 100
-      multipath                                            = true
-      route_policy                                         = "REDISTRIBUTE_POLICY"
+      instance_name                      = "ISIS1"
+      level_one_two_level_one_inter_area = true
+      metric                             = 100
+      multipath                          = true
+      route_policy                       = "REDISTRIBUTE_POLICY"
     }
   ]
   redistribute_connected              = true

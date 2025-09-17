@@ -152,7 +152,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Flowspec sub address family").String,
 				Optional:            true,
 			},
-			"rd_two_byte_as_number": schema.Int64Attribute{
+			"rd_two_byte_as_number": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 			},
@@ -163,7 +163,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"rd_four_byte_as_number": schema.Int64Attribute{
+			"rd_four_byte_as_number": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number in asplain format").String,
 				Optional:            true,
 			},
@@ -177,6 +177,10 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 			"rd_ipv4_address": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
+				},
 			},
 			"rd_ipv4_address_index": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,

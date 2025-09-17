@@ -19,7 +19,7 @@ resource "iosxr_router_isis_interface_address_family" "example" {
   af_name                 = "ipv4"
   saf_name                = "unicast"
   fast_reroute_per_prefix = true
-  fast_reroute_enable_levels = [
+  fast_reroute_levels = [
     {
       level_number = 1
       per_prefix   = true
@@ -33,7 +33,7 @@ resource "iosxr_router_isis_interface_address_family" "example" {
       route_policy = "ROUTE_POLICY_2"
     }
   ]
-  metric_default_metric = 500
+  metric_default = 500
 }
 ```
 
@@ -58,10 +58,10 @@ resource "iosxr_router_isis_interface_address_family" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `fast_reroute_enable_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_enable_levels))
+- `fast_reroute_levels` (Attributes List) enable (see [below for nested schema](#nestedatt--fast_reroute_levels))
 - `fast_reroute_per_link` (Boolean) per-link
 - `fast_reroute_per_prefix` (Boolean) per-prefix
-- `metric_default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
+- `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
 - `metric_levels` (Attributes List) Set metric for one level only (see [below for nested schema](#nestedatt--metric_levels))
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
@@ -111,8 +111,8 @@ Optional:
 - `route_policy` (String) Filter routes based on a route policy
 
 
-<a id="nestedatt--fast_reroute_enable_levels"></a>
-### Nested Schema for `fast_reroute_enable_levels`
+<a id="nestedatt--fast_reroute_levels"></a>
+### Nested Schema for `fast_reroute_levels`
 
 Required:
 
@@ -135,7 +135,7 @@ Required:
 
 Optional:
 
-- `default_metric` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
+- `metric_default` (Number) Default metric: <1-63> for narrow, <1-16777214> for wide
   - Range: `1`-`16777214`
 - `metric_maximum` (Boolean) Maximum wide metric. All routers will exclude this link from their SPF
 

@@ -76,6 +76,12 @@ func TestAccIosxrGnmi(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.redistribute/static", "<EMPTY>"),
 				),
 			},
+			{
+				Config: testAccIosxrGnmiConfig_yangEmptyNull(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.segment-routing/mpls/sr-prefer", "<NULL>"),
+				),
+			},
 		},
 	})
 }
@@ -147,6 +153,17 @@ func testAccIosxrGnmiConfig_yangEmpty() string {
 		attributes = {
 			"af-name" = "ipv6-unicast"
 			"redistribute/static" = "<EMPTY>"
+		}
+	}
+	`
+}
+
+func testAccIosxrGnmiConfig_yangEmptyNull() string {
+	return `
+	resource "iosxr_gnmi" "test" {
+		path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
+		attributes = {
+			"segment-routing/mpls/sr-prefer" = "<NULL>"
 		}
 	}
 	`

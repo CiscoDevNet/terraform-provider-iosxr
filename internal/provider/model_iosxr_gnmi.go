@@ -32,6 +32,7 @@ import (
 
 const (
 	EMPTY_TAG string = "<EMPTY>"
+	NULL_TAG  string = "<NULL>"
 )
 
 type Gnmi struct {
@@ -72,6 +73,9 @@ func (data Gnmi) toBody(ctx context.Context) string {
 		tflog.Debug(ctx, fmt.Sprintf("Setting attribute %s to %s", attr, value))
 		if value == EMPTY_TAG {
 			body, _ = sjson.Set(body, attr, map[string]interface{}{})
+		} else if value == NULL_TAG {
+			// Set the attribute to null for NULL values
+			body, _ = sjson.Set(body, attr, nil)
 		} else {
 			body, _ = sjson.Set(body, attr, value)
 		}
@@ -89,6 +93,9 @@ func (data Gnmi) toBody(ctx context.Context) string {
 					attr = strings.ReplaceAll(attr, "/", ".")
 					if value == EMPTY_TAG {
 						attrs, _ = sjson.Set(attrs, attr, map[string]interface{}{})
+					} else if value == NULL_TAG {
+						// Set the attribute to null for NULL values
+						attrs, _ = sjson.Set(attrs, attr, nil)
 					} else {
 						attrs, _ = sjson.Set(attrs, attr, value)
 					}
@@ -123,9 +130,9 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 		value := gjson.GetBytes(res, attrPath)
 		if value.IsObject() && len(value.Map()) == 0 {
 			attributes[attr] = types.StringValue(EMPTY_TAG)
-		} else if !value.Exists() || value.Raw == "[null]" {
+		} else if !value.Exists() || value.Raw == "[null]" || value.Raw == "null" || (value.IsArray() && len(value.Array()) == 1 && value.Array()[0].Raw == "null") {
 			if !helpers.Contains(keys, attr) {
-				attributes[attr] = types.StringValue("")
+				attributes[attr] = types.StringValue(NULL_TAG)
 			}
 		} else {
 			attributes[attr] = types.StringValue(value.String())
@@ -181,8 +188,8 @@ func (data *Gnmi) fromBody(ctx context.Context, res []byte) diag.Diagnostics {
 					value := r.Get(attrPath)
 					if value.IsObject() && len(value.Map()) == 0 {
 						listAttributes[attr] = types.StringValue(EMPTY_TAG)
-					} else if !value.Exists() || value.Raw == "[null]" {
-						listAttributes[attr] = types.StringValue("")
+					} else if !value.Exists() || value.Raw == "[null]" || value.Raw == "null" || (value.IsArray() && len(value.Array()) == 1 && value.Array()[0].Raw == "null") {
+						listAttributes[attr] = types.StringValue(NULL_TAG)
 					} else {
 						listAttributes[attr] = types.StringValue(value.String())
 					}

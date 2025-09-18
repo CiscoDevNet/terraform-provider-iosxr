@@ -105,3 +105,9 @@ attributes:
         example: 4
       - yang_name: metric-type
         example: 1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]
+    attributes:
+      - name: process-name
+        value: OSPF1

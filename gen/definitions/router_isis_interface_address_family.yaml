@@ -112,3 +112,11 @@ test_prerequisites:
         value: ROUTE_POLICY_2
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_2\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
+    attributes:
+      - name: process-id
+        value: P1
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]
+    attributes:
+      - name: interface-name
+        value: GigabitEthernet0/0/0/1

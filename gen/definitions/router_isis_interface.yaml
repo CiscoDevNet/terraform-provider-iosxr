@@ -134,3 +134,9 @@ attributes:
     example: 50
   - yang_name: bfd/multiplier
     example: 3
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
+    attributes:
+      - name: process-id
+        value: P1

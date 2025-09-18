@@ -14,25 +14,30 @@ attributes:
     tf_name: metric_style_narrow
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/NARROW/narrow/transition
     xpath: metric-style/narrow/transition
     tf_name: metric_style_narrow_transition
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide
     xpath: metric-style/wide
     tf_name: metric_style_wide
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide/transition
     xpath: metric-style/wide/transition
     tf_name: metric_style_wide_transition
     example: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/TRANSITION/transition
     xpath: metric-style/transition
     tf_name: metric_style_transition
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style-levels/metric-style-level
     tf_name: metric_style_levels
     exclude_test: true
@@ -421,3 +426,7 @@ test_prerequisites:
         value: ROUTE_POLICY_1
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
+    attributes:
+      - name: process-id
+        value: P1

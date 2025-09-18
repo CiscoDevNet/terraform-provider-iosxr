@@ -27,3 +27,18 @@ attributes:
     example: false
   - yang_name: passive/disable
     example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]
+    attributes:
+      - name: process-name
+        value: OSPF1
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]
+    attributes:
+      - name: area-id
+        value: 0
+    dependencies: [0,1]

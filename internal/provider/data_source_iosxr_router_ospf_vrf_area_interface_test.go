@@ -40,12 +40,37 @@ func TestAccDataSourceIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig(),
+				Config: testAccDataSourceIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
+	attributes = {
+		"process-name" = "OSPF1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]"
+	attributes = {
+		"area-id" = "0"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+}
+
+`
 
 func testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig() string {
 	config := `resource "iosxr_router_ospf_vrf_area_interface" "test" {` + "\n"
@@ -62,6 +87,7 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig() string {
 	config += `	priority = 100` + "\n"
 	config += `	passive_enable = false` + "\n"
 	config += `	passive_disable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

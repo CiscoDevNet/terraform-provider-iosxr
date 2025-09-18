@@ -71,11 +71,11 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterOSPFVRFConfig_minimum(),
+			Config: testAccIosxrRouterOSPFVRFPrerequisitesConfig + testAccIosxrRouterOSPFVRFConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterOSPFVRFConfig_all(),
+		Config: testAccIosxrRouterOSPFVRFPrerequisitesConfig + testAccIosxrRouterOSPFVRFConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -91,10 +91,21 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterOSPFVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
+	attributes = {
+		"process-name" = "OSPF1"
+	}
+}
+
+`
+
 func testAccIosxrRouterOSPFVRFConfig_minimum() string {
 	config := `resource "iosxr_router_ospf_vrf" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -150,6 +161,7 @@ func testAccIosxrRouterOSPFVRFConfig_all() string {
 	config += `		tag = 4` + "\n"
 	config += `		metric_type = "1"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

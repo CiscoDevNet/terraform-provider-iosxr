@@ -48,12 +48,22 @@ func TestAccDataSourceIosxrRouterISISInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterISISInterfaceConfig(),
+				Config: testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterISISInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterISISInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterISISInterfaceConfig() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
@@ -82,6 +92,7 @@ func testAccDataSourceIosxrRouterISISInterfaceConfig() string {
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"
 	config += `	bfd_minimum_interval = 50` + "\n"
 	config += `	bfd_multiplier = 3` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

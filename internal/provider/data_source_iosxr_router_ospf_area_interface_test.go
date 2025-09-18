@@ -43,12 +43,30 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig(),
+				Config: testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
+	attributes = {
+		"process-name" = "OSPF1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]"
+	attributes = {
+		"area-id" = "0"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
 
 func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
@@ -67,6 +85,7 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint = 22` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting = 33` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

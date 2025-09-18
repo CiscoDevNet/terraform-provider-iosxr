@@ -78,6 +78,20 @@ resource "iosxr_gnmi" "PreReq1" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+}
+
 `
 
 func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
@@ -86,7 +100,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_minimum() string {
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -109,7 +123,7 @@ func testAccIosxrRouterISISInterfaceAddressFamilyConfig_all() string {
 	config += `		route_policy = "ROUTE_POLICY_2"` + "\n"
 	config += `		}]` + "\n"
 	config += `	metric_default = 500` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

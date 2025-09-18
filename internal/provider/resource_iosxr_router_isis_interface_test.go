@@ -48,11 +48,11 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterISISInterfaceConfig_minimum(),
+			Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterISISInterfaceConfig_all(),
+		Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -68,10 +68,21 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterISISInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
+`
+
 func testAccIosxrRouterISISInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -102,6 +113,7 @@ func testAccIosxrRouterISISInterfaceConfig_all() string {
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"
 	config += `	bfd_minimum_interval = 50` + "\n"
 	config += `	bfd_multiplier = 3` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

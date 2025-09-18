@@ -102,6 +102,13 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
 `
 
 func testAccDataSourceIosxrRouterISISAddressFamilyConfig() string {
@@ -184,7 +191,7 @@ func testAccDataSourceIosxrRouterISISAddressFamilyConfig() string {
 	config += `		metric_type = "internal"` + "\n"
 	config += `		down_flag_clear = true` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

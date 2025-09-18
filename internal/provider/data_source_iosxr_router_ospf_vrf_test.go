@@ -71,12 +71,22 @@ func TestAccDataSourceIosxrRouterOSPFVRF(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterOSPFVRFConfig(),
+				Config: testAccDataSourceIosxrRouterOSPFVRFPrerequisitesConfig + testAccDataSourceIosxrRouterOSPFVRFConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterOSPFVRFPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
+	attributes = {
+		"process-name" = "OSPF1"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterOSPFVRFConfig() string {
 	config := `resource "iosxr_router_ospf_vrf" "test" {` + "\n"
@@ -130,6 +140,7 @@ func testAccDataSourceIosxrRouterOSPFVRFConfig() string {
 	config += `		tag = 4` + "\n"
 	config += `		metric_type = "1"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

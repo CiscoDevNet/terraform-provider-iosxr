@@ -38,12 +38,21 @@ func TestAccDataSourceIosxrEVPNInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNInterfaceConfig(),
+				Config: testAccDataSourceIosxrEVPNInterfacePrerequisitesConfig + testAccDataSourceIosxrEVPNInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrEVPNInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
 
 func testAccDataSourceIosxrEVPNInterfaceConfig() string {
 	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
@@ -55,6 +64,7 @@ func testAccDataSourceIosxrEVPNInterfaceConfig() string {
 	config += `	ethernet_segment_load_balancing_mode_port_active = false` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_single_active = true` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_single_flow_active = false` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

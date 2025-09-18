@@ -37,12 +37,29 @@ func TestAccDataSourceIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig(),
+				Config: testAccDataSourceIosxrL2VPNXconnectGroupP2PPrerequisitesConfig + testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrL2VPNXconnectGroupP2PPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]"
+	attributes = {
+		"group-name" = "P2P"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
 
 func testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig() string {
 	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
@@ -58,6 +75,7 @@ func testAccDataSourceIosxrL2VPNXconnectGroupP2PConfig() string {
 	config += `		service_id = 600` + "\n"
 	config += `		segment_routing_srv6_locator = "LOC11"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

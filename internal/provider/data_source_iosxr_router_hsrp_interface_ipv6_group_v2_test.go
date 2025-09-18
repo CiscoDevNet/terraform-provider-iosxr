@@ -47,12 +47,22 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config(),
+				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/2"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
@@ -80,6 +90,7 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
 	config += `	}]` + "\n"
 	config += `	address_link_local_autoconfig = true` + "\n"
 	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

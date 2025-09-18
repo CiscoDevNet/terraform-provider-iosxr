@@ -34,12 +34,29 @@ func TestAccDataSourceIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]"
+	attributes = {
+		"group-name" = "BG123"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
 
 func testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig() string {
 	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
@@ -52,6 +69,7 @@ func testAccDataSourceIosxrL2VPNBridgeGroupBridgeDomainConfig() string {
 	config += `	vnis = [{` + "\n"
 	config += `		vni_id = 1234` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

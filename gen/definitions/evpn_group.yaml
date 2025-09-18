@@ -13,3 +13,6 @@ attributes:
       - yang_name: interface-name
         id: true
         example: Bundle-Ether111
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

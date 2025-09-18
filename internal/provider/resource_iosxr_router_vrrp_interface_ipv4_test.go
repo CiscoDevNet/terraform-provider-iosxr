@@ -47,11 +47,11 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterVRRPInterfaceIPv4Config_minimum(),
+			Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv4Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterVRRPInterfaceIPv4Config_all(),
+		Config: testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccIosxrRouterVRRPInterfaceIPv4Config_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -67,11 +67,29 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
 func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	vrrp_id = 123` + "\n"
 	config += `	version = 2` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -99,6 +117,7 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config += `		priority_decrement = 22` + "\n"
 	config += `		}]` + "\n"
 	config += `	bfd_fast_detect_peer_ipv4 = "33.33.33.3"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

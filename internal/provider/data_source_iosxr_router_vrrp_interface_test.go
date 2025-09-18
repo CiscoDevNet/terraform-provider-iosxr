@@ -37,12 +37,21 @@ func TestAccDataSourceIosxrRouterVRRPInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterVRRPInterfaceConfig(),
+				Config: testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig + testAccDataSourceIosxrRouterVRRPInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterVRRPInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {
 	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
@@ -53,6 +62,7 @@ func testAccDataSourceIosxrRouterVRRPInterfaceConfig() string {
 	config += `	delay_reload = 4321` + "\n"
 	config += `	bfd_minimum_interval = 255` + "\n"
 	config += `	bfd_multiplier = 33` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

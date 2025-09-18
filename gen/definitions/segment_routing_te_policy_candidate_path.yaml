@@ -25,3 +25,10 @@ attributes:
       - yang_name: segment-list-name
         id: true
         example: dynamic
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering
+  - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]
+    attributes:
+      - name: policy-name
+        value: POLICY1

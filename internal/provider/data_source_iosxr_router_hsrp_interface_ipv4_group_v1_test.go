@@ -43,12 +43,22 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config(),
+				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v1" "test" {` + "\n"
@@ -70,6 +80,7 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv4GroupV1Config() string {
 	config += `		object_name = "OBJECT1"` + "\n"
 	config += `		priority_decrement = 177` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -83,3 +83,11 @@ attributes:
         example: 600
       - yang_name: segment-routing/srv6/locator
         example: LOC11
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]
+    attributes:
+      - name: group-name
+        value: P2P
+    dependencies: [0]

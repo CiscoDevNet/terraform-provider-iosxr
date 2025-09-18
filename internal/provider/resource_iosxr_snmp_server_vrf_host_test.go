@@ -34,11 +34,11 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSNMPServerVRFHostConfig_minimum(),
+			Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig + testAccIosxrSNMPServerVRFHostConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSNMPServerVRFHostConfig_all(),
+		Config: testAccIosxrSNMPServerVRFHostPrerequisitesConfig + testAccIosxrSNMPServerVRFHostConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -54,10 +54,21 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 	})
 }
 
+const testAccIosxrSNMPServerVRFHostPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
+
 func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -70,6 +81,7 @@ func testAccIosxrSNMPServerVRFHostConfig_all() string {
 	config += `		community_string = "COMMUNITY1"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

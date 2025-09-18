@@ -38,11 +38,11 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNInterfaceConfig_minimum(),
+			Config: testAccIosxrEVPNInterfacePrerequisitesConfig + testAccIosxrEVPNInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNInterfaceConfig_all(),
+		Config: testAccIosxrEVPNInterfacePrerequisitesConfig + testAccIosxrEVPNInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -58,10 +58,20 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 	})
 }
 
+const testAccIosxrEVPNInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+
 func testAccIosxrEVPNInterfaceConfig_minimum() string {
 	config := `resource "iosxr_evpn_interface" "test" {` + "\n"
 	config += `	interface_name = "Bundle-Ether12"` + "\n"
 	config += `	ethernet_segment_identifier_type_zero_esi = "01.00.01.01.00.00.00.01.1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -75,6 +85,7 @@ func testAccIosxrEVPNInterfaceConfig_all() string {
 	config += `	ethernet_segment_load_balancing_mode_port_active = false` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_single_active = true` + "\n"
 	config += `	ethernet_segment_load_balancing_mode_single_flow_active = false` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -36,3 +36,6 @@ attributes:
     example: true
   - yang_name: encapsulation/mpls/load-balancing/flow-label/code/one7/disable
     example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn

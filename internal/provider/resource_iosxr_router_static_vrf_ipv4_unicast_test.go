@@ -46,11 +46,11 @@ func TestAccIosxrRouterStaticVRFIPv4Unicast(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterStaticVRFIPv4UnicastConfig_minimum(),
+			Config: testAccIosxrRouterStaticVRFIPv4UnicastPrerequisitesConfig + testAccIosxrRouterStaticVRFIPv4UnicastConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterStaticVRFIPv4UnicastConfig_all(),
+		Config: testAccIosxrRouterStaticVRFIPv4UnicastPrerequisitesConfig + testAccIosxrRouterStaticVRFIPv4UnicastConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -66,11 +66,22 @@ func TestAccIosxrRouterStaticVRFIPv4Unicast(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterStaticVRFIPv4UnicastPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+`
+
 func testAccIosxrRouterStaticVRFIPv4UnicastConfig_minimum() string {
 	config := `resource "iosxr_router_static_vrf_ipv4_unicast" "test" {` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	prefix_address = "100.0.1.0"` + "\n"
 	config += `	prefix_length = 24` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -99,6 +110,7 @@ func testAccIosxrRouterStaticVRFIPv4UnicastConfig_all() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

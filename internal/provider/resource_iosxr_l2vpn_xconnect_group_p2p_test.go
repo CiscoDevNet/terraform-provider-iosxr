@@ -37,11 +37,11 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNXconnectGroupP2PConfig_minimum(),
+			Config: testAccIosxrL2VPNXconnectGroupP2PPrerequisitesConfig + testAccIosxrL2VPNXconnectGroupP2PConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNXconnectGroupP2PConfig_all(),
+		Config: testAccIosxrL2VPNXconnectGroupP2PPrerequisitesConfig + testAccIosxrL2VPNXconnectGroupP2PConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -57,10 +57,28 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	})
 }
 
+const testAccIosxrL2VPNXconnectGroupP2PPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]"
+	attributes = {
+		"group-name" = "P2P"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
 func testAccIosxrL2VPNXconnectGroupP2PConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
 	config += `	group_name = "P2P"` + "\n"
 	config += `	p2p_xconnect_name = "XC"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -78,6 +96,7 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
 	config += `		service_id = 600` + "\n"
 	config += `		segment_routing_srv6_locator = "LOC11"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

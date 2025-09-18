@@ -61,3 +61,11 @@ attributes:
       - yang_name: vpn-id
         id: true
         example: 32
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]
+    attributes:
+      - name: group-name
+        value: BG123
+    dependencies: [0]

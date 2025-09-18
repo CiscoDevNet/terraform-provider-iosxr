@@ -19,3 +19,6 @@ attributes:
     example: true
   - yang_name: ethernet-segment/load-balancing-mode/single-flow-active
     example: false
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

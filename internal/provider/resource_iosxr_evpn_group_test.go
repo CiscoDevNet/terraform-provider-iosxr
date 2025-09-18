@@ -33,11 +33,11 @@ func TestAccIosxrEVPNGroup(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNGroupConfig_minimum(),
+			Config: testAccIosxrEVPNGroupPrerequisitesConfig + testAccIosxrEVPNGroupConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNGroupConfig_all(),
+		Config: testAccIosxrEVPNGroupPrerequisitesConfig + testAccIosxrEVPNGroupConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -53,9 +53,19 @@ func TestAccIosxrEVPNGroup(t *testing.T) {
 	})
 }
 
+const testAccIosxrEVPNGroupPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+`
+
 func testAccIosxrEVPNGroupConfig_minimum() string {
 	config := `resource "iosxr_evpn_group" "test" {` + "\n"
 	config += `	group_id = 1` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -66,6 +76,7 @@ func testAccIosxrEVPNGroupConfig_all() string {
 	config += `	core_interfaces = [{` + "\n"
 	config += `		interface_name = "Bundle-Ether111"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

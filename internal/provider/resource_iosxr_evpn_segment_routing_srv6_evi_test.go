@@ -61,17 +61,32 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 
 const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]"
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
 	attributes = {
-		"locator-name" = "LOC1"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6"
+	attributes = {
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]"
+	attributes = {
+		"locator-name" = "LOC1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+}
+
+resource "iosxr_gnmi" "PreReq3" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]"
 	attributes = {
 		"ethernet-segment/identifier/type/zero/esi" = "01.02.03.04.05.06.07.08.09"
 	}
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 }
 
 `
@@ -79,7 +94,7 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
 	config += `	vpn_id = 1235` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -100,7 +115,7 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	config += `	locators = [{` + "\n"
 	config += `		locator_name = "LOC12"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

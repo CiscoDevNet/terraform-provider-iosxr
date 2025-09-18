@@ -63,3 +63,9 @@ attributes:
   - yang_name: address/link-local/ipv6-address
     example: fe80::240:d0ff:fe48:4672
     exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]
+    attributes:
+      - name: interface-name
+        value: GigabitEthernet0/0/0/2

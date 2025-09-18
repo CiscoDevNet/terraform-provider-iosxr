@@ -41,11 +41,11 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNPWClassConfig_minimum(),
+			Config: testAccIosxrL2VPNPWClassPrerequisitesConfig + testAccIosxrL2VPNPWClassConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNPWClassConfig_all(),
+		Config: testAccIosxrL2VPNPWClassPrerequisitesConfig + testAccIosxrL2VPNPWClassConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -61,9 +61,19 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	})
 }
 
+const testAccIosxrL2VPNPWClassPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+`
+
 func testAccIosxrL2VPNPWClassConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
 	config += `	name = "PWC1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -80,6 +90,7 @@ func testAccIosxrL2VPNPWClassConfig_all() string {
 	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7_disable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

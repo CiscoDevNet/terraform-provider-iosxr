@@ -5,3 +5,6 @@ doc_category: L2VPN
 attributes:
   - yang_name: group-name
     example: BG123
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn

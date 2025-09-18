@@ -19,3 +19,9 @@ attributes:
         exclude_test: true
       - yang_name: version/v3/security-level
         example: auth
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1

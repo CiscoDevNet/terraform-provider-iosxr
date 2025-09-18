@@ -150,3 +150,9 @@ attributes:
             example: TRACK1
           - yang_name: metric
             example: 10
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]
+    attributes:
+      - name: vrf-name
+        value: VRF2

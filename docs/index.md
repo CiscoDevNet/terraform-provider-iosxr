@@ -38,9 +38,12 @@ provider "iosxr" {
 
 ### Optional
 
+- `batch_max_size` (Number) Maximum size of a batch. This can also be set as the IOSXR_BATCH_MAX_SIZE environment variable. Defaults to `10`.
+- `batch_timeout` (Number) Timeout for batching in milliseconds. This can also be set as the IOSXR_BATCH_TIMEOUT environment variable. Defaults to `100`.
 - `ca_certificate` (String) TLS CA certificate content. This can also be set as the IOSXR_CA_CERTIFICATE environment variable.
 - `certificate` (String) TLS certificate content. This can also be set as the IOSXR_CERTIFICATE environment variable.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
+- `enable_batching` (Boolean) Enable batching of gNMI set requests. This can also be set as the IOSXR_ENABLE_BATCHING environment variable. Defaults to `true`.
 - `host` (String) IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.

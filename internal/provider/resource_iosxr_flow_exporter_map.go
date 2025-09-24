@@ -229,8 +229,8 @@ func (r *FlowExporterMapResource) Create(ctx context.Context, req resource.Creat
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, plan.Device.ValueString(), plan.getPath(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
@@ -324,8 +324,8 @@ func (r *FlowExporterMapResource) Update(ctx context.Context, req resource.Updat
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, plan.Device.ValueString(), plan.Id.ValueString(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
@@ -361,8 +361,8 @@ func (r *FlowExporterMapResource) Delete(ctx context.Context, req resource.Delet
 		}
 	}
 
-	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, state.Device.ValueString(), state.Id.ValueString(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}

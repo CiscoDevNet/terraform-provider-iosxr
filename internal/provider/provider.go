@@ -23,6 +23,7 @@ import (
 	"context"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -51,6 +52,9 @@ type providerData struct {
 	Key               types.String         `tfsdk:"key"`
 	CaCertificate     types.String         `tfsdk:"ca_certificate"`
 	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
+	EnableBatching    types.Bool           `tfsdk:"enable_batching"`
+	BatchTimeout      types.Int64          `tfsdk:"batch_timeout"`
+	BatchMaxSize      types.Int64          `tfsdk:"batch_max_size"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
 }
 
@@ -102,6 +106,18 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"reuse_connection": schema.BoolAttribute{
 				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"enable_batching": schema.BoolAttribute{
+				MarkdownDescription: "Enable batching of gNMI set requests. This can also be set as the IOSXR_ENABLE_BATCHING environment variable. Defaults to `true`.",
+				Optional:            true,
+			},
+			"batch_timeout": schema.Int64Attribute{
+				MarkdownDescription: "Timeout for batching in milliseconds. This can also be set as the IOSXR_BATCH_TIMEOUT environment variable. Defaults to `100`.",
+				Optional:            true,
+			},
+			"batch_max_size": schema.Int64Attribute{
+				MarkdownDescription: "Maximum size of a batch. This can also be set as the IOSXR_BATCH_MAX_SIZE environment variable. Defaults to `10`.",
 				Optional:            true,
 			},
 			"devices": schema.ListNestedAttribute{
@@ -325,7 +341,49 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		reuseConnection = config.ReuseConnection.ValueBool()
 	}
 
+	// Configure batching options
+	var enableBatching bool
+	if config.EnableBatching.IsNull() {
+		enableBatchingStr := os.Getenv("IOSXR_ENABLE_BATCHING")
+		if enableBatchingStr == "" {
+			enableBatching = true // Default to enabled
+		} else {
+			enableBatching, _ = strconv.ParseBool(enableBatchingStr)
+		}
+	} else {
+		enableBatching = config.EnableBatching.ValueBool()
+	}
+
+	var batchTimeout int64
+	if config.BatchTimeout.IsNull() {
+		batchTimeoutStr := os.Getenv("IOSXR_BATCH_TIMEOUT")
+		if batchTimeoutStr == "" {
+			batchTimeout = 100 // Default 100ms
+		} else {
+			batchTimeout, _ = strconv.ParseInt(batchTimeoutStr, 10, 64)
+		}
+	} else {
+		batchTimeout = config.BatchTimeout.ValueInt64()
+	}
+
+	var batchMaxSize int64
+	if config.BatchMaxSize.IsNull() {
+		batchMaxSizeStr := os.Getenv("IOSXR_BATCH_MAX_SIZE")
+		if batchMaxSizeStr == "" {
+			batchMaxSize = 10 // Default 10 operations
+		} else {
+			batchMaxSize, _ = strconv.ParseInt(batchMaxSizeStr, 10, 64)
+		}
+	} else {
+		batchMaxSize = config.BatchMaxSize.ValueInt64()
+	}
+
 	client := client.NewClient(reuseConnection)
+
+	// Configure batching
+	client.EnableBatchingForAllDevices(enableBatching)
+	client.SetBatchTimeoutForAllDevices(time.Duration(batchTimeout) * time.Millisecond)
+	client.SetBatchMaxSizeForAllDevices(int(batchMaxSize))
 
 	err := client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
 	if err != nil {

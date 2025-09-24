@@ -236,8 +236,8 @@ func (r *MPLSLDPResource) Create(ctx context.Context, req resource.CreateRequest
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, plan.Device.ValueString(), plan.getPath(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
@@ -331,8 +331,8 @@ func (r *MPLSLDPResource) Update(ctx context.Context, req resource.UpdateRequest
 		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
 	}
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, plan.Device.ValueString(), plan.Id.ValueString(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}
@@ -373,8 +373,8 @@ func (r *MPLSLDPResource) Delete(ctx context.Context, req resource.DeleteRequest
 		}
 	}
 
-	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
-	if err != nil {
+	// Execute operations using the centralized batching logic
+	if err := r.client.ExecuteOperations(ctx, state.Device.ValueString(), state.Id.ValueString(), ops); err != nil {
 		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 		return
 	}

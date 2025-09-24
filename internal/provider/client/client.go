@@ -60,6 +60,11 @@ type Client struct {
 	BackoffMaxDelay int
 	// Backoff delay factor
 	BackoffDelayFactor float64
+	// Batch managers for each device
+	batchManagers map[string]*BatchManager
+	batchMutex    sync.RWMutex
+	// Enable batching globally
+	BatchingEnabled bool
 }
 
 type Device struct {
@@ -75,6 +80,7 @@ type SetOperation struct {
 
 func NewClient(reuseConnection bool) Client {
 	devices := make(map[string]*Device)
+	batchManagers := make(map[string]*BatchManager)
 	return Client{
 		Devices:            devices,
 		ReuseConnection:    reuseConnection,
@@ -82,6 +88,8 @@ func NewClient(reuseConnection bool) Client {
 		BackoffMinDelay:    DefaultBackoffMinDelay,
 		BackoffMaxDelay:    DefaultBackoffMaxDelay,
 		BackoffDelayFactor: DefaultBackoffDelayFactor,
+		batchManagers:      batchManagers,
+		BatchingEnabled:    true, // Enable batching by default
 	}
 }
 
@@ -148,6 +156,7 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 		if !c.ReuseConnection {
 			err = target.CreateGNMIClient(ctx)
 			if err != nil {
+				c.Devices[device].SetMutex.Unlock() // Unlock before continuing
 				if ok := c.Backoff(ctx, attempts); !ok {
 					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
 				} else {
@@ -157,11 +166,13 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 			}
 		}
 		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
-		defer cancel()
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
 		setResp, err = target.Set(tCtx, setReq)
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
+		cancel() // Call cancel immediately after the operation
+
 		c.Devices[device].SetMutex.Unlock()
+
 		if !c.ReuseConnection {
 			target.Close()
 		}
@@ -248,4 +259,53 @@ func (c *Client) Backoff(ctx context.Context, attempts int) bool {
 	time.Sleep(backoffDuration)
 	tflog.Debug(ctx, "Exit from backoff method with return value true")
 	return true
+}
+
+// GetBatchManager returns the batch manager for a specific device
+func (c *Client) GetBatchManager(device string) *BatchManager {
+	c.batchMutex.RLock()
+	bm, exists := c.batchManagers[device]
+	c.batchMutex.RUnlock()
+
+	if !exists {
+		c.batchMutex.Lock()
+		// Double-check locking pattern
+		if bm, exists = c.batchManagers[device]; !exists {
+			bm = NewBatchManager(c, device)
+			bm.EnableBatching(c.BatchingEnabled)
+			c.batchManagers[device] = bm
+		}
+		c.batchMutex.Unlock()
+	}
+
+	return bm
+}
+
+// SetBatched adds an operation to the batch for a specific device
+func (c *Client) SetBatched(ctx context.Context, device, resourceID string, operation SetOperation) (*gnmi.SetResponse, error) {
+	bm := c.GetBatchManager(device)
+	return bm.AddOperation(ctx, resourceID, operation)
+}
+
+// ExecuteOperations executes a list of operations either batched or directly based on client configuration
+func (c *Client) ExecuteOperations(ctx context.Context, device string, resourceID string, operations []SetOperation) error {
+	if c.BatchingEnabled {
+		// Submit each operation to the batch manager
+		for i, op := range operations {
+			opResourceID := fmt.Sprintf("%s_op_%d", resourceID, i)
+			_, err := c.SetBatched(ctx, device, opResourceID, op)
+			if err != nil {
+				return fmt.Errorf("unable to apply gNMI Set operation: %w", err)
+			}
+		}
+		tflog.Debug(ctx, fmt.Sprintf("%s: Batched operations completed successfully", resourceID))
+	} else {
+		// Use regular Set method when batching is disabled
+		_, err := c.Set(ctx, device, operations...)
+		if err != nil {
+			return fmt.Errorf("unable to apply gNMI Set operation: %w", err)
+		}
+		tflog.Debug(ctx, fmt.Sprintf("%s: Regular Set operation completed successfully", resourceID))
+	}
+	return nil
 }

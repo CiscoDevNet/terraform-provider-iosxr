@@ -8,4 +8,5 @@ attributes:
     example: set1
   - yang_name: rplrd-set
     tf_name: rpl
+    description: "Configures a rd-set"
     example: "rd-set set1\\nend-set\\n"

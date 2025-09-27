@@ -98,6 +98,10 @@ func (r *InterfaceResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("multipoint sub-interface").String,
 				Optional:            true,
 			},
+			"dampening": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("configure state dampening on the given interface").String,
+				Optional:            true,
+			},
 			"dampening_decay_half_life_value": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Decay half life (in minutes)").AddIntegerRangeDescription(1, 45).String,
 				Optional:            true,

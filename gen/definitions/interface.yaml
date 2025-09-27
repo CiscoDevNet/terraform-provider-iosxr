@@ -14,6 +14,8 @@ attributes:
   - yang_name: sub-interface-type/multipoint
     tf_name: multipoint
     example: false
+  - yang_name: dampening
+    example: true
   - yang_name: dampening/decay-half-life/value
     delete_parent: true
     optional: true

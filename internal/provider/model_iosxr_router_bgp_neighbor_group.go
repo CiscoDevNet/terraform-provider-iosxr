@@ -43,7 +43,7 @@ type RouterBGPNeighborGroup struct {
 	AdvertisementIntervalMilliseconds            types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
 	AoKeyChainName                               types.String                            `tfsdk:"ao_key_chain_name"`
 	AoKeyChainIncludeTcpOptions                  types.String                            `tfsdk:"ao_key_chain_include_tcp_options"`
-	AoKeyChainAcceptAoMismatchConnection         types.Bool                              `tfsdk:"ao_key_chain_accept_ao_mismatch_connection"`
+	AoKeyChainAcceptMismatch                     types.Bool                              `tfsdk:"ao_key_chain_accept_mismatch"`
 	AoInheritanceDisable                         types.Bool                              `tfsdk:"ao_inheritance_disable"`
 	BfdMinimumInterval                           types.Int64                             `tfsdk:"bfd_minimum_interval"`
 	BfdMultiplier                                types.Int64                             `tfsdk:"bfd_multiplier"`
@@ -78,7 +78,7 @@ type RouterBGPNeighborGroupData struct {
 	AdvertisementIntervalMilliseconds            types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
 	AoKeyChainName                               types.String                            `tfsdk:"ao_key_chain_name"`
 	AoKeyChainIncludeTcpOptions                  types.String                            `tfsdk:"ao_key_chain_include_tcp_options"`
-	AoKeyChainAcceptAoMismatchConnection         types.Bool                              `tfsdk:"ao_key_chain_accept_ao_mismatch_connection"`
+	AoKeyChainAcceptMismatch                     types.Bool                              `tfsdk:"ao_key_chain_accept_mismatch"`
 	AoInheritanceDisable                         types.Bool                              `tfsdk:"ao_inheritance_disable"`
 	BfdMinimumInterval                           types.Int64                             `tfsdk:"bfd_minimum_interval"`
 	BfdMultiplier                                types.Int64                             `tfsdk:"bfd_multiplier"`
@@ -146,8 +146,8 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	if !data.AoKeyChainIncludeTcpOptions.IsNull() && !data.AoKeyChainIncludeTcpOptions.IsUnknown() {
 		body, _ = sjson.Set(body, "ao.key-chain-name.include-tcp-options", data.AoKeyChainIncludeTcpOptions.ValueString())
 	}
-	if !data.AoKeyChainAcceptAoMismatchConnection.IsNull() && !data.AoKeyChainAcceptAoMismatchConnection.IsUnknown() {
-		if data.AoKeyChainAcceptAoMismatchConnection.ValueBool() {
+	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.IsUnknown() {
+		if data.AoKeyChainAcceptMismatch.ValueBool() {
 			body, _ = sjson.Set(body, "ao.key-chain-name.accept-ao-mismatch-connection", map[string]string{})
 		}
 	}
@@ -311,14 +311,14 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.AoKeyChainIncludeTcpOptions = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); !data.AoKeyChainAcceptAoMismatchConnection.IsNull() {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); !data.AoKeyChainAcceptMismatch.IsNull() {
 		if value.Exists() {
-			data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(true)
+			data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 		} else {
-			data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(false)
+			data.AoKeyChainAcceptMismatch = types.BoolValue(false)
 		}
 	} else {
-		data.AoKeyChainAcceptAoMismatchConnection = types.BoolNull()
+		data.AoKeyChainAcceptMismatch = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "ao.inheritance-disable"); !data.AoInheritanceDisable.IsNull() {
 		if value.Exists() {
@@ -573,9 +573,9 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
-		data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(true)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 	} else {
-		data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(false)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
 		data.AoInheritanceDisable = types.BoolValue(true)
@@ -726,9 +726,9 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
-		data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(true)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 	} else {
-		data.AoKeyChainAcceptAoMismatchConnection = types.BoolValue(false)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
 		data.AoInheritanceDisable = types.BoolValue(true)
@@ -879,7 +879,7 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	if !state.AoKeyChainIncludeTcpOptions.IsNull() && data.AoKeyChainIncludeTcpOptions.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", state.getPath()))
 	}
-	if !state.AoKeyChainAcceptAoMismatchConnection.IsNull() && data.AoKeyChainAcceptAoMismatchConnection.IsNull() {
+	if !state.AoKeyChainAcceptMismatch.IsNull() && data.AoKeyChainAcceptMismatch.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
 	}
 	if !state.AoInheritanceDisable.IsNull() && data.AoInheritanceDisable.IsNull() {
@@ -998,7 +998,7 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.AoKeyChainAcceptAoMismatchConnection.IsNull() && !data.AoKeyChainAcceptAoMismatchConnection.ValueBool() {
+	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
 	}
 	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.ValueBool() {
@@ -1083,7 +1083,7 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	if !data.AoKeyChainIncludeTcpOptions.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", data.getPath()))
 	}
-	if !data.AoKeyChainAcceptAoMismatchConnection.IsNull() {
+	if !data.AoKeyChainAcceptMismatch.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
 	}
 	if !data.AoInheritanceDisable.IsNull() {

@@ -29,54 +29,54 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "description", "My VRF Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "vpn_id", "1000:1000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_multicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_flowspec", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_policy", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_multicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_flowspec", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_number", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_flowspec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_flowspec", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_number", "65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_index", "123"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_import_route_target_ip_address_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv4_unicast_export_route_target_ip_address_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_import_route_target_ip_address_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "address_family_ipv6_unicast_export_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_target_ip_address_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_two_byte_as_format.0.two_byte_as_number", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_two_byte_as_format.0.asn2_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_two_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_four_byte_as_format.0.four_byte_as_number", "100000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_four_byte_as_format.0.asn4_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_four_byte_as_format.0.stitching", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.ipv4_address_index", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_target_ip_address_format.0.stitching", "enable"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -106,74 +106,74 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `	vrf_name = "VRF3"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"
-	config += `	address_family_ipv4_unicast = true` + "\n"
-	config += `	address_family_ipv4_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	address_family_ipv4_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	address_family_ipv4_multicast = true` + "\n"
-	config += `	address_family_ipv4_flowspec = true` + "\n"
-	config += `	address_family_ipv6_unicast = true` + "\n"
-	config += `	address_family_ipv6_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	address_family_ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
-	config += `	address_family_ipv6_multicast = true` + "\n"
-	config += `	address_family_ipv6_flowspec = true` + "\n"
-	config += `	rd_two_byte_as_number = "123"` + "\n"
+	config += `	ipv4_unicast = true` + "\n"
+	config += `	ipv4_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv4_multicast = true` + "\n"
+	config += `	ipv4_flowspec = true` + "\n"
+	config += `	ipv6_unicast = true` + "\n"
+	config += `	ipv6_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv6_multicast = true` + "\n"
+	config += `	ipv6_flowspec = true` + "\n"
+	config += `	rd_two_byte_as_number = "65001"` + "\n"
 	config += `	rd_two_byte_as_index = 123` + "\n"
-	config += `	address_family_ipv4_unicast_import_route_target_two_byte_as_format = [{` + "\n"
-	config += `		two_byte_as_number = 1` + "\n"
+	config += `	ipv4_unicast_import_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
 	config += `		asn2_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv4_unicast_import_route_target_four_byte_as_format = [{` + "\n"
+	config += `	ipv4_unicast_import_route_target_four_byte_as_format = [{` + "\n"
 	config += `		four_byte_as_number = 100000` + "\n"
 	config += `		asn4_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv4_unicast_import_route_target_ip_address_format = [{` + "\n"
+	config += `	ipv4_unicast_import_route_target_ip_address_format = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv4_unicast_export_route_target_two_byte_as_format = [{` + "\n"
-	config += `		two_byte_as_number = 1` + "\n"
+	config += `	ipv4_unicast_export_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
 	config += `		asn2_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv4_unicast_export_route_target_four_byte_as_format = [{` + "\n"
+	config += `	ipv4_unicast_export_route_target_four_byte_as_format = [{` + "\n"
 	config += `		four_byte_as_number = 100000` + "\n"
 	config += `		asn4_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv4_unicast_export_route_target_ip_address_format = [{` + "\n"
+	config += `	ipv4_unicast_export_route_target_ip_address_format = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_import_route_target_two_byte_as_format = [{` + "\n"
-	config += `		two_byte_as_number = 1` + "\n"
+	config += `	ipv6_unicast_import_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
 	config += `		asn2_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_import_route_target_four_byte_as_format = [{` + "\n"
+	config += `	ipv6_unicast_import_route_target_four_byte_as_format = [{` + "\n"
 	config += `		four_byte_as_number = 100000` + "\n"
 	config += `		asn4_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_import_route_target_ip_address_format = [{` + "\n"
+	config += `	ipv6_unicast_import_route_target_ip_address_format = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_export_route_target_two_byte_as_format = [{` + "\n"
-	config += `		two_byte_as_number = 1` + "\n"
+	config += `	ipv6_unicast_export_route_target_two_byte_as_format = [{` + "\n"
+	config += `		two_byte_as_number = 65001` + "\n"
 	config += `		asn2_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_export_route_target_four_byte_as_format = [{` + "\n"
+	config += `	ipv6_unicast_export_route_target_four_byte_as_format = [{` + "\n"
 	config += `		four_byte_as_number = 100000` + "\n"
 	config += `		asn4_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	address_family_ipv6_unicast_export_route_target_ip_address_format = [{` + "\n"
+	config += `	ipv6_unicast_export_route_target_ip_address_format = [{` + "\n"
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"

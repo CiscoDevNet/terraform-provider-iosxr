@@ -35,6 +35,7 @@ type BFD struct {
 	Id                                     types.String            `tfsdk:"id"`
 	DeleteMode                             types.String            `tfsdk:"delete_mode"`
 	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
 	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
 	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
 	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
@@ -62,6 +63,7 @@ type BFDData struct {
 	Device                                 types.String            `tfsdk:"device"`
 	Id                                     types.String            `tfsdk:"id"`
 	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
 	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
 	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
 	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
@@ -112,6 +114,11 @@ func (data BFD) toBody(ctx context.Context) string {
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.IsUnknown() {
 		if data.EchoDisable.ValueBool() {
 			body, _ = sjson.Set(body, "echo.disable", map[string]string{})
+		}
+	}
+	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.IsUnknown() {
+		if data.EchoLatencyDetect.ValueBool() {
+			body, _ = sjson.Set(body, "echo.latency.detect", map[string]string{})
 		}
 	}
 	if !data.EchoLatencyDetectPercentage.IsNull() && !data.EchoLatencyDetectPercentage.IsUnknown() {
@@ -239,6 +246,15 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.EchoDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); !data.EchoLatencyDetect.IsNull() {
+		if value.Exists() {
+			data.EchoLatencyDetect = types.BoolValue(true)
+		} else {
+			data.EchoLatencyDetect = types.BoolValue(false)
+		}
+	} else {
+		data.EchoLatencyDetect = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() && !data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
@@ -473,6 +489,11 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+		data.EchoLatencyDetect = types.BoolValue(true)
+	} else {
+		data.EchoLatencyDetect = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
@@ -600,6 +621,11 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+		data.EchoLatencyDetect = types.BoolValue(true)
+	} else {
+		data.EchoLatencyDetect = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
@@ -726,11 +752,14 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	if !state.EchoDisable.IsNull() && data.EchoDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/disable", state.getPath()))
 	}
+	if !state.EchoLatencyDetect.IsNull() && data.EchoLatencyDetect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
+	}
 	if !state.EchoLatencyDetectPercentage.IsNull() && data.EchoLatencyDetectPercentage.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/percentage", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
 	}
 	if !state.EchoLatencyDetectCount.IsNull() && data.EchoLatencyDetectCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/count", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
 	}
 	if !state.EchoStartupValidateForce.IsNull() && data.EchoStartupValidateForce.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate", state.getPath()))
@@ -875,6 +904,9 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/disable", data.getPath()))
 	}
+	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
+	}
 	if !data.EchoStartupValidateForce.IsNull() && !data.EchoStartupValidateForce.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/startup/validate/force", data.getPath()))
 	}
@@ -923,11 +955,14 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	if !data.EchoDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/disable", data.getPath()))
 	}
+	if !data.EchoLatencyDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
+	}
 	if !data.EchoLatencyDetectPercentage.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect/percentage", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
 	}
 	if !data.EchoLatencyDetectCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect/count", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
 	}
 	if !data.EchoStartupValidateForce.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/startup/validate", data.getPath()))

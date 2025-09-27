@@ -10,7 +10,6 @@ attributes:
     no_augment_config: true
     optional: true
     example: "asplain"
-    description: "Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)"
     enum_values:
       - "asdot"
       - "asplain"

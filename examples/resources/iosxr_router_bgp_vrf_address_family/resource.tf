@@ -6,7 +6,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   additional_paths_send_disable           = true
   additional_paths_receive                = true
   additional_paths_receive_disable        = true
-  additional_paths_selection_route_policy = "ADDITIONAL_PATHS_SELECTION_POLICY"
+  additional_paths_selection_route_policy = "ADDITIONAL_PATHS_POLICY"
   allocate_label_all                      = true
   allocate_label_all_unlabeled_path       = true
   advertise_best_external                 = true
@@ -50,7 +50,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   redistribute_isis = [
     {
       instance_name                      = "ISIS1"
-      level_one_two_level_one_inter_area = true
+      level_1_level_2_level_1_inter_area = true
       metric                             = 100
       multipath                          = true
       route_policy                       = "REDISTRIBUTE_POLICY"

@@ -406,7 +406,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Specify a tag to indicate priority",
 				Computed:            true,
 			},
-			"spf_prefix_priority_critical_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_critical_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: "Prefix-list name",
 				Computed:            true,
 			},
@@ -414,7 +414,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Specify a tag to indicate priority",
 				Computed:            true,
 			},
-			"spf_prefix_priority_high_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_high_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: "Prefix-list name",
 				Computed:            true,
 			},
@@ -422,7 +422,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "Specify a tag to indicate priority",
 				Computed:            true,
 			},
-			"spf_prefix_priority_medium_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_medium_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: "Prefix-list name",
 				Computed:            true,
 			},
@@ -439,7 +439,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Specify a tag to indicate priority",
 							Computed:            true,
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: "Prefix-list name",
 							Computed:            true,
 						},
@@ -459,7 +459,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Specify a tag to indicate priority",
 							Computed:            true,
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: "Prefix-list name",
 							Computed:            true,
 						},
@@ -479,7 +479,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Specify a tag to indicate priority",
 							Computed:            true,
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: "Prefix-list name",
 							Computed:            true,
 						},
@@ -515,7 +515,7 @@ func (d *RouterISISAddressFamilyDataSource) Schema(ctx context.Context, req data
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "IS-IS",
+				MarkdownDescription: "Redistribute ISIS routes",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

@@ -139,7 +139,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				Optional:            true,
 			},
 			"allocate_label_route_policy_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("route policy name").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Allocate label route policy").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
@@ -365,7 +365,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -390,115 +390,115 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 							Optional:            true,
 						},
 						"match_internal_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+						"match_internal_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_internal_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 1 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 1 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 1 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+						"match_internal_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_internal_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 2 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 2 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external type 2 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"match_internal_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal, external and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"match_internal_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+						"match_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 1 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 1 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 1 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+						"match_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 2 routes").String,
 							Optional:            true,
 						},
-						"ospf_match_external_external_two_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 2 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 2 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external type 2 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"metric": schema.Int64Attribute{
@@ -523,7 +523,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_ospfv3": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IPv6 Open Shortest Path First (OSPFv3)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -536,127 +536,127 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 							},
 						},
 						"match_internal": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF internal routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal routes").String,
 							Optional:            true,
 						},
 						"match_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external routes").String,
 							Optional:            true,
 						},
 						"match_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 NSSA external routes").String,
 							Optional:            true,
 						},
 						"match_internal_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+						"match_internal_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_internal_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 1 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 1 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_one_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 1 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+						"match_internal_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_internal_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 2 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 2 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_two_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external type 2 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"match_internal_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_external_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal, external and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"match_internal_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_internal_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_internal_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_internal_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_internal_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 internal and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 1 routes").String,
+						"match_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 1 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 1 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_one_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 1 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute external type 2 routes").String,
+						"match_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 2 and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 2 and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_two_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external type 2 and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF NSSA external routes").String,
+						"match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external and NSSA external routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external and NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_external_external_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 external and NSSA external type 2 routes").String,
 							Optional:            true,
 						},
-						"match_nssa_external_one": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 1 routes").String,
+						"match_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 NSSA external type 1 routes").String,
 							Optional:            true,
 						},
-						"match_nssa_external_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute NSSA external type 2 routes").String,
+						"match_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPFv3 NSSA external type 2 routes").String,
 							Optional:            true,
 						},
 						"metric": schema.Int64Attribute{
@@ -681,7 +681,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_eigrp": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enhanced Interior Gateway Routing Protocol (EIGRP)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -698,7 +698,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 							Optional:            true,
 						},
 						"match_internal_external": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP external routes").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute EIGRP internal and external routes").String,
 							Optional:            true,
 						},
 						"match_external": schema.BoolAttribute{
@@ -727,7 +727,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -739,31 +739,31 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
-						"level_one": schema.BoolAttribute{
+						"level_1": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 routes").String,
 							Optional:            true,
 						},
-						"level_one_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
+						"level_1_level_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 and level 2 routes").String,
 							Optional:            true,
 						},
-						"level_one_two_level_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						"level_1_level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1, level 2 and level 1 inter-area routes").String,
 							Optional:            true,
 						},
-						"level_one_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						"level_1_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 and level 1 inter-area routes").String,
 							Optional:            true,
 						},
-						"level_two": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 ISIS routes").String,
+						"level_2": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 routes").String,
 							Optional:            true,
 						},
-						"level_two_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
+						"level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 2 and level 1 inter-area routes").String,
 							Optional:            true,
 						},
-						"level_one_inter_area": schema.BoolAttribute{
+						"level_1_inter_area": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS level 1 inter-area routes").String,
 							Optional:            true,
 						},
@@ -789,7 +789,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_connected": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Connected routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute connected routes").String,
 				Optional:            true,
 			},
 			"redistribute_connected_metric": schema.Int64Attribute{
@@ -811,7 +811,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_static": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute static routes").String,
 				Optional:            true,
 			},
 			"redistribute_static_metric": schema.Int64Attribute{
@@ -833,7 +833,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 				},
 			},
 			"redistribute_rip": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Routing Information Protocol (RIP)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute RIP routes").String,
 				Optional:            true,
 			},
 			"redistribute_rip_metric": schema.Int64Attribute{

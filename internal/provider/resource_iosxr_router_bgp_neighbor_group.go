@@ -139,7 +139,7 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 					stringvalidator.OneOf("disable", "enable"),
 				},
 			},
-			"ao_key_chain_accept_ao_mismatch_connection": schema.BoolAttribute{
+			"ao_key_chain_accept_mismatch": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Accept new connection even if AO mismatched").String,
 				Optional:            true,
 			},

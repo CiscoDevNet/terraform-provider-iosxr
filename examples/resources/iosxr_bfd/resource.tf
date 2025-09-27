@@ -1,5 +1,6 @@
 resource "iosxr_bfd" "example" {
   echo_disable                                 = true
+  echo_latency_detect                          = true
   echo_latency_detect_percentage               = 200
   echo_latency_detect_count                    = 10
   echo_startup_validate_force                  = true

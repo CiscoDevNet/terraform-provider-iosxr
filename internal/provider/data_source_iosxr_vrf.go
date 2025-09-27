@@ -74,43 +74,43 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "VPN ID, (OUI:VPN-Index) format(hex), 4 bytes VPN_Index Part",
 				Computed:            true,
 			},
-			"address_family_ipv4_unicast": schema.BoolAttribute{
+			"ipv4_unicast": schema.BoolAttribute{
 				MarkdownDescription: "Unicast sub address family",
 				Computed:            true,
 			},
-			"address_family_ipv4_unicast_import_route_policy": schema.StringAttribute{
+			"ipv4_unicast_import_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Use route-policy for import filtering",
 				Computed:            true,
 			},
-			"address_family_ipv4_unicast_export_route_policy": schema.StringAttribute{
+			"ipv4_unicast_export_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Use route-policy for export",
 				Computed:            true,
 			},
-			"address_family_ipv4_multicast": schema.BoolAttribute{
+			"ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: "Multicast topology",
 				Computed:            true,
 			},
-			"address_family_ipv4_flowspec": schema.BoolAttribute{
+			"ipv4_flowspec": schema.BoolAttribute{
 				MarkdownDescription: "Flowspec sub address family",
 				Computed:            true,
 			},
-			"address_family_ipv6_unicast": schema.BoolAttribute{
+			"ipv6_unicast": schema.BoolAttribute{
 				MarkdownDescription: "Unicast sub address family",
 				Computed:            true,
 			},
-			"address_family_ipv6_unicast_import_route_policy": schema.StringAttribute{
+			"ipv6_unicast_import_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Use route-policy for import filtering",
 				Computed:            true,
 			},
-			"address_family_ipv6_unicast_export_route_policy": schema.StringAttribute{
+			"ipv6_unicast_export_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Use route-policy for export",
 				Computed:            true,
 			},
-			"address_family_ipv6_multicast": schema.BoolAttribute{
+			"ipv6_multicast": schema.BoolAttribute{
 				MarkdownDescription: "Multicast topology",
 				Computed:            true,
 			},
-			"address_family_ipv6_flowspec": schema.BoolAttribute{
+			"ipv6_flowspec": schema.BoolAttribute{
 				MarkdownDescription: "Flowspec sub address family",
 				Computed:            true,
 			},
@@ -138,7 +138,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "IPv4Address:index (hex or decimal format)",
 				Computed:            true,
 			},
-			"address_family_ipv4_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+			"ipv4_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -158,7 +158,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+			"ipv4_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -178,7 +178,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv4_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+			"ipv4_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
 				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -198,7 +198,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+			"ipv4_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -218,7 +218,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+			"ipv4_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -238,7 +238,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+			"ipv4_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
 				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -258,7 +258,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+			"ipv6_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -278,7 +278,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+			"ipv6_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -298,7 +298,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+			"ipv6_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
 				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -318,7 +318,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+			"ipv6_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "2-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -338,7 +338,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+			"ipv6_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
 				MarkdownDescription: "4-byte AS number",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
@@ -358,7 +358,7 @@ func (d *VRFDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+			"ipv6_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
 				MarkdownDescription: "ipv4 address route target",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{

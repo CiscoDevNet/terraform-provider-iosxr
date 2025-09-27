@@ -74,7 +74,7 @@ func (r *BGPASFormatResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"as_format": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)").AddStringEnumDescription("asdot", "asplain").String,
+				MarkdownDescription: helpers.NewAttributeDescription("").AddStringEnumDescription("asdot", "asplain").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf("asdot", "asplain"),

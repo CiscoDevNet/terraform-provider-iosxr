@@ -79,6 +79,10 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Disable BFD echo mode").String,
 				Optional:            true,
 			},
+			"echo_latency_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD echo latency detection").String,
+				Optional:            true,
+			},
 			"echo_latency_detect_percentage": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Percentage of detection time to consider as bad latency").AddIntegerRangeDescription(100, 250).String,
 				Optional:            true,

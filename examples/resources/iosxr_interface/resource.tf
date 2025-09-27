@@ -3,6 +3,7 @@ resource "iosxr_interface" "example" {
   l2transport                     = false
   point_to_point                  = false
   multipoint                      = false
+  dampening                       = true
   dampening_decay_half_life_value = 2
   ipv4_point_to_point             = true
   service_policy_input = [

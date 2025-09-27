@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "multipoint", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening_decay_half_life_value", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_point_to_point", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_input.0.name", "PMAP-IN"))
@@ -203,6 +204,7 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
+	config += `	dampening = true` + "\n"
 	config += `	dampening_decay_half_life_value = 2` + "\n"
 	config += `	ipv4_point_to_point = true` + "\n"
 	config += `	service_policy_input = [{` + "\n"

@@ -170,78 +170,78 @@ type RouterBGPVRFAddressFamilyNetworks struct {
 	Multipath   types.Bool   `tfsdk:"multipath"`
 }
 type RouterBGPVRFAddressFamilyRedistributeOspf struct {
-	RouterTag                                types.String `tfsdk:"router_tag"`
-	MatchInternal                            types.Bool   `tfsdk:"match_internal"`
-	MatchExternal                            types.Bool   `tfsdk:"match_external"`
-	MatchNssaExternal                        types.Bool   `tfsdk:"match_nssa_external"`
-	MatchInternalExternal                    types.Bool   `tfsdk:"match_internal_external"`
-	MatchInternalExternalOne                 types.Bool   `tfsdk:"match_internal_external_one"`
-	MatchInternalExternalOneNssaExternal     types.Bool   `tfsdk:"match_internal_external_one_nssa_external"`
-	MatchInternalExternalOneNssaExternalOne  types.Bool   `tfsdk:"match_internal_external_one_nssa_external_one"`
-	MatchInternalExternalOneNssaExternalTwo  types.Bool   `tfsdk:"match_internal_external_one_nssa_external_two"`
-	MatchInternalExternalTwo                 types.Bool   `tfsdk:"match_internal_external_two"`
-	MatchInternalExternalTwoNssaExternal     types.Bool   `tfsdk:"match_internal_external_two_nssa_external"`
-	MatchInternalExternalTwoNssaExternalOne  types.Bool   `tfsdk:"match_internal_external_two_nssa_external_one"`
-	MatchInternalExternalTwoNssaExternalTwo  types.Bool   `tfsdk:"match_internal_external_two_nssa_external_two"`
-	MatchInternalExternalNssaExternal        types.Bool   `tfsdk:"match_internal_external_nssa_external"`
-	MatchInternalExternalNssaExternalOne     types.Bool   `tfsdk:"match_internal_external_nssa_external_one"`
-	MatchInternalExternalNssaExternalTwo     types.Bool   `tfsdk:"match_internal_external_nssa_external_two"`
-	MatchInternalNssaExternal                types.Bool   `tfsdk:"match_internal_nssa_external"`
-	MatchInternalNssaExternalOne             types.Bool   `tfsdk:"match_internal_nssa_external_one"`
-	MatchInternalNssaExternalTwo             types.Bool   `tfsdk:"match_internal_nssa_external_two"`
-	MatchExternalExternalOne                 types.Bool   `tfsdk:"match_external_external_one"`
-	MatchExternalExternalOneNssaExternal     types.Bool   `tfsdk:"match_external_external_one_nssa_external"`
-	MatchExternalExternalOneNssaExternalOne  types.Bool   `tfsdk:"match_external_external_one_nssa_external_one"`
-	MatchExternalExternalOneNssaExternalTwo  types.Bool   `tfsdk:"match_external_external_one_nssa_external_two"`
-	MatchExternalExternalTwo                 types.Bool   `tfsdk:"match_external_external_two"`
-	OspfMatchExternalExternalTwoNssaExternal types.Bool   `tfsdk:"ospf_match_external_external_two_nssa_external"`
-	MatchExternalExternalTwoNssaExternalOne  types.Bool   `tfsdk:"match_external_external_two_nssa_external_one"`
-	MatchExternalExternalTwoNssaExternalTwo  types.Bool   `tfsdk:"match_external_external_two_nssa_external_two"`
-	MatchExternalExternalNssaExternal        types.Bool   `tfsdk:"match_external_external_nssa_external"`
-	MatchExternalExternalNssaExternalOne     types.Bool   `tfsdk:"match_external_external_nssa_external_one"`
-	MatchExternalExternalNssaExternalTwo     types.Bool   `tfsdk:"match_external_external_nssa_external_two"`
-	MatchNssaExternalOne                     types.Bool   `tfsdk:"match_nssa_external_one"`
-	MatchNssaExternalTwo                     types.Bool   `tfsdk:"match_nssa_external_two"`
-	Metric                                   types.Int64  `tfsdk:"metric"`
-	Multipath                                types.Bool   `tfsdk:"multipath"`
-	RoutePolicy                              types.String `tfsdk:"route_policy"`
+	RouterTag                           types.String `tfsdk:"router_tag"`
+	MatchInternal                       types.Bool   `tfsdk:"match_internal"`
+	MatchExternal                       types.Bool   `tfsdk:"match_external"`
+	MatchNssaExternal                   types.Bool   `tfsdk:"match_nssa_external"`
+	MatchInternalExternal               types.Bool   `tfsdk:"match_internal_external"`
+	MatchInternalExternal1              types.Bool   `tfsdk:"match_internal_external_1"`
+	MatchInternalExternal1NssaExternal  types.Bool   `tfsdk:"match_internal_external_1_nssa_external"`
+	MatchInternalExternal1NssaExternal1 types.Bool   `tfsdk:"match_internal_external_1_nssa_external_1"`
+	MatchInternalExternal1NssaExternal2 types.Bool   `tfsdk:"match_internal_external_1_nssa_external_2"`
+	MatchInternalExternal2              types.Bool   `tfsdk:"match_internal_external_2"`
+	MatchInternalExternal2NssaExternal  types.Bool   `tfsdk:"match_internal_external_2_nssa_external"`
+	MatchInternalExternal2NssaExternal1 types.Bool   `tfsdk:"match_internal_external_2_nssa_external_1"`
+	MatchInternalExternal2NssaExternal2 types.Bool   `tfsdk:"match_internal_external_2_nssa_external_2"`
+	MatchInternalExternalNssaExternal   types.Bool   `tfsdk:"match_internal_external_nssa_external"`
+	MatchInternalExternalNssaExternal1  types.Bool   `tfsdk:"match_internal_external_nssa_external_1"`
+	MatchInternalExternalNssaExternal2  types.Bool   `tfsdk:"match_internal_external_nssa_external_2"`
+	MatchInternalNssaExternal           types.Bool   `tfsdk:"match_internal_nssa_external"`
+	MatchInternalNssaExternal1          types.Bool   `tfsdk:"match_internal_nssa_external_1"`
+	MatchInternalNssaExternal2          types.Bool   `tfsdk:"match_internal_nssa_external_2"`
+	MatchExternal1                      types.Bool   `tfsdk:"match_external_1"`
+	MatchExternal1NssaExternal          types.Bool   `tfsdk:"match_external_1_nssa_external"`
+	MatchExternal1NssaExternal1         types.Bool   `tfsdk:"match_external_1_nssa_external_1"`
+	MatchExternal1NssaExternal2         types.Bool   `tfsdk:"match_external_1_nssa_external_2"`
+	MatchExternal2                      types.Bool   `tfsdk:"match_external_2"`
+	MatchExternal2NssaExternal          types.Bool   `tfsdk:"match_external_2_nssa_external"`
+	MatchExternal2NssaExternal1         types.Bool   `tfsdk:"match_external_2_nssa_external_1"`
+	MatchExternal2NssaExternal2         types.Bool   `tfsdk:"match_external_2_nssa_external_2"`
+	MatchExternalNssaExternal           types.Bool   `tfsdk:"match_external_nssa_external"`
+	MatchExternalNssaExternal1          types.Bool   `tfsdk:"match_external_nssa_external_1"`
+	MatchExternalNssaExternal2          types.Bool   `tfsdk:"match_external_nssa_external_2"`
+	MatchNssaExternal1                  types.Bool   `tfsdk:"match_nssa_external_1"`
+	MatchNssaExternal2                  types.Bool   `tfsdk:"match_nssa_external_2"`
+	Metric                              types.Int64  `tfsdk:"metric"`
+	Multipath                           types.Bool   `tfsdk:"multipath"`
+	RoutePolicy                         types.String `tfsdk:"route_policy"`
 }
 type RouterBGPVRFAddressFamilyRedistributeOspfv3 struct {
-	RouterTag                               types.String `tfsdk:"router_tag"`
-	MatchInternal                           types.Bool   `tfsdk:"match_internal"`
-	MatchExternal                           types.Bool   `tfsdk:"match_external"`
-	MatchNssaExternal                       types.Bool   `tfsdk:"match_nssa_external"`
-	MatchInternalExternal                   types.Bool   `tfsdk:"match_internal_external"`
-	MatchInternalExternalOne                types.Bool   `tfsdk:"match_internal_external_one"`
-	MatchInternalExternalOneNssaExternal    types.Bool   `tfsdk:"match_internal_external_one_nssa_external"`
-	MatchInternalExternalOneNssaExternalOne types.Bool   `tfsdk:"match_internal_external_one_nssa_external_one"`
-	MatchInternalExternalOneNssaExternalTwo types.Bool   `tfsdk:"match_internal_external_one_nssa_external_two"`
-	MatchInternalExternalTwo                types.Bool   `tfsdk:"match_internal_external_two"`
-	MatchInternalExternalTwoNssaExternal    types.Bool   `tfsdk:"match_internal_external_two_nssa_external"`
-	MatchInternalExternalTwoNssaExternalOne types.Bool   `tfsdk:"match_internal_external_two_nssa_external_one"`
-	MatchInternalExternalTwoNssaExternalTwo types.Bool   `tfsdk:"match_internal_external_two_nssa_external_two"`
-	MatchInternalExternalNssaExternal       types.Bool   `tfsdk:"match_internal_external_nssa_external"`
-	MatchInternalExternalNssaExternalOne    types.Bool   `tfsdk:"match_internal_external_nssa_external_one"`
-	MatchInternalExternalNssaExternalTwo    types.Bool   `tfsdk:"match_internal_external_nssa_external_two"`
-	MatchInternalNssaExternal               types.Bool   `tfsdk:"match_internal_nssa_external"`
-	MatchInternalNssaExternalOne            types.Bool   `tfsdk:"match_internal_nssa_external_one"`
-	MatchInternalNssaExternalTwo            types.Bool   `tfsdk:"match_internal_nssa_external_two"`
-	MatchExternalExternalOne                types.Bool   `tfsdk:"match_external_external_one"`
-	MatchExternalExternalOneNssaExternal    types.Bool   `tfsdk:"match_external_external_one_nssa_external"`
-	MatchExternalExternalOneNssaExternalOne types.Bool   `tfsdk:"match_external_external_one_nssa_external_one"`
-	MatchExternalExternalOneNssaExternalTwo types.Bool   `tfsdk:"match_external_external_one_nssa_external_two"`
-	MatchExternalExternalTwo                types.Bool   `tfsdk:"match_external_external_two"`
-	MatchExternalExternalTwoNssaExternal    types.Bool   `tfsdk:"match_external_external_two_nssa_external"`
-	MatchExternalExternalTwoNssaExternalOne types.Bool   `tfsdk:"match_external_external_two_nssa_external_one"`
-	MatchExternalExternalTwoNssaExternalTwo types.Bool   `tfsdk:"match_external_external_two_nssa_external_two"`
-	MatchExternalExternalNssaExternal       types.Bool   `tfsdk:"match_external_external_nssa_external"`
-	MatchExternalExternalNssaExternalOne    types.Bool   `tfsdk:"match_external_external_nssa_external_one"`
-	MatchExternalExternalNssaExternalTwo    types.Bool   `tfsdk:"match_external_external_nssa_external_two"`
-	MatchNssaExternalOne                    types.Bool   `tfsdk:"match_nssa_external_one"`
-	MatchNssaExternalTwo                    types.Bool   `tfsdk:"match_nssa_external_two"`
-	Metric                                  types.Int64  `tfsdk:"metric"`
-	Multipath                               types.Bool   `tfsdk:"multipath"`
-	RoutePolicy                             types.String `tfsdk:"route_policy"`
+	RouterTag                           types.String `tfsdk:"router_tag"`
+	MatchInternal                       types.Bool   `tfsdk:"match_internal"`
+	MatchExternal                       types.Bool   `tfsdk:"match_external"`
+	MatchNssaExternal                   types.Bool   `tfsdk:"match_nssa_external"`
+	MatchInternalExternal               types.Bool   `tfsdk:"match_internal_external"`
+	MatchInternalExternal1              types.Bool   `tfsdk:"match_internal_external_1"`
+	MatchInternalExternal1NssaExternal  types.Bool   `tfsdk:"match_internal_external_1_nssa_external"`
+	MatchInternalExternal1NssaExternal1 types.Bool   `tfsdk:"match_internal_external_1_nssa_external_1"`
+	MatchInternalExternal1NssaExternal2 types.Bool   `tfsdk:"match_internal_external_1_nssa_external_2"`
+	MatchInternalExternal2              types.Bool   `tfsdk:"match_internal_external_2"`
+	MatchInternalExternal2NssaExternal  types.Bool   `tfsdk:"match_internal_external_2_nssa_external"`
+	MatchInternalExternal2NssaExternal1 types.Bool   `tfsdk:"match_internal_external_2_nssa_external_1"`
+	MatchInternalExternal2NssaExternal2 types.Bool   `tfsdk:"match_internal_external_2_nssa_external_2"`
+	MatchInternalExternalNssaExternal   types.Bool   `tfsdk:"match_internal_external_nssa_external"`
+	MatchInternalExternalNssaExternal1  types.Bool   `tfsdk:"match_internal_external_nssa_external_1"`
+	MatchInternalExternalNssaExternal2  types.Bool   `tfsdk:"match_internal_external_nssa_external_2"`
+	MatchInternalNssaExternal           types.Bool   `tfsdk:"match_internal_nssa_external"`
+	MatchInternalNssaExternal1          types.Bool   `tfsdk:"match_internal_nssa_external_1"`
+	MatchInternalNssaExternal2          types.Bool   `tfsdk:"match_internal_nssa_external_2"`
+	MatchExternal1                      types.Bool   `tfsdk:"match_external_1"`
+	MatchExternal1NssaExternal          types.Bool   `tfsdk:"match_external_1_nssa_external"`
+	MatchExternal1NssaExternal1         types.Bool   `tfsdk:"match_external_1_nssa_external_1"`
+	MatchExternal1NssaExternal2         types.Bool   `tfsdk:"match_external_1_nssa_external_2"`
+	MatchExternal2                      types.Bool   `tfsdk:"match_external_2"`
+	MatchExternal2NssaExternal          types.Bool   `tfsdk:"match_external_2_nssa_external"`
+	MatchExternal2NssaExternal1         types.Bool   `tfsdk:"match_external_2_nssa_external_1"`
+	MatchExternal2NssaExternal2         types.Bool   `tfsdk:"match_external_2_nssa_external_2"`
+	MatchExternalNssaExternal           types.Bool   `tfsdk:"match_external_nssa_external"`
+	MatchExternalNssaExternal1          types.Bool   `tfsdk:"match_external_nssa_external_1"`
+	MatchExternalNssaExternal2          types.Bool   `tfsdk:"match_external_nssa_external_2"`
+	MatchNssaExternal1                  types.Bool   `tfsdk:"match_nssa_external_1"`
+	MatchNssaExternal2                  types.Bool   `tfsdk:"match_nssa_external_2"`
+	Metric                              types.Int64  `tfsdk:"metric"`
+	Multipath                           types.Bool   `tfsdk:"multipath"`
+	RoutePolicy                         types.String `tfsdk:"route_policy"`
 }
 type RouterBGPVRFAddressFamilyRedistributeEigrp struct {
 	InstanceName          types.String `tfsdk:"instance_name"`
@@ -253,17 +253,17 @@ type RouterBGPVRFAddressFamilyRedistributeEigrp struct {
 	RoutePolicy           types.String `tfsdk:"route_policy"`
 }
 type RouterBGPVRFAddressFamilyRedistributeIsis struct {
-	InstanceName                 types.String `tfsdk:"instance_name"`
-	LevelOne                     types.Bool   `tfsdk:"level_one"`
-	LevelOneTwo                  types.Bool   `tfsdk:"level_one_two"`
-	LevelOneTwoLevelOneInterArea types.Bool   `tfsdk:"level_one_two_level_one_inter_area"`
-	LevelOneOneInterArea         types.Bool   `tfsdk:"level_one_one_inter_area"`
-	LevelTwo                     types.Bool   `tfsdk:"level_two"`
-	LevelTwoOneInterArea         types.Bool   `tfsdk:"level_two_one_inter_area"`
-	LevelOneInterArea            types.Bool   `tfsdk:"level_one_inter_area"`
-	Metric                       types.Int64  `tfsdk:"metric"`
-	Multipath                    types.Bool   `tfsdk:"multipath"`
-	RoutePolicy                  types.String `tfsdk:"route_policy"`
+	InstanceName                types.String `tfsdk:"instance_name"`
+	Level1                      types.Bool   `tfsdk:"level_1"`
+	Level1Level2                types.Bool   `tfsdk:"level_1_level_2"`
+	Level1Level2Level1InterArea types.Bool   `tfsdk:"level_1_level_2_level_1_inter_area"`
+	Level1Level1InterArea       types.Bool   `tfsdk:"level_1_level_1_inter_area"`
+	Level2                      types.Bool   `tfsdk:"level_2"`
+	Level2Level1InterArea       types.Bool   `tfsdk:"level_2_level_1_inter_area"`
+	Level1InterArea             types.Bool   `tfsdk:"level_1_inter_area"`
+	Metric                      types.Int64  `tfsdk:"metric"`
+	Multipath                   types.Bool   `tfsdk:"multipath"`
+	RoutePolicy                 types.String `tfsdk:"route_policy"`
 }
 
 func (data RouterBGPVRFAddressFamily) getPath() string {
@@ -565,43 +565,43 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOne.IsNull() && !item.MatchInternalExternalOne.IsUnknown() {
-				if item.MatchInternalExternalOne.ValueBool() {
+			if !item.MatchInternalExternal1.IsNull() && !item.MatchInternalExternal1.IsUnknown() {
+				if item.MatchInternalExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternal.IsNull() && !item.MatchInternalExternalOneNssaExternal.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternal.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal.IsNull() && !item.MatchInternalExternal1NssaExternal.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternalOne.IsNull() && !item.MatchInternalExternalOneNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal1.IsNull() && !item.MatchInternalExternal1NssaExternal1.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternalTwo.IsNull() && !item.MatchInternalExternalOneNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal2.IsNull() && !item.MatchInternalExternal1NssaExternal2.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwo.IsNull() && !item.MatchInternalExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal2.IsNull() && !item.MatchInternalExternal2.IsUnknown() {
+				if item.MatchInternalExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.two", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternal.IsNull() && !item.MatchInternalExternalTwoNssaExternal.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternal.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal.IsNull() && !item.MatchInternalExternal2NssaExternal.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternalOne.IsNull() && !item.MatchInternalExternalTwoNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal1.IsNull() && !item.MatchInternalExternal2NssaExternal1.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternalTwo.IsNull() && !item.MatchInternalExternalTwoNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal2.IsNull() && !item.MatchInternalExternal2NssaExternal2.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external.two", map[string]string{})
 				}
 			}
@@ -610,13 +610,13 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalNssaExternalOne.IsNull() && !item.MatchInternalExternalNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternalNssaExternal1.IsNull() && !item.MatchInternalExternalNssaExternal1.IsUnknown() {
+				if item.MatchInternalExternalNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalNssaExternalTwo.IsNull() && !item.MatchInternalExternalNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternalNssaExternal2.IsNull() && !item.MatchInternalExternalNssaExternal2.IsUnknown() {
+				if item.MatchInternalExternalNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external.two", map[string]string{})
 				}
 			}
@@ -625,78 +625,78 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalNssaExternalOne.IsNull() && !item.MatchInternalNssaExternalOne.IsUnknown() {
-				if item.MatchInternalNssaExternalOne.ValueBool() {
+			if !item.MatchInternalNssaExternal1.IsNull() && !item.MatchInternalNssaExternal1.IsUnknown() {
+				if item.MatchInternalNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalNssaExternalTwo.IsNull() && !item.MatchInternalNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalNssaExternal2.IsNull() && !item.MatchInternalNssaExternal2.IsUnknown() {
+				if item.MatchInternalNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOne.IsNull() && !item.MatchExternalExternalOne.IsUnknown() {
-				if item.MatchExternalExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.one", map[string]string{})
+			if !item.MatchExternal1.IsNull() && !item.MatchExternal1.IsUnknown() {
+				if item.MatchExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternal.IsNull() && !item.MatchExternalExternalOneNssaExternal.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external", map[string]string{})
+			if !item.MatchExternal1NssaExternal.IsNull() && !item.MatchExternal1NssaExternal.IsUnknown() {
+				if item.MatchExternal1NssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternalOne.IsNull() && !item.MatchExternalExternalOneNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external.one", map[string]string{})
+			if !item.MatchExternal1NssaExternal1.IsNull() && !item.MatchExternal1NssaExternal1.IsUnknown() {
+				if item.MatchExternal1NssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternalTwo.IsNull() && !item.MatchExternalExternalOneNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external.two", map[string]string{})
+			if !item.MatchExternal1NssaExternal2.IsNull() && !item.MatchExternal1NssaExternal2.IsUnknown() {
+				if item.MatchExternal1NssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwo.IsNull() && !item.MatchExternalExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.two", map[string]string{})
+			if !item.MatchExternal2.IsNull() && !item.MatchExternal2.IsUnknown() {
+				if item.MatchExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.two", map[string]string{})
 				}
 			}
-			if !item.OspfMatchExternalExternalTwoNssaExternal.IsNull() && !item.OspfMatchExternalExternalTwoNssaExternal.IsUnknown() {
-				if item.OspfMatchExternalExternalTwoNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external", map[string]string{})
+			if !item.MatchExternal2NssaExternal.IsNull() && !item.MatchExternal2NssaExternal.IsUnknown() {
+				if item.MatchExternal2NssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwoNssaExternalOne.IsNull() && !item.MatchExternalExternalTwoNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalTwoNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external.one", map[string]string{})
+			if !item.MatchExternal2NssaExternal1.IsNull() && !item.MatchExternal2NssaExternal1.IsUnknown() {
+				if item.MatchExternal2NssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwoNssaExternalTwo.IsNull() && !item.MatchExternalExternalTwoNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalTwoNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external.two", map[string]string{})
+			if !item.MatchExternal2NssaExternal2.IsNull() && !item.MatchExternal2NssaExternal2.IsUnknown() {
+				if item.MatchExternal2NssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternal.IsNull() && !item.MatchExternalExternalNssaExternal.IsUnknown() {
-				if item.MatchExternalExternalNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external", map[string]string{})
+			if !item.MatchExternalNssaExternal.IsNull() && !item.MatchExternalNssaExternal.IsUnknown() {
+				if item.MatchExternalNssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternalOne.IsNull() && !item.MatchExternalExternalNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external.one", map[string]string{})
+			if !item.MatchExternalNssaExternal1.IsNull() && !item.MatchExternalNssaExternal1.IsUnknown() {
+				if item.MatchExternalNssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternalTwo.IsNull() && !item.MatchExternalExternalNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external.two", map[string]string{})
+			if !item.MatchExternalNssaExternal2.IsNull() && !item.MatchExternalNssaExternal2.IsUnknown() {
+				if item.MatchExternalNssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchNssaExternalOne.IsNull() && !item.MatchNssaExternalOne.IsUnknown() {
-				if item.MatchNssaExternalOne.ValueBool() {
+			if !item.MatchNssaExternal1.IsNull() && !item.MatchNssaExternal1.IsUnknown() {
+				if item.MatchNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchNssaExternalTwo.IsNull() && !item.MatchNssaExternalTwo.IsUnknown() {
-				if item.MatchNssaExternalTwo.ValueBool() {
+			if !item.MatchNssaExternal2.IsNull() && !item.MatchNssaExternal2.IsUnknown() {
+				if item.MatchNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfs.ospf"+"."+strconv.Itoa(index)+"."+"match.nssa-external.two", map[string]string{})
 				}
 			}
@@ -739,43 +739,43 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOne.IsNull() && !item.MatchInternalExternalOne.IsUnknown() {
-				if item.MatchInternalExternalOne.ValueBool() {
+			if !item.MatchInternalExternal1.IsNull() && !item.MatchInternalExternal1.IsUnknown() {
+				if item.MatchInternalExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternal.IsNull() && !item.MatchInternalExternalOneNssaExternal.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternal.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal.IsNull() && !item.MatchInternalExternal1NssaExternal.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternalOne.IsNull() && !item.MatchInternalExternalOneNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal1.IsNull() && !item.MatchInternalExternal1NssaExternal1.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalOneNssaExternalTwo.IsNull() && !item.MatchInternalExternalOneNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalOneNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal1NssaExternal2.IsNull() && !item.MatchInternalExternal1NssaExternal2.IsUnknown() {
+				if item.MatchInternalExternal1NssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.one.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwo.IsNull() && !item.MatchInternalExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal2.IsNull() && !item.MatchInternalExternal2.IsUnknown() {
+				if item.MatchInternalExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.two", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternal.IsNull() && !item.MatchInternalExternalTwoNssaExternal.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternal.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal.IsNull() && !item.MatchInternalExternal2NssaExternal.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternalOne.IsNull() && !item.MatchInternalExternalTwoNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal1.IsNull() && !item.MatchInternalExternal2NssaExternal1.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalTwoNssaExternalTwo.IsNull() && !item.MatchInternalExternalTwoNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalTwoNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternal2NssaExternal2.IsNull() && !item.MatchInternalExternal2NssaExternal2.IsUnknown() {
+				if item.MatchInternalExternal2NssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.two.nssa-external.two", map[string]string{})
 				}
 			}
@@ -784,13 +784,13 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalNssaExternalOne.IsNull() && !item.MatchInternalExternalNssaExternalOne.IsUnknown() {
-				if item.MatchInternalExternalNssaExternalOne.ValueBool() {
+			if !item.MatchInternalExternalNssaExternal1.IsNull() && !item.MatchInternalExternalNssaExternal1.IsUnknown() {
+				if item.MatchInternalExternalNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalExternalNssaExternalTwo.IsNull() && !item.MatchInternalExternalNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalExternalNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalExternalNssaExternal2.IsNull() && !item.MatchInternalExternalNssaExternal2.IsUnknown() {
+				if item.MatchInternalExternalNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.external.nssa-external.two", map[string]string{})
 				}
 			}
@@ -799,78 +799,78 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchInternalNssaExternalOne.IsNull() && !item.MatchInternalNssaExternalOne.IsUnknown() {
-				if item.MatchInternalNssaExternalOne.ValueBool() {
+			if !item.MatchInternalNssaExternal1.IsNull() && !item.MatchInternalNssaExternal1.IsUnknown() {
+				if item.MatchInternalNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchInternalNssaExternalTwo.IsNull() && !item.MatchInternalNssaExternalTwo.IsUnknown() {
-				if item.MatchInternalNssaExternalTwo.ValueBool() {
+			if !item.MatchInternalNssaExternal2.IsNull() && !item.MatchInternalNssaExternal2.IsUnknown() {
+				if item.MatchInternalNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.internal.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOne.IsNull() && !item.MatchExternalExternalOne.IsUnknown() {
-				if item.MatchExternalExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.one", map[string]string{})
+			if !item.MatchExternal1.IsNull() && !item.MatchExternal1.IsUnknown() {
+				if item.MatchExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternal.IsNull() && !item.MatchExternalExternalOneNssaExternal.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external", map[string]string{})
+			if !item.MatchExternal1NssaExternal.IsNull() && !item.MatchExternal1NssaExternal.IsUnknown() {
+				if item.MatchExternal1NssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternalOne.IsNull() && !item.MatchExternalExternalOneNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external.one", map[string]string{})
+			if !item.MatchExternal1NssaExternal1.IsNull() && !item.MatchExternal1NssaExternal1.IsUnknown() {
+				if item.MatchExternal1NssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalOneNssaExternalTwo.IsNull() && !item.MatchExternalExternalOneNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalOneNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.one.nssa-external.two", map[string]string{})
+			if !item.MatchExternal1NssaExternal2.IsNull() && !item.MatchExternal1NssaExternal2.IsUnknown() {
+				if item.MatchExternal1NssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.one.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwo.IsNull() && !item.MatchExternalExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.two", map[string]string{})
+			if !item.MatchExternal2.IsNull() && !item.MatchExternal2.IsUnknown() {
+				if item.MatchExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwoNssaExternal.IsNull() && !item.MatchExternalExternalTwoNssaExternal.IsUnknown() {
-				if item.MatchExternalExternalTwoNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external", map[string]string{})
+			if !item.MatchExternal2NssaExternal.IsNull() && !item.MatchExternal2NssaExternal.IsUnknown() {
+				if item.MatchExternal2NssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwoNssaExternalOne.IsNull() && !item.MatchExternalExternalTwoNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalTwoNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external.one", map[string]string{})
+			if !item.MatchExternal2NssaExternal1.IsNull() && !item.MatchExternal2NssaExternal1.IsUnknown() {
+				if item.MatchExternal2NssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalTwoNssaExternalTwo.IsNull() && !item.MatchExternalExternalTwoNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalTwoNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.two.nssa-external.two", map[string]string{})
+			if !item.MatchExternal2NssaExternal2.IsNull() && !item.MatchExternal2NssaExternal2.IsUnknown() {
+				if item.MatchExternal2NssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.two.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternal.IsNull() && !item.MatchExternalExternalNssaExternal.IsUnknown() {
-				if item.MatchExternalExternalNssaExternal.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external", map[string]string{})
+			if !item.MatchExternalNssaExternal.IsNull() && !item.MatchExternalNssaExternal.IsUnknown() {
+				if item.MatchExternalNssaExternal.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternalOne.IsNull() && !item.MatchExternalExternalNssaExternalOne.IsUnknown() {
-				if item.MatchExternalExternalNssaExternalOne.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external.one", map[string]string{})
+			if !item.MatchExternalNssaExternal1.IsNull() && !item.MatchExternalNssaExternal1.IsUnknown() {
+				if item.MatchExternalNssaExternal1.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchExternalExternalNssaExternalTwo.IsNull() && !item.MatchExternalExternalNssaExternalTwo.IsUnknown() {
-				if item.MatchExternalExternalNssaExternalTwo.ValueBool() {
-					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.external.nssa-external.two", map[string]string{})
+			if !item.MatchExternalNssaExternal2.IsNull() && !item.MatchExternalNssaExternal2.IsUnknown() {
+				if item.MatchExternalNssaExternal2.ValueBool() {
+					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.external.nssa-external.two", map[string]string{})
 				}
 			}
-			if !item.MatchNssaExternalOne.IsNull() && !item.MatchNssaExternalOne.IsUnknown() {
-				if item.MatchNssaExternalOne.ValueBool() {
+			if !item.MatchNssaExternal1.IsNull() && !item.MatchNssaExternal1.IsUnknown() {
+				if item.MatchNssaExternal1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.nssa-external.one", map[string]string{})
 				}
 			}
-			if !item.MatchNssaExternalTwo.IsNull() && !item.MatchNssaExternalTwo.IsUnknown() {
-				if item.MatchNssaExternalTwo.ValueBool() {
+			if !item.MatchNssaExternal2.IsNull() && !item.MatchNssaExternal2.IsUnknown() {
+				if item.MatchNssaExternal2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.ospfv3s.ospfv3"+"."+strconv.Itoa(index)+"."+"match.nssa-external.two", map[string]string{})
 				}
 			}
@@ -927,38 +927,38 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 			if !item.InstanceName.IsNull() && !item.InstanceName.IsUnknown() {
 				body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"isis-name", item.InstanceName.ValueString())
 			}
-			if !item.LevelOne.IsNull() && !item.LevelOne.IsUnknown() {
-				if item.LevelOne.ValueBool() {
+			if !item.Level1.IsNull() && !item.Level1.IsUnknown() {
+				if item.Level1.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.one", map[string]string{})
 				}
 			}
-			if !item.LevelOneTwo.IsNull() && !item.LevelOneTwo.IsUnknown() {
-				if item.LevelOneTwo.ValueBool() {
+			if !item.Level1Level2.IsNull() && !item.Level1Level2.IsUnknown() {
+				if item.Level1Level2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.one.level.two", map[string]string{})
 				}
 			}
-			if !item.LevelOneTwoLevelOneInterArea.IsNull() && !item.LevelOneTwoLevelOneInterArea.IsUnknown() {
-				if item.LevelOneTwoLevelOneInterArea.ValueBool() {
+			if !item.Level1Level2Level1InterArea.IsNull() && !item.Level1Level2Level1InterArea.IsUnknown() {
+				if item.Level1Level2Level1InterArea.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.one.level.two.level.one-inter-area", map[string]string{})
 				}
 			}
-			if !item.LevelOneOneInterArea.IsNull() && !item.LevelOneOneInterArea.IsUnknown() {
-				if item.LevelOneOneInterArea.ValueBool() {
+			if !item.Level1Level1InterArea.IsNull() && !item.Level1Level1InterArea.IsUnknown() {
+				if item.Level1Level1InterArea.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.one.level.one-inter-area", map[string]string{})
 				}
 			}
-			if !item.LevelTwo.IsNull() && !item.LevelTwo.IsUnknown() {
-				if item.LevelTwo.ValueBool() {
+			if !item.Level2.IsNull() && !item.Level2.IsUnknown() {
+				if item.Level2.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.two", map[string]string{})
 				}
 			}
-			if !item.LevelTwoOneInterArea.IsNull() && !item.LevelTwoOneInterArea.IsUnknown() {
-				if item.LevelTwoOneInterArea.ValueBool() {
+			if !item.Level2Level1InterArea.IsNull() && !item.Level2Level1InterArea.IsUnknown() {
+				if item.Level2Level1InterArea.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.two.level.one-inter-area", map[string]string{})
 				}
 			}
-			if !item.LevelOneInterArea.IsNull() && !item.LevelOneInterArea.IsUnknown() {
-				if item.LevelOneInterArea.ValueBool() {
+			if !item.Level1InterArea.IsNull() && !item.Level1InterArea.IsUnknown() {
+				if item.Level1InterArea.ValueBool() {
 					body, _ = sjson.Set(body, "redistribute.isis-processes.isis-process"+"."+strconv.Itoa(index)+"."+"level.one-inter-area", map[string]string{})
 				}
 			}
@@ -1447,77 +1447,77 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspf[i].MatchInternalExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one"); !data.RedistributeOspf[i].MatchInternalExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.one"); !data.RedistributeOspf[i].MatchInternalExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external"); !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external"); !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal1NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two"); !data.RedistributeOspf[i].MatchInternalExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.two"); !data.RedistributeOspf[i].MatchInternalExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external"); !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external"); !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal2NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("match.internal.external.nssa-external"); !data.RedistributeOspf[i].MatchInternalExternalNssaExternal.IsNull() {
 			if value.Exists() {
@@ -1528,23 +1528,23 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspf[i].MatchInternalExternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalExternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalExternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalExternalNssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("match.internal.nssa-external"); !data.RedistributeOspf[i].MatchInternalNssaExternal.IsNull() {
 			if value.Exists() {
@@ -1555,140 +1555,140 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspf[i].MatchInternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.nssa-external.one"); !data.RedistributeOspf[i].MatchInternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.nssa-external.two"); !data.RedistributeOspf[i].MatchInternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchInternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchInternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchInternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchInternalNssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one"); !data.RedistributeOspf[i].MatchExternalExternalOne.IsNull() {
+		if value := r.Get("match.external.one"); !data.RedistributeOspf[i].MatchExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external"); !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal.IsNull() {
+		if value := r.Get("match.external.one.nssa-external"); !data.RedistributeOspf[i].MatchExternal1NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal1NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external.one"); !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.one.nssa-external.one"); !data.RedistributeOspf[i].MatchExternal1NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal1NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external.two"); !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.one.nssa-external.two"); !data.RedistributeOspf[i].MatchExternal1NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal1NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two"); !data.RedistributeOspf[i].MatchExternalExternalTwo.IsNull() {
+		if value := r.Get("match.external.two"); !data.RedistributeOspf[i].MatchExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external"); !data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal.IsNull() {
+		if value := r.Get("match.external.two.nssa-external"); !data.RedistributeOspf[i].MatchExternal2NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal2NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external.one"); !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.two.nssa-external.one"); !data.RedistributeOspf[i].MatchExternal2NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal2NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external.two"); !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.two.nssa-external.two"); !data.RedistributeOspf[i].MatchExternal2NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternal2NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external"); !data.RedistributeOspf[i].MatchExternalExternalNssaExternal.IsNull() {
+		if value := r.Get("match.external.nssa-external"); !data.RedistributeOspf[i].MatchExternalNssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternal = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternal = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternalNssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalNssaExternal = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external.one"); !data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.nssa-external.one"); !data.RedistributeOspf[i].MatchExternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external.two"); !data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.nssa-external.two"); !data.RedistributeOspf[i].MatchExternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchExternalNssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external.one"); !data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() {
+		if value := r.Get("match.nssa-external.one"); !data.RedistributeOspf[i].MatchNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchNssaExternalOne = types.BoolNull()
+			data.RedistributeOspf[i].MatchNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external.two"); !data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() {
+		if value := r.Get("match.nssa-external.two"); !data.RedistributeOspf[i].MatchNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspf[i].MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspf[i].MatchNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspf[i].MatchNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspf[i].MatchNssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("metric"); value.Exists() && !data.RedistributeOspf[i].Metric.IsNull() {
 			data.RedistributeOspf[i].Metric = types.Int64Value(value.Int())
@@ -1774,77 +1774,77 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspfv3[i].MatchInternalExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one"); !data.RedistributeOspfv3[i].MatchInternalExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.one"); !data.RedistributeOspfv3[i].MatchInternalExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.one.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.one.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two"); !data.RedistributeOspfv3[i].MatchInternalExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.two"); !data.RedistributeOspfv3[i].MatchInternalExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.two.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.two.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("match.internal.external.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal.IsNull() {
 			if value.Exists() {
@@ -1855,23 +1855,23 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.external.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.external.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.external.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("match.internal.nssa-external"); !data.RedistributeOspfv3[i].MatchInternalNssaExternal.IsNull() {
 			if value.Exists() {
@@ -1882,140 +1882,140 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeOspfv3[i].MatchInternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.internal.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.internal.nssa-external.one"); !data.RedistributeOspfv3[i].MatchInternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.internal.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.internal.nssa-external.two"); !data.RedistributeOspfv3[i].MatchInternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchInternalNssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one"); !data.RedistributeOspfv3[i].MatchExternalExternalOne.IsNull() {
+		if value := r.Get("match.external.one"); !data.RedistributeOspfv3[i].MatchExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external"); !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal.IsNull() {
+		if value := r.Get("match.external.one.nssa-external"); !data.RedistributeOspfv3[i].MatchExternal1NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal1NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.one.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternal1NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal1NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.one.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.one.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternal1NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal1NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two"); !data.RedistributeOspfv3[i].MatchExternalExternalTwo.IsNull() {
+		if value := r.Get("match.external.two"); !data.RedistributeOspfv3[i].MatchExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external"); !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal.IsNull() {
+		if value := r.Get("match.external.two.nssa-external"); !data.RedistributeOspfv3[i].MatchExternal2NssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal2NssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.two.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternal2NssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal2NssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.two.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.two.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternal2NssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternal2NssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external"); !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal.IsNull() {
+		if value := r.Get("match.external.nssa-external"); !data.RedistributeOspfv3[i].MatchExternalNssaExternal.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternalNssaExternal = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne.IsNull() {
+		if value := r.Get("match.external.nssa-external.one"); !data.RedistributeOspfv3[i].MatchExternalNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternalNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.external.external.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo.IsNull() {
+		if value := r.Get("match.external.nssa-external.two"); !data.RedistributeOspfv3[i].MatchExternalNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchExternalNssaExternal2 = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external.one"); !data.RedistributeOspfv3[i].MatchNssaExternalOne.IsNull() {
+		if value := r.Get("match.nssa-external.one"); !data.RedistributeOspfv3[i].MatchNssaExternal1.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchNssaExternalOne = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchNssaExternalOne = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchNssaExternal1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchNssaExternalOne = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchNssaExternal1 = types.BoolNull()
 		}
-		if value := r.Get("match.nssa-external.two"); !data.RedistributeOspfv3[i].MatchNssaExternalTwo.IsNull() {
+		if value := r.Get("match.nssa-external.two"); !data.RedistributeOspfv3[i].MatchNssaExternal2.IsNull() {
 			if value.Exists() {
-				data.RedistributeOspfv3[i].MatchNssaExternalTwo = types.BoolValue(true)
+				data.RedistributeOspfv3[i].MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				data.RedistributeOspfv3[i].MatchNssaExternalTwo = types.BoolValue(false)
+				data.RedistributeOspfv3[i].MatchNssaExternal2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeOspfv3[i].MatchNssaExternalTwo = types.BoolNull()
+			data.RedistributeOspfv3[i].MatchNssaExternal2 = types.BoolNull()
 		}
 		if value := r.Get("metric"); value.Exists() && !data.RedistributeOspfv3[i].Metric.IsNull() {
 			data.RedistributeOspfv3[i].Metric = types.Int64Value(value.Int())
@@ -2140,68 +2140,68 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 		} else {
 			data.RedistributeIsis[i].InstanceName = types.StringNull()
 		}
-		if value := r.Get("level.one"); !data.RedistributeIsis[i].LevelOne.IsNull() {
+		if value := r.Get("level.one"); !data.RedistributeIsis[i].Level1.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelOne = types.BoolValue(true)
+				data.RedistributeIsis[i].Level1 = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelOne = types.BoolValue(false)
+				data.RedistributeIsis[i].Level1 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelOne = types.BoolNull()
+			data.RedistributeIsis[i].Level1 = types.BoolNull()
 		}
-		if value := r.Get("level.one.level.two"); !data.RedistributeIsis[i].LevelOneTwo.IsNull() {
+		if value := r.Get("level.one.level.two"); !data.RedistributeIsis[i].Level1Level2.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelOneTwo = types.BoolValue(true)
+				data.RedistributeIsis[i].Level1Level2 = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelOneTwo = types.BoolValue(false)
+				data.RedistributeIsis[i].Level1Level2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelOneTwo = types.BoolNull()
+			data.RedistributeIsis[i].Level1Level2 = types.BoolNull()
 		}
-		if value := r.Get("level.one.level.two.level.one-inter-area"); !data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea.IsNull() {
+		if value := r.Get("level.one.level.two.level.one-inter-area"); !data.RedistributeIsis[i].Level1Level2Level1InterArea.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea = types.BoolValue(true)
+				data.RedistributeIsis[i].Level1Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea = types.BoolValue(false)
+				data.RedistributeIsis[i].Level1Level2Level1InterArea = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea = types.BoolNull()
+			data.RedistributeIsis[i].Level1Level2Level1InterArea = types.BoolNull()
 		}
-		if value := r.Get("level.one.level.one-inter-area"); !data.RedistributeIsis[i].LevelOneOneInterArea.IsNull() {
+		if value := r.Get("level.one.level.one-inter-area"); !data.RedistributeIsis[i].Level1Level1InterArea.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelOneOneInterArea = types.BoolValue(true)
+				data.RedistributeIsis[i].Level1Level1InterArea = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelOneOneInterArea = types.BoolValue(false)
+				data.RedistributeIsis[i].Level1Level1InterArea = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelOneOneInterArea = types.BoolNull()
+			data.RedistributeIsis[i].Level1Level1InterArea = types.BoolNull()
 		}
-		if value := r.Get("level.two"); !data.RedistributeIsis[i].LevelTwo.IsNull() {
+		if value := r.Get("level.two"); !data.RedistributeIsis[i].Level2.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelTwo = types.BoolValue(true)
+				data.RedistributeIsis[i].Level2 = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelTwo = types.BoolValue(false)
+				data.RedistributeIsis[i].Level2 = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelTwo = types.BoolNull()
+			data.RedistributeIsis[i].Level2 = types.BoolNull()
 		}
-		if value := r.Get("level.two.level.one-inter-area"); !data.RedistributeIsis[i].LevelTwoOneInterArea.IsNull() {
+		if value := r.Get("level.two.level.one-inter-area"); !data.RedistributeIsis[i].Level2Level1InterArea.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelTwoOneInterArea = types.BoolValue(true)
+				data.RedistributeIsis[i].Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelTwoOneInterArea = types.BoolValue(false)
+				data.RedistributeIsis[i].Level2Level1InterArea = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelTwoOneInterArea = types.BoolNull()
+			data.RedistributeIsis[i].Level2Level1InterArea = types.BoolNull()
 		}
-		if value := r.Get("level.one-inter-area"); !data.RedistributeIsis[i].LevelOneInterArea.IsNull() {
+		if value := r.Get("level.one-inter-area"); !data.RedistributeIsis[i].Level1InterArea.IsNull() {
 			if value.Exists() {
-				data.RedistributeIsis[i].LevelOneInterArea = types.BoolValue(true)
+				data.RedistributeIsis[i].Level1InterArea = types.BoolValue(true)
 			} else {
-				data.RedistributeIsis[i].LevelOneInterArea = types.BoolValue(false)
+				data.RedistributeIsis[i].Level1InterArea = types.BoolValue(false)
 			}
 		} else {
-			data.RedistributeIsis[i].LevelOneInterArea = types.BoolNull()
+			data.RedistributeIsis[i].Level1InterArea = types.BoolNull()
 		}
 		if value := r.Get("metric"); value.Exists() && !data.RedistributeIsis[i].Metric.IsNull() {
 			data.RedistributeIsis[i].Metric = types.Int64Value(value.Int())
@@ -2556,44 +2556,44 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
-				item.MatchInternalExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
@@ -2601,14 +2601,14 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
@@ -2616,79 +2616,79 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one"); cValue.Exists() {
-				item.MatchExternalExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one"); cValue.Exists() {
+				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOne = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
+				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two"); cValue.Exists() {
+				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwo = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external"); cValue.Exists() {
-				item.OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
+				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
+				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
+				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
+				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
-				item.MatchNssaExternalOne = types.BoolValue(true)
+				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
-				item.MatchNssaExternalTwo = types.BoolValue(true)
+				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -2733,44 +2733,44 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
-				item.MatchInternalExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
@@ -2778,14 +2778,14 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
@@ -2793,79 +2793,79 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.MatchInternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one"); cValue.Exists() {
-				item.MatchExternalExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one"); cValue.Exists() {
+				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOne = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
+				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two"); cValue.Exists() {
+				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwo = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
+				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
+				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
+				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
+				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
-				item.MatchNssaExternalOne = types.BoolValue(true)
+				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
-				item.MatchNssaExternalTwo = types.BoolValue(true)
+				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -2927,39 +2927,39 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 				item.InstanceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level.one"); cValue.Exists() {
-				item.LevelOne = types.BoolValue(true)
+				item.Level1 = types.BoolValue(true)
 			} else {
-				item.LevelOne = types.BoolValue(false)
+				item.Level1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.two"); cValue.Exists() {
-				item.LevelOneTwo = types.BoolValue(true)
+				item.Level1Level2 = types.BoolValue(true)
 			} else {
-				item.LevelOneTwo = types.BoolValue(false)
+				item.Level1Level2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.two.level.one-inter-area"); cValue.Exists() {
-				item.LevelOneTwoLevelOneInterArea = types.BoolValue(true)
+				item.Level1Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneTwoLevelOneInterArea = types.BoolValue(false)
+				item.Level1Level2Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.one-inter-area"); cValue.Exists() {
-				item.LevelOneOneInterArea = types.BoolValue(true)
+				item.Level1Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneOneInterArea = types.BoolValue(false)
+				item.Level1Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.two"); cValue.Exists() {
-				item.LevelTwo = types.BoolValue(true)
+				item.Level2 = types.BoolValue(true)
 			} else {
-				item.LevelTwo = types.BoolValue(false)
+				item.Level2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.two.level.one-inter-area"); cValue.Exists() {
-				item.LevelTwoOneInterArea = types.BoolValue(true)
+				item.Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelTwoOneInterArea = types.BoolValue(false)
+				item.Level2Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one-inter-area"); cValue.Exists() {
-				item.LevelOneInterArea = types.BoolValue(true)
+				item.Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneInterArea = types.BoolValue(false)
+				item.Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -3273,44 +3273,44 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
-				item.MatchInternalExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
@@ -3318,14 +3318,14 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
@@ -3333,79 +3333,79 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one"); cValue.Exists() {
-				item.MatchExternalExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one"); cValue.Exists() {
+				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOne = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
+				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two"); cValue.Exists() {
+				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwo = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external"); cValue.Exists() {
-				item.OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
+				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.OspfMatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
+				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
+				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
+				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
-				item.MatchNssaExternalOne = types.BoolValue(true)
+				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
-				item.MatchNssaExternalTwo = types.BoolValue(true)
+				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -3450,44 +3450,44 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one"); cValue.Exists() {
-				item.MatchInternalExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal1NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternal2NssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external"); cValue.Exists() {
 				item.MatchInternalExternalNssaExternal = types.BoolValue(true)
@@ -3495,14 +3495,14 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalExternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.external.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external"); cValue.Exists() {
 				item.MatchInternalNssaExternal = types.BoolValue(true)
@@ -3510,79 +3510,79 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.MatchInternalNssaExternal = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.one"); cValue.Exists() {
-				item.MatchInternalNssaExternalOne = types.BoolValue(true)
+				item.MatchInternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalOne = types.BoolValue(false)
+				item.MatchInternalNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.internal.nssa-external.two"); cValue.Exists() {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(true)
+				item.MatchInternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchInternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchInternalNssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one"); cValue.Exists() {
-				item.MatchExternalExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one"); cValue.Exists() {
+				item.MatchExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOne = types.BoolValue(false)
+				item.MatchExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external"); cValue.Exists() {
+				item.MatchExternal1NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternal = types.BoolValue(false)
+				item.MatchExternal1NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal1NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal1NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.one.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.one.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal1NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalOneNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal1NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two"); cValue.Exists() {
+				item.MatchExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwo = types.BoolValue(false)
+				item.MatchExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external"); cValue.Exists() {
+				item.MatchExternal2NssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternal = types.BoolValue(false)
+				item.MatchExternal2NssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.one"); cValue.Exists() {
+				item.MatchExternal2NssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalOne = types.BoolValue(false)
+				item.MatchExternal2NssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.two.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.two.nssa-external.two"); cValue.Exists() {
+				item.MatchExternal2NssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalTwoNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternal2NssaExternal2 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external"); cValue.Exists() {
+				item.MatchExternalNssaExternal = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternal = types.BoolValue(false)
+				item.MatchExternalNssaExternal = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.one"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.one"); cValue.Exists() {
+				item.MatchExternalNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalOne = types.BoolValue(false)
+				item.MatchExternalNssaExternal1 = types.BoolValue(false)
 			}
-			if cValue := v.Get("match.external.external.nssa-external.two"); cValue.Exists() {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(true)
+			if cValue := v.Get("match.external.nssa-external.two"); cValue.Exists() {
+				item.MatchExternalNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchExternalExternalNssaExternalTwo = types.BoolValue(false)
+				item.MatchExternalNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.one"); cValue.Exists() {
-				item.MatchNssaExternalOne = types.BoolValue(true)
+				item.MatchNssaExternal1 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalOne = types.BoolValue(false)
+				item.MatchNssaExternal1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("match.nssa-external.two"); cValue.Exists() {
-				item.MatchNssaExternalTwo = types.BoolValue(true)
+				item.MatchNssaExternal2 = types.BoolValue(true)
 			} else {
-				item.MatchNssaExternalTwo = types.BoolValue(false)
+				item.MatchNssaExternal2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -3644,39 +3644,39 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 				item.InstanceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("level.one"); cValue.Exists() {
-				item.LevelOne = types.BoolValue(true)
+				item.Level1 = types.BoolValue(true)
 			} else {
-				item.LevelOne = types.BoolValue(false)
+				item.Level1 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.two"); cValue.Exists() {
-				item.LevelOneTwo = types.BoolValue(true)
+				item.Level1Level2 = types.BoolValue(true)
 			} else {
-				item.LevelOneTwo = types.BoolValue(false)
+				item.Level1Level2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.two.level.one-inter-area"); cValue.Exists() {
-				item.LevelOneTwoLevelOneInterArea = types.BoolValue(true)
+				item.Level1Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneTwoLevelOneInterArea = types.BoolValue(false)
+				item.Level1Level2Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one.level.one-inter-area"); cValue.Exists() {
-				item.LevelOneOneInterArea = types.BoolValue(true)
+				item.Level1Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneOneInterArea = types.BoolValue(false)
+				item.Level1Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.two"); cValue.Exists() {
-				item.LevelTwo = types.BoolValue(true)
+				item.Level2 = types.BoolValue(true)
 			} else {
-				item.LevelTwo = types.BoolValue(false)
+				item.Level2 = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.two.level.one-inter-area"); cValue.Exists() {
-				item.LevelTwoOneInterArea = types.BoolValue(true)
+				item.Level2Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelTwoOneInterArea = types.BoolValue(false)
+				item.Level2Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("level.one-inter-area"); cValue.Exists() {
-				item.LevelOneInterArea = types.BoolValue(true)
+				item.Level1InterArea = types.BoolValue(true)
 			} else {
-				item.LevelOneInterArea = types.BoolValue(false)
+				item.Level1InterArea = types.BoolValue(false)
 			}
 			if cValue := v.Get("metric"); cValue.Exists() {
 				item.Metric = types.Int64Value(cValue.Int())
@@ -3984,85 +3984,85 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				if !state.RedistributeOspf[i].MatchInternalExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalOne.IsNull() && data.RedistributeOspf[j].MatchInternalExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal1.IsNull() && data.RedistributeOspf[j].MatchInternalExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalOneNssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternalOneNssaExternal.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal1NssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternal1NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchInternalExternalOneNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal1NssaExternal1.IsNull() && data.RedistributeOspf[j].MatchInternalExternal1NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchInternalExternalOneNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal1NssaExternal2.IsNull() && data.RedistributeOspf[j].MatchInternalExternal1NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalTwo.IsNull() && data.RedistributeOspf[j].MatchInternalExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal2.IsNull() && data.RedistributeOspf[j].MatchInternalExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternalTwoNssaExternal.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal2NssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternal2NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchInternalExternalTwoNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal2NssaExternal1.IsNull() && data.RedistributeOspf[j].MatchInternalExternal2NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchInternalExternalTwoNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternal2NssaExternal2.IsNull() && data.RedistributeOspf[j].MatchInternalExternal2NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspf[i].MatchInternalExternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalExternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchInternalExternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternalNssaExternal1.IsNull() && data.RedistributeOspf[j].MatchInternalExternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchInternalExternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalExternalNssaExternal2.IsNull() && data.RedistributeOspf[j].MatchInternalExternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspf[i].MatchInternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalNssaExternal1.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchInternalNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchInternalNssaExternal2.IsNull() && data.RedistributeOspf[j].MatchInternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalOne.IsNull() && data.RedistributeOspf[j].MatchExternalExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal1.IsNull() && data.RedistributeOspf[j].MatchExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalOneNssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternalExternalOneNssaExternal.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal1NssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternal1NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchExternalExternalOneNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal1NssaExternal1.IsNull() && data.RedistributeOspf[j].MatchExternal1NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchExternalExternalOneNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal1NssaExternal2.IsNull() && data.RedistributeOspf[j].MatchExternal1NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalTwo.IsNull() && data.RedistributeOspf[j].MatchExternalExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal2.IsNull() && data.RedistributeOspf[j].MatchExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal.IsNull() && data.RedistributeOspf[j].OspfMatchExternalExternalTwoNssaExternal.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal2NssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternal2NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchExternalExternalTwoNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal2NssaExternal1.IsNull() && data.RedistributeOspf[j].MatchExternal2NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchExternalExternalTwoNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternal2NssaExternal2.IsNull() && data.RedistributeOspf[j].MatchExternal2NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternalExternalNssaExternal.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternalNssaExternal.IsNull() && data.RedistributeOspf[j].MatchExternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchExternalExternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternalNssaExternal1.IsNull() && data.RedistributeOspf[j].MatchExternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchExternalExternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchExternalNssaExternal2.IsNull() && data.RedistributeOspf[j].MatchExternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchNssaExternalOne.IsNull() && data.RedistributeOspf[j].MatchNssaExternalOne.IsNull() {
+				if !state.RedistributeOspf[i].MatchNssaExternal1.IsNull() && data.RedistributeOspf[j].MatchNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() && data.RedistributeOspf[j].MatchNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspf[i].MatchNssaExternal2.IsNull() && data.RedistributeOspf[j].MatchNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspf[i].Metric.IsNull() && data.RedistributeOspf[j].Metric.IsNull() {
@@ -4116,85 +4116,85 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				if !state.RedistributeOspfv3[i].MatchInternalExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal1.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalOneNssaExternal.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal1NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalOneNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal1NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalOneNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal1NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal2.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalTwoNssaExternal.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal2NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalTwoNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal2NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalTwoNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternal2NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspfv3[i].MatchInternalExternalNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchInternalExternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspfv3[i].MatchInternalNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchInternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchInternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalNssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchInternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchInternalNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchInternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchInternalNssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchInternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal1.IsNull() && data.RedistributeOspfv3[j].MatchExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalOneNssaExternal.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal1NssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternal1NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalOneNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal1NssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchExternal1NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalOneNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal1NssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchExternal1NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal2.IsNull() && data.RedistributeOspfv3[j].MatchExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalTwoNssaExternal.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal2NssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternal2NssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalTwoNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal2NssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchExternal2NssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalTwoNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternal2NssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchExternal2NssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalNssaExternal.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternalNssaExternal.IsNull() && data.RedistributeOspfv3[j].MatchExternalNssaExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternalNssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchExternalNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchExternalExternalNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchExternalNssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchExternalNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchNssaExternalOne.IsNull() && data.RedistributeOspfv3[j].MatchNssaExternalOne.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchNssaExternal1.IsNull() && data.RedistributeOspfv3[j].MatchNssaExternal1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE", state.getPath(), keyString))
 				}
-				if !state.RedistributeOspfv3[i].MatchNssaExternalTwo.IsNull() && data.RedistributeOspfv3[j].MatchNssaExternalTwo.IsNull() {
+				if !state.RedistributeOspfv3[i].MatchNssaExternal2.IsNull() && data.RedistributeOspfv3[j].MatchNssaExternal2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", state.getPath(), keyString))
 				}
 				if !state.RedistributeOspfv3[i].Metric.IsNull() && data.RedistributeOspfv3[j].Metric.IsNull() {
@@ -4284,25 +4284,25 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 				found = false
 			}
 			if found {
-				if !state.RedistributeIsis[i].LevelOne.IsNull() && data.RedistributeIsis[j].LevelOne.IsNull() {
+				if !state.RedistributeIsis[i].Level1.IsNull() && data.RedistributeIsis[j].Level1.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelOneTwo.IsNull() && data.RedistributeIsis[j].LevelOneTwo.IsNull() {
+				if !state.RedistributeIsis[i].Level1Level2.IsNull() && data.RedistributeIsis[j].Level1Level2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/TWO", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelOneTwoLevelOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneTwoLevelOneInterArea.IsNull() {
+				if !state.RedistributeIsis[i].Level1Level2Level1InterArea.IsNull() && data.RedistributeIsis[j].Level1Level2Level1InterArea.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/TWO/two/level", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelOneOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneOneInterArea.IsNull() {
+				if !state.RedistributeIsis[i].Level1Level1InterArea.IsNull() && data.RedistributeIsis[j].Level1Level1InterArea.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/ONE-INTER-AREA", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelTwo.IsNull() && data.RedistributeIsis[j].LevelTwo.IsNull() {
+				if !state.RedistributeIsis[i].Level2.IsNull() && data.RedistributeIsis[j].Level2.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/TWO/two", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelTwoOneInterArea.IsNull() && data.RedistributeIsis[j].LevelTwoOneInterArea.IsNull() {
+				if !state.RedistributeIsis[i].Level2Level1InterArea.IsNull() && data.RedistributeIsis[j].Level2Level1InterArea.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/TWO/two/level", state.getPath(), keyString))
 				}
-				if !state.RedistributeIsis[i].LevelOneInterArea.IsNull() && data.RedistributeIsis[j].LevelOneInterArea.IsNull() {
+				if !state.RedistributeIsis[i].Level1InterArea.IsNull() && data.RedistributeIsis[j].Level1InterArea.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE-INTER-AREA/one-inter-area", state.getPath(), keyString))
 				}
 				if !state.RedistributeIsis[i].Metric.IsNull() && data.RedistributeIsis[j].Metric.IsNull() {
@@ -4484,85 +4484,85 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 		if !data.RedistributeOspf[i].MatchInternalExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalOne.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal1.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternal.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalOneNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal1NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal2.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternal.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalTwoNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchInternalExternal2NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspf[i].MatchInternalExternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternalNssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalExternalNssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchInternalExternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspf[i].MatchInternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalNssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchInternalNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchInternalNssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchInternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalOne.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal1.IsNull() && !data.RedistributeOspf[i].MatchExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternal.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal1NssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal1NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal1NssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchExternal1NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalOneNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal1NssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchExternal1NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal2.IsNull() && !data.RedistributeOspf[i].MatchExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal.IsNull() && !data.RedistributeOspf[i].OspfMatchExternalExternalTwoNssaExternal.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal2NssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternal2NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal2NssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchExternal2NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalTwoNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternal2NssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchExternal2NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalNssaExternal.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternalNssaExternal.IsNull() && !data.RedistributeOspf[i].MatchExternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternalNssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchExternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchExternalExternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchExternalNssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchExternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchNssaExternalOne.IsNull() && !data.RedistributeOspf[i].MatchNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspf[i].MatchNssaExternal1.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspf[i].MatchNssaExternalTwo.IsNull() && !data.RedistributeOspf[i].MatchNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspf[i].MatchNssaExternal2.IsNull() && !data.RedistributeOspf[i].MatchNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfs/ospf%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspf[i].Multipath.IsNull() && !data.RedistributeOspf[i].Multipath.ValueBool() {
@@ -4588,85 +4588,85 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 		if !data.RedistributeOspfv3[i].MatchInternalExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternal.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalOneNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal1NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternal.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalTwoNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternal2NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchInternalExternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspfv3[i].MatchInternalNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchInternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchInternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalNssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchInternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchInternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchInternalNssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchInternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/INTERNAL/internal/INTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternal.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal1NssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternal1NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal1NssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchExternal1NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalOneNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal1NssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchExternal1NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/ONE/one/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternal.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal2NssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternal2NssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal2NssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchExternal2NssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalTwoNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternal2NssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchExternal2NssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/TWO/two/nssa-external/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternal.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternalNssaExternal.IsNull() && !data.RedistributeOspfv3[i].MatchExternalNssaExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternalNssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchExternalNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchExternalExternalNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchExternalNssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchExternalNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/EXTERNAL/external/EXTERNAL/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchNssaExternalOne.IsNull() && !data.RedistributeOspfv3[i].MatchNssaExternalOne.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchNssaExternal1.IsNull() && !data.RedistributeOspfv3[i].MatchNssaExternal1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeOspfv3[i].MatchNssaExternalTwo.IsNull() && !data.RedistributeOspfv3[i].MatchNssaExternalTwo.ValueBool() {
+		if !data.RedistributeOspfv3[i].MatchNssaExternal2.IsNull() && !data.RedistributeOspfv3[i].MatchNssaExternal2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/ospfv3s/ospfv3%v/match/MATCH/NSSA-EXTERNAL/nssa-external/NSSA-EXTERNAL/TWO/two", data.getPath(), keyString))
 		}
 		if !data.RedistributeOspfv3[i].Multipath.IsNull() && !data.RedistributeOspfv3[i].Multipath.ValueBool() {
@@ -4700,25 +4700,25 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.RedistributeIsis[i].LevelOne.IsNull() && !data.RedistributeIsis[i].LevelOne.ValueBool() {
+		if !data.RedistributeIsis[i].Level1.IsNull() && !data.RedistributeIsis[i].Level1.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelOneTwo.IsNull() && !data.RedistributeIsis[i].LevelOneTwo.ValueBool() {
+		if !data.RedistributeIsis[i].Level1Level2.IsNull() && !data.RedistributeIsis[i].Level1Level2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea.IsNull() && !data.RedistributeIsis[i].LevelOneTwoLevelOneInterArea.ValueBool() {
+		if !data.RedistributeIsis[i].Level1Level2Level1InterArea.IsNull() && !data.RedistributeIsis[i].Level1Level2Level1InterArea.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/TWO/two/level/one-inter-area", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelOneOneInterArea.IsNull() && !data.RedistributeIsis[i].LevelOneOneInterArea.ValueBool() {
+		if !data.RedistributeIsis[i].Level1Level1InterArea.IsNull() && !data.RedistributeIsis[i].Level1Level1InterArea.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE/one/level/LEVEL/ONE-INTER-AREA/one-inter-area", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelTwo.IsNull() && !data.RedistributeIsis[i].LevelTwo.ValueBool() {
+		if !data.RedistributeIsis[i].Level2.IsNull() && !data.RedistributeIsis[i].Level2.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/TWO/two", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelTwoOneInterArea.IsNull() && !data.RedistributeIsis[i].LevelTwoOneInterArea.ValueBool() {
+		if !data.RedistributeIsis[i].Level2Level1InterArea.IsNull() && !data.RedistributeIsis[i].Level2Level1InterArea.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/TWO/two/level/one-inter-area", data.getPath(), keyString))
 		}
-		if !data.RedistributeIsis[i].LevelOneInterArea.IsNull() && !data.RedistributeIsis[i].LevelOneInterArea.ValueBool() {
+		if !data.RedistributeIsis[i].Level1InterArea.IsNull() && !data.RedistributeIsis[i].Level1InterArea.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/redistribute/isis-processes/isis-process%v/level/LEVEL/ONE-INTER-AREA/one-inter-area", data.getPath(), keyString))
 		}
 		if !data.RedistributeIsis[i].Multipath.IsNull() && !data.RedistributeIsis[i].Multipath.ValueBool() {

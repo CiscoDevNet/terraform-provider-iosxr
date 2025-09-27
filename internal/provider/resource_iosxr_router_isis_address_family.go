@@ -568,7 +568,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"spf_prefix_priority_critical_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_critical_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -582,7 +582,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"spf_prefix_priority_high_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_high_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -596,7 +596,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"spf_prefix_priority_medium_prefixlist_name": schema.StringAttribute{
+			"spf_prefix_priority_medium_prefix_list_name": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -622,7 +622,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 4294967295),
 							},
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 							Optional:            true,
 							Validators: []validator.String{
@@ -651,7 +651,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 4294967295),
 							},
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 							Optional:            true,
 							Validators: []validator.String{
@@ -680,7 +680,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 								int64validator.Between(1, 4294967295),
 							},
 						},
-						"prefixlist_name": schema.StringAttribute{
+						"prefix_list_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prefix-list name").String,
 							Optional:            true,
 							Validators: []validator.String{
@@ -728,7 +728,7 @@ func (r *RouterISISAddressFamilyResource) Schema(ctx context.Context, req resour
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IS-IS").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

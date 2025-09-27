@@ -29,6 +29,7 @@ import (
 func TestAccIosxrBFD(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_latency_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_latency_detect_percentage", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_latency_detect_count", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "echo_startup_validate_force", "true"))
@@ -90,6 +91,7 @@ func testAccIosxrBFDConfig_minimum() string {
 func testAccIosxrBFDConfig_all() string {
 	config := `resource "iosxr_bfd" "test" {` + "\n"
 	config += `	echo_disable = true` + "\n"
+	config += `	echo_latency_detect = true` + "\n"
 	config += `	echo_latency_detect_percentage = 200` + "\n"
 	config += `	echo_latency_detect_count = 10` + "\n"
 	config += `	echo_startup_validate_force = true` + "\n"

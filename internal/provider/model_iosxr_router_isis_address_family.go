@@ -89,11 +89,11 @@ type RouterISISAddressFamily struct {
 	SpfIntervalIetfHolddownInterval                        types.Int64                                                                     `tfsdk:"spf_interval_ietf_holddown_interval"`
 	SpfIntervalLevels                                      []RouterISISAddressFamilySpfIntervalLevels                                      `tfsdk:"spf_interval_levels"`
 	SpfPrefixPriorityCriticalTag                           types.Int64                                                                     `tfsdk:"spf_prefix_priority_critical_tag"`
-	SpfPrefixPriorityCriticalPrefixlistName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefixlist_name"`
+	SpfPrefixPriorityCriticalPrefixListName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
 	SpfPrefixPriorityHighTag                               types.Int64                                                                     `tfsdk:"spf_prefix_priority_high_tag"`
-	SpfPrefixPriorityHighPrefixlistName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefixlist_name"`
+	SpfPrefixPriorityHighPrefixListName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
 	SpfPrefixPriorityMediumTag                             types.Int64                                                                     `tfsdk:"spf_prefix_priority_medium_tag"`
-	SpfPrefixPriorityMediumPrefixlistName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefixlist_name"`
+	SpfPrefixPriorityMediumPrefixListName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
 	SpfPrefixPriorityCriticalLevels                        []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                        `tfsdk:"spf_prefix_priority_critical_levels"`
 	SpfPrefixPriorityHighLevels                            []RouterISISAddressFamilySpfPrefixPriorityHighLevels                            `tfsdk:"spf_prefix_priority_high_levels"`
 	SpfPrefixPriorityMediumLevels                          []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                          `tfsdk:"spf_prefix_priority_medium_levels"`
@@ -163,11 +163,11 @@ type RouterISISAddressFamilyData struct {
 	SpfIntervalIetfHolddownInterval                        types.Int64                                                                     `tfsdk:"spf_interval_ietf_holddown_interval"`
 	SpfIntervalLevels                                      []RouterISISAddressFamilySpfIntervalLevels                                      `tfsdk:"spf_interval_levels"`
 	SpfPrefixPriorityCriticalTag                           types.Int64                                                                     `tfsdk:"spf_prefix_priority_critical_tag"`
-	SpfPrefixPriorityCriticalPrefixlistName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefixlist_name"`
+	SpfPrefixPriorityCriticalPrefixListName                types.String                                                                    `tfsdk:"spf_prefix_priority_critical_prefix_list_name"`
 	SpfPrefixPriorityHighTag                               types.Int64                                                                     `tfsdk:"spf_prefix_priority_high_tag"`
-	SpfPrefixPriorityHighPrefixlistName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefixlist_name"`
+	SpfPrefixPriorityHighPrefixListName                    types.String                                                                    `tfsdk:"spf_prefix_priority_high_prefix_list_name"`
 	SpfPrefixPriorityMediumTag                             types.Int64                                                                     `tfsdk:"spf_prefix_priority_medium_tag"`
-	SpfPrefixPriorityMediumPrefixlistName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefixlist_name"`
+	SpfPrefixPriorityMediumPrefixListName                  types.String                                                                    `tfsdk:"spf_prefix_priority_medium_prefix_list_name"`
 	SpfPrefixPriorityCriticalLevels                        []RouterISISAddressFamilySpfPrefixPriorityCriticalLevels                        `tfsdk:"spf_prefix_priority_critical_levels"`
 	SpfPrefixPriorityHighLevels                            []RouterISISAddressFamilySpfPrefixPriorityHighLevels                            `tfsdk:"spf_prefix_priority_high_levels"`
 	SpfPrefixPriorityMediumLevels                          []RouterISISAddressFamilySpfPrefixPriorityMediumLevels                          `tfsdk:"spf_prefix_priority_medium_levels"`
@@ -219,17 +219,17 @@ type RouterISISAddressFamilySpfIntervalLevels struct {
 type RouterISISAddressFamilySpfPrefixPriorityCriticalLevels struct {
 	LevelNumber    types.Int64  `tfsdk:"level_number"`
 	Tag            types.Int64  `tfsdk:"tag"`
-	PrefixlistName types.String `tfsdk:"prefixlist_name"`
+	PrefixListName types.String `tfsdk:"prefix_list_name"`
 }
 type RouterISISAddressFamilySpfPrefixPriorityHighLevels struct {
 	LevelNumber    types.Int64  `tfsdk:"level_number"`
 	Tag            types.Int64  `tfsdk:"tag"`
-	PrefixlistName types.String `tfsdk:"prefixlist_name"`
+	PrefixListName types.String `tfsdk:"prefix_list_name"`
 }
 type RouterISISAddressFamilySpfPrefixPriorityMediumLevels struct {
 	LevelNumber    types.Int64  `tfsdk:"level_number"`
 	Tag            types.Int64  `tfsdk:"tag"`
-	PrefixlistName types.String `tfsdk:"prefixlist_name"`
+	PrefixListName types.String `tfsdk:"prefix_list_name"`
 }
 type RouterISISAddressFamilyMaximumRedistributedPrefixesLevels struct {
 	LevelNumber                  types.Int64 `tfsdk:"level_number"`
@@ -449,20 +449,20 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 	if !data.SpfPrefixPriorityCriticalTag.IsNull() && !data.SpfPrefixPriorityCriticalTag.IsUnknown() {
 		body, _ = sjson.Set(body, "spf.prefix-priority.critical.tag", strconv.FormatInt(data.SpfPrefixPriorityCriticalTag.ValueInt64(), 10))
 	}
-	if !data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() && !data.SpfPrefixPriorityCriticalPrefixlistName.IsUnknown() {
-		body, _ = sjson.Set(body, "spf.prefix-priority.critical.prefixlist-name", data.SpfPrefixPriorityCriticalPrefixlistName.ValueString())
+	if !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() && !data.SpfPrefixPriorityCriticalPrefixListName.IsUnknown() {
+		body, _ = sjson.Set(body, "spf.prefix-priority.critical.prefixlist-name", data.SpfPrefixPriorityCriticalPrefixListName.ValueString())
 	}
 	if !data.SpfPrefixPriorityHighTag.IsNull() && !data.SpfPrefixPriorityHighTag.IsUnknown() {
 		body, _ = sjson.Set(body, "spf.prefix-priority.high.tag", strconv.FormatInt(data.SpfPrefixPriorityHighTag.ValueInt64(), 10))
 	}
-	if !data.SpfPrefixPriorityHighPrefixlistName.IsNull() && !data.SpfPrefixPriorityHighPrefixlistName.IsUnknown() {
-		body, _ = sjson.Set(body, "spf.prefix-priority.high.prefixlist-name", data.SpfPrefixPriorityHighPrefixlistName.ValueString())
+	if !data.SpfPrefixPriorityHighPrefixListName.IsNull() && !data.SpfPrefixPriorityHighPrefixListName.IsUnknown() {
+		body, _ = sjson.Set(body, "spf.prefix-priority.high.prefixlist-name", data.SpfPrefixPriorityHighPrefixListName.ValueString())
 	}
 	if !data.SpfPrefixPriorityMediumTag.IsNull() && !data.SpfPrefixPriorityMediumTag.IsUnknown() {
 		body, _ = sjson.Set(body, "spf.prefix-priority.medium.tag", strconv.FormatInt(data.SpfPrefixPriorityMediumTag.ValueInt64(), 10))
 	}
-	if !data.SpfPrefixPriorityMediumPrefixlistName.IsNull() && !data.SpfPrefixPriorityMediumPrefixlistName.IsUnknown() {
-		body, _ = sjson.Set(body, "spf.prefix-priority.medium.prefixlist-name", data.SpfPrefixPriorityMediumPrefixlistName.ValueString())
+	if !data.SpfPrefixPriorityMediumPrefixListName.IsNull() && !data.SpfPrefixPriorityMediumPrefixListName.IsUnknown() {
+		body, _ = sjson.Set(body, "spf.prefix-priority.medium.prefixlist-name", data.SpfPrefixPriorityMediumPrefixListName.ValueString())
 	}
 	if !data.SegmentRoutingMplsEnable.IsNull() && !data.SegmentRoutingMplsEnable.IsUnknown() {
 		if data.SegmentRoutingMplsEnable.ValueBool() {
@@ -605,8 +605,8 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
 				body, _ = sjson.Set(body, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
-			if !item.PrefixlistName.IsNull() && !item.PrefixlistName.IsUnknown() {
-				body, _ = sjson.Set(body, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixlistName.ValueString())
+			if !item.PrefixListName.IsNull() && !item.PrefixListName.IsUnknown() {
+				body, _ = sjson.Set(body, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixListName.ValueString())
 			}
 		}
 	}
@@ -619,8 +619,8 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
 				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
-			if !item.PrefixlistName.IsNull() && !item.PrefixlistName.IsUnknown() {
-				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixlistName.ValueString())
+			if !item.PrefixListName.IsNull() && !item.PrefixListName.IsUnknown() {
+				body, _ = sjson.Set(body, "spf.prefix-priority-high-levels.prefix-priority-high-level"+"."+strconv.Itoa(index)+"."+"prefix_list_name", item.PrefixListName.ValueString())
 			}
 		}
 	}
@@ -633,8 +633,8 @@ func (data RouterISISAddressFamily) toBody(ctx context.Context) string {
 			if !item.Tag.IsNull() && !item.Tag.IsUnknown() {
 				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"tag", strconv.FormatInt(item.Tag.ValueInt64(), 10))
 			}
-			if !item.PrefixlistName.IsNull() && !item.PrefixlistName.IsUnknown() {
-				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"prefixlist-name", item.PrefixlistName.ValueString())
+			if !item.PrefixListName.IsNull() && !item.PrefixListName.IsUnknown() {
+				body, _ = sjson.Set(body, "spf.prefix-priority-medium-levels.prefix-priority-medium-level"+"."+strconv.Itoa(index)+"."+"prefix_list_name", item.PrefixListName.ValueString())
 			}
 		}
 	}
@@ -1330,30 +1330,30 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 	} else {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() {
-		data.SpfPrefixPriorityCriticalPrefixlistName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
+		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	} else {
-		data.SpfPrefixPriorityCriticalPrefixlistName = types.StringNull()
+		data.SpfPrefixPriorityCriticalPrefixListName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() && !data.SpfPrefixPriorityHighTag.IsNull() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	} else {
 		data.SpfPrefixPriorityHighTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighPrefixlistName.IsNull() {
-		data.SpfPrefixPriorityHighPrefixlistName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
+		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	} else {
-		data.SpfPrefixPriorityHighPrefixlistName = types.StringNull()
+		data.SpfPrefixPriorityHighPrefixListName = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() && !data.SpfPrefixPriorityMediumTag.IsNull() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	} else {
 		data.SpfPrefixPriorityMediumTag = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumPrefixlistName.IsNull() {
-		data.SpfPrefixPriorityMediumPrefixlistName = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
+		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	} else {
-		data.SpfPrefixPriorityMediumPrefixlistName = types.StringNull()
+		data.SpfPrefixPriorityMediumPrefixListName = types.StringNull()
 	}
 	for i := range data.SpfPrefixPriorityCriticalLevels {
 		keys := [...]string{"level-number"}
@@ -1388,10 +1388,10 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SpfPrefixPriorityCriticalLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalLevels[i].PrefixlistName.IsNull() {
-			data.SpfPrefixPriorityCriticalLevels[i].PrefixlistName = types.StringValue(value.String())
+		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() {
+			data.SpfPrefixPriorityCriticalLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
-			data.SpfPrefixPriorityCriticalLevels[i].PrefixlistName = types.StringNull()
+			data.SpfPrefixPriorityCriticalLevels[i].PrefixListName = types.StringNull()
 		}
 	}
 	for i := range data.SpfPrefixPriorityHighLevels {
@@ -1427,10 +1427,10 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SpfPrefixPriorityHighLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityHighLevels[i].PrefixlistName.IsNull() {
-			data.SpfPrefixPriorityHighLevels[i].PrefixlistName = types.StringValue(value.String())
+		if value := r.Get("prefix_list_name"); value.Exists() && !data.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() {
+			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
-			data.SpfPrefixPriorityHighLevels[i].PrefixlistName = types.StringNull()
+			data.SpfPrefixPriorityHighLevels[i].PrefixListName = types.StringNull()
 		}
 	}
 	for i := range data.SpfPrefixPriorityMediumLevels {
@@ -1466,10 +1466,10 @@ func (data *RouterISISAddressFamily) updateFromBody(ctx context.Context, res []b
 		} else {
 			data.SpfPrefixPriorityMediumLevels[i].Tag = types.Int64Null()
 		}
-		if value := r.Get("prefixlist-name"); value.Exists() && !data.SpfPrefixPriorityMediumLevels[i].PrefixlistName.IsNull() {
-			data.SpfPrefixPriorityMediumLevels[i].PrefixlistName = types.StringValue(value.String())
+		if value := r.Get("prefix_list_name"); value.Exists() && !data.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() {
+			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringValue(value.String())
 		} else {
-			data.SpfPrefixPriorityMediumLevels[i].PrefixlistName = types.StringNull()
+			data.SpfPrefixPriorityMediumLevels[i].PrefixListName = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "segment-routing.mpls.enable"); !data.SegmentRoutingMplsEnable.IsNull() {
@@ -2016,19 +2016,19 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 		data.SpfPrefixPriorityCriticalTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityCriticalPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityHighPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityMediumPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
 		data.SpfPrefixPriorityCriticalLevels = make([]RouterISISAddressFamilySpfPrefixPriorityCriticalLevels, 0)
@@ -2041,7 +2041,7 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityCriticalLevels = append(data.SpfPrefixPriorityCriticalLevels, item)
 			return true
@@ -2057,8 +2057,8 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
 			return true
@@ -2074,8 +2074,8 @@ func (data *RouterISISAddressFamily) fromBody(ctx context.Context, res []byte) {
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
@@ -2501,19 +2501,19 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 		data.SpfPrefixPriorityCriticalTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.critical.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityCriticalPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityCriticalPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.high.tag"); value.Exists() {
 		data.SpfPrefixPriorityHighTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.high.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityHighPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityHighPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.tag"); value.Exists() {
 		data.SpfPrefixPriorityMediumTag = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority.medium.prefixlist-name"); value.Exists() {
-		data.SpfPrefixPriorityMediumPrefixlistName = types.StringValue(value.String())
+		data.SpfPrefixPriorityMediumPrefixListName = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "spf.prefix-priority-critical-levels.prefix-priority-critical-level"); value.Exists() {
 		data.SpfPrefixPriorityCriticalLevels = make([]RouterISISAddressFamilySpfPrefixPriorityCriticalLevels, 0)
@@ -2526,7 +2526,7 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 				item.Tag = types.Int64Value(cValue.Int())
 			}
 			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityCriticalLevels = append(data.SpfPrefixPriorityCriticalLevels, item)
 			return true
@@ -2542,8 +2542,8 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityHighLevels = append(data.SpfPrefixPriorityHighLevels, item)
 			return true
@@ -2559,8 +2559,8 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 			if cValue := v.Get("tag"); cValue.Exists() {
 				item.Tag = types.Int64Value(cValue.Int())
 			}
-			if cValue := v.Get("prefixlist-name"); cValue.Exists() {
-				item.PrefixlistName = types.StringValue(cValue.String())
+			if cValue := v.Get("prefix_list_name"); cValue.Exists() {
+				item.PrefixListName = types.StringValue(cValue.String())
 			}
 			data.SpfPrefixPriorityMediumLevels = append(data.SpfPrefixPriorityMediumLevels, item)
 			return true
@@ -3069,19 +3069,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", state.getPath()))
 	}
-	if !state.SpfPrefixPriorityCriticalPrefixlistName.IsNull() && data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() {
+	if !state.SpfPrefixPriorityCriticalPrefixListName.IsNull() && data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", state.getPath()))
 	}
-	if !state.SpfPrefixPriorityHighPrefixlistName.IsNull() && data.SpfPrefixPriorityHighPrefixlistName.IsNull() {
+	if !state.SpfPrefixPriorityHighPrefixListName.IsNull() && data.SpfPrefixPriorityHighPrefixListName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", state.getPath()))
 	}
-	if !state.SpfPrefixPriorityMediumPrefixlistName.IsNull() && data.SpfPrefixPriorityMediumPrefixlistName.IsNull() {
+	if !state.SpfPrefixPriorityMediumPrefixListName.IsNull() && data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
 	}
 	for i := range state.SpfPrefixPriorityCriticalLevels {
@@ -3110,7 +3110,7 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
-				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixlistName.IsNull() {
+				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixListName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
@@ -3146,7 +3146,7 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
-				if !state.SpfPrefixPriorityHighLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixlistName.IsNull() {
+				if !state.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixListName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
@@ -3182,7 +3182,7 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/TAG/tag", state.getPath(), keyString))
 				}
-				if !state.SpfPrefixPriorityMediumLevels[i].PrefixlistName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixlistName.IsNull() {
+				if !state.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixListName.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
 				}
 				break
@@ -3803,19 +3803,19 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 	if !data.SpfPrefixPriorityCriticalTag.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", data.getPath()))
 	}
-	if !data.SpfPrefixPriorityCriticalPrefixlistName.IsNull() {
+	if !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityHighTag.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", data.getPath()))
 	}
-	if !data.SpfPrefixPriorityHighPrefixlistName.IsNull() {
+	if !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityMediumTag.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", data.getPath()))
 	}
-	if !data.SpfPrefixPriorityMediumPrefixlistName.IsNull() {
+	if !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
 	}
 	for i := range data.SpfPrefixPriorityCriticalLevels {

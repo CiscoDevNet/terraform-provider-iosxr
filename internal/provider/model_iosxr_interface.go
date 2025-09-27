@@ -38,6 +38,7 @@ type Interface struct {
 	L2transport                                      types.Bool                                `tfsdk:"l2transport"`
 	PointToPoint                                     types.Bool                                `tfsdk:"point_to_point"`
 	Multipoint                                       types.Bool                                `tfsdk:"multipoint"`
+	Dampening                                        types.Bool                                `tfsdk:"dampening"`
 	DampeningDecayHalfLifeValue                      types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
 	Ipv4PointToPoint                                 types.Bool                                `tfsdk:"ipv4_point_to_point"`
 	ServicePolicyInput                               []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
@@ -108,6 +109,7 @@ type InterfaceData struct {
 	L2transport                                      types.Bool                                `tfsdk:"l2transport"`
 	PointToPoint                                     types.Bool                                `tfsdk:"point_to_point"`
 	Multipoint                                       types.Bool                                `tfsdk:"multipoint"`
+	Dampening                                        types.Bool                                `tfsdk:"dampening"`
 	DampeningDecayHalfLifeValue                      types.Int64                               `tfsdk:"dampening_decay_half_life_value"`
 	Ipv4PointToPoint                                 types.Bool                                `tfsdk:"ipv4_point_to_point"`
 	ServicePolicyInput                               []InterfaceServicePolicyInput             `tfsdk:"service_policy_input"`
@@ -236,6 +238,11 @@ func (data Interface) toBody(ctx context.Context) string {
 	if !data.Multipoint.IsNull() && !data.Multipoint.IsUnknown() {
 		if data.Multipoint.ValueBool() {
 			body, _ = sjson.Set(body, "sub-interface-type.multipoint", map[string]string{})
+		}
+	}
+	if !data.Dampening.IsNull() && !data.Dampening.IsUnknown() {
+		if data.Dampening.ValueBool() {
+			body, _ = sjson.Set(body, "dampening", map[string]string{})
 		}
 	}
 	if !data.DampeningDecayHalfLifeValue.IsNull() && !data.DampeningDecayHalfLifeValue.IsUnknown() {
@@ -558,6 +565,15 @@ func (data *Interface) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.Multipoint = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "dampening"); !data.Dampening.IsNull() {
+		if value.Exists() {
+			data.Dampening = types.BoolValue(true)
+		} else {
+			data.Dampening = types.BoolValue(false)
+		}
+	} else {
+		data.Dampening = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() && !data.DampeningDecayHalfLifeValue.IsNull() {
 		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
@@ -1252,6 +1268,11 @@ func (data *Interface) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Multipoint = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "dampening"); value.Exists() {
+		data.Dampening = types.BoolValue(true)
+	} else {
+		data.Dampening = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() {
 		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
 	}
@@ -1601,6 +1622,11 @@ func (data *InterfaceData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.Multipoint = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "dampening"); value.Exists() {
+		data.Dampening = types.BoolValue(true)
+	} else {
+		data.Dampening = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "dampening.decay-half-life.value"); value.Exists() {
 		data.DampeningDecayHalfLifeValue = types.Int64Value(value.Int())
 	}
@@ -1944,6 +1970,9 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 	}
 	if !state.Multipoint.IsNull() && data.Multipoint.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/sub-interface-type/multipoint", state.getPath()))
+	}
+	if !state.Dampening.IsNull() && data.Dampening.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening", state.getPath()))
 	}
 	if !state.DampeningDecayHalfLifeValue.IsNull() && data.DampeningDecayHalfLifeValue.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/decay-half-life", state.getPath()))
@@ -2469,6 +2498,9 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.Multipoint.IsNull() && !data.Multipoint.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sub-interface-type/multipoint", data.getPath()))
 	}
+	if !data.Dampening.IsNull() && !data.Dampening.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/dampening", data.getPath()))
+	}
 	if !data.Ipv4PointToPoint.IsNull() && !data.Ipv4PointToPoint.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:point-to-point", data.getPath()))
 	}
@@ -2621,6 +2653,9 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.Multipoint.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/sub-interface-type/multipoint", data.getPath()))
+	}
+	if !data.Dampening.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening", data.getPath()))
 	}
 	if !data.DampeningDecayHalfLifeValue.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening/decay-half-life", data.getPath()))

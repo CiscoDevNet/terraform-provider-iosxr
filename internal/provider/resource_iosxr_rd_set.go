@@ -78,7 +78,7 @@ func (r *RDSetResource) Schema(ctx context.Context, req resource.SchemaRequest, 
 				},
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configures a rd-set. This leaf accepts a complete Cisco IOS XR CLI configuration string that defines a rd-set by its name and a rd-set is used to create a set with route distinguisher (RD) elements. RD set is a 64-bit value prepended to an IPv4 address to create a globally unique Border Gateway Protocol (BGP) VPN IPv4 address. You can define RD values with the following commands:  * a.b.c.d:m:*—BGP VPN RD in IPv4 format with a wildcard character. For example, 10.0.0.2:255.255.0.0:*. * a.b.c.d/m:n—BGP VPN RD in IPv4 format with a mask. For example, 10.0.0.2:255.255.0.0:666. * a.b.c.d:** —BGP VPN RD in IPv4 format with a wildcard character. For example, 10.0.0.2:255.255.0.0. * a.b.c.d:n— BGP VPN RD in IPv4 format. For example, 10.0.0.2:666. * asn:*— BGP VPN RD in ASN format with a wildcard character. For example, 10002:255.255.0.0. * asn:n—BGP VPN RD in ASN format. For example, 10002:666.  rd-set rdset 10.0.0.0/8:*, 10.0.0.0/8:777, 10.0.0.0:*, 10.0.0.0:777, 65000:*, 65000:777 end-set  Note: The rd-set entries should be separated by commas and the entire configuration should be provided as a single string. The 'end-set' keyword indicates the end of the rd-set  definition.").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a rd-set").String,
 				Required:            true,
 			},
 		},

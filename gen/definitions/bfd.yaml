@@ -6,9 +6,13 @@ skip_minimum_test: true
 attributes:
   - yang_name: echo/disable
     example: true
+  - yang_name: echo/latency/detect
+    example: true
   - yang_name: echo/latency/detect/percentage
+    delete_parent: true
     example: 200
   - yang_name: echo/latency/detect/count
+    delete_parent: true
     example: 10
   - yang_name: echo/startup/validate/force
     delete_parent: true

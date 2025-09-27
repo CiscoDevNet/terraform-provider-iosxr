@@ -33,7 +33,7 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_send_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_receive", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_receive_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_selection_route_policy", "ADDITIONAL_PATHS_SELECTION_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "additional_paths_selection_route_policy", "ADDITIONAL_PATHS_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "allocate_label_all", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "allocate_label_all_unlabeled_path", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "advertise_best_external", "true"))
@@ -59,7 +59,7 @@ func TestAccIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_eigrp.0.route_policy", "REDISTRIBUTE_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.instance_name", "ISIS1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.level_one_two_level_one_inter_area", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.level_1_level_2_level_1_inter_area", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_address_family.test", "redistribute_isis.0.route_policy", "REDISTRIBUTE_POLICY"))
@@ -113,8 +113,8 @@ resource "iosxr_gnmi" "PreReq0" {
 					"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 				},
 				{
-					"route-policy-name" = "ADDITIONAL_PATHS_SELECTION_POLICY"
-					"rpl-route-policy" = "route-policy ADDITIONAL_PATHS_SELECTION_POLICY\n  pass\nend-policy\n"
+					"route-policy-name" = "ADDITIONAL_PATHS_POLICY"
+					"rpl-route-policy" = "route-policy ADDITIONAL_PATHS_POLICY\n  pass\nend-policy\n"
 				},
 				{
 					"route-policy-name" = "ALLOCATE_LABEL_POLICY"
@@ -188,7 +188,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config += `	additional_paths_send_disable = true` + "\n"
 	config += `	additional_paths_receive = true` + "\n"
 	config += `	additional_paths_receive_disable = true` + "\n"
-	config += `	additional_paths_selection_route_policy = "ADDITIONAL_PATHS_SELECTION_POLICY"` + "\n"
+	config += `	additional_paths_selection_route_policy = "ADDITIONAL_PATHS_POLICY"` + "\n"
 	config += `	allocate_label_all = true` + "\n"
 	config += `	allocate_label_all_unlabeled_path = true` + "\n"
 	config += `	advertise_best_external = true` + "\n"
@@ -223,7 +223,7 @@ func testAccIosxrRouterBGPVRFAddressFamilyConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	redistribute_isis = [{` + "\n"
 	config += `		instance_name = "ISIS1"` + "\n"
-	config += `		level_one_two_level_one_inter_area = true` + "\n"
+	config += `		level_1_level_2_level_1_inter_area = true` + "\n"
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"
 	config += `		route_policy = "REDISTRIBUTE_POLICY"` + "\n"

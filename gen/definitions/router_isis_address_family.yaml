@@ -270,7 +270,7 @@ attributes:
     example: 100
   - yang_name: spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name
     xpath: spf/prefix-priority/critical/prefixlist-name
-    tf_name: spf_prefix_priority_critical_prefixlist_name
+    tf_name: spf_prefix_priority_critical_prefix_list_name
     example: "CRITICAL_PREFIXES"
     exclude_test: true
   - yang_name: spf/prefix-priority/high/HIGH/TAG/tag
@@ -279,7 +279,7 @@ attributes:
     example: 200
   - yang_name: spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name
     xpath: spf/prefix-priority/high/prefixlist-name
-    tf_name: spf_prefix_priority_high_prefixlist_name
+    tf_name: spf_prefix_priority_high_prefix_list_name
     example: "HIGH_PREFIXES"
     exclude_test: true
   - yang_name: spf/prefix-priority/medium/MEDIUM/TAG/tag
@@ -288,7 +288,7 @@ attributes:
     example: 300
   - yang_name: spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name
     xpath: spf/prefix-priority/medium/prefixlist-name
-    tf_name: spf_prefix_priority_medium_prefixlist_name
+    tf_name: spf_prefix_priority_medium_prefix_list_name
     example: "MEDIUM_PREFIXES"
     exclude_test: true
   - yang_name: spf/prefix-priority-critical-levels/prefix-priority-critical-level
@@ -304,7 +304,7 @@ attributes:
         example: 100
       - yang_name: PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name
         xpath: prefixlist-name
-        tf_name: prefixlist_name
+        tf_name: prefix_list_name
         example: "CRITICAL_L1"
         exclude_test: true
   - yang_name: spf/prefix-priority-high-levels/prefix-priority-high-level
@@ -319,8 +319,8 @@ attributes:
         tf_name: tag
         example: 200
       - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name
-        xpath: prefixlist-name
-        tf_name: prefixlist_name
+        xpath: prefix_list_name
+        tf_name: prefix_list_name
         example: "HIGH_L1"
         exclude_test: true
   - yang_name: spf/prefix-priority-medium-levels/prefix-priority-medium-level
@@ -335,8 +335,8 @@ attributes:
         tf_name: tag
         example: 300
       - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name
-        xpath: prefixlist-name
-        tf_name: prefixlist_name
+        xpath: prefix_list_name
+        tf_name: prefix_list_name
         example: "MEDIUM_L1"
         exclude_test: true
   - yang_name: segment-routing/mpls/enable
@@ -358,6 +358,7 @@ attributes:
         example: 1000
   - yang_name: redistribute/isis-processes/isis-process
     tf_name: redistribute_isis
+    description: "Redistribute ISIS routes"
     type: List
     attributes:
       - yang_name: isis-string

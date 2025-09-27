@@ -98,7 +98,7 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Include/Exclude other TCP options in the header",
 				Computed:            true,
 			},
-			"ao_key_chain_accept_ao_mismatch_connection": schema.BoolAttribute{
+			"ao_key_chain_accept_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "Accept new connection even if AO mismatched",
 				Computed:            true,
 			},

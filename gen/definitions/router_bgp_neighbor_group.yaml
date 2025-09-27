@@ -39,7 +39,7 @@ attributes:
     exclude_test: true
   - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection
     xpath: ao/key-chain-name/accept-ao-mismatch-connection
-    tf_name: ao_key_chain_accept_ao_mismatch_connection
+    tf_name: ao_key_chain_accept_mismatch
     example: "enable"
     exclude_test: true
   - yang_name: ao/AO/INHERITANCE-DISABLE/inheritance-disable

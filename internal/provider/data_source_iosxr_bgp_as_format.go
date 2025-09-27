@@ -63,7 +63,7 @@ func (d *BGPASFormatDataSource) Schema(ctx context.Context, req datasource.Schem
 				Computed:            true,
 			},
 			"as_format": schema.StringAttribute{
-				MarkdownDescription: "Autonomous system number format (Note: Root-level YANG leaf - generator limitation causes gNMI errors)",
+				MarkdownDescription: "",
 				Computed:            true,
 			},
 		},

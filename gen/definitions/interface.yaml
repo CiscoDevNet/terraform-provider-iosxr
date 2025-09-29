@@ -94,14 +94,17 @@ attributes:
     tf_name: unnumbered
     exclude_test: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/type
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: any
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-ipv4-cfg:verify/unicast/source/reachable-via/allow-default
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: false
@@ -219,7 +222,7 @@ attributes:
     example: 100
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor
     tf_name: flow_ipv4_ingress_monitors
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -227,7 +230,7 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler
     tf_name: flow_ipv4_ingress_monitor_samplers
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -238,7 +241,7 @@ attributes:
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor
     tf_name: flow_ipv4_egress_monitors
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -246,7 +249,7 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler
     tf_name: flow_ipv4_egress_monitor_samplers
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -257,7 +260,7 @@ attributes:
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor
     tf_name: flow_ipv6_ingress_monitors
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -265,7 +268,7 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler
     tf_name: flow_ipv6_ingress_monitor_samplers
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -276,7 +279,7 @@ attributes:
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor
     tf_name: flow_ipv6_egress_monitors
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -284,7 +287,7 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler
     tf_name: flow_ipv6_egress_monitor_samplers
-    test_tags: [FLOW]
+    test_tags: [PHYSICAL]
     type: List
     attributes:
       - yang_name: monitor-map-name

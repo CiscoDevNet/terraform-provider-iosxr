@@ -3,7 +3,7 @@ name: Flow Exporter Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
 no_delete_attributes: true
 doc_category: Flow
-test_tags: [FLOW]
+test_tags: [PHYSICAL]
 attributes:
   - yang_name: exporter-map-name
     tf_name: name

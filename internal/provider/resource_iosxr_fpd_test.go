@@ -27,8 +27,8 @@ import (
 )
 
 func TestAccIosxrFPD(t *testing.T) {
-	if os.Getenv("FPD") == "" {
-		t.Skip("skipping test, set environment variable FPD")
+	if os.Getenv("PHYSICAL") == "" {
+		t.Skip("skipping test, set environment variable PHYSICAL")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_enable", "false"))

@@ -27,8 +27,8 @@ import (
 )
 
 func TestAccDataSourceIosxrFlowExporterMap(t *testing.T) {
-	if os.Getenv("FLOW") == "" {
-		t.Skip("skipping test, set environment variable FLOW")
+	if os.Getenv("PHYSICAL") == "" {
+		t.Skip("skipping test, set environment variable PHYSICAL")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_exporter_map.test", "destination_ipv4_address", "10.1.1.1"))

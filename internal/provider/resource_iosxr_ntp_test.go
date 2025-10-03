@@ -27,6 +27,9 @@ import (
 )
 
 func TestAccIosxrNTP(t *testing.T) {
+	if os.Getenv("XRV9K") == "" {
+		t.Skip("skipping test, set environment variable XRV9K")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ntp.test", "ipv4_precedence", "network"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ntp.test", "ipv6_dscp", "af11"))

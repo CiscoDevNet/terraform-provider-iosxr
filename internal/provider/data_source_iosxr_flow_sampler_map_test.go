@@ -27,8 +27,8 @@ import (
 )
 
 func TestAccDataSourceIosxrFlowSamplerMap(t *testing.T) {
-	if os.Getenv("FLOW") == "" {
-		t.Skip("skipping test, set environment variable FLOW")
+	if os.Getenv("PHYSICAL") == "" {
+		t.Skip("skipping test, set environment variable PHYSICAL")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_flow_sampler_map.test", "random", "1"))

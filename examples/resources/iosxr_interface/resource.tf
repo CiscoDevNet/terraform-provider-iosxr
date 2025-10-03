@@ -24,9 +24,6 @@ resource "iosxr_interface" "example" {
   vrf                                                      = "VRF1"
   ipv4_address                                             = "1.1.1.1"
   ipv4_netmask                                             = "255.255.255.0"
-  ipv4_verify_unicast_source_reachable_via_type            = "any"
-  ipv4_verify_unicast_source_reachable_via_allow_self_ping = true
-  ipv4_verify_unicast_source_reachable_via_allow_default   = false
   ipv4_access_group_ingress_acl1                           = "ACL1"
   ipv4_access_group_ingress_hardware_count                 = true
   ipv4_access_group_ingress_interface_statistics           = true

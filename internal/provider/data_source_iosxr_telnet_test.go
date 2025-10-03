@@ -20,12 +20,16 @@
 package provider
 
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccDataSourceIosxrTelnet(t *testing.T) {
+	if os.Getenv("XRV9K") == "" {
+		t.Skip("skipping test, set environment variable XRV9K")
+	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "ipv4_client_source_interface", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.vrf_name", "ROI"))

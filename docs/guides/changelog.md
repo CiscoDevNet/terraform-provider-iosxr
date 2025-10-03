@@ -9,346 +9,368 @@ description: |-
 
 ## 0.6.0 (IOS-XR Version 24.4.2 Compatibility)
 
-- Add 'bfd_fast_detect_ipv4' to 'router_isis_interface' resource and data source
-- Add 'bfd_minimum_interval' to 'router_isis_interface' resource and data source
-- Add 'bfd_multiplier' to 'router_isis_interface' resource and data source
-- Add 'interfaces' (type: List) to 'evpn' resource and data source
-- Add 'ethernet_segment_enable' to 'evpn' resource and data source
-- Add 'ethernet_segment_esi_zero' to 'evpn' resource and data source
-- Add 'vpn_id' to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'description' to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_import_two_byte_as_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_import_four_byte_as_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_import_ipv4_address_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_export_two_byte_as_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_export_four_byte_as_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'bgp_route_target_export_ipv4_address_format' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'advertise_mac' to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'locators' (type: List) to 'evpn_segment_routing_srv6_evi' resource and data source
-- Add 'segment_routing_srv6' to 'evpn' resource and data source
-- Add 'segment_routing_srv6_locators' (type: List) to 'evpn' resource and data source
-- Add 'segment_routing_srv6_usid_allocation_wide_local_id_block' to 'evpn' resource and data source
-- Add 'password' to 'router_bgp_neighbor_group' resource and data source
-- Add 'password_inheritance_disable' to 'router_bgp_neighbor_group' resource and data source
-- Add 'segment_routing_mpls_enable' to 'router_isis_interface_address_family' resource and data source
-- Add 'adjacency_sid_indices' (type: List) to 'router_isis_interface_address_family' resource and data source
-- Add 'adjacency_sid_absolutes' (type: List) to 'router_isis_interface_address_family' resource and data source
-- Add 'formats' (type: List) to 'segment_routing_v6' resource and data source
-- BREAKING CHANGE: Update YANG path to 'Cisco-IOS-XR-segment-routing-ms-cfg:/sr/srv6' in 'segment_routing_v6' resource and data source
-- BREAKING CHANGE: Rename 'name' to 'locator_name' in 'segment_routing_v6' resource and data source
-- BREAKING CHANGE: Remove 'locator_enable' in 'segment_routing_v6' resource and data source
-- Add 'micro_segment_behavior_unode_psp_usd' to 'segment_routing_v6' resource and data source
-- BREAKING CHANGE: Update YANG path to 'Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing' in 'segment_routing' resource and data source
-- BREAKING CHANGE: Remove 'rd_two_byte_as_number', 'rd_two_byte_as_index', 'rd_four_byte_as_number', 'rd_four_byte_as_index', 'rd_ipv4_address', 'rd_ipv4_address_index' in 'vrf' resource and data source
-- Add 'rd_two_byte_as_number' to 'vrf' resource and data source
-- Add 'rd_two_byte_as_index' to 'vrf' resource and data source
-- Add 'rd_four_byte_as_number' to 'vrf' resource and data source
-- Add 'rd_four_byte_as_index' to 'vrf' resource and data source
-- Add 'rd_ipv4_address' to 'vrf' resource and data source
-- Add 'rd_ipv4_address_index' to 'vrf' resource and data source
-- BREAKING CHANGE: Remove 'address_family_ipv4_unicast_import_route_target_two_byte_as_format', 'address_family_ipv4_unicast_import_route_target_four_byte_as_format', 'address_family_ipv4_unicast_import_route_target_ip_address_format', 'address_family_ipv4_unicast_export_route_target_two_byte_as_format', 'address_family_ipv4_unicast_export_route_target_four_byte_as_format', 'address_family_ipv4_unicast_export_route_target_ip_address_format', 'address_family_ipv6_unicast_import_route_target_two_byte_as_format', 'address_family_ipv6_unicast_import_route_target_four_byte_as_format', 'address_family_ipv6_unicast_import_route_target_ip_address_format', 'address_family_ipv6_unicast_export_route_target_two_byte_as_format', 'address_family_ipv6_unicast_export_route_target_four_byte_as_format', 'address_family_ipv6_unicast_export_route_target_ip_address_format' (type: List) in 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_import_route_target_two_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_import_route_target_four_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_import_route_target_ip_address_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_export_route_target_two_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_export_route_target_four_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv4_unicast_export_route_target_ip_address_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_import_route_target_two_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_import_route_target_four_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_import_route_target_ip_address_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_export_route_target_two_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_export_route_target_four_byte_as_format' (type: List) to 'vrf' resource and data source
-- Add 'address_family_ipv6_unicast_export_route_target_ip_address_format' (type: List) to 'vrf' resource and data source
-- BREAKING CHANGE: Remove 'traps_bgp_cbgp2_updown', 'traps_bgp_bgp4_mib_updown' in 'snmp_server' resource and data source
-- Add 'traps_bgp_cbgp_two_updown' to 'snmp_server' resource and data source
-- Add 'traps_bgp_cbgp_two_enable' to 'snmp_server' resource and data source
-- Add 'traps_bgp_enable_updown' to 'snmp_server' resource and data source
-- Add 'traps_bgp_enable_cisco_bgp4_mib' to 'snmp_server' resource and data source
-- BREAKING CHANGE: Remove 'traps_isis_all', 'traps_isis_database_overload', 'traps_isis_manual_address_drops', 'traps_isis_corrupted_lsp_detected', 'traps_isis_attempt_to_exceed_max_sequence', 'traps_isis_id_len_mismatch', 'traps_isis_max_area_addresses_mismatch', 'traps_isis_own_lsp_purge', 'traps_isis_sequence_number_skip', 'traps_isis_authentication_type_failure', 'traps_isis_authentication_failure', 'traps_isis_version_skew', 'traps_isis_area_mismatch', 'traps_isis_rejected_adjacency', 'traps_isis_lsp_too_large_to_propagate', 'traps_isis_orig_lsp_buff_size_mismatch', 'traps_isis_protocols_supported_mismatch', 'traps_isis_adjacency_change', 'traps_isis_lsp_error_detected' in 'snmp_server' resource and data source
-- Add 'traps_isis_all' to 'snmp_server' resource and data source
-- Add 'traps_isis_database_overload' to 'snmp_server' resource and data source
-- Add 'traps_isis_manual_address_drops' to 'snmp_server' resource and data source
-- Add 'traps_isis_corrupted_lsp_detected' to 'snmp_server' resource and data source
-- Add 'traps_isis_attempt_to_exceed_max_sequence' to 'snmp_server' resource and data source
-- Add 'traps_isis_id_len_mismatch' to 'snmp_server' resource and data source
-- Add 'traps_isis_max_area_addresses_mismatch' to 'snmp_server' resource and data source
-- Add 'traps_isis_own_lsp_purge' to 'snmp_server' resource and data source
-- Add 'traps_isis_sequence_number_skip' to 'snmp_server' resource and data source
-- Add 'traps_isis_authentication_type_failure' to 'snmp_server' resource and data source
-- Add 'traps_isis_authentication_failure' to 'snmp_server' resource and data source
-- Add 'traps_isis_version_skew' to 'snmp_server' resource and data source
-- Add 'traps_isis_area_mismatch' to 'snmp_server' resource and data source
-- Add 'traps_isis_rejected_adjacency' to 'snmp_server' resource and data source
-- Add 'traps_isis_lsp_too_large_to_propagate' to 'snmp_server' resource and data source
-- Add 'traps_isis_orig_lsp_buff_size_mismatch' to 'snmp_server' resource and data source
-- Add 'traps_isis_protocols_supported_mismatch' to 'snmp_server' resource and data source
-- Add 'traps_isis_adjacency_change' to 'snmp_server' resource and data source
-- Add 'traps_isis_lsp_error_detected' to 'snmp_server' resource and data source
-- Add 'metric_levels' (type: List) to 'router_isis_interface_address_family' resource and data source
-- BREAKING CHANGE: Remove 'metric', 'maximum' in 'router_isis_interface_address_family' resource and data source
-- Add 'metric_default_metric' to 'router_isis_interface_address_family' resource and data source
-- Add 'metric_maximum' to 'router_isis_interface_address_family' resource and data source
-- BREAKING CHANGE: Remove 'prefix_sid_absolute', 'prefix_sid_index', 'prefix_sid_n_flag_clear' in 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_index_id' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_index_php_disable' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_index_explicit_null' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_index_n_flag_clear' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_absolute_id' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_absolute_php_disable' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_absolute_explicit_null' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_absolute_n_flag_clear' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_index_id' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_index_php_disable' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_index_explicit_null' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_index_n_flag_clear' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_absolute_id' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_absolute_php_disable' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_absolute_explicit_null' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_strict_spf_absolute_n_flag_clear' to 'router_isis_interface_address_family' resource and data source
-- Add 'prefix_sid_algorithms' (type: List) to 'router_isis_interface_address_family' resource and data source
-- BREAKING CHANGE: Remove 'hello_password_hmac_md5', 'hello_password_keychain', 'hello_password_text' in 'router_isis_interface' resource and data source
-- BREAKING CHANGE: Remove 'passive', 'shutdown', 'suppressed' in 'router_isis_interface' resource and data source
-- BREAKING CHANGE: Remove 'hello_padding_disable', 'hello_padding_sometimes' in 'router_isis_interface' resource and data source
-- Add 'hello_padding' to 'router_isis_interface' resource and data source
-- Add 'hello_padding_levels' (type: List) to 'router_isis_interface' resource and data source
-- Add 'state' to 'router_isis_interface' resource and data source
-- Add 'hello_password_accepts_encrypted' to 'router_isis_interface' resource and data source
-- Add 'hello_password_accepts_levels' (type: List) to 'router_isis_interface' resource and data source
-- Add 'hello_password_text_encrypted' to 'router_isis_interface' resource and data source
-- Add 'hello_password_text_send_only' to 'router_isis_interface' resource and data source
-- Add 'hello_password_hmac_md5_encrypted' to 'router_isis_interface' resource and data source
-- Add 'hello_password_hmac_md5_send_only' to 'router_isis_interface' resource and data source
-- Add 'hello_password_keychain_name' to 'router_isis_interface' resource and data source
-- Add 'hello_password_levels' (type: List) to 'router_isis_interface' resource and data source
-- Add 'priority_levels' (type: List) to 'router_isis_interface' resource and data source
-- Add 'metric_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'tag' to 'router_isis_address_family' resource and data source
-- Add 'tag_levels' (type: List) to 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'redistribute_isis' to 'redistribute_isis_processes' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'instance_id' to 'isis_string' in 'router_isis_address_family' resource and data source
-- Add 'redistribute_route_level' to 'router_isis_address_family' resource and data source
-- Add 'metric' to 'router_isis_address_family' resource and data source
-- Add 'metric_type' to 'router_isis_address_family' resource and data source
-- Add 'down_flag_clear' to 'router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast' to 'ipv4_unicast' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_import_route_policy' to 'ipv4_unicast_import_route_policy' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_export_route_policy' to 'ipv4_unicast_export_route_policy' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_multicast' to 'ipv4_multicast' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_flowspec' to 'ipv4_flowspec' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast' to 'ipv6_unicast' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_import_route_policy' to 'ipv6_unicast_import_route_policy' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_export_route_policy' to 'ipv6_unicast_export_route_policy' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_multicast' to 'ipv6_multicast' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_flowspec' to 'ipv6_flowspec' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_import_route_target_two_byte_as_format' to 'ipv4_unicast_import_route_target_two_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_import_route_target_four_byte_as_format' to 'ipv4_unicast_import_route_target_four_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_import_route_target_ip_address_format' to 'ipv4_unicast_import_route_target_ip_address_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_export_route_target_two_byte_as_format' to 'ipv4_unicast_export_route_target_two_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_export_route_target_four_byte_as_format' to 'ipv4_unicast_export_route_target_four_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv4_unicast_export_route_target_ip_address_format' to 'ipv4_unicast_export_route_target_ip_address_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_import_route_target_two_byte_as_format' to 'ipv6_unicast_import_route_target_two_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_import_route_target_four_byte_as_format' to 'ipv6_unicast_import_route_target_four_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_import_route_target_ip_address_format' to 'ipv6_unicast_import_route_target_ip_address_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_export_route_target_two_byte_as_format' to 'ipv6_unicast_export_route_target_two_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_export_route_target_four_byte_as_format' to 'ipv6_unicast_export_route_target_four_byte_as_format' in 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Rename 'address_family_ipv6_unicast_export_route_target_ip_address_format' to 'ipv6_unicast_export_route_target_ip_address_format' in 'iosxr_vrf' resource and data source
+- Add 'bfd_fast_detect_ipv4' to 'iosxr_router_isis_interface' resource and data source
+- Add 'bfd_minimum_interval' to 'iosxr_router_isis_interface' resource and data source
+- Add 'bfd_multiplier' to 'iosxr_router_isis_interface' resource and data source
+- Add 'interfaces' (type: List) to 'iosxr_evpn' resource and data source
+- Add 'ethernet_segment_enable' to 'iosxr_evpn' resource and data source
+- Add 'ethernet_segment_esi_zero' to 'iosxr_evpn' resource and data source
+- Add 'vpn_id' to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'description' to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_import_two_byte_as_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_import_four_byte_as_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_import_ipv4_address_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_export_two_byte_as_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_export_four_byte_as_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'bgp_route_target_export_ipv4_address_format' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'advertise_mac' to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'locators' (type: List) to 'iosxr_evpn_segment_routing_srv6_evi' resource and data source
+- Add 'segment_routing_srv6' to 'iosxr_evpn' resource and data source
+- Add 'segment_routing_srv6_locators' (type: List) to 'iosxr_evpn' resource and data source
+- Add 'segment_routing_srv6_usid_allocation_wide_local_id_block' to 'iosxr_evpn' resource and data source
+- Add 'password' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'password_inheritance_disable' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'segment_routing_mpls_enable' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'adjacency_sid_indices' (type: List) to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'adjacency_sid_absolutes' (type: List) to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'formats' (type: List) to 'iosxr_segment_routing_v6' resource and data source
+- BREAKING CHANGE: Update YANG path to 'Cisco-IOS-XR-segment-routing-ms-cfg:/sr/srv6' in 'iosxr_segment_routing_v6' resource and data source
+- BREAKING CHANGE: Rename 'name' to 'locator_name' in 'iosxr_segment_routing_v6' resource and data source
+- BREAKING CHANGE: Remove 'locator_enable' in 'iosxr_segment_routing_v6' resource and data source
+- Add 'micro_segment_behavior_unode_psp_usd' to 'iosxr_segment_routing_v6' resource and data source
+- BREAKING CHANGE: Update YANG path to 'Cisco-IOS-XR-um-segment-routing-cfg:/segment-routing' in 'iosxr_segment_routing' resource and data source
+- BREAKING CHANGE: Remove 'rd_two_byte_as_number', 'rd_two_byte_as_index', 'rd_four_byte_as_number', 'rd_four_byte_as_index', 'rd_ipv4_address', 'rd_ipv4_address_index' in 'iosxr_vrf' resource and data source
+- Add 'rd_two_byte_as_number' to 'iosxr_vrf' resource and data source
+- Add 'rd_two_byte_as_index' to 'iosxr_vrf' resource and data source
+- Add 'rd_four_byte_as_number' to 'iosxr_vrf' resource and data source
+- Add 'rd_four_byte_as_index' to 'iosxr_vrf' resource and data source
+- Add 'rd_ipv4_address' to 'iosxr_vrf' resource and data source
+- Add 'rd_ipv4_address_index' to 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Remove 'address_family_ipv4_unicast_import_route_target_two_byte_as_format', 'address_family_ipv4_unicast_import_route_target_four_byte_as_format', 'address_family_ipv4_unicast_import_route_target_ip_address_format', 'address_family_ipv4_unicast_export_route_target_two_byte_as_format', 'address_family_ipv4_unicast_export_route_target_four_byte_as_format', 'address_family_ipv4_unicast_export_route_target_ip_address_format', 'address_family_ipv6_unicast_import_route_target_two_byte_as_format', 'address_family_ipv6_unicast_import_route_target_four_byte_as_format', 'address_family_ipv6_unicast_import_route_target_ip_address_format', 'address_family_ipv6_unicast_export_route_target_two_byte_as_format', 'address_family_ipv6_unicast_export_route_target_four_byte_as_format', 'address_family_ipv6_unicast_export_route_target_ip_address_format' (type: List) in 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_import_route_target_two_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_import_route_target_four_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_import_route_target_ip_address_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_export_route_target_two_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_export_route_target_four_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv4_unicast_export_route_target_ip_address_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_import_route_target_two_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_import_route_target_four_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_import_route_target_ip_address_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_export_route_target_two_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_export_route_target_four_byte_as_format' (type: List) to 'iosxr_vrf' resource and data source
+- Add 'address_family_ipv6_unicast_export_route_target_ip_address_format' (type: List) to 'iosxr_vrf' resource and data source
+- BREAKING CHANGE: Remove 'traps_bgp_cbgp2_updown', 'traps_bgp_bgp4_mib_updown' in 'iosxr_snmp_server' resource and data source
+- Add 'traps_bgp_cbgp_two_updown' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_bgp_cbgp_two_enable' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_bgp_enable_updown' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_bgp_enable_cisco_bgp4_mib' to 'iosxr_snmp_server' resource and data source
+- BREAKING CHANGE: Remove 'traps_isis_all', 'traps_isis_database_overload', 'traps_isis_manual_address_drops', 'traps_isis_corrupted_lsp_detected', 'traps_isis_attempt_to_exceed_max_sequence', 'traps_isis_id_len_mismatch', 'traps_isis_max_area_addresses_mismatch', 'traps_isis_own_lsp_purge', 'traps_isis_sequence_number_skip', 'traps_isis_authentication_type_failure', 'traps_isis_authentication_failure', 'traps_isis_version_skew', 'traps_isis_area_mismatch', 'traps_isis_rejected_adjacency', 'traps_isis_lsp_too_large_to_propagate', 'traps_isis_orig_lsp_buff_size_mismatch', 'traps_isis_protocols_supported_mismatch', 'traps_isis_adjacency_change', 'traps_isis_lsp_error_detected' in 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_all' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_database_overload' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_manual_address_drops' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_corrupted_lsp_detected' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_attempt_to_exceed_max_sequence' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_id_len_mismatch' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_max_area_addresses_mismatch' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_own_lsp_purge' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_sequence_number_skip' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_authentication_type_failure' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_authentication_failure' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_version_skew' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_area_mismatch' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_rejected_adjacency' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_lsp_too_large_to_propagate' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_orig_lsp_buff_size_mismatch' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_protocols_supported_mismatch' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_adjacency_change' to 'iosxr_snmp_server' resource and data source
+- Add 'traps_isis_lsp_error_detected' to 'iosxr_snmp_server' resource and data source
+- Add 'metric_levels' (type: List) to 'iosxr_router_isis_interface_address_family' resource and data source
+- BREAKING CHANGE: Remove 'metric', 'maximum' in 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'metric_default_metric' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'metric_maximum' to 'iosxr_router_isis_interface_address_family' resource and data source
+- BREAKING CHANGE: Remove 'prefix_sid_absolute', 'prefix_sid_index', 'prefix_sid_n_flag_clear' in 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_index_id' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_index_php_disable' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_index_explicit_null' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_index_n_flag_clear' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_absolute_id' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_absolute_php_disable' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_absolute_explicit_null' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_absolute_n_flag_clear' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_index_id' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_index_php_disable' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_index_explicit_null' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_index_n_flag_clear' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_absolute_id' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_absolute_php_disable' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_absolute_explicit_null' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_strict_spf_absolute_n_flag_clear' to 'iosxr_router_isis_interface_address_family' resource and data source
+- Add 'prefix_sid_algorithms' (type: List) to 'iosxr_router_isis_interface_address_family' resource and data source
+- BREAKING CHANGE: Remove 'hello_password_hmac_md5', 'hello_password_keychain', 'hello_password_text' in 'iosxr_router_isis_interface' resource and data source
+- BREAKING CHANGE: Remove 'passive', 'shutdown', 'suppressed' in 'iosxr_router_isis_interface' resource and data source
+- BREAKING CHANGE: Remove 'hello_padding_disable', 'hello_padding_sometimes' in 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_padding' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_padding_levels' (type: List) to 'iosxr_router_isis_interface' resource and data source
+- Add 'state' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_accepts_encrypted' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_accepts_levels' (type: List) to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_text_encrypted' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_text_send_only' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_hmac_md5_encrypted' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_hmac_md5_send_only' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_keychain_name' to 'iosxr_router_isis_interface' resource and data source
+- Add 'hello_password_levels' (type: List) to 'iosxr_router_isis_interface' resource and data source
+- Add 'priority_levels' (type: List) to 'iosxr_router_isis_interface' resource and data source
+- Add 'metric_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'tag' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'tag_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'redistribute_isis' to 'redistribute_isis_processes' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'instance_id' to 'isis_string' in 'iosxr_router_isis_address_family' resource and data source
+- Add 'redistribute_route_level' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_type' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'down_flag_clear' to 'iosxr_router_isis_address_family' resource and data source
 - BREAKING CHANGE: Remove 'spf_prefix_priorities' (type: List) in 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf_initial_wait' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf_short_wait' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf_long_wait' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf_learn_interval' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_ietf_holddown_interval' to 'router_isis_address_family' resource and data source
-- Add 'spf_interval_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_critical_tag' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_critical_prefixlist_name' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_high_tag' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_high_prefixlist_name' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_medium_tag' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_medium_prefixlist_name' to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_critical_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_high_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'spf_prefix_priority_medium_levels' (type: List) to 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'mpls_traffic_eng_router_id_ip_address' to 'mpls_traffic_eng_router_id_ipv4_address' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'mpls_traffic_eng_router_id_interface' to 'mpls_traffic_eng_router_id_interface_name' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'microloop_avoidance_protected' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'microloop_avoidance_segment_routing' in 'router_isis_address_family' resource and data source
-- Add 'microloop_avoidance_enable' to 'router_isis_address_family' resource and data source
-- Add 'microloop_avoidance_enable_protected' to 'router_isis_address_family' resource and data source
-- Add 'microloop_avoidance_enable_segment_routing_route_policy' to 'router_isis_address_family' resource and data source
-- Add 'microloop_avoidance_rib_update_delay' to 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_critical' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_high' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_medium' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_critical' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_high' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_medium' in 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_priority_limit' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_priority_limit_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_use_candidate_only' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_srlg_protection_weighted_global' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_srlg_protection_weighted_global_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_remote_lfa_prefix_list' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_remote_lfa_prefix_list_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_load_sharing_disable' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_load_sharing_disable_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_downstream_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_lc_disjoint_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_node_protecting_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_primary_path_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_secondary_path_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_link_priority_limit' to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_link_priority_limit_levels' (type: List) to 'router_isis_address_family' resource and data source
-- Add 'fast_reroute_per_link_use_candidate_only' to 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'interface_name' to 'router_id_interface_name' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'ip_address' to 'router_id_ip_address' in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Rename 'level_id' to 'level_number' in 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'narrow' from 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'wide' from 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'transition' from 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- Add 'metric_style_narrow' to 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- Add 'metric_style_narrow_transition' to 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- Add 'metric_style_wide' to 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- Add 'metric_style_wide_transition' to 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- Add 'metric_style_transition' to 'metric_style_levels' list in 'router_isis_address_family' resource and data source
-- BREAKING CHANGE: Remove 'passive' from 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Remove 'suppressed' from 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Remove 'shutdown' from 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'state' (enumeration) to 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Remove 'priority' from 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'priority_levels' (type: List) to 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Change 'hello_padding' from Bool to String (enumeration) in 'interfaces' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'algorithm_number' to 'flex_algo_number' in 'flex_algos' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'metric_type_delay' to 'metric_type' in 'flex_algos' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'affinity_map_name' to 'name' in 'affinity_maps' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Remove 'lsp_password_keychain' from 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_accept_encrypted' to 'router_isis' resource and data source
+- Add 'spf_interval_ietf' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_ietf_initial_wait' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_ietf_short_wait' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_ietf_long_wait' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_ietf_learn_interval' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_ietf_holddown_interval' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_interval_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_critical_tag' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_critical_prefixlist_name' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_high_tag' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_high_prefixlist_name' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_medium_tag' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_medium_prefixlist_name' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_critical_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_high_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'spf_prefix_priority_medium_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'mpls_traffic_eng_router_id_ip_address' to 'mpls_traffic_eng_router_id_ipv4_address' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'mpls_traffic_eng_router_id_interface' to 'mpls_traffic_eng_router_id_interface_name' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'microloop_avoidance_protected' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'microloop_avoidance_segment_routing' in 'iosxr_router_isis_address_family' resource and data source
+- Add 'microloop_avoidance_enable' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'microloop_avoidance_enable_protected' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'microloop_avoidance_enable_segment_routing_route_policy' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'microloop_avoidance_rib_update_delay' to 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_critical' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_high' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_link_priority_limit_medium' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_critical' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_high' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'fast_reroute_per_prefix_priority_limit_medium' in 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_priority_limit' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_priority_limit_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_use_candidate_only' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_srlg_protection_weighted_global' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_srlg_protection_weighted_global_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_remote_lfa_prefix_list' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_remote_lfa_prefix_list_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_load_sharing_disable' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_load_sharing_disable_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_downstream_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_lc_disjoint_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_lowest_backup_metric_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_node_protecting_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_primary_path_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_secondary_path_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_link_priority_limit' to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_link_priority_limit_levels' (type: List) to 'iosxr_router_isis_address_family' resource and data source
+- Add 'fast_reroute_per_link_use_candidate_only' to 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'interface_name' to 'router_id_interface_name' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'ip_address' to 'router_id_ip_address' in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Rename 'level_id' to 'level_number' in 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'narrow' from 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'wide' from 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'transition' from 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_style_narrow' to 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_style_narrow_transition' to 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_style_wide' to 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_style_wide_transition' to 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- Add 'metric_style_transition' to 'metric_style_levels' list in 'iosxr_router_isis_address_family' resource and data source
+- BREAKING CHANGE: Remove 'passive' from 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Remove 'suppressed' from 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Remove 'shutdown' from 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'state' (enumeration) to 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Remove 'priority' from 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'priority_levels' (type: List) to 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Change 'hello_padding' from Bool to String (enumeration) in 'interfaces' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'algorithm_number' to 'flex_algo_number' in 'flex_algos' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'metric_type_delay' to 'metric_type' in 'flex_algos' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'affinity_map_name' to 'name' in 'affinity_maps' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Remove 'lsp_password_keychain' from 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_accept_encrypted' to 'iosxr_router_isis' resource and data source
 - BREAKING CHANGE: Add 'lsp_password_accept_levels' (type: List) to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_text_encrypted' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_text_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_text_snp_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_text_enable_poi' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_hmac_md5_encrypted' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_hmac_md5_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_hmac_md5_snp_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_hmac_md5_enable_poi' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_keychain_name' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_keychain_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_keychain_snp_send_only' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'lsp_password_keychain_enable_poi' to 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'lsp_refresh_interval_lsp_refresh_interval_time' to 'lsp_refresh_interval' in 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'max_lsp_lifetime_max_lsp_lifetime' to 'max_lsp_lifetime' in 'router_isis' resource and data source
-- BREAKING CHANGE: Rename 'level_id' to 'level_number' in 'set_overload_bit_levels' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'nsf_cisco' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'nsf_ietf' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'set_overload_bit_on_startup_time_to_advertise_seconds' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'set_overload_bit_on_startup_wait_for_bgp' to 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'on_startup_time_to_advertise_seconds' to 'set_overload_bit_levels' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'on_startup_wait_for_bgp' to 'set_overload_bit_levels' list in 'router_isis' resource and data source
-- BREAKING CHANGE: Add 'segment_routing_srv6_usid_allocation_wide_local_id_block' in 'router_bgp' resource and data source
-- BREAKING CHANGE: Add 'segment_routing_srv6_alloc_mode_per_ce' in 'router_bgp_vrf_address_family' resource and data source
-- BREAKING CHANGE: Add 'label_mode_per_vrf' to 'segment_routing_srv6_alloc_mode_per_vrf' in 'router_bgp_vrf_address_family' resource and data source
-- BREAKING CHANGE: Add 'label_mode_per_vrf_46' to 'segment_routing_srv6_alloc_mode_per_vrf_46' in 'router_bgp_vrf_address_family' resource and data source
-- BREAKING CHANGE: Add 'label_mode_route_policy' to 'segment_routing_srv6_alloc_mode_route_policy' in 'router_bgp_vrf_address_family' resource and data source
-- Add 'timers_zero' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_keepalive_zero' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_zero_minimum_acceptable_holdtime' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_holdtime' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_holdtime_number' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_holdtime_zero' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_holdtime_minimum_acceptable_holdtime' to 'router_bgp_neighbor_group' resource and data source
-- Add 'timers_zero' to 'router_bgp_vrf' resource and data source
-- Add 'timers_bgp_keepalive_zero' to 'router_bgp_vrf' resource and data source
-- Add 'timers_zero_minimum_acceptable_holdtime' to 'router_bgp_vrf' resource and data source
-- Add 'timers_holdtime' to 'router_bgp_vrf' resource and data source
-- Add 'timers_holdtime_number' to 'router_bgp_vrf' resource and data source
-- Add 'timers_holdtime_zero' to 'router_bgp_vrf' resource and data source
-- Add 'timers_holdtime_minimum_acceptable_holdtime' to 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'local_as_replace_as' to 'local_as_no_prepend_replace_as' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'local_as_dual_as' to 'local_as_no_prepend_replace_as_dual_as' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'neighbor' to 'address' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_auto' to 'rd_auto' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_two_byte_as_as_number' to 'rd_two_byte_as_number' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_two_byte_as_index' to 'rd_two_byte_as_index' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_four_byte_as_as_number' to 'rd_four_byte_as_number' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_four_byte_as_index' to 'rd_four_byte_as_index' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_ip_address_ipv4_address' to 'rd_ipv4_address_address' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'rd_ip_address_index' to 'rd_ipv4_address_index' in 'router_bgp_vrf' resource and data source
-- Add 'rd_two_byte_as' to 'router_bgp_vrf' resource and data source
-- Add 'rd_four_byte_as' to 'router_bgp_vrf' resource and data source
-- Add 'rd_ipv4_address' to 'router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_text_encrypted' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_text_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_text_snp_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_text_enable_poi' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_hmac_md5_encrypted' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_hmac_md5_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_hmac_md5_snp_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_hmac_md5_enable_poi' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_keychain_name' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_keychain_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_keychain_snp_send_only' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'lsp_password_keychain_enable_poi' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'lsp_refresh_interval_lsp_refresh_interval_time' to 'lsp_refresh_interval' in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'max_lsp_lifetime_max_lsp_lifetime' to 'max_lsp_lifetime' in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Rename 'level_id' to 'level_number' in 'set_overload_bit_levels' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'nsf_cisco' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'nsf_ietf' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'set_overload_bit_on_startup_time_to_advertise_seconds' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'set_overload_bit_on_startup_wait_for_bgp' to 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'on_startup_time_to_advertise_seconds' to 'set_overload_bit_levels' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'on_startup_wait_for_bgp' to 'set_overload_bit_levels' list in 'iosxr_router_isis' resource and data source
+- BREAKING CHANGE: Add 'segment_routing_srv6_usid_allocation_wide_local_id_block' in 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Add 'segment_routing_srv6_alloc_mode_per_ce' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- BREAKING CHANGE: Add 'label_mode_per_vrf' to 'segment_routing_srv6_alloc_mode_per_vrf' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- BREAKING CHANGE: Add 'label_mode_per_vrf_46' to 'segment_routing_srv6_alloc_mode_per_vrf_46' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- BREAKING CHANGE: Add 'label_mode_route_policy' to 'segment_routing_srv6_alloc_mode_route_policy' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'timers_zero' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_keepalive_zero' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_zero_minimum_acceptable_holdtime' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_holdtime' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_holdtime_number' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_holdtime_zero' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_holdtime_minimum_acceptable_holdtime' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'timers_zero' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_bgp_keepalive_zero' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_zero_minimum_acceptable_holdtime' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_holdtime' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_holdtime_number' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_holdtime_zero' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'timers_holdtime_minimum_acceptable_holdtime' to 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'local_as_replace_as' to 'local_as_no_prepend_replace_as' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'local_as_dual_as' to 'local_as_no_prepend_replace_as_dual_as' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'neighbor' to 'address' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_auto' to 'rd_auto' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_two_byte_as_as_number' to 'rd_two_byte_as_number' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_two_byte_as_index' to 'rd_two_byte_as_index' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_four_byte_as_as_number' to 'rd_four_byte_as_number' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_four_byte_as_index' to 'rd_four_byte_as_index' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_ip_address_ipv4_address' to 'rd_ipv4_address_address' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'rd_ip_address_index' to 'rd_ipv4_address_index' in 'iosxr_router_bgp_vrf' resource and data source
+- Add 'rd_two_byte_as' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'rd_four_byte_as' to 'iosxr_router_bgp_vrf' resource and data source
+- Add 'rd_ipv4_address' to 'iosxr_router_bgp_vrf' resource and data source
 
-- BREAKING CHANGE: Remove 'ao_key_chain_name' in 'router_bgp_neighbor_group' resource and data source
-- BREAKING CHANGE: Remove 'ao_include_tcp_options_enable' in 'router_bgp_neighbor_group' resource and data source
-- Add 'ao_key_chain_name' to 'router_bgp_neighbor_group' resource and data source
-- Add 'ao_key_chain_name_name' to 'router_bgp_neighbor_group' resource and data source
-- Add 'ao_key_chain_include_tcp_options' to 'router_bgp_neighbor_group' resource and data source
-- Add 'ao_key_chain_accept_ao_mismatch_connection' to 'router_bgp_neighbor_group' resource and data source
-- Add 'ao_inheritance_disable' to 'router_bgp_neighbor_group' resource and data source
+- BREAKING CHANGE: Remove 'ao_key_chain_name' in 'iosxr_router_bgp_neighbor_group' resource and data source
+- BREAKING CHANGE: Remove 'ao_include_tcp_options_enable' in 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'ao_key_chain_name' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'ao_key_chain_name_name' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'ao_key_chain_include_tcp_options' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'ao_key_chain_accept_ao_mismatch_connection' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'ao_inheritance_disable' to 'iosxr_router_bgp_neighbor_group' resource and data source
 
-- BREAKING CHANGE: Rename 'default_originate_route_policy' in 'router_bgp_neighbor_address_family' resource and data source
-- BREAKING CHANGE: Rename 'default_originate_inheritance_disable' in 'router_bgp_neighbor_address_family' resource and data source
-- BREAKING CHANGE: Rename 'default_originate_route_policy' in 'router_bgp_vrf_neighbor_address_family' resource and data source
-- BREAKING CHANGE: Rename 'default_originate_inheritance_disable' in 'router_bgp_vrf_neighbor_address_family' resource and data source
-- Add 'redistribute_ospf' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_ospfv3' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_eigrp' in 'router_bgp_address_family.yaml' resource and data source
-- BREAKING CHANGE: Rename 'redistribute_isis' (yang_name: 'redistribute/isis' to 'redistribute/isis-processes/isis-process') in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_connected_multipath' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_rip' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_rip_metric' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_rip_multipath' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_rip_route_policy' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'redistribute_static_multipath' in 'router_bgp_address_family.yaml' resource and data source
+- BREAKING CHANGE: Rename 'default_originate_route_policy' in 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- BREAKING CHANGE: Rename 'default_originate_inheritance_disable' in 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- BREAKING CHANGE: Rename 'default_originate_route_policy' in 'iosxr_router_bgp_vrf_neighbor_address_family' resource and data source
+- BREAKING CHANGE: Rename 'default_originate_inheritance_disable' in 'iosxr_router_bgp_vrf_neighbor_address_family' resource and data source
+- Add 'redistribute_ospf' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_ospfv3' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_eigrp' in 'iosxr_router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Rename 'redistribute_isis' (yang_name: 'redistribute/isis' to 'redistribute/isis-processes/isis-process') in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_connected_multipath' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_rip' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_rip_metric' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_rip_multipath' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_rip_route_policy' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'redistribute_static_multipath' in 'iosxr_router_bgp_address_family' resource and data source
 
-- BREAKING CHANGE: Remove 'import' in 'router_bgp_neighbor_address_family' resource and data source
-- Add 'import_stitching_rt' to 'router_bgp_neighbor_address_family' resource and data source
-- Add 'import_stitching_rt_re_originate' to 'router_bgp_neighbor_address_family' resource and data source
-- Add 'import_stitching_rt_re_originate_stitching_rt' to 'router_bgp_neighbor_address_family' resource and data source
-- Add 'import_re_originate' to 'router_bgp_neighbor_address_family' resource and data source
-- BREAKING CHANGE: Rename 'encapsulation-type/srv6' to 'encapsulation_type' in 'router_bgp_neighbor_address_family' resource and data source
+- BREAKING CHANGE: Remove 'import' in 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- Add 'import_stitching_rt' to 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- Add 'import_stitching_rt_re_originate' to 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- Add 'import_stitching_rt_re_originate_stitching_rt' to 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- Add 'import_re_originate' to 'iosxr_router_bgp_neighbor_address_family' resource and data source
+- BREAKING CHANGE: Rename 'encapsulation-type/srv6' to 'encapsulation_type' in 'iosxr_router_bgp_neighbor_address_family' resource and data source
 
-- BREAKING CHANGE: Rename 'masklength' to 'address_prefix' (yang_name: 'masklength' to 'address-prefix') in 'router_bgp_address_family.yaml' resource and data source
-- Add 'route_policy' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'description' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'set_tag' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'backdoor' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'multipath' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'label_mode_per_prefix' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'label_mode_per_ce' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'label_mode_per_vrf' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'label_mode_per_vrf_46' in 'router_bgp_address_family.yaml' resource and data source
-- Add 'label_mode_route_policy' to 'router_bgp_address_family' resource and data source
-- Add 'label_mode_route_policy_name' to 'router_bgp_address_family' resource and data source
-- Add 'label_mode_per_nexthop_received_label' to 'router_bgp_address_family' resource and data source
-- Add 'label_mode_per_nexthop_received_label_allocate_secondary_label' to 'router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Rename 'masklength' to 'address_prefix' (yang_name: 'masklength' to 'address-prefix') in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'route_policy' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'description' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'set_tag' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'backdoor' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'multipath' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_prefix' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_ce' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_vrf' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_vrf_46' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_route_policy' to 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_route_policy_name' to 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_nexthop_received_label' to 'iosxr_router_bgp_address_family' resource and data source
+- Add 'label_mode_per_nexthop_received_label_allocate_secondary_label' to 'iosxr_router_bgp_address_family' resource and data source
 
-- BREAKING CHANGE: Rename 'masklength' to 'address_prefix' in 'router_bgp_vrf_address_family' resource and data source
-- Add 'route_policy', 'description', 'set_tag' to 'router_bgp_vrf_address_family' resource and data source
-- Add 'route_policy', 'backdoor', 'multipath' to 'router_bgp_vrf_address_family' resource and data source
-- Add 'redistribute_isis_processes' (type: List) to 'router_bgp_vrf_address_family' resource and data source
-- Add 'level_one', 'level_one_level_two', 'level_one_level_two_level_one_inter_area', 'level_one_level_one_inter_area', 'level_two', 'level_two_level_one_inter_area', 'level_one_inter_area' to 'router_bgp_vrf_address_family' resource and data source
-- Add 'metric', 'multipath', 'route_policy' to 'router_bgp_vrf_address_family' resource and data source
-- Add 'label_mode_per_prefix', 'label_mode_per_ce', 'label_mode_per_vrf', 'label_mode_per_vrf_46' to 'router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Rename 'masklength' to 'address_prefix' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'route_policy', 'description', 'set_tag' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'route_policy', 'backdoor', 'multipath' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'redistribute_isis_processes' (type: List) to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'level_one', 'level_one_level_two', 'level_one_level_two_level_one_inter_area', 'level_one_level_one_inter_area', 'level_two', 'level_two_level_one_inter_area', 'level_one_inter_area' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'metric', 'multipath', 'route_policy' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'label_mode_per_prefix', 'label_mode_per_ce', 'label_mode_per_vrf', 'label_mode_per_vrf_46' to 'iosxr_router_bgp_address_family' resource and data source
 
-- BREAKING CHANGE: Remove 'echo_ipv4_bundle_per_member_preferred_minimum_interval' in 'bfd' resource and data source
-- Add 'echo_ipv4_bundle_per_member_minimum_interval' to 'bfd' resource and data source
-- BREAKING CHANGE: Rename 'location-name' to 'location-id' in 'bfd' resource and data source
+- BREAKING CHANGE: Remove 'echo_ipv4_bundle_per_member_preferred_minimum_interval' in 'iosxr_bfd' resource and data source
+- Add 'echo_ipv4_bundle_per_member_minimum_interval' to 'iosxr_bfd' resource and data source
+- BREAKING CHANGE: Rename 'location-name' to 'location-id' in 'iosxr_bfd' resource and data source
 
-- BREAKING CHANGE: Remove 'ethernet_segment_identifier_type_zero_bytes_1', 'ethernet_segment_identifier_type_zero_bytes_23', 'ethernet_segment_identifier_type_zero_bytes_45', 'ethernet_segment_identifier_type_zero_bytes_67', 'ethernet_segment_identifier_type_zero_bytes_89' in 'evpn_interface' resource and data source
+- BREAKING CHANGE: Remove 'ethernet_segment_identifier_type_zero_bytes_1', 'ethernet_segment_identifier_type_zero_bytes_23', 'ethernet_segment_identifier_type_zero_bytes_45', 'ethernet_segment_identifier_type_zero_bytes_67', 'ethernet_segment_identifier_type_zero_bytes_89' in 'iosxr_evpn_interface' resource and data source
 
-- BREAKING CHANGE: Rename 'compress-level' to 'compress' in 'interface' resource and data source
-- BREAKING CHANGE: Rename 'ipv6_access_group_egress_acl1' to 'ipv6_access_group_egress_acl' in 'interface' resource and data source
-- Add 'timers_bgp_keepalive_zero', 'timers_bgp_holdtime_zero', 'timers_bgp_holdtime_minimum_acceptable_holdtime', 'timers_bgp_zero_zero', 'timers_bgp_zero_minimum_acceptable_holdtime' to 'router_bgp' resource and data source
-- BREAKING CHANGE: Rename 'timers_bgp_holdtime_holdtime' to 'timers_bgp_holdtime_number' in 'router_bgp' resource and data source
-- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'router_bgp' resource and data source
-- Add 'remote_as' to 'router_bgp' resource and data source
-- BREAKING CHANGE: Rename 'advertisement_interval_time_in_seconds' to 'advertisement_interval_advertisement_interval_time_in_seconds' in 'router_bgp' resource and data source
-- BREAKING CHANGE: Rename 'advertisement_interval_time_in_milliseconds' to 'advertisement_interval_advertisement_interval_time_in_milliseconds' in 'router_bgp' resource and data source
-- BREAKING CHANGE: Remove 'bfd_fast_detect_inheritance_disable' in 'router_bgp' resource and data source
-- Add 'bfd_fast_detect_disable' to 'router_bgp' resource and data source
-- Add 'local_as_inheritance_disable', 'local_as_no_prepend', 'local_as_replace_as', 'local_as_dual_as' to 'router_bgp' resource and data source
-- Add 'bgp_bestpath_sr_policy_prefer', 'bgp_bestpath_sr_policy_force' to 'router_bgp' resource and data source
+- BREAKING CHANGE: Rename 'compress-level' to 'compress' in 'iosxr_interface' resource and data source
+- BREAKING CHANGE: Rename 'ipv6_access_group_egress_acl1' to 'ipv6_access_group_egress_acl' in 'iosxr_interface' resource and data source
+- Add 'timers_bgp_keepalive_zero', 'timers_bgp_holdtime_zero', 'timers_bgp_holdtime_minimum_acceptable_holdtime', 'timers_bgp_zero_zero', 'timers_bgp_zero_minimum_acceptable_holdtime' to 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Rename 'timers_bgp_holdtime_holdtime' to 'timers_bgp_holdtime_number' in 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'iosxr_router_bgp' resource and data source
+- Add 'remote_as' to 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Rename 'advertisement_interval_time_in_seconds' to 'advertisement_interval_advertisement_interval_time_in_seconds' in 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Rename 'advertisement_interval_time_in_milliseconds' to 'advertisement_interval_advertisement_interval_time_in_milliseconds' in 'iosxr_router_bgp' resource and data source
+- BREAKING CHANGE: Remove 'bfd_fast_detect_inheritance_disable' in 'iosxr_router_bgp' resource and data source
+- Add 'bfd_fast_detect_disable' to 'iosxr_router_bgp' resource and data source
+- Add 'local_as_inheritance_disable', 'local_as_no_prepend', 'local_as_replace_as', 'local_as_dual_as' to 'iosxr_router_bgp' resource and data source
+- Add 'bgp_bestpath_sr_policy_prefer', 'bgp_bestpath_sr_policy_force' to 'iosxr_router_bgp' resource and data source
 
-- Add 'timers_bgp_keepalive_zero', 'timers_bgp_holdtime_zero', 'timers_bgp_holdtime_minimum_acceptable_holdtime', 'timers_bgp_zero_zero', 'timers_bgp_zero_minimum_acceptable_holdtime' to 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Remove 'bgp_bestpath_med_confed' in 'router_bgp_vrf' resource and data source
-- Add 'bgp_bestpath_sr_policy_prefer', 'bgp_bestpath_sr_policy_force' to 'router_bgp_vrf' resource and data source
-- BREAKING CHANGE: Rename 'advertisement_interval_time_in_seconds' to 'advertisement_interval_advertisement_interval_time_in_seconds' in 'router_bgp_neighbor_group' resource and data source
-- BREAKING CHANGE: Rename 'advertisement_interval_time_in_milliseconds' to 'advertisement_interval_advertisement_interval_time_in_milliseconds' in 'router_bgp_neighbor_group' resource and data source
-- BREAKING CHANGE: Remove 'bfd_fast_detect_inheritance_disable' in 'router_bgp_neighbor_group' resource and data source
-- Add 'bfd_fast_detect_disable' to 'router_bgp_neighbor_group' resource and data source
-- Add 'additional_paths_selection_route_policy', 'additional_paths_selection_disable' to 'router_bgp_address_family' resource and data source
-- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'router_bgp_vrf_neighbor_address_family' resource and data source
-- Add 'additional_paths_selection_route_policy', 'additional_paths_selection_disable' to 'router_bgp_vrf_address_family' resource and data source
-- BREAKING CHANGE: Remove 'allocate_label_all_unlabeled_path' in 'router_bgp_address_family' resource and data source
-- Add 'allocate_label_all', 'allocate_label_all_unlabeled_path', 'allocate_label_route_policy', 'allocate_label_route_policy_name', 'allocate_label_route_policy_unlabeled_path' to 'router_bgp_address_family' resource and data source
-- BREAKING CHANGE: Remove 'allocate_label_all_unlabeled_path' in 'router_bgp_vrf_address_family' resource and data source
-- Add 'allocate_label_all', 'allocate_label_all_unlabeled_path', 'allocate_label_route_policy', 'allocate_label_route_policy_name', 'allocate_label_route_policy_unlabeled_path' to 'router_bgp_vrf_address_family' resource and data source
-- BREAKING CHANGE: Remove 'maximum_paths_ebgp_multipath', 'maximum_paths_ibgp_multipath', 'maximum_paths_eibgp_multipath' in 'router_bgp_address_family' resource and data source
-- Add 'maximum_paths_ebgp', 'maximum_paths_ebgp_number', 'maximum_paths_ebgp_selective', 'maximum_paths_ebgp_route_policy', 'maximum_paths_ibgp', 'maximum_paths_ibgp_number', 'maximum_paths_ibgp_unequal_cost', 'maximum_paths_ibgp_unequal_cost_deterministic', 'maximum_paths_ibgp_selective', 'maximum_paths_ibgp_route_policy', 'maximum_paths_eibgp', 'maximum_paths_eibgp_number', 'maximum_paths_eibgp_equal_cost', 'maximum_paths_eibgp_selective', 'maximum_paths_eibgp_route_policy', 'maximum_paths_unique_nexthop_check_disable' to 'router_bgp_address_family' resource and data source
-- BREAKING CHANGE: Remove 'maximum_paths_ebgp_multipath', 'maximum_paths_ibgp_multipath', 'maximum_paths_eibgp_multipath' in 'router_bgp_vrf_address_family' resource and data source
-- Add 'maximum_paths_ebgp', 'maximum_paths_ebgp_number', 'maximum_paths_ebgp_selective', 'maximum_paths_ebgp_route_policy', 'maximum_paths_ibgp', 'maximum_paths_ibgp_number', 'maximum_paths_ibgp_unequal_cost', 'maximum_paths_ibgp_unequal_cost_deterministic', 'maximum_paths_ibgp_selective', 'maximum_paths_ibgp_route_policy', 'maximum_paths_eibgp', 'maximum_paths_eibgp_number', 'maximum_paths_eibgp_equal_cost', 'maximum_paths_eibgp_selective', 'maximum_paths_eibgp_route_policy', 'maximum_paths_unique_nexthop_check_disable' to 'router_bgp_vrf_address_family' resource and data source
+- Add 'timers_bgp_keepalive_zero', 'timers_bgp_holdtime_zero', 'timers_bgp_holdtime_minimum_acceptable_holdtime', 'timers_bgp_zero_zero', 'timers_bgp_zero_minimum_acceptable_holdtime' to 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Remove 'bgp_bestpath_med_confed' in 'iosxr_router_bgp_vrf' resource and data source
+- Add 'bgp_bestpath_sr_policy_prefer', 'bgp_bestpath_sr_policy_force' to 'iosxr_router_bgp_vrf' resource and data source
+- BREAKING CHANGE: Rename 'advertisement_interval_time_in_seconds' to 'advertisement_interval_advertisement_interval_time_in_seconds' in 'iosxr_router_bgp_neighbor_group' resource and data source
+- BREAKING CHANGE: Rename 'advertisement_interval_time_in_milliseconds' to 'advertisement_interval_advertisement_interval_time_in_milliseconds' in 'iosxr_router_bgp_neighbor_group' resource and data source
+- BREAKING CHANGE: Remove 'bfd_fast_detect_inheritance_disable' in 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'bfd_fast_detect_disable' to 'iosxr_router_bgp_neighbor_group' resource and data source
+- Add 'additional_paths_selection_route_policy', 'additional_paths_selection_disable' to 'iosxr_router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Rename 'neighbor-address' to 'address' in 'iosxr_router_bgp_vrf_neighbor_address_family' resource and data source
+- Add 'additional_paths_selection_route_policy', 'additional_paths_selection_disable' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- BREAKING CHANGE: Remove 'allocate_label_all_unlabeled_path' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'allocate_label_all', 'allocate_label_all_unlabeled_path', 'allocate_label_route_policy', 'allocate_label_route_policy_name', 'allocate_label_route_policy_unlabeled_path' to 'iosxr_router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Remove 'allocate_label_all_unlabeled_path' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'allocate_label_all', 'allocate_label_all_unlabeled_path', 'allocate_label_route_policy', 'allocate_label_route_policy_name', 'allocate_label_route_policy_unlabeled_path' to 'iosxr_router_bgp_vrf_address_family' resource and data source
+- BREAKING CHANGE: Remove 'maximum_paths_ebgp_multipath', 'maximum_paths_ibgp_multipath', 'maximum_paths_eibgp_multipath' in 'iosxr_router_bgp_address_family' resource and data source
+- Add 'maximum_paths_ebgp', 'maximum_paths_ebgp_number', 'maximum_paths_ebgp_selective', 'maximum_paths_ebgp_route_policy', 'maximum_paths_ibgp', 'maximum_paths_ibgp_number', 'maximum_paths_ibgp_unequal_cost', 'maximum_paths_ibgp_unequal_cost_deterministic', 'maximum_paths_ibgp_selective', 'maximum_paths_ibgp_route_policy', 'maximum_paths_eibgp', 'maximum_paths_eibgp_number', 'maximum_paths_eibgp_equal_cost', 'maximum_paths_eibgp_selective', 'maximum_paths_eibgp_route_policy', 'maximum_paths_unique_nexthop_check_disable' to 'iosxr_router_bgp_address_family' resource and data source
+- BREAKING CHANGE: Remove 'maximum_paths_ebgp_multipath', 'maximum_paths_ibgp_multipath', 'maximum_paths_eibgp_multipath' in 'iosxr_router_bgp_vrf_address_family' resource and data source
+- Add 'maximum_paths_ebgp', 'maximum_paths_ebgp_number', 'maximum_paths_ebgp_selective', 'maximum_paths_ebgp_route_policy', 'maximum_paths_ibgp', 'maximum_paths_ibgp_number', 'maximum_paths_ibgp_unequal_cost', 'maximum_paths_ibgp_unequal_cost_deterministic', 'maximum_paths_ibgp_selective', 'maximum_paths_ibgp_route_policy', 'maximum_paths_eibgp', 'maximum_paths_eibgp_number', 'maximum_paths_eibgp_equal_cost', 'maximum_paths_eibgp_selective', 'maximum_paths_eibgp_route_policy', 'maximum_paths_unique_nexthop_check_disable' to 'iosxr_router_bgp_vrf_address_family' resource and data source
 
 ## 0.5.3
 

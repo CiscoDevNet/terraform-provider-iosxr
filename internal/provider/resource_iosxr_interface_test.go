@@ -45,9 +45,15 @@ func TestAccIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_netmask", "255.255.255.0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_type", "any"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_self_ping", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_default", "false"))
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_type", "any"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_self_ping", "true"))
+	}
+	if os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_verify_unicast_source_reachable_via_allow_default", "false"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_access_group_ingress_acl1", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_access_group_ingress_hardware_count", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv4_access_group_ingress_interface_statistics", "true"))
@@ -73,31 +79,31 @@ func TestAccIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.prefix_length", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "ipv6_addresses.0.zone", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "bundle_port_priority", "100"))
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_ingress_monitors.0.monitor_map_name", "MMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_egress_monitors.0.monitor_map_name", "MMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_egress_monitor_samplers.0.monitor_map_name", "MMAP1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv4_egress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_ingress_monitors.0.monitor_map_name", "MMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_ingress_monitor_samplers.0.monitor_map_name", "MMAP1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_ingress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_egress_monitors.0.monitor_map_name", "MMAP1"))
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_egress_monitor_samplers.0.monitor_map_name", "MMAP1"))
 		checks = append(checks, resource.TestCheckResourceAttr("iosxr_interface.test", "flow_ipv6_egress_monitor_samplers.0.sampler_map_name", "SMAP1"))
 	}
@@ -240,9 +246,15 @@ func testAccIosxrInterfaceConfig_all() string {
 	config += `	vrf = "VRF1"` + "\n"
 	config += `	ipv4_address = "1.1.1.1"` + "\n"
 	config += `	ipv4_netmask = "255.255.255.0"` + "\n"
-	config += `	ipv4_verify_unicast_source_reachable_via_type = "any"` + "\n"
-	config += `	ipv4_verify_unicast_source_reachable_via_allow_self_ping = true` + "\n"
-	config += `	ipv4_verify_unicast_source_reachable_via_allow_default = false` + "\n"
+	if os.Getenv("XRV9K") != "" {
+		config += `	ipv4_verify_unicast_source_reachable_via_type = "any"` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	ipv4_verify_unicast_source_reachable_via_allow_self_ping = true` + "\n"
+	}
+	if os.Getenv("XRV9K") != "" {
+		config += `	ipv4_verify_unicast_source_reachable_via_allow_default = false` + "\n"
+	}
 	config += `	ipv4_access_group_ingress_acl1 = "ACL1"` + "\n"
 	config += `	ipv4_access_group_ingress_hardware_count = true` + "\n"
 	config += `	ipv4_access_group_ingress_interface_statistics = true` + "\n"
@@ -270,45 +282,45 @@ func testAccIosxrInterfaceConfig_all() string {
 	config += `		zone = "0"` + "\n"
 	config += `		}]` + "\n"
 	config += `	bundle_port_priority = 100` + "\n"
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv4_ingress_monitors = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv4_ingress_monitor_samplers = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		sampler_map_name = "SMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv4_egress_monitors = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv4_egress_monitor_samplers = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		sampler_map_name = "SMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv6_ingress_monitors = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv6_ingress_monitor_samplers = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		sampler_map_name = "SMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv6_egress_monitors = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		}]` + "\n"
 	}
-	if os.Getenv("FLOW") != "" {
+	if os.Getenv("PHYSICAL") != "" {
 		config += `	flow_ipv6_egress_monitor_samplers = [{` + "\n"
 		config += `		monitor_map_name = "MMAP1"` + "\n"
 		config += `		sampler_map_name = "SMAP1"` + "\n"

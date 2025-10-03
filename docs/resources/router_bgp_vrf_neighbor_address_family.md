@@ -71,6 +71,8 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import iosxr_router_bgp_vrf_neighbor_address_family.example "<as_number>,<vrf_name>,<address>,<af_name>"
 ```

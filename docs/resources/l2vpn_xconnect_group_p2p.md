@@ -143,6 +143,8 @@ Optional:
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import iosxr_l2vpn_xconnect_group_p2p.example "<group_name>,<p2p_xconnect_name>"
 ```

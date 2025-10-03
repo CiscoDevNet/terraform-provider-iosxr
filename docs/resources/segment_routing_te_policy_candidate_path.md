@@ -69,6 +69,8 @@ Optional:
 
 Import is supported using the following syntax:
 
+The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/commands/import) can be used, for example:
+
 ```shell
 terraform import iosxr_segment_routing_te_policy_candidate_path.example "<policy_name>,<path_index>"
 ```

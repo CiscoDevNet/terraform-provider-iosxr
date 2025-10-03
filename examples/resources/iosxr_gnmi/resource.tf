@@ -1,7 +1,7 @@
 resource "iosxr_gnmi" "hostname" {
-  path = "openconfig-system:/system/config"
+  path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
   attributes = {
-    hostname = "ROUTER-1"
+    system-network-name = "ROUTER-1"
   }
 }
 

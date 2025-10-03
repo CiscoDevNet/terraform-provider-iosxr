@@ -14,9 +14,9 @@ Manages IOS-XR objects via gNMI calls. This resource can only manage a single ob
 
 ```terraform
 resource "iosxr_gnmi" "hostname" {
-  path = "openconfig-system:/system/config"
+  path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
   attributes = {
-    hostname = "ROUTER-1"
+    system-network-name = "ROUTER-1"
   }
 }
 
@@ -92,5 +92,5 @@ Optional:
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_gnmi.example "openconfig-system:/system/config"
+terraform import iosxr_gnmi.example "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 ```

@@ -14,7 +14,7 @@ This data source can retrieve one or more attributes via gNMI.
 
 ```terraform
 data "iosxr_gnmi" "example" {
-  path = "openconfig-system:/system/config"
+  path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 }
 ```
 

@@ -1,3 +1,3 @@
 data "iosxr_gnmi" "example" {
-  path = "openconfig-system:/system/config"
+  path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 }

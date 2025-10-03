@@ -1,1 +1,1 @@
-terraform import iosxr_gnmi.example "openconfig-system:/system/config"
+terraform import iosxr_gnmi.example "Cisco-IOS-XR-um-hostname-cfg:/hostname"

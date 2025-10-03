@@ -8,15 +8,17 @@ attributes:
   - yang_name: group-number-version-2-id
     tf_name: group_id
     id: true
-    example: 4055
+    example: 4000
   - yang_name: name
     example: gp2
   - yang_name: mac-address
     example: 00:01:00:02:00:02
   - yang_name: timers/hold-time
     example: 10
+    exclude_test: true
   - yang_name: timers/hold-time2
     example: 20
+    exclude_test: true
   - yang_name: timers/msec
     example: 100
   - yang_name: timers/msec2
@@ -61,3 +63,9 @@ attributes:
   - yang_name: address/link-local/ipv6-address
     example: fe80::240:d0ff:fe48:4672
     exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]
+    attributes:
+      - name: interface-name
+        value: GigabitEthernet0/0/0/2

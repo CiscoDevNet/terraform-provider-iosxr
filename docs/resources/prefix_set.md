@@ -24,7 +24,7 @@ resource "iosxr_prefix_set" "example" {
 
 ### Required
 
-- `rpl` (String) prefix statements
+- `rpl` (String) Configures a prefix set
 - `set_name` (String) Set name
 
 ### Optional

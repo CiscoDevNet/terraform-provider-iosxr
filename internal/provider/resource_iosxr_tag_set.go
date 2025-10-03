@@ -71,14 +71,14 @@ func (r *TagSetResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				MarkdownDescription: helpers.NewAttributeDescription("Set name").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"rpl_tag_set": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Tag Set").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Configures a tag-set").String,
 				Required:            true,
 			},
 		},

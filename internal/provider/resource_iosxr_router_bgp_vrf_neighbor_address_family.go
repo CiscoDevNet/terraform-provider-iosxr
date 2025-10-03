@@ -82,18 +82,18 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 				},
 			},
 			"vrf_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify a vrf name").String,
+				MarkdownDescription: helpers.NewAttributeDescription("VRF name - maximum length 32 characters").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"neighbor_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+			"address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -150,36 +150,32 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent send-community-ebgp from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"remove_private_as": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from outbound updates").String,
-				Optional:            true,
-			},
-			"remove_private_as_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
-				Optional:            true,
-			},
-			"remove_private_as_entire_aspath": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
-				Optional:            true,
-			},
-			"remove_private_as_internal": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
-				Optional:            true,
-			},
-			"remove_private_as_internal_inheritance_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
-				Optional:            true,
-			},
 			"remove_private_as_inbound": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from inbound updates").String,
+				Optional:            true,
+			},
+			"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
 				Optional:            true,
 			},
 			"remove_private_as_inbound_entire_aspath": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
 				Optional:            true,
 			},
-			"remove_private_as_inbound_inheritance_disable": schema.BoolAttribute{
+			"remove_private_as": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Remove private AS number from outbound updates").String,
+				Optional:            true,
+			},
+			"remove_private_as_entire_aspath": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
+				Optional:            true,
+			},
+			"remove_private_as_inheritance_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent remove-private-AS from being inherited from the parent").String,
+				Optional:            true,
+			},
+			"remove_private_as_internal": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("remove only if all ASes in the path are private").String,
 				Optional:            true,
 			},
 		},
@@ -373,7 +369,7 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) ImportState(ctx context.Cont
 	if len(idParts) != 4 {
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <as_number>,<vrf_name>,<neighbor_address>,<af_name>. Got: %q", req.ID),
+			fmt.Sprintf("Expected import identifier with format: <as_number>,<vrf_name>,<address>,<af_name>. Got: %q", req.ID),
 		)
 		return
 	}
@@ -382,7 +378,7 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) ImportState(ctx context.Cont
 	value1 := idParts[1]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), value1)...)
 	value2 := idParts[2]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("neighbor_address"), value2)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), value2)...)
 	value3 := idParts[3]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value3)...)
 }

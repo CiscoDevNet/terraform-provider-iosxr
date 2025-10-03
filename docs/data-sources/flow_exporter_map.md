@@ -23,7 +23,7 @@ data "iosxr_flow_exporter_map" "example" {
 
 ### Required
 
-- `name` (String) Exporter map name - maximum 32 characters
+- `name` (String) Exporter map name
 
 ### Optional
 
@@ -38,7 +38,7 @@ data "iosxr_flow_exporter_map" "example" {
 - `dscp` (Number) Specify DSCP value for ipv4 export packets or traffic-class for ipv6 export packets
 - `id` (String) The path of the retrieved object.
 - `packet_length` (Number) Export Packet maximum L3 length, should conform to outgoing interface mtu
-- `source` (String) Source interface
+- `source` (String) Source interface whose address can be used as source address for export packets
 - `transport_udp` (Number) Use UDP as transport protocol
 - `version_export_format` (String) Specify export format
 - `version_options_class_table_timeout` (Number) Specify export timeout

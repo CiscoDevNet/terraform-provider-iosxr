@@ -80,7 +80,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -91,7 +91,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 27),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -195,7 +195,7 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Schema(ctx context.Context, req r
 					},
 				},
 			},
-			"segment_routing_srv6_evis": schema.ListNestedAttribute{
+			"srv6_evis": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Ethernet VPN identifier for srv6").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{

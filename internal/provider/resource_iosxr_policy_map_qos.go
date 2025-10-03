@@ -80,7 +80,7 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 				Optional:            true,
 			},
 			"classes": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("").String,
+				MarkdownDescription: helpers.NewAttributeDescription("QoS policy-map").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -178,7 +178,7 @@ func (r *PolicyMapQoSResource) Schema(ctx context.Context, req resource.SchemaRe
 							Optional:            true,
 						},
 						"shape_average_rate_value": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Value of Shape rate").String,
 							Optional:            true,
 						},
 						"shape_average_rate_unit": schema.StringAttribute{

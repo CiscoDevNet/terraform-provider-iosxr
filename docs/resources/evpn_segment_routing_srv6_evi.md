@@ -22,14 +22,18 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
       assigned_number = 1
     }
   ]
-  bgp_route_target_export_ipv4_address_format = [
+  bgp_route_target_export_two_byte_as_format = [
     {
-      ipv4_address    = "1.1.1.1"
+      as_number       = 1
       assigned_number = 1
     }
   ]
   advertise_mac = true
-  locator       = "LOC12"
+  locators = [
+    {
+      locator_name = "LOC12"
+    }
+  ]
 }
 ```
 
@@ -52,7 +56,7 @@ resource "iosxr_evpn_segment_routing_srv6_evi" "example" {
 - `bgp_route_target_import_two_byte_as_format` (Attributes List) Two Byte AS Number Route Target (see [below for nested schema](#nestedatt--bgp_route_target_import_two_byte_as_format))
 - `description` (String) Description for this EVPN Instance
 - `device` (String) A device name from the provider configuration.
-- `locator` (String) EVI locator to use for EVPN SID allocation
+- `locators` (Attributes List) EVI locator to use for EVPN SID allocation (see [below for nested schema](#nestedatt--locators))
 
 ### Read-Only
 
@@ -120,6 +124,18 @@ Required:
   - Range: `1`-`65535`
 - `assigned_number` (Number) AS:nn (hex or decimal format)
   - Range: `0`-`4294967295`
+
+
+<a id="nestedatt--locators"></a>
+### Nested Schema for `locators`
+
+Required:
+
+- `locator_name` (String) EVI locator to use for EVPN SID allocation
+
+Optional:
+
+- `usid_allocation_wide_local_id_block` (Boolean) Enable uSID wide function knob for the locator
 
 ## Import
 

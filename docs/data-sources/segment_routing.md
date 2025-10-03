@@ -26,6 +26,7 @@ data "iosxr_segment_routing" "example" {
 
 ### Read-Only
 
+- `enable` (Boolean) enable SR
 - `global_block_lower_bound` (Number) SRGB Lower Bound
 - `global_block_upper_bound` (Number) SRGB Upper Bound
 - `id` (String) The path of the retrieved object.

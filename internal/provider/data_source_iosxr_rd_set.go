@@ -67,7 +67,7 @@ func (d *RDSetDataSource) Schema(ctx context.Context, req datasource.SchemaReque
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "RD Set",
+				MarkdownDescription: "Configures a rd-set",
 				Computed:            true,
 			},
 		},

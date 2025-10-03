@@ -69,10 +69,10 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 				},
 			},
 			"access_list_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Access list name - maximum 64 characters").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Access list name - maximum 128 characters").String,
 				Required:            true,
 				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 64),
+					stringvalidator.LengthBetween(1, 128),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -117,7 +117,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_counter": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Counter for this ACE").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -179,7 +179,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_source_port_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("source port object group").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Source port object group").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -253,7 +253,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_destination_port_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("destination port object group").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Destination port object group").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -305,7 +305,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_dscp": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("").String,
+							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
 						"permit_dscp_eq": schema.StringAttribute{
@@ -482,7 +482,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_nexthop2_track": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("specific TRACK Name for this nexthop").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specific TRACK Name for this nexthop").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
@@ -504,7 +504,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"permit_nexthop3_track": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("specific TRACK Name for this nexthop").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Specific TRACK Name for this nexthop").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 32),
@@ -559,7 +559,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_counter": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("counter for this ACE").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Counter for this ACE").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -629,7 +629,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_source_port_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("source port object group").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Source port object group").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -703,7 +703,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_destination_port_group": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("destination port object group").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Destination port object group").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
@@ -755,7 +755,7 @@ func (r *IPv6AccessListResource) Schema(ctx context.Context, req resource.Schema
 							},
 						},
 						"deny_dscp": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("").String,
+							MarkdownDescription: helpers.NewAttributeDescription("DSCP value").String,
 							Optional:            true,
 						},
 						"deny_dscp_eq": schema.StringAttribute{

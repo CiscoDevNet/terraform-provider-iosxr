@@ -80,7 +80,7 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -100,60 +100,60 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					stringvalidator.RegexMatches(regexp.MustCompile(`([0-9a-f]{1,8}):([0-9a-f]{1,8})`), ""),
 				},
 			},
-			"address_family_ipv4_unicast": schema.BoolAttribute{
+			"ipv4_unicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Unicast sub address family").String,
 				Optional:            true,
 			},
-			"address_family_ipv4_unicast_import_route_policy": schema.StringAttribute{
+			"ipv4_unicast_import_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"address_family_ipv4_unicast_export_route_policy": schema.StringAttribute{
+			"ipv4_unicast_export_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"address_family_ipv4_multicast": schema.BoolAttribute{
+			"ipv4_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,
 				Optional:            true,
 			},
-			"address_family_ipv4_flowspec": schema.BoolAttribute{
+			"ipv4_flowspec": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Flowspec sub address family").String,
 				Optional:            true,
 			},
-			"address_family_ipv6_unicast": schema.BoolAttribute{
+			"ipv6_unicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Unicast sub address family").String,
 				Optional:            true,
 			},
-			"address_family_ipv6_unicast_import_route_policy": schema.StringAttribute{
+			"ipv6_unicast_import_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for import filtering").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"address_family_ipv6_unicast_export_route_policy": schema.StringAttribute{
+			"ipv6_unicast_export_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Use route-policy for export").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
-			"address_family_ipv6_multicast": schema.BoolAttribute{
+			"ipv6_multicast": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Multicast topology").String,
 				Optional:            true,
 			},
-			"address_family_ipv6_flowspec": schema.BoolAttribute{
+			"ipv6_flowspec": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Flowspec sub address family").String,
 				Optional:            true,
 			},
-			"rd_two_byte_as_as_number": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+			"rd_two_byte_as_number": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 			},
 			"rd_two_byte_as_index": schema.Int64Attribute{
@@ -163,344 +163,380 @@ func (r *VRFResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(0, 4294967295),
 				},
 			},
-			"rd_four_byte_as_as_number": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
+			"rd_four_byte_as_number": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number in asplain format").String,
 				Optional:            true,
 			},
 			"rd_four_byte_as_index": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
+				MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(0, 4294967295),
+					int64validator.Between(0, 65535),
 				},
 			},
-			"rd_ip_address_ipv4_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("configure this node").String,
+			"rd_ipv4_address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
-			"rd_ip_address_index": schema.Int64Attribute{
+			"rd_ipv4_address_index": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
-			"address_family_ipv4_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+			"ipv4_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv4_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+			"ipv4_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv4_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+			"ipv4_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+			"ipv4_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+			"ipv4_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv4_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+			"ipv4_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+			"ipv6_unicast_import_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+			"ipv6_unicast_import_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+			"ipv6_unicast_import_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number Route Target").String,
+			"ipv6_unicast_export_route_target_two_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Two Byte AS Number").AddIntegerRangeDescription(1, 65535).String,
+						"two_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("2-byte AS number").AddIntegerRangeDescription(1, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(1, 65535),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"asn2_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 4294967295),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number Route Target").String,
+			"ipv6_unicast_export_route_target_four_byte_as_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"as_number": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Four Byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
+						"four_byte_as_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("4-byte AS number").AddIntegerRangeDescription(65536, 4294967295).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(65536, 4294967295),
 							},
 						},
-						"index": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("ASN2:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
+						"asn4_index": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ASN4:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},
 			},
-			"address_family_ipv6_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+			"ipv6_unicast_export_route_target_ip_address_format": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ipv4 address route target").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"ip_address": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("IP address").String,
+						"ipv4_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"index": schema.Int64Attribute{
+						"ipv4_address_index": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("IPv4Address:index (hex or decimal format)").AddIntegerRangeDescription(0, 65535).String,
 							Required:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 65535),
 							},
 						},
-						"stitching": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").String,
+						"stitching": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("These are stitching RTs").AddStringEnumDescription("disable", "enable").String,
 							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 					},
 				},

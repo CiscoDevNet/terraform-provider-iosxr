@@ -131,7 +131,7 @@ func (r *RouterVRRPInterfaceIPv6Resource) Schema(ctx context.Context, req resour
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 800),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 			},
 			"timer_advertisement_seconds": schema.Int64Attribute{
@@ -199,7 +199,7 @@ func (r *RouterVRRPInterfaceIPv6Resource) Schema(ctx context.Context, req resour
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 800),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"priority_decrement": schema.Int64Attribute{

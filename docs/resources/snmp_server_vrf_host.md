@@ -50,7 +50,8 @@ resource "iosxr_snmp_server_vrf_host" "example" {
 Required:
 
 - `community_string` (String) The UNENCRYPTED (cleartext) community string
-- `version_v3_security_level` (String) - Choices: `auth`, `noauth`, `priv`
+- `version_v3_security_level` (String) Security level
+  - Choices: `auth`, `noauth`, `priv`
 
 Optional:
 

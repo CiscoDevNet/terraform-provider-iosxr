@@ -32,4 +32,4 @@ data "iosxr_extcommunity_soo_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Extended Community SOO Set
+- `rpl` (String) Configures an extended community soo set

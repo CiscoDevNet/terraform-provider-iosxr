@@ -15,7 +15,7 @@ This data source can read the Router HSRP Interface IPv6 Group V2 configuration.
 ```terraform
 data "iosxr_router_hsrp_interface_ipv6_group_v2" "example" {
   interface_name = "GigabitEthernet0/0/0/2"
-  group_id       = 4055
+  group_id       = 4000
 }
 ```
 

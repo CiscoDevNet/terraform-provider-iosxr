@@ -24,7 +24,7 @@ resource "iosxr_extcommunity_opaque_set" "example" {
 
 ### Required
 
-- `rpl` (String) Extended Community Opaque Set
+- `rpl` (String) Configures an extended community opaque set
 - `set_name` (String) Set name
 
 ### Optional

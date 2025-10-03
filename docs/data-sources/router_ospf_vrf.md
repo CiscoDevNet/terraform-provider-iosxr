@@ -51,13 +51,13 @@ data "iosxr_router_ospf_vrf" "example" {
 - `passive_disable` (Boolean) Disable passive
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
-- `redistribute_bgp` (Attributes List) bgp as-number (see [below for nested schema](#nestedatt--redistribute_bgp))
-- `redistribute_connected` (Boolean) Connected routes
+- `redistribute_bgp` (Attributes List) Redistribute BGP routes (see [below for nested schema](#nestedatt--redistribute_bgp))
+- `redistribute_connected` (Boolean) Redistribute connected routes
 - `redistribute_connected_metric_type` (String) OSPF exterior metric type for redistributed routes
 - `redistribute_connected_tag` (Number) Set tag for routes redistributed into OSPF
-- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_static` (Boolean) Static routes
+- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_static` (Boolean) Redistribute static routes
 - `redistribute_static_metric_type` (String) OSPF exterior metric type for redistributed routes
 - `redistribute_static_tag` (Number) Set tag for routes redistributed into OSPF
 - `router_id` (String) configure this node

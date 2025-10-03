@@ -14,26 +14,23 @@ This resource can manage the Router BGP Neighbor Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_address_family" "example" {
-  as_number                                                 = "65001"
-  neighbor_address                                          = "10.1.1.2"
-  af_name                                                   = "vpnv4-unicast"
-  import_stitching_rt_re_originate_stitching_rt             = true
-  route_reflector_client                                    = true
-  route_reflector_client_inheritance_disable                = true
-  advertise_vpnv4_unicast_enable_re_originated_stitching_rt = true
-  next_hop_self                                             = true
-  next_hop_self_inheritance_disable                         = true
-  encapsulation_type_srv6                                   = true
-  route_policy_in                                           = "ROUTE_POLICY_1"
-  route_policy_out                                          = "ROUTE_POLICY_1"
-  soft_reconfiguration_inbound_always                       = true
-  send_community_ebgp                                       = true
-  send_community_ebgp_inheritance_disable                   = true
-  maximum_prefix_limit                                      = 1248576
-  maximum_prefix_threshold                                  = 80
-  maximum_prefix_warning_only                               = true
-  default_originate_route_policy                            = "ROUTE_POLICY_1"
-  default_originate_inheritance_disable                     = true
+  as_number                                          = "65001"
+  address                                            = "10.1.1.2"
+  af_name                                            = "vpnv4-unicast"
+  import_stitching_rt_re_originate_stitching_rt      = true
+  route_reflector_client                             = true
+  route_reflector_client_inheritance_disable         = true
+  advertise_vpnv4_unicast_re_originated_stitching_rt = true
+  next_hop_self                                      = true
+  next_hop_self_inheritance_disable                  = true
+  encapsulation_type                                 = "srv6"
+  route_policy_in                                    = "ROUTE_POLICY_1"
+  route_policy_out                                   = "ROUTE_POLICY_1"
+  soft_reconfiguration_inbound_always                = true
+  maximum_prefix_limit                               = 1248576
+  maximum_prefix_threshold                           = 80
+  maximum_prefix_warning_only                        = true
+  default_originate                                  = true
 }
 ```
 
@@ -42,28 +39,33 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Required
 
+- `address` (String) IPaddress
 - `af_name` (String) Enter Address Family command mode
   - Choices: `all-address-family`, `ipv4-flowspec`, `ipv4-labeled-unicast`, `ipv4-mdt`, `ipv4-multicast`, `ipv4-mvpn`, `ipv4-rt-filter`, `ipv4-sr-policy`, `ipv4-tunnel`, `ipv4-unicast`, `ipv6-flowspec`, `ipv6-labeled-unicast`, `ipv6-multicast`, `ipv6-mvpn`, `ipv6-sr-policy`, `ipv6-unicast`, `l2vpn-evpn`, `l2vpn-mspw`, `l2vpn-vpls-vpws`, `link-state-link-state`, `vpnv4-flowspec`, `vpnv4-multicast`, `vpnv4-unicast`, `vpnv6-flowspec`, `vpnv6-multicast`, `vpnv6-unicast`
 - `as_number` (String) bgp as-number
-- `neighbor_address` (String) Neighbor address
+- `maximum_prefix_limit` (Number) maximum no. of prefix limit
+  - Range: `1`-`4294967295`
+- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
+  - Range: `1`-`100`
 
 ### Optional
 
-- `advertise_vpnv4_unicast_enable_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
+- `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `encapsulation_type_srv6` (Boolean) SRv6 encapsulation
+- `encapsulation_type` (String) Specify encapsulation type
+  - Choices: `srv6`, `vxlan`
+- `import_re_originate` (Boolean) Reoriginate imported routes by attaching stitching RTs
+- `import_stitching_rt` (Boolean) Import routes using stitching RTs
+- `import_stitching_rt_re_originate` (Boolean) Re-originate imported routes
 - `import_stitching_rt_re_originate_stitching_rt` (Boolean) Reoriginate imported routes by attaching stitching RTs
 - `maximum_prefix_discard_extra_paths` (Boolean) Discard extra paths when limit is exceeded
-- `maximum_prefix_limit` (Number) Maximum number of prefixes to accept from this peer
-  - Range: `1`-`4294967295`
 - `maximum_prefix_restart` (Number) Restart time interval
   - Range: `1`-`65535`
-- `maximum_prefix_threshold` (Number) Threshold value (%) at which to generate a warning msg
-  - Range: `1`-`100`
 - `maximum_prefix_warning_only` (Boolean) Only give warning message when limit is exceeded
 - `next_hop_self` (Boolean) Disable the next hop calculation for this neighbor
 - `next_hop_self_inheritance_disable` (Boolean) Prevent next-hop-self from being inherited from the parent
@@ -84,5 +86,5 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_bgp_neighbor_address_family.example "<as_number>,<neighbor_address>,<af_name>"
+terraform import iosxr_router_bgp_neighbor_address_family.example "<as_number>,<address>,<af_name>"
 ```

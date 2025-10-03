@@ -41,12 +41,21 @@ func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNPWClassConfig(),
+				Config: testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig + testAccDataSourceIosxrL2VPNPWClassConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+`
 
 func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
@@ -61,6 +70,7 @@ func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7_disable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

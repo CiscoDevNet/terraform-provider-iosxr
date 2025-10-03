@@ -80,13 +80,14 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 36),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
 			"interface_name": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enter the IS-IS interface configuration submode").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Interface to configure").String,
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
@@ -102,13 +103,34 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.OneOf("level-1", "level-1-2", "level-2-only"),
 				},
 			},
-			"hello_padding_disable": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable hello-padding").String,
+			"hello_padding": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Add padding to IS-IS hello packets").AddStringEnumDescription("adaptive", "always", "disable", "sometimes").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("adaptive", "always", "disable", "sometimes"),
+				},
 			},
-			"hello_padding_sometimes": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable hello-padding during adjacency formation only").String,
+			"hello_padding_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set hello-padding for one level only").String,
 				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set hello-padding for IIHs at this level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("hello-padding").AddStringEnumDescription("adaptive", "always", "disable", "sometimes").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("adaptive", "always", "disable", "sometimes"),
+							},
+						},
+					},
+				},
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
@@ -117,35 +139,89 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					int64validator.Between(0, 127),
 				},
 			},
+			"priority_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set priority for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set priority for this level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set priority for Designated Router election").AddIntegerRangeDescription(0, 127).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 127),
+							},
+						},
+					},
+				},
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Treat active LAN interface as point-to-point").String,
 				Optional:            true,
 			},
-			"passive": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").String,
+			"state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not establish adjacencies over this interface").AddStringEnumDescription("passive", "shutdown", "suppressed").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("passive", "shutdown", "suppressed"),
+				},
 			},
-			"suppressed": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Do not advertise connected prefixes of this interface").String,
-				Optional:            true,
-			},
-			"shutdown": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Shutdown IS-IS on this interface").String,
-				Optional:            true,
-			},
-			"hello_password_text": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The encrypted LSP/SNP password").String,
+			"hello_password_accept_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
 			},
-			"hello_password_hmac_md5": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The encrypted LSP/SNP password").String,
+			"hello_password_accepts_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set hello-password for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set hello-password for IIHs at this level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+					},
+				},
+			},
+			"hello_password_text_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 				},
+			},
+			"hello_password_text_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+				Optional:            true,
+			},
+			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+				},
+			},
+			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+				Optional:            true,
 			},
 			"hello_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
@@ -154,9 +230,79 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 					stringvalidator.LengthBetween(1, 1024),
 				},
 			},
+			"hello_password_keychain_send_only": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+				Optional:            true,
+			},
+			"hello_password_levels": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set hello-password for one level only").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Set hello-password for one level only").AddIntegerRangeDescription(1, 2).String,
+							Required:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 2),
+							},
+						},
+						"text_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"text_send_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+							Optional:            true,
+						},
+						"hmac_md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
+							},
+						},
+						"hmac_md5_send_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+							Optional:            true,
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 1024),
+							},
+						},
+						"keychain_send_only": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"bfd_fast_detect_ipv4": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
+				Optional:            true,
+			},
 			"bfd_fast_detect_ipv6": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Address Family").String,
 				Optional:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(3, 30000),
+				},
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(2, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(2, 50),
+				},
 			},
 		},
 	}

@@ -37,11 +37,11 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterVRRPInterfaceConfig_minimum(),
+			Config: testAccIosxrRouterVRRPInterfacePrerequisitesConfig + testAccIosxrRouterVRRPInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterVRRPInterfaceConfig_all(),
+		Config: testAccIosxrRouterVRRPInterfacePrerequisitesConfig + testAccIosxrRouterVRRPInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -57,9 +57,19 @@ func TestAccIosxrRouterVRRPInterface(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterVRRPInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+`
+
 func testAccIosxrRouterVRRPInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -72,6 +82,7 @@ func testAccIosxrRouterVRRPInterfaceConfig_all() string {
 	config += `	delay_reload = 4321` + "\n"
 	config += `	bfd_minimum_interval = 255` + "\n"
 	config += `	bfd_multiplier = 33` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -67,7 +67,7 @@ func (d *ExtcommunityCostSetDataSource) Schema(ctx context.Context, req datasour
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Extended Community Cost Set",
+				MarkdownDescription: "Configures an extended community cost set",
 				Computed:            true,
 			},
 		},

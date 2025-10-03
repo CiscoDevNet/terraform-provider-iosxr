@@ -30,23 +30,29 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "circuit_type", "level-1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_sometimes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_padding_levels.0.hello_padding", "always"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.priority", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "passive", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "suppressed", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "shutdown", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_keychain", "KEY_CHAIN_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "state", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.level_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv4", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_minimum_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_multiplier", "3"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterISISInterfaceConfig_minimum(),
+			Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterISISInterfaceConfig_all(),
+		Config: testAccIosxrRouterISISInterfacePrerequisitesConfig + testAccIosxrRouterISISInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -62,10 +68,21 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterISISInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]"
+	attributes = {
+		"process-id" = "P1"
+	}
+}
+
+`
+
 func testAccIosxrRouterISISInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_isis_interface" "test" {` + "\n"
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -75,15 +92,28 @@ func testAccIosxrRouterISISInterfaceConfig_all() string {
 	config += `	process_id = "P1"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	circuit_type = "level-1"` + "\n"
-	config += `	hello_padding_disable = true` + "\n"
-	config += `	hello_padding_sometimes = false` + "\n"
+	config += `	hello_padding = "disable"` + "\n"
+	config += `	hello_padding_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		hello_padding = "always"` + "\n"
+	config += `		}]` + "\n"
 	config += `	priority = 10` + "\n"
+	config += `	priority_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		priority = 64` + "\n"
+	config += `		}]` + "\n"
 	config += `	point_to_point = false` + "\n"
-	config += `	passive = false` + "\n"
-	config += `	suppressed = false` + "\n"
-	config += `	shutdown = false` + "\n"
-	config += `	hello_password_keychain = "KEY_CHAIN_1"` + "\n"
+	config += `	state = "passive"` + "\n"
+	config += `	hello_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `	hello_password_levels = [{` + "\n"
+	config += `		level_number = 1` + "\n"
+	config += `		text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `		}]` + "\n"
+	config += `	bfd_fast_detect_ipv4 = true` + "\n"
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"
+	config += `	bfd_minimum_interval = 50` + "\n"
+	config += `	bfd_multiplier = 3` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -42,11 +42,11 @@ func TestAccIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum(),
+			Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig + testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all(),
+		Config: testAccIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig + testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -62,10 +62,21 @@ func TestAccIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+}
+
+`
+
 func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	group_id = 2345` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -88,6 +99,7 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all() string {
 	config += `		object_name = "OBJECT2"` + "\n"
 	config += `		priority_decrement = 77` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

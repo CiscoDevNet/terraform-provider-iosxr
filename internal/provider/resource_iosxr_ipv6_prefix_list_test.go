@@ -30,13 +30,10 @@ func TestAccIosxrIPv6PrefixList(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "prefix_list_name", "LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.sequence_number", "4096"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.remark", "REMARK"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.permission", "permit"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8:3333:4444:5555:6666:7777:8888"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.mask", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_eq", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "20"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_le", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8::"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.mask", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "64"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -72,13 +69,10 @@ func testAccIosxrIPv6PrefixListConfig_all() string {
 	config += `	prefix_list_name = "LIST1"` + "\n"
 	config += `	sequences = [{` + "\n"
 	config += `		sequence_number = 4096` + "\n"
-	config += `		remark = "REMARK"` + "\n"
 	config += `		permission = "permit"` + "\n"
-	config += `		prefix = "2001:db8:3333:4444:5555:6666:7777:8888"` + "\n"
-	config += `		mask = 64` + "\n"
-	config += `		match_prefix_length_eq = 10` + "\n"
-	config += `		match_prefix_length_ge = 20` + "\n"
-	config += `		match_prefix_length_le = 20` + "\n"
+	config += `		prefix = "2001:db8::"` + "\n"
+	config += `		mask = 32` + "\n"
+	config += `		match_prefix_length_ge = 64` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

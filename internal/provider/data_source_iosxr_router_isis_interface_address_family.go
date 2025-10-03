@@ -67,36 +67,40 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				Required:            true,
 			},
 			"interface_name": schema.StringAttribute{
-				MarkdownDescription: "Enter the IS-IS interface configuration submode",
+				MarkdownDescription: "Interface to configure",
 				Required:            true,
 			},
 			"af_name": schema.StringAttribute{
-				MarkdownDescription: "Address family name",
+				MarkdownDescription: "af-name",
 				Required:            true,
 			},
 			"saf_name": schema.StringAttribute{
-				MarkdownDescription: "Sub address family name",
+				MarkdownDescription: "saf-name",
 				Required:            true,
 			},
 			"fast_reroute_per_prefix": schema.BoolAttribute{
-				MarkdownDescription: "Prefix dependent computation",
+				MarkdownDescription: "per-prefix",
 				Computed:            true,
 			},
-			"fast_reroute_per_prefix_ti_lfa": schema.BoolAttribute{
-				MarkdownDescription: "Enable TI LFA computation",
+			"fast_reroute_per_link": schema.BoolAttribute{
+				MarkdownDescription: "per-link",
 				Computed:            true,
 			},
-			"fast_reroute_per_prefix_levels": schema.ListNestedAttribute{
-				MarkdownDescription: "Enable EPCFRR LFA for one level only",
+			"fast_reroute_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "enable",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: "Enable EPCFRR LFA for one level only",
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Configure FRR for one level only",
 							Computed:            true,
 						},
-						"ti_lfa": schema.BoolAttribute{
-							MarkdownDescription: "Enable TI LFA computation",
+						"per_prefix": schema.BoolAttribute{
+							MarkdownDescription: "per-prefix",
+							Computed:            true,
+						},
+						"per_link": schema.BoolAttribute{
+							MarkdownDescription: "per-link",
 							Computed:            true,
 						},
 					},
@@ -106,28 +110,60 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				MarkdownDescription: "Set interface tag",
 				Computed:            true,
 			},
-			"prefix_sid_absolute": schema.Int64Attribute{
-				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
+			"adjacency_sid_indices": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the index of Adjacency Segement ID",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"index_number": schema.Int64Attribute{
+							MarkdownDescription: "The Adjacency Segment ID index",
+							Computed:            true,
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: "Protect Adjacency SID",
+							Computed:            true,
+						},
+					},
+				},
 			},
-			"prefix_sid_n_flag_clear": schema.BoolAttribute{
-				MarkdownDescription: "Clear N-flag for the prefix-SID ",
+			"adjacency_sid_absolutes": schema.ListNestedAttribute{
+				MarkdownDescription: "Specify the absolute value of Adjacency Segement ID",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"absolute_number": schema.Int64Attribute{
+							MarkdownDescription: "The Adjacency Segment ID value",
+							Computed:            true,
+						},
+						"protected": schema.BoolAttribute{
+							MarkdownDescription: "Protect Adjacency SID",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"advertise_prefix_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Filter routes based on a route policy",
 				Computed:            true,
 			},
-			"prefix_sid_index": schema.Int64Attribute{
-				MarkdownDescription: "Specify the index of Prefix Segement ID",
+			"advertise_prefix_route_policy_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set advertisement for one level only",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set advertisement at this level only",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Filter routes based on a route policy",
+							Computed:            true,
+						},
+					},
+				},
 			},
-			"prefix_sid_strict_spf_absolute": schema.Int64Attribute{
-				MarkdownDescription: "Specify the absolute value of Prefix Segement ID",
-				Computed:            true,
-			},
-			"metric": schema.Int64Attribute{
-				MarkdownDescription: "Default metric",
+			"metric_default": schema.Int64Attribute{
+				MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 				Computed:            true,
 			},
 			"metric_maximum": schema.BoolAttribute{
@@ -139,15 +175,15 @@ func (d *RouterISISInterfaceAddressFamilyDataSource) Schema(ctx context.Context,
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: "Set metric for one level only",
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set metric at this level only",
 							Computed:            true,
 						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: "Default metric",
+						"metric_default": schema.Int64Attribute{
+							MarkdownDescription: "Default metric: <1-63> for narrow, <1-16777214> for wide",
 							Computed:            true,
 						},
-						"maximum": schema.BoolAttribute{
+						"metric_maximum": schema.BoolAttribute{
 							MarkdownDescription: "Maximum wide metric. All routers will exclude this link from their SPF",
 							Computed:            true,
 						},

@@ -31,7 +31,7 @@ func TestAccIosxrDomain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "domains.0.domain_name", "DOMAIN1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "domains.0.order", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "lookup_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "lookup_source_interface", "Loopback2147483647"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "lookup_source_interface", "Loopback214"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "name", "DOMAIN"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_hosts.0.host_name", "HOST_NAME"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"))
@@ -77,7 +77,7 @@ func testAccIosxrDomainConfig_all() string {
 	config += `		order = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	lookup_disable = true` + "\n"
-	config += `	lookup_source_interface = "Loopback2147483647"` + "\n"
+	config += `	lookup_source_interface = "Loopback214"` + "\n"
 	config += `	name = "DOMAIN"` + "\n"
 	config += `	ipv4_hosts = [{` + "\n"
 	config += `		host_name = "HOST_NAME"` + "\n"

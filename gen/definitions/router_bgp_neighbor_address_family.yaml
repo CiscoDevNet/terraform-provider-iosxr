@@ -1,28 +1,50 @@
 ---
 name: Router BGP Neighbor Address Family
-path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[neighbor-address=%s]/address-families/address-family[af-name=%s]
+path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]
 doc_category: BGP
 attributes:
   - yang_name: as-number
     example: 65001
-  - yang_name: neighbor-address
+  - yang_name: address
     example: 10.1.1.2
   - yang_name: af-name
     example: vpnv4-unicast
-  - yang_name: import/stitching-rt/re-originate/stitching-rt
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt
+    xpath: import/stitching-rt
+    tf_name: import_stitching_rt
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate
+    xpath: import/stitching-rt/re-originate
+    tf_name: import_stitching_rt_re_originate
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt
+    xpath: import/stitching-rt/re-originate/stitching-rt
+    tf_name: import_stitching_rt_re_originate_stitching_rt
+    delete_parent: true
+    example: true
+  - yang_name: import/IMPORT/RE-ORIGINATE/re-originate
+    xpath: import/re-originate
+    tf_name: import_re_originate
+    delete_parent: true
+    exclude_test: true
     example: true
   - yang_name: route-reflector-client
     example: true
   - yang_name: route-reflector-client/inheritance-disable
     example: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
+    tf_name: advertise_vpnv4_unicast_re_originated_stitching_rt
     example: true
   - yang_name: next-hop-self
     example: true
   - yang_name: next-hop-self/inheritance-disable
     example: true
-  - yang_name: encapsulation-type/srv6
-    example: true
+  - yang_name: encapsulation-type
+    example: srv6
   - yang_name: route-policy/in
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
@@ -30,16 +52,17 @@ attributes:
   - yang_name: soft-reconfiguration/inbound/always
     example: true
   - yang_name: send-community-ebgp
+    exclude_test: true
     example: true
   - yang_name: send-community-ebgp/inheritance-disable
+    exclude_test: true
     example: true
-  - yang_name: maximum-prefix/prefix-limit
+  - yang_name: maximum-prefix/maximum-prefix-number
     tf_name: maximum_prefix_limit
-    optional: true
     delete_parent: true
     example: 1248576
-  - yang_name: maximum-prefix/threshold
-    optional: true
+  - yang_name: maximum-prefix/threshold-value
+    tf_name: maximum_prefix_threshold
     delete_parent: true
     example: 80
   - yang_name: maximum-prefix/restart
@@ -48,14 +71,25 @@ attributes:
     exclude_test: true
   - yang_name: maximum-prefix/discard-extra-paths
     delete_parent: true
-    example: false
+    example: true
     exclude_test: true
   - yang_name: maximum-prefix/warning-only
     delete_parent: true
     example: true
-  - yang_name: default-originate/route-policy
+  - yang_name: default-originate
+    tf_name: default_originate
+    example: true
+  - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
+    tf_name: default_originate_route_policy
+    xpath: default-originate/route-policy
+    delete_parent: true
+    exclude_test: true
     example: ROUTE_POLICY_1
-  - yang_name: default-originate/inheritance-disable
+  - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
+    tf_name: default_originate_inheritance_disable
+    xpath: default-originate/inheritance-disable
+    delete_parent: true
+    exclude_test: true
     example: true
 
 test_prerequisites:
@@ -71,10 +105,10 @@ test_prerequisites:
               - name: af-name
                 value: vpnv4-unicast
       - name: neighbors/neighbor
-        key: neighbor-address
+        key: address
         items:
           - attributes:
-              - name: neighbor-address
+              - name: address
                 value: 10.1.1.2
               - name: remote-as
                 value: 65001

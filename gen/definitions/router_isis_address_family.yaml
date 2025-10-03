@@ -6,126 +6,419 @@ attributes:
   - yang_name: process-id
     example: P1
   - yang_name: af-name
-    example: ipv6
+    example: ipv4
   - yang_name: saf-name
     example: unicast
-  - yang_name: metric-style/narrow
-    example: false
-  - yang_name: metric-style/wide
+  - yang_name: metric-style/METRIC-STYLE/NARROW/narrow
+    xpath: metric-style/narrow
+    tf_name: metric_style_narrow
     example: true
-  - yang_name: metric-style/transition
-    example: false
-  - yang_name: metric-style/levels/level
+    exclude_test: true
+    exclude_example: false
+  - yang_name: metric-style/METRIC-STYLE/NARROW/narrow/transition
+    xpath: metric-style/narrow/transition
+    tf_name: metric_style_narrow_transition
+    example: true
+    exclude_test: true
+    exclude_example: false
+  - yang_name: metric-style/METRIC-STYLE/WIDE/wide
+    xpath: metric-style/wide
+    tf_name: metric_style_wide
+    example: true
+    exclude_test: true
+    exclude_example: false
+  - yang_name: metric-style/METRIC-STYLE/WIDE/wide/transition
+    xpath: metric-style/wide/transition
+    tf_name: metric_style_wide_transition
+    example: true
+    exclude_example: false
+  - yang_name: metric-style/METRIC-STYLE/TRANSITION/transition
+    xpath: metric-style/transition
+    tf_name: metric_style_transition
+    example: true
+    exclude_test: true
+    exclude_example: false
+  - yang_name: metric-style-levels/metric-style-level
     tf_name: metric_style_levels
+    exclude_test: true
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: level-number
         id: true
         example: 1
-      - yang_name: narrow
-        example: false
-      - yang_name: wide
+      - yang_name: METRIC-STYLE/NARROW/narrow
+        xpath: narrow
+        tf_name: narrow
         example: true
-      - yang_name: transition
-        example: false
-  - yang_name: router-id/interface-name
+        exclude_test: true
+      - yang_name: METRIC-STYLE/NARROW/narrow/transition
+        xpath: narrow/transition
+        tf_name: narrow_transition
+        example: true
+        exclude_test: true
+      - yang_name: METRIC-STYLE/WIDE/wide
+        xpath: wide
+        tf_name: wide
+        example: true
+        exclude_test: true
+      - yang_name: METRIC-STYLE/WIDE/wide/transition
+        xpath: wide/transition
+        tf_name: wide_transition
+        example: true
+      - yang_name: METRIC-STYLE/TRANSITION/transition
+        xpath: transition
+        tf_name: transition
+        example: true
+        exclude_test: true
+  - yang_name: router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: router-id/interface-name
+    tf_name: router_id_interface_name
+    optional: true
+    delete_parent: true
     example: GigabitEthernet0/0/0/1
     exclude_test: true
-  - yang_name: router-id/ip-address
-    example: 1050:0000:0000:0000:0005:0600:300c:326b
+  - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
+    xpath: router-id/ip-address
+    tf_name: router_id_ip_address
+    optional: true
+    delete_parent: true
+    example: "192.168.1.1"
   - yang_name: default-information/originate
     example: true
   - yang_name: fast-reroute/delay-interval
     example: 300
-  - yang_name: fast-reroute/per-link/priority-limit/critical
+  - yang_name: fast-reroute/per-prefix/priority-limit
+    example: "critical"
+  - yang_name: fast-reroute/per-prefix/priority-limit-levels/priority-limit-level
+    tf_name: fast_reroute_per_prefix_priority_limit_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority-limit
+        example: "critical"
+  - yang_name: fast-reroute/per-prefix/use-candidate-only
     example: true
-  - yang_name: fast-reroute/per-link/priority-limit/high
-    example: false
-  - yang_name: fast-reroute/per-link/priority-limit/medium
-    example: false
-  - yang_name: fast-reroute/per-prefix/priority-limit/critical
+  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global
     example: true
-  - yang_name: fast-reroute/per-prefix/priority-limit/high
-    example: false
-  - yang_name: fast-reroute/per-prefix/priority-limit/medium
-    example: false
-  - yang_name: microloop/avoidance/protected
-    example: false
-  - yang_name: microloop/avoidance/segment-routing
+  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level
+    tf_name: fast_reroute_per_prefix_srlg_protection_weighted_global_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list
+    example: "PQ_FILTER"
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level
+    tf_name: fast_reroute_per_prefix_remote_lfa_prefix_list_levels
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: prefix-list
+        example: "PQ_FILTER_L1"
+        exclude_test: true
+  - yang_name: fast-reroute/per-prefix/load-sharing/disable
     example: true
+  - yang_name: fast-reroute/per-prefix/load-sharing/disable-levels/disable-level
+    tf_name: fast_reroute_per_prefix_load_sharing_disable_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/index
+    example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
+    example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index
+    example: 30
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    example: 40
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/index
+    example: 50
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/index
+    example: 60
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    example: 70
+  - yang_name: fast-reroute/per-link/priority-limit
+    example: "critical"
+    exclude_test: true
+  - yang_name: fast-reroute/per-link/priority-limit-levels/priority-limit-level
+    tf_name: fast_reroute_per_link_priority_limit_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority-limit
+        example: "critical"
+  - yang_name: fast-reroute/per-link/use-candidate-only
+    example: true
+  - yang_name: microloop/avoidance/enable
+    tf_name: microloop_avoidance
+    example: true
+    exclude_test: true
+  - yang_name: microloop/avoidance/enable/protected
+    tf_name: microloop_avoidance_protected
+    optional: true
+    example: true
+  - yang_name: microloop/avoidance/enable/segment-routing/route-policy
+    tf_name: microloop_avoidance_segment_routing_route_policy
+    example: "ULOOP_POLICY"
+    exclude_test: true
+  - yang_name: microloop/avoidance/rib-update-delay
+    example: 5000
   - yang_name: advertise/passive-only
     example: true
   - yang_name: advertise/link/attributes
     example: true
   - yang_name: mpls/ldp/auto-config
     example: false
-  - yang_name: mpls/traffic-eng/router-id/ip-address
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
+    xpath: mpls/traffic-eng/router-id/ipv4-address
+    tf_name: mpls_traffic_eng_router_id_ipv4_address
+    delete_parent: true
     example: 1.2.3.4
-    exclude_test: true
-  - yang_name: mpls/traffic-eng/router-id/interface
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: mpls/traffic-eng/router-id/interface-name
+    tf_name: mpls_traffic_eng_router_id_interface_name
+    delete_parent: true
     exclude_test: true
     example: Loopback0
-  - yang_name: mpls/traffic-eng/level-1-2
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
+    tf_name: mpls_traffic_eng_level_1_2
+    delete_parent: true
+    example: true
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one
+    tf_name: mpls_traffic_eng_level_1
+    delete_parent: true
     example: false
-  - yang_name: mpls/traffic-eng/level-1
-    example: false
-  - yang_name: mpls/traffic-eng/level-2-only
+    exclude_test: true
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
+    xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
+    tf_name: mpls_traffic_eng_level_2_only
+    delete_parent: true
     example: true
     exclude_test: true
-  - yang_name: spf-interval/maximum-wait/maximum-wait-time
-    tf_name: spf_interval_maximum_wait
+  - yang_name: spf-interval/maximum-wait
     example: 5000
-  - yang_name: spf-interval/initial-wait/initial-wait-time
-    tf_name: spf_interval_initial_wait
+  - yang_name: spf-interval/initial-wait
     example: 50
-  - yang_name: spf-interval/secondary-wait/secondary-wait-time
-    tf_name: spf_interval_secondary_wait
+  - yang_name: spf-interval/secondary-wait
     example: 200
-  - yang_name: spf/prefix-priority/prefix-priority
-    tf_name: spf_prefix_priorities
+  - yang_name: spf-interval/ietf
+    example: true
+    exclude_test: true
+  - yang_name: spf-interval/ietf/initial-wait
+    example: 50
+    exclude_test: true
+  - yang_name: spf-interval/ietf/short-wait
+    example: 200
+    exclude_test: true
+  - yang_name: spf-interval/ietf/long-wait
+    example: 5000
+    exclude_test: true
+  - yang_name: spf-interval/ietf/learn-interval
+    example: 500
+    exclude_test: true
+  - yang_name: spf-interval/ietf/holddown-interval
+    example: 10000
+    exclude_test: true
+  - yang_name: spf-interval-levels/level
+    tf_name: spf_interval_levels
     type: List
     attributes:
-      - yang_name: priority
+      - yang_name: level-number
         id: true
-        example: critical
-      - yang_name: tag
-        example: 100
-      - yang_name: access-list-name
+        example: 1
+      - yang_name: maximum-wait
+        example: 5000
+      - yang_name: initial-wait
+        example: 50
+      - yang_name: secondary-wait
+        example: 200
+      - yang_name: ietf
+        example: true
         exclude_test: true
-        example: ACL1
-  - yang_name: segment-routing/mpls/sr-prefer
+      - yang_name: ietf/initial-wait
+        example: 50
+        exclude_test: true
+      - yang_name: ietf/short-wait
+        example: 200
+        exclude_test: true
+      - yang_name: ietf/long-wait
+        example: 5000
+        exclude_test: true
+      - yang_name: ietf/learn-interval
+        example: 500
+        exclude_test: true
+      - yang_name: ietf/holddown-interval
+        example: 10000
+        exclude_test: true
+  - yang_name: spf/prefix-priority/critical/CRITICAL/TAG/tag
+    xpath: spf/prefix-priority/critical/tag
+    tf_name: spf_prefix_priority_critical_tag
+    example: 100
+  - yang_name: spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/critical/prefixlist-name
+    tf_name: spf_prefix_priority_critical_prefix_list_name
+    example: "CRITICAL_PREFIXES"
+    exclude_test: true
+  - yang_name: spf/prefix-priority/high/HIGH/TAG/tag
+    xpath: spf/prefix-priority/high/tag
+    tf_name: spf_prefix_priority_high_tag
+    example: 200
+  - yang_name: spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/high/prefixlist-name
+    tf_name: spf_prefix_priority_high_prefix_list_name
+    example: "HIGH_PREFIXES"
+    exclude_test: true
+  - yang_name: spf/prefix-priority/medium/MEDIUM/TAG/tag
+    xpath: spf/prefix-priority/medium/tag
+    tf_name: spf_prefix_priority_medium_tag
+    example: 300
+  - yang_name: spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name
+    xpath: spf/prefix-priority/medium/prefixlist-name
+    tf_name: spf_prefix_priority_medium_prefix_list_name
+    example: "MEDIUM_PREFIXES"
+    exclude_test: true
+  - yang_name: spf/prefix-priority-critical-levels/prefix-priority-critical-level
+    tf_name: spf_prefix_priority_critical_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: PREFIX-PRIORITY-CRITICAL-LEVEL/TAG/tag
+        xpath: tag
+        tf_name: tag
+        example: 100
+      - yang_name: PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefixlist-name
+        tf_name: prefix_list_name
+        example: "CRITICAL_L1"
+        exclude_test: true
+  - yang_name: spf/prefix-priority-high-levels/prefix-priority-high-level
+    tf_name: spf_prefix_priority_high_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/TAG/tag
+        xpath: tag
+        tf_name: tag
+        example: 200
+      - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefix_list_name
+        tf_name: prefix_list_name
+        example: "HIGH_L1"
+        exclude_test: true
+  - yang_name: spf/prefix-priority-medium-levels/prefix-priority-medium-level
+    tf_name: spf_prefix_priority_medium_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/TAG/tag
+        xpath: tag
+        tf_name: tag
+        example: 300
+      - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name
+        xpath: prefix_list_name
+        tf_name: prefix_list_name
+        example: "MEDIUM_L1"
+        exclude_test: true
+  - yang_name: segment-routing/mpls/enable
     example: true
     exclude_test: true
-  - yang_name: maximum-redistributed-prefixes/maximum-prefixes
+  - yang_name: segment-routing/mpls/sr-prefer
+    example: true
+  - yang_name: maximum-redistributed-prefixes
     tf_name: maximum_redistributed_prefixes
     example: 100
-  - yang_name: maximum-redistributed-prefixes/levels/level
+  - yang_name: maximum-redistributed-prefixes-levels/maximum-redistributed-prefixes-level
     tf_name: maximum_redistributed_prefixes_levels
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: level-number
         id: true
         example: 1
-      - yang_name: maximum-prefixes
+      - yang_name: maximum-redistributed-prefixes
         example: 1000
-  - yang_name: redistribute/isis
+  - yang_name: redistribute/isis-processes/isis-process
     tf_name: redistribute_isis
+    description: "Redistribute ISIS routes"
     type: List
     attributes:
-      - yang_name: instance-id
+      - yang_name: isis-string
+        tf_name: instance_id
         id: true
-        example: CORE
+        example: "CORE"
+      - yang_name: redistribute-route-level
+        tf_name: level
+        example: "level-2"
+      - yang_name: metric
+        example: 10
       - yang_name: route-policy
-        example: ROUTE_POLICY_1
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric-type
+        example: "internal"
+      - yang_name: down-flag-clear
+        example: true
   - yang_name: segment-routing/srv6/locators/locator
     tf_name: segment_routing_srv6_locators
     type: List
+    exclude_test: true
     attributes:
-      - yang_name: locator-name
+      - yang_name: locator-string
+        tf_name: locator_name
         id: true
-        example: AlgoLocator
+        exclude_test: true
+        example: "AlgoLocator"
       - yang_name: level
+        exclude_test: true
         example: 1
+      - yang_name: metric
+        exclude_test: true
+        example: 10
+      - yang_name: metric-levels/metric-level
+        tf_name: metric_levels
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: level-number
+            id: true
+            exclude_test: true
+            example: 1
+          - yang_name: metric
+            exclude_test: true
+            example: 20
+      - yang_name: tag
+        exclude_test: true
+        example: 100
+      - yang_name: tag-levels/tag-level
+        tf_name: tag_levels
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: level-number
+            id: true
+            exclude_test: true
+            example: 1
+          - yang_name: tag
+            exclude_test: true
+            example: 200
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
@@ -134,3 +427,7 @@ test_prerequisites:
         value: ROUTE_POLICY_1
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
+    attributes:
+      - name: process-id
+        value: P1

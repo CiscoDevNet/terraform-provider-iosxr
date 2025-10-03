@@ -25,7 +25,7 @@ resource "iosxr_route_policy" "example" {
 ### Required
 
 - `route_policy_name` (String) Route policy name
-- `rpl` (String) policy statements
+- `rpl` (String) Configures a route policy
 
 ### Optional
 

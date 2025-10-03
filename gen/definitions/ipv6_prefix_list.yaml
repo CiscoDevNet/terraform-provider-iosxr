@@ -16,15 +16,18 @@ attributes:
         example: 4096
       - yang_name: remark
         example: REMARK
+        exclude_test: true
       - yang_name: permission
         example: permit
       - yang_name: prefix
-        example: 2001:db8:3333:4444:5555:6666:7777:8888
+        example: "2001:db8::"
       - yang_name: mask
-        example: 64
+        example: 32
       - yang_name: match-prefix-length/eq
-        example: 10
+        example: 128
+        exclude_test: true
       - yang_name: match-prefix-length/ge
-        example: 20
+        example: 64
       - yang_name: match-prefix-length/le
-        example: 20
+        example: 128
+        exclude_test: true

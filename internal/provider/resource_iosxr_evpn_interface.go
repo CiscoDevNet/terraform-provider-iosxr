@@ -92,44 +92,12 @@ func (r *EVPNInterfaceResource) Schema(ctx context.Context, req resource.SchemaR
 					int64validator.Between(1, 4294967295),
 				},
 			},
-			"ethernet_segment_identifier_type_zero_bytes_1": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("1st Byte, used up to version 7.7.x").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{1,2}`), ""),
-				},
-			},
-			"ethernet_segment_identifier_type_zero_bytes_23": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("2nd and 3rd Bytes, used up to version 7.7.x").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{1,4}`), ""),
-				},
-			},
-			"ethernet_segment_identifier_type_zero_bytes_45": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("4th and 5th Bytes, used up to version 7.7.x").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{1,4}`), ""),
-				},
-			},
-			"ethernet_segment_identifier_type_zero_bytes_67": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("6th and 7th Bytes, used up to version 7.7.x").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{1,4}`), ""),
-				},
-			},
-			"ethernet_segment_identifier_type_zero_bytes_89": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("8th and 9th Bytes, used up to version 7.7.x").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F]{1,4}`), ""),
-				},
-			},
 			"ethernet_segment_identifier_type_zero_esi": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ESI value, used instead of `bytes-x` from version 7.8.1`").String,
-				Optional:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+				Required:            true,
+				Validators: []validator.String{
+					stringvalidator.LengthBetween(1, 254),
+				},
 			},
 			"ethernet_segment_load_balancing_mode_all_active": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("All-Active load balancing").String,

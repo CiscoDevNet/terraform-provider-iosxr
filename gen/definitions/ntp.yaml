@@ -1,6 +1,7 @@
 ---
 name: NTP
 path: Cisco-IOS-XR-um-ntp-cfg:/ntp
+test_tags: [XRV9K]
 doc_category: System
 attributes:
   - yang_name: ipv4/dscp
@@ -66,7 +67,8 @@ attributes:
   - yang_name: broadcastdelay
     example: 10
   - yang_name: max-associations
-    example: 1
+    example: 10
+    exclude_test: true
   - yang_name: trusted-keys/trusted-key
     tf_name: trusted_keys
     type: List

@@ -43,11 +43,11 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRouterOSPFAreaInterfaceConfig_minimum(),
+			Config: testAccIosxrRouterOSPFAreaInterfacePrerequisitesConfig + testAccIosxrRouterOSPFAreaInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRouterOSPFAreaInterfaceConfig_all(),
+		Config: testAccIosxrRouterOSPFAreaInterfacePrerequisitesConfig + testAccIosxrRouterOSPFAreaInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -63,11 +63,30 @@ func TestAccIosxrRouterOSPFAreaInterface(t *testing.T) {
 	})
 }
 
+const testAccIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
+	attributes = {
+		"process-name" = "OSPF1"
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]"
+	attributes = {
+		"area-id" = "0"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
 func testAccIosxrRouterOSPFAreaInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -88,6 +107,7 @@ func testAccIosxrRouterOSPFAreaInterfaceConfig_all() string {
 	config += `	fast_reroute_per_prefix_ti_lfa = true` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint = 22` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting = 33` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

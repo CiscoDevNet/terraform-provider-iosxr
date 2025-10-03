@@ -24,7 +24,7 @@ resource "iosxr_extcommunity_rt_set" "example" {
 
 ### Required
 
-- `rpl` (String) Extended Community RT Set
+- `rpl` (String) Configures an extended community rt set
 - `set_name` (String) Set name
 
 ### Optional

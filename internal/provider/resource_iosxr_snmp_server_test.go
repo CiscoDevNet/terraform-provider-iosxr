@@ -50,9 +50,26 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_sensor", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_fru_ctrl", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_failure", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp2_updown", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_bgp4_mib_updown", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_database_overload", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_manual_address_drops", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_corrupted_lsp_detected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_attempt_to_exceed_max_sequence", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_id_len_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_max_area_addresses_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_own_lsp_purge", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_sequence_number_skip", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_type_failure", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_authentication_failure", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_version_skew", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_area_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_rejected_adjacency", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_lsp_too_large_to_propagate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_orig_lsp_buff_size_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_protocols_supported_mismatch", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_adjacency_change", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_isis_lsp_error_detected", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_cbgp_two_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bgp_enable_cisco_bgp4_mib", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.user_name", "USER1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.group_name", "GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "users.0.v3_auth_md5_encryption_aes", "073C05626E2A4841141D"))
@@ -127,9 +144,26 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `	traps_l2vpn_vc_down = true` + "\n"
 	config += `	traps_sensor = true` + "\n"
 	config += `	traps_fru_ctrl = true` + "\n"
-	config += `	traps_isis_authentication_failure = "enable"` + "\n"
-	config += `	traps_bgp_cbgp2_updown = true` + "\n"
-	config += `	traps_bgp_bgp4_mib_updown = true` + "\n"
+	config += `	traps_isis_database_overload = true` + "\n"
+	config += `	traps_isis_manual_address_drops = true` + "\n"
+	config += `	traps_isis_corrupted_lsp_detected = true` + "\n"
+	config += `	traps_isis_attempt_to_exceed_max_sequence = true` + "\n"
+	config += `	traps_isis_id_len_mismatch = true` + "\n"
+	config += `	traps_isis_max_area_addresses_mismatch = true` + "\n"
+	config += `	traps_isis_own_lsp_purge = true` + "\n"
+	config += `	traps_isis_sequence_number_skip = true` + "\n"
+	config += `	traps_isis_authentication_type_failure = true` + "\n"
+	config += `	traps_isis_authentication_failure = true` + "\n"
+	config += `	traps_isis_version_skew = true` + "\n"
+	config += `	traps_isis_area_mismatch = true` + "\n"
+	config += `	traps_isis_rejected_adjacency = true` + "\n"
+	config += `	traps_isis_lsp_too_large_to_propagate = true` + "\n"
+	config += `	traps_isis_orig_lsp_buff_size_mismatch = true` + "\n"
+	config += `	traps_isis_protocols_supported_mismatch = true` + "\n"
+	config += `	traps_isis_adjacency_change = true` + "\n"
+	config += `	traps_isis_lsp_error_detected = true` + "\n"
+	config += `	traps_bgp_cbgp_two_enable = true` + "\n"
+	config += `	traps_bgp_enable_cisco_bgp4_mib = true` + "\n"
 	config += `	users = [{` + "\n"
 	config += `		user_name = "USER1"` + "\n"
 	config += `		group_name = "GROUP1"` + "\n"

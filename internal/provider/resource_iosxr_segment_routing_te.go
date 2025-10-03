@@ -170,14 +170,14 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-insert-reduced").String,
+							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ub6-insert-reduced"),
+								stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
 							},
 						},
 						"srv6_locator_binding_sid_type": schema.StringAttribute{
@@ -224,7 +224,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							},
 						},
 						"constraint_segments_sid_algorithm": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs").AddIntegerRangeDescription(0, 255).String,
+							MarkdownDescription: helpers.NewAttributeDescription("'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs").AddIntegerRangeDescription(0, 255).String,
 							Optional:            true,
 							Validators: []validator.Int64{
 								int64validator.Between(0, 255),
@@ -243,7 +243,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 59),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"srv6_enable": schema.BoolAttribute{
@@ -255,7 +255,7 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 64),
-								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 							},
 						},
 						"srv6_locator_binding_sid_type": schema.StringAttribute{
@@ -266,10 +266,10 @@ func (r *SegmentRoutingTEResource) Schema(ctx context.Context, req resource.Sche
 							},
 						},
 						"srv6_locator_behavior": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-insert-reduced").String,
+							MarkdownDescription: helpers.NewAttributeDescription("SRv6 USID Behavior").AddStringEnumDescription("ub6-encaps-reduced", "ub6-insert-reduced").String,
 							Optional:            true,
 							Validators: []validator.String{
-								stringvalidator.OneOf("ub6-insert-reduced"),
+								stringvalidator.OneOf("ub6-encaps-reduced", "ub6-insert-reduced"),
 							},
 						},
 						"source_address": schema.StringAttribute{

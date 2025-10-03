@@ -64,3 +64,9 @@ attributes:
         example: OBJECT1
       - yang_name: priority-decrement
         example: 177
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]
+    attributes:
+      - name: interface-name
+        value: GigabitEthernet0/0/0/1

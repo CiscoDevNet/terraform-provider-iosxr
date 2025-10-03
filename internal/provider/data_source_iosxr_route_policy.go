@@ -67,7 +67,7 @@ func (d *RoutePolicyDataSource) Schema(ctx context.Context, req datasource.Schem
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "policy statements",
+				MarkdownDescription: "Configures a route policy",
 				Computed:            true,
 			},
 		},

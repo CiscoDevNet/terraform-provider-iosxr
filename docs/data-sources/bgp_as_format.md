@@ -26,6 +26,5 @@ data "iosxr_bgp_as_format" "example" {
 
 ### Read-Only
 
-- `asdot` (Boolean) AS Dot format
-- `asplain` (Boolean) AS Plain format
+- `as_format` (String)
 - `id` (String) The path of the retrieved object.

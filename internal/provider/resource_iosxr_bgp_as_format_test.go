@@ -28,8 +28,6 @@ import (
 
 func TestAccIosxrBGPASFormat(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asdot", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "asplain", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -61,8 +59,6 @@ func testAccIosxrBGPASFormatConfig_minimum() string {
 
 func testAccIosxrBGPASFormatConfig_all() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
-	config += `	asdot = false` + "\n"
-	config += `	asplain = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

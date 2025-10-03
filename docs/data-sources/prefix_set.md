@@ -32,4 +32,4 @@ data "iosxr_prefix_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) prefix statements
+- `rpl` (String) Configures a prefix set

@@ -31,67 +31,67 @@ import (
 )
 
 type BFD struct {
-	Device                                          types.String            `tfsdk:"device"`
-	Id                                              types.String            `tfsdk:"id"`
-	DeleteMode                                      types.String            `tfsdk:"delete_mode"`
-	EchoDisable                                     types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetectPercentage                     types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                          types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce                        types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                                  types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_preferred_minimum_interval"`
-	TrapSinglehopPreMapped                          types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                              []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold                        types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                            types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                          types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                            types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                              types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring               types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                                types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode                 types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait                types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait              types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait                types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlbInherit                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
-	BundleCoexistenceBobBlbLogical                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
-	Interfaces                                      []BFDInterfaces         `tfsdk:"interfaces"`
-	Ipv6ChecksumDisable                             types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Device                                 types.String            `tfsdk:"device"`
+	Id                                     types.String            `tfsdk:"id"`
+	DeleteMode                             types.String            `tfsdk:"delete_mode"`
+	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
+	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                         types.String            `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
+	TrapSinglehopPreMapped                 types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                     []BFDMultipathLocations `tfsdk:"multipath_locations"`
+	MultihopTtlDropThreshold               types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                   types.Int64             `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                 types.Int64             `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                   types.Int64             `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                     types.Int64             `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring      types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                       types.Bool              `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode        types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait       types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
+	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
+	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
 }
 
 type BFDData struct {
-	Device                                          types.String            `tfsdk:"device"`
-	Id                                              types.String            `tfsdk:"id"`
-	EchoDisable                                     types.Bool              `tfsdk:"echo_disable"`
-	EchoLatencyDetectPercentage                     types.Int64             `tfsdk:"echo_latency_detect_percentage"`
-	EchoLatencyDetectCount                          types.Int64             `tfsdk:"echo_latency_detect_count"`
-	EchoStartupValidateForce                        types.Bool              `tfsdk:"echo_startup_validate_force"`
-	EchoIpv4Source                                  types.String            `tfsdk:"echo_ipv4_source"`
-	EchoIpv4BundlePerMemberPreferredMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_preferred_minimum_interval"`
-	TrapSinglehopPreMapped                          types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
-	MultipathLocations                              []BFDMultipathLocations `tfsdk:"multipath_locations"`
-	MultihopTtlDropThreshold                        types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
-	DampeningInitialWait                            types.Int64             `tfsdk:"dampening_initial_wait"`
-	DampeningSecondaryWait                          types.Int64             `tfsdk:"dampening_secondary_wait"`
-	DampeningMaximumWait                            types.Int64             `tfsdk:"dampening_maximum_wait"`
-	DampeningThreshold                              types.Int64             `tfsdk:"dampening_threshold"`
-	DampeningExtensionsDownMonitoring               types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
-	DampeningDisable                                types.Bool              `tfsdk:"dampening_disable"`
-	DampeningBundleMemberL3OnlyMode                 types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
-	DampeningBundleMemberInitialWait                types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
-	DampeningBundleMemberSecondaryWait              types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
-	DampeningBundleMemberMaximumWait                types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
-	BundleCoexistenceBobBlbInherit                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_inherit"`
-	BundleCoexistenceBobBlbLogical                  types.Bool              `tfsdk:"bundle_coexistence_bob_blb_logical"`
-	Interfaces                                      []BFDInterfaces         `tfsdk:"interfaces"`
-	Ipv6ChecksumDisable                             types.Bool              `tfsdk:"ipv6_checksum_disable"`
+	Device                                 types.String            `tfsdk:"device"`
+	Id                                     types.String            `tfsdk:"id"`
+	EchoDisable                            types.Bool              `tfsdk:"echo_disable"`
+	EchoLatencyDetect                      types.Bool              `tfsdk:"echo_latency_detect"`
+	EchoLatencyDetectPercentage            types.Int64             `tfsdk:"echo_latency_detect_percentage"`
+	EchoLatencyDetectCount                 types.Int64             `tfsdk:"echo_latency_detect_count"`
+	EchoStartupValidateForce               types.Bool              `tfsdk:"echo_startup_validate_force"`
+	EchoIpv4Source                         types.String            `tfsdk:"echo_ipv4_source"`
+	EchoIpv4BundlePerMemberMinimumInterval types.Int64             `tfsdk:"echo_ipv4_bundle_per_member_minimum_interval"`
+	TrapSinglehopPreMapped                 types.Bool              `tfsdk:"trap_singlehop_pre_mapped"`
+	MultipathLocations                     []BFDMultipathLocations `tfsdk:"multipath_locations"`
+	MultihopTtlDropThreshold               types.Int64             `tfsdk:"multihop_ttl_drop_threshold"`
+	DampeningInitialWait                   types.Int64             `tfsdk:"dampening_initial_wait"`
+	DampeningSecondaryWait                 types.Int64             `tfsdk:"dampening_secondary_wait"`
+	DampeningMaximumWait                   types.Int64             `tfsdk:"dampening_maximum_wait"`
+	DampeningThreshold                     types.Int64             `tfsdk:"dampening_threshold"`
+	DampeningExtensionsDownMonitoring      types.Bool              `tfsdk:"dampening_extensions_down_monitoring"`
+	DampeningDisable                       types.Bool              `tfsdk:"dampening_disable"`
+	DampeningBundleMemberL3OnlyMode        types.Bool              `tfsdk:"dampening_bundle_member_l3_only_mode"`
+	DampeningBundleMemberInitialWait       types.Int64             `tfsdk:"dampening_bundle_member_initial_wait"`
+	DampeningBundleMemberSecondaryWait     types.Int64             `tfsdk:"dampening_bundle_member_secondary_wait"`
+	DampeningBundleMemberMaximumWait       types.Int64             `tfsdk:"dampening_bundle_member_maximum_wait"`
+	BundleCoexistenceBobBlb                types.String            `tfsdk:"bundle_coexistence_bob_blb"`
+	Interfaces                             []BFDInterfaces         `tfsdk:"interfaces"`
+	Ipv6ChecksumDisable                    types.Bool              `tfsdk:"ipv6_checksum_disable"`
 }
 type BFDMultipathLocations struct {
-	LocationName types.String `tfsdk:"location_name"`
+	LocationId types.String `tfsdk:"location_id"`
 }
 type BFDInterfaces struct {
 	InterfaceName       types.String `tfsdk:"interface_name"`
-	EchoDisable         types.Bool   `tfsdk:"echo_disable"`
+	EchoDisable         types.String `tfsdk:"echo_disable"`
 	EchoIpv4Source      types.String `tfsdk:"echo_ipv4_source"`
 	Ipv6ChecksumDisable types.Bool   `tfsdk:"ipv6_checksum_disable"`
 	Disable             types.Bool   `tfsdk:"disable"`
@@ -116,6 +116,11 @@ func (data BFD) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "echo.disable", map[string]string{})
 		}
 	}
+	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.IsUnknown() {
+		if data.EchoLatencyDetect.ValueBool() {
+			body, _ = sjson.Set(body, "echo.latency.detect", map[string]string{})
+		}
+	}
 	if !data.EchoLatencyDetectPercentage.IsNull() && !data.EchoLatencyDetectPercentage.IsUnknown() {
 		body, _ = sjson.Set(body, "echo.latency.detect.percentage", strconv.FormatInt(data.EchoLatencyDetectPercentage.ValueInt64(), 10))
 	}
@@ -128,10 +133,10 @@ func (data BFD) toBody(ctx context.Context) string {
 		}
 	}
 	if !data.EchoIpv4Source.IsNull() && !data.EchoIpv4Source.IsUnknown() {
-		body, _ = sjson.Set(body, "echo.ipv4.source", data.EchoIpv4Source.ValueString())
+		body, _ = sjson.Set(body, "echo.ipv4.source.ipv4-address", data.EchoIpv4Source.ValueString())
 	}
-	if !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() && !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsUnknown() {
-		body, _ = sjson.Set(body, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval", strconv.FormatInt(data.EchoIpv4BundlePerMemberPreferredMinimumInterval.ValueInt64(), 10))
+	if !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() && !data.EchoIpv4BundlePerMemberMinimumInterval.IsUnknown() {
+		body, _ = sjson.Set(body, "echo.ipv4.bundle-per-member.minimum-interval", strconv.FormatInt(data.EchoIpv4BundlePerMemberMinimumInterval.ValueInt64(), 10))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() && !data.TrapSinglehopPreMapped.IsUnknown() {
 		if data.TrapSinglehopPreMapped.ValueBool() {
@@ -177,15 +182,8 @@ func (data BFD) toBody(ctx context.Context) string {
 	if !data.DampeningBundleMemberMaximumWait.IsNull() && !data.DampeningBundleMemberMaximumWait.IsUnknown() {
 		body, _ = sjson.Set(body, "dampening.bundle-member.maximum-wait", strconv.FormatInt(data.DampeningBundleMemberMaximumWait.ValueInt64(), 10))
 	}
-	if !data.BundleCoexistenceBobBlbInherit.IsNull() && !data.BundleCoexistenceBobBlbInherit.IsUnknown() {
-		if data.BundleCoexistenceBobBlbInherit.ValueBool() {
-			body, _ = sjson.Set(body, "bundle.coexistence.bob-blb.inherit", map[string]string{})
-		}
-	}
-	if !data.BundleCoexistenceBobBlbLogical.IsNull() && !data.BundleCoexistenceBobBlbLogical.IsUnknown() {
-		if data.BundleCoexistenceBobBlbLogical.ValueBool() {
-			body, _ = sjson.Set(body, "bundle.coexistence.bob-blb.logical", map[string]string{})
-		}
+	if !data.BundleCoexistenceBobBlb.IsNull() && !data.BundleCoexistenceBobBlb.IsUnknown() {
+		body, _ = sjson.Set(body, "bundle.coexistence.bob-blb", data.BundleCoexistenceBobBlb.ValueString())
 	}
 	if !data.Ipv6ChecksumDisable.IsNull() && !data.Ipv6ChecksumDisable.IsUnknown() {
 		if data.Ipv6ChecksumDisable.ValueBool() {
@@ -195,8 +193,8 @@ func (data BFD) toBody(ctx context.Context) string {
 	if len(data.MultipathLocations) > 0 {
 		body, _ = sjson.Set(body, "multipath.include.locations.location", []interface{}{})
 		for index, item := range data.MultipathLocations {
-			if !item.LocationName.IsNull() && !item.LocationName.IsUnknown() {
-				body, _ = sjson.Set(body, "multipath.include.locations.location"+"."+strconv.Itoa(index)+"."+"location-name", item.LocationName.ValueString())
+			if !item.LocationId.IsNull() && !item.LocationId.IsUnknown() {
+				body, _ = sjson.Set(body, "multipath.include.locations.location"+"."+strconv.Itoa(index)+"."+"location-id", item.LocationId.ValueString())
 			}
 		}
 	}
@@ -207,12 +205,10 @@ func (data BFD) toBody(ctx context.Context) string {
 				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"interface-name", item.InterfaceName.ValueString())
 			}
 			if !item.EchoDisable.IsNull() && !item.EchoDisable.IsUnknown() {
-				if item.EchoDisable.ValueBool() {
-					body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"echo.disable", map[string]string{})
-				}
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"echo.disable", item.EchoDisable.ValueString())
 			}
 			if !item.EchoIpv4Source.IsNull() && !item.EchoIpv4Source.IsUnknown() {
-				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"echo.ipv4.source", item.EchoIpv4Source.ValueString())
+				body, _ = sjson.Set(body, "interfaces.interface"+"."+strconv.Itoa(index)+"."+"echo.ipv4.source.ipv4-address", item.EchoIpv4Source.ValueString())
 			}
 			if !item.Ipv6ChecksumDisable.IsNull() && !item.Ipv6ChecksumDisable.IsUnknown() {
 				if item.Ipv6ChecksumDisable.ValueBool() {
@@ -251,6 +247,15 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoDisable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); !data.EchoLatencyDetect.IsNull() {
+		if value.Exists() {
+			data.EchoLatencyDetect = types.BoolValue(true)
+		} else {
+			data.EchoLatencyDetect = types.BoolValue(false)
+		}
+	} else {
+		data.EchoLatencyDetect = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() && !data.EchoLatencyDetectPercentage.IsNull() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	} else {
@@ -270,15 +275,15 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoStartupValidateForce = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.source"); value.Exists() && !data.EchoIpv4Source.IsNull() {
+	if value := gjson.GetBytes(res, "echo.ipv4.source.ipv4-address"); value.Exists() && !data.EchoIpv4Source.IsNull() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	} else {
 		data.EchoIpv4Source = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
-		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() && !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
+		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	} else {
-		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Null()
+		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Null()
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); !data.TrapSinglehopPreMapped.IsNull() {
 		if value.Exists() {
@@ -290,8 +295,8 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		data.TrapSinglehopPreMapped = types.BoolNull()
 	}
 	for i := range data.MultipathLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.MultipathLocations[i].LocationName.ValueString()}
+		keys := [...]string{"location-id"}
+		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
 
 		var r gjson.Result
 		gjson.GetBytes(res, "multipath.include.locations.location").ForEach(
@@ -312,10 +317,10 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 				return true
 			},
 		)
-		if value := r.Get("location-name"); value.Exists() && !data.MultipathLocations[i].LocationName.IsNull() {
-			data.MultipathLocations[i].LocationName = types.StringValue(value.String())
+		if value := r.Get("location-id"); value.Exists() && !data.MultipathLocations[i].LocationId.IsNull() {
+			data.MultipathLocations[i].LocationId = types.StringValue(value.String())
 		} else {
-			data.MultipathLocations[i].LocationName = types.StringNull()
+			data.MultipathLocations[i].LocationId = types.StringNull()
 		}
 	}
 	if value := gjson.GetBytes(res, "multihop.ttl-drop-threshold"); value.Exists() && !data.MultihopTtlDropThreshold.IsNull() {
@@ -385,23 +390,10 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.DampeningBundleMemberMaximumWait = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.inherit"); !data.BundleCoexistenceBobBlbInherit.IsNull() {
-		if value.Exists() {
-			data.BundleCoexistenceBobBlbInherit = types.BoolValue(true)
-		} else {
-			data.BundleCoexistenceBobBlbInherit = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() && !data.BundleCoexistenceBobBlb.IsNull() {
+		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	} else {
-		data.BundleCoexistenceBobBlbInherit = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.logical"); !data.BundleCoexistenceBobBlbLogical.IsNull() {
-		if value.Exists() {
-			data.BundleCoexistenceBobBlbLogical = types.BoolValue(true)
-		} else {
-			data.BundleCoexistenceBobBlbLogical = types.BoolValue(false)
-		}
-	} else {
-		data.BundleCoexistenceBobBlbLogical = types.BoolNull()
+		data.BundleCoexistenceBobBlb = types.StringNull()
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -431,16 +423,12 @@ func (data *BFD) updateFromBody(ctx context.Context, res []byte) {
 		} else {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
-		if value := r.Get("echo.disable"); !data.Interfaces[i].EchoDisable.IsNull() {
-			if value.Exists() {
-				data.Interfaces[i].EchoDisable = types.BoolValue(true)
-			} else {
-				data.Interfaces[i].EchoDisable = types.BoolValue(false)
-			}
+		if value := r.Get("echo.disable"); value.Exists() && !data.Interfaces[i].EchoDisable.IsNull() {
+			data.Interfaces[i].EchoDisable = types.StringValue(value.String())
 		} else {
-			data.Interfaces[i].EchoDisable = types.BoolNull()
+			data.Interfaces[i].EchoDisable = types.StringNull()
 		}
-		if value := r.Get("echo.ipv4.source"); value.Exists() && !data.Interfaces[i].EchoIpv4Source.IsNull() {
+		if value := r.Get("echo.ipv4.source.ipv4-address"); value.Exists() && !data.Interfaces[i].EchoIpv4Source.IsNull() {
 			data.Interfaces[i].EchoIpv4Source = types.StringValue(value.String())
 		} else {
 			data.Interfaces[i].EchoIpv4Source = types.StringNull()
@@ -501,6 +489,11 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+		data.EchoLatencyDetect = types.BoolValue(true)
+	} else {
+		data.EchoLatencyDetect = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
@@ -512,11 +505,11 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.source"); value.Exists() {
+	if value := gjson.GetBytes(res, "echo.ipv4.source.ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() {
-		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() {
+		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
@@ -527,8 +520,8 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := BFDMultipathLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
+			if cValue := v.Get("location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
 			}
 			data.MultipathLocations = append(data.MultipathLocations, item)
 			return true
@@ -573,15 +566,8 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "dampening.bundle-member.maximum-wait"); value.Exists() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.inherit"); value.Exists() {
-		data.BundleCoexistenceBobBlbInherit = types.BoolValue(true)
-	} else {
-		data.BundleCoexistenceBobBlbInherit = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.logical"); value.Exists() {
-		data.BundleCoexistenceBobBlbLogical = types.BoolValue(true)
-	} else {
-		data.BundleCoexistenceBobBlbLogical = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() {
+		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
@@ -591,11 +577,9 @@ func (data *BFD) fromBody(ctx context.Context, res []byte) {
 				item.InterfaceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("echo.disable"); cValue.Exists() {
-				item.EchoDisable = types.BoolValue(true)
-			} else {
-				item.EchoDisable = types.BoolValue(false)
+				item.EchoDisable = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("echo.ipv4.source"); cValue.Exists() {
+			if cValue := v.Get("echo.ipv4.source.ipv4-address"); cValue.Exists() {
 				item.EchoIpv4Source = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
@@ -637,6 +621,11 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "echo.latency.detect"); value.Exists() {
+		data.EchoLatencyDetect = types.BoolValue(true)
+	} else {
+		data.EchoLatencyDetect = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "echo.latency.detect.percentage"); value.Exists() {
 		data.EchoLatencyDetectPercentage = types.Int64Value(value.Int())
 	}
@@ -648,11 +637,11 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.EchoStartupValidateForce = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.source"); value.Exists() {
+	if value := gjson.GetBytes(res, "echo.ipv4.source.ipv4-address"); value.Exists() {
 		data.EchoIpv4Source = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval.preferred-minimum-interval"); value.Exists() {
-		data.EchoIpv4BundlePerMemberPreferredMinimumInterval = types.Int64Value(value.Int())
+	if value := gjson.GetBytes(res, "echo.ipv4.bundle-per-member.minimum-interval"); value.Exists() {
+		data.EchoIpv4BundlePerMemberMinimumInterval = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "trap.singlehop.pre-mapped"); value.Exists() {
 		data.TrapSinglehopPreMapped = types.BoolValue(true)
@@ -663,8 +652,8 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 		data.MultipathLocations = make([]BFDMultipathLocations, 0)
 		value.ForEach(func(k, v gjson.Result) bool {
 			item := BFDMultipathLocations{}
-			if cValue := v.Get("location-name"); cValue.Exists() {
-				item.LocationName = types.StringValue(cValue.String())
+			if cValue := v.Get("location-id"); cValue.Exists() {
+				item.LocationId = types.StringValue(cValue.String())
 			}
 			data.MultipathLocations = append(data.MultipathLocations, item)
 			return true
@@ -709,15 +698,8 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "dampening.bundle-member.maximum-wait"); value.Exists() {
 		data.DampeningBundleMemberMaximumWait = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.inherit"); value.Exists() {
-		data.BundleCoexistenceBobBlbInherit = types.BoolValue(true)
-	} else {
-		data.BundleCoexistenceBobBlbInherit = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb.logical"); value.Exists() {
-		data.BundleCoexistenceBobBlbLogical = types.BoolValue(true)
-	} else {
-		data.BundleCoexistenceBobBlbLogical = types.BoolValue(false)
+	if value := gjson.GetBytes(res, "bundle.coexistence.bob-blb"); value.Exists() {
+		data.BundleCoexistenceBobBlb = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "interfaces.interface"); value.Exists() {
 		data.Interfaces = make([]BFDInterfaces, 0)
@@ -727,11 +709,9 @@ func (data *BFDData) fromBody(ctx context.Context, res []byte) {
 				item.InterfaceName = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("echo.disable"); cValue.Exists() {
-				item.EchoDisable = types.BoolValue(true)
-			} else {
-				item.EchoDisable = types.BoolValue(false)
+				item.EchoDisable = types.StringValue(cValue.String())
 			}
-			if cValue := v.Get("echo.ipv4.source"); cValue.Exists() {
+			if cValue := v.Get("echo.ipv4.source.ipv4-address"); cValue.Exists() {
 				item.EchoIpv4Source = types.StringValue(cValue.String())
 			}
 			if cValue := v.Get("ipv6.checksum.disable"); cValue.Exists() {
@@ -772,34 +752,37 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	if !state.EchoDisable.IsNull() && data.EchoDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/disable", state.getPath()))
 	}
+	if !state.EchoLatencyDetect.IsNull() && data.EchoLatencyDetect.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
+	}
 	if !state.EchoLatencyDetectPercentage.IsNull() && data.EchoLatencyDetectPercentage.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/percentage", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
 	}
 	if !state.EchoLatencyDetectCount.IsNull() && data.EchoLatencyDetectCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect/count", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/latency/detect", state.getPath()))
 	}
 	if !state.EchoStartupValidateForce.IsNull() && data.EchoStartupValidateForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate/force", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/startup/validate", state.getPath()))
 	}
 	if !state.EchoIpv4Source.IsNull() && data.EchoIpv4Source.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/source", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/source/ipv4-address", state.getPath()))
 	}
-	if !state.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() && data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval/preferred-minimum-interval", state.getPath()))
+	if !state.EchoIpv4BundlePerMemberMinimumInterval.IsNull() && data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval", state.getPath()))
 	}
 	if !state.TrapSinglehopPreMapped.IsNull() && data.TrapSinglehopPreMapped.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/trap/singlehop/pre-mapped", state.getPath()))
 	}
 	for i := range state.MultipathLocations {
-		keys := [...]string{"location-name"}
-		stateKeyValues := [...]string{state.MultipathLocations[i].LocationName.ValueString()}
+		keys := [...]string{"location-id"}
+		stateKeyValues := [...]string{state.MultipathLocations[i].LocationId.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.MultipathLocations[i].LocationName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.MultipathLocations[i].LocationId.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -809,7 +792,7 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 		found := false
 		for j := range data.MultipathLocations {
 			found = true
-			if state.MultipathLocations[i].LocationName.ValueString() != data.MultipathLocations[j].LocationName.ValueString() {
+			if state.MultipathLocations[i].LocationId.ValueString() != data.MultipathLocations[j].LocationId.ValueString() {
 				found = false
 			}
 			if found {
@@ -853,11 +836,8 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 	if !state.DampeningBundleMemberMaximumWait.IsNull() && data.DampeningBundleMemberMaximumWait.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/dampening/bundle-member/maximum-wait", state.getPath()))
 	}
-	if !state.BundleCoexistenceBobBlbInherit.IsNull() && data.BundleCoexistenceBobBlbInherit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb/inherit", state.getPath()))
-	}
-	if !state.BundleCoexistenceBobBlbLogical.IsNull() && data.BundleCoexistenceBobBlbLogical.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb/logical", state.getPath()))
+	if !state.BundleCoexistenceBobBlb.IsNull() && data.BundleCoexistenceBobBlb.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bundle/coexistence/bob-blb", state.getPath()))
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -886,10 +866,10 @@ func (data *BFD) getDeletedItems(ctx context.Context, state BFD) []string {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/disable", state.getPath(), keyString))
 				}
 				if !state.Interfaces[i].EchoIpv4Source.IsNull() && data.Interfaces[j].EchoIpv4Source.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/ipv4/source", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/echo/ipv4/source/ipv4-address", state.getPath(), keyString))
 				}
 				if !state.Interfaces[i].Ipv6ChecksumDisable.IsNull() && data.Interfaces[j].Ipv6ChecksumDisable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum/disable", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum", state.getPath(), keyString))
 				}
 				if !state.Interfaces[i].Disable.IsNull() && data.Interfaces[j].Disable.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/disable", state.getPath(), keyString))
@@ -924,6 +904,9 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.EchoDisable.IsNull() && !data.EchoDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/disable", data.getPath()))
 	}
+	if !data.EchoLatencyDetect.IsNull() && !data.EchoLatencyDetect.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
+	}
 	if !data.EchoStartupValidateForce.IsNull() && !data.EchoStartupValidateForce.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/startup/validate/force", data.getPath()))
 	}
@@ -931,8 +914,8 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/trap/singlehop/pre-mapped", data.getPath()))
 	}
 	for i := range data.MultipathLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.MultipathLocations[i].LocationName.ValueString()}
+		keys := [...]string{"location-id"}
+		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -947,21 +930,12 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.DampeningBundleMemberL3OnlyMode.IsNull() && !data.DampeningBundleMemberL3OnlyMode.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/dampening/bundle-member/l3-only-mode", data.getPath()))
 	}
-	if !data.BundleCoexistenceBobBlbInherit.IsNull() && !data.BundleCoexistenceBobBlbInherit.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bundle/coexistence/bob-blb/inherit", data.getPath()))
-	}
-	if !data.BundleCoexistenceBobBlbLogical.IsNull() && !data.BundleCoexistenceBobBlbLogical.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bundle/coexistence/bob-blb/logical", data.getPath()))
-	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
 		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.Interfaces[i].EchoDisable.IsNull() && !data.Interfaces[i].EchoDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/echo/disable", data.getPath(), keyString))
 		}
 		if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum/disable", data.getPath(), keyString))
@@ -981,27 +955,30 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	if !data.EchoDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/disable", data.getPath()))
 	}
+	if !data.EchoLatencyDetect.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
+	}
 	if !data.EchoLatencyDetectPercentage.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect/percentage", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
 	}
 	if !data.EchoLatencyDetectCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect/count", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
 	}
 	if !data.EchoStartupValidateForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/startup/validate/force", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/startup/validate", data.getPath()))
 	}
 	if !data.EchoIpv4Source.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/source", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/source/ipv4-address", data.getPath()))
 	}
-	if !data.EchoIpv4BundlePerMemberPreferredMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval/preferred-minimum-interval", data.getPath()))
+	if !data.EchoIpv4BundlePerMemberMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/echo/ipv4/bundle-per-member/minimum-interval", data.getPath()))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/trap/singlehop/pre-mapped", data.getPath()))
 	}
 	for i := range data.MultipathLocations {
-		keys := [...]string{"location-name"}
-		keyValues := [...]string{data.MultipathLocations[i].LocationName.ValueString()}
+		keys := [...]string{"location-id"}
+		keyValues := [...]string{data.MultipathLocations[i].LocationId.ValueString()}
 
 		keyString := ""
 		for ki := range keys {
@@ -1042,11 +1019,8 @@ func (data *BFD) getDeletePaths(ctx context.Context) []string {
 	if !data.DampeningBundleMemberMaximumWait.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/dampening/bundle-member/maximum-wait", data.getPath()))
 	}
-	if !data.BundleCoexistenceBobBlbInherit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bundle/coexistence/bob-blb/inherit", data.getPath()))
-	}
-	if !data.BundleCoexistenceBobBlbLogical.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bundle/coexistence/bob-blb/logical", data.getPath()))
+	if !data.BundleCoexistenceBobBlb.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bundle/coexistence/bob-blb", data.getPath()))
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}

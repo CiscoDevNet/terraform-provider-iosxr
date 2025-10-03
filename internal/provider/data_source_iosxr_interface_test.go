@@ -31,6 +31,7 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "l2transport", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "multipoint", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "dampening_decay_half_life_value", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_point_to_point", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "service_policy_input.0.name", "PMAP-IN"))
@@ -49,20 +50,20 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_acl1", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_hardware_count", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_interface_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_ingress_compress", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_acl", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_hardware_count", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_interface_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv4_access_group_egress_compress", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_type", "any"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_allow_self_ping", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_verify_unicast_source_reachable_via_allow_default", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_acl1", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_interface_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_compress_level", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_acl1", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_ingress_compress", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_acl", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_interface_statistics", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_compress_level", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_access_group_egress_compress", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_link_local_address", "fe80::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_link_local_zone", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_interface.test", "ipv6_autoconfig", "false"))
@@ -203,6 +204,7 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	config += `	l2transport = false` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	multipoint = false` + "\n"
+	config += `	dampening = true` + "\n"
 	config += `	dampening_decay_half_life_value = 2` + "\n"
 	config += `	ipv4_point_to_point = true` + "\n"
 	config += `	service_policy_input = [{` + "\n"
@@ -225,20 +227,20 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	config += `	ipv4_access_group_ingress_acl1 = "ACL1"` + "\n"
 	config += `	ipv4_access_group_ingress_hardware_count = true` + "\n"
 	config += `	ipv4_access_group_ingress_interface_statistics = true` + "\n"
-	config += `	ipv4_access_group_ingress_compress_level = 0` + "\n"
+	config += `	ipv4_access_group_ingress_compress = 0` + "\n"
 	config += `	ipv4_access_group_egress_acl = "ACL1"` + "\n"
 	config += `	ipv4_access_group_egress_hardware_count = true` + "\n"
 	config += `	ipv4_access_group_egress_interface_statistics = true` + "\n"
-	config += `	ipv4_access_group_egress_compress_level = 0` + "\n"
+	config += `	ipv4_access_group_egress_compress = 0` + "\n"
 	config += `	ipv6_verify_unicast_source_reachable_via_type = "any"` + "\n"
 	config += `	ipv6_verify_unicast_source_reachable_via_allow_self_ping = true` + "\n"
 	config += `	ipv6_verify_unicast_source_reachable_via_allow_default = false` + "\n"
 	config += `	ipv6_access_group_ingress_acl1 = "ACL2"` + "\n"
 	config += `	ipv6_access_group_ingress_interface_statistics = true` + "\n"
-	config += `	ipv6_access_group_ingress_compress_level = 0` + "\n"
-	config += `	ipv6_access_group_egress_acl1 = "ACL2"` + "\n"
+	config += `	ipv6_access_group_ingress_compress = 0` + "\n"
+	config += `	ipv6_access_group_egress_acl = "ACL2"` + "\n"
 	config += `	ipv6_access_group_egress_interface_statistics = true` + "\n"
-	config += `	ipv6_access_group_egress_compress_level = 0` + "\n"
+	config += `	ipv6_access_group_egress_compress = 0` + "\n"
 	config += `	ipv6_link_local_address = "fe80::1"` + "\n"
 	config += `	ipv6_link_local_zone = "0"` + "\n"
 	config += `	ipv6_autoconfig = false` + "\n"

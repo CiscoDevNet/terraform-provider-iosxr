@@ -7,42 +7,65 @@ attributes:
     example: P1
   - yang_name: is-type
     example: level-1
-  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded
+  - yang_name: set-overload-bit
     example: true
-  - yang_name: set-overload-bit/on-startup/advertise-as-overloaded/time-to-advertise
+  - yang_name: set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise/time-to-advertise-number
+    xpath: set-overload-bit/on-startup/time-to-advertise/time-to-advertise-number
+    tf_name: set_overload_bit_on_startup_time_to_advertise
     optional: true
     delete_parent: true
-    example: 10
-  - yang_name: set-overload-bit/on-startup/wait-for-bgp
-    example: false
+    example: 300
+  - yang_name: set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp
+    xpath: set-overload-bit/on-startup/wait-for-bgp
+    tf_name: set_overload_bit_on_startup_wait_for_bgp
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
   - yang_name: set-overload-bit/advertise/external
     example: true
   - yang_name: set-overload-bit/advertise/interlevel
     example: true
-  - yang_name: set-overload-bit-levels/level
+  - yang_name: set-overload-bit-levels/set-overload-bit-level
     tf_name: set_overload_bit_levels
     type: List
     attributes:
-      - yang_name: level-id
+      - yang_name: level-number
         id: true
         example: 1
-      - yang_name: on-startup/advertise-as-overloaded
-        example: true
-      - yang_name: on-startup/advertise-as-overloaded/time-to-advertise
+      - yang_name: on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise/time-to-advertise-number
+        xpath: on-startup/time-to-advertise/time-to-advertise-number
+        tf_name: on_startup_time_to_advertise
         optional: true
-        example: 10
-      - yang_name: on-startup/wait-for-bgp
-        example: false
+        delete_parent: true
+        example: 300
+      - yang_name: on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp
+        xpath: on-startup/wait-for-bgp
+        tf_name: on_startup_wait_for_bgp
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: true
       - yang_name: advertise/external
         example: true
       - yang_name: advertise/interlevel
         example: true
   - yang_name: nsr
     example: true
-  - yang_name: nsf/cisco
+  - yang_name: nsf/NSF/CISCO/cisco
+    xpath: nsf/cisco
+    tf_name: nsf_cisco
+    optional: true
+    delete_parent: true
     example: true
-  - yang_name: nsf/ietf
-    example: false
+    exclude_test: true
+  - yang_name: nsf/NSF/IETF/ietf
+    xpath: nsf/ietf
+    tf_name: nsf_ietf
+    optional: true
+    delete_parent: true
+    example: true
+    exclude_test: true
   - yang_name: nsf/lifetime
     example: 10
   - yang_name: nsf/interface-timer
@@ -57,17 +80,106 @@ attributes:
     example: 50
   - yang_name: lsp-gen-interval/secondary-wait
     example: 200
-  - yang_name: lsp-refresh-interval/lsp-refresh-interval-time
+  - yang_name: lsp-refresh-interval
     tf_name: lsp_refresh_interval
     example: 65000
-  - yang_name: max-lsp-lifetime/max-lsp-lifetime
-    tf_name: max_lsp_lifetime
+  - yang_name: max-lsp-lifetime
     example: 65535
-  - yang_name: lsp-password/keychain/keychain-name
+  - yang_name: lsp-password/accept/encrypted
+    exclude_test: true
+    example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/accept-levels/accept-level
+    tf_name: lsp_password_levels
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: encrypted
+        example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted
+    xpath: lsp-password/lsp-password-option/text/password-options/encrypted
+    tf_name: lsp_password_text_encrypted
+    optional: true
+    example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/send-only
+    xpath: lsp-password/lsp-password-option/text/password-options/send-only
+    tf_name: lsp_password_text_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp/send-only
+    xpath: lsp-password/lsp-password-option/text/password-options/snp/send-only
+    tf_name: lsp_password_text_snp_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/enable-poi
+    xpath: lsp-password/lsp-password-option/text/password-options/enable-poi
+    tf_name: lsp_password_text_enable_poi
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/encrypted
+    xpath: lsp-password/lsp-password-option/hmac-md5/password-options/encrypted
+    tf_name: lsp_password_hmac_md5_encrypted
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: "060506324F41584B564B0F49584B"
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/send-only
+    xpath: lsp-password/lsp-password-option/hmac-md5/password-options/send-only
+    tf_name: lsp_password_hmac_md5_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp/send-only
+    xpath: lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only
+    tf_name: lsp_password_hmac_md5_snp_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/enable-poi
+    xpath: lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi
+    tf_name: lsp_password_hmac_md5_enable_poi
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/keychain-name
+    xpath: lsp-password/lsp-password-option/keychain/keychain-name
     tf_name: lsp_password_keychain
     optional: true
-    no_delete: true
-    example: ISIS-KEY
+    delete_parent: true
+    exclude_test: true
+    example: "ISIS-KEY"
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/send-only
+    xpath: lsp-password/lsp-password-option/keychain/send-only
+    tf_name: lsp_password_keychain_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp/send-only
+    xpath: lsp-password/lsp-password-option/keychain/snp/send-only
+    tf_name: lsp_password_keychain_snp_send_only
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/enable-poi
+    xpath: lsp-password/lsp-password-option/keychain/enable-poi
+    tf_name: lsp_password_keychain_enable_poi
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: true
   - yang_name: distribute/link-state/instance-id
     example: 32
   - yang_name: distribute/link-state/throttle
@@ -80,23 +192,25 @@ attributes:
     tf_name: affinity_maps
     type: List
     attributes:
-      - yang_name: affinity-map-name
+      - yang_name: affinity-attribute-name
         tf_name: name
         id: true
         example: 22
       - yang_name: bit-position
         example: 4
-  - yang_name: flex-algos/flex-algo
+  - yang_name: flex-algoes/flex-algo
     tf_name: flex_algos
     type: List
     attributes:
-      - yang_name: algorithm-number
+      - yang_name: flex-algo-number
+        tf_name: number
         id: true
         example: 128
       - yang_name: advertise-definition
         example: true
-      - yang_name: metric-type/delay
-        example: true
+      - yang_name: metric-type
+        tf_name: metric_type
+        example: "delay"
   - yang_name: nets/net
     tf_name: nets
     type: List
@@ -113,18 +227,18 @@ attributes:
         example: GigabitEthernet0/0/0/1
       - yang_name: circuit-type
         example: level-1
-      - yang_name: hello-padding/disable
-        example: true
-      - yang_name: hello-padding/sometimes
-        example: false
-      - yang_name: priority/priority-value
-        tf_name: priority
-        example: 10
+      - yang_name: hello-padding
+        example: "always"
+      - yang_name: priority-levels/priority-level
+        tf_name: priority_levels
+        type: List
+        attributes:
+          - yang_name: level-number
+            id: true
+            example: 1
+          - yang_name: priority
+            example: 10
       - yang_name: point-to-point
         example: false
-      - yang_name: passive
-        example: false
-      - yang_name: suppressed
-        example: false
-      - yang_name: shutdown
-        example: false
+      - yang_name: state
+        example: "passive"

@@ -23,7 +23,7 @@ data "iosxr_ipv6_prefix_list" "example" {
 
 ### Required
 
-- `prefix_list_name` (String) Name of a prefix list - maximum 32 characters
+- `prefix_list_name` (String) Name of a prefix list - maximum 128 characters
 
 ### Optional
 

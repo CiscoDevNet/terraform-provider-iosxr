@@ -6,7 +6,7 @@ resource "iosxr_domain" "example" {
     }
   ]
   lookup_disable          = true
-  lookup_source_interface = "Loopback2147483647"
+  lookup_source_interface = "Loopback214"
   name                    = "DOMAIN"
   ipv4_hosts = [
     {

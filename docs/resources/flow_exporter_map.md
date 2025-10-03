@@ -39,7 +39,7 @@ resource "iosxr_flow_exporter_map" "example" {
 
 ### Required
 
-- `name` (String) Exporter map name - maximum 32 characters
+- `name` (String) Exporter map name
 - `version_export_format` (String) Specify export format
   - Choices: `ipfix`, `protobuf`, `sflow`, `v9`
 
@@ -54,7 +54,7 @@ resource "iosxr_flow_exporter_map" "example" {
   - Range: `0`-`63`
 - `packet_length` (Number) Export Packet maximum L3 length, should conform to outgoing interface mtu
   - Range: `512`-`9000`
-- `source` (String) Source interface
+- `source` (String) Source interface whose address can be used as source address for export packets
 - `transport_udp` (Number) Use UDP as transport protocol
   - Range: `1024`-`65535`
 - `version_options_class_table_timeout` (Number) Specify export timeout

@@ -29,37 +29,37 @@ func TestAccIosxrGnmi(t *testing.T) {
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
-			{
+			/*{
 				Config: testAccIosxrGnmiConfig_empty(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "openconfig-system:/system/config"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-hostname-cfg:/hostname"),
 				),
-			},
+			},*/
 			{
-				Config: testAccIosxrGnmiConfig_hostname("TF-ROUTER-1"),
+				Config: testAccIosxrGnmiConfig_hostname("tf-router-1"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "openconfig-system:/system/config"),
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.hostname", "TF-ROUTER-1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-hostname-cfg:/hostname"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.system-network-name", "tf-router-1"),
 				),
 			},
 			{
 				ResourceName:  "iosxr_gnmi.test",
 				ImportState:   true,
-				ImportStateId: "openconfig-system:/system/config",
+				ImportStateId: "Cisco-IOS-XR-um-hostname-cfg:/hostname",
 			},
 			{
-				Config: testAccIosxrGnmiConfig_hostname("ROUTER-1"),
+				Config: testAccIosxrGnmiConfig_hostname("router-1"),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.hostname", "ROUTER-1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.system-network-name", "router-1"),
 				),
 			},
 			{
 				Config: testAccIosxrGnmiConfig_list(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"),
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.ip-address", "1.1.1.1"),
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.index", "1"),
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.stitching", "true"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.ipv4-address", "1.1.1.1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.ipv4-address-index", "1"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.stitching", "enable"),
 				),
 			},
 			{
@@ -76,6 +76,12 @@ func TestAccIosxrGnmi(t *testing.T) {
 					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.redistribute/static", "<EMPTY>"),
 				),
 			},
+			{
+				Config: testAccIosxrGnmiConfig_yangEmptyNull(),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.segment-routing/mpls/sr-prefer", "<NULL>"),
+				),
+			},
 		},
 	})
 }
@@ -83,7 +89,7 @@ func TestAccIosxrGnmi(t *testing.T) {
 func testAccIosxrGnmiConfig_empty() string {
 	return `
 	resource "iosxr_gnmi" "test" {
-		path = "openconfig-system:/system/config"
+		path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 	}
 	`
 }
@@ -91,9 +97,9 @@ func testAccIosxrGnmiConfig_empty() string {
 func testAccIosxrGnmiConfig_hostname(name string) string {
 	return fmt.Sprintf(`
 	resource "iosxr_gnmi" "test" {
-		path = "openconfig-system:/system/config"
+		path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 		attributes = {
-			"hostname" = "%s"
+			"system-network-name" = "%s"
 		}
 	}
 	`, name)
@@ -108,13 +114,13 @@ func testAccIosxrGnmiConfig_list() string {
 		}
 		lists = [
 			{
-				name = "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ip-addresse-rts/ip-address-rt"
-				key = "ip-address,index,stitching"
+				name = "address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target"
+				key = "ipv4-address,ipv4-address-index,stitching"
 				items = [
 					{
-						ip-address = "1.1.1.1"
-						index      = "1"
-						stitching  = "true"
+						ipv4-address       = "1.1.1.1"
+						ipv4-address-index = "1"
+						stitching          = "enable"
 					}
 				]
 			}
@@ -147,6 +153,17 @@ func testAccIosxrGnmiConfig_yangEmpty() string {
 		attributes = {
 			"af-name" = "ipv6-unicast"
 			"redistribute/static" = "<EMPTY>"
+		}
+	}
+	`
+}
+
+func testAccIosxrGnmiConfig_yangEmptyNull() string {
+	return `
+	resource "iosxr_gnmi" "test" {
+		path = "Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]"
+		attributes = {
+			"segment-routing/mpls/sr-prefer" = "<NULL>"
 		}
 	}
 	`

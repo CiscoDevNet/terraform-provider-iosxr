@@ -82,7 +82,23 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Route-policy for additional paths selection",
 				Computed:            true,
 			},
+			"additional_paths_selection_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable additional paths selection",
+				Computed:            true,
+			},
+			"allocate_label_all": schema.BoolAttribute{
+				MarkdownDescription: "Allocate labels for all prefixes",
+				Computed:            true,
+			},
 			"allocate_label_all_unlabeled_path": schema.BoolAttribute{
+				MarkdownDescription: "Allocate label for unlabeled paths too",
+				Computed:            true,
+			},
+			"allocate_label_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Allocate label route policy",
+				Computed:            true,
+			},
+			"allocate_label_route_policy_unlabeled_path": schema.BoolAttribute{
 				MarkdownDescription: "Allocate label for unlabeled paths too",
 				Computed:            true,
 			},
@@ -90,20 +106,52 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Advertise best-external path",
 				Computed:            true,
 			},
-			"allocate_label_all": schema.BoolAttribute{
-				MarkdownDescription: "Allocate labels for all prefixes",
-				Computed:            true,
-			},
 			"maximum_paths_ebgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: "eBGP-multipath",
+				MarkdownDescription: "Number of paths (limit includes backup path)",
 				Computed:            true,
 			},
-			"maximum_paths_eibgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: "eiBGP-multipath",
+			"maximum_paths_ebgp_selective": schema.BoolAttribute{
+				MarkdownDescription: "Allow multipaths only from marked neighbors",
+				Computed:            true,
+			},
+			"maximum_paths_ebgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to specify ORF and inbound filter",
 				Computed:            true,
 			},
 			"maximum_paths_ibgp_multipath": schema.Int64Attribute{
-				MarkdownDescription: "iBGP-multipath",
+				MarkdownDescription: "Number of paths (limit includes backup path)",
+				Computed:            true,
+			},
+			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
+				MarkdownDescription: "Deterministic Multipath selection primarily on IGP metric order",
+				Computed:            true,
+			},
+			"maximum_paths_ibgp_selective": schema.BoolAttribute{
+				MarkdownDescription: "Allow multipaths only from marked neighbors",
+				Computed:            true,
+			},
+			"maximum_paths_ibgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to specify ORF and inbound filter",
+				Computed:            true,
+			},
+			"maximum_paths_eibgp_multipath": schema.Int64Attribute{
+				MarkdownDescription: "Number of paths (limit includes backup path)",
+				Computed:            true,
+			},
+			"maximum_paths_eibgp_equal_cost": schema.BoolAttribute{
+				MarkdownDescription: "Preserve equal nexthop IGP metric criteria for multipath eligiblity between same path-types (iBGP or eBGP)",
+				Computed:            true,
+			},
+			"maximum_paths_eibgp_selective": schema.BoolAttribute{
+				MarkdownDescription: "Allow multipaths only from marked neighbors",
+				Computed:            true,
+			},
+			"maximum_paths_eibgp_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy to specify ORF and inbound filter",
+				Computed:            true,
+			},
+			"maximum_paths_unique_nexthop_check_disable": schema.BoolAttribute{
+				MarkdownDescription: "Disable multipath unique nexthop check",
 				Computed:            true,
 			},
 			"nexthop_trigger_delay_critical": schema.Int64Attribute{
@@ -114,6 +162,10 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "For non-critical notification",
 				Computed:            true,
 			},
+			"label_mode_per_prefix": schema.BoolAttribute{
+				MarkdownDescription: "Set per perfix label mode",
+				Computed:            true,
+			},
 			"label_mode_per_ce": schema.BoolAttribute{
 				MarkdownDescription: "Set per CE label mode",
 				Computed:            true,
@@ -122,41 +174,33 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Set per VRF label mode",
 				Computed:            true,
 			},
-			"redistribute_connected": schema.BoolAttribute{
-				MarkdownDescription: "Connected routes",
+			"label_mode_per_vrf_46": schema.BoolAttribute{
+				MarkdownDescription: "Set per VRF 46 label mode",
 				Computed:            true,
 			},
-			"redistribute_connected_metric": schema.Int64Attribute{
-				MarkdownDescription: "Metric for redistributed routes",
+			"label_mode_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Use a route policy to select prefixes for label allocation mode",
 				Computed:            true,
 			},
-			"redistribute_connected_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Route policy reference",
+			"label_mode_per_nexthop_received_label": schema.BoolAttribute{
+				MarkdownDescription: "Set label mode per nexthop and received label",
 				Computed:            true,
 			},
-			"redistribute_static": schema.BoolAttribute{
-				MarkdownDescription: "Static routes",
-				Computed:            true,
-			},
-			"redistribute_static_metric": schema.Int64Attribute{
-				MarkdownDescription: "Metric for redistributed routes",
-				Computed:            true,
-			},
-			"redistribute_static_route_policy": schema.StringAttribute{
-				MarkdownDescription: "Route policy reference",
+			"label_mode_per_nexthop_received_label_allocate_secondary_label": schema.BoolAttribute{
+				MarkdownDescription: "Allocate secondary label to avoid label oscillation insymmetric PIC deployments",
 				Computed:            true,
 			},
 			"aggregate_addresses": schema.ListNestedAttribute{
-				MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
+				MarkdownDescription: "Configure BGP aggregate entries",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
-							MarkdownDescription: "IPv6 Aggregate address and mask or masklength",
+							MarkdownDescription: "IPaddress",
 							Computed:            true,
 						},
-						"masklength": schema.Int64Attribute{
-							MarkdownDescription: "Network in prefix/length format (prefix part)",
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
 							Computed:            true,
 						},
 						"as_set": schema.BoolAttribute{
@@ -171,112 +215,188 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 							MarkdownDescription: "Filter more specific routes from updates",
 							Computed:            true,
 						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route-policy to modify the attributes",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Aggreate address specific description",
+							Computed:            true,
+						},
+						"set_tag": schema.Int64Attribute{
+							MarkdownDescription: "Set a IGP tag value on the route",
+							Computed:            true,
+						},
 					},
 				},
 			},
 			"networks": schema.ListNestedAttribute{
-				MarkdownDescription: "IPv6 network and mask or masklength",
+				MarkdownDescription: "Specify a network to announce via BGP",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
-							MarkdownDescription: "IPv6 network and mask or masklength",
+							MarkdownDescription: "IPaddress",
 							Computed:            true,
 						},
-						"masklength": schema.Int64Attribute{
-							MarkdownDescription: "Network in prefix/length format (prefix part)",
+						"prefix": schema.Int64Attribute{
+							MarkdownDescription: "IP address prefix",
 							Computed:            true,
 						},
 						"route_policy": schema.StringAttribute{
 							MarkdownDescription: "Route-policy to modify the attributes",
 							Computed:            true,
 						},
-					},
-				},
-			},
-			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "ISO IS-IS",
-				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"instance_name": schema.StringAttribute{
-							MarkdownDescription: "ISO IS-IS",
+						"backdoor": schema.BoolAttribute{
+							MarkdownDescription: "Specify a BGP backdoor route",
 							Computed:            true,
 						},
-						"level_one": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 1 routes",
-							Computed:            true,
-						},
-						"level_one_two": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 2 ISIS routes",
-							Computed:            true,
-						},
-						"level_one_two_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
-							Computed:            true,
-						},
-						"level_one_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
-							Computed:            true,
-						},
-						"level_two": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 2 ISIS routes",
-							Computed:            true,
-						},
-						"level_two_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
-							Computed:            true,
-						},
-						"level_one_inter_area": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
-							Computed:            true,
-						},
-						"metric": schema.Int64Attribute{
-							MarkdownDescription: "Metric for redistributed routes",
-							Computed:            true,
-						},
-						"route_policy": schema.StringAttribute{
-							MarkdownDescription: "Route policy reference",
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
 							Computed:            true,
 						},
 					},
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: "Open Shortest Path First (OSPF or OSPFv3)",
+				MarkdownDescription: "Redistribute OSPF routes",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"router_tag": schema.StringAttribute{
-							MarkdownDescription: "Open Shortest Path First (OSPF)",
+							MarkdownDescription: "OSPF router tag",
 							Computed:            true,
 						},
 						"match_internal": schema.BoolAttribute{
 							MarkdownDescription: "Redistribute OSPF internal routes",
 							Computed:            true,
 						},
-						"match_internal_external": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF external routes",
-							Computed:            true,
-						},
-						"match_internal_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF NSSA external routes",
-							Computed:            true,
-						},
 						"match_external": schema.BoolAttribute{
 							MarkdownDescription: "Redistribute OSPF external routes",
-							Computed:            true,
-						},
-						"match_external_nssa_external": schema.BoolAttribute{
-							MarkdownDescription: "Redistribute OSPF NSSA external routes",
 							Computed:            true,
 						},
 						"match_nssa_external": schema.BoolAttribute{
 							MarkdownDescription: "Redistribute OSPF NSSA external routes",
 							Computed:            true,
 						},
+						"match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and external routes",
+							Computed:            true,
+						},
+						"match_internal_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 1 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 1 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 1 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 2 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 2 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external type 2 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal, external and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF internal and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 1 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 1 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 1 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 2 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 2 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external type 2 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF external and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPF NSSA external type 2 routes",
+							Computed:            true,
+						},
 						"metric": schema.Int64Attribute{
 							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
 							Computed:            true,
 						},
 						"route_policy": schema.StringAttribute{
@@ -285,6 +405,290 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 						},
 					},
 				},
+			},
+			"redistribute_ospfv3": schema.ListNestedAttribute{
+				MarkdownDescription: "Redistribute OSPFv3 routes",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"router_tag": schema.StringAttribute{
+							MarkdownDescription: "OSPFv3 router tag",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external routes",
+							Computed:            true,
+						},
+						"match_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and external routes",
+							Computed:            true,
+						},
+						"match_internal_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 1 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 1 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 1 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 2 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 2 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external type 2 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal, external and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and NSSA external routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_internal_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 internal and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 1 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 1 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_1_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 1 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 2 and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 2 and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_2_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external type 2 and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external and NSSA external routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external and NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_external_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 external and NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"match_nssa_external_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 NSSA external type 1 routes",
+							Computed:            true,
+						},
+						"match_nssa_external_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute OSPFv3 NSSA external type 2 routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"redistribute_eigrp": schema.ListNestedAttribute{
+				MarkdownDescription: "Redistribute EIGRP routes",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "EIGRP instance name",
+							Computed:            true,
+						},
+						"match_internal": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute EIGRP internal routes",
+							Computed:            true,
+						},
+						"match_internal_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute EIGRP internal and external routes",
+							Computed:            true,
+						},
+						"match_external": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute EIGRP external routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"redistribute_isis": schema.ListNestedAttribute{
+				MarkdownDescription: "Redistribute ISIS routes",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"instance_name": schema.StringAttribute{
+							MarkdownDescription: "ISIS instance name",
+							Computed:            true,
+						},
+						"level_1": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 1 routes",
+							Computed:            true,
+						},
+						"level_1_level_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 1 and level 2 routes",
+							Computed:            true,
+						},
+						"level_1_level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 1, level 2 and level 1 inter-area routes",
+							Computed:            true,
+						},
+						"level_1_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 1 and level 1 inter-area routes",
+							Computed:            true,
+						},
+						"level_2": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 2 routes",
+							Computed:            true,
+						},
+						"level_2_level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 2 and level 1 inter-area routes",
+							Computed:            true,
+						},
+						"level_1_inter_area": schema.BoolAttribute{
+							MarkdownDescription: "Redistribute ISIS level 1 inter-area routes",
+							Computed:            true,
+						},
+						"metric": schema.Int64Attribute{
+							MarkdownDescription: "Metric for redistributed routes",
+							Computed:            true,
+						},
+						"multipath": schema.BoolAttribute{
+							MarkdownDescription: "Enable installation of multiple paths from RIB",
+							Computed:            true,
+						},
+						"route_policy": schema.StringAttribute{
+							MarkdownDescription: "Route policy reference",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"redistribute_connected": schema.BoolAttribute{
+				MarkdownDescription: "Redistribute connected routes",
+				Computed:            true,
+			},
+			"redistribute_connected_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_connected_multipath": schema.BoolAttribute{
+				MarkdownDescription: "Enable installation of multiple paths from RIB",
+				Computed:            true,
+			},
+			"redistribute_connected_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
+			"redistribute_static": schema.BoolAttribute{
+				MarkdownDescription: "Redistribute static routes",
+				Computed:            true,
+			},
+			"redistribute_static_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_static_multipath": schema.BoolAttribute{
+				MarkdownDescription: "Enable installation of multiple paths from RIB",
+				Computed:            true,
+			},
+			"redistribute_static_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
+			},
+			"redistribute_rip": schema.BoolAttribute{
+				MarkdownDescription: "Redistribute RIP routes",
+				Computed:            true,
+			},
+			"redistribute_rip_metric": schema.Int64Attribute{
+				MarkdownDescription: "Metric for redistributed routes",
+				Computed:            true,
+			},
+			"redistribute_rip_multipath": schema.BoolAttribute{
+				MarkdownDescription: "Enable installation of multiple paths from RIB",
+				Computed:            true,
+			},
+			"redistribute_rip_route_policy": schema.StringAttribute{
+				MarkdownDescription: "Route policy reference",
+				Computed:            true,
 			},
 		},
 	}

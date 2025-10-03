@@ -15,20 +15,37 @@ attributes:
     example: My Neighbor Group Description
   - yang_name: update-source
     example: Loopback0
-  - yang_name: advertisement-interval/time-in-seconds
+  - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
     tf_name: advertisement_interval_seconds
     optional: true
     delete_parent: true
     example: 10
-  - yang_name: advertisement-interval/time-in-milliseconds
+  - yang_name: advertisement-interval/advertisement-interval-time-in-milliseconds
     tf_name: advertisement_interval_milliseconds
     delete_parent: true
     example: 500
     exclude_test: true
-  - yang_name: ao/key-chain-name
-    example: BGP-GROUP1-CLIENTS
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/key-chain-name
+    xpath: ao/key-chain-name/key-chain-name
+    tf_name: ao_key_chain_name
+    delete_parent: true
     exclude_test: true
-  - yang_name: ao/include-tcp-options/enable
+    example: "BGP-GROUP1-CLIENTS"
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/include-tcp-options
+    xpath: ao/key-chain-name/include-tcp-options
+    tf_name: ao_key_chain_include_tcp_options
+    delete_parent: true
+    example: "enable"
+    exclude_test: true
+  - yang_name: ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection
+    xpath: ao/key-chain-name/accept-ao-mismatch-connection
+    tf_name: ao_key_chain_accept_mismatch
+    example: "enable"
+    exclude_test: true
+  - yang_name: ao/AO/INHERITANCE-DISABLE/inheritance-disable
+    tf_name: ao_inheritance_disable
+    xpath: ao/inheritance-disable
+    delete_parent: true
     example: true
     exclude_test: true
   - yang_name: bfd/minimum-interval
@@ -39,23 +56,86 @@ attributes:
     example: true
   - yang_name: bfd/fast-detect/strict-mode
     example: false
-  - yang_name: bfd/fast-detect/inheritance-disable
+  - yang_name: bfd/fast-detect/disable
+    delete_parent: true
     example: false
-  - yang_name: local-as/as-number
+  - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
+    xpath: local-as/inheritance-disable
+    tf_name: local_as_inheritance_disable
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: local-as/LOCAL-AS/AS/as/as-number
+    xpath: local-as/as/as-number
     tf_name: local_as
+    delete_parent: true
     exclude_test: true
-    example: 65003
-  - yang_name: local-as/no-prepend
-    exclude_test: true
+    example: "65001"
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend
+    xpath: local-as/as/no-prepend
+    tf_name: local_as_no_prepend
     example: true
-  - yang_name: local-as/no-prepend/replace-as
+    exclude_test: true
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as
+    xpath: local-as/as/no-prepend/replace-as
     tf_name: local_as_replace_as
+    delete_parent: true
     exclude_test: true
     example: true
-  - yang_name: local-as/no-prepend/replace-as/dual-as
+  - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as
+    xpath: local-as/as/no-prepend/replace-as/dual-as
     tf_name: local_as_dual_as
+    delete_parent: true
     exclude_test: true
     example: true
+  - yang_name: password/encrypted
+    type: String
+    tf_name: password
+    no_augment_config: true
+    optional: true
+    example: 12341C2713181F13253920
+    description: "Specifies an ENCRYPTED password will follow"
+  - yang_name: password/inheritance-disable
+    tf_name: password_inheritance_disable
+    type: Bool
+    type_yang_bool: empty
+    no_augment_config: true
+    optional: true
+    example: false
+    description: "Prevent password from being inherited from parent"
+  - yang_name: timers/keepalive-interval
+    tf_name: timers_keepalive_interval
+    delete_parent: true
+    example: 10
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/zero/zero
+    tf_name: timers_keepalive_zero
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/zero/minimum-acceptable-holdtime
+    tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
+    delete_parent: true
+    exclude_test: true
+    example: 10
+  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
+    xpath: timers/holdtime/holdtime-number
+    tf_name: timers_holdtime
+    delete_parent: true
+    example: 20
+  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/holdtime/zero
+    tf_name: timers_holdtime_zero
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
+    xpath: timers/holdtime/minimum-acceptable-holdtime
+    tf_name: timers_holdtime_minimum_acceptable_holdtime
+    delete_parent: true
+    exclude_test: true
+    example: 30
   - yang_name: address-families/address-family
     tf_name: address_families
     type: List
@@ -78,19 +158,8 @@ attributes:
       - yang_name: route-policy/out
         example: ROUTE_POLICY_1
       - yang_name: use/af-group
-        example: ROUTE_POLICY_1
+        example: AF_GROUP_1
         exclude_test: true
-  - yang_name: timers/keepalive-interval
-    optional: true
-    delete_parent: true
-    example: 3
-  - yang_name: timers/holdtime
-    optional: true
-    delete_parent: true
-    example: 10
-  - yang_name: timers/minimum-acceptable-holdtime
-    delete_parent: true
-    example: 9
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]

@@ -24,7 +24,7 @@ resource "iosxr_extcommunity_soo_set" "example" {
 
 ### Required
 
-- `rpl` (String) Extended Community SOO Set
+- `rpl` (String) Configures an extended community soo set
 - `set_name` (String) Set name
 
 ### Optional

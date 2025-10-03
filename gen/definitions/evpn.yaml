@@ -5,3 +5,32 @@ doc_category: EVPN
 attributes:
   - yang_name: source/interface
     example: Loopback0
+  - yang_name: interface/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/1"
+      - yang_name: ethernet-segment
+        tf_name: ethernet_segment_enable
+        example: true
+      - yang_name: ethernet-segment/identifier/type/zero/esi
+        tf_name: ethernet_segment_esi_zero
+        example: "01.02.03.04.05.06.07.08.09"
+  - yang_name: segment-routing/srv6
+    tf_name: srv6
+    example: true
+  - yang_name: segment-routing/srv6/locators/locator
+    tf_name: srv6_locators
+    type: List
+    attributes:
+      - yang_name: locator-name
+        id: true
+        example: "LOC1"
+      - yang_name: usid/allocation/wide-local-id-block
+        tf_name: usid_allocation_wide_local_id_block
+        example: true
+  - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
+    tf_name: srv6_usid_allocation_wide_local_id_block
+    example: true

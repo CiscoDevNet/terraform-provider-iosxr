@@ -70,28 +70,8 @@ func (d *EVPNInterfaceDataSource) Schema(ctx context.Context, req datasource.Sch
 				MarkdownDescription: "Core isolation group",
 				Computed:            true,
 			},
-			"ethernet_segment_identifier_type_zero_bytes_1": schema.StringAttribute{
-				MarkdownDescription: "1st Byte, used up to version 7.7.x",
-				Computed:            true,
-			},
-			"ethernet_segment_identifier_type_zero_bytes_23": schema.StringAttribute{
-				MarkdownDescription: "2nd and 3rd Bytes, used up to version 7.7.x",
-				Computed:            true,
-			},
-			"ethernet_segment_identifier_type_zero_bytes_45": schema.StringAttribute{
-				MarkdownDescription: "4th and 5th Bytes, used up to version 7.7.x",
-				Computed:            true,
-			},
-			"ethernet_segment_identifier_type_zero_bytes_67": schema.StringAttribute{
-				MarkdownDescription: "6th and 7th Bytes, used up to version 7.7.x",
-				Computed:            true,
-			},
-			"ethernet_segment_identifier_type_zero_bytes_89": schema.StringAttribute{
-				MarkdownDescription: "8th and 9th Bytes, used up to version 7.7.x",
-				Computed:            true,
-			},
 			"ethernet_segment_identifier_type_zero_esi": schema.StringAttribute{
-				MarkdownDescription: "ESI value, used instead of `bytes-x` from version 7.8.1`",
+				MarkdownDescription: "ESI value",
 				Computed:            true,
 			},
 			"ethernet_segment_load_balancing_mode_all_active": schema.BoolAttribute{

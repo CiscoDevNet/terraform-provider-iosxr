@@ -1,15 +1,19 @@
 resource "iosxr_router_bgp_neighbor_group" "example" {
-  as_number                           = "65001"
-  name                                = "GROUP1"
-  remote_as                           = "65001"
-  description                         = "My Neighbor Group Description"
-  update_source                       = "Loopback0"
-  advertisement_interval_seconds      = 10
-  bfd_minimum_interval                = 3
-  bfd_multiplier                      = 4
-  bfd_fast_detect                     = true
-  bfd_fast_detect_strict_mode         = false
-  bfd_fast_detect_inheritance_disable = false
+  as_number                      = "65001"
+  name                           = "GROUP1"
+  remote_as                      = "65001"
+  description                    = "My Neighbor Group Description"
+  update_source                  = "Loopback0"
+  advertisement_interval_seconds = 10
+  bfd_minimum_interval           = 3
+  bfd_multiplier                 = 4
+  bfd_fast_detect                = true
+  bfd_fast_detect_strict_mode    = false
+  bfd_fast_detect_disable        = false
+  password                       = "12341C2713181F13253920"
+  password_inheritance_disable   = false
+  timers_keepalive_interval      = 10
+  timers_holdtime                = 20
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"
@@ -22,7 +26,4 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       route_policy_out                           = "ROUTE_POLICY_1"
     }
   ]
-  timers_keepalive_interval          = 3
-  timers_holdtime                    = "10"
-  timers_minimum_acceptable_holdtime = "9"
 }

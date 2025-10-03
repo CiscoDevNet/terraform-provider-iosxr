@@ -37,6 +37,7 @@ type SegmentRouting struct {
 	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
 	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
+	Enable                types.Bool   `tfsdk:"enable"`
 }
 
 type SegmentRoutingData struct {
@@ -46,6 +47,7 @@ type SegmentRoutingData struct {
 	GlobalBlockUpperBound types.Int64  `tfsdk:"global_block_upper_bound"`
 	LocalBlockLowerBound  types.Int64  `tfsdk:"local_block_lower_bound"`
 	LocalBlockUpperBound  types.Int64  `tfsdk:"local_block_upper_bound"`
+	Enable                types.Bool   `tfsdk:"enable"`
 }
 
 func (data SegmentRouting) getPath() string {
@@ -69,6 +71,11 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 	}
 	if !data.LocalBlockUpperBound.IsNull() && !data.LocalBlockUpperBound.IsUnknown() {
 		body, _ = sjson.Set(body, "local-block.upper-bound", strconv.FormatInt(data.LocalBlockUpperBound.ValueInt64(), 10))
+	}
+	if !data.Enable.IsNull() && !data.Enable.IsUnknown() {
+		if data.Enable.ValueBool() {
+			body, _ = sjson.Set(body, "enable", map[string]string{})
+		}
 	}
 	return body
 }
@@ -94,6 +101,15 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LocalBlockUpperBound = types.Int64Null()
 	}
+	if value := gjson.GetBytes(res, "enable"); !data.Enable.IsNull() {
+		if value.Exists() {
+			data.Enable = types.BoolValue(true)
+		} else {
+			data.Enable = types.BoolValue(false)
+		}
+	} else {
+		data.Enable = types.BoolNull()
+	}
 }
 
 func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
@@ -109,6 +125,11 @@ func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
 	}
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
+	}
 }
 
 func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
@@ -123,6 +144,11 @@ func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "local-block.upper-bound"); value.Exists() {
 		data.LocalBlockUpperBound = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "enable"); value.Exists() {
+		data.Enable = types.BoolValue(true)
+	} else {
+		data.Enable = types.BoolValue(false)
 	}
 }
 
@@ -140,11 +166,17 @@ func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRo
 	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
 	}
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	}
 	return deletedItems
 }
 
 func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
+	}
 	return emptyLeafsDelete
 }
 
@@ -161,6 +193,9 @@ func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	}
 	if !data.LocalBlockUpperBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	}
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
 	}
 	return deletePaths
 }

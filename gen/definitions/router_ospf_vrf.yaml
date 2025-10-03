@@ -26,12 +26,14 @@ attributes:
   - yang_name: router-id
     example: 10.11.12.13
   - yang_name: redistribute/connected
+    description: "Redistribute connected routes"
     example: true
   - yang_name: redistribute/connected/tag
     example: 1
   - yang_name: redistribute/connected/metric-type
     example: 1
   - yang_name: redistribute/static
+    description: "Redistribute static routes"
     example: true
   - yang_name: redistribute/static/tag
     example: 2
@@ -62,6 +64,7 @@ attributes:
         example: 0
   - yang_name: redistribute/bgp/as
     tf_name: redistribute_bgp
+    description: "Redistribute BGP routes"
     type: List
     attributes:
       - yang_name: as-number
@@ -73,6 +76,7 @@ attributes:
         example: 1
   - yang_name: redistribute/isis
     tf_name: redistribute_isis
+    description: "Redistribute ISIS routes"
     type: List
     attributes:
       - yang_name: instance-name
@@ -90,6 +94,7 @@ attributes:
         example: 1
   - yang_name: redistribute/ospf
     tf_name: redistribute_ospf
+    description: "Redistribute OSPF routes"
     type: List
     attributes:
       - yang_name: instance-name
@@ -105,3 +110,9 @@ attributes:
         example: 4
       - yang_name: metric-type
         example: 1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]
+    attributes:
+      - name: process-name
+        value: OSPF1

@@ -150,87 +150,95 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable SNMP entity FRU control traps",
 				Computed:            true,
 			},
-			"traps_isis_all": schema.StringAttribute{
+			"traps_isis_all": schema.BoolAttribute{
 				MarkdownDescription: "Enable all IS-IS traps",
 				Computed:            true,
 			},
-			"traps_isis_database_overload": schema.StringAttribute{
+			"traps_isis_database_overload": schema.BoolAttribute{
 				MarkdownDescription: "isisDatabaseOverload",
 				Computed:            true,
 			},
-			"traps_isis_manual_address_drops": schema.StringAttribute{
+			"traps_isis_manual_address_drops": schema.BoolAttribute{
 				MarkdownDescription: "isisManualAddressDrops",
 				Computed:            true,
 			},
-			"traps_isis_corrupted_lsp_detected": schema.StringAttribute{
+			"traps_isis_corrupted_lsp_detected": schema.BoolAttribute{
 				MarkdownDescription: "isisCorruptedLSPDetected",
 				Computed:            true,
 			},
-			"traps_isis_attempt_to_exceed_max_sequence": schema.StringAttribute{
+			"traps_isis_attempt_to_exceed_max_sequence": schema.BoolAttribute{
 				MarkdownDescription: "isisAttemptToExceedMaxSequence",
 				Computed:            true,
 			},
-			"traps_isis_id_len_mismatch": schema.StringAttribute{
+			"traps_isis_id_len_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "isisIDLenMismatch",
 				Computed:            true,
 			},
-			"traps_isis_max_area_addresses_mismatch": schema.StringAttribute{
+			"traps_isis_max_area_addresses_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "isisMaxAreaAddressesMismatch",
 				Computed:            true,
 			},
-			"traps_isis_own_lsp_purge": schema.StringAttribute{
+			"traps_isis_own_lsp_purge": schema.BoolAttribute{
 				MarkdownDescription: "isisOwnLSPPurge",
 				Computed:            true,
 			},
-			"traps_isis_sequence_number_skip": schema.StringAttribute{
+			"traps_isis_sequence_number_skip": schema.BoolAttribute{
 				MarkdownDescription: "isisSequenceNumberSkip",
 				Computed:            true,
 			},
-			"traps_isis_authentication_type_failure": schema.StringAttribute{
+			"traps_isis_authentication_type_failure": schema.BoolAttribute{
 				MarkdownDescription: "isisAuthenticationTypeFailure",
 				Computed:            true,
 			},
-			"traps_isis_authentication_failure": schema.StringAttribute{
+			"traps_isis_authentication_failure": schema.BoolAttribute{
 				MarkdownDescription: "isisAuthenticationFailure",
 				Computed:            true,
 			},
-			"traps_isis_version_skew": schema.StringAttribute{
+			"traps_isis_version_skew": schema.BoolAttribute{
 				MarkdownDescription: "isisVersionSkew",
 				Computed:            true,
 			},
-			"traps_isis_area_mismatch": schema.StringAttribute{
+			"traps_isis_area_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "isisAreaMismatch",
 				Computed:            true,
 			},
-			"traps_isis_rejected_adjacency": schema.StringAttribute{
+			"traps_isis_rejected_adjacency": schema.BoolAttribute{
 				MarkdownDescription: "isisRejectedAdjacency",
 				Computed:            true,
 			},
-			"traps_isis_lsp_too_large_to_propagate": schema.StringAttribute{
+			"traps_isis_lsp_too_large_to_propagate": schema.BoolAttribute{
 				MarkdownDescription: "isisLSPTooLargeToPropagate",
 				Computed:            true,
 			},
-			"traps_isis_orig_lsp_buff_size_mismatch": schema.StringAttribute{
+			"traps_isis_orig_lsp_buff_size_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "isisOrigLSPBuffSizeMismatch",
 				Computed:            true,
 			},
-			"traps_isis_protocols_supported_mismatch": schema.StringAttribute{
+			"traps_isis_protocols_supported_mismatch": schema.BoolAttribute{
 				MarkdownDescription: "isisProtocolsSupportedMismatch",
 				Computed:            true,
 			},
-			"traps_isis_adjacency_change": schema.StringAttribute{
+			"traps_isis_adjacency_change": schema.BoolAttribute{
 				MarkdownDescription: "isisAdjacencyChange",
 				Computed:            true,
 			},
-			"traps_isis_lsp_error_detected": schema.StringAttribute{
+			"traps_isis_lsp_error_detected": schema.BoolAttribute{
 				MarkdownDescription: "isisLSPErrorDetected",
 				Computed:            true,
 			},
-			"traps_bgp_cbgp2_updown": schema.BoolAttribute{
+			"traps_bgp_cbgp_two_enable": schema.BoolAttribute{
+				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 traps",
+				Computed:            true,
+			},
+			"traps_bgp_cbgp_two_updown": schema.BoolAttribute{
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},
-			"traps_bgp_bgp4_mib_updown": schema.BoolAttribute{
+			"traps_bgp_enable_updown": schema.BoolAttribute{
+				MarkdownDescription: "Enable BGP4-MIB and CISCO-BGP4-MIB traps",
+				Computed:            true,
+			},
+			"traps_bgp_enable_cisco_bgp4_mib": schema.BoolAttribute{
 				MarkdownDescription: "Enable CISCO-BGP4-MIB v2 up/down traps",
 				Computed:            true,
 			},

@@ -84,7 +84,7 @@ func (d *SNMPServerVRFHostDataSource) Schema(ctx context.Context, req datasource
 							Computed:            true,
 						},
 						"version_v3_security_level": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "Security level",
 							Computed:            true,
 						},
 					},

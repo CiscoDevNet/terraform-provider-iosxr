@@ -24,7 +24,7 @@ resource "iosxr_rd_set" "example" {
 
 ### Required
 
-- `rpl` (String) RD Set
+- `rpl` (String) Configures a rd-set
 - `set_name` (String) Set name
 
 ### Optional

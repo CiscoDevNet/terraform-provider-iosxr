@@ -2,6 +2,7 @@
 name: Telnet
 path: Cisco-IOS-XR-um-telnet-cfg:/telnet
 doc_category: System
+test_tags: [XRV9K]
 attributes:
   - yang_name: ipv4/client/source-interface
     example: GigabitEthernet0/0/0/1
@@ -30,6 +31,5 @@ attributes:
       - yang_name: vrf-name
         id: true
         example: TOI
-      - yang_name: ipv4/dscp 
+      - yang_name: ipv4/dscp
         example: 55
-      

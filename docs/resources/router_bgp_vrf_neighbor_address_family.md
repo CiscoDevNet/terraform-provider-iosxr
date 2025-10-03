@@ -14,20 +14,20 @@ This resource can manage the Router BGP VRF Neighbor Address Family configuratio
 
 ```terraform
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
-  as_number                                     = "65001"
-  vrf_name                                      = "VRF1"
-  neighbor_address                              = "10.1.1.2"
-  af_name                                       = "ipv4-unicast"
-  route_policy_in                               = "ROUTE_POLICY_1"
-  route_policy_out                              = "ROUTE_POLICY_1"
-  default_originate_route_policy                = "ROUTE_POLICY_1"
-  next_hop_self                                 = true
-  next_hop_self_inheritance_disable             = true
-  soft_reconfiguration_inbound_always           = true
-  send_community_ebgp_inheritance_disable       = true
-  remove_private_as                             = true
-  remove_private_as_entire_aspath               = true
-  remove_private_as_inbound_inheritance_disable = true
+  as_number                               = "65001"
+  vrf_name                                = "VRF1"
+  address                                 = "10.1.1.2"
+  af_name                                 = "ipv4-unicast"
+  route_policy_in                         = "ROUTE_POLICY_1"
+  route_policy_out                        = "ROUTE_POLICY_1"
+  next_hop_self                           = true
+  next_hop_self_inheritance_disable       = true
+  soft_reconfiguration_inbound_always     = true
+  send_community_ebgp_inheritance_disable = true
+  remove_private_as_inbound               = true
+  remove_private_as_inbound_entire_aspath = true
+  remove_private_as                       = true
+  remove_private_as_entire_aspath         = true
 }
 ```
 
@@ -36,11 +36,11 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 ### Required
 
+- `address` (String) IPaddress
 - `af_name` (String) Enter Address Family command mode
   - Choices: `all-address-family`, `ipv4-flowspec`, `ipv4-labeled-unicast`, `ipv4-mdt`, `ipv4-multicast`, `ipv4-mvpn`, `ipv4-rt-filter`, `ipv4-sr-policy`, `ipv4-tunnel`, `ipv4-unicast`, `ipv6-flowspec`, `ipv6-labeled-unicast`, `ipv6-multicast`, `ipv6-mvpn`, `ipv6-sr-policy`, `ipv6-unicast`, `l2vpn-evpn`, `l2vpn-mspw`, `l2vpn-vpls-vpws`, `link-state-link-state`, `vpnv4-flowspec`, `vpnv4-multicast`, `vpnv4-unicast`, `vpnv6-flowspec`, `vpnv6-multicast`, `vpnv6-unicast`
 - `as_number` (String) bgp as-number
-- `neighbor_address` (String) Neighbor address
-- `vrf_name` (String) Specify a vrf name
+- `vrf_name` (String) VRF name - maximum length 32 characters
 
 ### Optional
 
@@ -58,7 +58,6 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
-- `remove_private_as_internal_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
@@ -73,5 +72,5 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 Import is supported using the following syntax:
 
 ```shell
-terraform import iosxr_router_bgp_vrf_neighbor_address_family.example "<as_number>,<vrf_name>,<neighbor_address>,<af_name>"
+terraform import iosxr_router_bgp_vrf_neighbor_address_family.example "<as_number>,<vrf_name>,<address>,<af_name>"
 ```

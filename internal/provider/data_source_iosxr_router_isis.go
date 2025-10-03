@@ -70,11 +70,11 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Area type (level)",
 				Computed:            true,
 			},
-			"set_overload_bit_on_startup_advertise_as_overloaded": schema.BoolAttribute{
-				MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
+			"set_overload_bit": schema.BoolAttribute{
+				MarkdownDescription: "Signal other routers not to use us in SPF",
 				Computed:            true,
 			},
-			"set_overload_bit_on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+			"set_overload_bit_on_startup_time_to_advertise": schema.Int64Attribute{
 				MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
 				Computed:            true,
 			},
@@ -95,15 +95,11 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"level_id": schema.Int64Attribute{
-							MarkdownDescription: "Set overload-bit for one level only",
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Level",
 							Computed:            true,
 						},
-						"on_startup_advertise_as_overloaded": schema.BoolAttribute{
-							MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
-							Computed:            true,
-						},
-						"on_startup_advertise_as_overloaded_time_to_advertise": schema.Int64Attribute{
+						"on_startup_time_to_advertise": schema.Int64Attribute{
 							MarkdownDescription: "Time in seconds to advertise ourself as overloaded after reboot",
 							Computed:            true,
 						},
@@ -127,11 +123,11 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"nsf_cisco": schema.BoolAttribute{
-				MarkdownDescription: "Cisco Proprietary NSF restart",
+				MarkdownDescription: "Checkpoint NSF restart",
 				Computed:            true,
 			},
 			"nsf_ietf": schema.BoolAttribute{
-				MarkdownDescription: "IETF NSF restar",
+				MarkdownDescription: "IETF NSF restart",
 				Computed:            true,
 			},
 			"nsf_lifetime": schema.Int64Attribute{
@@ -151,15 +147,15 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 			},
 			"lsp_gen_interval_maximum_wait": schema.Int64Attribute{
-				MarkdownDescription: "Maximum delay before generating an LSP",
+				MarkdownDescription: "Maximum delay before generating an LSP [5000]",
 				Computed:            true,
 			},
 			"lsp_gen_interval_initial_wait": schema.Int64Attribute{
-				MarkdownDescription: "Initial delay before generating an LSP",
+				MarkdownDescription: "Initial delay before generating an LSP [50]",
 				Computed:            true,
 			},
 			"lsp_gen_interval_secondary_wait": schema.Int64Attribute{
-				MarkdownDescription: "Secondary delay before generating an LSP",
+				MarkdownDescription: "Secondary delay before generating an LSP [200]",
 				Computed:            true,
 			},
 			"lsp_refresh_interval": schema.Int64Attribute{
@@ -170,8 +166,72 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Set maximum LSP lifetime",
 				Computed:            true,
 			},
+			"lsp_password_accept_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+			},
+			"lsp_password_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set lsp-password for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set lsp-password for LSPs/SNPs at this level only",
+							Computed:            true,
+						},
+						"encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"lsp_password_text_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+			},
+			"lsp_password_text_send_only": schema.BoolAttribute{
+				MarkdownDescription: "specify SNP packets authentication mode",
+				Computed:            true,
+			},
+			"lsp_password_text_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+				Computed:            true,
+			},
+			"lsp_password_text_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: "Enable purge originator identification",
+				Computed:            true,
+			},
+			"lsp_password_hmac_md5_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+			},
+			"lsp_password_hmac_md5_send_only": schema.BoolAttribute{
+				MarkdownDescription: "specify SNP packets authentication mode",
+				Computed:            true,
+			},
+			"lsp_password_hmac_md5_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+				Computed:            true,
+			},
+			"lsp_password_hmac_md5_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: "Enable purge originator identification",
+				Computed:            true,
+			},
 			"lsp_password_keychain": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
+				Computed:            true,
+			},
+			"lsp_password_keychain_send_only": schema.BoolAttribute{
+				MarkdownDescription: "specify SNP packets authentication mode",
+				Computed:            true,
+			},
+			"lsp_password_keychain_snp_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Authenticate outgoing SNPs, no check on incoming SNPs",
+				Computed:            true,
+			},
+			"lsp_password_keychain_enable_poi": schema.BoolAttribute{
+				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
@@ -192,7 +252,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							MarkdownDescription: "Affinity map configuration",
+							MarkdownDescription: "Affinity attribute name",
 							Computed:            true,
 						},
 						"bit_position": schema.Int64Attribute{
@@ -207,16 +267,16 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"algorithm_number": schema.Int64Attribute{
-							MarkdownDescription: "Flex Algorithm definition",
+						"number": schema.Int64Attribute{
+							MarkdownDescription: "Algorithm number",
 							Computed:            true,
 						},
 						"advertise_definition": schema.BoolAttribute{
 							MarkdownDescription: "Advertise the Flex-Algo Definition",
 							Computed:            true,
 						},
-						"metric_type_delay": schema.BoolAttribute{
-							MarkdownDescription: "Use delay as metric",
+						"metric_type": schema.StringAttribute{
+							MarkdownDescription: "Metric-type used by flex-algo calculation",
 							Computed:            true,
 						},
 					},
@@ -228,7 +288,7 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"net_id": schema.StringAttribute{
-							MarkdownDescription: "A Network Entity Title (NET) for this process",
+							MarkdownDescription: "NET (XX.XXXX. ... .XXXX.XX)",
 							Computed:            true,
 						},
 					},
@@ -240,39 +300,39 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "Enter the IS-IS interface configuration submode",
+							MarkdownDescription: "Interface to configure",
 							Computed:            true,
 						},
 						"circuit_type": schema.StringAttribute{
 							MarkdownDescription: "Configure circuit type for interface",
 							Computed:            true,
 						},
-						"hello_padding_disable": schema.BoolAttribute{
-							MarkdownDescription: "Disable hello-padding",
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: "Add padding to IS-IS hello packets",
 							Computed:            true,
 						},
-						"hello_padding_sometimes": schema.BoolAttribute{
-							MarkdownDescription: "Enable hello-padding during adjacency formation only",
+						"priority_levels": schema.ListNestedAttribute{
+							MarkdownDescription: "Set priority for one level only",
 							Computed:            true,
-						},
-						"priority": schema.Int64Attribute{
-							MarkdownDescription: "Set priority for Designated Router election",
-							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"level_number": schema.Int64Attribute{
+										MarkdownDescription: "Set priority for this level only",
+										Computed:            true,
+									},
+									"priority": schema.Int64Attribute{
+										MarkdownDescription: "Set priority for Designated Router election",
+										Computed:            true,
+									},
+								},
+							},
 						},
 						"point_to_point": schema.BoolAttribute{
 							MarkdownDescription: "Treat active LAN interface as point-to-point",
 							Computed:            true,
 						},
-						"passive": schema.BoolAttribute{
+						"state": schema.StringAttribute{
 							MarkdownDescription: "Do not establish adjacencies over this interface",
-							Computed:            true,
-						},
-						"suppressed": schema.BoolAttribute{
-							MarkdownDescription: "Do not advertise connected prefixes of this interface",
-							Computed:            true,
-						},
-						"shutdown": schema.BoolAttribute{
-							MarkdownDescription: "Shutdown IS-IS on this interface",
 							Computed:            true,
 						},
 					},

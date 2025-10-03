@@ -35,11 +35,6 @@ type EVPNInterface struct {
 	DeleteMode                                       types.String `tfsdk:"delete_mode"`
 	InterfaceName                                    types.String `tfsdk:"interface_name"`
 	CoreIsolationGroup                               types.Int64  `tfsdk:"core_isolation_group"`
-	EthernetSegmentIdentifierTypeZeroBytes1          types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_1"`
-	EthernetSegmentIdentifierTypeZeroBytes23         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_23"`
-	EthernetSegmentIdentifierTypeZeroBytes45         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_45"`
-	EthernetSegmentIdentifierTypeZeroBytes67         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_67"`
-	EthernetSegmentIdentifierTypeZeroBytes89         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_89"`
 	EthernetSegmentIdentifierTypeZeroEsi             types.String `tfsdk:"ethernet_segment_identifier_type_zero_esi"`
 	EthernetSegmentLoadBalancingModeAllActive        types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
 	EthernetSegmentLoadBalancingModePortActive       types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
@@ -52,11 +47,6 @@ type EVPNInterfaceData struct {
 	Id                                               types.String `tfsdk:"id"`
 	InterfaceName                                    types.String `tfsdk:"interface_name"`
 	CoreIsolationGroup                               types.Int64  `tfsdk:"core_isolation_group"`
-	EthernetSegmentIdentifierTypeZeroBytes1          types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_1"`
-	EthernetSegmentIdentifierTypeZeroBytes23         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_23"`
-	EthernetSegmentIdentifierTypeZeroBytes45         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_45"`
-	EthernetSegmentIdentifierTypeZeroBytes67         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_67"`
-	EthernetSegmentIdentifierTypeZeroBytes89         types.String `tfsdk:"ethernet_segment_identifier_type_zero_bytes_89"`
 	EthernetSegmentIdentifierTypeZeroEsi             types.String `tfsdk:"ethernet_segment_identifier_type_zero_esi"`
 	EthernetSegmentLoadBalancingModeAllActive        types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_all_active"`
 	EthernetSegmentLoadBalancingModePortActive       types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_port_active"`
@@ -79,21 +69,6 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 	}
 	if !data.CoreIsolationGroup.IsNull() && !data.CoreIsolationGroup.IsUnknown() {
 		body, _ = sjson.Set(body, "core-isolation-group", strconv.FormatInt(data.CoreIsolationGroup.ValueInt64(), 10))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() && !data.EthernetSegmentIdentifierTypeZeroBytes1.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.bytes-1", data.EthernetSegmentIdentifierTypeZeroBytes1.ValueString())
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() && !data.EthernetSegmentIdentifierTypeZeroBytes23.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.bytes-23", data.EthernetSegmentIdentifierTypeZeroBytes23.ValueString())
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() && !data.EthernetSegmentIdentifierTypeZeroBytes45.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.bytes-45", data.EthernetSegmentIdentifierTypeZeroBytes45.ValueString())
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() && !data.EthernetSegmentIdentifierTypeZeroBytes67.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.bytes-67", data.EthernetSegmentIdentifierTypeZeroBytes67.ValueString())
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() && !data.EthernetSegmentIdentifierTypeZeroBytes89.IsUnknown() {
-		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.bytes-89", data.EthernetSegmentIdentifierTypeZeroBytes89.ValueString())
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsUnknown() {
 		body, _ = sjson.Set(body, "ethernet-segment.identifier.type.zero.esi", data.EthernetSegmentIdentifierTypeZeroEsi.ValueString())
@@ -126,31 +101,6 @@ func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	} else {
 		data.CoreIsolationGroup = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-1"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroBytes1 = types.StringValue(value.String())
-	} else {
-		data.EthernetSegmentIdentifierTypeZeroBytes1 = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-23"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroBytes23 = types.StringValue(value.String())
-	} else {
-		data.EthernetSegmentIdentifierTypeZeroBytes23 = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-45"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroBytes45 = types.StringValue(value.String())
-	} else {
-		data.EthernetSegmentIdentifierTypeZeroBytes45 = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-67"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroBytes67 = types.StringValue(value.String())
-	} else {
-		data.EthernetSegmentIdentifierTypeZeroBytes67 = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-89"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() {
-		data.EthernetSegmentIdentifierTypeZeroBytes89 = types.StringValue(value.String())
-	} else {
-		data.EthernetSegmentIdentifierTypeZeroBytes89 = types.StringNull()
 	}
 	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() && !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
@@ -199,21 +149,6 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-1"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes1 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-23"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes23 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-45"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes45 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-67"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes67 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-89"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes89 = types.StringValue(value.String())
-	}
 	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
 	}
@@ -242,21 +177,6 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-1"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes1 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-23"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes23 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-45"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes45 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-67"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes67 = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.bytes-89"); value.Exists() {
-		data.EthernetSegmentIdentifierTypeZeroBytes89 = types.StringValue(value.String())
 	}
 	if value := gjson.GetBytes(res, "ethernet-segment.identifier.type.zero.esi"); value.Exists() {
 		data.EthernetSegmentIdentifierTypeZeroEsi = types.StringValue(value.String())
@@ -287,21 +207,6 @@ func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterf
 	deletedItems := make([]string, 0)
 	if !state.CoreIsolationGroup.IsNull() && data.CoreIsolationGroup.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/core-isolation-group", state.getPath()))
-	}
-	if !state.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
-	}
-	if !state.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
-	}
-	if !state.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
-	}
-	if !state.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
-	}
-	if !state.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() && data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
 	}
 	if !state.EthernetSegmentIdentifierTypeZeroEsi.IsNull() && data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", state.getPath()))
@@ -342,21 +247,6 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.CoreIsolationGroup.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/core-isolation-group", data.getPath()))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes23.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes45.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes67.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
-	}
-	if !data.EthernetSegmentIdentifierTypeZeroBytes89.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))
 	}
 	if !data.EthernetSegmentIdentifierTypeZeroEsi.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ethernet-segment/identifier/type/zero", data.getPath()))

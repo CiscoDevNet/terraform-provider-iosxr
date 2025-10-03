@@ -168,7 +168,7 @@ func (d *SegmentRoutingTEDataSource) Schema(ctx context.Context, req datasource.
 							Computed:            true,
 						},
 						"constraint_segments_sid_algorithm": schema.Int64Attribute{
-							MarkdownDescription: "'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs",
+							MarkdownDescription: "'0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs",
 							Computed:            true,
 						},
 					},

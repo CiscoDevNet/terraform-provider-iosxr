@@ -46,12 +46,29 @@ func TestAccDataSourceIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config(),
+				Config: testAccDataSourceIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig + testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
 
 func testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
@@ -77,6 +94,7 @@ func testAccDataSourceIosxrRouterVRRPInterfaceIPv4Config() string {
 	config += `		priority_decrement = 22` + "\n"
 	config += `	}]` + "\n"
 	config += `	bfd_fast_detect_peer_ipv4 = "33.33.33.3"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

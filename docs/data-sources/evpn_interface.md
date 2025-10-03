@@ -32,12 +32,7 @@ data "iosxr_evpn_interface" "example" {
 ### Read-Only
 
 - `core_isolation_group` (Number) Core isolation group
-- `ethernet_segment_identifier_type_zero_bytes_1` (String) 1st Byte, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_23` (String) 2nd and 3rd Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_45` (String) 4th and 5th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_67` (String) 6th and 7th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_bytes_89` (String) 8th and 9th Bytes, used up to version 7.7.x
-- `ethernet_segment_identifier_type_zero_esi` (String) ESI value, used instead of `bytes-x` from version 7.8.1`
+- `ethernet_segment_identifier_type_zero_esi` (String) ESI value
 - `ethernet_segment_load_balancing_mode_all_active` (Boolean) All-Active load balancing
 - `ethernet_segment_load_balancing_mode_port_active` (Boolean) Port-Active load balancing
 - `ethernet_segment_load_balancing_mode_single_active` (Boolean) Single-Active load balancing

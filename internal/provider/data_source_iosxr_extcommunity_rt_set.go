@@ -67,7 +67,7 @@ func (d *ExtcommunityRTSetDataSource) Schema(ctx context.Context, req datasource
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Extended Community RT Set",
+				MarkdownDescription: "Configures an extended community rt set",
 				Computed:            true,
 			},
 		},

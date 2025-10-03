@@ -125,3 +125,4 @@ test_prerequisites:
         value: ROUTE_POLICY_1
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

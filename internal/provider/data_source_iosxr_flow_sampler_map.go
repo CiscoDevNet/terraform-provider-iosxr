@@ -63,7 +63,7 @@ func (d *FlowSamplerMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"name": schema.StringAttribute{
-				MarkdownDescription: "Sampler map name - maximum 32 characters",
+				MarkdownDescription: "Sampler map name",
 				Required:            true,
 			},
 			"random": schema.Int64Attribute{

@@ -32,4 +32,4 @@ data "iosxr_rd_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) RD Set
+- `rpl` (String) Configures a rd-set

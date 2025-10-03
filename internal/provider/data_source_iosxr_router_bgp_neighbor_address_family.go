@@ -66,15 +66,27 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "bgp as-number",
 				Required:            true,
 			},
-			"neighbor_address": schema.StringAttribute{
-				MarkdownDescription: "Neighbor address",
+			"address": schema.StringAttribute{
+				MarkdownDescription: "IPaddress",
 				Required:            true,
 			},
 			"af_name": schema.StringAttribute{
 				MarkdownDescription: "Enter Address Family command mode",
 				Required:            true,
 			},
+			"import_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: "Import routes using stitching RTs",
+				Computed:            true,
+			},
+			"import_stitching_rt_re_originate": schema.BoolAttribute{
+				MarkdownDescription: "Re-originate imported routes",
+				Computed:            true,
+			},
 			"import_stitching_rt_re_originate_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: "Reoriginate imported routes by attaching stitching RTs",
+				Computed:            true,
+			},
+			"import_re_originate": schema.BoolAttribute{
 				MarkdownDescription: "Reoriginate imported routes by attaching stitching RTs",
 				Computed:            true,
 			},
@@ -86,7 +98,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Prevent route-reflector-client from being inherited from the parent",
 				Computed:            true,
 			},
-			"advertise_vpnv4_unicast_enable_re_originated_stitching_rt": schema.BoolAttribute{
+			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: "Advertise re-originated and local routes with stitching Route-Targets",
 				Computed:            true,
 			},
@@ -98,8 +110,8 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Prevent next-hop-self from being inherited from the parent",
 				Computed:            true,
 			},
-			"encapsulation_type_srv6": schema.BoolAttribute{
-				MarkdownDescription: "SRv6 encapsulation",
+			"encapsulation_type": schema.StringAttribute{
+				MarkdownDescription: "Specify encapsulation type",
 				Computed:            true,
 			},
 			"route_policy_in": schema.StringAttribute{
@@ -123,7 +135,7 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				Computed:            true,
 			},
 			"maximum_prefix_limit": schema.Int64Attribute{
-				MarkdownDescription: "Maximum number of prefixes to accept from this peer",
+				MarkdownDescription: "maximum no. of prefix limit",
 				Computed:            true,
 			},
 			"maximum_prefix_threshold": schema.Int64Attribute{
@@ -140,6 +152,10 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 			},
 			"maximum_prefix_warning_only": schema.BoolAttribute{
 				MarkdownDescription: "Only give warning message when limit is exceeded",
+				Computed:            true,
+			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: "Originate default route to this neighbor",
 				Computed:            true,
 			},
 			"default_originate_route_policy": schema.StringAttribute{

@@ -18,6 +18,7 @@ resource "iosxr_interface" "example" {
   l2transport                     = false
   point_to_point                  = false
   multipoint                      = false
+  dampening                       = true
   dampening_decay_half_life_value = 2
   ipv4_point_to_point             = true
   service_policy_input = [
@@ -44,20 +45,20 @@ resource "iosxr_interface" "example" {
   ipv4_access_group_ingress_acl1                           = "ACL1"
   ipv4_access_group_ingress_hardware_count                 = true
   ipv4_access_group_ingress_interface_statistics           = true
-  ipv4_access_group_ingress_compress_level                 = 0
+  ipv4_access_group_ingress_compress                       = 0
   ipv4_access_group_egress_acl                             = "ACL1"
   ipv4_access_group_egress_hardware_count                  = true
   ipv4_access_group_egress_interface_statistics            = true
-  ipv4_access_group_egress_compress_level                  = 0
+  ipv4_access_group_egress_compress                        = 0
   ipv6_verify_unicast_source_reachable_via_type            = "any"
   ipv6_verify_unicast_source_reachable_via_allow_self_ping = true
   ipv6_verify_unicast_source_reachable_via_allow_default   = false
   ipv6_access_group_ingress_acl1                           = "ACL2"
   ipv6_access_group_ingress_interface_statistics           = true
-  ipv6_access_group_ingress_compress_level                 = 0
-  ipv6_access_group_egress_acl1                            = "ACL2"
+  ipv6_access_group_ingress_compress                       = 0
+  ipv6_access_group_egress_acl                             = "ACL2"
   ipv6_access_group_egress_interface_statistics            = true
-  ipv6_access_group_egress_compress_level                  = 0
+  ipv6_access_group_egress_compress                        = 0
   ipv6_link_local_address                                  = "fe80::1"
   ipv6_link_local_zone                                     = "0"
   ipv6_autoconfig                                          = false
@@ -99,6 +100,7 @@ resource "iosxr_interface" "example" {
   - Range: `1`-`65535`
 - `bundle_shutdown` (Boolean) Bring all links in the bundle down to Standby state
 - `cdp` (Boolean) Enable CDP on an interface
+- `dampening` (Boolean) configure state dampening on the given interface
 - `dampening_decay_half_life_value` (Number) Decay half life (in minutes)
   - Range: `1`-`45`
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
@@ -116,13 +118,13 @@ resource "iosxr_interface" "example" {
 - `flow_ipv6_ingress_monitor_samplers` (Attributes List) Specify a flow monitor and sampler for incoming packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitor_samplers))
 - `flow_ipv6_ingress_monitors` (Attributes List) Specify a flow monitor for packets (see [below for nested schema](#nestedatt--flow_ipv6_ingress_monitors))
 - `ipv4_access_group_egress_acl` (String) Access-list name
-- `ipv4_access_group_egress_compress_level` (Number) Specify ACL compression in hardware
-  - Range: `0`-`3`
+- `ipv4_access_group_egress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv4_access_group_egress_hardware_count` (Boolean) Count packets in hardware
 - `ipv4_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_access_group_ingress_acl1` (String) Access-list name
-- `ipv4_access_group_ingress_compress_level` (Number) Specify ACL compression in hardware
-  - Range: `0`-`3`
+- `ipv4_access_group_ingress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv4_access_group_ingress_hardware_count` (Boolean) Count packets in hardware
 - `ipv4_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv4_address` (String) IP address
@@ -132,13 +134,13 @@ resource "iosxr_interface" "example" {
 - `ipv4_verify_unicast_source_reachable_via_allow_self_ping` (Boolean) Allow router to ping itself (opens vulnerability in verification)
 - `ipv4_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
-- `ipv6_access_group_egress_acl1` (String) Access-list name
-- `ipv6_access_group_egress_compress_level` (Number) Specify ACL compression in hardware
-  - Range: `0`-`3`
+- `ipv6_access_group_egress_acl` (String) Access-list name
+- `ipv6_access_group_egress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv6_access_group_egress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_access_group_ingress_acl1` (String) Access-list name
-- `ipv6_access_group_ingress_compress_level` (Number) Specify ACL compression in hardware
-  - Range: `0`-`3`
+- `ipv6_access_group_ingress_compress` (Number) Specify ACL compression in hardware
+  - Range: `0`-`4`
 - `ipv6_access_group_ingress_interface_statistics` (Boolean) Per interface statistics in hardware
 - `ipv6_addresses` (Attributes List) IPv6 address (see [below for nested schema](#nestedatt--ipv6_addresses))
 - `ipv6_autoconfig` (Boolean) Enable slaac on Mgmt interface
@@ -150,7 +152,7 @@ resource "iosxr_interface" "example" {
 - `ipv6_verify_unicast_source_reachable_via_type` (String) Source reachable type
   - Choices: `any`, `rx`
 - `l2transport` (Boolean) l2transport sub-interface
-- `l2transport_encapsulation_dot1q_second_dot1q` (String) End of VLAN range
+- `l2transport_encapsulation_dot1q_second_dot1q` (String) Single VLAN id or start of VLAN range
 - `l2transport_encapsulation_dot1q_vlan_id` (String) Single VLAN id or start of VLAN range
 - `load_interval` (Number) Specify interval for load calculation for an interface
 - `mtu` (Number) Set the MTU on an interface

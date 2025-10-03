@@ -34,12 +34,22 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSNMPServerVRFHostConfig(),
+				Config: testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig + testAccDataSourceIosxrSNMPServerVRFHostConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
@@ -50,6 +60,7 @@ func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
 	config += `		community_string = "COMMUNITY1"` + "\n"
 	config += `		version_v3_security_level = "auth"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

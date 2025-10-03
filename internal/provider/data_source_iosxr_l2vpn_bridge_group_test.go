@@ -32,17 +32,27 @@ func TestAccDataSourceIosxrL2VPNBridgeGroup(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrL2VPNBridgeGroupConfig(),
+				Config: testAccDataSourceIosxrL2VPNBridgeGroupPrerequisitesConfig + testAccDataSourceIosxrL2VPNBridgeGroupConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
+const testAccDataSourceIosxrL2VPNBridgeGroupPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+`
+
 func testAccDataSourceIosxrL2VPNBridgeGroupConfig() string {
 	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	group_name = "BG123"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

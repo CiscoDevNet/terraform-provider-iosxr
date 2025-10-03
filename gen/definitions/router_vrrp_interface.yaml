@@ -15,3 +15,6 @@ attributes:
     example: 255
   - yang_name: bfd/multiplier
     example: 33
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp

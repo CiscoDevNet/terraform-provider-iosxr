@@ -34,11 +34,11 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
+			Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
+		Config: testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -54,10 +54,28 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 	})
 }
 
+const testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]"
+	attributes = {
+		"group-name" = "BG123"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+`
+
 func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_bridge_group_bridge_domain" "test" {` + "\n"
 	config += `	bridge_group_name = "BG123"` + "\n"
 	config += `	bridge_domain_name = "BD123"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -72,6 +90,7 @@ func testAccIosxrL2VPNBridgeGroupBridgeDomainConfig_all() string {
 	config += `	vnis = [{` + "\n"
 	config += `		vni_id = 1234` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

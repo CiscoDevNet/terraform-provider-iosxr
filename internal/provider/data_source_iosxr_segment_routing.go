@@ -78,6 +78,10 @@ func (d *SegmentRoutingDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "SRLB Upper Bound",
 				Computed:            true,
 			},
+			"enable": schema.BoolAttribute{
+				MarkdownDescription: "enable SR",
+				Computed:            true,
+			},
 		},
 	}
 }

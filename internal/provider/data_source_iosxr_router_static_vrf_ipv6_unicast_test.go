@@ -45,12 +45,22 @@ func TestAccDataSourceIosxrRouterStaticVRFIPv6Unicast(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig(),
+				Config: testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig + testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterStaticVRFIPv6UnicastPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig() string {
 	config := `resource "iosxr_router_static_vrf_ipv6_unicast" "test" {` + "\n"
@@ -77,6 +87,7 @@ func testAccDataSourceIosxrRouterStaticVRFIPv6UnicastConfig() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

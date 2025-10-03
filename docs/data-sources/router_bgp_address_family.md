@@ -34,28 +34,53 @@ data "iosxr_router_bgp_address_family" "example" {
 ### Read-Only
 
 - `additional_paths_receive` (Boolean) Additional paths Receive capability
+- `additional_paths_selection_disable` (Boolean) Disable additional paths selection
 - `additional_paths_selection_route_policy` (String) Route-policy for additional paths selection
 - `additional_paths_send` (Boolean) Additional paths Send capability
 - `advertise_best_external` (Boolean) Advertise best-external path
-- `aggregate_addresses` (Attributes List) IPv6 Aggregate address and mask or masklength (see [below for nested schema](#nestedatt--aggregate_addresses))
+- `aggregate_addresses` (Attributes List) Configure BGP aggregate entries (see [below for nested schema](#nestedatt--aggregate_addresses))
 - `allocate_label_all` (Boolean) Allocate labels for all prefixes
 - `allocate_label_all_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
+- `allocate_label_route_policy` (String) Allocate label route policy
+- `allocate_label_route_policy_unlabeled_path` (Boolean) Allocate label for unlabeled paths too
 - `id` (String) The path of the retrieved object.
 - `label_mode_per_ce` (Boolean) Set per CE label mode
+- `label_mode_per_nexthop_received_label` (Boolean) Set label mode per nexthop and received label
+- `label_mode_per_nexthop_received_label_allocate_secondary_label` (Boolean) Allocate secondary label to avoid label oscillation insymmetric PIC deployments
+- `label_mode_per_prefix` (Boolean) Set per perfix label mode
 - `label_mode_per_vrf` (Boolean) Set per VRF label mode
-- `maximum_paths_ebgp_multipath` (Number) eBGP-multipath
-- `maximum_paths_eibgp_multipath` (Number) eiBGP-multipath
-- `maximum_paths_ibgp_multipath` (Number) iBGP-multipath
-- `networks` (Attributes List) IPv6 network and mask or masklength (see [below for nested schema](#nestedatt--networks))
+- `label_mode_per_vrf_46` (Boolean) Set per VRF 46 label mode
+- `label_mode_route_policy` (String) Use a route policy to select prefixes for label allocation mode
+- `maximum_paths_ebgp_multipath` (Number) Number of paths (limit includes backup path)
+- `maximum_paths_ebgp_route_policy` (String) Route policy to specify ORF and inbound filter
+- `maximum_paths_ebgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_eibgp_equal_cost` (Boolean) Preserve equal nexthop IGP metric criteria for multipath eligiblity between same path-types (iBGP or eBGP)
+- `maximum_paths_eibgp_multipath` (Number) Number of paths (limit includes backup path)
+- `maximum_paths_eibgp_route_policy` (String) Route policy to specify ORF and inbound filter
+- `maximum_paths_eibgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_ibgp_multipath` (Number) Number of paths (limit includes backup path)
+- `maximum_paths_ibgp_route_policy` (String) Route policy to specify ORF and inbound filter
+- `maximum_paths_ibgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_ibgp_unequal_cost_deterministic` (Boolean) Deterministic Multipath selection primarily on IGP metric order
+- `maximum_paths_unique_nexthop_check_disable` (Boolean) Disable multipath unique nexthop check
+- `networks` (Attributes List) Specify a network to announce via BGP (see [below for nested schema](#nestedatt--networks))
 - `nexthop_trigger_delay_critical` (Number) For critical notification
 - `nexthop_trigger_delay_non_critical` (Number) For non-critical notification
-- `redistribute_connected` (Boolean) Connected routes
+- `redistribute_connected` (Boolean) Redistribute connected routes
 - `redistribute_connected_metric` (Number) Metric for redistributed routes
+- `redistribute_connected_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_connected_route_policy` (String) Route policy reference
-- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF or OSPFv3) (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_static` (Boolean) Static routes
+- `redistribute_eigrp` (Attributes List) Redistribute EIGRP routes (see [below for nested schema](#nestedatt--redistribute_eigrp))
+- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_ospfv3` (Attributes List) Redistribute OSPFv3 routes (see [below for nested schema](#nestedatt--redistribute_ospfv3))
+- `redistribute_rip` (Boolean) Redistribute RIP routes
+- `redistribute_rip_metric` (Number) Metric for redistributed routes
+- `redistribute_rip_multipath` (Boolean) Enable installation of multiple paths from RIB
+- `redistribute_rip_route_policy` (String) Route policy reference
+- `redistribute_static` (Boolean) Redistribute static routes
 - `redistribute_static_metric` (Number) Metric for redistributed routes
+- `redistribute_static_multipath` (Boolean) Enable installation of multiple paths from RIB
 - `redistribute_static_route_policy` (String) Route policy reference
 
 <a id="nestedatt--aggregate_addresses"></a>
@@ -63,10 +88,13 @@ data "iosxr_router_bgp_address_family" "example" {
 
 Read-Only:
 
-- `address` (String) IPv6 Aggregate address and mask or masklength
+- `address` (String) IPaddress
 - `as_confed_set` (Boolean) Generate AS confed set path information
 - `as_set` (Boolean) Generate AS set path information
-- `masklength` (Number) Network in prefix/length format (prefix part)
+- `description` (String) Aggreate address specific description
+- `prefix` (Number) IP address prefix
+- `route_policy` (String) Route-policy to modify the attributes
+- `set_tag` (Number) Set a IGP tag value on the route
 - `summary_only` (Boolean) Filter more specific routes from updates
 
 
@@ -75,9 +103,25 @@ Read-Only:
 
 Read-Only:
 
-- `address` (String) IPv6 network and mask or masklength
-- `masklength` (Number) Network in prefix/length format (prefix part)
+- `address` (String) IPaddress
+- `backdoor` (Boolean) Specify a BGP backdoor route
+- `multipath` (Boolean) Enable installation of multiple paths from RIB
+- `prefix` (Number) IP address prefix
 - `route_policy` (String) Route-policy to modify the attributes
+
+
+<a id="nestedatt--redistribute_eigrp"></a>
+### Nested Schema for `redistribute_eigrp`
+
+Read-Only:
+
+- `instance_name` (String) EIGRP instance name
+- `match_external` (Boolean) Redistribute EIGRP external routes
+- `match_internal` (Boolean) Redistribute EIGRP internal routes
+- `match_internal_external` (Boolean) Redistribute EIGRP internal and external routes
+- `metric` (Number) Metric for redistributed routes
+- `multipath` (Boolean) Enable installation of multiple paths from RIB
+- `route_policy` (String) Route policy reference
 
 
 <a id="nestedatt--redistribute_isis"></a>
@@ -85,15 +129,16 @@ Read-Only:
 
 Read-Only:
 
-- `instance_name` (String) ISO IS-IS
-- `level_one` (Boolean) Redistribute ISIS level 1 routes
-- `level_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
-- `level_one_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
-- `level_one_two` (Boolean) Redistribute ISIS level 2 ISIS routes
-- `level_one_two_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
-- `level_two` (Boolean) Redistribute ISIS level 2 ISIS routes
-- `level_two_one_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `instance_name` (String) ISIS instance name
+- `level_1` (Boolean) Redistribute ISIS level 1 routes
+- `level_1_inter_area` (Boolean) Redistribute ISIS level 1 inter-area routes
+- `level_1_level_1_inter_area` (Boolean) Redistribute ISIS level 1 and level 1 inter-area routes
+- `level_1_level_2` (Boolean) Redistribute ISIS level 1 and level 2 routes
+- `level_1_level_2_level_1_inter_area` (Boolean) Redistribute ISIS level 1, level 2 and level 1 inter-area routes
+- `level_2` (Boolean) Redistribute ISIS level 2 routes
+- `level_2_level_1_inter_area` (Boolean) Redistribute ISIS level 2 and level 1 inter-area routes
 - `metric` (Number) Metric for redistributed routes
+- `multipath` (Boolean) Enable installation of multiple paths from RIB
 - `route_policy` (String) Route policy reference
 
 
@@ -103,11 +148,79 @@ Read-Only:
 Read-Only:
 
 - `match_external` (Boolean) Redistribute OSPF external routes
-- `match_external_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_external_1` (Boolean) Redistribute OSPF external type 1 routes
+- `match_external_1_nssa_external` (Boolean) Redistribute OSPF external type 1 and NSSA external routes
+- `match_external_1_nssa_external_1` (Boolean) Redistribute OSPF external type 1 and NSSA external type 1 routes
+- `match_external_1_nssa_external_2` (Boolean) Redistribute OSPF external type 1 and NSSA external type 2 routes
+- `match_external_2` (Boolean) Redistribute OSPF external type 2 routes
+- `match_external_2_nssa_external` (Boolean) Redistribute OSPF external type 2 and NSSA external routes
+- `match_external_2_nssa_external_1` (Boolean) Redistribute OSPF external type 2 and NSSA external type 1 routes
+- `match_external_2_nssa_external_2` (Boolean) Redistribute OSPF external type 2 and NSSA external type 2 routes
+- `match_external_nssa_external` (Boolean) Redistribute OSPF external and NSSA external routes
+- `match_external_nssa_external_1` (Boolean) Redistribute OSPF external and NSSA external type 1 routes
+- `match_external_nssa_external_2` (Boolean) Redistribute OSPF external and NSSA external type 2 routes
 - `match_internal` (Boolean) Redistribute OSPF internal routes
-- `match_internal_external` (Boolean) Redistribute OSPF external routes
-- `match_internal_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_internal_external` (Boolean) Redistribute OSPF internal and external routes
+- `match_internal_external_1` (Boolean) Redistribute OSPF internal and external type 1 routes
+- `match_internal_external_1_nssa_external` (Boolean) Redistribute OSPF internal, external type 1 and NSSA external routes
+- `match_internal_external_1_nssa_external_1` (Boolean) Redistribute OSPF internal, external type 1 and NSSA external type 1 routes
+- `match_internal_external_1_nssa_external_2` (Boolean) Redistribute OSPF internal, external type 1 and NSSA external type 2 routes
+- `match_internal_external_2` (Boolean) Redistribute OSPF internal and external type 2 routes
+- `match_internal_external_2_nssa_external` (Boolean) Redistribute OSPF internal, external type 2 and NSSA external routes
+- `match_internal_external_2_nssa_external_1` (Boolean) Redistribute OSPF internal, external type 2 and NSSA external type 1 routes
+- `match_internal_external_2_nssa_external_2` (Boolean) Redistribute OSPF internal, external type 2 and NSSA external type 2 routes
+- `match_internal_external_nssa_external` (Boolean) Redistribute OSPF internal, external and NSSA external routes
+- `match_internal_external_nssa_external_1` (Boolean) Redistribute OSPF internal, external and NSSA external type 1 routes
+- `match_internal_external_nssa_external_2` (Boolean) Redistribute OSPF internal, external and NSSA external type 2 routes
+- `match_internal_nssa_external` (Boolean) Redistribute OSPF internal and NSSA external routes
+- `match_internal_nssa_external_1` (Boolean) Redistribute OSPF internal and NSSA external type 1 routes
+- `match_internal_nssa_external_2` (Boolean) Redistribute OSPF internal and NSSA external type 2 routes
 - `match_nssa_external` (Boolean) Redistribute OSPF NSSA external routes
+- `match_nssa_external_1` (Boolean) Redistribute OSPF NSSA external type 1 routes
+- `match_nssa_external_2` (Boolean) Redistribute OSPF NSSA external type 2 routes
 - `metric` (Number) Metric for redistributed routes
+- `multipath` (Boolean) Enable installation of multiple paths from RIB
 - `route_policy` (String) Route policy reference
-- `router_tag` (String) Open Shortest Path First (OSPF)
+- `router_tag` (String) OSPF router tag
+
+
+<a id="nestedatt--redistribute_ospfv3"></a>
+### Nested Schema for `redistribute_ospfv3`
+
+Read-Only:
+
+- `match_external` (Boolean) Redistribute OSPFv3 external routes
+- `match_external_1` (Boolean) Redistribute OSPFv3 external type 1 routes
+- `match_external_1_nssa_external` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external routes
+- `match_external_1_nssa_external_1` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external type 1 routes
+- `match_external_1_nssa_external_2` (Boolean) Redistribute OSPFv3 external type 1 and NSSA external type 2 routes
+- `match_external_2` (Boolean) Redistribute OSPFv3 external type 2 routes
+- `match_external_2_nssa_external` (Boolean) Redistribute OSPFv3 external type 2 and NSSA external routes
+- `match_external_2_nssa_external_1` (Boolean) Redistribute OSPFv3 external type 2 and NSSA external type 1 routes
+- `match_external_2_nssa_external_2` (Boolean) Redistribute OSPFv3 external type 2 and NSSA external type 2 routes
+- `match_external_nssa_external` (Boolean) Redistribute OSPFv3 external and NSSA external routes
+- `match_external_nssa_external_1` (Boolean) Redistribute OSPFv3 external and NSSA external type 1 routes
+- `match_external_nssa_external_2` (Boolean) Redistribute OSPFv3 external and NSSA external type 2 routes
+- `match_internal` (Boolean) Redistribute OSPFv3 internal routes
+- `match_internal_external` (Boolean) Redistribute OSPFv3 internal and external routes
+- `match_internal_external_1` (Boolean) Redistribute OSPFv3 internal and external type 1 routes
+- `match_internal_external_1_nssa_external` (Boolean) Redistribute OSPFv3 internal, external type 1 and NSSA external routes
+- `match_internal_external_1_nssa_external_1` (Boolean) Redistribute OSPFv3 internal, external type 1 and NSSA external type 1 routes
+- `match_internal_external_1_nssa_external_2` (Boolean) Redistribute OSPFv3 internal, external type 1 and NSSA external type 2 routes
+- `match_internal_external_2` (Boolean) Redistribute OSPFv3 internal and external type 2 routes
+- `match_internal_external_2_nssa_external` (Boolean) Redistribute OSPFv3 internal, external type 2 and NSSA external routes
+- `match_internal_external_2_nssa_external_1` (Boolean) Redistribute OSPFv3 internal, external type 2 and NSSA external type 1 routes
+- `match_internal_external_2_nssa_external_2` (Boolean) Redistribute OSPFv3 internal, external type 2 and NSSA external type 2 routes
+- `match_internal_external_nssa_external` (Boolean) Redistribute OSPFv3 internal, external and NSSA external routes
+- `match_internal_external_nssa_external_1` (Boolean) Redistribute OSPFv3 internal, external and NSSA external type 1 routes
+- `match_internal_external_nssa_external_2` (Boolean) Redistribute OSPFv3 internal, external and NSSA external type 2 routes
+- `match_internal_nssa_external` (Boolean) Redistribute OSPFv3 internal and NSSA external routes
+- `match_internal_nssa_external_1` (Boolean) Redistribute OSPFv3 internal and NSSA external type 1 routes
+- `match_internal_nssa_external_2` (Boolean) Redistribute OSPFv3 internal and NSSA external type 2 routes
+- `match_nssa_external` (Boolean) Redistribute OSPFv3 NSSA external routes
+- `match_nssa_external_1` (Boolean) Redistribute OSPFv3 NSSA external type 1 routes
+- `match_nssa_external_2` (Boolean) Redistribute OSPFv3 NSSA external type 2 routes
+- `metric` (Number) Metric for redistributed routes
+- `multipath` (Boolean) Enable installation of multiple paths from RIB
+- `route_policy` (String) Route policy reference
+- `router_tag` (String) OSPFv3 router tag

@@ -32,4 +32,4 @@ data "iosxr_tag_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl_tag_set` (String) Tag Set
+- `rpl_tag_set` (String) Configures a tag-set

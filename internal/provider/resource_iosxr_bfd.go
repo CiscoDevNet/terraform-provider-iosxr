@@ -79,6 +79,10 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: helpers.NewAttributeDescription("Disable BFD echo mode").String,
 				Optional:            true,
 			},
+			"echo_latency_detect": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable BFD echo latency detection").String,
+				Optional:            true,
+			},
 			"echo_latency_detect_percentage": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Percentage of detection time to consider as bad latency").AddIntegerRangeDescription(100, 250).String,
 				Optional:            true,
@@ -98,15 +102,15 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 			},
 			"echo_ipv4_source": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("BFD echo source IP address").String,
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 					stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 				},
 			},
-			"echo_ipv4_bundle_per_member_preferred_minimum_interval": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The preferred minimum interval (in ms) for the BFD session").AddIntegerRangeDescription(15, 2000).String,
+			"echo_ipv4_bundle_per_member_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Set the preferred minimum interval for the BFD session").AddIntegerRangeDescription(15, 2000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(15, 2000),
@@ -121,11 +125,11 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"location_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Specify a location").String,
+						"location_id": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Fully qualified location specification").String,
 							Required:            true,
 							Validators: []validator.String{
-								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d+)`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`([a-zA-Z0-9_]*\d+/){1,2}([a-zA-Z0-9_]*\d*)`), ""),
 							},
 						},
 					},
@@ -199,13 +203,12 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 					int64validator.Between(1, 518400000),
 				},
 			},
-			"bundle_coexistence_bob_blb_inherit": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use inheritence mechanism").String,
+			"bundle_coexistence_bob_blb": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Coexistence for BoB and BLB").AddStringEnumDescription("inherit", "logical").String,
 				Optional:            true,
-			},
-			"bundle_coexistence_bob_blb_logical": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Use BFD logical Bundle natively").String,
-				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("inherit", "logical"),
+				},
 			},
 			"interfaces": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Configure BFD on an interface").String,
@@ -213,18 +216,21 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Configure BFD on an interface").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Select an interface to configure").String,
 							Required:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 							},
 						},
-						"echo_disable": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disable BFD echo mode for this interface").String,
+						"echo_disable": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable BFD echo mode for this interface").AddStringEnumDescription("disable", "enable").String,
 							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disable", "enable"),
+							},
 						},
 						"echo_ipv4_source": schema.StringAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("BFD echo source IP address").String,
+							MarkdownDescription: helpers.NewAttributeDescription("IPv4 address").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),

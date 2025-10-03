@@ -25,6 +25,15 @@ resource "iosxr_segment_routing_v6" "example" {
       prefix_length          = 48
     }
   ]
+  formats = [
+    {
+      name                                         = "usid-f3216"
+      format_enable                                = true
+      usid_local_id_block_ranges_lib_start         = 57344
+      usid_local_id_block_ranges_explict_lib_start = 65024
+      usid_wide_local_id_block_explicit_range      = 65527
+    }
+  ]
 }
 ```
 
@@ -38,11 +47,30 @@ resource "iosxr_segment_routing_v6" "example" {
 - `device` (String) A device name from the provider configuration.
 - `enable` (Boolean) Enable SRv6
 - `encapsulation_source_address` (String) Configure a source address
+- `formats` (Attributes List) Configure a SRv6 format (see [below for nested schema](#nestedatt--formats))
 - `locators` (Attributes List) Configure a SRv6 locator (see [below for nested schema](#nestedatt--locators))
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--formats"></a>
+### Nested Schema for `formats`
+
+Required:
+
+- `name` (String) Format name
+
+Optional:
+
+- `format_enable` (Boolean) Enable a SRv6 format
+- `usid_local_id_block_ranges_explict_lib_start` (Number) Start of Explicit LIB
+  - Range: `57444`-`65279`
+- `usid_local_id_block_ranges_lib_start` (Number) Start of LIB
+  - Range: `57344`-`57344`
+- `usid_wide_local_id_block_explicit_range` (Number) Specify uSID WLIB explicit range
+  - Range: `65520`-`65527`
+
 
 <a id="nestedatt--locators"></a>
 ### Nested Schema for `locators`

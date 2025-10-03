@@ -46,7 +46,7 @@ Read-Only:
 
 - `color` (Number) Color
 - `constraint_segments_protection_type` (String) Protection Type
-- `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for algorithm SIDs
+- `constraint_segments_sid_algorithm` (Number) '0' for regular SIDs, '1' for strict-spf SIDs, '128' - '255' for flexible algorithm SIDs
 - `dynamic_anycast_sid_inclusion` (Boolean) Anycast Prefix SID Inclusion. Applicable for SR-MPLS and SRv6 policies
 - `dynamic_metric_type` (String) Metric Type
 - `effective_metric_enable` (Boolean) True only

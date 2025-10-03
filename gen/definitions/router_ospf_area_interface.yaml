@@ -39,7 +39,7 @@ attributes:
     example: 3000
     optional: true
     delete_parent: true
-    exclude_test: true   
+    exclude_test: true
   - yang_name: prefix-sid/algorithms/algorithm
     tf_name: prefix_sid_algorithms
     type: List
@@ -65,3 +65,14 @@ attributes:
       - yang_name: absolute/n-flag-clear
         example: true
         exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]
+    attributes:
+      - name: process-name
+        value: OSPF1
+  - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/areas/area[area-id=0]
+    attributes:
+      - name: area-id
+        value: 0
+    dependencies: [0]

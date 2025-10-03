@@ -29,17 +29,16 @@ import (
 )
 
 type BGPASFormat struct {
-	Device  types.String `tfsdk:"device"`
-	Id      types.String `tfsdk:"id"`
-	Asdot   types.Bool   `tfsdk:"asdot"`
-	Asplain types.Bool   `tfsdk:"asplain"`
+	Device     types.String `tfsdk:"device"`
+	Id         types.String `tfsdk:"id"`
+	DeleteMode types.String `tfsdk:"delete_mode"`
+	AsFormat   types.String `tfsdk:"as_format"`
 }
 
 type BGPASFormatData struct {
-	Device  types.String `tfsdk:"device"`
-	Id      types.String `tfsdk:"id"`
-	Asdot   types.Bool   `tfsdk:"asdot"`
-	Asplain types.Bool   `tfsdk:"asplain"`
+	Device   types.String `tfsdk:"device"`
+	Id       types.String `tfsdk:"id"`
+	AsFormat types.String `tfsdk:"as_format"`
 }
 
 func (data BGPASFormat) getPath() string {
@@ -52,95 +51,49 @@ func (data BGPASFormatData) getPath() string {
 
 func (data BGPASFormat) toBody(ctx context.Context) string {
 	body := "{}"
-	if !data.Asdot.IsNull() && !data.Asdot.IsUnknown() {
-		if data.Asdot.ValueBool() {
-			body, _ = sjson.Set(body, "asdot", map[string]string{})
-		}
-	}
-	if !data.Asplain.IsNull() && !data.Asplain.IsUnknown() {
-		if data.Asplain.ValueBool() {
-			body, _ = sjson.Set(body, "asplain", map[string]string{})
-		}
+	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
+		body, _ = sjson.Set(body, "", data.AsFormat.ValueString())
 	}
 	return body
 }
 
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "asdot"); !data.Asdot.IsNull() {
-		if value.Exists() {
-			data.Asdot = types.BoolValue(true)
-		} else {
-			data.Asdot = types.BoolValue(false)
-		}
+	if value := gjson.GetBytes(res, ""); value.Exists() && !data.AsFormat.IsNull() {
+		data.AsFormat = types.StringValue(value.String())
 	} else {
-		data.Asdot = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "asplain"); !data.Asplain.IsNull() {
-		if value.Exists() {
-			data.Asplain = types.BoolValue(true)
-		} else {
-			data.Asplain = types.BoolValue(false)
-		}
-	} else {
-		data.Asplain = types.BoolNull()
+		data.AsFormat = types.StringNull()
 	}
 }
 
 func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
-		data.Asdot = types.BoolValue(true)
-	} else {
-		data.Asdot = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
-		data.Asplain = types.BoolValue(true)
-	} else {
-		data.Asplain = types.BoolValue(false)
+	if value := gjson.GetBytes(res, ""); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
 	}
 }
 
 func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "asdot"); value.Exists() {
-		data.Asdot = types.BoolValue(true)
-	} else {
-		data.Asdot = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "asplain"); value.Exists() {
-		data.Asplain = types.BoolValue(true)
-	} else {
-		data.Asplain = types.BoolValue(false)
+	if value := gjson.GetBytes(res, ""); value.Exists() {
+		data.AsFormat = types.StringValue(value.String())
 	}
 }
 
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
-	if !state.Asdot.IsNull() && data.Asdot.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/asdot", state.getPath()))
-	}
-	if !state.Asplain.IsNull() && data.Asplain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/asplain", state.getPath()))
+	if !state.AsFormat.IsNull() && data.AsFormat.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/", state.getPath()))
 	}
 	return deletedItems
 }
 
 func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.Asdot.IsNull() && !data.Asdot.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/asdot", data.getPath()))
-	}
-	if !data.Asplain.IsNull() && !data.Asplain.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/asplain", data.getPath()))
-	}
 	return emptyLeafsDelete
 }
 
 func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Asdot.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/asdot", data.getPath()))
-	}
-	if !data.Asplain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/asplain", data.getPath()))
+	if !data.AsFormat.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/", data.getPath()))
 	}
 	return deletePaths
 }

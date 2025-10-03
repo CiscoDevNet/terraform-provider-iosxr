@@ -31,7 +31,7 @@ data "iosxr_policy_map_qos" "example" {
 
 ### Read-Only
 
-- `classes` (Attributes List) (see [below for nested schema](#nestedatt--classes))
+- `classes` (Attributes List) QoS policy-map (see [below for nested schema](#nestedatt--classes))
 - `description` (String) Set description for this policy-map
 - `id` (String) The path of the retrieved object.
 
@@ -57,7 +57,7 @@ Read-Only:
 - `set_dscp` (String) Set IP DSCP (DiffServ CodePoint)
 - `set_mpls_experimental_topmost` (Number) Sets the experimental value of the MPLS packet top-most labels.
 - `shape_average_rate_unit` (String) Shape rate unit
-- `shape_average_rate_value` (String)
+- `shape_average_rate_value` (String) Value of Shape rate
 - `type` (String) The type of class-map
 
 <a id="nestedatt--classes--queue_limits"></a>

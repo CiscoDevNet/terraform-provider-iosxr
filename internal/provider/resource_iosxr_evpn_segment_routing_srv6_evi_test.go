@@ -32,18 +32,18 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.as_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.as_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "bgp_route_target_export_two_byte_as_format.0.assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "advertise_mac", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locator", "LOC12"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_evpn_segment_routing_srv6_evi.test", "locators.0.locator_name", "LOC12"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
+			Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
+		Config: testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig + testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -59,9 +59,42 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	})
 }
 
+const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6"
+	attributes = {
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/segment-routing/srv6/locators/locator[locator-name=LOC1]"
+	attributes = {
+		"locator-name" = "LOC1"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+}
+
+resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=GigabitEthernet0/0/0/1]"
+	attributes = {
+		"ethernet-segment/identifier/type/zero/esi" = "01.02.03.04.05.06.07.08.09"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+}
+
+`
+
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
 	config += `	vpn_id = 1235` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -74,12 +107,15 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	config += `		as_number = 1` + "\n"
 	config += `		assigned_number = 1` + "\n"
 	config += `		}]` + "\n"
-	config += `	bgp_route_target_export_ipv4_address_format = [{` + "\n"
-	config += `		ipv4_address = "1.1.1.1"` + "\n"
+	config += `	bgp_route_target_export_two_byte_as_format = [{` + "\n"
+	config += `		as_number = 1` + "\n"
 	config += `		assigned_number = 1` + "\n"
 	config += `		}]` + "\n"
 	config += `	advertise_mac = true` + "\n"
-	config += `	locator = "LOC12"` + "\n"
+	config += `	locators = [{` + "\n"
+	config += `		locator_name = "LOC12"` + "\n"
+	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

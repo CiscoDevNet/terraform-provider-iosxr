@@ -67,7 +67,7 @@ func (d *PrefixSetDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "prefix statements",
+				MarkdownDescription: "Configures a prefix set",
 				Computed:            true,
 			},
 		},

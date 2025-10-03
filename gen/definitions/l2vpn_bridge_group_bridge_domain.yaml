@@ -54,10 +54,18 @@ attributes:
       - yang_name: split-horizon/group
         example: true
   - yang_name: segment-routing-srv6-evis/evi
-    tf_name: segment_routing_srv6_evis
+    tf_name: srv6_evis
     type: List
     exclude_test: true
     attributes:
       - yang_name: vpn-id
         id: true
         example: 32
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]
+    attributes:
+      - name: group-name
+        value: BG123
+    dependencies: [0]

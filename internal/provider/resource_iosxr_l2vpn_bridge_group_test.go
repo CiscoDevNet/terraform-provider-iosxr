@@ -32,11 +32,11 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrL2VPNBridgeGroupConfig_minimum(),
+			Config: testAccIosxrL2VPNBridgeGroupPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrL2VPNBridgeGroupConfig_all(),
+		Config: testAccIosxrL2VPNBridgeGroupPrerequisitesConfig + testAccIosxrL2VPNBridgeGroupConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -52,9 +52,19 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 	})
 }
 
+const testAccIosxrL2VPNBridgeGroupPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
+	attributes = {
+	}
+}
+
+`
+
 func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	group_name = "BG123"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -62,6 +72,7 @@ func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
 func testAccIosxrL2VPNBridgeGroupConfig_all() string {
 	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	group_name = "BG123"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

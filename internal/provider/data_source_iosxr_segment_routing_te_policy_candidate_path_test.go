@@ -37,12 +37,28 @@ func TestAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig(),
+				Config: testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]"
+	attributes = {
+		"policy-name" = "POLICY1"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig() string {
 	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
@@ -56,6 +72,7 @@ func testAccDataSourceIosxrSegmentRoutingTEPolicyCandidatePathConfig() string {
 	config += `		hop_type = "mpls"` + "\n"
 	config += `		segment_list_name = "dynamic"` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

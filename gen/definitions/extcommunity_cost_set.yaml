@@ -8,4 +8,5 @@ attributes:
     example: COST2
   - yang_name: rpl-extended-community-cost-set
     tf_name: rpl
+    description: "Configures an extended community cost set"
     example: "extcommunity-set cost COST2\\nend-set\\n"

@@ -80,7 +80,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 32),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
+					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
 				},
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -136,7 +136,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"redistribute_connected": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Connected routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute connected routes").String,
 				Optional:            true,
 			},
 			"redistribute_connected_tag": schema.Int64Attribute{
@@ -154,7 +154,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"redistribute_static": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Static routes").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute static routes").String,
 				Optional:            true,
 			},
 			"redistribute_static_tag": schema.Int64Attribute{
@@ -205,10 +205,10 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"auto_cost_reference_bandwidth": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 4294967).String,
+				MarkdownDescription: helpers.NewAttributeDescription("Specify reference bandwidth for OSPF cost computations").AddIntegerRangeDescription(1, 2147483647).String,
 				Optional:            true,
 				Validators: []validator.Int64{
-					int64validator.Between(1, 4294967),
+					int64validator.Between(1, 2147483647),
 				},
 			},
 			"auto_cost_disable": schema.BoolAttribute{
@@ -236,7 +236,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"redistribute_bgp": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("bgp as-number").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute BGP routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -262,7 +262,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("ISO IS-IS").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute ISIS routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -303,7 +303,7 @@ func (r *RouterOSPFResource) Schema(ctx context.Context, req resource.SchemaRequ
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Open Shortest Path First (OSPF)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Redistribute OSPF routes").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

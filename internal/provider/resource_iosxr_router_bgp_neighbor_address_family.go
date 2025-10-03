@@ -81,8 +81,8 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
-			"neighbor_address": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Neighbor address").String,
+			"address": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPaddress").String,
 				Required:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
@@ -98,7 +98,19 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 					stringplanmodifier.RequiresReplace(),
 				},
 			},
+			"import_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Import routes using stitching RTs").String,
+				Optional:            true,
+			},
+			"import_stitching_rt_re_originate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Re-originate imported routes").String,
+				Optional:            true,
+			},
 			"import_stitching_rt_re_originate_stitching_rt": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
+				Optional:            true,
+			},
+			"import_re_originate": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Reoriginate imported routes by attaching stitching RTs").String,
 				Optional:            true,
 			},
@@ -110,7 +122,7 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"advertise_vpnv4_unicast_enable_re_originated_stitching_rt": schema.BoolAttribute{
+			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
 				Optional:            true,
 			},
@@ -122,9 +134,12 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent next-hop-self from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"encapsulation_type_srv6": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("SRv6 encapsulation").String,
+			"encapsulation_type": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify encapsulation type").AddStringEnumDescription("srv6", "vxlan").String,
 				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("srv6", "vxlan"),
+				},
 			},
 			"route_policy_in": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Apply route policy to inbound routes").String,
@@ -153,15 +168,15 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				Optional:            true,
 			},
 			"maximum_prefix_limit": schema.Int64Attribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Maximum number of prefixes to accept from this peer").AddIntegerRangeDescription(1, 4294967295).String,
-				Optional:            true,
+				MarkdownDescription: helpers.NewAttributeDescription("maximum no. of prefix limit").AddIntegerRangeDescription(1, 4294967295).String,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4294967295),
 				},
 			},
 			"maximum_prefix_threshold": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Threshold value (%) at which to generate a warning msg").AddIntegerRangeDescription(1, 100).String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
@@ -179,6 +194,10 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 			},
 			"maximum_prefix_warning_only": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Only give warning message when limit is exceeded").String,
+				Optional:            true,
+			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Originate default route to this neighbor").String,
 				Optional:            true,
 			},
 			"default_originate_route_policy": schema.StringAttribute{
@@ -383,14 +402,14 @@ func (r *RouterBGPNeighborAddressFamilyResource) ImportState(ctx context.Context
 	if len(idParts) != 3 {
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <as_number>,<neighbor_address>,<af_name>. Got: %q", req.ID),
+			fmt.Sprintf("Expected import identifier with format: <as_number>,<address>,<af_name>. Got: %q", req.ID),
 		)
 		return
 	}
 	value0 := idParts[0]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("as_number"), value0)...)
 	value1 := idParts[1]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("neighbor_address"), value1)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), value1)...)
 	value2 := idParts[2]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value2)...)
 }

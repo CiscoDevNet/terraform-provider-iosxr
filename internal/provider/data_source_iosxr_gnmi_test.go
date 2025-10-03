@@ -31,8 +31,8 @@ func TestAccDataSourceIosxrGnmi(t *testing.T) {
 			{
 				Config: testAccDataSourceIosxrGnmiConfigInterface,
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "id", "openconfig-system:/system/config"),
-					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "attributes.hostname", "TF-ROUTER-1"),
+					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-hostname-cfg:/hostname"),
+					resource.TestCheckResourceAttr("data.iosxr_gnmi.test", "attributes.system-network-name", "TF-ROUTER-1"),
 				),
 			},
 		},
@@ -41,14 +41,14 @@ func TestAccDataSourceIosxrGnmi(t *testing.T) {
 
 const testAccDataSourceIosxrGnmiConfigInterface = `
 resource "iosxr_gnmi" "test" {
-	path = "openconfig-system:/system/config"
+	path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 	attributes = {
-		hostname = "TF-ROUTER-1"
+		system-network-name = "TF-ROUTER-1"
 	}
 }
 
 data "iosxr_gnmi" "test" {
-	path = "openconfig-system:/system/config"
+	path = "Cisco-IOS-XR-um-hostname-cfg:/hostname"
 	depends_on = [iosxr_gnmi.test]
 }
 `

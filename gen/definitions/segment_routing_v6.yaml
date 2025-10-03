@@ -15,7 +15,7 @@ attributes:
         example: true
       - yang_name: name
         id: true
-        example: Locator1        
+        example: Locator1
       - yang_name: micro-segment/behavior
         example: unode-psp-usd
       - yang_name: prefix/prefix
@@ -24,3 +24,18 @@ attributes:
       - yang_name: prefix/prefix-length
         tf_name: prefix_length
         example: 48
+  - yang_name: formats/formats/format
+    tf_name: formats
+    type: List
+    attributes:
+      - yang_name: name
+        id: true
+        example: "usid-f3216"
+      - yang_name: format-enable
+        example: true
+      - yang_name: usid/local-id-block-ranges/lib-start
+        example: 57344
+      - yang_name: usid/local-id-block-ranges/explict-lib-start
+        example: 65024
+      - yang_name: usid/wide-local-id-block-explicit-range
+        example: 65527

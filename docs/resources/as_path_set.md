@@ -24,7 +24,7 @@ resource "iosxr_as_path_set" "example" {
 
 ### Required
 
-- `rpl` (String) ASPath Set
+- `rpl` (String) AS path set
 - `set_name` (String) Set name
 
 ### Optional

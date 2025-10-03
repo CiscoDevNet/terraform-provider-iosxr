@@ -67,7 +67,7 @@ func (d *ASPathSetDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "ASPath Set",
+				MarkdownDescription: "AS path set",
 				Computed:            true,
 			},
 		},

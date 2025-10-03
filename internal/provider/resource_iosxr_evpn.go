@@ -81,6 +81,61 @@ func (r *EVPNResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
 				},
 			},
+			"interfaces": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interface_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Specify interface name").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-zA-Z0-9.:_/-]+`), ""),
+							},
+						},
+						"ethernet_segment_enable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ethernet Segment configuration commands").String,
+							Optional:            true,
+						},
+						"ethernet_segment_esi_zero": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ESI value").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 254),
+							},
+						},
+					},
+				},
+			},
+			"srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 configuration for EVPN").String,
+				Optional:            true,
+			},
+			"srv6_locators": schema.ListNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Default locator to use for EVPN SID allocation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 58),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+							},
+						},
+						"usid_allocation_wide_local_id_block": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function knob for the locator").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"srv6_usid_allocation_wide_local_id_block": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function global knob").String,
+				Optional:            true,
+			},
 		},
 	}
 }

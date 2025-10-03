@@ -1,3 +1,4 @@
+---
 name: SNMP Server
 path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server
 doc_category: Management
@@ -46,85 +47,123 @@ attributes:
     example: true
   - yang_name: traps/Cisco-IOS-XR-um-traps-fru-ctrl-cfg:fru-ctrl
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
-    default_value: disable
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ALL/all
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/all
+    tf_name: traps_isis_all
     delete_parent: true
     exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure
-    default_value: disable
-    delete_parent: true
-    example: enable
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
-    default_value: disable
-    delete_parent: true
-    exclude_test: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp2-updown
     example: true
-  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/bgp4-mib-updown
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/database-overload
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/database-overload
+    tf_name: traps_isis_database_overload
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/manual-address-drops
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/manual-address-drops
+    tf_name: traps_isis_manual_address_drops
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/corrupted-lsp-detected
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/corrupted-lsp-detected
+    tf_name: traps_isis_corrupted_lsp_detected
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/attempt-to-exceed-max-sequence
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/attempt-to-exceed-max-sequence
+    tf_name: traps_isis_attempt_to_exceed_max_sequence
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/id-len-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/id-len-mismatch
+    tf_name: traps_isis_id_len_mismatch
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/max-area-addresses-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/max-area-addresses-mismatch
+    tf_name: traps_isis_max_area_addresses_mismatch
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/own-lsp-purge
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/own-lsp-purge
+    tf_name: traps_isis_own_lsp_purge
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/sequence-number-skip
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/sequence-number-skip
+    tf_name: traps_isis_sequence_number_skip
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-type-failure
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-type-failure
+    tf_name: traps_isis_authentication_type_failure
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/authentication-failure
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/authentication-failure
+    tf_name: traps_isis_authentication_failure
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/version-skew
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/version-skew
+    tf_name: traps_isis_version_skew
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/area-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/area-mismatch
+    tf_name: traps_isis_area_mismatch
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/rejected-adjacency
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/rejected-adjacency
+    tf_name: traps_isis_rejected_adjacency
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-too-large-to-propagate
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-too-large-to-propagate
+    tf_name: traps_isis_lsp_too_large_to_propagate
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/orig-lsp-buff-size-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/orig-lsp-buff-size-mismatch
+    tf_name: traps_isis_orig_lsp_buff_size_mismatch
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/protocols-supported-mismatch
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/protocols-supported-mismatch
+    tf_name: traps_isis_protocols_supported_mismatch
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/adjacency-change
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/adjacency-change
+    tf_name: traps_isis_adjacency_change
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/ISIS/ISIS-TRAPS/lsp-error-detected
+    xpath: traps/Cisco-IOS-XR-um-router-isis-cfg:isis/lsp-error-detected
+    tf_name: traps_isis_lsp_error_detected
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/ENABLE/enable
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/enable
+    tf_name: traps_bgp_cbgp_two_enable
+    delete_parent: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/CBGP-TWO/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/cbgp-two/updown
+    tf_name: traps_bgp_cbgp_two_updown
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/CISCO-BGP4-MIB/cisco-bgp4-mib
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/cisco-bgp4-mib
+    tf_name: traps_bgp_enable_updown
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/ENABLE/UPDOWN/updown
+    xpath: traps/Cisco-IOS-XR-um-router-bgp-cfg:bgp/enable/updown
+    tf_name: traps_bgp_enable_cisco_bgp4_mib
+    delete_parent: true
     example: true
   - yang_name: users/user
     tf_name: users

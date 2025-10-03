@@ -38,7 +38,7 @@ resource "iosxr_ipv6_access_list" "example" {
 
 ### Required
 
-- `access_list_name` (String) Access list name - maximum 64 characters
+- `access_list_name` (String) Access list name - maximum 128 characters
 
 ### Optional
 
@@ -60,13 +60,13 @@ Required:
 Optional:
 
 - `deny_capture` (Boolean) Capture matched packet
-- `deny_counter` (String) counter for this ACE
+- `deny_counter` (String) Counter for this ACE
 - `deny_destination_address` (String) Destination IP address
 - `deny_destination_any` (Boolean) Any destination host
 - `deny_destination_host` (String) A single destination host
 - `deny_destination_net_group` (String) IPv6 destination network object group
 - `deny_destination_port_eq` (String) Match only packets on a given port number
-- `deny_destination_port_group` (String) destination port object group
+- `deny_destination_port_group` (String) Destination port object group
 - `deny_destination_port_gt` (String) Match only packet with a greater port number
 - `deny_destination_port_lt` (String) Match only packets with a lower port number
 - `deny_destination_port_neq` (String) Match only packets not on a given port
@@ -75,7 +75,7 @@ Optional:
 - `deny_destination_prefix_length` (Number) Destination IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
   - Range: `0`-`128`
 - `deny_destination_wildcard_mask` (String) Destination IP address mask. Either wildcard-mask or prefix-length is supported along with address.
-- `deny_dscp` (String)
+- `deny_dscp` (String) DSCP value
 - `deny_dscp_eq` (String) Match only packets on a given DSCP value
 - `deny_dscp_gt` (String) Match only packet with a greater DSCP value
 - `deny_dscp_lt` (String) Match only packets with a lower DSCP value
@@ -128,7 +128,7 @@ Optional:
 - `deny_source_host` (String) A single source host
 - `deny_source_net_group` (String) IPv6 source network object group
 - `deny_source_port_eq` (String) Match only packets on a given port number
-- `deny_source_port_group` (String) source port object group
+- `deny_source_port_group` (String) Source port object group
 - `deny_source_port_gt` (String) Match only packet with a greater port number
 - `deny_source_port_lt` (String) Match only packets with a lower port number
 - `deny_source_port_neq` (String) Match only packets not on a given port
@@ -150,13 +150,13 @@ Optional:
 - `deny_ttl_range_start` (Number) ttl range lower value
   - Range: `0`-`255`
 - `permit_capture` (Boolean) Capture matched packet
-- `permit_counter` (String) counter for this ACE
+- `permit_counter` (String) Counter for this ACE
 - `permit_destination_address` (String) Destination IP address
 - `permit_destination_any` (Boolean) Any destination host
 - `permit_destination_host` (String) A single destination host
 - `permit_destination_net_group` (String) IPv6 destination network object group
 - `permit_destination_port_eq` (String) Match only packets on a given port number
-- `permit_destination_port_group` (String) destination port object group
+- `permit_destination_port_group` (String) Destination port object group
 - `permit_destination_port_gt` (String) Match only packet with a greater port number
 - `permit_destination_port_lt` (String) Match only packets with a lower port number
 - `permit_destination_port_neq` (String) Match only packets not on a given port
@@ -165,7 +165,7 @@ Optional:
 - `permit_destination_prefix_length` (Number) Destination IP address prefix length.Either wildcard-mask or prefix-length is supported along with address.
   - Range: `0`-`128`
 - `permit_destination_wildcard_mask` (String) Destination IP address mask. Either wildcard-mask or prefix-length is supported along with address.
-- `permit_dscp` (String)
+- `permit_dscp` (String) DSCP value
 - `permit_dscp_eq` (String) Match only packets on a given DSCP value
 - `permit_dscp_gt` (String) Match only packet with a greater DSCP value
 - `permit_dscp_lt` (String) Match only packets with a lower DSCP value
@@ -187,10 +187,10 @@ Optional:
 - `permit_nexthop1_track` (String) specific TRACK Name for this nexthop
 - `permit_nexthop1_vrf` (String) Specific VRF Name for this nexthop
 - `permit_nexthop2_ipv6` (String) nexthop2 ipv6 address
-- `permit_nexthop2_track` (String) specific TRACK Name for this nexthop
+- `permit_nexthop2_track` (String) Specific TRACK Name for this nexthop
 - `permit_nexthop2_vrf` (String) Specific VRF Name for this nexthop
 - `permit_nexthop3_ipv6` (String) nexthop3 ipv6 address
-- `permit_nexthop3_track` (String) specific TRACK Name for this nexthop
+- `permit_nexthop3_track` (String) Specific TRACK Name for this nexthop
 - `permit_nexthop3_vrf` (String) Specific VRF Name for this nexthop
 - `permit_packet_length_eq` (Number) Match only packets with a given value
   - Range: `0`-`65535`
@@ -225,7 +225,7 @@ Optional:
 - `permit_source_host` (String) A single source host
 - `permit_source_net_group` (String) IPv6 source network object group
 - `permit_source_port_eq` (String) Match only packets on a given port number
-- `permit_source_port_group` (String) source port object group
+- `permit_source_port_group` (String) Source port object group
 - `permit_source_port_gt` (String) Match only packet with a greater port number
 - `permit_source_port_lt` (String) Match only packets with a lower port number
 - `permit_source_port_neq` (String) Match only packets not on a given port

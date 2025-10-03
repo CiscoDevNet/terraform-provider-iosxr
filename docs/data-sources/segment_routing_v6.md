@@ -28,8 +28,21 @@ data "iosxr_segment_routing_v6" "example" {
 
 - `enable` (Boolean) Enable SRv6
 - `encapsulation_source_address` (String) Configure a source address
+- `formats` (Attributes List) Configure a SRv6 format (see [below for nested schema](#nestedatt--formats))
 - `id` (String) The path of the retrieved object.
 - `locators` (Attributes List) Configure a SRv6 locator (see [below for nested schema](#nestedatt--locators))
+
+<a id="nestedatt--formats"></a>
+### Nested Schema for `formats`
+
+Read-Only:
+
+- `format_enable` (Boolean) Enable a SRv6 format
+- `name` (String) Format name
+- `usid_local_id_block_ranges_explict_lib_start` (Number) Start of Explicit LIB
+- `usid_local_id_block_ranges_lib_start` (Number) Start of LIB
+- `usid_wide_local_id_block_explicit_range` (Number) Specify uSID WLIB explicit range
+
 
 <a id="nestedatt--locators"></a>
 ### Nested Schema for `locators`

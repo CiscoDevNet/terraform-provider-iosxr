@@ -31,58 +31,74 @@ import (
 )
 
 type RouterBGPNeighborGroup struct {
-	Device                            types.String                            `tfsdk:"device"`
-	Id                                types.String                            `tfsdk:"id"`
-	DeleteMode                        types.String                            `tfsdk:"delete_mode"`
-	AsNumber                          types.String                            `tfsdk:"as_number"`
-	Name                              types.String                            `tfsdk:"name"`
-	RemoteAs                          types.String                            `tfsdk:"remote_as"`
-	Description                       types.String                            `tfsdk:"description"`
-	UpdateSource                      types.String                            `tfsdk:"update_source"`
-	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
-	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
-	AoKeyChainName                    types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable         types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval                types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                     types.Int64                             `tfsdk:"bfd_multiplier"`
-	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
-	LocalAs                           types.String                            `tfsdk:"local_as"`
-	LocalAsNoPrepend                  types.Bool                              `tfsdk:"local_as_no_prepend"`
-	LocalAsReplaceAs                  types.Bool                              `tfsdk:"local_as_replace_as"`
-	LocalAsDualAs                     types.Bool                              `tfsdk:"local_as_dual_as"`
-	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
-	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
-	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
-	TimersMinimumAcceptableHoldtime   types.String                            `tfsdk:"timers_minimum_acceptable_holdtime"`
+	Device                                       types.String                            `tfsdk:"device"`
+	Id                                           types.String                            `tfsdk:"id"`
+	DeleteMode                                   types.String                            `tfsdk:"delete_mode"`
+	AsNumber                                     types.String                            `tfsdk:"as_number"`
+	Name                                         types.String                            `tfsdk:"name"`
+	RemoteAs                                     types.String                            `tfsdk:"remote_as"`
+	Description                                  types.String                            `tfsdk:"description"`
+	UpdateSource                                 types.String                            `tfsdk:"update_source"`
+	AdvertisementIntervalSeconds                 types.Int64                             `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds            types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
+	AoKeyChainName                               types.String                            `tfsdk:"ao_key_chain_name"`
+	AoKeyChainIncludeTcpOptions                  types.String                            `tfsdk:"ao_key_chain_include_tcp_options"`
+	AoKeyChainAcceptMismatch                     types.Bool                              `tfsdk:"ao_key_chain_accept_mismatch"`
+	AoInheritanceDisable                         types.Bool                              `tfsdk:"ao_inheritance_disable"`
+	BfdMinimumInterval                           types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                                types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                                types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode                      types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectDisable                         types.Bool                              `tfsdk:"bfd_fast_detect_disable"`
+	LocalAsInheritanceDisable                    types.Bool                              `tfsdk:"local_as_inheritance_disable"`
+	LocalAs                                      types.String                            `tfsdk:"local_as"`
+	LocalAsNoPrepend                             types.Bool                              `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                             types.Bool                              `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                                types.Bool                              `tfsdk:"local_as_dual_as"`
+	Password                                     types.String                            `tfsdk:"password"`
+	PasswordInheritanceDisable                   types.Bool                              `tfsdk:"password_inheritance_disable"`
+	TimersKeepaliveInterval                      types.Int64                             `tfsdk:"timers_keepalive_interval"`
+	TimersKeepaliveZero                          types.Bool                              `tfsdk:"timers_keepalive_zero"`
+	TimersKeepaliveZeroMinimumAcceptableHoldtime types.Int64                             `tfsdk:"timers_keepalive_zero_minimum_acceptable_holdtime"`
+	TimersHoldtime                               types.Int64                             `tfsdk:"timers_holdtime"`
+	TimersHoldtimeZero                           types.Bool                              `tfsdk:"timers_holdtime_zero"`
+	TimersHoldtimeMinimumAcceptableHoldtime      types.Int64                             `tfsdk:"timers_holdtime_minimum_acceptable_holdtime"`
+	AddressFamilies                              []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 
 type RouterBGPNeighborGroupData struct {
-	Device                            types.String                            `tfsdk:"device"`
-	Id                                types.String                            `tfsdk:"id"`
-	AsNumber                          types.String                            `tfsdk:"as_number"`
-	Name                              types.String                            `tfsdk:"name"`
-	RemoteAs                          types.String                            `tfsdk:"remote_as"`
-	Description                       types.String                            `tfsdk:"description"`
-	UpdateSource                      types.String                            `tfsdk:"update_source"`
-	AdvertisementIntervalSeconds      types.Int64                             `tfsdk:"advertisement_interval_seconds"`
-	AdvertisementIntervalMilliseconds types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
-	AoKeyChainName                    types.String                            `tfsdk:"ao_key_chain_name"`
-	AoIncludeTcpOptionsEnable         types.Bool                              `tfsdk:"ao_include_tcp_options_enable"`
-	BfdMinimumInterval                types.Int64                             `tfsdk:"bfd_minimum_interval"`
-	BfdMultiplier                     types.Int64                             `tfsdk:"bfd_multiplier"`
-	BfdFastDetect                     types.Bool                              `tfsdk:"bfd_fast_detect"`
-	BfdFastDetectStrictMode           types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
-	BfdFastDetectInheritanceDisable   types.Bool                              `tfsdk:"bfd_fast_detect_inheritance_disable"`
-	LocalAs                           types.String                            `tfsdk:"local_as"`
-	LocalAsNoPrepend                  types.Bool                              `tfsdk:"local_as_no_prepend"`
-	LocalAsReplaceAs                  types.Bool                              `tfsdk:"local_as_replace_as"`
-	LocalAsDualAs                     types.Bool                              `tfsdk:"local_as_dual_as"`
-	AddressFamilies                   []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
-	TimersKeepaliveInterval           types.Int64                             `tfsdk:"timers_keepalive_interval"`
-	TimersHoldtime                    types.String                            `tfsdk:"timers_holdtime"`
-	TimersMinimumAcceptableHoldtime   types.String                            `tfsdk:"timers_minimum_acceptable_holdtime"`
+	Device                                       types.String                            `tfsdk:"device"`
+	Id                                           types.String                            `tfsdk:"id"`
+	AsNumber                                     types.String                            `tfsdk:"as_number"`
+	Name                                         types.String                            `tfsdk:"name"`
+	RemoteAs                                     types.String                            `tfsdk:"remote_as"`
+	Description                                  types.String                            `tfsdk:"description"`
+	UpdateSource                                 types.String                            `tfsdk:"update_source"`
+	AdvertisementIntervalSeconds                 types.Int64                             `tfsdk:"advertisement_interval_seconds"`
+	AdvertisementIntervalMilliseconds            types.Int64                             `tfsdk:"advertisement_interval_milliseconds"`
+	AoKeyChainName                               types.String                            `tfsdk:"ao_key_chain_name"`
+	AoKeyChainIncludeTcpOptions                  types.String                            `tfsdk:"ao_key_chain_include_tcp_options"`
+	AoKeyChainAcceptMismatch                     types.Bool                              `tfsdk:"ao_key_chain_accept_mismatch"`
+	AoInheritanceDisable                         types.Bool                              `tfsdk:"ao_inheritance_disable"`
+	BfdMinimumInterval                           types.Int64                             `tfsdk:"bfd_minimum_interval"`
+	BfdMultiplier                                types.Int64                             `tfsdk:"bfd_multiplier"`
+	BfdFastDetect                                types.Bool                              `tfsdk:"bfd_fast_detect"`
+	BfdFastDetectStrictMode                      types.Bool                              `tfsdk:"bfd_fast_detect_strict_mode"`
+	BfdFastDetectDisable                         types.Bool                              `tfsdk:"bfd_fast_detect_disable"`
+	LocalAsInheritanceDisable                    types.Bool                              `tfsdk:"local_as_inheritance_disable"`
+	LocalAs                                      types.String                            `tfsdk:"local_as"`
+	LocalAsNoPrepend                             types.Bool                              `tfsdk:"local_as_no_prepend"`
+	LocalAsReplaceAs                             types.Bool                              `tfsdk:"local_as_replace_as"`
+	LocalAsDualAs                                types.Bool                              `tfsdk:"local_as_dual_as"`
+	Password                                     types.String                            `tfsdk:"password"`
+	PasswordInheritanceDisable                   types.Bool                              `tfsdk:"password_inheritance_disable"`
+	TimersKeepaliveInterval                      types.Int64                             `tfsdk:"timers_keepalive_interval"`
+	TimersKeepaliveZero                          types.Bool                              `tfsdk:"timers_keepalive_zero"`
+	TimersKeepaliveZeroMinimumAcceptableHoldtime types.Int64                             `tfsdk:"timers_keepalive_zero_minimum_acceptable_holdtime"`
+	TimersHoldtime                               types.Int64                             `tfsdk:"timers_holdtime"`
+	TimersHoldtimeZero                           types.Bool                              `tfsdk:"timers_holdtime_zero"`
+	TimersHoldtimeMinimumAcceptableHoldtime      types.Int64                             `tfsdk:"timers_holdtime_minimum_acceptable_holdtime"`
+	AddressFamilies                              []RouterBGPNeighborGroupAddressFamilies `tfsdk:"address_families"`
 }
 type RouterBGPNeighborGroupAddressFamilies struct {
 	AfName                                 types.String `tfsdk:"af_name"`
@@ -119,17 +135,25 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 		body, _ = sjson.Set(body, "update-source", data.UpdateSource.ValueString())
 	}
 	if !data.AdvertisementIntervalSeconds.IsNull() && !data.AdvertisementIntervalSeconds.IsUnknown() {
-		body, _ = sjson.Set(body, "advertisement-interval.time-in-seconds", strconv.FormatInt(data.AdvertisementIntervalSeconds.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "advertisement-interval.advertisement-interval-time-in-seconds", strconv.FormatInt(data.AdvertisementIntervalSeconds.ValueInt64(), 10))
 	}
 	if !data.AdvertisementIntervalMilliseconds.IsNull() && !data.AdvertisementIntervalMilliseconds.IsUnknown() {
-		body, _ = sjson.Set(body, "advertisement-interval.time-in-milliseconds", strconv.FormatInt(data.AdvertisementIntervalMilliseconds.ValueInt64(), 10))
+		body, _ = sjson.Set(body, "advertisement-interval.advertisement-interval-time-in-milliseconds", strconv.FormatInt(data.AdvertisementIntervalMilliseconds.ValueInt64(), 10))
 	}
 	if !data.AoKeyChainName.IsNull() && !data.AoKeyChainName.IsUnknown() {
-		body, _ = sjson.Set(body, "ao.key-chain-name", data.AoKeyChainName.ValueString())
+		body, _ = sjson.Set(body, "ao.key-chain-name.key-chain-name", data.AoKeyChainName.ValueString())
 	}
-	if !data.AoIncludeTcpOptionsEnable.IsNull() && !data.AoIncludeTcpOptionsEnable.IsUnknown() {
-		if data.AoIncludeTcpOptionsEnable.ValueBool() {
-			body, _ = sjson.Set(body, "ao.include-tcp-options.enable", map[string]string{})
+	if !data.AoKeyChainIncludeTcpOptions.IsNull() && !data.AoKeyChainIncludeTcpOptions.IsUnknown() {
+		body, _ = sjson.Set(body, "ao.key-chain-name.include-tcp-options", data.AoKeyChainIncludeTcpOptions.ValueString())
+	}
+	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.IsUnknown() {
+		if data.AoKeyChainAcceptMismatch.ValueBool() {
+			body, _ = sjson.Set(body, "ao.key-chain-name.accept-ao-mismatch-connection", map[string]string{})
+		}
+	}
+	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.IsUnknown() {
+		if data.AoInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "ao.inheritance-disable", map[string]string{})
 		}
 	}
 	if !data.BfdMinimumInterval.IsNull() && !data.BfdMinimumInterval.IsUnknown() {
@@ -148,37 +172,63 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "bfd.fast-detect.strict-mode", map[string]string{})
 		}
 	}
-	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.IsUnknown() {
-		if data.BfdFastDetectInheritanceDisable.ValueBool() {
-			body, _ = sjson.Set(body, "bfd.fast-detect.inheritance-disable", map[string]string{})
+	if !data.BfdFastDetectDisable.IsNull() && !data.BfdFastDetectDisable.IsUnknown() {
+		if data.BfdFastDetectDisable.ValueBool() {
+			body, _ = sjson.Set(body, "bfd.fast-detect.disable", map[string]string{})
+		}
+	}
+	if !data.LocalAsInheritanceDisable.IsNull() && !data.LocalAsInheritanceDisable.IsUnknown() {
+		if data.LocalAsInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "local-as.inheritance-disable", map[string]string{})
 		}
 	}
 	if !data.LocalAs.IsNull() && !data.LocalAs.IsUnknown() {
-		body, _ = sjson.Set(body, "local-as.as-number", data.LocalAs.ValueString())
+		body, _ = sjson.Set(body, "local-as.as.as-number", data.LocalAs.ValueString())
 	}
 	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.IsUnknown() {
 		if data.LocalAsNoPrepend.ValueBool() {
-			body, _ = sjson.Set(body, "local-as.no-prepend", map[string]string{})
+			body, _ = sjson.Set(body, "local-as.as.no-prepend", map[string]string{})
 		}
 	}
 	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.IsUnknown() {
 		if data.LocalAsReplaceAs.ValueBool() {
-			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as", map[string]string{})
+			body, _ = sjson.Set(body, "local-as.as.no-prepend.replace-as", map[string]string{})
 		}
 	}
 	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.IsUnknown() {
 		if data.LocalAsDualAs.ValueBool() {
-			body, _ = sjson.Set(body, "local-as.no-prepend.replace-as.dual-as", map[string]string{})
+			body, _ = sjson.Set(body, "local-as.as.no-prepend.replace-as.dual-as", map[string]string{})
+		}
+	}
+	if !data.Password.IsNull() && !data.Password.IsUnknown() {
+		body, _ = sjson.Set(body, "password.encrypted", data.Password.ValueString())
+	}
+	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.IsUnknown() {
+		if data.PasswordInheritanceDisable.ValueBool() {
+			body, _ = sjson.Set(body, "password.inheritance-disable", map[string]string{})
 		}
 	}
 	if !data.TimersKeepaliveInterval.IsNull() && !data.TimersKeepaliveInterval.IsUnknown() {
 		body, _ = sjson.Set(body, "timers.keepalive-interval", strconv.FormatInt(data.TimersKeepaliveInterval.ValueInt64(), 10))
 	}
-	if !data.TimersHoldtime.IsNull() && !data.TimersHoldtime.IsUnknown() {
-		body, _ = sjson.Set(body, "timers.holdtime", data.TimersHoldtime.ValueString())
+	if !data.TimersKeepaliveZero.IsNull() && !data.TimersKeepaliveZero.IsUnknown() {
+		if data.TimersKeepaliveZero.ValueBool() {
+			body, _ = sjson.Set(body, "timers.zero.zero", map[string]string{})
+		}
 	}
-	if !data.TimersMinimumAcceptableHoldtime.IsNull() && !data.TimersMinimumAcceptableHoldtime.IsUnknown() {
-		body, _ = sjson.Set(body, "timers.minimum-acceptable-holdtime", data.TimersMinimumAcceptableHoldtime.ValueString())
+	if !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.zero.minimum-acceptable-holdtime", strconv.FormatInt(data.TimersKeepaliveZeroMinimumAcceptableHoldtime.ValueInt64(), 10))
+	}
+	if !data.TimersHoldtime.IsNull() && !data.TimersHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.holdtime.holdtime-number", strconv.FormatInt(data.TimersHoldtime.ValueInt64(), 10))
+	}
+	if !data.TimersHoldtimeZero.IsNull() && !data.TimersHoldtimeZero.IsUnknown() {
+		if data.TimersHoldtimeZero.ValueBool() {
+			body, _ = sjson.Set(body, "timers.holdtime.zero", map[string]string{})
+		}
+	}
+	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && !data.TimersHoldtimeMinimumAcceptableHoldtime.IsUnknown() {
+		body, _ = sjson.Set(body, "timers.holdtime.minimum-acceptable-holdtime", strconv.FormatInt(data.TimersHoldtimeMinimumAcceptableHoldtime.ValueInt64(), 10))
 	}
 	if len(data.AddressFamilies) > 0 {
 		body, _ = sjson.Set(body, "address-families.address-family", []interface{}{})
@@ -241,29 +291,43 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.UpdateSource = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() && !data.AdvertisementIntervalSeconds.IsNull() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() && !data.AdvertisementIntervalSeconds.IsNull() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
 	} else {
 		data.AdvertisementIntervalSeconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() && !data.AdvertisementIntervalMilliseconds.IsNull() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() && !data.AdvertisementIntervalMilliseconds.IsNull() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	} else {
 		data.AdvertisementIntervalMilliseconds = types.Int64Null()
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() && !data.AoKeyChainName.IsNull() {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() && !data.AoKeyChainName.IsNull() {
 		data.AoKeyChainName = types.StringValue(value.String())
 	} else {
 		data.AoKeyChainName = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "ao.include-tcp-options.enable"); !data.AoIncludeTcpOptionsEnable.IsNull() {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() && !data.AoKeyChainIncludeTcpOptions.IsNull() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	} else {
+		data.AoKeyChainIncludeTcpOptions = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); !data.AoKeyChainAcceptMismatch.IsNull() {
 		if value.Exists() {
-			data.AoIncludeTcpOptionsEnable = types.BoolValue(true)
+			data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 		} else {
-			data.AoIncludeTcpOptionsEnable = types.BoolValue(false)
+			data.AoKeyChainAcceptMismatch = types.BoolValue(false)
 		}
 	} else {
-		data.AoIncludeTcpOptionsEnable = types.BoolNull()
+		data.AoKeyChainAcceptMismatch = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "ao.inheritance-disable"); !data.AoInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.AoInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.AoInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.AoInheritanceDisable = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() && !data.BfdMinimumInterval.IsNull() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
@@ -293,21 +357,30 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.BfdFastDetectStrictMode = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); !data.BfdFastDetectInheritanceDisable.IsNull() {
+	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); !data.BfdFastDetectDisable.IsNull() {
 		if value.Exists() {
-			data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+			data.BfdFastDetectDisable = types.BoolValue(true)
 		} else {
-			data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+			data.BfdFastDetectDisable = types.BoolValue(false)
 		}
 	} else {
-		data.BfdFastDetectInheritanceDisable = types.BoolNull()
+		data.BfdFastDetectDisable = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
+	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); !data.LocalAsInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.LocalAsInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.LocalAsInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.LocalAsInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() && !data.LocalAs.IsNull() {
 		data.LocalAs = types.StringValue(value.String())
 	} else {
 		data.LocalAs = types.StringNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend"); !data.LocalAsNoPrepend.IsNull() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); !data.LocalAsNoPrepend.IsNull() {
 		if value.Exists() {
 			data.LocalAsNoPrepend = types.BoolValue(true)
 		} else {
@@ -316,7 +389,7 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.LocalAsNoPrepend = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); !data.LocalAsReplaceAs.IsNull() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); !data.LocalAsReplaceAs.IsNull() {
 		if value.Exists() {
 			data.LocalAsReplaceAs = types.BoolValue(true)
 		} else {
@@ -325,7 +398,7 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	} else {
 		data.LocalAsReplaceAs = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); !data.LocalAsDualAs.IsNull() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); !data.LocalAsDualAs.IsNull() {
 		if value.Exists() {
 			data.LocalAsDualAs = types.BoolValue(true)
 		} else {
@@ -333,6 +406,58 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 		}
 	} else {
 		data.LocalAsDualAs = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() && !data.Password.IsNull() {
+		data.Password = types.StringValue(value.String())
+	} else {
+		data.Password = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "password.inheritance-disable"); !data.PasswordInheritanceDisable.IsNull() {
+		if value.Exists() {
+			data.PasswordInheritanceDisable = types.BoolValue(true)
+		} else {
+			data.PasswordInheritanceDisable = types.BoolValue(false)
+		}
+	} else {
+		data.PasswordInheritanceDisable = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	} else {
+		data.TimersKeepaliveInterval = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.zero.zero"); !data.TimersKeepaliveZero.IsNull() {
+		if value.Exists() {
+			data.TimersKeepaliveZero = types.BoolValue(true)
+		} else {
+			data.TimersKeepaliveZero = types.BoolValue(false)
+		}
+	} else {
+		data.TimersKeepaliveZero = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() && !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	} else {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() && !data.TimersHoldtime.IsNull() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	} else {
+		data.TimersHoldtime = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.zero"); !data.TimersHoldtimeZero.IsNull() {
+		if value.Exists() {
+			data.TimersHoldtimeZero = types.BoolValue(true)
+		} else {
+			data.TimersHoldtimeZero = types.BoolValue(false)
+		}
+	} else {
+		data.TimersHoldtimeZero = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() && !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	} else {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Null()
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -423,21 +548,6 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 			data.AddressFamilies[i].UseAfGroup = types.StringNull()
 		}
 	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() && !data.TimersKeepaliveInterval.IsNull() {
-		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
-	} else {
-		data.TimersKeepaliveInterval = types.Int64Null()
-	}
-	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() && !data.TimersHoldtime.IsNull() {
-		data.TimersHoldtime = types.StringValue(value.String())
-	} else {
-		data.TimersHoldtime = types.StringNull()
-	}
-	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() && !data.TimersMinimumAcceptableHoldtime.IsNull() {
-		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
-	} else {
-		data.TimersMinimumAcceptableHoldtime = types.StringNull()
-	}
 }
 
 func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
@@ -450,19 +560,27 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() {
 		data.AoKeyChainName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ao.include-tcp-options.enable"); value.Exists() {
-		data.AoIncludeTcpOptionsEnable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 	} else {
-		data.AoIncludeTcpOptionsEnable = types.BoolValue(false)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AoInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
@@ -480,28 +598,63 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.BfdFastDetectStrictMode = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); value.Exists() {
-		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+		data.BfdFastDetectDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.LocalAsInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() {
 		data.LocalAs = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend = types.BoolValue(true)
 	} else {
 		data.LocalAsNoPrepend = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
 		data.LocalAsReplaceAs = types.BoolValue(true)
 	} else {
 		data.LocalAsReplaceAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
 		data.LocalAsDualAs = types.BoolValue(true)
 	} else {
 		data.LocalAsDualAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
+		data.Password = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.PasswordInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	} else {
+		data.TimersKeepaliveZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.zero"); value.Exists() {
+		data.TimersHoldtimeZero = types.BoolValue(true)
+	} else {
+		data.TimersHoldtimeZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
@@ -547,15 +700,6 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
-		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
-		data.TimersHoldtime = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() {
-		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
 	}
 }
 
@@ -569,19 +713,27 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	if value := gjson.GetBytes(res, "update-source"); value.Exists() {
 		data.UpdateSource = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-seconds"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-seconds"); value.Exists() {
 		data.AdvertisementIntervalSeconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "advertisement-interval.time-in-milliseconds"); value.Exists() {
+	if value := gjson.GetBytes(res, "advertisement-interval.advertisement-interval-time-in-milliseconds"); value.Exists() {
 		data.AdvertisementIntervalMilliseconds = types.Int64Value(value.Int())
 	}
-	if value := gjson.GetBytes(res, "ao.key-chain-name"); value.Exists() {
+	if value := gjson.GetBytes(res, "ao.key-chain-name.key-chain-name"); value.Exists() {
 		data.AoKeyChainName = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "ao.include-tcp-options.enable"); value.Exists() {
-		data.AoIncludeTcpOptionsEnable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "ao.key-chain-name.include-tcp-options"); value.Exists() {
+		data.AoKeyChainIncludeTcpOptions = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "ao.key-chain-name.accept-ao-mismatch-connection"); value.Exists() {
+		data.AoKeyChainAcceptMismatch = types.BoolValue(true)
 	} else {
-		data.AoIncludeTcpOptionsEnable = types.BoolValue(false)
+		data.AoKeyChainAcceptMismatch = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "ao.inheritance-disable"); value.Exists() {
+		data.AoInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.AoInheritanceDisable = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "bfd.minimum-interval"); value.Exists() {
 		data.BfdMinimumInterval = types.Int64Value(value.Int())
@@ -599,28 +751,63 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	} else {
 		data.BfdFastDetectStrictMode = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "bfd.fast-detect.inheritance-disable"); value.Exists() {
-		data.BfdFastDetectInheritanceDisable = types.BoolValue(true)
+	if value := gjson.GetBytes(res, "bfd.fast-detect.disable"); value.Exists() {
+		data.BfdFastDetectDisable = types.BoolValue(true)
 	} else {
-		data.BfdFastDetectInheritanceDisable = types.BoolValue(false)
+		data.BfdFastDetectDisable = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.as-number"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.inheritance-disable"); value.Exists() {
+		data.LocalAsInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.LocalAsInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "local-as.as.as-number"); value.Exists() {
 		data.LocalAs = types.StringValue(value.String())
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend"); value.Exists() {
 		data.LocalAsNoPrepend = types.BoolValue(true)
 	} else {
 		data.LocalAsNoPrepend = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as"); value.Exists() {
 		data.LocalAsReplaceAs = types.BoolValue(true)
 	} else {
 		data.LocalAsReplaceAs = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "local-as.no-prepend.replace-as.dual-as"); value.Exists() {
+	if value := gjson.GetBytes(res, "local-as.as.no-prepend.replace-as.dual-as"); value.Exists() {
 		data.LocalAsDualAs = types.BoolValue(true)
 	} else {
 		data.LocalAsDualAs = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "password.encrypted"); value.Exists() {
+		data.Password = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "password.inheritance-disable"); value.Exists() {
+		data.PasswordInheritanceDisable = types.BoolValue(true)
+	} else {
+		data.PasswordInheritanceDisable = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
+		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.zero.zero"); value.Exists() {
+		data.TimersKeepaliveZero = types.BoolValue(true)
+	} else {
+		data.TimersKeepaliveZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.zero.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersKeepaliveZeroMinimumAcceptableHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.holdtime-number"); value.Exists() {
+		data.TimersHoldtime = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.zero"); value.Exists() {
+		data.TimersHoldtimeZero = types.BoolValue(true)
+	} else {
+		data.TimersHoldtimeZero = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "timers.holdtime.minimum-acceptable-holdtime"); value.Exists() {
+		data.TimersHoldtimeMinimumAcceptableHoldtime = types.Int64Value(value.Int())
 	}
 	if value := gjson.GetBytes(res, "address-families.address-family"); value.Exists() {
 		data.AddressFamilies = make([]RouterBGPNeighborGroupAddressFamilies, 0)
@@ -666,15 +853,6 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 			data.AddressFamilies = append(data.AddressFamilies, item)
 			return true
 		})
-	}
-	if value := gjson.GetBytes(res, "timers.keepalive-interval"); value.Exists() {
-		data.TimersKeepaliveInterval = types.Int64Value(value.Int())
-	}
-	if value := gjson.GetBytes(res, "timers.holdtime"); value.Exists() {
-		data.TimersHoldtime = types.StringValue(value.String())
-	}
-	if value := gjson.GetBytes(res, "timers.minimum-acceptable-holdtime"); value.Exists() {
-		data.TimersMinimumAcceptableHoldtime = types.StringValue(value.String())
 	}
 }
 
@@ -696,10 +874,16 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertisement-interval", state.getPath()))
 	}
 	if !state.AoKeyChainName.IsNull() && data.AoKeyChainName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", state.getPath()))
 	}
-	if !state.AoIncludeTcpOptionsEnable.IsNull() && data.AoIncludeTcpOptionsEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/include-tcp-options/enable", state.getPath()))
+	if !state.AoKeyChainIncludeTcpOptions.IsNull() && data.AoKeyChainIncludeTcpOptions.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", state.getPath()))
+	}
+	if !state.AoKeyChainAcceptMismatch.IsNull() && data.AoKeyChainAcceptMismatch.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
+	}
+	if !state.AoInheritanceDisable.IsNull() && data.AoInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE", state.getPath()))
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
@@ -713,20 +897,47 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	if !state.BfdFastDetectStrictMode.IsNull() && data.BfdFastDetectStrictMode.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", state.getPath()))
 	}
-	if !state.BfdFastDetectInheritanceDisable.IsNull() && data.BfdFastDetectInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", state.getPath()))
+	if !state.BfdFastDetectDisable.IsNull() && data.BfdFastDetectDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
+	}
+	if !state.LocalAsInheritanceDisable.IsNull() && data.LocalAsInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE", state.getPath()))
 	}
 	if !state.LocalAs.IsNull() && data.LocalAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as-number", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as", state.getPath()))
 	}
 	if !state.LocalAsNoPrepend.IsNull() && data.LocalAsNoPrepend.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", state.getPath()))
 	}
 	if !state.LocalAsReplaceAs.IsNull() && data.LocalAsReplaceAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend/replace-as", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", state.getPath()))
 	}
 	if !state.LocalAsDualAs.IsNull() && data.LocalAsDualAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", state.getPath()))
+	}
+	if !state.Password.IsNull() && data.Password.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
+	}
+	if !state.PasswordInheritanceDisable.IsNull() && data.PasswordInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/inheritance-disable", state.getPath()))
+	}
+	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
+	}
+	if !state.TimersKeepaliveZero.IsNull() && data.TimersKeepaliveZero.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+	}
+	if !state.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
+	}
+	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", state.getPath()))
+	}
+	if !state.TimersHoldtimeZero.IsNull() && data.TimersHoldtimeZero.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+	}
+	if !state.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
 	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -782,22 +993,16 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
-	if !state.TimersKeepaliveInterval.IsNull() && data.TimersKeepaliveInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
-	}
-	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
-	}
-	if !state.TimersMinimumAcceptableHoldtime.IsNull() && data.TimersMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
-	}
 	return deletedItems
 }
 
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.AoIncludeTcpOptionsEnable.IsNull() && !data.AoIncludeTcpOptionsEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/include-tcp-options/enable", data.getPath()))
+	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
+	}
+	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
 	}
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
@@ -805,17 +1010,29 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 	if !data.BfdFastDetectStrictMode.IsNull() && !data.BfdFastDetectStrictMode.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
 	}
-	if !data.BfdFastDetectInheritanceDisable.IsNull() && !data.BfdFastDetectInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
+	if !data.BfdFastDetectDisable.IsNull() && !data.BfdFastDetectDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/disable", data.getPath()))
+	}
+	if !data.LocalAsInheritanceDisable.IsNull() && !data.LocalAsInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
 	}
 	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend/replace-as", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", data.getPath()))
 	}
 	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as", data.getPath()))
+	}
+	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
+	}
+	if !data.TimersKeepaliveZero.IsNull() && !data.TimersKeepaliveZero.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
+	}
+	if !data.TimersHoldtimeZero.IsNull() && !data.TimersHoldtimeZero.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -861,10 +1078,16 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertisement-interval", data.getPath()))
 	}
 	if !data.AoKeyChainName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", data.getPath()))
 	}
-	if !data.AoIncludeTcpOptionsEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/include-tcp-options/enable", data.getPath()))
+	if !data.AoKeyChainIncludeTcpOptions.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", data.getPath()))
+	}
+	if !data.AoKeyChainAcceptMismatch.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
+	}
+	if !data.AoInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE", data.getPath()))
 	}
 	if !data.BfdMinimumInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
@@ -878,20 +1101,47 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	if !data.BfdFastDetectStrictMode.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
 	}
-	if !data.BfdFastDetectInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/inheritance-disable", data.getPath()))
+	if !data.BfdFastDetectDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
+	}
+	if !data.LocalAsInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE", data.getPath()))
 	}
 	if !data.LocalAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as-number", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as", data.getPath()))
 	}
 	if !data.LocalAsNoPrepend.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsReplaceAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend/replace-as", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsDualAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/no-prepend/replace-as/dual-as", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", data.getPath()))
+	}
+	if !data.Password.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
+	}
+	if !data.PasswordInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
+	}
+	if !data.TimersKeepaliveInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
+	}
+	if !data.TimersKeepaliveZero.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+	}
+	if !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
+	}
+	if !data.TimersHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", data.getPath()))
+	}
+	if !data.TimersHoldtimeZero.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+	}
+	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -902,15 +1152,6 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
-	}
-	if !data.TimersKeepaliveInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
-	}
-	if !data.TimersHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
-	}
-	if !data.TimersMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
 	}
 	return deletePaths
 }

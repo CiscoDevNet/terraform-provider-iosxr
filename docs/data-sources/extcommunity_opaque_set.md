@@ -32,4 +32,4 @@ data "iosxr_extcommunity_opaque_set" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) Extended Community Opaque Set
+- `rpl` (String) Configures an extended community opaque set

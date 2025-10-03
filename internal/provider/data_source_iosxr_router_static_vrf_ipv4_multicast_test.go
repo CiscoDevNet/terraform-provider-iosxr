@@ -45,12 +45,22 @@ func TestAccDataSourceIosxrRouterStaticVRFIPv4Multicast(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterStaticVRFIPv4MulticastConfig(),
+				Config: testAccDataSourceIosxrRouterStaticVRFIPv4MulticastPrerequisitesConfig + testAccDataSourceIosxrRouterStaticVRFIPv4MulticastConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
+
+const testAccDataSourceIosxrRouterStaticVRFIPv4MulticastPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
+	attributes = {
+		"vrf-name" = "VRF2"
+	}
+}
+
+`
 
 func testAccDataSourceIosxrRouterStaticVRFIPv4MulticastConfig() string {
 	config := `resource "iosxr_router_static_vrf_ipv4_multicast" "test" {` + "\n"
@@ -77,6 +87,7 @@ func testAccDataSourceIosxrRouterStaticVRFIPv4MulticastConfig() string {
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

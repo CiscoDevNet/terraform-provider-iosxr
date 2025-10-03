@@ -87,7 +87,7 @@ resource "iosxr_router_ospf" "example" {
 - `areas` (Attributes List) Enter the OSPF area configuration submode (see [below for nested schema](#nestedatt--areas))
 - `auto_cost_disable` (Boolean) Assign OSPF cost based on interface type
 - `auto_cost_reference_bandwidth` (Number) Specify reference bandwidth for OSPF cost computations
-  - Range: `1`-`4294967`
+  - Range: `1`-`2147483647`
 - `bfd_fast_detect` (Boolean) Enable Fast detection
 - `bfd_minimum_interval` (Number) Minimum interval
   - Range: `3`-`30000`
@@ -111,15 +111,15 @@ resource "iosxr_router_ospf" "example" {
 - `passive_enable` (Boolean) Enable passive
 - `priority` (Number) Router priority
   - Range: `0`-`255`
-- `redistribute_bgp` (Attributes List) bgp as-number (see [below for nested schema](#nestedatt--redistribute_bgp))
-- `redistribute_connected` (Boolean) Connected routes
+- `redistribute_bgp` (Attributes List) Redistribute BGP routes (see [below for nested schema](#nestedatt--redistribute_bgp))
+- `redistribute_connected` (Boolean) Redistribute connected routes
 - `redistribute_connected_metric_type` (String) OSPF exterior metric type for redistributed routes
   - Choices: `1`, `2`
 - `redistribute_connected_tag` (Number) Set tag for routes redistributed into OSPF
   - Range: `0`-`4294967295`
-- `redistribute_isis` (Attributes List) ISO IS-IS (see [below for nested schema](#nestedatt--redistribute_isis))
-- `redistribute_ospf` (Attributes List) Open Shortest Path First (OSPF) (see [below for nested schema](#nestedatt--redistribute_ospf))
-- `redistribute_static` (Boolean) Static routes
+- `redistribute_isis` (Attributes List) Redistribute ISIS routes (see [below for nested schema](#nestedatt--redistribute_isis))
+- `redistribute_ospf` (Attributes List) Redistribute OSPF routes (see [below for nested schema](#nestedatt--redistribute_ospf))
+- `redistribute_static` (Boolean) Redistribute static routes
 - `redistribute_static_metric_type` (String) OSPF exterior metric type for redistributed routes
   - Choices: `1`, `2`
 - `redistribute_static_tag` (Number) Set tag for routes redistributed into OSPF

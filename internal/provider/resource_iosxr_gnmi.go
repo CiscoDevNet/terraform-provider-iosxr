@@ -80,7 +80,7 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Default:             booldefault.StaticBool(true),
 			},
 			"attributes": schema.MapAttribute{
-				MarkdownDescription: "Map of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value.",
+				MarkdownDescription: "Map of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value. To omit an attribute entirely (null value) use `<NULL>` as the value.",
 				Optional:            true,
 				ElementType:         types.StringType,
 			},
@@ -98,7 +98,7 @@ func (r *GnmiResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 						"items": schema.ListAttribute{
-							MarkdownDescription: "List of maps of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value.",
+							MarkdownDescription: "List of maps of key-value pairs which represents the attributes and its values. To indicate an empty YANG container use `<EMPTY>` as the value. To omit an attribute entirely (null value) use `<NULL>` as the value.",
 							Optional:            true,
 							ElementType:         types.MapType{ElemType: types.StringType},
 						},

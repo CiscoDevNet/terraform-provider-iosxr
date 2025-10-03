@@ -67,7 +67,7 @@ func (d *ExtcommunityOpaqueSetDataSource) Schema(ctx context.Context, req dataso
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Extended Community Opaque Set",
+				MarkdownDescription: "Configures an extended community opaque set",
 				Computed:            true,
 			},
 		},

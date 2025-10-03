@@ -225,13 +225,25 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Schema(ctx context.Context, req reso
 				MarkdownDescription: helpers.NewAttributeDescription("Configure EVPN Instance MAC advertisement").String,
 				Optional:            true,
 			},
-			"locator": schema.StringAttribute{
+			"locators": schema.ListNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("EVI locator to use for EVPN SID allocation").String,
 				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.LengthBetween(1, 58),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\|;]+`), ""),
-					stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"locator_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("EVI locator to use for EVPN SID allocation").String,
+							Required:            true,
+							Validators: []validator.String{
+								stringvalidator.LengthBetween(1, 58),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[\w\-\.:,_@#%$\+=\| ;]+`), ""),
+								stringvalidator.RegexMatches(regexp.MustCompile(`[a-z0-9A-Z][a-z0-9A-Z_.:]*`), ""),
+							},
+						},
+						"usid_allocation_wide_local_id_block": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Enable uSID wide function knob for the locator").String,
+							Optional:            true,
+						},
+					},
 				},
 			},
 		},

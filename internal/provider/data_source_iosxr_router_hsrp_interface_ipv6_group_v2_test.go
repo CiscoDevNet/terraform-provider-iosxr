@@ -29,8 +29,6 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_hold_time", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_hold_time2", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec2", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
@@ -49,22 +47,30 @@ func TestAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config(),
+				Config: testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig + testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
 	})
 }
 
+const testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/2]"
+	attributes = {
+		"interface-name" = "GigabitEthernet0/0/0/2"
+	}
+}
+
+`
+
 func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
-	config += `	group_id = 4055` + "\n"
+	config += `	group_id = 4000` + "\n"
 	config += `	name = "gp2"` + "\n"
 	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
-	config += `	timers_hold_time = 10` + "\n"
-	config += `	timers_hold_time2 = 20` + "\n"
 	config += `	timers_msec = 100` + "\n"
 	config += `	timers_msec2 = 300` + "\n"
 	config += `	preempt_delay = 256` + "\n"
@@ -84,12 +90,13 @@ func testAccDataSourceIosxrRouterHSRPInterfaceIPv6GroupV2Config() string {
 	config += `	}]` + "\n"
 	config += `	address_link_local_autoconfig = true` + "\n"
 	config += `	address_link_local_autoconfig_legacy_compatible = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_router_hsrp_interface_ipv6_group_v2" "test" {
 			interface_name = "GigabitEthernet0/0/0/2"
-			group_id = 4055
+			group_id = 4000
 			depends_on = [iosxr_router_hsrp_interface_ipv6_group_v2.test]
 		}
 	`

@@ -63,7 +63,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"access_list_name": schema.StringAttribute{
-				MarkdownDescription: "Access list name - maximum 64 characters",
+				MarkdownDescription: "Access list name - maximum 128 characters",
 				Required:            true,
 			},
 			"sequences": schema.ListNestedAttribute{
@@ -96,7 +96,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_counter": schema.StringAttribute{
-							MarkdownDescription: "counter for this ACE",
+							MarkdownDescription: "Counter for this ACE",
 							Computed:            true,
 						},
 						"permit_capture": schema.BoolAttribute{
@@ -136,7 +136,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_source_port_group": schema.StringAttribute{
-							MarkdownDescription: "source port object group",
+							MarkdownDescription: "Source port object group",
 							Computed:            true,
 						},
 						"permit_source_port_eq": schema.StringAttribute{
@@ -188,7 +188,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_destination_port_group": schema.StringAttribute{
-							MarkdownDescription: "destination port object group",
+							MarkdownDescription: "Destination port object group",
 							Computed:            true,
 						},
 						"permit_destination_port_eq": schema.StringAttribute{
@@ -228,7 +228,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_dscp": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
 						"permit_dscp_eq": schema.StringAttribute{
@@ -340,7 +340,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_nexthop2_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"permit_nexthop2_vrf": schema.StringAttribute{
@@ -352,7 +352,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_nexthop3_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"permit_nexthop3_vrf": schema.StringAttribute{
@@ -392,7 +392,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_counter": schema.StringAttribute{
-							MarkdownDescription: "counter for this ACE",
+							MarkdownDescription: "Counter for this ACE",
 							Computed:            true,
 						},
 						"deny_capture": schema.BoolAttribute{
@@ -440,7 +440,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_source_port_group": schema.StringAttribute{
-							MarkdownDescription: "source port object group",
+							MarkdownDescription: "Source port object group",
 							Computed:            true,
 						},
 						"deny_source_port_eq": schema.StringAttribute{
@@ -492,7 +492,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_destination_port_group": schema.StringAttribute{
-							MarkdownDescription: "destination port object group",
+							MarkdownDescription: "Destination port object group",
 							Computed:            true,
 						},
 						"deny_destination_port_eq": schema.StringAttribute{
@@ -532,7 +532,7 @@ func (d *IPv6AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_dscp": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "DSCP value",
 							Computed:            true,
 						},
 						"deny_dscp_eq": schema.StringAttribute{

@@ -14,10 +14,10 @@ This data source can read the Router BGP VRF Neighbor Address Family configurati
 
 ```terraform
 data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
-  as_number        = "65001"
-  vrf_name         = "VRF1"
-  neighbor_address = "10.1.1.2"
-  af_name          = "ipv4-unicast"
+  as_number = "65001"
+  vrf_name  = "VRF1"
+  address   = "10.1.1.2"
+  af_name   = "ipv4-unicast"
 }
 ```
 
@@ -26,10 +26,10 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 ### Required
 
+- `address` (String) IPaddress
 - `af_name` (String) Enter Address Family command mode
 - `as_number` (String) bgp as-number
-- `neighbor_address` (String) Neighbor address
-- `vrf_name` (String) Specify a vrf name
+- `vrf_name` (String) VRF name - maximum length 32 characters
 
 ### Optional
 
@@ -49,7 +49,6 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 - `remove_private_as_inbound_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `remove_private_as_internal` (Boolean) remove only if all ASes in the path are private
-- `remove_private_as_internal_inheritance_disable` (Boolean) Prevent remove-private-AS from being inherited from the parent
 - `route_policy_in` (String) Apply route policy to inbound routes
 - `route_policy_out` (String) Apply route policy to outbound routes
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent

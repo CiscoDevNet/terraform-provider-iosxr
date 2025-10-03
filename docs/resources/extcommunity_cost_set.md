@@ -24,7 +24,7 @@ resource "iosxr_extcommunity_cost_set" "example" {
 
 ### Required
 
-- `rpl` (String) Extended Community Cost Set
+- `rpl` (String) Configures an extended community cost set
 - `set_name` (String) Set name
 
 ### Optional

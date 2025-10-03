@@ -63,7 +63,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 				Computed:            true,
 			},
 			"access_list_name": schema.StringAttribute{
-				MarkdownDescription: "Access list name - maximum 64 characters",
+				MarkdownDescription: "Access list name - maximum 128 characters",
 				Required:            true,
 			},
 			"sequences": schema.ListNestedAttribute{
@@ -148,7 +148,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_source_port_group": schema.StringAttribute{
-							MarkdownDescription: "source port object group",
+							MarkdownDescription: "Source port object group",
 							Computed:            true,
 						},
 						"permit_source_port_eq": schema.StringAttribute{
@@ -240,7 +240,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_dscp": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "Match packets with given DSCP value(s)",
 							Computed:            true,
 						},
 						"permit_dscp_eq": schema.StringAttribute{
@@ -376,7 +376,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_nexthop2_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"permit_nexthop2_vrf": schema.StringAttribute{
@@ -388,7 +388,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"permit_nexthop3_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"permit_nexthop3_vrf": schema.StringAttribute{
@@ -444,7 +444,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_source_port_group": schema.StringAttribute{
-							MarkdownDescription: "source port object group",
+							MarkdownDescription: "Source port object group",
 							Computed:            true,
 						},
 						"deny_source_port_eq": schema.StringAttribute{
@@ -580,7 +580,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_dscp": schema.StringAttribute{
-							MarkdownDescription: "",
+							MarkdownDescription: "Match packets with given DSCP value(s)",
 							Computed:            true,
 						},
 						"deny_dscp_eq": schema.StringAttribute{
@@ -716,7 +716,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_nexthop2_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"deny_nexthop2_vrf": schema.StringAttribute{
@@ -728,7 +728,7 @@ func (d *IPv4AccessListDataSource) Schema(ctx context.Context, req datasource.Sc
 							Computed:            true,
 						},
 						"deny_nexthop3_track": schema.StringAttribute{
-							MarkdownDescription: "specific TRACK Name for this nexthop",
+							MarkdownDescription: "Specific TRACK Name for this nexthop",
 							Computed:            true,
 						},
 						"deny_nexthop3_vrf": schema.StringAttribute{

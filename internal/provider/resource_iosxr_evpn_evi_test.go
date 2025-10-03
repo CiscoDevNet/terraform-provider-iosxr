@@ -78,12 +78,18 @@ resource "iosxr_gnmi" "PreReq0" {
 	}
 }
 
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
+	attributes = {
+	}
+}
+
 `
 
 func testAccIosxrEVPNEVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
 	config += `	vpn_id = 1234` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -112,7 +118,7 @@ func testAccIosxrEVPNEVIConfig_all() string {
 	config += `	etree = true` + "\n"
 	config += `	etree_leaf = false` + "\n"
 	config += `	etree_rt_leaf = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -37,11 +37,11 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum(),
+			Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig + testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all(),
+		Config: testAccIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig + testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -57,10 +57,27 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 	})
 }
 
+const testAccIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
+	attributes = {
+	}
+}
+
+resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=POLICY1]"
+	attributes = {
+		"policy-name" = "POLICY1"
+	}
+}
+
+`
+
 func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum() string {
 	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
 	config += `	path_index = 100` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -76,6 +93,7 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
 	config += `		hop_type = "mpls"` + "\n"
 	config += `		segment_list_name = "dynamic"` + "\n"
 	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -67,55 +67,155 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				Required:            true,
 			},
 			"interface_name": schema.StringAttribute{
-				MarkdownDescription: "Enter the IS-IS interface configuration submode",
+				MarkdownDescription: "Interface to configure",
 				Required:            true,
 			},
 			"circuit_type": schema.StringAttribute{
 				MarkdownDescription: "Configure circuit type for interface",
 				Computed:            true,
 			},
-			"hello_padding_disable": schema.BoolAttribute{
-				MarkdownDescription: "Disable hello-padding",
+			"hello_padding": schema.StringAttribute{
+				MarkdownDescription: "Add padding to IS-IS hello packets",
 				Computed:            true,
 			},
-			"hello_padding_sometimes": schema.BoolAttribute{
-				MarkdownDescription: "Enable hello-padding during adjacency formation only",
+			"hello_padding_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-padding for one level only",
 				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-padding for IIHs at this level only",
+							Computed:            true,
+						},
+						"hello_padding": schema.StringAttribute{
+							MarkdownDescription: "hello-padding",
+							Computed:            true,
+						},
+					},
+				},
 			},
 			"priority": schema.Int64Attribute{
 				MarkdownDescription: "Set priority for Designated Router election",
 				Computed:            true,
 			},
+			"priority_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set priority for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set priority for this level only",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Set priority for Designated Router election",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"point_to_point": schema.BoolAttribute{
 				MarkdownDescription: "Treat active LAN interface as point-to-point",
 				Computed:            true,
 			},
-			"passive": schema.BoolAttribute{
+			"state": schema.StringAttribute{
 				MarkdownDescription: "Do not establish adjacencies over this interface",
 				Computed:            true,
 			},
-			"suppressed": schema.BoolAttribute{
-				MarkdownDescription: "Do not advertise connected prefixes of this interface",
+			"hello_password_accept_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
-			"shutdown": schema.BoolAttribute{
-				MarkdownDescription: "Shutdown IS-IS on this interface",
+			"hello_password_accepts_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-password for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-password for IIHs at this level only",
+							Computed:            true,
+						},
+						"encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hello_password_text_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
 				Computed:            true,
 			},
-			"hello_password_text": schema.StringAttribute{
-				MarkdownDescription: "The encrypted LSP/SNP password",
+			"hello_password_text_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
-			"hello_password_hmac_md5": schema.StringAttribute{
-				MarkdownDescription: "The encrypted LSP/SNP password",
+			"hello_password_hmac_md5_encrypted": schema.StringAttribute{
+				MarkdownDescription: "Specifies a password will follow",
+				Computed:            true,
+			},
+			"hello_password_hmac_md5_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
 			"hello_password_keychain": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
+			"hello_password_keychain_send_only": schema.BoolAttribute{
+				MarkdownDescription: "Do not require authentication of incoming IIHs",
+				Computed:            true,
+			},
+			"hello_password_levels": schema.ListNestedAttribute{
+				MarkdownDescription: "Set hello-password for one level only",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"level_number": schema.Int64Attribute{
+							MarkdownDescription: "Set hello-password for one level only",
+							Computed:            true,
+						},
+						"text_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+						},
+						"text_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+						"hmac_md5_encrypted": schema.StringAttribute{
+							MarkdownDescription: "Specifies a password will follow",
+							Computed:            true,
+						},
+						"hmac_md5_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+						"keychain_name": schema.StringAttribute{
+							MarkdownDescription: "Specifies a Key Chain name will follow",
+							Computed:            true,
+						},
+						"keychain_send_only": schema.BoolAttribute{
+							MarkdownDescription: "Do not require authentication of incoming IIHs",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"bfd_fast_detect_ipv4": schema.BoolAttribute{
+				MarkdownDescription: "Address Family",
+				Computed:            true,
+			},
 			"bfd_fast_detect_ipv6": schema.BoolAttribute{
 				MarkdownDescription: "Address Family",
+				Computed:            true,
+			},
+			"bfd_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Hello interval",
+				Computed:            true,
+			},
+			"bfd_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detect multiplier",
 				Computed:            true,
 			},
 		},

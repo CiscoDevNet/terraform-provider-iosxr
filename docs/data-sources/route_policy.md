@@ -32,4 +32,4 @@ data "iosxr_route_policy" "example" {
 ### Read-Only
 
 - `id` (String) The path of the retrieved object.
-- `rpl` (String) policy statements
+- `rpl` (String) Configures a route policy

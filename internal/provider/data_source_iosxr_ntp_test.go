@@ -50,7 +50,6 @@ func TestAccDataSourceIosxrNTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "authentication_keys.0.key_number", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "authentication_keys.0.md5_encrypted", "1212000E43"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "broadcastdelay", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "max_associations", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "trusted_keys.0.key_number", "8"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "update_calendar", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ntp.test", "log_internal_sync", "true"))
@@ -116,7 +115,6 @@ func testAccDataSourceIosxrNTPConfig() string {
 	config += `		md5_encrypted = "1212000E43"` + "\n"
 	config += `	}]` + "\n"
 	config += `	broadcastdelay = 10` + "\n"
-	config += `	max_associations = 1` + "\n"
 	config += `	trusted_keys = [{` + "\n"
 	config += `		key_number = 8` + "\n"
 	config += `	}]` + "\n"

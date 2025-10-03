@@ -107,7 +107,7 @@ func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:            true,
 			},
 			"redistribute_connected": schema.BoolAttribute{
-				MarkdownDescription: "Connected routes",
+				MarkdownDescription: "Redistribute connected routes",
 				Computed:            true,
 			},
 			"redistribute_connected_tag": schema.Int64Attribute{
@@ -119,7 +119,7 @@ func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				Computed:            true,
 			},
 			"redistribute_static": schema.BoolAttribute{
-				MarkdownDescription: "Static routes",
+				MarkdownDescription: "Redistribute static routes",
 				Computed:            true,
 			},
 			"redistribute_static_tag": schema.Int64Attribute{
@@ -175,7 +175,7 @@ func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				},
 			},
 			"redistribute_bgp": schema.ListNestedAttribute{
-				MarkdownDescription: "bgp as-number",
+				MarkdownDescription: "Redistribute BGP routes",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -195,7 +195,7 @@ func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				},
 			},
 			"redistribute_isis": schema.ListNestedAttribute{
-				MarkdownDescription: "ISO IS-IS",
+				MarkdownDescription: "Redistribute ISIS routes",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -227,7 +227,7 @@ func (d *RouterOSPFVRFDataSource) Schema(ctx context.Context, req datasource.Sch
 				},
 			},
 			"redistribute_ospf": schema.ListNestedAttribute{
-				MarkdownDescription: "Open Shortest Path First (OSPF)",
+				MarkdownDescription: "Redistribute OSPF routes",
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{

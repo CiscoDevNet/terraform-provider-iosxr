@@ -14,17 +14,21 @@ This resource can manage the Router BGP Neighbor Group configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_group" "example" {
-  as_number                           = "65001"
-  name                                = "GROUP1"
-  remote_as                           = "65001"
-  description                         = "My Neighbor Group Description"
-  update_source                       = "Loopback0"
-  advertisement_interval_seconds      = 10
-  bfd_minimum_interval                = 3
-  bfd_multiplier                      = 4
-  bfd_fast_detect                     = true
-  bfd_fast_detect_strict_mode         = false
-  bfd_fast_detect_inheritance_disable = false
+  as_number                      = "65001"
+  name                           = "GROUP1"
+  remote_as                      = "65001"
+  description                    = "My Neighbor Group Description"
+  update_source                  = "Loopback0"
+  advertisement_interval_seconds = 10
+  bfd_minimum_interval           = 3
+  bfd_multiplier                 = 4
+  bfd_fast_detect                = true
+  bfd_fast_detect_strict_mode    = false
+  bfd_fast_detect_disable        = false
+  password                       = "12341C2713181F13253920"
+  password_inheritance_disable   = false
+  timers_keepalive_interval      = 10
+  timers_holdtime                = 20
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"
@@ -37,9 +41,6 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
       route_policy_out                           = "ROUTE_POLICY_1"
     }
   ]
-  timers_keepalive_interval          = 3
-  timers_holdtime                    = "10"
-  timers_minimum_acceptable_holdtime = "9"
 }
 ```
 
@@ -49,20 +50,23 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
 ### Required
 
 - `as_number` (String) bgp as-number
-- `name` (String) Specify a Neighbor-group
+- `name` (String) Neighbor-group name
 
 ### Optional
 
 - `address_families` (Attributes List) Enter Address Family command mode (see [below for nested schema](#nestedatt--address_families))
 - `advertisement_interval_milliseconds` (Number) time in milliseconds
   - Range: `0`-`999`
-- `advertisement_interval_seconds` (Number) Minimum interval between sending BGP routing updates
+- `advertisement_interval_seconds` (Number) time in seconds
   - Range: `0`-`600`
-- `ao_include_tcp_options_enable` (Boolean) Include other TCP options in the header
+- `ao_inheritance_disable` (Boolean) Prevent keychain from being inherited from parent
+- `ao_key_chain_accept_mismatch` (Boolean) Accept new connection even if AO mismatched
+- `ao_key_chain_include_tcp_options` (String) Include/Exclude other TCP options in the header
+  - Choices: `disable`, `enable`
 - `ao_key_chain_name` (String) Name of the key chain - maximum 32 characters
 - `bfd_fast_detect` (Boolean) Enable Fast detection
-- `bfd_fast_detect_inheritance_disable` (Boolean) Prevent bfd settings from being inherited from the parent
-- `bfd_fast_detect_strict_mode` (Boolean) Hold down neighbor session until BFD session is up
+- `bfd_fast_detect_disable` (Boolean) Prevent bfd settings from being inherited from the parent
+- `bfd_fast_detect_strict_mode` (Boolean) (Deprecated) Hold down neighbor session until BFD is up (based on IOS-XR proprietary mechanism)
 - `bfd_minimum_interval` (Number) Hello interval
   - Range: `3`-`30000`
 - `bfd_multiplier` (Number) Detect multiplier
@@ -71,15 +75,24 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   - Choices: `all`, `attributes`
 - `description` (String) Neighbor specific description
 - `device` (String) A device name from the provider configuration.
-- `local_as` (String) bgp as-number
+- `local_as` (String) AS number
 - `local_as_dual_as` (Boolean) Dual-AS mode
+- `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
 - `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
-- `remote_as` (String) bgp as-number
-- `timers_holdtime` (String) Holdtime. Set 0 to disable keepalives/hold time.
-- `timers_keepalive_interval` (Number) BGP timers
+- `password` (String) Specifies an ENCRYPTED password will follow
+- `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
+- `remote_as` (String) Set remote AS
+- `timers_holdtime` (Number) Holdtime
+  - Range: `3`-`65535`
+- `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
+- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
-- `timers_minimum_acceptable_holdtime` (String) Minimum acceptable holdtime from neighbor. Set 0 to disable keepalives/hold time.
+- `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
+  - Range: `3`-`65535`
 - `update_source` (String) Source of routing updates
 
 ### Read-Only

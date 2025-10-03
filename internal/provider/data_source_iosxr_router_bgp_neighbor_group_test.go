@@ -35,7 +35,11 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_multiplier", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_strict_mode", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_inheritance_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "bfd_fast_detect_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "password", "12341C2713181F13253920"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "password_inheritance_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_keepalive_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.af_name", "ipv4-labeled-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.next_hop_self", "true"))
@@ -44,9 +48,6 @@ func TestAccDataSourceIosxrRouterBGPNeighborGroup(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_reflector_client_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "address_families.0.route_policy_out", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_keepalive_interval", "3"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_holdtime", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_neighbor_group.test", "timers_minimum_acceptable_holdtime", "9"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -90,7 +91,11 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `	bfd_multiplier = 4` + "\n"
 	config += `	bfd_fast_detect = true` + "\n"
 	config += `	bfd_fast_detect_strict_mode = false` + "\n"
-	config += `	bfd_fast_detect_inheritance_disable = false` + "\n"
+	config += `	bfd_fast_detect_disable = false` + "\n"
+	config += `	password = "12341C2713181F13253920"` + "\n"
+	config += `	password_inheritance_disable = false` + "\n"
+	config += `	timers_keepalive_interval = 10` + "\n"
+	config += `	timers_holdtime = 20` + "\n"
 	config += `	address_families = [{` + "\n"
 	config += `		af_name = "ipv4-labeled-unicast"` + "\n"
 	config += `		soft_reconfiguration_inbound_always = true` + "\n"
@@ -101,9 +106,6 @@ func testAccDataSourceIosxrRouterBGPNeighborGroupConfig() string {
 	config += `		route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `		route_policy_out = "ROUTE_POLICY_1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	timers_keepalive_interval = 3` + "\n"
-	config += `	timers_holdtime = "10"` + "\n"
-	config += `	timers_minimum_acceptable_holdtime = "9"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 

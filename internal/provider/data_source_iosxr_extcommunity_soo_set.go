@@ -67,7 +67,7 @@ func (d *ExtcommunitySOOSetDataSource) Schema(ctx context.Context, req datasourc
 				Required:            true,
 			},
 			"rpl": schema.StringAttribute{
-				MarkdownDescription: "Extended Community SOO Set",
+				MarkdownDescription: "Configures an extended community soo set",
 				Computed:            true,
 			},
 		},

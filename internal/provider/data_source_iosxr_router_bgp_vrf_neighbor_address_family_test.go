@@ -29,14 +29,14 @@ func TestAccDataSourceIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "send_community_ebgp_inheritance_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_entire_aspath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_entire_aspath", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_bgp_vrf_neighbor_address_family.test", "remove_private_as_inbound_inheritance_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -53,8 +53,8 @@ const testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
 	attributes = {
-		"as-number" = "1"
-		"index" = "1"
+		"two-byte-as-number" = "1"
+		"asn2-index" = "1"
 	}
 }
 
@@ -94,10 +94,10 @@ resource "iosxr_gnmi" "PreReq2" {
 		},
 		{
 			name = "neighbors/neighbor"
-			key = "neighbor-address"
+			key = "address"
 			items = [
 				{
-					"neighbor-address" = "10.1.1.2"
+					"address" = "10.1.1.2"
 					"remote-as" = "65002"
 				},
 			]
@@ -121,18 +121,18 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	as_number = "65001"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
-	config += `	neighbor_address = "10.1.1.2"` + "\n"
+	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
-	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	soft_reconfiguration_inbound_always = true` + "\n"
 	config += `	send_community_ebgp_inheritance_disable = true` + "\n"
+	config += `	remove_private_as_inbound = true` + "\n"
+	config += `	remove_private_as_inbound_entire_aspath = true` + "\n"
 	config += `	remove_private_as = true` + "\n"
 	config += `	remove_private_as_entire_aspath = true` + "\n"
-	config += `	remove_private_as_inbound_inheritance_disable = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 
@@ -140,7 +140,7 @@ func testAccDataSourceIosxrRouterBGPVRFNeighborAddressFamilyConfig() string {
 		data "iosxr_router_bgp_vrf_neighbor_address_family" "test" {
 			as_number = "65001"
 			vrf_name = "VRF1"
-			neighbor_address = "10.1.1.2"
+			address = "10.1.1.2"
 			af_name = "ipv4-unicast"
 			depends_on = [iosxr_router_bgp_vrf_neighbor_address_family.test]
 		}

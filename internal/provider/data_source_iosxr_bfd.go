@@ -66,6 +66,10 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Disable BFD echo mode",
 				Computed:            true,
 			},
+			"echo_latency_detect": schema.BoolAttribute{
+				MarkdownDescription: "Enable BFD echo latency detection",
+				Computed:            true,
+			},
 			"echo_latency_detect_percentage": schema.Int64Attribute{
 				MarkdownDescription: "Percentage of detection time to consider as bad latency",
 				Computed:            true,
@@ -79,11 +83,11 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 			},
 			"echo_ipv4_source": schema.StringAttribute{
-				MarkdownDescription: "BFD echo source IP address",
+				MarkdownDescription: "IPv4 address",
 				Computed:            true,
 			},
-			"echo_ipv4_bundle_per_member_preferred_minimum_interval": schema.Int64Attribute{
-				MarkdownDescription: "The preferred minimum interval (in ms) for the BFD session",
+			"echo_ipv4_bundle_per_member_minimum_interval": schema.Int64Attribute{
+				MarkdownDescription: "Set the preferred minimum interval for the BFD session",
 				Computed:            true,
 			},
 			"trap_singlehop_pre_mapped": schema.BoolAttribute{
@@ -95,8 +99,8 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
-						"location_name": schema.StringAttribute{
-							MarkdownDescription: "Specify a location",
+						"location_id": schema.StringAttribute{
+							MarkdownDescription: "Fully qualified location specification",
 							Computed:            true,
 						},
 					},
@@ -146,12 +150,8 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Maximum delay before bringing up session",
 				Computed:            true,
 			},
-			"bundle_coexistence_bob_blb_inherit": schema.BoolAttribute{
-				MarkdownDescription: "Use inheritence mechanism",
-				Computed:            true,
-			},
-			"bundle_coexistence_bob_blb_logical": schema.BoolAttribute{
-				MarkdownDescription: "Use BFD logical Bundle natively",
+			"bundle_coexistence_bob_blb": schema.StringAttribute{
+				MarkdownDescription: "Coexistence for BoB and BLB",
 				Computed:            true,
 			},
 			"interfaces": schema.ListNestedAttribute{
@@ -160,15 +160,15 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"interface_name": schema.StringAttribute{
-							MarkdownDescription: "Configure BFD on an interface",
+							MarkdownDescription: "Select an interface to configure",
 							Computed:            true,
 						},
-						"echo_disable": schema.BoolAttribute{
+						"echo_disable": schema.StringAttribute{
 							MarkdownDescription: "Disable BFD echo mode for this interface",
 							Computed:            true,
 						},
 						"echo_ipv4_source": schema.StringAttribute{
-							MarkdownDescription: "BFD echo source IP address",
+							MarkdownDescription: "IPv4 address",
 							Computed:            true,
 						},
 						"ipv6_checksum_disable": schema.BoolAttribute{

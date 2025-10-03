@@ -60,3 +60,11 @@ attributes:
         example: 22
   - yang_name: bfd/fast-detect/peer/ipv4
     example: 33.33.33.3
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp
+  - path: Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]
+    attributes:
+      - name: interface-name
+        value: GigabitEthernet0/0/0/1
+    dependencies: [0]

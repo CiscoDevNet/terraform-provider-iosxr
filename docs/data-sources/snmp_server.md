@@ -33,8 +33,10 @@ data "iosxr_snmp_server" "example" {
 - `location` (String) Text for mib Object sysLocation
 - `trap_source_both` (String) Assign an interface for the source address of all traps
 - `traps_bfd` (Boolean) Enable BFD traps
-- `traps_bgp_bgp4_mib_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
-- `traps_bgp_cbgp2_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
+- `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `traps_bgp_enable_cisco_bgp4_mib` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps
+- `traps_bgp_enable_updown` (Boolean) Enable BGP4-MIB and CISCO-BGP4-MIB traps
 - `traps_bridgemib` (Boolean) Enable SNMP Trap for Bridge MIB
 - `traps_config` (Boolean) Enable SNMP config traps
 - `traps_copy_complete` (Boolean) Enable CISCO-CONFIG-COPY-MIB ccCopyCompletion traps
@@ -43,25 +45,25 @@ data "iosxr_snmp_server" "example" {
 - `traps_entity_state_operstatus` (Boolean) Enable entity oper status enable notification
 - `traps_ethernet_oam_events` (Boolean) Enable all OAM event traps
 - `traps_fru_ctrl` (Boolean) Enable SNMP entity FRU control traps
-- `traps_isis_adjacency_change` (String) isisAdjacencyChange
-- `traps_isis_all` (String) Enable all IS-IS traps
-- `traps_isis_area_mismatch` (String) isisAreaMismatch
-- `traps_isis_attempt_to_exceed_max_sequence` (String) isisAttemptToExceedMaxSequence
-- `traps_isis_authentication_failure` (String) isisAuthenticationFailure
-- `traps_isis_authentication_type_failure` (String) isisAuthenticationTypeFailure
-- `traps_isis_corrupted_lsp_detected` (String) isisCorruptedLSPDetected
-- `traps_isis_database_overload` (String) isisDatabaseOverload
-- `traps_isis_id_len_mismatch` (String) isisIDLenMismatch
-- `traps_isis_lsp_error_detected` (String) isisLSPErrorDetected
-- `traps_isis_lsp_too_large_to_propagate` (String) isisLSPTooLargeToPropagate
-- `traps_isis_manual_address_drops` (String) isisManualAddressDrops
-- `traps_isis_max_area_addresses_mismatch` (String) isisMaxAreaAddressesMismatch
-- `traps_isis_orig_lsp_buff_size_mismatch` (String) isisOrigLSPBuffSizeMismatch
-- `traps_isis_own_lsp_purge` (String) isisOwnLSPPurge
-- `traps_isis_protocols_supported_mismatch` (String) isisProtocolsSupportedMismatch
-- `traps_isis_rejected_adjacency` (String) isisRejectedAdjacency
-- `traps_isis_sequence_number_skip` (String) isisSequenceNumberSkip
-- `traps_isis_version_skew` (String) isisVersionSkew
+- `traps_isis_adjacency_change` (Boolean) isisAdjacencyChange
+- `traps_isis_all` (Boolean) Enable all IS-IS traps
+- `traps_isis_area_mismatch` (Boolean) isisAreaMismatch
+- `traps_isis_attempt_to_exceed_max_sequence` (Boolean) isisAttemptToExceedMaxSequence
+- `traps_isis_authentication_failure` (Boolean) isisAuthenticationFailure
+- `traps_isis_authentication_type_failure` (Boolean) isisAuthenticationTypeFailure
+- `traps_isis_corrupted_lsp_detected` (Boolean) isisCorruptedLSPDetected
+- `traps_isis_database_overload` (Boolean) isisDatabaseOverload
+- `traps_isis_id_len_mismatch` (Boolean) isisIDLenMismatch
+- `traps_isis_lsp_error_detected` (Boolean) isisLSPErrorDetected
+- `traps_isis_lsp_too_large_to_propagate` (Boolean) isisLSPTooLargeToPropagate
+- `traps_isis_manual_address_drops` (Boolean) isisManualAddressDrops
+- `traps_isis_max_area_addresses_mismatch` (Boolean) isisMaxAreaAddressesMismatch
+- `traps_isis_orig_lsp_buff_size_mismatch` (Boolean) isisOrigLSPBuffSizeMismatch
+- `traps_isis_own_lsp_purge` (Boolean) isisOwnLSPPurge
+- `traps_isis_protocols_supported_mismatch` (Boolean) isisProtocolsSupportedMismatch
+- `traps_isis_rejected_adjacency` (Boolean) isisRejectedAdjacency
+- `traps_isis_sequence_number_skip` (Boolean) isisSequenceNumberSkip
+- `traps_isis_version_skew` (Boolean) isisVersionSkew
 - `traps_l2vpn_all` (Boolean) Enable all L2VPN traps
 - `traps_l2vpn_vc_down` (Boolean) Enable VC down traps
 - `traps_l2vpn_vc_up` (Boolean) Enable VC up traps

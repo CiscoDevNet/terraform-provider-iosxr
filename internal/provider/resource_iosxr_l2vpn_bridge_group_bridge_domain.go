@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewL2VPNBridgeGroupBridgeDomainResource() resource.Resource {
 	return &L2VPNBridgeGroupBridgeDomainResource{}
@@ -222,6 +227,10 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Configure(_ context.Context, req 
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *L2VPNBridgeGroupBridgeDomainResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan L2VPNBridgeGroupBridgeDomain
 
@@ -260,6 +269,10 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Create(ctx context.Context, req r
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *L2VPNBridgeGroupBridgeDomainResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state L2VPNBridgeGroupBridgeDomain
@@ -302,6 +315,10 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Read(ctx context.Context, req res
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *L2VPNBridgeGroupBridgeDomainResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state L2VPNBridgeGroupBridgeDomain
@@ -354,6 +371,10 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Update(ctx context.Context, req r
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *L2VPNBridgeGroupBridgeDomainResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state L2VPNBridgeGroupBridgeDomain
 
@@ -395,6 +416,10 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) Delete(ctx context.Context, req r
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *L2VPNBridgeGroupBridgeDomainResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -410,3 +435,5 @@ func (r *L2VPNBridgeGroupBridgeDomainResource) ImportState(ctx context.Context, 
 	value1 := idParts[1]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("bridge_domain_name"), value1)...)
 }
+
+// End of section. //template:end import

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPVRFAddressFamily struct {
 	Device                                                 types.String                                  `tfsdk:"device"`
 	Id                                                     types.String                                  `tfsdk:"id"`
@@ -266,6 +270,10 @@ type RouterBGPVRFAddressFamilyRedistributeIsis struct {
 	RoutePolicy                 types.String `tfsdk:"route_policy"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterBGPVRFAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.AfName.ValueString())
 }
@@ -273,6 +281,10 @@ func (data RouterBGPVRFAddressFamily) getPath() string {
 func (data RouterBGPVRFAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString(), data.AfName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
@@ -977,6 +989,10 @@ func (data RouterBGPVRFAddressFamily) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "additional-paths.send"); !data.AdditionalPathsSend.IsNull() {
@@ -2309,6 +2325,10 @@ func (data *RouterBGPVRFAddressFamily) updateFromBody(ctx context.Context, res [
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
 		data.AdditionalPathsSend = types.BoolValue(true)
@@ -3025,6 +3045,10 @@ func (data *RouterBGPVRFAddressFamily) fromBody(ctx context.Context, res []byte)
 		data.RedistributeRipRoutePolicy = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "additional-paths.send"); value.Exists() {
@@ -3743,6 +3767,10 @@ func (data *RouterBGPVRFAddressFamilyData) fromBody(ctx context.Context, res []b
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPVRFAddressFamily) []string {
 	deletedItems := make([]string, 0)
 	if !state.AdditionalPathsSend.IsNull() && data.AdditionalPathsSend.IsNull() {
@@ -4360,6 +4388,10 @@ func (data *RouterBGPVRFAddressFamily) getDeletedItems(ctx context.Context, stat
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AdditionalPathsSend.IsNull() && !data.AdditionalPathsSend.ValueBool() {
@@ -4746,6 +4778,10 @@ func (data *RouterBGPVRFAddressFamily) getEmptyLeafsDelete(ctx context.Context) 
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *RouterBGPVRFAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.AdditionalPathsSend.IsNull() {
@@ -4951,3 +4987,5 @@ func (data *RouterBGPVRFAddressFamily) getDeletePaths(ctx context.Context) []str
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

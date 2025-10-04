@@ -19,11 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -56,6 +61,9 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
@@ -72,6 +80,10 @@ resource "iosxr_gnmi" "PreReq1" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrEVPNEVIConfig() string {
 	config := `resource "iosxr_evpn_evi" "test" {` + "\n"
@@ -109,3 +121,5 @@ func testAccDataSourceIosxrEVPNEVIConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrRouterStaticVRFIPv4Multicast(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -66,6 +71,9 @@ func TestAccIosxrRouterStaticVRFIPv4Multicast(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterStaticVRFIPv4MulticastPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=VRF2]"
@@ -76,6 +84,10 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrRouterStaticVRFIPv4MulticastConfig_minimum() string {
 	config := `resource "iosxr_router_static_vrf_ipv4_multicast" "test" {` + "\n"
 	config += `	vrf_name = "VRF2"` + "\n"
@@ -85,6 +97,10 @@ func testAccIosxrRouterStaticVRFIPv4MulticastConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrRouterStaticVRFIPv4MulticastConfig_all() string {
 	config := `resource "iosxr_router_static_vrf_ipv4_multicast" "test" {` + "\n"
@@ -114,3 +130,5 @@ func testAccIosxrRouterStaticVRFIPv4MulticastConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

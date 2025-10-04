@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type FlowExporterMap struct {
 	Device                              types.String `tfsdk:"device"`
 	Id                                  types.String `tfsdk:"id"`
@@ -73,6 +77,10 @@ type FlowExporterMapData struct {
 	VersionOptionsVrfTableTimeout       types.Int64  `tfsdk:"version_options_vrf_table_timeout"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data FlowExporterMap) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]", data.Name.ValueString())
 }
@@ -80,6 +88,10 @@ func (data FlowExporterMap) getPath() string {
 func (data FlowExporterMapData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]", data.Name.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data FlowExporterMap) toBody(ctx context.Context) string {
 	body := "{}"
@@ -138,6 +150,10 @@ func (data FlowExporterMap) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() && !data.DestinationIpv4Address.IsNull() {
@@ -226,6 +242,10 @@ func (data *FlowExporterMap) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *FlowExporterMap) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() {
 		data.DestinationIpv4Address = types.StringValue(value.String())
@@ -278,6 +298,10 @@ func (data *FlowExporterMap) fromBody(ctx context.Context, res []byte) {
 		data.VersionOptionsVrfTableTimeout = types.Int64Value(value.Int())
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "destination.ipv4-address"); value.Exists() {
@@ -332,6 +356,10 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExporterMap) []string {
 	deletedItems := make([]string, 0)
 	if !state.DestinationIpv4Address.IsNull() && data.DestinationIpv4Address.IsNull() {
@@ -385,6 +413,10 @@ func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExpo
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DfbitSet.IsNull() && !data.DfbitSet.ValueBool() {
@@ -392,6 +424,10 @@ func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -445,3 +481,5 @@ func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

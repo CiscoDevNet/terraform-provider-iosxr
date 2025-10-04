@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -40,6 +41,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterStaticVRFIPv4MulticastResource() resource.Resource {
 	return &RouterStaticVRFIPv4MulticastResource{}
@@ -499,6 +504,10 @@ func (r *RouterStaticVRFIPv4MulticastResource) Configure(_ context.Context, req 
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RouterStaticVRFIPv4MulticastResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterStaticVRFIPv4Multicast
 
@@ -537,6 +546,10 @@ func (r *RouterStaticVRFIPv4MulticastResource) Create(ctx context.Context, req r
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RouterStaticVRFIPv4MulticastResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterStaticVRFIPv4Multicast
@@ -579,6 +592,10 @@ func (r *RouterStaticVRFIPv4MulticastResource) Read(ctx context.Context, req res
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RouterStaticVRFIPv4MulticastResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterStaticVRFIPv4Multicast
@@ -631,6 +648,10 @@ func (r *RouterStaticVRFIPv4MulticastResource) Update(ctx context.Context, req r
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RouterStaticVRFIPv4MulticastResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterStaticVRFIPv4Multicast
 
@@ -672,6 +693,10 @@ func (r *RouterStaticVRFIPv4MulticastResource) Delete(ctx context.Context, req r
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RouterStaticVRFIPv4MulticastResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -689,3 +714,5 @@ func (r *RouterStaticVRFIPv4MulticastResource) ImportState(ctx context.Context, 
 	value2, _ := strconv.Atoi(idParts[2])
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_length"), value2)...)
 }
+
+// End of section. //template:end import

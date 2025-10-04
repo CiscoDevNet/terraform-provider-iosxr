@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrPCE(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -58,11 +63,23 @@ func TestAccIosxrPCE(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrPCEConfig_minimum() string {
 	config := `resource "iosxr_pce" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrPCEConfig_all() string {
 	config := `resource "iosxr_pce" "test" {` + "\n"
@@ -80,3 +97,5 @@ func testAccIosxrPCEConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

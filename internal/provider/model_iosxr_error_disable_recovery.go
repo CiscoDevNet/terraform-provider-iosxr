@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ErrorDisableRecovery struct {
 	Device                              types.String `tfsdk:"device"`
 	Id                                  types.String `tfsdk:"id"`
@@ -80,6 +84,10 @@ type ErrorDisableRecoveryData struct {
 	LinkOamDampeningInterval            types.Int64  `tfsdk:"link_oam_dampening_interval"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data ErrorDisableRecovery) getPath() string {
 	return "Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause"
 }
@@ -87,6 +95,10 @@ func (data ErrorDisableRecovery) getPath() string {
 func (data ErrorDisableRecoveryData) getPath() string {
 	return "Cisco-IOS-XR-um-error-disable-cfg:/error-disable/recovery/cause"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data ErrorDisableRecovery) toBody(ctx context.Context) string {
 	body := "{}"
@@ -152,6 +164,10 @@ func (data ErrorDisableRecovery) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() && !data.LinkOamSessionDownInterval.IsNull() {
@@ -256,6 +272,10 @@ func (data *ErrorDisableRecovery) updateFromBody(ctx context.Context, res []byte
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *ErrorDisableRecovery) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
@@ -319,6 +339,10 @@ func (data *ErrorDisableRecovery) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "link-oam-session-down.interval"); value.Exists() {
 		data.LinkOamSessionDownInterval = types.Int64Value(value.Int())
@@ -381,6 +405,10 @@ func (data *ErrorDisableRecoveryData) fromBody(ctx context.Context, res []byte) 
 		data.LinkOamDampeningInterval = types.Int64Value(value.Int())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *ErrorDisableRecovery) getDeletedItems(ctx context.Context, state ErrorDisableRecovery) []string {
 	deletedItems := make([]string, 0)
@@ -447,10 +475,18 @@ func (data *ErrorDisableRecovery) getDeletedItems(ctx context.Context, state Err
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *ErrorDisableRecovery) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *ErrorDisableRecovery) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -516,3 +552,5 @@ func (data *ErrorDisableRecovery) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

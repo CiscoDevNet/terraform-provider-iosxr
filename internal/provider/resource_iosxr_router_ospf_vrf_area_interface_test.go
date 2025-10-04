@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -60,6 +65,9 @@ func TestAccIosxrRouterOSPFVRFAreaInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterOSPFVRFAreaInterfacePrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
@@ -85,6 +93,10 @@ resource "iosxr_gnmi" "PreReq2" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_minimum() string {
 	config := `resource "iosxr_router_ospf_vrf_area_interface" "test" {` + "\n"
 	config += `	process_name = "OSPF1"` + "\n"
@@ -95,6 +107,10 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all() string {
 	config := `resource "iosxr_router_ospf_vrf_area_interface" "test" {` + "\n"
@@ -114,3 +130,5 @@ func testAccIosxrRouterOSPFVRFAreaInterfaceConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterISISInterfaceAddressFamily struct {
 	Device                           types.String                                                       `tfsdk:"device"`
 	Id                               types.String                                                       `tfsdk:"id"`
@@ -93,6 +97,10 @@ type RouterISISInterfaceAddressFamilyMetricLevels struct {
 	MetricMaximum types.Bool  `tfsdk:"metric_maximum"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterISISInterfaceAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
@@ -100,6 +108,10 @@ func (data RouterISISInterfaceAddressFamily) getPath() string {
 func (data RouterISISInterfaceAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]/interfaces/interface[interface-name=%s]/address-families/address-family[af-name=%s][saf-name=%s]", data.ProcessId.ValueString(), data.InterfaceName.ValueString(), data.AfName.ValueString(), data.SafName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
@@ -206,6 +218,10 @@ func (data RouterISISInterfaceAddressFamily) toBody(ctx context.Context) string 
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.enable.per-prefix"); !data.FastReroutePerPrefix.IsNull() {
@@ -452,6 +468,10 @@ func (data *RouterISISInterfaceAddressFamily) updateFromBody(ctx context.Context
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.enable.per-prefix"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)
@@ -565,6 +585,10 @@ func (data *RouterISISInterfaceAddressFamily) fromBody(ctx context.Context, res 
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "fast-reroute.enable.per-prefix"); value.Exists() {
 		data.FastReroutePerPrefix = types.BoolValue(true)
@@ -677,6 +701,10 @@ func (data *RouterISISInterfaceAddressFamilyData) fromBody(ctx context.Context, 
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Context, state RouterISISInterfaceAddressFamily) []string {
 	deletedItems := make([]string, 0)
@@ -872,6 +900,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.FastReroutePerPrefix.IsNull() && !data.FastReroutePerPrefix.ValueBool() {
@@ -940,6 +972,10 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1013,3 +1049,5 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

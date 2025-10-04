@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrSNMPServerView(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -54,12 +59,24 @@ func TestAccIosxrSNMPServerView(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrSNMPServerViewConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
 	config += `	view_name = "VIEW12"` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrSNMPServerViewConfig_all() string {
 	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
@@ -71,3 +88,5 @@ func testAccIosxrSNMPServerViewConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

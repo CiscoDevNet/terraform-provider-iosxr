@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterOSPFResource() resource.Resource {
 	return &RouterOSPFResource{}
@@ -355,6 +360,10 @@ func (r *RouterOSPFResource) Configure(_ context.Context, req resource.Configure
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RouterOSPFResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterOSPF
 
@@ -393,6 +402,10 @@ func (r *RouterOSPFResource) Create(ctx context.Context, req resource.CreateRequ
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RouterOSPFResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterOSPF
@@ -435,6 +448,10 @@ func (r *RouterOSPFResource) Read(ctx context.Context, req resource.ReadRequest,
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RouterOSPFResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterOSPF
@@ -487,6 +504,10 @@ func (r *RouterOSPFResource) Update(ctx context.Context, req resource.UpdateRequ
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RouterOSPFResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterOSPF
 
@@ -528,6 +549,10 @@ func (r *RouterOSPFResource) Delete(ctx context.Context, req resource.DeleteRequ
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RouterOSPFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -541,3 +566,5 @@ func (r *RouterOSPFResource) ImportState(ctx context.Context, req resource.Impor
 	value0 := idParts[0]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_name"), value0)...)
 }
+
+// End of section. //template:end import

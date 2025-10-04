@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterOSPFVRFAreaInterface struct {
 	Device                   types.String `tfsdk:"device"`
 	Id                       types.String `tfsdk:"id"`
@@ -64,6 +68,10 @@ type RouterOSPFVRFAreaInterfaceData struct {
 	PassiveDisable           types.Bool   `tfsdk:"passive_disable"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterOSPFVRFAreaInterface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.VrfName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
 }
@@ -71,6 +79,10 @@ func (data RouterOSPFVRFAreaInterface) getPath() string {
 func (data RouterOSPFVRFAreaInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]/vrfs/vrf[vrf-name=%s]/areas/area[area-id=%s]/interfaces/interface[interface-name=%s]", data.ProcessName.ValueString(), data.VrfName.ValueString(), data.AreaId.ValueString(), data.InterfaceName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterOSPFVRFAreaInterface) toBody(ctx context.Context) string {
 	body := "{}"
@@ -115,6 +127,10 @@ func (data RouterOSPFVRFAreaInterface) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); !data.NetworkBroadcast.IsNull() {
@@ -183,6 +199,10 @@ func (data *RouterOSPFVRFAreaInterface) updateFromBody(ctx context.Context, res 
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
 		data.NetworkBroadcast = types.BoolValue(true)
@@ -221,6 +241,10 @@ func (data *RouterOSPFVRFAreaInterface) fromBody(ctx context.Context, res []byte
 		data.PassiveDisable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterOSPFVRFAreaInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "network.broadcast"); value.Exists() {
@@ -261,6 +285,10 @@ func (data *RouterOSPFVRFAreaInterfaceData) fromBody(ctx context.Context, res []
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterOSPFVRFAreaInterface) getDeletedItems(ctx context.Context, state RouterOSPFVRFAreaInterface) []string {
 	deletedItems := make([]string, 0)
 	if !state.NetworkBroadcast.IsNull() && data.NetworkBroadcast.IsNull() {
@@ -290,6 +318,10 @@ func (data *RouterOSPFVRFAreaInterface) getDeletedItems(ctx context.Context, sta
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.NetworkBroadcast.IsNull() && !data.NetworkBroadcast.ValueBool() {
@@ -312,6 +344,10 @@ func (data *RouterOSPFVRFAreaInterface) getEmptyLeafsDelete(ctx context.Context)
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterOSPFVRFAreaInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -341,3 +377,5 @@ func (data *RouterOSPFVRFAreaInterface) getDeletePaths(ctx context.Context) []st
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

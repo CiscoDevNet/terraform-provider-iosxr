@@ -19,11 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -48,6 +53,9 @@ func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrL2VPNPWClassPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
@@ -56,6 +64,10 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config := `resource "iosxr_l2vpn_pw_class" "test" {` + "\n"
@@ -81,3 +93,5 @@ func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

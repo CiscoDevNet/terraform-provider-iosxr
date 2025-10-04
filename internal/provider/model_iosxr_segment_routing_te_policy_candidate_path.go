@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRoutingTEPolicyCandidatePath struct {
 	Device     types.String                                   `tfsdk:"device"`
 	Id         types.String                                   `tfsdk:"id"`
@@ -54,6 +58,10 @@ type SegmentRoutingTEPolicyCandidatePathPathInfos struct {
 	SegmentListName types.String `tfsdk:"segment_list_name"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SegmentRoutingTEPolicyCandidatePath) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
 }
@@ -61,6 +69,10 @@ func (data SegmentRoutingTEPolicyCandidatePath) getPath() string {
 func (data SegmentRoutingTEPolicyCandidatePathData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering/Cisco-IOS-XR-infra-xtc-agent-cfg:policies/Cisco-IOS-XR-infra-xtc-agent-cfg:policy[policy-name=%s]/Cisco-IOS-XR-infra-xtc-agent-cfg:candidate-paths/Cisco-IOS-XR-infra-xtc-agent-cfg:preferences/Cisco-IOS-XR-infra-xtc-agent-cfg:preference[path-index=%d]", data.PolicyName.ValueString(), data.PathIndex.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SegmentRoutingTEPolicyCandidatePath) toBody(ctx context.Context) string {
 	body := "{}"
@@ -91,6 +103,10 @@ func (data SegmentRoutingTEPolicyCandidatePath) toBody(ctx context.Context) stri
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SegmentRoutingTEPolicyCandidatePath) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.PathInfos {
@@ -148,6 +164,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) updateFromBody(ctx context.Cont
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SegmentRoutingTEPolicyCandidatePath) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
 		data.PathInfos = make([]SegmentRoutingTEPolicyCandidatePathPathInfos, 0)
@@ -176,6 +196,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) fromBody(ctx context.Context, r
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *SegmentRoutingTEPolicyCandidatePathData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "path-infos.path-info"); value.Exists() {
 		data.PathInfos = make([]SegmentRoutingTEPolicyCandidatePathPathInfos, 0)
@@ -203,6 +227,10 @@ func (data *SegmentRoutingTEPolicyCandidatePathData) fromBody(ctx context.Contex
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Context, state SegmentRoutingTEPolicyCandidatePath) []string {
 	deletedItems := make([]string, 0)
@@ -257,6 +285,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Con
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SegmentRoutingTEPolicyCandidatePath) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.PathInfos {
@@ -273,6 +305,10 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getEmptyLeafsDelete(ctx context
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *SegmentRoutingTEPolicyCandidatePath) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.PathInfos {
@@ -287,3 +323,5 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletePaths(ctx context.Cont
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

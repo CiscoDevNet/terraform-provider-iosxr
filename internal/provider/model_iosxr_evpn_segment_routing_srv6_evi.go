@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNSegmentRoutingSRv6EVI struct {
 	Device                                types.String                                                     `tfsdk:"device"`
 	Id                                    types.String                                                     `tfsdk:"id"`
@@ -88,6 +92,10 @@ type EVPNSegmentRoutingSRv6EVILocators struct {
 	UsidAllocationWideLocalIdBlock types.Bool   `tfsdk:"usid_allocation_wide_local_id_block"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data EVPNSegmentRoutingSRv6EVI) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
@@ -95,6 +103,10 @@ func (data EVPNSegmentRoutingSRv6EVI) getPath() string {
 func (data EVPNSegmentRoutingSRv6EVIData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/segment-routing/srv6/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context) string {
 	body := "{}"
@@ -190,6 +202,10 @@ func (data EVPNSegmentRoutingSRv6EVI) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
@@ -450,6 +466,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) updateFromBody(ctx context.Context, res [
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -561,6 +581,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) fromBody(ctx context.Context, res []byte)
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -671,6 +695,10 @@ func (data *EVPNSegmentRoutingSRv6EVIData) fromBody(ctx context.Context, res []b
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, state EVPNSegmentRoutingSRv6EVI) []string {
 	deletedItems := make([]string, 0)
@@ -932,6 +960,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletedItems(ctx context.Context, stat
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.BgpRouteTargetImportTwoByteAsFormat {
@@ -998,6 +1030,10 @@ func (data *EVPNSegmentRoutingSRv6EVI) getEmptyLeafsDelete(ctx context.Context) 
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1079,3 +1115,5 @@ func (data *EVPNSegmentRoutingSRv6EVI) getDeletePaths(ctx context.Context) []str
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

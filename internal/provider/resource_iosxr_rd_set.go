@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -37,6 +38,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRDSetResource() resource.Resource {
 	return &RDSetResource{}
@@ -93,6 +98,10 @@ func (r *RDSetResource) Configure(_ context.Context, req resource.ConfigureReque
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RDSetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RDSet
 
@@ -131,6 +140,10 @@ func (r *RDSetResource) Create(ctx context.Context, req resource.CreateRequest, 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RDSetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RDSet
@@ -173,6 +186,10 @@ func (r *RDSetResource) Read(ctx context.Context, req resource.ReadRequest, resp
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RDSetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RDSet
@@ -225,6 +242,10 @@ func (r *RDSetResource) Update(ctx context.Context, req resource.UpdateRequest, 
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RDSetResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RDSet
 
@@ -261,6 +282,10 @@ func (r *RDSetResource) Delete(ctx context.Context, req resource.DeleteRequest, 
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RDSetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -274,3 +299,5 @@ func (r *RDSetResource) ImportState(ctx context.Context, req resource.ImportStat
 	value0 := idParts[0]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("set_name"), value0)...)
 }
+
+// End of section. //template:end import

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterOSPF struct {
 	Device                                types.String                 `tfsdk:"device"`
 	Id                                    types.String                 `tfsdk:"id"`
@@ -125,6 +129,10 @@ type RouterOSPFRedistributeOspf struct {
 	MetricType        types.String `tfsdk:"metric_type"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterOSPF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
 }
@@ -132,6 +140,10 @@ func (data RouterOSPF) getPath() string {
 func (data RouterOSPFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=%s]", data.ProcessName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterOSPF) toBody(ctx context.Context) string {
 	body := "{}"
@@ -321,6 +333,10 @@ func (data RouterOSPF) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); !data.MplsLdpSync.IsNull() {
@@ -702,6 +718,10 @@ func (data *RouterOSPF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
@@ -898,6 +918,10 @@ func (data *RouterOSPF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mpls.ldp.sync"); value.Exists() {
 		data.MplsLdpSync = types.BoolValue(true)
@@ -1093,6 +1117,10 @@ func (data *RouterOSPFData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) []string {
 	deletedItems := make([]string, 0)
@@ -1330,6 +1358,10 @@ func (data *RouterOSPF) getDeletedItems(ctx context.Context, state RouterOSPF) [
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MplsLdpSync.IsNull() && !data.MplsLdpSync.ValueBool() {
@@ -1423,6 +1455,10 @@ func (data *RouterOSPF) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1543,3 +1579,5 @@ func (data *RouterOSPF) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

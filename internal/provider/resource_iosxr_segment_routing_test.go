@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrSegmentRouting(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -56,6 +61,14 @@ func TestAccIosxrSegmentRouting(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrSegmentRoutingConfig_minimum() string {
 	config := `resource "iosxr_segment_routing" "test" {` + "\n"
 	config += `	global_block_lower_bound = 16000` + "\n"
@@ -65,6 +78,10 @@ func testAccIosxrSegmentRoutingConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrSegmentRoutingConfig_all() string {
 	config := `resource "iosxr_segment_routing" "test" {` + "\n"
@@ -76,3 +93,5 @@ func testAccIosxrSegmentRoutingConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

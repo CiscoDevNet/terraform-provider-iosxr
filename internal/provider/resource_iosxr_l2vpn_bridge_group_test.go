@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -52,6 +57,9 @@ func TestAccIosxrL2VPNBridgeGroup(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNBridgeGroupPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
@@ -61,6 +69,10 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	group_name = "BG123"` + "\n"
@@ -69,6 +81,10 @@ func testAccIosxrL2VPNBridgeGroupConfig_minimum() string {
 	return config
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
+
 func testAccIosxrL2VPNBridgeGroupConfig_all() string {
 	config := `resource "iosxr_l2vpn_bridge_group" "test" {` + "\n"
 	config += `	group_name = "BG123"` + "\n"
@@ -76,3 +92,5 @@ func testAccIosxrL2VPNBridgeGroupConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -130,6 +135,9 @@ func TestAccIosxrInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrInterfacePrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
@@ -215,6 +223,10 @@ resource "iosxr_gnmi" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrInterfaceConfig_minimum() string {
 	config := `resource "iosxr_interface" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -222,6 +234,10 @@ func testAccIosxrInterfaceConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrInterfaceConfig_all() string {
 	config := `resource "iosxr_interface" "test" {` + "\n"
@@ -330,3 +346,5 @@ func testAccIosxrInterfaceConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

@@ -20,6 +20,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
 	"strconv"
@@ -29,6 +30,10 @@ import (
 	"github.com/tidwall/sjson"
 	"github.com/tidwall/gjson"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 
 {{- $name := camelCase .Name}}
 type {{camelCase .Name}} struct {
@@ -98,6 +103,10 @@ type {{$name}}{{$cname}}{{toGoName .TfName}} struct {
 {{- end}}
 {{- end}}
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data {{camelCase .Name}}) getPath() string {
 {{- if hasId .Attributes}}
 	return fmt.Sprintf("{{.Path}}"{{range .Attributes}}{{if or .Id .Reference}}, data.{{toGoName .TfName}}.Value{{.Type}}(){{end}}{{end}})
@@ -113,6 +122,10 @@ func (data {{camelCase .Name}}Data) getPath() string {
 	return "{{.Path}}"
 {{- end}}
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	body := "{}"
@@ -211,6 +224,10 @@ func (data {{camelCase .Name}}) toBody(ctx context.Context) string {
 	{{- end}}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
@@ -406,6 +423,10 @@ func (data *{{camelCase .Name}}) updateFromBody(ctx context.Context, res []byte)
 	{{- end}}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
 	{{- $cname := toGoName .TfName}}
@@ -532,6 +553,10 @@ func (data *{{camelCase .Name}}) fromBody(ctx context.Context, res []byte) {
 	{{- end}}
 	{{- end}}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	{{- range .Attributes}}
@@ -660,6 +685,10 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 	{{- end}}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedItems := make([]string, 0)
 	{{- range .Attributes}}
@@ -780,6 +809,10 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	{{- range .Attributes}}
@@ -830,6 +863,10 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	{{- range .Attributes}}
@@ -857,3 +894,5 @@ func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 	{{- end}}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

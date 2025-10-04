@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrBGPASFormat(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -51,14 +56,28 @@ func TestAccIosxrBGPASFormat(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrBGPASFormatConfig_minimum() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
+
 func testAccIosxrBGPASFormatConfig_all() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

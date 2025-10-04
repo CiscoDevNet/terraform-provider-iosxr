@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -53,12 +58,24 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrLoggingSourceInterfaceConfig_minimum() string {
 	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
 	config += `	name = "Loopback0"` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrLoggingSourceInterfaceConfig_all() string {
 	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
@@ -69,3 +86,5 @@ func testAccIosxrLoggingSourceInterfaceConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

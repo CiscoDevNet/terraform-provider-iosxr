@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -59,6 +64,9 @@ func TestAccIosxrEVPNSegmentRoutingSRv6EVI(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNSegmentRoutingSRv6EVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
@@ -91,6 +99,10 @@ resource "iosxr_gnmi" "PreReq3" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
 	config += `	vpn_id = 1235` + "\n"
@@ -98,6 +110,10 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	config := `resource "iosxr_evpn_segment_routing_srv6_evi" "test" {` + "\n"
@@ -119,3 +135,5 @@ func testAccIosxrEVPNSegmentRoutingSRv6EVIConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

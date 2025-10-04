@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -57,6 +62,9 @@ func TestAccIosxrSegmentRoutingTEPolicyCandidatePath(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSegmentRoutingTEPolicyCandidatePathPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
@@ -73,6 +81,10 @@ resource "iosxr_gnmi" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum() string {
 	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
 	config += `	policy_name = "POLICY1"` + "\n"
@@ -81,6 +93,10 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
 	config := `resource "iosxr_segment_routing_te_policy_candidate_path" "test" {` + "\n"
@@ -97,3 +113,5 @@ func testAccIosxrSegmentRoutingTEPolicyCandidatePathConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

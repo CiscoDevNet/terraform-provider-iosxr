@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterISIS struct {
 	Device                                 types.String                     `tfsdk:"device"`
 	Id                                     types.String                     `tfsdk:"id"`
@@ -158,6 +162,10 @@ type RouterISISInterfacesPriorityLevels struct {
 	Priority    types.Int64 `tfsdk:"priority"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterISIS) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
@@ -165,6 +173,10 @@ func (data RouterISIS) getPath() string {
 func (data RouterISISData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=%s]", data.ProcessId.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterISIS) toBody(ctx context.Context) string {
 	body := "{}"
@@ -414,6 +426,10 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() && !data.IsType.IsNull() {
@@ -944,6 +960,10 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
@@ -1209,6 +1229,10 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "is-type"); value.Exists() {
 		data.IsType = types.StringValue(value.String())
@@ -1473,6 +1497,10 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) []string {
 	deletedItems := make([]string, 0)
@@ -1830,6 +1858,10 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SetOverloadBit.IsNull() && !data.SetOverloadBit.ValueBool() {
@@ -1956,6 +1988,10 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -2123,3 +2159,5 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

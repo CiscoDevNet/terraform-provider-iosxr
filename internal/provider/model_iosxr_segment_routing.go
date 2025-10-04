@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRouting struct {
 	Device                types.String `tfsdk:"device"`
 	Id                    types.String `tfsdk:"id"`
@@ -50,6 +54,10 @@ type SegmentRoutingData struct {
 	Enable                types.Bool   `tfsdk:"enable"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SegmentRouting) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 }
@@ -57,6 +65,10 @@ func (data SegmentRouting) getPath() string {
 func (data SegmentRoutingData) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SegmentRouting) toBody(ctx context.Context) string {
 	body := "{}"
@@ -79,6 +91,10 @@ func (data SegmentRouting) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() && !data.GlobalBlockLowerBound.IsNull() {
@@ -112,6 +128,10 @@ func (data *SegmentRouting) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
 		data.GlobalBlockLowerBound = types.Int64Value(value.Int())
@@ -131,6 +151,10 @@ func (data *SegmentRouting) fromBody(ctx context.Context, res []byte) {
 		data.Enable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "global-block.lower-bound"); value.Exists() {
@@ -152,6 +176,10 @@ func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
 	deletedItems := make([]string, 0)
 	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
@@ -172,6 +200,10 @@ func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRo
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
@@ -179,6 +211,10 @@ func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -199,3 +235,5 @@ func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

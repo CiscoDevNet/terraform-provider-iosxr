@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type Telnet struct {
 	Device                    types.String     `tfsdk:"device"`
 	Id                        types.String     `tfsdk:"id"`
@@ -60,6 +64,10 @@ type TelnetVrfsDscp struct {
 	Ipv4Dscp types.Int64  `tfsdk:"ipv4_dscp"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data Telnet) getPath() string {
 	return "Cisco-IOS-XR-um-telnet-cfg:/telnet"
 }
@@ -67,6 +75,10 @@ func (data Telnet) getPath() string {
 func (data TelnetData) getPath() string {
 	return "Cisco-IOS-XR-um-telnet-cfg:/telnet"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data Telnet) toBody(ctx context.Context) string {
 	body := "{}"
@@ -109,6 +121,10 @@ func (data Telnet) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Telnet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() && !data.Ipv4ClientSourceInterface.IsNull() {
@@ -206,6 +222,10 @@ func (data *Telnet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *Telnet) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
 		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
@@ -252,6 +272,10 @@ func (data *Telnet) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "ipv4.client.source-interface"); value.Exists() {
 		data.Ipv4ClientSourceInterface = types.StringValue(value.String())
@@ -297,6 +321,10 @@ func (data *TelnetData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string {
 	deletedItems := make([]string, 0)
@@ -384,6 +412,10 @@ func (data *Telnet) getDeletedItems(ctx context.Context, state Telnet) []string 
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *Telnet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Vrfs {
@@ -404,6 +436,10 @@ func (data *Telnet) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *Telnet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -435,3 +471,5 @@ func (data *Telnet) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

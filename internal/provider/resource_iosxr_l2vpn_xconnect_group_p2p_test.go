@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -57,6 +62,9 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNXconnectGroupP2PPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn"
@@ -74,6 +82,10 @@ resource "iosxr_gnmi" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrL2VPNXconnectGroupP2PConfig_minimum() string {
 	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
 	config += `	group_name = "P2P"` + "\n"
@@ -82,6 +94,10 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
 	config := `resource "iosxr_l2vpn_xconnect_group_p2p" "test" {` + "\n"
@@ -100,3 +116,5 @@ func testAccIosxrL2VPNXconnectGroupP2PConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

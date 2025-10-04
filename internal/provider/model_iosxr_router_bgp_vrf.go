@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPVRF struct {
 	Device                                          types.String            `tfsdk:"device"`
 	Id                                              types.String            `tfsdk:"id"`
@@ -114,6 +118,10 @@ type RouterBGPVRFNeighbors struct {
 	TtlSecurity                                  types.Bool   `tfsdk:"ttl_security"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterBGPVRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString())
 }
@@ -121,6 +129,10 @@ func (data RouterBGPVRF) getPath() string {
 func (data RouterBGPVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/vrfs/vrf[vrf-name=%s]", data.AsNumber.ValueString(), data.VrfName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterBGPVRF) toBody(ctx context.Context) string {
 	body := "{}"
@@ -309,6 +321,10 @@ func (data RouterBGPVRF) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
@@ -640,6 +656,10 @@ func (data *RouterBGPVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
@@ -825,6 +845,10 @@ func (data *RouterBGPVRF) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
@@ -1012,6 +1036,10 @@ func (data *RouterBGPVRFData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVRF) []string {
 	deletedItems := make([]string, 0)
 	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
@@ -1185,6 +1213,10 @@ func (data *RouterBGPVRF) getDeletedItems(ctx context.Context, state RouterBGPVR
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
@@ -1248,6 +1280,10 @@ func (data *RouterBGPVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterBGPVRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1317,3 +1353,5 @@ func (data *RouterBGPVRF) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

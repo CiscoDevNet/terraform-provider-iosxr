@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ExtcommunityOpaqueSet struct {
 	Device  types.String `tfsdk:"device"`
 	Id      types.String `tfsdk:"id"`
@@ -42,6 +46,10 @@ type ExtcommunityOpaqueSetData struct {
 	Rpl     types.String `tfsdk:"rpl"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data ExtcommunityOpaqueSet) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=%s]", data.SetName.ValueString())
 }
@@ -49,6 +57,10 @@ func (data ExtcommunityOpaqueSet) getPath() string {
 func (data ExtcommunityOpaqueSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/extended-community-opaque-sets/extended-community-opaque-set[set-name=%s]", data.SetName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data ExtcommunityOpaqueSet) toBody(ctx context.Context) string {
 	body := "{}"
@@ -61,6 +73,10 @@ func (data ExtcommunityOpaqueSet) toBody(ctx context.Context) string {
 	return body
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *ExtcommunityOpaqueSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() && !data.Rpl.IsNull() {
 		data.Rpl = types.StringValue(value.String())
@@ -69,17 +85,29 @@ func (data *ExtcommunityOpaqueSet) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *ExtcommunityOpaqueSet) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *ExtcommunityOpaqueSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-extended-community-opaque-set"); value.Exists() {
 		data.Rpl = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *ExtcommunityOpaqueSet) getDeletedItems(ctx context.Context, state ExtcommunityOpaqueSet) []string {
 	deletedItems := make([]string, 0)
@@ -89,10 +117,18 @@ func (data *ExtcommunityOpaqueSet) getDeletedItems(ctx context.Context, state Ex
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *ExtcommunityOpaqueSet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *ExtcommunityOpaqueSet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -101,3 +137,5 @@ func (data *ExtcommunityOpaqueSet) getDeletePaths(ctx context.Context) []string 
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

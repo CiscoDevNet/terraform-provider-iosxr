@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -40,6 +41,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewEVPNSegmentRoutingSRv6EVIResource() resource.Resource {
 	return &EVPNSegmentRoutingSRv6EVIResource{}
@@ -258,6 +263,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Configure(_ context.Context, req res
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *EVPNSegmentRoutingSRv6EVIResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan EVPNSegmentRoutingSRv6EVI
 
@@ -296,6 +305,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Create(ctx context.Context, req reso
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *EVPNSegmentRoutingSRv6EVIResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state EVPNSegmentRoutingSRv6EVI
@@ -338,6 +351,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Read(ctx context.Context, req resour
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *EVPNSegmentRoutingSRv6EVIResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state EVPNSegmentRoutingSRv6EVI
@@ -390,6 +407,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Update(ctx context.Context, req reso
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *EVPNSegmentRoutingSRv6EVIResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state EVPNSegmentRoutingSRv6EVI
 
@@ -426,6 +447,10 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) Delete(ctx context.Context, req reso
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *EVPNSegmentRoutingSRv6EVIResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -439,3 +464,5 @@ func (r *EVPNSegmentRoutingSRv6EVIResource) ImportState(ctx context.Context, req
 	value0, _ := strconv.Atoi(idParts[0])
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vpn_id"), value0)...)
 }
+
+// End of section. //template:end import

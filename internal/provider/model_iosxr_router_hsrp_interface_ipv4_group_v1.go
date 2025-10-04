@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterHSRPInterfaceIPv4GroupV1 struct {
 	Device                     types.String                                           `tfsdk:"device"`
 	Id                         types.String                                           `tfsdk:"id"`
@@ -86,6 +90,10 @@ type RouterHSRPInterfaceIPv4GroupV1TrackObjects struct {
 	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterHSRPInterfaceIPv4GroupV1) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]", data.InterfaceName.ValueString(), data.GroupId.ValueInt64())
 }
@@ -93,6 +101,10 @@ func (data RouterHSRPInterfaceIPv4GroupV1) getPath() string {
 func (data RouterHSRPInterfaceIPv4GroupV1Data) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]/address-family/ipv4/hsrp/group-number-version-1s/group-number-version-1[group-number-version-1-id=%v]", data.InterfaceName.ValueString(), data.GroupId.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterHSRPInterfaceIPv4GroupV1) toBody(ctx context.Context) string {
 	body := "{}"
@@ -169,6 +181,10 @@ func (data RouterHSRPInterfaceIPv4GroupV1) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() && !data.Address.IsNull() {
@@ -334,6 +350,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) updateFromBody(ctx context.Context, 
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
@@ -414,6 +434,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) fromBody(ctx context.Context, res []
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address.ipv4-address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
@@ -493,6 +517,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1Data) fromBody(ctx context.Context, re
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletedItems(ctx context.Context, state RouterHSRPInterfaceIPv4GroupV1) []string {
 	deletedItems := make([]string, 0)
@@ -631,6 +659,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletedItems(ctx context.Context,
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AddressLearn.IsNull() && !data.AddressLearn.ValueBool() {
@@ -662,6 +694,10 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getEmptyLeafsDelete(ctx context.Cont
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -733,3 +769,5 @@ func (data *RouterHSRPInterfaceIPv4GroupV1) getDeletePaths(ctx context.Context) 
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

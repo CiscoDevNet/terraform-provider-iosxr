@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGP struct {
 	Device                                           types.String         `tfsdk:"device"`
 	Id                                               types.String         `tfsdk:"id"`
@@ -137,6 +141,10 @@ type RouterBGPNeighbors struct {
 	TtlSecurity                                  types.Bool   `tfsdk:"ttl_security"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterBGP) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
 }
@@ -144,6 +152,10 @@ func (data RouterBGP) getPath() string {
 func (data RouterBGPData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]", data.AsNumber.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterBGP) toBody(ctx context.Context) string {
 	body := "{}"
@@ -394,6 +406,10 @@ func (data RouterBGP) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); !data.DefaultInformationOriginate.IsNull() {
@@ -839,6 +855,10 @@ func (data *RouterBGP) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
 		data.DefaultInformationOriginate = types.BoolValue(true)
@@ -1086,6 +1106,10 @@ func (data *RouterBGP) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "default-information.originate"); value.Exists() {
@@ -1335,6 +1359,10 @@ func (data *RouterBGPData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []string {
 	deletedItems := make([]string, 0)
 	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
@@ -1538,6 +1566,10 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
@@ -1649,6 +1681,10 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1763,3 +1799,5 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

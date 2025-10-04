@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNPWClass struct {
 	Device                                                 types.String `tfsdk:"device"`
 	Id                                                     types.String `tfsdk:"id"`
@@ -67,6 +71,10 @@ type L2VPNPWClassData struct {
 	EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable types.Bool   `tfsdk:"encapsulation_mpls_load_balancing_flow_label_code_one7_disable"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data L2VPNPWClass) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.Name.ValueString())
 }
@@ -74,6 +82,10 @@ func (data L2VPNPWClass) getPath() string {
 func (data L2VPNPWClassData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/pw-classes/pw-class[pw-class-name=%s]", data.Name.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data L2VPNPWClass) toBody(ctx context.Context) string {
 	body := "{}"
@@ -147,6 +159,10 @@ func (data L2VPNPWClass) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); !data.EncapsulationMpls.IsNull() {
@@ -268,6 +284,10 @@ func (data *L2VPNPWClass) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
 		data.EncapsulationMpls = types.BoolValue(true)
@@ -335,6 +355,10 @@ func (data *L2VPNPWClass) fromBody(ctx context.Context, res []byte) {
 		data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "encapsulation.mpls"); value.Exists() {
@@ -404,6 +428,10 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClass) []string {
 	deletedItems := make([]string, 0)
 	if !state.EncapsulationMpls.IsNull() && data.EncapsulationMpls.IsNull() {
@@ -447,6 +475,10 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
@@ -492,6 +524,10 @@ func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.EncapsulationMpls.IsNull() {
@@ -535,3 +571,5 @@ func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

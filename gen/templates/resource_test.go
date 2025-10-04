@@ -20,11 +20,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- if len .TestTags}}
@@ -110,6 +115,12 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
 {{- if .TestPrerequisites}}
 const testAccIosxr{{camelCase .Name}}PrerequisitesConfig = `
 {{- range $index, $item := .TestPrerequisites}}
@@ -154,6 +165,10 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 {{ end}}
 `
 {{- end}}
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 
 func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	config := `resource "iosxr_{{snakeCase $name}}" "test" {` + "\n"
@@ -218,6 +233,10 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxr{{camelCase .Name}}Config_all() string {
 	config := `resource "iosxr_{{snakeCase $name}}" "test" {` + "\n"
@@ -285,3 +304,5 @@ func testAccIosxr{{camelCase .Name}}Config_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

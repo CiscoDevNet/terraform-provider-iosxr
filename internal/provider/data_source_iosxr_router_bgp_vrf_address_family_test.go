@@ -19,11 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -85,6 +90,9 @@ func TestAccDataSourceIosxrRouterBGPVRFAddressFamily(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterBGPVRFAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies"
@@ -155,6 +163,10 @@ resource "iosxr_gnmi" "PreReq2" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	config := `resource "iosxr_router_bgp_vrf_address_family" "test" {` + "\n"
@@ -231,3 +243,5 @@ func testAccDataSourceIosxrRouterBGPVRFAddressFamilyConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

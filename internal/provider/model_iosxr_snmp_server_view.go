@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SNMPServerView struct {
 	Device          types.String                    `tfsdk:"device"`
 	Id              types.String                    `tfsdk:"id"`
@@ -50,6 +54,10 @@ type SNMPServerViewMibViewFamilies struct {
 	Excluded types.Bool   `tfsdk:"excluded"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SNMPServerView) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
 }
@@ -57,6 +65,10 @@ func (data SNMPServerView) getPath() string {
 func (data SNMPServerViewData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/views/view[view-name=%s]", data.ViewName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SNMPServerView) toBody(ctx context.Context) string {
 	body := "{}"
@@ -83,6 +95,10 @@ func (data SNMPServerView) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.MibViewFamilies {
@@ -134,6 +150,10 @@ func (data *SNMPServerView) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
@@ -158,6 +178,10 @@ func (data *SNMPServerView) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "mib-view-families.mib-view-family"); value.Exists() {
 		data.MibViewFamilies = make([]SNMPServerViewMibViewFamilies, 0)
@@ -181,6 +205,10 @@ func (data *SNMPServerViewData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServerView) []string {
 	deletedItems := make([]string, 0)
@@ -223,6 +251,10 @@ func (data *SNMPServerView) getDeletedItems(ctx context.Context, state SNMPServe
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.MibViewFamilies {
@@ -242,6 +274,10 @@ func (data *SNMPServerView) getEmptyLeafsDelete(ctx context.Context) []string {
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *SNMPServerView) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.MibViewFamilies {
@@ -256,3 +292,5 @@ func (data *SNMPServerView) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

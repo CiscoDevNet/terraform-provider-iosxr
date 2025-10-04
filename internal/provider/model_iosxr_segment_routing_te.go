@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SegmentRoutingTE struct {
 	Device                types.String                     `tfsdk:"device"`
 	Id                    types.String                     `tfsdk:"id"`
@@ -95,6 +99,10 @@ type SegmentRoutingTEPolicies struct {
 	PolicyColorEndpointAddress types.String `tfsdk:"policy_color_endpoint_address"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SegmentRoutingTE) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
 }
@@ -102,6 +110,10 @@ func (data SegmentRoutingTE) getPath() string {
 func (data SegmentRoutingTEData) getPath() string {
 	return "Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-infra-xtc-agent-cfg:traffic-engineering"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SegmentRoutingTE) toBody(ctx context.Context) string {
 	body := "{}"
@@ -238,6 +250,10 @@ func (data SegmentRoutingTE) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); !data.LoggingPcepPeerStatus.IsNull() {
@@ -512,6 +528,10 @@ func (data *SegmentRoutingTE) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
 		data.LoggingPcepPeerStatus = types.BoolValue(true)
@@ -655,6 +675,10 @@ func (data *SegmentRoutingTE) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "logging.pcep-peer-status"); value.Exists() {
 		data.LoggingPcepPeerStatus = types.BoolValue(true)
@@ -797,6 +821,10 @@ func (data *SegmentRoutingTEData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state SegmentRoutingTE) []string {
 	deletedItems := make([]string, 0)
@@ -986,6 +1014,10 @@ func (data *SegmentRoutingTE) getDeletedItems(ctx context.Context, state Segment
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LoggingPcepPeerStatus.IsNull() && !data.LoggingPcepPeerStatus.ValueBool() {
@@ -1035,6 +1067,10 @@ func (data *SegmentRoutingTE) getEmptyLeafsDelete(ctx context.Context) []string 
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1094,3 +1130,5 @@ func (data *SegmentRoutingTE) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

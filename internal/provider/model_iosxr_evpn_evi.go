@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNEVI struct {
 	Device                                types.String                                   `tfsdk:"device"`
 	Id                                    types.String                                   `tfsdk:"id"`
@@ -113,6 +117,10 @@ type EVPNEVIBgpRouteTargetExportIpv4AddressFormat struct {
 	AssignedNumber types.Int64  `tfsdk:"assigned_number"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data EVPNEVI) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
@@ -120,6 +128,10 @@ func (data EVPNEVI) getPath() string {
 func (data EVPNEVIData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/evis/evi[vpn-id=%v]", data.VpnId.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data EVPNEVI) toBody(ctx context.Context) string {
 	body := "{}"
@@ -261,6 +273,10 @@ func (data EVPNEVI) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
@@ -586,6 +602,10 @@ func (data *EVPNEVI) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -740,6 +760,10 @@ func (data *EVPNEVI) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -893,6 +917,10 @@ func (data *EVPNEVIData) fromBody(ctx context.Context, res []byte) {
 		data.EtreeRtLeaf = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []string {
 	deletedItems := make([]string, 0)
@@ -1166,6 +1194,10 @@ func (data *EVPNEVI) getDeletedItems(ctx context.Context, state EVPNEVI) []strin
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.LoadBalancing.IsNull() && !data.LoadBalancing.ValueBool() {
@@ -1242,6 +1274,10 @@ func (data *EVPNEVI) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1358,3 +1394,5 @@ func (data *EVPNEVI) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

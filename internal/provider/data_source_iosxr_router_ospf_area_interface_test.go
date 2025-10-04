@@ -19,11 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -50,6 +55,9 @@ func TestAccDataSourceIosxrRouterOSPFAreaInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrRouterOSPFAreaInterfacePrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]"
@@ -67,6 +75,10 @@ resource "iosxr_gnmi" "PreReq1" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	config := `resource "iosxr_router_ospf_area_interface" "test" {` + "\n"
@@ -98,3 +110,5 @@ func testAccDataSourceIosxrRouterOSPFAreaInterfaceConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

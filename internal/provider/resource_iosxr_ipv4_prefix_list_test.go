@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrIPv4PrefixList(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -59,12 +64,24 @@ func TestAccIosxrIPv4PrefixList(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrIPv4PrefixListConfig_minimum() string {
 	config := `resource "iosxr_ipv4_prefix_list" "test" {` + "\n"
 	config += `	prefix_list_name = "LIST1"` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrIPv4PrefixListConfig_all() string {
 	config := `resource "iosxr_ipv4_prefix_list" "test" {` + "\n"
@@ -81,3 +98,5 @@ func testAccIosxrIPv4PrefixListConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -79,6 +84,9 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
@@ -101,6 +109,10 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
@@ -109,6 +121,10 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrRouterBGPVRFConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
@@ -147,3 +163,5 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

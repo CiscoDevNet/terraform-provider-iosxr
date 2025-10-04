@@ -19,11 +19,16 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -41,6 +46,9 @@ func TestAccDataSourceIosxrSNMPServerVRFHost(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrSNMPServerVRFHostPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=VRF1]"
@@ -50,6 +58,10 @@ resource "iosxr_gnmi" "PreReq0" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
@@ -72,3 +84,5 @@ func testAccDataSourceIosxrSNMPServerVRFHostConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

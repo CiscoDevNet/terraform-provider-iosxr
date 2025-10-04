@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterStaticVRFIPv4Unicast struct {
 	Device                    types.String                                          `tfsdk:"device"`
 	Id                        types.String                                          `tfsdk:"id"`
@@ -119,6 +123,10 @@ type RouterStaticVRFIPv4UnicastVrfsNexthopAddresses struct {
 	Metric         types.Int64  `tfsdk:"metric"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterStaticVRFIPv4Unicast) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=%s]/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.VrfName.ValueString(), data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
 }
@@ -126,6 +134,10 @@ func (data RouterStaticVRFIPv4Unicast) getPath() string {
 func (data RouterStaticVRFIPv4UnicastData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/vrfs/vrf[vrf-name=%s]/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.VrfName.ValueString(), data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterStaticVRFIPv4Unicast) toBody(ctx context.Context) string {
 	body := "{}"
@@ -325,6 +337,10 @@ func (data RouterStaticVRFIPv4Unicast) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterStaticVRFIPv4Unicast) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.NexthopInterfaces {
@@ -756,6 +772,10 @@ func (data *RouterStaticVRFIPv4Unicast) updateFromBody(ctx context.Context, res 
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterStaticVRFIPv4Unicast) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticVRFIPv4UnicastNexthopInterfaces, 0)
@@ -968,6 +988,10 @@ func (data *RouterStaticVRFIPv4Unicast) fromBody(ctx context.Context, res []byte
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterStaticVRFIPv4UnicastData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticVRFIPv4UnicastNexthopInterfaces, 0)
@@ -1179,6 +1203,10 @@ func (data *RouterStaticVRFIPv4UnicastData) fromBody(ctx context.Context, res []
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterStaticVRFIPv4Unicast) getDeletedItems(ctx context.Context, state RouterStaticVRFIPv4Unicast) []string {
 	deletedItems := make([]string, 0)
@@ -1521,6 +1549,10 @@ func (data *RouterStaticVRFIPv4Unicast) getDeletedItems(ctx context.Context, sta
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.NexthopInterfaces {
@@ -1600,6 +1632,10 @@ func (data *RouterStaticVRFIPv4Unicast) getEmptyLeafsDelete(ctx context.Context)
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *RouterStaticVRFIPv4Unicast) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.NexthopInterfaces {
@@ -1644,3 +1680,5 @@ func (data *RouterStaticVRFIPv4Unicast) getDeletePaths(ctx context.Context) []st
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

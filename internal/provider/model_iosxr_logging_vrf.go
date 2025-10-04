@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type LoggingVRF struct {
 	Device            types.String                  `tfsdk:"device"`
 	Id                types.String                  `tfsdk:"id"`
@@ -59,6 +63,10 @@ type LoggingVRFHostIpv6Addresses struct {
 	Operator    types.String `tfsdk:"operator"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data LoggingVRF) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
@@ -66,6 +74,10 @@ func (data LoggingVRF) getPath() string {
 func (data LoggingVRFData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/vrfs/vrf[vrf-name=%s]", data.VrfName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data LoggingVRF) toBody(ctx context.Context) string {
 	body := "{}"
@@ -108,6 +120,10 @@ func (data LoggingVRF) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.HostIpv4Addresses {
@@ -200,6 +216,10 @@ func (data *LoggingVRF) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
@@ -243,6 +263,10 @@ func (data *LoggingVRF) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "host-ipv4-addresses.host-ipv4-address"); value.Exists() {
 		data.HostIpv4Addresses = make([]LoggingVRFHostIpv4Addresses, 0)
@@ -285,6 +309,10 @@ func (data *LoggingVRFData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LoggingVRF) getDeletedItems(ctx context.Context, state LoggingVRF) []string {
 	deletedItems := make([]string, 0)
@@ -369,6 +397,10 @@ func (data *LoggingVRF) getDeletedItems(ctx context.Context, state LoggingVRF) [
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.HostIpv4Addresses {
@@ -389,6 +421,10 @@ func (data *LoggingVRF) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LoggingVRF) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -414,3 +450,5 @@ func (data *LoggingVRF) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

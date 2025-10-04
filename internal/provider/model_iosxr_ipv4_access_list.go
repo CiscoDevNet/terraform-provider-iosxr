@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv4AccessList struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`
@@ -216,6 +220,10 @@ type IPv4AccessListSequences struct {
 	DenySetTtl                      types.Int64  `tfsdk:"deny_set_ttl"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv4AccessList) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=%s]", data.AccessListName.ValueString())
 }
@@ -223,6 +231,10 @@ func (data IPv4AccessList) getPath() string {
 func (data IPv4AccessListData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=%s]", data.AccessListName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data IPv4AccessList) toBody(ctx context.Context) string {
 	body := "{}"
@@ -778,6 +790,10 @@ func (data IPv4AccessList) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Sequences {
@@ -1720,6 +1736,10 @@ func (data *IPv4AccessList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4AccessListSequences, 0)
@@ -2272,6 +2292,10 @@ func (data *IPv4AccessList) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
@@ -2826,6 +2850,10 @@ func (data *IPv4AccessListData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4AccessList) []string {
 	deletedItems := make([]string, 0)
 	for i := range state.Sequences {
@@ -3368,6 +3396,10 @@ func (data *IPv4AccessList) getDeletedItems(ctx context.Context, state IPv4Acces
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Sequences {
@@ -3429,6 +3461,10 @@ func (data *IPv4AccessList) getEmptyLeafsDelete(ctx context.Context) []string {
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *IPv4AccessList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.Sequences {
@@ -3443,3 +3479,5 @@ func (data *IPv4AccessList) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterVRRPInterfaceIPv4 struct {
 	Device                         types.String                                `tfsdk:"device"`
 	Id                             types.String                                `tfsdk:"id"`
@@ -86,6 +90,10 @@ type RouterVRRPInterfaceIPv4TrackObjects struct {
 	PriorityDecrement types.Int64  `tfsdk:"priority_decrement"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterVRRPInterfaceIPv4) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]/address-family/ipv4/vrrps/vrrp[vrrp-id=%d][version=%d]", data.InterfaceName.ValueString(), data.VrrpId.ValueInt64(), data.Version.ValueInt64())
 }
@@ -93,6 +101,10 @@ func (data RouterVRRPInterfaceIPv4) getPath() string {
 func (data RouterVRRPInterfaceIPv4Data) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp/interfaces/interface[interface-name=%s]/address-family/ipv4/vrrps/vrrp[vrrp-id=%d][version=%d]", data.InterfaceName.ValueString(), data.VrrpId.ValueInt64(), data.Version.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterVRRPInterfaceIPv4) toBody(ctx context.Context) string {
 	body := "{}"
@@ -173,6 +185,10 @@ func (data RouterVRRPInterfaceIPv4) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterVRRPInterfaceIPv4) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address"); value.Exists() && !data.Address.IsNull() {
@@ -341,6 +357,10 @@ func (data *RouterVRRPInterfaceIPv4) updateFromBody(ctx context.Context, res []b
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterVRRPInterfaceIPv4) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
@@ -422,6 +442,10 @@ func (data *RouterVRRPInterfaceIPv4) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterVRRPInterfaceIPv4Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "address"); value.Exists() {
 		data.Address = types.StringValue(value.String())
@@ -502,6 +526,10 @@ func (data *RouterVRRPInterfaceIPv4Data) fromBody(ctx context.Context, res []byt
 		data.BfdFastDetectPeerIpv4 = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceIPv4) []string {
 	deletedItems := make([]string, 0)
@@ -637,6 +665,10 @@ func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state 
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterVRRPInterfaceIPv4) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.SecondaryAddresses {
@@ -674,6 +706,10 @@ func (data *RouterVRRPInterfaceIPv4) getEmptyLeafsDelete(ctx context.Context) []
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterVRRPInterfaceIPv4) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -742,3 +778,5 @@ func (data *RouterVRRPInterfaceIPv4) getDeletePaths(ctx context.Context) []strin
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

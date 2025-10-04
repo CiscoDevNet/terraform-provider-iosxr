@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterISISInterfaceResource() resource.Resource {
 	return &RouterISISInterfaceResource{}
@@ -316,6 +321,10 @@ func (r *RouterISISInterfaceResource) Configure(_ context.Context, req resource.
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RouterISISInterfaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterISISInterface
 
@@ -354,6 +363,10 @@ func (r *RouterISISInterfaceResource) Create(ctx context.Context, req resource.C
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterISISInterface
@@ -396,6 +409,10 @@ func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.Rea
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RouterISISInterfaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterISISInterface
@@ -448,6 +465,10 @@ func (r *RouterISISInterfaceResource) Update(ctx context.Context, req resource.U
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RouterISISInterfaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterISISInterface
 
@@ -489,6 +510,10 @@ func (r *RouterISISInterfaceResource) Delete(ctx context.Context, req resource.D
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -504,3 +529,5 @@ func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resou
 	value1 := idParts[1]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value1)...)
 }
+
+// End of section. //template:end import

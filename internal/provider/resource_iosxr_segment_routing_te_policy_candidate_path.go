@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -40,6 +41,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewSegmentRoutingTEPolicyCandidatePathResource() resource.Resource {
 	return &SegmentRoutingTEPolicyCandidatePathResource{}
@@ -151,6 +156,10 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Configure(_ context.Contex
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *SegmentRoutingTEPolicyCandidatePathResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan SegmentRoutingTEPolicyCandidatePath
 
@@ -189,6 +198,10 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Create(ctx context.Context
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *SegmentRoutingTEPolicyCandidatePathResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state SegmentRoutingTEPolicyCandidatePath
@@ -231,6 +244,10 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Read(ctx context.Context, 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *SegmentRoutingTEPolicyCandidatePathResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state SegmentRoutingTEPolicyCandidatePath
@@ -283,6 +300,10 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Update(ctx context.Context
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *SegmentRoutingTEPolicyCandidatePathResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state SegmentRoutingTEPolicyCandidatePath
 
@@ -324,6 +345,10 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) Delete(ctx context.Context
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *SegmentRoutingTEPolicyCandidatePathResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -339,3 +364,5 @@ func (r *SegmentRoutingTEPolicyCandidatePathResource) ImportState(ctx context.Co
 	value1, _ := strconv.Atoi(idParts[1])
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path_index"), value1)...)
 }
+
+// End of section. //template:end import

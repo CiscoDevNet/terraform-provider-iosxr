@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type TagSet struct {
 	Device    types.String `tfsdk:"device"`
 	Id        types.String `tfsdk:"id"`
@@ -42,6 +46,10 @@ type TagSetData struct {
 	RplTagSet types.String `tfsdk:"rpl_tag_set"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data TagSet) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/tag-sets/tag-set[set-name=%s]", data.SetName.ValueString())
 }
@@ -49,6 +57,10 @@ func (data TagSet) getPath() string {
 func (data TagSetData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/tag-sets/tag-set[set-name=%s]", data.SetName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data TagSet) toBody(ctx context.Context) string {
 	body := "{}"
@@ -61,6 +73,10 @@ func (data TagSet) toBody(ctx context.Context) string {
 	return body
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() && !data.RplTagSet.IsNull() {
 		data.RplTagSet = types.StringValue(value.String())
@@ -69,17 +85,29 @@ func (data *TagSet) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *TagSet) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
 		data.RplTagSet = types.StringValue(value.String())
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *TagSetData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "rpl-tag-set"); value.Exists() {
 		data.RplTagSet = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string {
 	deletedItems := make([]string, 0)
@@ -89,10 +117,18 @@ func (data *TagSet) getDeletedItems(ctx context.Context, state TagSet) []string 
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *TagSet) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *TagSet) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -101,3 +137,5 @@ func (data *TagSet) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

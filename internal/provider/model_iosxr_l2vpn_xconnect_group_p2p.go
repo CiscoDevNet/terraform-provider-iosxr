@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNXconnectGroupP2P struct {
 	Device                                types.String                                                 `tfsdk:"device"`
 	Id                                    types.String                                                 `tfsdk:"id"`
@@ -88,6 +92,10 @@ type L2VPNXconnectGroupP2PNeighborEvpnEviSegmentRoutingServices struct {
 	SegmentRoutingSrv6Locator types.String `tfsdk:"segment_routing_srv6_locator"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data L2VPNXconnectGroupP2P) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
 }
@@ -95,6 +103,10 @@ func (data L2VPNXconnectGroupP2P) getPath() string {
 func (data L2VPNXconnectGroupP2PData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]/p2ps/p2p[p2p-xconnect-name=%s]", data.GroupName.ValueString(), data.P2pXconnectName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {
 	body := "{}"
@@ -187,6 +199,10 @@ func (data L2VPNXconnectGroupP2P) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() && !data.Description.IsNull() {
@@ -425,6 +441,10 @@ func (data *L2VPNXconnectGroupP2P) updateFromBody(ctx context.Context, res []byt
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -530,6 +550,10 @@ func (data *L2VPNXconnectGroupP2P) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "description"); value.Exists() {
 		data.Description = types.StringValue(value.String())
@@ -634,6 +658,10 @@ func (data *L2VPNXconnectGroupP2PData) fromBody(ctx context.Context, res []byte)
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2VPNXconnectGroupP2P) []string {
 	deletedItems := make([]string, 0)
@@ -874,6 +902,10 @@ func (data *L2VPNXconnectGroupP2P) getDeletedItems(ctx context.Context, state L2
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Interfaces {
@@ -926,6 +958,10 @@ func (data *L2VPNXconnectGroupP2P) getEmptyLeafsDelete(ctx context.Context) []st
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *L2VPNXconnectGroupP2P) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -994,3 +1030,5 @@ func (data *L2VPNXconnectGroupP2P) getDeletePaths(ctx context.Context) []string 
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

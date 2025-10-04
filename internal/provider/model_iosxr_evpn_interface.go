@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type EVPNInterface struct {
 	Device                                           types.String `tfsdk:"device"`
 	Id                                               types.String `tfsdk:"id"`
@@ -54,6 +58,10 @@ type EVPNInterfaceData struct {
 	EthernetSegmentLoadBalancingModeSingleFlowActive types.Bool   `tfsdk:"ethernet_segment_load_balancing_mode_single_flow_active"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data EVPNInterface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
@@ -61,6 +69,10 @@ func (data EVPNInterface) getPath() string {
 func (data EVPNInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/evpn/interface/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data EVPNInterface) toBody(ctx context.Context) string {
 	body := "{}"
@@ -95,6 +107,10 @@ func (data EVPNInterface) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() && !data.CoreIsolationGroup.IsNull() {
@@ -145,6 +161,10 @@ func (data *EVPNInterface) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
 		data.CoreIsolationGroup = types.Int64Value(value.Int())
@@ -173,6 +193,10 @@ func (data *EVPNInterface) fromBody(ctx context.Context, res []byte) {
 		data.EthernetSegmentLoadBalancingModeSingleFlowActive = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "core-isolation-group"); value.Exists() {
@@ -203,6 +227,10 @@ func (data *EVPNInterfaceData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterface) []string {
 	deletedItems := make([]string, 0)
 	if !state.CoreIsolationGroup.IsNull() && data.CoreIsolationGroup.IsNull() {
@@ -226,6 +254,10 @@ func (data *EVPNInterface) getDeletedItems(ctx context.Context, state EVPNInterf
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.EthernetSegmentLoadBalancingModeAllActive.IsNull() && !data.EthernetSegmentLoadBalancingModeAllActive.ValueBool() {
@@ -242,6 +274,10 @@ func (data *EVPNInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -265,3 +301,5 @@ func (data *EVPNInterface) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

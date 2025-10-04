@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv6 struct {
 	Device                           types.String `tfsdk:"device"`
 	Id                               types.String `tfsdk:"id"`
@@ -62,6 +66,10 @@ type IPv6Data struct {
 	PathMtuTimeout                   types.Int64  `tfsdk:"path_mtu_timeout"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv6) getPath() string {
 	return "Cisco-IOS-XR-um-ipv6-cfg:/ipv6"
 }
@@ -69,6 +77,10 @@ func (data IPv6) getPath() string {
 func (data IPv6Data) getPath() string {
 	return "Cisco-IOS-XR-um-ipv6-cfg:/ipv6"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data IPv6) toBody(ctx context.Context) string {
 	body := "{}"
@@ -117,6 +129,10 @@ func (data IPv6) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() && !data.HopLimit.IsNull() {
@@ -196,6 +212,10 @@ func (data *IPv6) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv6) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() {
 		data.HopLimit = types.Int64Value(value.Int())
@@ -241,6 +261,10 @@ func (data *IPv6) fromBody(ctx context.Context, res []byte) {
 		data.PathMtuTimeout = types.Int64Value(value.Int())
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hop-limit"); value.Exists() {
@@ -288,6 +312,10 @@ func (data *IPv6Data) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *IPv6) getDeletedItems(ctx context.Context, state IPv6) []string {
 	deletedItems := make([]string, 0)
 	if !state.HopLimit.IsNull() && data.HopLimit.IsNull() {
@@ -326,6 +354,10 @@ func (data *IPv6) getDeletedItems(ctx context.Context, state IPv6) []string {
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *IPv6) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.SourceRoute.IsNull() && !data.SourceRoute.ValueBool() {
@@ -345,6 +377,10 @@ func (data *IPv6) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv6) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -383,3 +419,5 @@ func (data *IPv6) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

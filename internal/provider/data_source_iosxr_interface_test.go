@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrInterface(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -118,6 +123,9 @@ func TestAccDataSourceIosxrInterface(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrInterfacePrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-policymap-classmap-cfg:/policy-map/type/qos[policy-map-name=PMAP-IN]"
@@ -202,6 +210,10 @@ resource "iosxr_gnmi" "PreReq3" {
 }
 
 `
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
 
 func testAccDataSourceIosxrInterfaceConfig() string {
 	config := `resource "iosxr_interface" "test" {` + "\n"
@@ -318,3 +330,5 @@ func testAccDataSourceIosxrInterfaceConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

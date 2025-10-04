@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type IPv4PrefixList struct {
 	Device         types.String              `tfsdk:"device"`
 	Id             types.String              `tfsdk:"id"`
@@ -54,6 +58,10 @@ type IPv4PrefixListSequences struct {
 	MatchPrefixLengthLe types.Int64  `tfsdk:"match_prefix_length_le"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data IPv4PrefixList) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]", data.PrefixListName.ValueString())
 }
@@ -61,6 +69,10 @@ func (data IPv4PrefixList) getPath() string {
 func (data IPv4PrefixListData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=%s]", data.PrefixListName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data IPv4PrefixList) toBody(ctx context.Context) string {
 	body := "{}"
@@ -98,6 +110,10 @@ func (data IPv4PrefixList) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *IPv4PrefixList) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Sequences {
@@ -166,6 +182,10 @@ func (data *IPv4PrefixList) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *IPv4PrefixList) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4PrefixListSequences, 0)
@@ -201,6 +221,10 @@ func (data *IPv4PrefixList) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *IPv4PrefixListData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "sequences.sequence"); value.Exists() {
 		data.Sequences = make([]IPv4PrefixListSequences, 0)
@@ -235,6 +259,10 @@ func (data *IPv4PrefixListData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4PrefixList) []string {
 	deletedItems := make([]string, 0)
@@ -292,6 +320,10 @@ func (data *IPv4PrefixList) getDeletedItems(ctx context.Context, state IPv4Prefi
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Sequences {
@@ -304,6 +336,10 @@ func (data *IPv4PrefixList) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -319,3 +355,5 @@ func (data *IPv4PrefixList) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

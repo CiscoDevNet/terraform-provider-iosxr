@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -67,6 +72,9 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterVRRPInterfaceIPv4PrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-vrrp-cfg:/router/vrrp"
@@ -84,6 +92,10 @@ resource "iosxr_gnmi" "PreReq1" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -93,6 +105,10 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv4" "test" {` + "\n"
@@ -121,3 +137,5 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

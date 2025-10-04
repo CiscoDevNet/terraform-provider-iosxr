@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SNMPServerMIB struct {
 	Device           types.String `tfsdk:"device"`
 	Id               types.String `tfsdk:"id"`
@@ -43,6 +47,10 @@ type SNMPServerMIBData struct {
 	IfindexPersist   types.Bool   `tfsdk:"ifindex_persist"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SNMPServerMIB) getPath() string {
 	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
 }
@@ -50,6 +58,10 @@ func (data SNMPServerMIB) getPath() string {
 func (data SNMPServerMIBData) getPath() string {
 	return "Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SNMPServerMIB) toBody(ctx context.Context) string {
 	body := "{}"
@@ -65,6 +77,10 @@ func (data SNMPServerMIB) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); !data.IfmibIfaliasLong.IsNull() {
@@ -87,6 +103,10 @@ func (data *SNMPServerMIB) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
 		data.IfmibIfaliasLong = types.BoolValue(true)
@@ -99,6 +119,10 @@ func (data *SNMPServerMIB) fromBody(ctx context.Context, res []byte) {
 		data.IfindexPersist = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib.ifalias.long"); value.Exists() {
@@ -113,6 +137,10 @@ func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
 	deletedItems := make([]string, 0)
 	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
@@ -123,6 +151,10 @@ func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServer
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
@@ -135,6 +167,10 @@ func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.IfmibIfaliasLong.IsNull() {
@@ -145,3 +181,5 @@ func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

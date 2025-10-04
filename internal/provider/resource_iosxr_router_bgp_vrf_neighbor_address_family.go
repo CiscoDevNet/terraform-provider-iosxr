@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -37,6 +38,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterBGPVRFNeighborAddressFamilyResource() resource.Resource {
 	return &RouterBGPVRFNeighborAddressFamilyResource{}
@@ -190,6 +195,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Configure(_ context.Context,
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RouterBGPVRFNeighborAddressFamilyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterBGPVRFNeighborAddressFamily
 
@@ -228,6 +237,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Create(ctx context.Context, 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RouterBGPVRFNeighborAddressFamilyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterBGPVRFNeighborAddressFamily
@@ -270,6 +283,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Read(ctx context.Context, re
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RouterBGPVRFNeighborAddressFamilyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterBGPVRFNeighborAddressFamily
@@ -322,6 +339,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Update(ctx context.Context, 
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RouterBGPVRFNeighborAddressFamilyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterBGPVRFNeighborAddressFamily
 
@@ -363,6 +384,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Delete(ctx context.Context, 
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RouterBGPVRFNeighborAddressFamilyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -382,3 +407,5 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) ImportState(ctx context.Cont
 	value3 := idParts[3]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("af_name"), value3)...)
 }
+
+// End of section. //template:end import

@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewL2VPNXconnectGroupP2PResource() resource.Resource {
 	return &L2VPNXconnectGroupP2PResource{}
@@ -292,6 +297,10 @@ func (r *L2VPNXconnectGroupP2PResource) Configure(_ context.Context, req resourc
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *L2VPNXconnectGroupP2PResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan L2VPNXconnectGroupP2P
 
@@ -330,6 +339,10 @@ func (r *L2VPNXconnectGroupP2PResource) Create(ctx context.Context, req resource
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *L2VPNXconnectGroupP2PResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state L2VPNXconnectGroupP2P
@@ -372,6 +385,10 @@ func (r *L2VPNXconnectGroupP2PResource) Read(ctx context.Context, req resource.R
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *L2VPNXconnectGroupP2PResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state L2VPNXconnectGroupP2P
@@ -424,6 +441,10 @@ func (r *L2VPNXconnectGroupP2PResource) Update(ctx context.Context, req resource
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *L2VPNXconnectGroupP2PResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state L2VPNXconnectGroupP2P
 
@@ -465,6 +486,10 @@ func (r *L2VPNXconnectGroupP2PResource) Delete(ctx context.Context, req resource
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *L2VPNXconnectGroupP2PResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -480,3 +505,5 @@ func (r *L2VPNXconnectGroupP2PResource) ImportState(ctx context.Context, req res
 	value1 := idParts[1]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("p2p_xconnect_name"), value1)...)
 }
+
+// End of section. //template:end import

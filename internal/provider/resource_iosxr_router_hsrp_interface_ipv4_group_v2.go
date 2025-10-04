@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -40,6 +41,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRouterHSRPInterfaceIPv4GroupV2Resource() resource.Resource {
 	return &RouterHSRPInterfaceIPv4GroupV2Resource{}
@@ -254,6 +259,10 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Configure(_ context.Context, re
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RouterHSRPInterfaceIPv4GroupV2
 
@@ -292,6 +301,10 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Create(ctx context.Context, req
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RouterHSRPInterfaceIPv4GroupV2
@@ -334,6 +347,10 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Read(ctx context.Context, req r
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RouterHSRPInterfaceIPv4GroupV2
@@ -386,6 +403,10 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Update(ctx context.Context, req
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RouterHSRPInterfaceIPv4GroupV2
 
@@ -427,6 +448,10 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Delete(ctx context.Context, req
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RouterHSRPInterfaceIPv4GroupV2Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -442,3 +467,5 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) ImportState(ctx context.Context
 	value1, _ := strconv.Atoi(idParts[1])
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group_id"), value1)...)
 }
+
+// End of section. //template:end import

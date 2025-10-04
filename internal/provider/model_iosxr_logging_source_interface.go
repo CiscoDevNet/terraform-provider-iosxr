@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type LoggingSourceInterface struct {
 	Device types.String                 `tfsdk:"device"`
 	Id     types.String                 `tfsdk:"id"`
@@ -47,6 +51,10 @@ type LoggingSourceInterfaceVrfs struct {
 	Name types.String `tfsdk:"name"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data LoggingSourceInterface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
 }
@@ -54,6 +62,10 @@ func (data LoggingSourceInterface) getPath() string {
 func (data LoggingSourceInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-logging-cfg:/logging/source-interfaces/source-interface[source-interface-name=%v]", data.Name.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data LoggingSourceInterface) toBody(ctx context.Context) string {
 	body := "{}"
@@ -70,6 +82,10 @@ func (data LoggingSourceInterface) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *LoggingSourceInterface) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Vrfs {
@@ -103,6 +119,10 @@ func (data *LoggingSourceInterface) updateFromBody(ctx context.Context, res []by
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *LoggingSourceInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LoggingSourceInterfaceVrfs, 0)
@@ -117,6 +137,10 @@ func (data *LoggingSourceInterface) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *LoggingSourceInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "vrfs.vrf"); value.Exists() {
 		data.Vrfs = make([]LoggingSourceInterfaceVrfs, 0)
@@ -130,6 +154,10 @@ func (data *LoggingSourceInterfaceData) fromBody(ctx context.Context, res []byte
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *LoggingSourceInterface) getDeletedItems(ctx context.Context, state LoggingSourceInterface) []string {
 	deletedItems := make([]string, 0)
@@ -166,6 +194,10 @@ func (data *LoggingSourceInterface) getDeletedItems(ctx context.Context, state L
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *LoggingSourceInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Vrfs {
@@ -178,6 +210,10 @@ func (data *LoggingSourceInterface) getEmptyLeafsDelete(ctx context.Context) []s
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *LoggingSourceInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -193,3 +229,5 @@ func (data *LoggingSourceInterface) getDeletePaths(ctx context.Context) []string
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

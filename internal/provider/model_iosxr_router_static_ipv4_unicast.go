@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterStaticIPv4Unicast struct {
 	Device                    types.String                                       `tfsdk:"device"`
 	Id                        types.String                                       `tfsdk:"id"`
@@ -115,6 +119,10 @@ type RouterStaticIPv4UnicastVrfsNexthopAddresses struct {
 	Metric         types.Int64  `tfsdk:"metric"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterStaticIPv4Unicast) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
 }
@@ -122,6 +130,10 @@ func (data RouterStaticIPv4Unicast) getPath() string {
 func (data RouterStaticIPv4UnicastData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-static-cfg:/router/static/address-family/ipv4/unicast/prefixes/prefix[prefix-address=%s][prefix-length=%d]", data.PrefixAddress.ValueString(), data.PrefixLength.ValueInt64())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterStaticIPv4Unicast) toBody(ctx context.Context) string {
 	body := "{}"
@@ -315,6 +327,10 @@ func (data RouterStaticIPv4Unicast) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterStaticIPv4Unicast) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.NexthopInterfaces {
@@ -736,6 +752,10 @@ func (data *RouterStaticIPv4Unicast) updateFromBody(ctx context.Context, res []b
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterStaticIPv4Unicast) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticIPv4UnicastNexthopInterfaces, 0)
@@ -942,6 +962,10 @@ func (data *RouterStaticIPv4Unicast) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *RouterStaticIPv4UnicastData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "nexthop-interfaces.nexthop-interface"); value.Exists() {
 		data.NexthopInterfaces = make([]RouterStaticIPv4UnicastNexthopInterfaces, 0)
@@ -1147,6 +1171,10 @@ func (data *RouterStaticIPv4UnicastData) fromBody(ctx context.Context, res []byt
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *RouterStaticIPv4Unicast) getDeletedItems(ctx context.Context, state RouterStaticIPv4Unicast) []string {
 	deletedItems := make([]string, 0)
@@ -1483,6 +1511,10 @@ func (data *RouterStaticIPv4Unicast) getDeletedItems(ctx context.Context, state 
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterStaticIPv4Unicast) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.NexthopInterfaces {
@@ -1562,6 +1594,10 @@ func (data *RouterStaticIPv4Unicast) getEmptyLeafsDelete(ctx context.Context) []
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *RouterStaticIPv4Unicast) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	for i := range data.NexthopInterfaces {
@@ -1606,3 +1642,5 @@ func (data *RouterStaticIPv4Unicast) getDeletePaths(ctx context.Context) []strin
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

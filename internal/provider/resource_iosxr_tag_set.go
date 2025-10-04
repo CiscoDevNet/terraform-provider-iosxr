@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -37,6 +38,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewTagSetResource() resource.Resource {
 	return &TagSetResource{}
@@ -93,6 +98,10 @@ func (r *TagSetResource) Configure(_ context.Context, req resource.ConfigureRequ
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *TagSetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan TagSet
 
@@ -131,6 +140,10 @@ func (r *TagSetResource) Create(ctx context.Context, req resource.CreateRequest,
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *TagSetResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state TagSet
@@ -173,6 +186,10 @@ func (r *TagSetResource) Read(ctx context.Context, req resource.ReadRequest, res
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *TagSetResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state TagSet
@@ -225,6 +242,10 @@ func (r *TagSetResource) Update(ctx context.Context, req resource.UpdateRequest,
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *TagSetResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state TagSet
 
@@ -261,6 +282,10 @@ func (r *TagSetResource) Delete(ctx context.Context, req resource.DeleteRequest,
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *TagSetResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -274,3 +299,5 @@ func (r *TagSetResource) ImportState(ctx context.Context, req resource.ImportSta
 	value0 := idParts[0]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("set_name"), value0)...)
 }
+
+// End of section. //template:end import

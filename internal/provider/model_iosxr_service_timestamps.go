@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ServiceTimestamps struct {
 	Device                     types.String `tfsdk:"device"`
 	Id                         types.String `tfsdk:"id"`
@@ -66,6 +70,10 @@ type ServiceTimestampsData struct {
 	LogDisable                 types.Bool   `tfsdk:"log_disable"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data ServiceTimestamps) getPath() string {
 	return "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
 }
@@ -73,6 +81,10 @@ func (data ServiceTimestamps) getPath() string {
 func (data ServiceTimestampsData) getPath() string {
 	return "Cisco-IOS-XR-um-service-timestamps-cfg:/service/timestamps"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data ServiceTimestamps) toBody(ctx context.Context) string {
 	body := "{}"
@@ -148,6 +160,10 @@ func (data ServiceTimestamps) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); !data.DebugDatetimeLocaltimeOnly.IsNull() {
@@ -278,6 +294,10 @@ func (data *ServiceTimestamps) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
 		data.DebugDatetimeLocaltimeOnly = types.BoolValue(true)
@@ -350,6 +370,10 @@ func (data *ServiceTimestamps) fromBody(ctx context.Context, res []byte) {
 		data.LogDisable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "debug.datetime.localtime-only"); value.Exists() {
@@ -424,6 +448,10 @@ func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state ServiceTimestamps) []string {
 	deletedItems := make([]string, 0)
 	if !state.DebugDatetimeLocaltimeOnly.IsNull() && data.DebugDatetimeLocaltimeOnly.IsNull() {
@@ -470,6 +498,10 @@ func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state Servic
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
@@ -518,6 +550,10 @@ func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *ServiceTimestamps) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.DebugDatetimeLocaltimeOnly.IsNull() {
@@ -564,3 +600,5 @@ func (data *ServiceTimestamps) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

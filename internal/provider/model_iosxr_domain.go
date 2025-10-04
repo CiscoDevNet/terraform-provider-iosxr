@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -31,6 +32,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type Domain struct {
 	Device                types.String        `tfsdk:"device"`
 	Id                    types.String        `tfsdk:"id"`
@@ -76,6 +80,10 @@ type DomainIpv6Hosts struct {
 	Ipv6Address types.List   `tfsdk:"ipv6_address"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data Domain) getPath() string {
 	return "Cisco-IOS-XR-um-domain-cfg:/domain"
 }
@@ -83,6 +91,10 @@ func (data Domain) getPath() string {
 func (data DomainData) getPath() string {
 	return "Cisco-IOS-XR-um-domain-cfg:/domain"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data Domain) toBody(ctx context.Context) string {
 	body := "{}"
@@ -155,6 +167,10 @@ func (data Domain) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Domains {
@@ -328,6 +344,10 @@ func (data *Domain) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *Domain) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
@@ -410,6 +430,10 @@ func (data *Domain) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "list.domain"); value.Exists() {
 		data.Domains = make([]DomainDomains, 0)
@@ -491,6 +515,10 @@ func (data *DomainData) fromBody(ctx context.Context, res []byte) {
 		data.DefaultFlowsDisable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string {
 	deletedItems := make([]string, 0)
@@ -650,6 +678,10 @@ func (data *Domain) getDeletedItems(ctx context.Context, state Domain) []string 
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Domains {
@@ -692,6 +724,10 @@ func (data *Domain) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *Domain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -752,3 +788,5 @@ func (data *Domain) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

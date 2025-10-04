@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -62,6 +67,9 @@ func TestAccIosxrRouterHSRPInterfaceIPv4GroupV2(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterHSRPInterfaceIPv4GroupV2PrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=GigabitEthernet0/0/0/1]"
@@ -72,6 +80,10 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
@@ -80,6 +92,10 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all() string {
 	config := `resource "iosxr_router_hsrp_interface_ipv4_group_v2" "test" {` + "\n"
@@ -103,3 +119,5 @@ func testAccIosxrRouterHSRPInterfaceIPv4GroupV2Config_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

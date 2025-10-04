@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPNeighborGroup struct {
 	Device                                       types.String                            `tfsdk:"device"`
 	Id                                           types.String                            `tfsdk:"id"`
@@ -112,6 +116,10 @@ type RouterBGPNeighborGroupAddressFamilies struct {
 	UseAfGroup                             types.String `tfsdk:"use_af_group"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterBGPNeighborGroup) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]", data.AsNumber.ValueString(), data.Name.ValueString())
 }
@@ -119,6 +127,10 @@ func (data RouterBGPNeighborGroup) getPath() string {
 func (data RouterBGPNeighborGroupData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbor-groups/neighbor-group[neighbor-group-name=%s]", data.AsNumber.ValueString(), data.Name.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	body := "{}"
@@ -274,6 +286,10 @@ func (data RouterBGPNeighborGroup) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() && !data.RemoteAs.IsNull() {
@@ -550,6 +566,10 @@ func (data *RouterBGPNeighborGroup) updateFromBody(ctx context.Context, res []by
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
 		data.RemoteAs = types.StringValue(value.String())
@@ -702,6 +722,10 @@ func (data *RouterBGPNeighborGroup) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "remote-as"); value.Exists() {
@@ -856,6 +880,10 @@ func (data *RouterBGPNeighborGroupData) fromBody(ctx context.Context, res []byte
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state RouterBGPNeighborGroup) []string {
 	deletedItems := make([]string, 0)
 	if !state.RemoteAs.IsNull() && data.RemoteAs.IsNull() {
@@ -996,6 +1024,10 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.ValueBool() {
@@ -1059,6 +1091,10 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -1155,3 +1191,5 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

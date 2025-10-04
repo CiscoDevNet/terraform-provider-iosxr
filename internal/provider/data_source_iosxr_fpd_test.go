@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrFPD(t *testing.T) {
 	if os.Getenv("PHYSICAL") == "" {
@@ -47,6 +52,14 @@ func TestAccDataSourceIosxrFPD(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAccDataSource
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSourceConfig
+
 func testAccDataSourceIosxrFPDConfig() string {
 	config := `resource "iosxr_fpd" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
@@ -63,3 +76,5 @@ func testAccDataSourceIosxrFPDConfig() string {
 	`
 	return config
 }
+
+// End of section. //template:end testAccDataSourceConfig

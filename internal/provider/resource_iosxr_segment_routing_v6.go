@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewSegmentRoutingV6Resource() resource.Resource {
 	return &SegmentRoutingV6Resource{}
@@ -173,6 +178,10 @@ func (r *SegmentRoutingV6Resource) Configure(_ context.Context, req resource.Con
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *SegmentRoutingV6Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan SegmentRoutingV6
 
@@ -211,6 +220,10 @@ func (r *SegmentRoutingV6Resource) Create(ctx context.Context, req resource.Crea
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *SegmentRoutingV6Resource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state SegmentRoutingV6
@@ -253,6 +266,10 @@ func (r *SegmentRoutingV6Resource) Read(ctx context.Context, req resource.ReadRe
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *SegmentRoutingV6Resource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state SegmentRoutingV6
@@ -305,6 +322,10 @@ func (r *SegmentRoutingV6Resource) Update(ctx context.Context, req resource.Upda
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *SegmentRoutingV6Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state SegmentRoutingV6
 
@@ -346,6 +367,12 @@ func (r *SegmentRoutingV6Resource) Delete(ctx context.Context, req resource.Dele
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *SegmentRoutingV6Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "")...)
 }
+
+// End of section. //template:end import

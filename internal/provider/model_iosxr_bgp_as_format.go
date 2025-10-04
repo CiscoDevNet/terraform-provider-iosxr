@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type BGPASFormat struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`
@@ -41,6 +45,10 @@ type BGPASFormatData struct {
 	AsFormat types.String `tfsdk:"as_format"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data BGPASFormat) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
@@ -48,6 +56,10 @@ func (data BGPASFormat) getPath() string {
 func (data BGPASFormatData) getPath() string {
 	return "Cisco-IOS-XR-um-router-bgp-cfg:/as-format"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data BGPASFormat) toBody(ctx context.Context) string {
 	body := "{}"
@@ -57,6 +69,10 @@ func (data BGPASFormat) toBody(ctx context.Context) string {
 	return body
 }
 
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
+
 func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, ""); value.Exists() && !data.AsFormat.IsNull() {
 		data.AsFormat = types.StringValue(value.String())
@@ -65,17 +81,29 @@ func (data *BGPASFormat) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *BGPASFormat) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, ""); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *BGPASFormatData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, ""); value.Exists() {
 		data.AsFormat = types.StringValue(value.String())
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat) []string {
 	deletedItems := make([]string, 0)
@@ -85,10 +113,18 @@ func (data *BGPASFormat) getDeletedItems(ctx context.Context, state BGPASFormat)
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *BGPASFormat) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -97,3 +133,5 @@ func (data *BGPASFormat) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

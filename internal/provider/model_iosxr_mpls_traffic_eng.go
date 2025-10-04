@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -28,6 +29,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type MPLSTrafficEng struct {
 	Device     types.String `tfsdk:"device"`
 	Id         types.String `tfsdk:"id"`
@@ -41,6 +45,10 @@ type MPLSTrafficEngData struct {
 	TrafficEng types.Bool   `tfsdk:"traffic_eng"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data MPLSTrafficEng) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
 }
@@ -48,6 +56,10 @@ func (data MPLSTrafficEng) getPath() string {
 func (data MPLSTrafficEngData) getPath() string {
 	return "Cisco-IOS-XR-um-mpls-te-cfg:/mpls"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data MPLSTrafficEng) toBody(ctx context.Context) string {
 	body := "{}"
@@ -58,6 +70,10 @@ func (data MPLSTrafficEng) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); !data.TrafficEng.IsNull() {
@@ -71,6 +87,10 @@ func (data *MPLSTrafficEng) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
 		data.TrafficEng = types.BoolValue(true)
@@ -78,6 +98,10 @@ func (data *MPLSTrafficEng) fromBody(ctx context.Context, res []byte) {
 		data.TrafficEng = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traffic-eng"); value.Exists() {
@@ -87,6 +111,10 @@ func (data *MPLSTrafficEngData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTrafficEng) []string {
 	deletedItems := make([]string, 0)
 	if !state.TrafficEng.IsNull() && data.TrafficEng.IsNull() {
@@ -94,6 +122,10 @@ func (data *MPLSTrafficEng) getDeletedItems(ctx context.Context, state MPLSTraff
 	}
 	return deletedItems
 }
+
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
 
 func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
@@ -103,6 +135,10 @@ func (data *MPLSTrafficEng) getEmptyLeafsDelete(ctx context.Context) []string {
 	return emptyLeafsDelete
 }
 
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
+
 func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.TrafficEng.IsNull() {
@@ -110,3 +146,5 @@ func (data *MPLSTrafficEng) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

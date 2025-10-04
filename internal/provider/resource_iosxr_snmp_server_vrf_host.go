@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -38,6 +39,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewSNMPServerVRFHostResource() resource.Resource {
 	return &SNMPServerVRFHostResource{}
@@ -133,6 +138,10 @@ func (r *SNMPServerVRFHostResource) Configure(_ context.Context, req resource.Co
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *SNMPServerVRFHostResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan SNMPServerVRFHost
 
@@ -171,6 +180,10 @@ func (r *SNMPServerVRFHostResource) Create(ctx context.Context, req resource.Cre
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state SNMPServerVRFHost
@@ -213,6 +226,10 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *SNMPServerVRFHostResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state SNMPServerVRFHost
@@ -265,6 +282,10 @@ func (r *SNMPServerVRFHostResource) Update(ctx context.Context, req resource.Upd
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state SNMPServerVRFHost
 
@@ -306,6 +327,10 @@ func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.Del
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *SNMPServerVRFHostResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -321,3 +346,5 @@ func (r *SNMPServerVRFHostResource) ImportState(ctx context.Context, req resourc
 	value1 := idParts[1]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("address"), value1)...)
 }
+
+// End of section. //template:end import

@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrASPathSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -53,6 +58,14 @@ func TestAccIosxrASPathSet(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrASPathSetConfig_minimum() string {
 	config := `resource "iosxr_as_path_set" "test" {` + "\n"
 	config += `	set_name = "TEST1"` + "\n"
@@ -61,6 +74,10 @@ func testAccIosxrASPathSetConfig_minimum() string {
 	return config
 }
 
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
+
 func testAccIosxrASPathSetConfig_all() string {
 	config := `resource "iosxr_as_path_set" "test" {` + "\n"
 	config += `	set_name = "TEST1"` + "\n"
@@ -68,3 +85,5 @@ func testAccIosxrASPathSetConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

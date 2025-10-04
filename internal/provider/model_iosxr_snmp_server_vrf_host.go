@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SNMPServerVRFHost struct {
 	Device             types.String                          `tfsdk:"device"`
 	Id                 types.String                          `tfsdk:"id"`
@@ -52,6 +56,10 @@ type SNMPServerVRFHostUnencryptedStrings struct {
 	VersionV3SecurityLevel types.String `tfsdk:"version_v3_security_level"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SNMPServerVRFHost) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
@@ -59,6 +67,10 @@ func (data SNMPServerVRFHost) getPath() string {
 func (data SNMPServerVRFHostData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server/vrfs/vrf[vrf-name=%s]/hosts/host[address=%s]", data.VrfName.ValueString(), data.Address.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 	body := "{}"
@@ -81,6 +93,10 @@ func (data SNMPServerVRFHost) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.UnencryptedStrings {
@@ -124,6 +140,10 @@ func (data *SNMPServerVRFHost) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
 		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
@@ -144,6 +164,10 @@ func (data *SNMPServerVRFHost) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "traps.unencrypted.unencrypted-string"); value.Exists() {
 		data.UnencryptedStrings = make([]SNMPServerVRFHostUnencryptedStrings, 0)
@@ -163,6 +187,10 @@ func (data *SNMPServerVRFHostData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPServerVRFHost) []string {
 	deletedItems := make([]string, 0)
@@ -205,6 +233,10 @@ func (data *SNMPServerVRFHost) getDeletedItems(ctx context.Context, state SNMPSe
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.UnencryptedStrings {
@@ -217,6 +249,10 @@ func (data *SNMPServerVRFHost) getEmptyLeafsDelete(ctx context.Context) []string
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *SNMPServerVRFHost) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -232,3 +268,5 @@ func (data *SNMPServerVRFHost) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

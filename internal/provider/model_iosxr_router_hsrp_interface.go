@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterHSRPInterface struct {
 	Device                 types.String `tfsdk:"device"`
 	Id                     types.String `tfsdk:"id"`
@@ -56,6 +60,10 @@ type RouterHSRPInterfaceData struct {
 	HsrpMacRefresh         types.Int64  `tfsdk:"hsrp_mac_refresh"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterHSRPInterface) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
@@ -63,6 +71,10 @@ func (data RouterHSRPInterface) getPath() string {
 func (data RouterHSRPInterfaceData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-hsrp-cfg:/router/hsrp/interfaces/interface[interface-name=%s]", data.InterfaceName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterHSRPInterface) toBody(ctx context.Context) string {
 	body := "{}"
@@ -96,6 +108,10 @@ func (data RouterHSRPInterface) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); !data.HsrpUseBia.IsNull() {
@@ -143,6 +159,10 @@ func (data *RouterHSRPInterface) updateFromBody(ctx context.Context, res []byte)
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterHSRPInterface) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
 		data.HsrpUseBia = types.BoolValue(true)
@@ -170,6 +190,10 @@ func (data *RouterHSRPInterface) fromBody(ctx context.Context, res []byte) {
 		data.HsrpMacRefresh = types.Int64Value(value.Int())
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "hsrp.use-bia"); value.Exists() {
@@ -199,6 +223,10 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state RouterHSRPInterface) []string {
 	deletedItems := make([]string, 0)
 	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
@@ -225,6 +253,10 @@ func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state Rout
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
@@ -235,6 +267,10 @@ func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -261,3 +297,5 @@ func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

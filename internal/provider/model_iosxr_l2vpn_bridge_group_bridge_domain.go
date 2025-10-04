@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type L2VPNBridgeGroupBridgeDomain struct {
 	Device                         types.String                             `tfsdk:"device"`
 	Id                             types.String                             `tfsdk:"id"`
@@ -80,6 +84,10 @@ type L2VPNBridgeGroupBridgeDomainSrv6Evis struct {
 	VpnId types.Int64 `tfsdk:"vpn_id"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
 }
@@ -87,6 +95,10 @@ func (data L2VPNBridgeGroupBridgeDomain) getPath() string {
 func (data L2VPNBridgeGroupBridgeDomainData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]", data.BridgeGroupName.ValueString(), data.BridgeDomainName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 	body := "{}"
@@ -153,6 +165,10 @@ func (data L2VPNBridgeGroupBridgeDomain) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, res []byte) {
 	for i := range data.Evis {
@@ -317,6 +333,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) updateFromBody(ctx context.Context, re
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
@@ -390,6 +410,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) fromBody(ctx context.Context, res []by
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "evis.evi"); value.Exists() {
 		data.Evis = make([]L2VPNBridgeGroupBridgeDomainEvis, 0)
@@ -462,6 +486,10 @@ func (data *L2VPNBridgeGroupBridgeDomainData) fromBody(ctx context.Context, res 
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, state L2VPNBridgeGroupBridgeDomain) []string {
 	deletedItems := make([]string, 0)
@@ -612,6 +640,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletedItems(ctx context.Context, s
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	for i := range data.Evis {
@@ -651,6 +683,10 @@ func (data *L2VPNBridgeGroupBridgeDomain) getEmptyLeafsDelete(ctx context.Contex
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -717,3 +753,5 @@ func (data *L2VPNBridgeGroupBridgeDomain) getDeletePaths(ctx context.Context) []
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

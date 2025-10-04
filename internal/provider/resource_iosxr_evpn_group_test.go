@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrEVPNGroup(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -53,6 +58,9 @@ func TestAccIosxrEVPNGroup(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNGroupPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
 	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
@@ -62,6 +70,10 @@ resource "iosxr_gnmi" "PreReq0" {
 
 `
 
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrEVPNGroupConfig_minimum() string {
 	config := `resource "iosxr_evpn_group" "test" {` + "\n"
 	config += `	group_id = 1` + "\n"
@@ -69,6 +81,10 @@ func testAccIosxrEVPNGroupConfig_minimum() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrEVPNGroupConfig_all() string {
 	config := `resource "iosxr_evpn_group" "test" {` + "\n"
@@ -80,3 +96,5 @@ func testAccIosxrEVPNGroupConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

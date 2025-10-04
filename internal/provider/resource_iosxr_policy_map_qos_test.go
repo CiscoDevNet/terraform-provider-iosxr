@@ -19,12 +19,17 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	var checks []resource.TestCheckFunc
@@ -59,12 +64,24 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	})
 }
 
+// End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+
+// End of section. //template:end testPrerequisites
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
+
 func testAccIosxrPolicyMapQoSConfig_minimum() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
 	config += `	policy_map_name = "PM1"` + "\n"
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigMinimal
+
+// Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 
 func testAccIosxrPolicyMapQoSConfig_all() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
@@ -83,3 +100,5 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 	config += `}` + "\n"
 	return config
 }
+
+// End of section. //template:end testAccConfigAll

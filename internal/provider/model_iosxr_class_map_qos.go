@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type ClassMapQoS struct {
 	Device                       types.String `tfsdk:"device"`
 	Id                           types.String `tfsdk:"id"`
@@ -53,6 +57,10 @@ type ClassMapQoSData struct {
 	MatchTrafficClass            types.List   `tfsdk:"match_traffic_class"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data ClassMapQoS) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
 }
@@ -60,6 +68,10 @@ func (data ClassMapQoS) getPath() string {
 func (data ClassMapQoSData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-policymap-classmap-cfg:/class-map/type/qos[class-map-name=%s]", data.ClassMapName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data ClassMapQoS) toBody(ctx context.Context) string {
 	body := "{}"
@@ -96,6 +108,10 @@ func (data ClassMapQoS) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); !data.MatchAny.IsNull() {
@@ -134,6 +150,10 @@ func (data *ClassMapQoS) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
 		data.MatchAny = types.BoolValue(true)
@@ -164,6 +184,10 @@ func (data *ClassMapQoS) fromBody(ctx context.Context, res []byte) {
 		data.MatchTrafficClass = types.ListNull(types.StringType)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "match-any"); value.Exists() {
@@ -196,6 +220,10 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS) []string {
 	deletedItems := make([]string, 0)
 	if !state.MatchAny.IsNull() && data.MatchAny.IsNull() {
@@ -219,6 +247,10 @@ func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS)
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MatchAny.IsNull() && !data.MatchAny.ValueBool() {
@@ -226,6 +258,10 @@ func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -249,3 +285,5 @@ func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

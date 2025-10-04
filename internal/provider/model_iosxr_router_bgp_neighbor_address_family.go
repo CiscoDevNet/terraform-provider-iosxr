@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -29,6 +30,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type RouterBGPNeighborAddressFamily struct {
 	Device                                       types.String `tfsdk:"device"`
 	Id                                           types.String `tfsdk:"id"`
@@ -92,6 +96,10 @@ type RouterBGPNeighborAddressFamilyData struct {
 	DefaultOriginateInheritanceDisable           types.Bool   `tfsdk:"default_originate_inheritance_disable"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data RouterBGPNeighborAddressFamily) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.Address.ValueString(), data.AfName.ValueString())
 }
@@ -99,6 +107,10 @@ func (data RouterBGPNeighborAddressFamily) getPath() string {
 func (data RouterBGPNeighborAddressFamilyData) getPath() string {
 	return fmt.Sprintf("Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=%s]/neighbors/neighbor[address=%s]/address-families/address-family[af-name=%s]", data.AsNumber.ValueString(), data.Address.ValueString(), data.AfName.ValueString())
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	body := "{}"
@@ -208,6 +220,10 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt"); !data.ImportStitchingRt.IsNull() {
@@ -391,6 +407,10 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
 		data.ImportStitchingRt = types.BoolValue(true)
@@ -494,6 +514,10 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 		data.DefaultOriginateInheritanceDisable = types.BoolValue(false)
 	}
 }
+
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "import.stitching-rt"); value.Exists() {
@@ -599,6 +623,10 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	}
 }
 
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
+
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
 	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
@@ -673,6 +701,10 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.ValueBool() {
@@ -725,6 +757,10 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -799,3 +835,5 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

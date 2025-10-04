@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -30,6 +31,9 @@ import (
 	"github.com/tidwall/sjson"
 )
 
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin types
 type SSH struct {
 	Device             types.String    `tfsdk:"device"`
 	Id                 types.String    `tfsdk:"id"`
@@ -58,6 +62,10 @@ type SSHServerVrfs struct {
 	Ipv6AccessList types.String `tfsdk:"ipv6_access_list"`
 }
 
+// End of section. //template:end types
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getPath
+
 func (data SSH) getPath() string {
 	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 }
@@ -65,6 +73,10 @@ func (data SSH) getPath() string {
 func (data SSHData) getPath() string {
 	return "Cisco-IOS-XR-um-ssh-cfg:/ssh"
 }
+
+// End of section. //template:end getPath
+
+// Section below is generated&owned by "gen/generator.go". //template:begin toBody
 
 func (data SSH) toBody(ctx context.Context) string {
 	body := "{}"
@@ -103,6 +115,10 @@ func (data SSH) toBody(ctx context.Context) string {
 	}
 	return body
 }
+
+// End of section. //template:end toBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() && !data.ServerDscp.IsNull() {
@@ -179,6 +195,10 @@ func (data *SSH) updateFromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end updateFromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBody
+
 func (data *SSH) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
@@ -218,6 +238,10 @@ func (data *SSH) fromBody(ctx context.Context, res []byte) {
 	}
 }
 
+// End of section. //template:end fromBody
+
+// Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
+
 func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 	if value := gjson.GetBytes(res, "server.dscp"); value.Exists() {
 		data.ServerDscp = types.Int64Value(value.Int())
@@ -256,6 +280,10 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 		})
 	}
 }
+
+// End of section. //template:end fromBodyData
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletedItems
 
 func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 	deletedItems := make([]string, 0)
@@ -313,6 +341,10 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 	return deletedItems
 }
 
+// End of section. //template:end getDeletedItems
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getEmptyLeafsDelete
+
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
@@ -331,6 +363,10 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 	}
 	return emptyLeafsDelete
 }
+
+// End of section. //template:end getEmptyLeafsDelete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin getDeletePaths
 
 func (data *SSH) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
@@ -361,3 +397,5 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 	}
 	return deletePaths
 }
+
+// End of section. //template:end getDeletePaths

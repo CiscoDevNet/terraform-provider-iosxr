@@ -19,6 +19,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"context"
 	"fmt"
@@ -37,6 +38,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
+
+// End of section. //template:end imports
+
+// Section below is generated&owned by "gen/generator.go". //template:begin model
 
 func NewRoutePolicyResource() resource.Resource {
 	return &RoutePolicyResource{}
@@ -93,6 +98,10 @@ func (r *RoutePolicyResource) Configure(_ context.Context, req resource.Configur
 	r.client = req.ProviderData.(*client.Client)
 }
 
+// End of section. //template:end model
+
+// Section below is generated&owned by "gen/generator.go". //template:begin create
+
 func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	var plan RoutePolicy
 
@@ -131,6 +140,10 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end create
+
+// Section below is generated&owned by "gen/generator.go". //template:begin read
 
 func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 	var state RoutePolicy
@@ -173,6 +186,10 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
 }
+
+// End of section. //template:end read
+
+// Section below is generated&owned by "gen/generator.go". //template:begin update
 
 func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 	var plan, state RoutePolicy
@@ -225,6 +242,10 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 	resp.Diagnostics.Append(diags...)
 }
 
+// End of section. //template:end update
+
+// Section below is generated&owned by "gen/generator.go". //template:begin delete
+
 func (r *RoutePolicyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var state RoutePolicy
 
@@ -261,6 +282,10 @@ func (r *RoutePolicyResource) Delete(ctx context.Context, req resource.DeleteReq
 	resp.State.RemoveResource(ctx)
 }
 
+// End of section. //template:end delete
+
+// Section below is generated&owned by "gen/generator.go". //template:begin import
+
 func (r *RoutePolicyResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
 
@@ -274,3 +299,5 @@ func (r *RoutePolicyResource) ImportState(ctx context.Context, req resource.Impo
 	value0 := idParts[0]
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("route_policy_name"), value0)...)
 }
+
+// End of section. //template:end import

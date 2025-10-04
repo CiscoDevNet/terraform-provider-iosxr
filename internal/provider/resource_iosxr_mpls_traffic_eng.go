@@ -143,6 +143,8 @@ func (r *MPLSTrafficEngResource) Create(ctx context.Context, req resource.Create
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end create
@@ -157,12 +159,6 @@ func (r *MPLSTrafficEngResource) Read(ctx context.Context, req resource.ReadRequ
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-
-	import_ := false
-	if state.Id.ValueString() == "" {
-		import_ = true
-		state.Id = types.StringValue(state.getPath())
 	}
 
 	device, ok := r.data.Devices[state.Device.ValueString()]
@@ -185,8 +181,14 @@ func (r *MPLSTrafficEngResource) Read(ctx context.Context, req resource.ReadRequ
 			}
 		}
 
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+
+		// After `terraform import` we switch to a full read.
 		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
-		if import_ {
+		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
 			state.updateFromBody(ctx, respBody)
@@ -197,6 +199,8 @@ func (r *MPLSTrafficEngResource) Read(ctx context.Context, req resource.ReadRequ
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end read
@@ -340,6 +344,8 @@ func (r *MPLSTrafficEngResource) ImportState(ctx context.Context, req resource.I
 	// construct path for 'id' attribute
 	var state MPLSTrafficEng
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
+
+	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end import

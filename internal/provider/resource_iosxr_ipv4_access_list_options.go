@@ -158,6 +158,8 @@ func (r *IPv4AccessListOptionsResource) Create(ctx context.Context, req resource
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end create
@@ -172,12 +174,6 @@ func (r *IPv4AccessListOptionsResource) Read(ctx context.Context, req resource.R
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-
-	import_ := false
-	if state.Id.ValueString() == "" {
-		import_ = true
-		state.Id = types.StringValue(state.getPath())
 	}
 
 	device, ok := r.data.Devices[state.Device.ValueString()]
@@ -200,8 +196,14 @@ func (r *IPv4AccessListOptionsResource) Read(ctx context.Context, req resource.R
 			}
 		}
 
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+
+		// After `terraform import` we switch to a full read.
 		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
-		if import_ {
+		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
 			state.updateFromBody(ctx, respBody)
@@ -212,6 +214,8 @@ func (r *IPv4AccessListOptionsResource) Read(ctx context.Context, req resource.R
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end read
@@ -355,6 +359,8 @@ func (r *IPv4AccessListOptionsResource) ImportState(ctx context.Context, req res
 	// construct path for 'id' attribute
 	var state IPv4AccessListOptions
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
+
+	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end import

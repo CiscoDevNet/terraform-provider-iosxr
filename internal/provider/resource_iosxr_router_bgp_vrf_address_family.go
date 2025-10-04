@@ -920,6 +920,8 @@ func (r *RouterBGPVRFAddressFamilyResource) Create(ctx context.Context, req reso
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end create
@@ -934,12 +936,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-
-	import_ := false
-	if state.Id.ValueString() == "" {
-		import_ = true
-		state.Id = types.StringValue(state.getPath())
 	}
 
 	device, ok := r.data.Devices[state.Device.ValueString()]
@@ -962,8 +958,14 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 			}
 		}
 
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+
+		// After `terraform import` we switch to a full read.
 		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
-		if import_ {
+		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
 			state.updateFromBody(ctx, respBody)
@@ -974,6 +976,8 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end read
@@ -1125,6 +1129,8 @@ func (r *RouterBGPVRFAddressFamilyResource) ImportState(ctx context.Context, req
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
+
+	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end import

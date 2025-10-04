@@ -187,6 +187,8 @@ func (r *SNMPServerVRFHostResource) Create(ctx context.Context, req resource.Cre
 
 	diags = resp.State.Set(ctx, &plan)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end create
@@ -201,12 +203,6 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
-	}
-
-	import_ := false
-	if state.Id.ValueString() == "" {
-		import_ = true
-		state.Id = types.StringValue(state.getPath())
 	}
 
 	device, ok := r.data.Devices[state.Device.ValueString()]
@@ -229,8 +225,14 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 			}
 		}
 
+		imp, diags := helpers.IsFlagImporting(ctx, req)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+
+		// After `terraform import` we switch to a full read.
 		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
-		if import_ {
+		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
 			state.updateFromBody(ctx, respBody)
@@ -241,6 +243,8 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 
 	diags = resp.State.Set(ctx, &state)
 	resp.Diagnostics.Append(diags...)
+
+	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end read
@@ -391,6 +395,8 @@ func (r *SNMPServerVRFHostResource) ImportState(ctx context.Context, req resourc
 		return
 	}
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
+
+	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)
 }
 
 // End of section. //template:end import

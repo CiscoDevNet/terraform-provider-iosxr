@@ -21,10 +21,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/tidwall/gjson"
@@ -41,7 +41,7 @@ func NewGnmiDataSource() datasource.DataSource {
 }
 
 type GnmiDataSource struct {
-	client *client.Client
+	data *IosxrProviderData
 }
 
 func (d *GnmiDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -80,7 +80,7 @@ func (d *GnmiDataSource) Configure(_ context.Context, req datasource.ConfigureRe
 		return
 	}
 
-	d.client = req.ProviderData.(*client.Client)
+	d.data = req.ProviderData.(*IosxrProviderData)
 }
 
 func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
@@ -93,22 +93,30 @@ func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
+	device, ok := d.data.Devices[config.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", config.Device.ValueString()))
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.Id.ValueString()))
 
-	getResp, err := d.client.Get(ctx, config.Device.ValueString(), config.Path.ValueString())
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-		return
+	attributes := make(map[string]attr.Value)
+
+	if device.Managed {
+		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.Path.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			return
+		}
+
+		for attr, value := range gjson.ParseBytes(getResp.Notification[0].Update[0].Val.GetJsonIetfVal()).Map() {
+			attributes[attr] = types.StringValue(value.String())
+		}
 	}
 
 	state.Path = types.StringValue(config.Path.ValueString())
 	state.Id = types.StringValue(config.Path.ValueString())
-
-	attributes := make(map[string]attr.Value)
-
-	for attr, value := range gjson.ParseBytes(getResp.Notification[0].Update[0].Val.GetJsonIetfVal()).Map() {
-		attributes[attr] = types.StringValue(value.String())
-	}
 	state.Attributes = types.MapValueMust(types.StringType, attributes)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.Id.ValueString()))

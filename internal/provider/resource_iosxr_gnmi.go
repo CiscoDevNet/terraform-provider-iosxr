@@ -43,7 +43,7 @@ func NewGnmiResource() resource.Resource {
 }
 
 type GnmiResource struct {
-	client *client.Client
+	data *IosxrProviderData
 }
 
 func (r *GnmiResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -147,7 +147,7 @@ func (r *GnmiResource) Configure(ctx context.Context, req resource.ConfigureRequ
 		return
 	}
 
-	r.client = req.ProviderData.(*client.Client)
+	r.data = req.ProviderData.(*IosxrProviderData)
 }
 
 func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -160,15 +160,23 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 		return
 	}
 
+	device, ok := r.data.Devices[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
-	if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
-		body := plan.toBody(ctx)
+	if device.Managed {
+		if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
+			body := plan.toBody(ctx)
 
-		_, err := r.client.Set(ctx, plan.Device.ValueString(), client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+			_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
 		}
 	}
 
@@ -190,23 +198,31 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
-
-	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
-	if err != nil {
-		if strings.Contains(err.Error(), "Requested element(s) not found") {
-			resp.State.RemoveResource(ctx)
-			return
-		} else {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-			return
-		}
+	device, ok := r.data.Devices[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
+		return
 	}
 
-	diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
-	resp.Diagnostics.Append(diags...)
-	if resp.Diagnostics.HasError() {
-		return
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+
+	if device.Managed {
+		getResp, err := r.data.Client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
+		if err != nil {
+			if strings.Contains(err.Error(), "Requested element(s) not found") {
+				resp.State.RemoveResource(ctx)
+				return
+			} else {
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
+		}
+
+		diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
@@ -232,26 +248,34 @@ func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, r
 		return
 	}
 
-	var ops []client.SetOperation
+	device, ok := r.data.Devices[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
-	if !plan.Attributes.IsUnknown() {
-		body := plan.toBody(ctx)
-		ops = append(ops, client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
-	}
+	if device.Managed {
+		var ops []client.SetOperation
 
-	deletedListItems := plan.getDeletedItems(ctx, state)
-	tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
+		if !plan.Attributes.IsUnknown() {
+			body := plan.toBody(ctx)
+			ops = append(ops, client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
+		}
 
-	for _, i := range deletedListItems {
-		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
-	}
+		deletedListItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
-	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-		return
+		for _, i := range deletedListItems {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+
+		_, err := r.data.Client.Set(ctx, state.Device.ValueString(), ops...)
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
@@ -270,13 +294,21 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 		return
 	}
 
+	device, ok := r.data.Devices[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
+		return
+	}
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
-	if state.Delete.ValueBool() {
-		_, err := r.client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.Path.ValueString(), Body: "", Operation: client.Delete})
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+	if device.Managed {
+		if state.Delete.ValueBool() {
+			_, err := r.data.Client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.Path.ValueString(), Body: "", Operation: client.Delete})
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
 		}
 	}
 

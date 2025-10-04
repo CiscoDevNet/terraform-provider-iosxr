@@ -51,7 +51,7 @@ func NewRouterStaticIPv4UnicastResource() resource.Resource {
 }
 
 type RouterStaticIPv4UnicastResource struct {
-	client *client.Client
+	data *IosxrProviderData
 }
 
 func (r *RouterStaticIPv4UnicastResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -476,7 +476,7 @@ func (r *RouterStaticIPv4UnicastResource) Configure(_ context.Context, req resou
 		return
 	}
 
-	r.client = req.ProviderData.(*client.Client)
+	r.data = req.ProviderData.(*IosxrProviderData)
 }
 
 // End of section. //template:end model
@@ -493,25 +493,33 @@ func (r *RouterStaticIPv4UnicastResource) Create(ctx context.Context, req resour
 		return
 	}
 
-	var ops []client.SetOperation
+	device, ok := r.data.Devices[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
-	// Create object
-	body := plan.toBody(ctx)
-	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
+	if device.Managed {
+		var ops []client.SetOperation
 
-	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		// Create object
+		body := plan.toBody(ctx)
+		ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
-	for _, i := range emptyLeafsDelete {
-		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
-	}
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-		return
+		for _, i := range emptyLeafsDelete {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+
+		_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), ops...)
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+			return
+		}
 	}
 
 	plan.Id = types.StringValue(plan.getPath())
@@ -542,24 +550,32 @@ func (r *RouterStaticIPv4UnicastResource) Read(ctx context.Context, req resource
 		state.Id = types.StringValue(state.getPath())
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
-
-	getResp, err := r.client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
-	if err != nil {
-		if strings.Contains(err.Error(), "Requested element(s) not found") {
-			resp.State.RemoveResource(ctx)
-			return
-		} else {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
-			return
-		}
+	device, ok := r.data.Devices[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
+		return
 	}
 
-	respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
-	if import_ {
-		state.fromBody(ctx, respBody)
-	} else {
-		state.updateFromBody(ctx, respBody)
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
+
+	if device.Managed {
+		getResp, err := r.data.Client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
+		if err != nil {
+			if strings.Contains(err.Error(), "Requested element(s) not found") {
+				resp.State.RemoveResource(ctx)
+				return
+			} else {
+				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				return
+			}
+		}
+
+		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		if import_ {
+			state.fromBody(ctx, respBody)
+		} else {
+			state.updateFromBody(ctx, respBody)
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Id.ValueString()))
@@ -589,32 +605,40 @@ func (r *RouterStaticIPv4UnicastResource) Update(ctx context.Context, req resour
 		return
 	}
 
-	var ops []client.SetOperation
+	device, ok := r.data.Devices[plan.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", plan.Device.ValueString()))
+		return
+	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
-	// Update object
-	body := plan.toBody(ctx)
-	ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
+	if device.Managed {
+		var ops []client.SetOperation
 
-	deletedListItems := plan.getDeletedItems(ctx, state)
-	tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
+		// Update object
+		body := plan.toBody(ctx)
+		ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
 
-	for _, i := range deletedListItems {
-		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
-	}
+		deletedListItems := plan.getDeletedItems(ctx, state)
+		tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
-	emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
-	tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
+		for _, i := range deletedListItems {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
 
-	for _, i := range emptyLeafsDelete {
-		ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
-	}
+		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
+		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
-	_, err := r.client.Set(ctx, plan.Device.ValueString(), ops...)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-		return
+		for _, i := range emptyLeafsDelete {
+			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+		}
+
+		_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), ops...)
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.Id.ValueString()))
@@ -637,30 +661,39 @@ func (r *RouterStaticIPv4UnicastResource) Delete(ctx context.Context, req resour
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
-	var ops []client.SetOperation
-	deleteMode := "all"
-	if state.DeleteMode.ValueString() == "all" {
-		deleteMode = "all"
-	} else if state.DeleteMode.ValueString() == "attributes" {
-		deleteMode = "attributes"
-	}
-
-	if deleteMode == "all" {
-		ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
-	} else {
-		deletePaths := state.getDeletePaths(ctx)
-		tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
-
-		for _, i := range deletePaths {
-			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
-		}
-	}
-
-	_, err := r.client.Set(ctx, state.Device.ValueString(), ops...)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+	device, ok := r.data.Devices[state.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", state.Device.ValueString()))
 		return
+	}
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
+
+	if device.Managed {
+		var ops []client.SetOperation
+		deleteMode := "all"
+		if state.DeleteMode.ValueString() == "all" {
+			deleteMode = "all"
+		} else if state.DeleteMode.ValueString() == "attributes" {
+			deleteMode = "attributes"
+		}
+
+		if deleteMode == "all" {
+			ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+		} else {
+			deletePaths := state.getDeletePaths(ctx)
+			tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
+
+			for _, i := range deletePaths {
+				ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+			}
+		}
+
+		_, err := r.data.Client.Set(ctx, state.Device.ValueString(), ops...)
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+			return
+		}
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Delete finished successfully", state.Id.ValueString()))

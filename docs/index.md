@@ -44,6 +44,7 @@ provider "iosxr" {
 - `key` (String) TLS private key content. This can also be set as the IOSXR_KEY environment variable.
 - `password` (String, Sensitive) Password for the IOS-XR device. This can also be set as the IOSXR_PASSWORD environment variable.
 - `reuse_connection` (Boolean) Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.
+- `selected_devices` (List of String) This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.
 - `tls` (Boolean) Use TLS. This can also be set as the IOSXR_TLS environment variable. Defaults to `true`.
 - `username` (String) Username for the IOS-XR device. This can also be set as the IOSXR_USERNAME environment variable.
 - `verify_certificate` (Boolean) Verify target certificate. This can also be set as the IOSXR_VERIFY_CERTIFICATE environment variable. Defaults to `false`.
@@ -55,3 +56,7 @@ Required:
 
 - `host` (String) IP of the Cisco IOS-XR device.
 - `name` (String) Device name.
+
+Optional:
+
+- `managed` (Boolean) Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.

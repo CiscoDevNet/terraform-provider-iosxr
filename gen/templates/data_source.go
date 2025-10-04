@@ -28,6 +28,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -49,7 +50,7 @@ func New{{camelCase .Name}}DataSource() datasource.DataSource {
 }
 
 type {{camelCase .Name}}DataSource struct{
-	client *client.Client
+	data *IosxrProviderData
 }
 
 func (d *{{camelCase .Name}}DataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -128,7 +129,7 @@ func (d *{{camelCase .Name}}DataSource) Configure(_ context.Context, req datasou
 		return
 	}
 
-	d.client = req.ProviderData.(*client.Client)
+	d.data = req.ProviderData.(*IosxrProviderData)
 }
 
 // End of section. //template:end model
@@ -145,15 +146,24 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
-
-	getResp, err := d.client.Get(ctx, config.Device.ValueString(), config.getPath())
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+	device, ok := d.data.Devices[config.Device.ValueString()]
+	if !ok {
+		resp.Diagnostics.AddAttributeError(path.Root("device"), "Invalid device", fmt.Sprintf("Device '%s' does not exist in provider configuration.", config.Device.ValueString()))
 		return
 	}
 
-	config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
+
+	if device.Managed {
+		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
+		if err != nil {
+			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			return
+		}
+
+		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+	}
+
 	config.Id = types.StringValue(config.getPath())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", config.getPath()))

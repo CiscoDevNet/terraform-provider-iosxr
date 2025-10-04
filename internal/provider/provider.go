@@ -22,7 +22,9 @@ package provider
 import (
 	"context"
 	"os"
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -51,12 +53,23 @@ type providerData struct {
 	Key               types.String         `tfsdk:"key"`
 	CaCertificate     types.String         `tfsdk:"ca_certificate"`
 	ReuseConnection   types.Bool           `tfsdk:"reuse_connection"`
+	SelectedDevices   types.List           `tfsdk:"selected_devices"`
 	Devices           []providerDataDevice `tfsdk:"devices"`
 }
 
 type providerDataDevice struct {
-	Name types.String `tfsdk:"name"`
-	Host types.String `tfsdk:"host"`
+	Name    types.String `tfsdk:"name"`
+	Host    types.String `tfsdk:"host"`
+	Managed types.Bool   `tfsdk:"managed"`
+}
+
+type IosxrProviderData struct {
+	Client  *client.Client
+	Devices map[string]*IosxrProviderDataDevice
+}
+
+type IosxrProviderDataDevice struct {
+	Managed bool
 }
 
 // Metadata returns the provider type name.
@@ -104,6 +117,11 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				MarkdownDescription: "Reuse gNMI connection. This can also be set as the IOSXR_REUSE_CONNECTION environment variable. Defaults to `true`.",
 				Optional:            true,
 			},
+			"selected_devices": schema.ListAttribute{
+				MarkdownDescription: "This can be used to select a list of devices to manage from the `devices` list. Selected devices will be managed while other devices will be skipped and their state will be frozen. This can be used to deploy changes to a subset of devices. Defaults to all devices.",
+				Optional:            true,
+				ElementType:         types.StringType,
+			},
 			"devices": schema.ListNestedAttribute{
 				MarkdownDescription: "This can be used to manage a list of devices from a single provider. All devices must use the same credentials. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list.",
 				Optional:            true,
@@ -116,6 +134,10 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 						"host": schema.StringAttribute{
 							MarkdownDescription: "IP of the Cisco IOS-XR device.",
 							Required:            true,
+						},
+						"managed": schema.BoolAttribute{
+							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.",
+							Optional:            true,
 						},
 					},
 				},
@@ -229,7 +251,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if verifyCertificateStr == "" {
 			verifyCertificate = false
 		} else {
-			verifyCertificate, _ = strconv.ParseBool(verifyCertificateStr)
+			var err error
+			verifyCertificate, err = strconv.ParseBool(verifyCertificateStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid verify_certificate value",
+					"IOSXR_VERIFY_CERTIFICATE must be a valid boolean (true/false/1/0), got: "+verifyCertificateStr,
+				)
+				return
+			}
 		}
 	} else {
 		verifyCertificate = config.VerifyCertificate.ValueBool()
@@ -250,7 +280,15 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if tlsStr == "" {
 			tls = true
 		} else {
-			tls, _ = strconv.ParseBool(tlsStr)
+			var err error
+			tls, err = strconv.ParseBool(tlsStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid tls value",
+					"IOSXR_TLS must be a valid boolean (true/false/1/0), got: "+tlsStr,
+				)
+				return
+			}
 		}
 	} else {
 		tls = config.Tls.ValueBool()
@@ -319,10 +357,69 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		if reuseConnectionStr == "" {
 			reuseConnection = true
 		} else {
-			reuseConnection, _ = strconv.ParseBool(reuseConnectionStr)
+			var err error
+			reuseConnection, err = strconv.ParseBool(reuseConnectionStr)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid reuse_connection value",
+					"IOSXR_REUSE_CONNECTION must be a valid boolean (true/false/1/0), got: "+reuseConnectionStr,
+				)
+				return
+			}
 		}
 	} else {
 		reuseConnection = config.ReuseConnection.ValueBool()
+	}
+
+	var selectedDevices []string
+	if config.SelectedDevices.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as selected_devices",
+		)
+		return
+	}
+
+	if config.SelectedDevices.IsNull() {
+		selectedDevicesStr := os.Getenv("IOSXR_SELECTED_DEVICES")
+		if selectedDevicesStr != "" {
+			parts := strings.Split(selectedDevicesStr, ",")
+			for _, part := range parts {
+				trimmed := strings.TrimSpace(part)
+				if trimmed != "" {
+					selectedDevices = append(selectedDevices, trimmed)
+				}
+			}
+		}
+	} else {
+		diags = config.SelectedDevices.ElementsAs(ctx, &selectedDevices, false)
+		resp.Diagnostics.Append(diags...)
+		if resp.Diagnostics.HasError() {
+			return
+		}
+	}
+
+	// Validate selected_devices references
+	if len(selectedDevices) > 0 {
+		deviceMap := make(map[string]bool)
+		for _, device := range config.Devices {
+			deviceMap[device.Name.ValueString()] = true
+		}
+
+		var invalidDevices []string
+		for _, selectedName := range selectedDevices {
+			if !deviceMap[selectedName] {
+				invalidDevices = append(invalidDevices, selectedName)
+			}
+		}
+
+		if len(invalidDevices) > 0 {
+			resp.Diagnostics.AddWarning(
+				"Unknown devices in selected_devices",
+				"The following device names from selected_devices do not exist in the devices list: "+strings.Join(invalidDevices, ", "),
+			)
+		}
 	}
 
 	client := client.NewClient(reuseConnection)
@@ -331,17 +428,37 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to add target", err.Error())
 	}
-	resp.Diagnostics.Append(diags...)
 
+	// Build provider data structure with device management information
+	providerData := &IosxrProviderData{
+		Client:  &client,
+		Devices: make(map[string]*IosxrProviderDataDevice),
+	}
+
+	// Add default device (empty string)
+	providerData.Devices[""] = &IosxrProviderDataDevice{Managed: true}
+
+	// Add all devices with their managed status
 	for _, device := range config.Devices {
-		err := client.AddTarget(ctx, device.Name.ValueString(), device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to add target", err.Error())
+		deviceName := device.Name.ValueString()
+		var managed bool
+		if len(selectedDevices) > 0 {
+			managed = slices.Contains(selectedDevices, deviceName)
+		} else {
+			managed = device.Managed.IsNull() || device.Managed.IsUnknown() || device.Managed.ValueBool()
+		}
+		providerData.Devices[deviceName] = &IosxrProviderDataDevice{Managed: managed}
+
+		if managed {
+			err := client.AddTarget(ctx, deviceName, device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to add target", err.Error())
+			}
 		}
 	}
 
-	resp.DataSourceData = &client
-	resp.ResourceData = &client
+	resp.DataSourceData = providerData
+	resp.ResourceData = providerData
 }
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {

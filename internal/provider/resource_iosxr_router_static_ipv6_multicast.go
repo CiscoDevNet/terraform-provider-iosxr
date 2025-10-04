@@ -679,18 +679,31 @@ func (r *RouterStaticIPv6MulticastResource) Delete(ctx context.Context, req reso
 
 func (r *RouterStaticIPv6MulticastResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 {
+	if len(idParts) != 2 && len(idParts) != 3 {
+		expectedIdentifier := "Expected import identifier with format: '<prefix_address>,<prefix_length>'"
+		expectedIdentifier += " or '<prefix_address>,<prefix_length>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <prefix_address>,<prefix_length>. Got: %q", req.ID),
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	value0 := idParts[0]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_address"), value0)...)
-	value1, _ := strconv.Atoi(idParts[1])
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_length"), value1)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_address"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("prefix_length"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+	if len(idParts) == 3 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state RouterStaticIPv6Multicast
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

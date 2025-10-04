@@ -262,6 +262,22 @@ func ImportParts(attributes []YamlConfigAttribute) int {
 	return parts
 }
 
+// Templating helper function to return import attributes
+func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
+	attributes := []YamlConfigAttribute{}
+	for _, attr := range config.Attributes {
+		if attr.Reference || attr.Id {
+			attributes = append(attributes, attr)
+		}
+	}
+	return attributes
+}
+
+// Templating helper function to add two integers
+func Add(a, b int) int {
+	return a + b
+}
+
 // Templating helper function to get example dn
 func GetExamplePath(path string, attributes []YamlConfigAttribute) string {
 	a := make([]interface{}, 0, len(attributes))
@@ -301,6 +317,8 @@ var functions = template.FuncMap{
 	"hasId":                 HasId,
 	"hasReference":          HasReference,
 	"importParts":           ImportParts,
+	"importAttributes":      ImportAttributes,
+	"add":                   Add,
 	"getExamplePath":        GetExamplePath,
 	"isLast":                IsLast,
 	"sprintf":               fmt.Sprintf,

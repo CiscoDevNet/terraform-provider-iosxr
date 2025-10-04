@@ -475,30 +475,36 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 
 func (r *{{camelCase .Name}}Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	{{- if gt (importParts .Attributes) 0}}
 	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != {{importParts .Attributes}} {
+	if len(idParts) != {{len (importAttributes .)}} && len(idParts) != {{add (len (importAttributes .)) 1}} {
+		expectedIdentifier := "Expected import identifier with format: '{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}'"
+		expectedIdentifier += " or '{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}<{{.TfName}}>{{end}}{{if importAttributes .}},{{end}}<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: {{range $index, $attr := .Attributes}}{{if or $attr.Reference $attr.Id}}{{if $index}},{{end}}<{{$attr.TfName}}>{{end}}{{end}}. Got: %q", req.ID),
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
 
-	{{- range $index, $attr := .Attributes}}
-	{{- if or $attr.Reference $attr.Id}}
-		{{- if eq $attr.Type "Int64"}}
-	value{{$index}}, _ := strconv.Atoi(idParts[{{$index}}])
-		{{- else}}
-	value{{$index}} := idParts[{{$index}}]
-		{{- end}}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{$attr.TfName}}"), value{{$index}})...)
+	{{- range $index, $attr := (importAttributes .)}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("{{.TfName}}"), {{if eq .Type "Bool"}}helpers.Must(strconv.ParseBool(idParts[{{$index}}])){{else if eq .Type "Int64"}}helpers.Must(strconv.ParseInt(idParts[{{$index}}], 10, 64)){{else if eq .Type "Float64"}}helpers.Must(strconv.ParseFloat(idParts[{{$index}}], 64)){{else}}idParts[{{$index}}]{{end}})...)
 	{{- end}}
+	if len(idParts) == {{add (len (importAttributes .)) 1}} {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state {{camelCase .Name}}
+	{{- if importAttributes .}}
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
 	{{- end}}
-	{{- else}}
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "")...)
-	{{- end}}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

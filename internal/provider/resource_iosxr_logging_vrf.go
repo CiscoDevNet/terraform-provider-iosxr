@@ -369,16 +369,30 @@ func (r *LoggingVRFResource) Delete(ctx context.Context, req resource.DeleteRequ
 
 func (r *LoggingVRFResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 1 {
+	if len(idParts) != 1 && len(idParts) != 2 {
+		expectedIdentifier := "Expected import identifier with format: '<vrf_name>'"
+		expectedIdentifier += " or '<vrf_name>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <vrf_name>. Got: %q", req.ID),
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	value0 := idParts[0]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), value0)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrf_name"), idParts[0])...)
+	if len(idParts) == 2 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state LoggingVRF
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

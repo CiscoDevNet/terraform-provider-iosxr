@@ -516,18 +516,31 @@ func (r *RouterISISInterfaceResource) Delete(ctx context.Context, req resource.D
 
 func (r *RouterISISInterfaceResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 2 {
+	if len(idParts) != 2 && len(idParts) != 3 {
+		expectedIdentifier := "Expected import identifier with format: '<process_id>,<interface_name>'"
+		expectedIdentifier += " or '<process_id>,<interface_name>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <process_id>,<interface_name>. Got: %q", req.ID),
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	value0 := idParts[0]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), value0)...)
-	value1 := idParts[1]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value1)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("process_id"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[1])...)
+	if len(idParts) == 3 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state RouterISISInterface
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

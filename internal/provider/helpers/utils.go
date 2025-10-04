@@ -55,3 +55,36 @@ func GetStringSlice(result []gjson.Result) []types.String {
 	}
 	return v
 }
+
+func GetStringSet(result []gjson.Result) types.Set {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.StringValue(result[r].String())
+	}
+	return types.SetValueMust(types.StringType, v)
+}
+
+func GetInt64Set(result []gjson.Result) types.Set {
+	v := make([]attr.Value, len(result))
+	for r := range result {
+		v[r] = types.Int64Value(result[r].Int())
+	}
+	return types.SetValueMust(types.Int64Type, v)
+}
+
+func Must[T any](v T, err error) T {
+	if err != nil {
+		panic(err)
+	}
+	return v
+}
+
+func RemoveEmptyStrings(s []string) []string {
+	var r []string
+	for _, v := range s {
+		if v != "" {
+			r = append(r, v)
+		}
+	}
+	return r
+}

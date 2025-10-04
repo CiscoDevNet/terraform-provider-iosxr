@@ -342,7 +342,25 @@ func (r *LLDPResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 // Section below is generated&owned by "gen/generator.go". //template:begin import
 
 func (r *LLDPResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), "")...)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
+
+	if len(idParts) != 0 && len(idParts) != 1 {
+		expectedIdentifier := "Expected import identifier with format: ''"
+		expectedIdentifier += " or '<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
+	}
+	if len(idParts) == 1 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state LLDP
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

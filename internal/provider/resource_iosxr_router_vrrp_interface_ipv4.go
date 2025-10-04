@@ -452,20 +452,32 @@ func (r *RouterVRRPInterfaceIPv4Resource) Delete(ctx context.Context, req resour
 
 func (r *RouterVRRPInterfaceIPv4Resource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	if len(idParts) != 3 {
+	if len(idParts) != 3 && len(idParts) != 4 {
+		expectedIdentifier := "Expected import identifier with format: '<interface_name>,<vrrp_id>,<version>'"
+		expectedIdentifier += " or '<interface_name>,<vrrp_id>,<version>,<device>'"
 		resp.Diagnostics.AddError(
 			"Unexpected Import Identifier",
-			fmt.Sprintf("Expected import identifier with format: <interface_name>,<vrrp_id>,<version>. Got: %q", req.ID),
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
 		)
 		return
 	}
-	value0 := idParts[0]
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), value0)...)
-	value1, _ := strconv.Atoi(idParts[1])
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrrp_id"), value1)...)
-	value2, _ := strconv.Atoi(idParts[2])
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("version"), value2)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("interface_name"), idParts[0])...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("vrrp_id"), helpers.Must(strconv.ParseInt(idParts[1], 10, 64)))...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("version"), helpers.Must(strconv.ParseInt(idParts[2], 10, 64)))...)
+	if len(idParts) == 4 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[len(idParts)-1])...)
+	}
+
+	// construct path for 'id' attribute
+	var state RouterVRRPInterfaceIPv4
+	diags := resp.State.Get(ctx, &state)
+	resp.Diagnostics.Append(diags...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getPath())...)
 }
 
 // End of section. //template:end import

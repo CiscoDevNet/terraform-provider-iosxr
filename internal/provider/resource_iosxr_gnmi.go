@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -285,12 +286,26 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 }
 
 func (r *GnmiResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	idParts := strings.Split(req.ID, ",")
+	idParts = helpers.RemoveEmptyStrings(idParts)
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", req.ID))
+	if len(idParts) != 1 && len(idParts) != 2 {
+		expectedIdentifier := "Expected import identifier with format: '<path>'"
+		expectedIdentifier += " or '<path>,<device>'"
+		resp.Diagnostics.AddError(
+			"Unexpected Import Identifier",
+			fmt.Sprintf("%s. Got: %q", expectedIdentifier, req.ID),
+		)
+		return
+	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path"), req.ID)...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), req.ID)...)
+	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Import", idParts[0]))
 
-	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", req.ID))
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("path"), idParts[0])...)
+	if len(idParts) == 2 {
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("device"), idParts[1])...)
+	}
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), idParts[0])...)
+
+	tflog.Debug(ctx, fmt.Sprintf("%s: Import finished successfully", idParts[0]))
 }

@@ -469,10 +469,10 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
@@ -517,7 +517,7 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletedItems(ctx context.Conte
 func (data *RouterBGPVRFNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
@@ -568,10 +568,10 @@ func (data *RouterBGPVRFNeighborAddressFamily) getDeletePaths(ctx context.Contex
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
 	}
 	if !data.DefaultOriginateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.NextHopSelf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))

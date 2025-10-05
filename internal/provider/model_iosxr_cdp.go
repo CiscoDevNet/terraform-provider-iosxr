@@ -230,7 +230,7 @@ func (data *CDP) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
 	}
 	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/v1", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise", data.getPath()))
 	}
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))

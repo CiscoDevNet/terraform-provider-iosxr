@@ -856,10 +856,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 		}
 	}
 	if !state.MetricDefault.IsNull() && data.MetricDefault.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/METRIC/DEFAULT-METRIC", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric", state.getPath()))
 	}
 	if !state.MetricMaximum.IsNull() && data.MetricMaximum.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric/METRIC/MAXIMUM", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric", state.getPath()))
 	}
 	for i := range state.MetricLevels {
 		keys := [...]string{"level-number"}
@@ -885,10 +885,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletedItems(ctx context.Contex
 			}
 			if found {
 				if !state.MetricLevels[i].MetricDefault.IsNull() && data.MetricLevels[j].MetricDefault.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/METRIC/DEFAULT-METRIC", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/metric-levels/metric-level", state.getPath(), keyString))
 				}
 				if !state.MetricLevels[i].MetricMaximum.IsNull() && data.MetricLevels[j].MetricMaximum.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/METRIC/MAXIMUM", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-levels/metric-level%v/metric-levels/metric-level", state.getPath(), keyString))
 				}
 				break
 			}
@@ -957,7 +957,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 		}
 	}
 	if !data.MetricMaximum.IsNull() && !data.MetricMaximum.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric/METRIC/MAXIMUM/maximum", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric", data.getPath()))
 	}
 	for i := range data.MetricLevels {
 		keys := [...]string{"level-number"}
@@ -967,7 +967,7 @@ func (data *RouterISISInterfaceAddressFamily) getEmptyLeafsDelete(ctx context.Co
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MetricLevels[i].MetricMaximum.IsNull() && !data.MetricLevels[i].MetricMaximum.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-levels/metric-level%v/METRIC/MAXIMUM/maximum", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-levels/metric-level%v/metric-levels/metric-level", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete
@@ -1032,10 +1032,10 @@ func (data *RouterISISInterfaceAddressFamily) getDeletePaths(ctx context.Context
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/prefix-advertisement/route-policy-levels/route-policy-level%v", data.getPath(), keyString))
 	}
 	if !data.MetricDefault.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/METRIC/DEFAULT-METRIC", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric", data.getPath()))
 	}
 	if !data.MetricMaximum.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric/METRIC/MAXIMUM", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric", data.getPath()))
 	}
 	for i := range data.MetricLevels {
 		keys := [...]string{"level-number"}

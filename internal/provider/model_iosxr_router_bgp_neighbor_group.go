@@ -902,16 +902,16 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertisement-interval", state.getPath()))
 	}
 	if !state.AoKeyChainName.IsNull() && data.AoKeyChainName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name", state.getPath()))
 	}
 	if !state.AoKeyChainIncludeTcpOptions.IsNull() && data.AoKeyChainIncludeTcpOptions.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name", state.getPath()))
 	}
 	if !state.AoKeyChainAcceptMismatch.IsNull() && data.AoKeyChainAcceptMismatch.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", state.getPath()))
 	}
 	if !state.AoInheritanceDisable.IsNull() && data.AoInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ao", state.getPath()))
 	}
 	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
@@ -929,19 +929,19 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect", state.getPath()))
 	}
 	if !state.LocalAsInheritanceDisable.IsNull() && data.LocalAsInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as", state.getPath()))
 	}
 	if !state.LocalAs.IsNull() && data.LocalAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as", state.getPath()))
 	}
 	if !state.LocalAsNoPrepend.IsNull() && data.LocalAsNoPrepend.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
 	}
 	if !state.LocalAsReplaceAs.IsNull() && data.LocalAsReplaceAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend", state.getPath()))
 	}
 	if !state.LocalAsDualAs.IsNull() && data.LocalAsDualAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", state.getPath()))
 	}
 	if !state.Password.IsNull() && data.Password.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/password/encrypted", state.getPath()))
@@ -953,19 +953,19 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers", state.getPath()))
 	}
 	if !state.TimersKeepaliveZero.IsNull() && data.TimersKeepaliveZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
 	}
 	if !state.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/zero", state.getPath()))
 	}
 	if !state.TimersHoldtime.IsNull() && data.TimersHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/holdtime", state.getPath()))
 	}
 	if !state.TimersHoldtimeZero.IsNull() && data.TimersHoldtimeZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/holdtime", state.getPath()))
 	}
 	if !state.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/holdtime", state.getPath()))
 	}
 	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -1031,10 +1031,10 @@ func (data *RouterBGPNeighborGroup) getDeletedItems(ctx context.Context, state R
 func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.AoKeyChainAcceptMismatch.IsNull() && !data.AoKeyChainAcceptMismatch.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
 	}
 	if !data.AoInheritanceDisable.IsNull() && !data.AoInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ao", data.getPath()))
 	}
 	if !data.BfdFastDetect.IsNull() && !data.BfdFastDetect.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
@@ -1043,28 +1043,28 @@ func (data *RouterBGPNeighborGroup) getEmptyLeafsDelete(ctx context.Context) []s
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/strict-mode", data.getPath()))
 	}
 	if !data.BfdFastDetectDisable.IsNull() && !data.BfdFastDetectDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect/disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
 	}
 	if !data.LocalAsInheritanceDisable.IsNull() && !data.LocalAsInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as", data.getPath()))
 	}
 	if !data.LocalAsNoPrepend.IsNull() && !data.LocalAsNoPrepend.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsReplaceAs.IsNull() && !data.LocalAsReplaceAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsDualAs.IsNull() && !data.LocalAsDualAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getPath()))
 	}
 	if !data.PasswordInheritanceDisable.IsNull() && !data.PasswordInheritanceDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/password/inheritance-disable", data.getPath()))
 	}
 	if !data.TimersKeepaliveZero.IsNull() && !data.TimersKeepaliveZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/zero", data.getPath()))
 	}
 	if !data.TimersHoldtimeZero.IsNull() && !data.TimersHoldtimeZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
@@ -1114,16 +1114,16 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertisement-interval", data.getPath()))
 	}
 	if !data.AoKeyChainName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name", data.getPath()))
 	}
 	if !data.AoKeyChainIncludeTcpOptions.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name", data.getPath()))
 	}
 	if !data.AoKeyChainAcceptMismatch.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/KEY-CHAIN-NAME/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/key-chain-name/accept-ao-mismatch-connection", data.getPath()))
 	}
 	if !data.AoInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao/AO/INHERITANCE-DISABLE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ao", data.getPath()))
 	}
 	if !data.BfdMinimumInterval.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
@@ -1141,19 +1141,19 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect", data.getPath()))
 	}
 	if !data.LocalAsInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/INHERITANCE-DISABLE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as", data.getPath()))
 	}
 	if !data.LocalAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as", data.getPath()))
 	}
 	if !data.LocalAsNoPrepend.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsReplaceAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as/no-prepend", data.getPath()))
 	}
 	if !data.LocalAsDualAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/LOCAL-AS/AS/as/no-prepend/replace-as", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-as/as/no-prepend/replace-as", data.getPath()))
 	}
 	if !data.Password.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/password/encrypted", data.getPath()))
@@ -1165,19 +1165,19 @@ func (data *RouterBGPNeighborGroup) getDeletePaths(ctx context.Context) []string
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers", data.getPath()))
 	}
 	if !data.TimersKeepaliveZero.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/zero", data.getPath()))
 	}
 	if !data.TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/zero", data.getPath()))
 	}
 	if !data.TimersHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
 	}
 	if !data.TimersHoldtimeZero.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
 	}
 	if !data.TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/holdtime", data.getPath()))
 	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}

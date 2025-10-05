@@ -3457,10 +3457,10 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].BroadcastClient.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/broadcast-client/interface%v/broadcast-client", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/interface%v/broadcast-client", data.getPath(), keyString, ckeyString))
 			}
 			if !data.InterfaceVrfs[i].Interfaces[ci].Disable.IsNull() && !data.InterfaceVrfs[i].Interfaces[ci].Disable.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/disable/interface%v/disable", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/vrfs/vrf%v/interface%v/disable", data.getPath(), keyString, ckeyString))
 			}
 		}
 	}
@@ -3516,13 +3516,13 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Prefer.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/prefer/ipv4/ipv4-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Burst.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/burst/ipv4/ipv4-peer-server%v/burst", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v/burst", data.getPath(), keyString, ckeyString))
 			}
 			if !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv4PeersServers[ci].Iburst.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/iburst/ipv4/ipv4-peer-server%v/iburst", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv4/ipv4-peer-server%v/iburst", data.getPath(), keyString, ckeyString))
 			}
 		}
 		for ci := range data.PeersServersVrfs[i].Ipv6PeersServers {
@@ -3533,13 +3533,13 @@ func (data *NTP) getEmptyLeafsDelete(ctx context.Context) []string {
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Prefer.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/prefer/ipv6/ipv6-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv6/ipv6-peer-server%v/prefer", data.getPath(), keyString, ckeyString))
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Burst.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/burst/ipv6/ipv6-peer-server%v/burst", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv6/ipv6-peer-server%v/burst", data.getPath(), keyString, ckeyString))
 			}
 			if !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.IsNull() && !data.PeersServersVrfs[i].Ipv6PeersServers[ci].Iburst.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/iburst/ipv6/ipv6-peer-server%v/iburst", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/peer-server/vrfs/vrf%v/ipv6/ipv6-peer-server%v/iburst", data.getPath(), keyString, ckeyString))
 			}
 		}
 	}

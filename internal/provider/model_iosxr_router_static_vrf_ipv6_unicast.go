@@ -1603,7 +1603,7 @@ func (data *RouterStaticVRFIPv6Unicast) getEmptyLeafsDelete(ctx context.Context)
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopInterfaces[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaces[ci].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/permanent/nexthop-interfaces/nexthop-interface%v/permanent", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interfaces/nexthop-interface%v/permanent", data.getPath(), keyString, ckeyString))
 			}
 		}
 		for ci := range data.Vrfs[i].NexthopInterfaceAddresses {
@@ -1614,7 +1614,7 @@ func (data *RouterStaticVRFIPv6Unicast) getEmptyLeafsDelete(ctx context.Context)
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopInterfaceAddresses[ci].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/permanent/nexthop-interface-addresses/nexthop-interface-address%v/permanent", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-interface-addresses/nexthop-interface-address%v/permanent", data.getPath(), keyString, ckeyString))
 			}
 		}
 		for ci := range data.Vrfs[i].NexthopAddresses {
@@ -1625,7 +1625,7 @@ func (data *RouterStaticVRFIPv6Unicast) getEmptyLeafsDelete(ctx context.Context)
 				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
 			}
 			if !data.Vrfs[i].NexthopAddresses[ci].Permanent.IsNull() && !data.Vrfs[i].NexthopAddresses[ci].Permanent.ValueBool() {
-				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/permanent/nexthop-addresses/nexthop-address%v/permanent", data.getPath(), keyString, ckeyString))
+				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/vrfs/vrf%v/nexthop-addresses/nexthop-address%v/permanent", data.getPath(), keyString, ckeyString))
 			}
 		}
 	}

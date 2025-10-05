@@ -1511,10 +1511,10 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit", state.getPath()))
 	}
 	if !state.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", state.getPath()))
 	}
 	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup", state.getPath()))
 	}
 	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
@@ -1546,10 +1546,10 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			}
 			if found {
 				if !state.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeToAdvertise.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/time-to-advertise", state.getPath(), keyString))
 				}
 				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/WAIT-FOR-BGP", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", state.getPath(), keyString))
 				}
 				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", state.getPath(), keyString))
@@ -1568,10 +1568,10 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
 	}
 	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/NSF/CISCO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
 	}
 	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/NSF/IETF", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
 	}
 	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
@@ -1637,40 +1637,40 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		}
 	}
 	if !state.LspPasswordTextEncrypted.IsNull() && data.LspPasswordTextEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", state.getPath()))
 	}
 	if !state.LspPasswordTextSendOnly.IsNull() && data.LspPasswordTextSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
 	}
 	if !state.LspPasswordTextSnpSendOnly.IsNull() && data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", state.getPath()))
 	}
 	if !state.LspPasswordTextEnablePoi.IsNull() && data.LspPasswordTextEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5Encrypted.IsNull() && data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5SendOnly.IsNull() && data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", state.getPath()))
 	}
 	if !state.LspPasswordHmacMd5EnablePoi.IsNull() && data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
 	if !state.LspPasswordKeychain.IsNull() && data.LspPasswordKeychain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
 	if !state.LspPasswordKeychainSendOnly.IsNull() && data.LspPasswordKeychainSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
 	if !state.LspPasswordKeychainSnpSendOnly.IsNull() && data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", state.getPath()))
 	}
 	if !state.LspPasswordKeychainEnablePoi.IsNull() && data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
 	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
@@ -1868,7 +1868,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
@@ -1884,7 +1884,7 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/ON-STARTUP/WAIT-FOR-BGP/wait-for-bgp", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", data.getPath(), keyString))
 		}
 		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", data.getPath(), keyString))
@@ -1897,10 +1897,10 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getPath()))
 	}
 	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/NSF/CISCO/cisco", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
 	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf/NSF/IETF/ietf", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
 	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
@@ -1914,31 +1914,31 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 		}
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp/send-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", data.getPath()))
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/enable-poi", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
 	}
 	for i := range data.AffinityMaps {
 		keys := [...]string{"affinity-attribute-name"}
@@ -2002,10 +2002,10 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
 	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/TIME-TO-ADVERTISE/time-to-advertise", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", data.getPath()))
 	}
 	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/ON-STARTUP/WAIT-FOR-BGP", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
 	}
 	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
@@ -2027,10 +2027,10 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
 	}
 	if !data.NsfCisco.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/NSF/CISCO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
 	if !data.NsfIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/NSF/IETF", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
 	if !data.NsfLifetime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
@@ -2073,40 +2073,40 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", data.getPath(), keyString))
 	}
 	if !data.LspPasswordTextEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/encrypted", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", data.getPath()))
 	}
 	if !data.LspPasswordTextSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordTextEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", data.getPath()))
 	}
 	if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
 	}
 	if !data.LspPasswordKeychain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
 	}
 	if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", data.getPath()))
 	}
 	if !data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
 	}
 	if !data.DistributeLinkStateInstanceId.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))

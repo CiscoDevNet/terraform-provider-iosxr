@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -46,10 +48,10 @@ func TestAccIosxrESISet(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_esi_set.test",
-		ImportState:   true,
-		ImportStateId: "POLICYSET",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_esi_set.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrESISetImportStateIdFunc("iosxr_esi_set.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -59,6 +61,19 @@ func TestAccIosxrESISet(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrESISetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		SetName := primary.Attributes["set_name"]
+
+		return fmt.Sprintf("%s", SetName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

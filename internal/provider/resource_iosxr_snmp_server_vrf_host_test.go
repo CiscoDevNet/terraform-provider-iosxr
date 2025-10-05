@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -47,10 +49,10 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_snmp_server_vrf_host.test",
-		ImportState:   true,
-		ImportStateId: "VRF1,11.11.11.11",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_snmp_server_vrf_host.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrSNMPServerVRFHostImportStateIdFunc("iosxr_snmp_server_vrf_host.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,6 +62,20 @@ func TestAccIosxrSNMPServerVRFHost(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrSNMPServerVRFHostImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		VrfName := primary.Attributes["vrf_name"]
+		Address := primary.Attributes["address"]
+
+		return fmt.Sprintf("%s,%s", VrfName, Address), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrSNMPServerVRFHostPrerequisitesConfig = `

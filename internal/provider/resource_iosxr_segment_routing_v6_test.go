@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -56,10 +58,10 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_segment_routing_v6.test",
-		ImportState:   true,
-		ImportStateId: "",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_segment_routing_v6.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrSegmentRoutingV6ImportStateIdFunc("iosxr_segment_routing_v6.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -69,6 +71,17 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

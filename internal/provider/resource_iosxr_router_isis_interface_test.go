@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -61,10 +63,10 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_isis_interface.test",
-		ImportState:   true,
-		ImportStateId: "P1,GigabitEthernet0/0/0/1",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_isis_interface.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterISISInterfaceImportStateIdFunc("iosxr_router_isis_interface.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -74,6 +76,20 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterISISInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		ProcessId := primary.Attributes["process_id"]
+		InterfaceName := primary.Attributes["interface_name"]
+
+		return fmt.Sprintf("%s,%s", ProcessId, InterfaceName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterISISInterfacePrerequisitesConfig = `

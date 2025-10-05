@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -58,10 +60,10 @@ func TestAccIosxrIPv4AccessList(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_ipv4_access_list.test",
-		ImportState:   true,
-		ImportStateId: "ACCESS1",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_ipv4_access_list.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrIPv4AccessListImportStateIdFunc("iosxr_ipv4_access_list.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -71,6 +73,19 @@ func TestAccIosxrIPv4AccessList(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrIPv4AccessListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		AccessListName := primary.Attributes["access_list_name"]
+
+		return fmt.Sprintf("%s", AccessListName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

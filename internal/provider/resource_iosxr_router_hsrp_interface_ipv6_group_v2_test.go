@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -60,10 +62,10 @@ func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_hsrp_interface_ipv6_group_v2.test",
-		ImportState:   true,
-		ImportStateId: "GigabitEthernet0/0/0/2,4000",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_hsrp_interface_ipv6_group_v2.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterHSRPInterfaceIPv6GroupV2ImportStateIdFunc("iosxr_router_hsrp_interface_ipv6_group_v2.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -73,6 +75,20 @@ func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterHSRPInterfaceIPv6GroupV2ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+		GroupId := primary.Attributes["group_id"]
+
+		return fmt.Sprintf("%s,%s", InterfaceName, GroupId), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterHSRPInterfaceIPv6GroupV2PrerequisitesConfig = `

@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -51,10 +53,10 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_evpn_interface.test",
-		ImportState:   true,
-		ImportStateId: "Bundle-Ether12",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_evpn_interface.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrEVPNInterfaceImportStateIdFunc("iosxr_evpn_interface.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -64,6 +66,19 @@ func TestAccIosxrEVPNInterface(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrEVPNInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+
+		return fmt.Sprintf("%s", InterfaceName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrEVPNInterfacePrerequisitesConfig = `

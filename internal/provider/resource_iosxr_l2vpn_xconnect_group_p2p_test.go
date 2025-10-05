@@ -21,9 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
+	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
@@ -50,10 +52,10 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_l2vpn_xconnect_group_p2p.test",
-		ImportState:   true,
-		ImportStateId: "P2P,XC",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_l2vpn_xconnect_group_p2p.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrL2VPNXconnectGroupP2PImportStateIdFunc("iosxr_l2vpn_xconnect_group_p2p.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -63,6 +65,20 @@ func TestAccIosxrL2VPNXconnectGroupP2P(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrL2VPNXconnectGroupP2PImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		GroupName := primary.Attributes["group_name"]
+		P2pXconnectName := primary.Attributes["p2p_xconnect_name"]
+
+		return fmt.Sprintf("%s,%s", GroupName, P2pXconnectName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNXconnectGroupP2PPrerequisitesConfig = `

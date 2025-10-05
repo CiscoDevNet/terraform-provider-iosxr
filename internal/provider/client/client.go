@@ -28,16 +28,17 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/openconfig/gnmi/proto/gnmi"
-	"github.com/openconfig/gnmic/pkg/api"
-	target "github.com/openconfig/gnmic/pkg/api/target"
+	"github.com/openconfig/gnmic/api"
+	"github.com/openconfig/gnmic/target"
 )
 
 const (
-	DefaultMaxRetries         int     = 2
-	DefaultBackoffMinDelay    int     = 4
-	DefaultBackoffMaxDelay    int     = 60
-	DefaultBackoffDelayFactor float64 = 3
-	GnmiTimeout                       = 15 * time.Second
+	DefaultMaxRetries         int           = 2
+	DefaultBackoffMinDelay    int           = 4
+	DefaultBackoffMaxDelay    int           = 60
+	DefaultBackoffDelayFactor float64       = 3
+	DefaultGnmiTimeout        time.Duration = 15 * time.Second // Configurable gNMI timeout
+	DefaultConnectTimeout     time.Duration = 30 * time.Second // Configurable connection timeout
 )
 
 type SetOperationType string
@@ -60,6 +61,10 @@ type Client struct {
 	BackoffMaxDelay int
 	// Backoff delay factor
 	BackoffDelayFactor float64
+	// Connection timeout - configurable by user
+	ConnectTimeout time.Duration
+	// gNMI operation timeout - configurable by user
+	GnmiTimeout time.Duration
 }
 
 type Device struct {
@@ -73,15 +78,57 @@ type SetOperation struct {
 	Operation SetOperationType
 }
 
-func NewClient(reuseConnection bool) Client {
+func NewClient(reuseConnection bool, options ...interface{}) Client {
 	devices := make(map[string]*Device)
-	return Client{
+
+	// Set default values
+	client := Client{
 		Devices:            devices,
 		ReuseConnection:    reuseConnection,
 		MaxRetries:         DefaultMaxRetries,
 		BackoffMinDelay:    DefaultBackoffMinDelay,
 		BackoffMaxDelay:    DefaultBackoffMaxDelay,
 		BackoffDelayFactor: DefaultBackoffDelayFactor,
+		ConnectTimeout:     DefaultConnectTimeout, // Default 30 seconds
+		GnmiTimeout:        DefaultGnmiTimeout,    // Default 15 seconds
+	}
+
+	// Parse optional parameters
+	for _, option := range options {
+		switch v := option.(type) {
+		case time.Duration:
+			// First duration is connection timeout, second is gNMI timeout
+			if client.ConnectTimeout == DefaultConnectTimeout {
+				client.ConnectTimeout = v // Set connection timeout
+			} else {
+				client.GnmiTimeout = v // Set gNMI timeout
+			}
+		case int:
+			client.MaxRetries = v // Set max retries
+		}
+	}
+
+	return client
+}
+
+// NewClientWithTimeouts creates a client with explicit timeout configuration
+func NewClientWithTimeouts(reuseConnection bool, connectTimeout, gnmiTimeout time.Duration, maxRetries ...int) Client {
+	devices := make(map[string]*Device)
+
+	retries := DefaultMaxRetries
+	if len(maxRetries) > 0 {
+		retries = maxRetries[0]
+	}
+
+	return Client{
+		Devices:            devices,
+		ReuseConnection:    reuseConnection,
+		MaxRetries:         retries,
+		BackoffMinDelay:    DefaultBackoffMinDelay,
+		BackoffMaxDelay:    DefaultBackoffMaxDelay,
+		BackoffDelayFactor: DefaultBackoffDelayFactor,
+		ConnectTimeout:     connectTimeout,
+		GnmiTimeout:        gnmiTimeout,
 	}
 }
 
@@ -106,7 +153,11 @@ func (c *Client) AddTarget(ctx context.Context, device, host, username, password
 	}
 
 	if c.ReuseConnection {
-		err = t.CreateGNMIClient(ctx)
+		// Create connection context with configurable timeout
+		connectCtx, cancel := context.WithTimeout(ctx, c.ConnectTimeout)
+		defer cancel()
+		tflog.Debug(ctx, fmt.Sprintf("Creating gNMI client with connection timeout: %v", c.ConnectTimeout))
+		err = t.CreateGNMIClient(connectCtx)
 		if err != nil {
 			return fmt.Errorf("Unable to create gNMI client: %w", err)
 		}
@@ -146,8 +197,14 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 	for attempts := 0; ; attempts++ {
 		c.Devices[device].SetMutex.Lock()
 		if !c.ReuseConnection {
-			err = target.CreateGNMIClient(ctx)
+			// Create connection context with configurable timeout
+			connectCtx, cancel := context.WithTimeout(ctx, c.ConnectTimeout)
+			tflog.Debug(ctx, fmt.Sprintf("Creating gNMI client with connection timeout: %v", c.ConnectTimeout))
+			err = target.CreateGNMIClient(connectCtx)
+			cancel() // Clean up timeout context immediately
+
 			if err != nil {
+				c.Devices[device].SetMutex.Unlock()
 				if ok := c.Backoff(ctx, attempts); !ok {
 					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
 				} else {
@@ -156,9 +213,10 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 				}
 			}
 		}
-		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		// Use configurable gNMI timeout
+		tCtx, cancel := context.WithTimeout(ctx, c.GnmiTimeout)
 		defer cancel()
-		tflog.Debug(ctx, fmt.Sprintf("gNMI set request: %s", setReq.String()))
+		tflog.Debug(ctx, fmt.Sprintf("gNMI set request (timeout: %v): %s", c.GnmiTimeout, setReq.String()))
 		setResp, err = target.Set(tCtx, setReq)
 		tflog.Debug(ctx, fmt.Sprintf("gNMI set response: %s", setResp.String()))
 		c.Devices[device].SetMutex.Unlock()
@@ -195,7 +253,12 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 	for attempts := 0; ; attempts++ {
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get request: %s", getReq.String()))
 		if !c.ReuseConnection {
-			err = target.CreateGNMIClient(ctx)
+			// Create connection context with configurable timeout
+			connectCtx, cancel := context.WithTimeout(ctx, c.ConnectTimeout)
+			tflog.Debug(ctx, fmt.Sprintf("Creating gNMI client with connection timeout: %v", c.ConnectTimeout))
+			err = target.CreateGNMIClient(connectCtx)
+			cancel() // Clean up timeout context immediately
+
 			if err != nil {
 				if ok := c.Backoff(ctx, attempts); !ok {
 					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
@@ -205,8 +268,10 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 				}
 			}
 		}
-		tCtx, cancel := context.WithTimeout(ctx, GnmiTimeout)
+		// Use configurable gNMI timeout
+		tCtx, cancel := context.WithTimeout(ctx, c.GnmiTimeout)
 		defer cancel()
+		tflog.Debug(ctx, fmt.Sprintf("gNMI get request (timeout: %v)", c.GnmiTimeout))
 		getResp, err = target.Get(tCtx, getReq)
 		if !c.ReuseConnection {
 			target.Close()
@@ -214,7 +279,7 @@ func (c *Client) Get(ctx context.Context, device, path string) (*gnmi.GetRespons
 		tflog.Debug(ctx, fmt.Sprintf("gNMI get response: %s", getResp.String()))
 		if err != nil {
 			if ok := c.Backoff(ctx, attempts); !ok {
-				return nil, fmt.Errorf(("Get request failed, got error: %w"), err)
+				return nil, fmt.Errorf("Get request failed, got error: %w", err)
 			} else {
 				tflog.Error(ctx, fmt.Sprintf("gNMI get request failed: %s, retries: %v", err, attempts))
 				continue

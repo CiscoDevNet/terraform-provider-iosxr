@@ -34,6 +34,7 @@ import (
 
 func TestAccIosxrBGPASFormat(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "as_format", "asplain"))
 	var steps []resource.TestStep
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrBGPASFormatConfig_all(),
@@ -83,6 +84,7 @@ func testAccIosxrBGPASFormatConfig_minimum() string {
 
 func testAccIosxrBGPASFormatConfig_all() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
+	config += `	as_format = "asplain"` + "\n"
 	config += `}` + "\n"
 	return config
 }

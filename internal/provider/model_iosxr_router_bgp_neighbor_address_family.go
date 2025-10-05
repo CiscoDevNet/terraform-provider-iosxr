@@ -630,16 +630,16 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
 	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
 	}
 	if !state.ImportStitchingRtReOriginate.IsNull() && data.ImportStitchingRtReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt", state.getPath()))
 	}
 	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt/re-originate", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
 	}
 	if !state.ImportReOriginate.IsNull() && data.ImportReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/IMPORT/RE-ORIGINATE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
 	}
 	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
@@ -693,10 +693,10 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	return deletedItems
 }
@@ -708,16 +708,16 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	if !data.ImportStitchingRtReOriginate.IsNull() && !data.ImportStitchingRtReOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt/re-originate", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt", data.getPath()))
 	}
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
 	}
 	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/IMPORT/RE-ORIGINATE/re-originate", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
@@ -744,16 +744,16 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
 	}
 	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix/discard-extra-paths", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix/warning-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
 	}
 	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -765,16 +765,16 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.ImportStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	if !data.ImportStitchingRtReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt", data.getPath()))
 	}
 	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/IMPORT/STITCHING-RT/stitching-rt/re-originate", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
 	}
 	if !data.ImportReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/IMPORT/RE-ORIGINATE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	if !data.RouteReflectorClient.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
@@ -828,10 +828,10 @@ func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) 
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginateRoutePolicy.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginateInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	return deletePaths
 }

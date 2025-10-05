@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -66,10 +68,10 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_bgp_neighbor_group.test",
-		ImportState:   true,
-		ImportStateId: "65001,GROUP1",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_bgp_neighbor_group.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterBGPNeighborGroupImportStateIdFunc("iosxr_router_bgp_neighbor_group.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -79,6 +81,20 @@ func TestAccIosxrRouterBGPNeighborGroup(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterBGPNeighborGroupImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		AsNumber := primary.Attributes["as_number"]
+		Name := primary.Attributes["name"]
+
+		return fmt.Sprintf("%s,%s", AsNumber, Name), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPNeighborGroupPrerequisitesConfig = `

@@ -21,10 +21,11 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
+	"fmt"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -65,20 +66,15 @@ func TestAccIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "interfaces.0.multiplier", "40"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bfd.test", "ipv6_checksum_disable", "true"))
 	var steps []resource.TestStep
-	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
-		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrBFDConfig_minimum(),
-		})
-	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrBFDConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_bfd.test",
-		ImportState:   true,
-		ImportStateId: "",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_bfd.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrBFDImportStateIdFunc("iosxr_bfd.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -88,6 +84,17 @@ func TestAccIosxrBFD(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrBFDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+
+		return fmt.Sprintf(""), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

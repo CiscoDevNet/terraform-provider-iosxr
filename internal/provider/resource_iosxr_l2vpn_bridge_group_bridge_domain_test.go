@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -47,10 +49,10 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_l2vpn_bridge_group_bridge_domain.test",
-		ImportState:   true,
-		ImportStateId: "BG123,BD123",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_l2vpn_bridge_group_bridge_domain.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc("iosxr_l2vpn_bridge_group_bridge_domain.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -60,6 +62,20 @@ func TestAccIosxrL2VPNBridgeGroupBridgeDomain(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrL2VPNBridgeGroupBridgeDomainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		BridgeGroupName := primary.Attributes["bridge_group_name"]
+		BridgeDomainName := primary.Attributes["bridge_domain_name"]
+
+		return fmt.Sprintf("%s,%s", BridgeGroupName, BridgeDomainName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrL2VPNBridgeGroupBridgeDomainPrerequisitesConfig = `

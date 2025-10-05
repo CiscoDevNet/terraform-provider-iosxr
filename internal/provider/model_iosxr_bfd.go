@@ -940,7 +940,7 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/latency/detect", data.getPath()))
 	}
 	if !data.EchoStartupValidateForce.IsNull() && !data.EchoStartupValidateForce.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/startup/validate/force", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/echo/startup/validate", data.getPath()))
 	}
 	if !data.TrapSinglehopPreMapped.IsNull() && !data.TrapSinglehopPreMapped.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/trap/singlehop/pre-mapped", data.getPath()))
@@ -970,7 +970,7 @@ func (data *BFD) getEmptyLeafsDelete(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.Interfaces[i].Ipv6ChecksumDisable.IsNull() && !data.Interfaces[i].Ipv6ChecksumDisable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum/disable", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/ipv6/checksum", data.getPath(), keyString))
 		}
 		if !data.Interfaces[i].Disable.IsNull() && !data.Interfaces[i].Disable.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/disable", data.getPath(), keyString))

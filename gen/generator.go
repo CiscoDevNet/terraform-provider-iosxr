@@ -272,6 +272,22 @@ func ImportAttributes(config YamlConfig) []YamlConfigAttribute {
 	return attributes
 }
 
+// Templating helper function to get xpath if available
+func GetXPath(yangPath, xPath string) string {
+	if xPath != "" {
+		return xPath
+	}
+	return yangPath
+}
+
+func GetDeletePath(attribute YamlConfigAttribute) string {
+	path := GetXPath(attribute.YangName, attribute.XPath)
+	if attribute.DeleteParent {
+		return RemoveLastPathElement(path)
+	}
+	return path
+}
+
 // Templating helper function to add two integers
 func Add(a, b int) int {
 	return a + b
@@ -322,6 +338,8 @@ var functions = template.FuncMap{
 	"isLast":                IsLast,
 	"sprintf":               fmt.Sprintf,
 	"removeLastPathElement": RemoveLastPathElement,
+	"getXPath":              GetXPath,
+	"getDeletePath":         GetDeletePath,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {
@@ -443,8 +461,11 @@ func parseAttribute(e *yang.Entry, attr *YamlConfigAttribute) {
 		attr.TypeYangBool = "presence"
 		attr.Type = "Bool"
 	}
+	if attr.XPath == "" {
+		attr.XPath = attr.YangName
+	}
 	if attr.TfName == "" {
-		tfName := strings.ReplaceAll(ToYangShortName(attr.YangName), "-", "_")
+		tfName := strings.ReplaceAll(ToYangShortName(attr.XPath), "-", "_")
 		tfName = strings.ReplaceAll(tfName, "/", "_")
 		attr.TfName = tfName
 	}

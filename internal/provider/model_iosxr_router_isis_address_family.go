@@ -2702,19 +2702,19 @@ func (data *RouterISISAddressFamilyData) fromBody(ctx context.Context, res []byt
 func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state RouterISISAddressFamily) []string {
 	deletedItems := make([]string, 0)
 	if !state.MetricStyleNarrow.IsNull() && data.MetricStyleNarrow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow", state.getPath()))
 	}
 	if !state.MetricStyleNarrowTransition.IsNull() && data.MetricStyleNarrowTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/narrow/transition", state.getPath()))
 	}
 	if !state.MetricStyleWide.IsNull() && data.MetricStyleWide.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/wide", state.getPath()))
 	}
 	if !state.MetricStyleWideTransition.IsNull() && data.MetricStyleWideTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/wide/transition", state.getPath()))
 	}
 	if !state.MetricStyleTransition.IsNull() && data.MetricStyleTransition.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style/transition", state.getPath()))
 	}
 	for i := range state.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -2740,19 +2740,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.MetricStyleLevels[i].Narrow.IsNull() && data.MetricStyleLevels[j].Narrow.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow", state.getPath(), keyString))
 				}
 				if !state.MetricStyleLevels[i].NarrowTransition.IsNull() && data.MetricStyleLevels[j].NarrowTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow/transition", state.getPath(), keyString))
 				}
 				if !state.MetricStyleLevels[i].Wide.IsNull() && data.MetricStyleLevels[j].Wide.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide", state.getPath(), keyString))
 				}
 				if !state.MetricStyleLevels[i].WideTransition.IsNull() && data.MetricStyleLevels[j].WideTransition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide/transition", state.getPath(), keyString))
 				}
 				if !state.MetricStyleLevels[i].Transition.IsNull() && data.MetricStyleLevels[j].Transition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/TRANSITION/transition", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/transition", state.getPath(), keyString))
 				}
 				break
 			}
@@ -2762,10 +2762,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 	}
 	if !state.RouterIdInterfaceName.IsNull() && data.RouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/ROUTER-ID/INTERFACE-NAME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
 	}
 	if !state.RouterIdIpAddress.IsNull() && data.RouterIdIpAddress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id/ROUTER-ID/IP-ADDRESS", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
 	}
 	if !state.DefaultInformationOriginate.IsNull() && data.DefaultInformationOriginate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-information/originate", state.getPath()))
@@ -2996,19 +2996,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/ldp/auto-config", state.getPath()))
 	}
 	if !state.MplsTrafficEngRouterIdIpv4Address.IsNull() && data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id", state.getPath()))
 	}
 	if !state.MplsTrafficEngRouterIdInterfaceName.IsNull() && data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/router-id", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel12.IsNull() && data.MplsTrafficEngLevel12.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel1.IsNull() && data.MplsTrafficEngLevel1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
 	}
 	if !state.MplsTrafficEngLevel2Only.IsNull() && data.MplsTrafficEngLevel2Only.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", state.getPath()))
 	}
 	if !state.SpfIntervalMaximumWait.IsNull() && data.SpfIntervalMaximumWait.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf-interval/maximum-wait", state.getPath()))
@@ -3095,22 +3095,22 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 		}
 	}
 	if !state.SpfPrefixPriorityCriticalTag.IsNull() && data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityCriticalPrefixListName.IsNull() && data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityHighTag.IsNull() && data.SpfPrefixPriorityHighTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityHighPrefixListName.IsNull() && data.SpfPrefixPriorityHighPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityMediumTag.IsNull() && data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", state.getPath()))
 	}
 	if !state.SpfPrefixPriorityMediumPrefixListName.IsNull() && data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", state.getPath()))
 	}
 	for i := range state.SpfPrefixPriorityCriticalLevels {
 		keys := [...]string{"level-number"}
@@ -3136,10 +3136,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityCriticalLevels[i].Tag.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/TAG/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityCriticalLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityCriticalLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/PREFIX-PRIORITY-CRITICAL-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-critical-levels/prefix-priority-critical-level%v/prefixlist-name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3172,10 +3172,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityHighLevels[i].Tag.IsNull() && data.SpfPrefixPriorityHighLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/TAG/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityHighLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityHighLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-high-levels/prefix-priority-high-level%v/prefix_list_name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3208,10 +3208,10 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 			}
 			if found {
 				if !state.SpfPrefixPriorityMediumLevels[i].Tag.IsNull() && data.SpfPrefixPriorityMediumLevels[j].Tag.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/TAG/tag", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/tag", state.getPath(), keyString))
 				}
 				if !state.SpfPrefixPriorityMediumLevels[i].PrefixListName.IsNull() && data.SpfPrefixPriorityMediumLevels[j].PrefixListName.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/spf/prefix-priority-medium-levels/prefix-priority-medium-level%v/prefix_list_name", state.getPath(), keyString))
 				}
 				break
 			}
@@ -3422,19 +3422,19 @@ func (data *RouterISISAddressFamily) getDeletedItems(ctx context.Context, state 
 func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
 	if !data.MetricStyleNarrow.IsNull() && !data.MetricStyleNarrow.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
 	}
 	if !data.MetricStyleNarrowTransition.IsNull() && !data.MetricStyleNarrowTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/narrow/transition", data.getPath()))
 	}
 	if !data.MetricStyleWide.IsNull() && !data.MetricStyleWide.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide", data.getPath()))
 	}
 	if !data.MetricStyleWideTransition.IsNull() && !data.MetricStyleWideTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/wide/transition", data.getPath()))
 	}
 	if !data.MetricStyleTransition.IsNull() && !data.MetricStyleTransition.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3444,19 +3444,19 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		if !data.MetricStyleLevels[i].Narrow.IsNull() && !data.MetricStyleLevels[i].Narrow.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow", data.getPath(), keyString))
 		}
 		if !data.MetricStyleLevels[i].NarrowTransition.IsNull() && !data.MetricStyleLevels[i].NarrowTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/NARROW/narrow/transition", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/narrow/transition", data.getPath(), keyString))
 		}
 		if !data.MetricStyleLevels[i].Wide.IsNull() && !data.MetricStyleLevels[i].Wide.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide", data.getPath(), keyString))
 		}
 		if !data.MetricStyleLevels[i].WideTransition.IsNull() && !data.MetricStyleLevels[i].WideTransition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/WIDE/wide/transition", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/wide/transition", data.getPath(), keyString))
 		}
 		if !data.MetricStyleLevels[i].Transition.IsNull() && !data.MetricStyleLevels[i].Transition.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/METRIC-STYLE/TRANSITION/transition", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v/transition", data.getPath(), keyString))
 		}
 	}
 	if !data.DefaultInformationOriginate.IsNull() && !data.DefaultInformationOriginate.ValueBool() {
@@ -3530,13 +3530,13 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() && !data.MplsTrafficEngLevel12.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() && !data.MplsTrafficEngLevel1.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() && !data.MplsTrafficEngLevel2Only.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.SpfIntervalIetf.IsNull() && !data.SpfIntervalIetf.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/spf-interval/ietf", data.getPath()))
@@ -3635,19 +3635,19 @@ func (data *RouterISISAddressFamily) getEmptyLeafsDelete(ctx context.Context) []
 func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
 	if !data.MetricStyleNarrow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow", data.getPath()))
 	}
 	if !data.MetricStyleNarrowTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/NARROW/narrow/transition", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/narrow/transition", data.getPath()))
 	}
 	if !data.MetricStyleWide.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide", data.getPath()))
 	}
 	if !data.MetricStyleWideTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/WIDE/wide/transition", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/wide/transition", data.getPath()))
 	}
 	if !data.MetricStyleTransition.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/METRIC-STYLE/TRANSITION/transition", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style/transition", data.getPath()))
 	}
 	for i := range data.MetricStyleLevels {
 		keys := [...]string{"level-number"}
@@ -3660,10 +3660,10 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/metric-style-levels/metric-style-level%v", data.getPath(), keyString))
 	}
 	if !data.RouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ROUTER-ID/INTERFACE-NAME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
 	}
 	if !data.RouterIdIpAddress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id/ROUTER-ID/IP-ADDRESS", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
 	}
 	if !data.DefaultInformationOriginate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-information/originate", data.getPath()))
@@ -3785,19 +3785,19 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/ldp/auto-config", data.getPath()))
 	}
 	if !data.MplsTrafficEngRouterIdIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id", data.getPath()))
 	}
 	if !data.MplsTrafficEngRouterIdInterfaceName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/router-id", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel12.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.MplsTrafficEngLevel2Only.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mpls/traffic-eng/traffic-eng-level", data.getPath()))
 	}
 	if !data.SpfIntervalMaximumWait.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval/maximum-wait", data.getPath()))
@@ -3837,22 +3837,22 @@ func (data *RouterISISAddressFamily) getDeletePaths(ctx context.Context) []strin
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf-interval-levels/level%v", data.getPath(), keyString))
 	}
 	if !data.SpfPrefixPriorityCriticalTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/TAG/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityCriticalPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/CRITICAL/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/critical/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityHighTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/TAG/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityHighPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/HIGH/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/high/prefixlist-name", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityMediumTag.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/TAG/tag", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/tag", data.getPath()))
 	}
 	if !data.SpfPrefixPriorityMediumPrefixListName.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/MEDIUM/PREFIXLIST-NAME/prefixlist-name", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/spf/prefix-priority/medium/prefixlist-name", data.getPath()))
 	}
 	for i := range data.SpfPrefixPriorityCriticalLevels {
 		keys := [...]string{"level-number"}

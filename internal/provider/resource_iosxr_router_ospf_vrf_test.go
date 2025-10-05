@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -84,10 +86,10 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_ospf_vrf.test",
-		ImportState:   true,
-		ImportStateId: "OSPF1,VRF1",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_ospf_vrf.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterOSPFVRFImportStateIdFunc("iosxr_router_ospf_vrf.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -97,6 +99,20 @@ func TestAccIosxrRouterOSPFVRF(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterOSPFVRFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		ProcessName := primary.Attributes["process_name"]
+		VrfName := primary.Attributes["vrf_name"]
+
+		return fmt.Sprintf("%s,%s", ProcessName, VrfName), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterOSPFVRFPrerequisitesConfig = `

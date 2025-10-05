@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -58,10 +60,10 @@ func TestAccIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_vrrp_interface_ipv6.test",
-		ImportState:   true,
-		ImportStateId: "GigabitEthernet0/0/0/2,124",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_vrrp_interface_ipv6.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterVRRPInterfaceIPv6ImportStateIdFunc("iosxr_router_vrrp_interface_ipv6.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -71,6 +73,20 @@ func TestAccIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterVRRPInterfaceIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		InterfaceName := primary.Attributes["interface_name"]
+		VrrpId := primary.Attributes["vrrp_id"]
+
+		return fmt.Sprintf("%s,%s", InterfaceName, VrrpId), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterVRRPInterfaceIPv6PrerequisitesConfig = `

@@ -25,6 +25,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -93,11 +94,13 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	{{- end}}
 	{{- end}}
 	var steps []resource.TestStep
+	{{- if not .SkipMinimumTest}}
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
 			Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_minimum(),
 		})
 	}
+	{{- end}}
 	steps = append(steps, resource.TestStep{
 		Config: {{if .TestPrerequisites}}testAccIosxr{{camelCase .Name}}PrerequisitesConfig+{{end}}testAccIosxr{{camelCase .Name}}Config_all(),
 		Check: resource.ComposeTestCheckFunc(checks...),
@@ -105,7 +108,7 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 	steps = append(steps, resource.TestStep{
 		ResourceName:  "iosxr_{{snakeCase $name}}.test",
 		ImportState:   true,
-		ImportStateId: "{{range $index, $attr := .Attributes}}{{if or $attr.Reference $attr.Id}}{{if $index}},{{end}}{{$attr.Example}}{{end}}{{end}}",
+		ImportStateIdFunc: iosxr{{camelCase .Name}}ImportStateIdFunc("iosxr_{{snakeCase $name}}.test"),
 		Check: resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
@@ -117,7 +120,23 @@ func TestAccIosxr{{camelCase .Name}}(t *testing.T) {
 
 // End of section. //template:end testAcc
 
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
 
+func iosxr{{camelCase .Name}}ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		{{- if importAttributes .}}
+		primary := s.RootModule().Resources[resourceName].Primary
+		{{- end}}
+
+		{{- range (importAttributes .)}}
+		{{toGoName .TfName}} := primary.Attributes["{{.TfName}}"]
+		{{- end}}
+
+		return fmt.Sprintf("{{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}%s{{end}}", {{range $i, $e := (importAttributes .)}}{{if $i}},{{end}}{{toGoName .TfName}}{{end}}), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

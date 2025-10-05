@@ -21,10 +21,12 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 // End of section. //template:end imports
@@ -85,10 +87,10 @@ func TestAccIosxrRouterStaticIPv4Unicast(t *testing.T) {
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
-		ResourceName:  "iosxr_router_static_ipv4_unicast.test",
-		ImportState:   true,
-		ImportStateId: "100.0.1.0,24",
-		Check:         resource.ComposeTestCheckFunc(checks...),
+		ResourceName:      "iosxr_router_static_ipv4_unicast.test",
+		ImportState:       true,
+		ImportStateIdFunc: iosxrRouterStaticIPv4UnicastImportStateIdFunc("iosxr_router_static_ipv4_unicast.test"),
+		Check:             resource.ComposeTestCheckFunc(checks...),
 	})
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -98,6 +100,20 @@ func TestAccIosxrRouterStaticIPv4Unicast(t *testing.T) {
 }
 
 // End of section. //template:end testAcc
+
+// Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
+
+func iosxrRouterStaticIPv4UnicastImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+	return func(s *terraform.State) (string, error) {
+		primary := s.RootModule().Resources[resourceName].Primary
+		PrefixAddress := primary.Attributes["prefix_address"]
+		PrefixLength := primary.Attributes["prefix_length"]
+
+		return fmt.Sprintf("%s,%s", PrefixAddress, PrefixLength), nil
+	}
+}
+
+// End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 

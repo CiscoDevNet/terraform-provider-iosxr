@@ -1387,19 +1387,19 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/keepalive-interval", state.getPath()))
 	}
 	if !state.TimersBgpKeepaliveZero.IsNull() && data.TimersBgpKeepaliveZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/zero", state.getPath()))
 	}
 	if !state.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/zero", state.getPath()))
 	}
 	if !state.TimersBgpHoldtime.IsNull() && data.TimersBgpHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/holdtime", state.getPath()))
 	}
 	if !state.TimersBgpHoldtimeZero.IsNull() && data.TimersBgpHoldtimeZero.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/holdtime", state.getPath()))
 	}
 	if !state.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() && data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timers/bgp/holdtime", state.getPath()))
 	}
 	if !state.BgpRouterId.IsNull() && data.BgpRouterId.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/router-id", state.getPath()))
@@ -1459,10 +1459,10 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/bestpath/origin-as/allow/invalid", state.getPath()))
 	}
 	if !state.BgpBestpathSrPolicyPrefer.IsNull() && data.BgpBestpathSrPolicyPrefer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/PREFER/prefer", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/bestpath/sr-policy/prefer", state.getPath()))
 	}
 	if !state.BgpBestpathSrPolicyForce.IsNull() && data.BgpBestpathSrPolicyForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/FORCE/force", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bgp/bestpath/sr-policy/force", state.getPath()))
 	}
 	for i := range state.Neighbors {
 		keys := [...]string{"address"}
@@ -1536,19 +1536,19 @@ func (data *RouterBGP) getDeletedItems(ctx context.Context, state RouterBGP) []s
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersKeepaliveZero.IsNull() && data.Neighbors[j].TimersKeepaliveZero.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersHoldtimeNumber.IsNull() && data.Neighbors[j].TimersHoldtimeNumber.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersHoldtimeZero.IsNull() && data.Neighbors[j].TimersHoldtimeZero.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() && data.Neighbors[j].TimersHoldtimeMinimumAcceptableHoldtime.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", state.getPath(), keyString))
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", state.getPath(), keyString))
 				}
 				if !state.Neighbors[i].UpdateSource.IsNull() && data.Neighbors[j].UpdateSource.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/neighbors/neighbor%v/update-source", state.getPath(), keyString))
@@ -1585,10 +1585,10 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
 	}
 	if !data.TimersBgpKeepaliveZero.IsNull() && !data.TimersBgpKeepaliveZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
 	if !data.TimersBgpHoldtimeZero.IsNull() && !data.TimersBgpHoldtimeZero.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timers/bgp/holdtime", data.getPath()))
 	}
 	if !data.BgpGracefulRestartGracefulReset.IsNull() && !data.BgpGracefulRestartGracefulReset.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/graceful-restart/graceful-reset", data.getPath()))
@@ -1639,10 +1639,10 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/origin-as/allow/invalid", data.getPath()))
 	}
 	if !data.BgpBestpathSrPolicyPrefer.IsNull() && !data.BgpBestpathSrPolicyPrefer.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/PREFER/prefer", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/prefer", data.getPath()))
 	}
 	if !data.BgpBestpathSrPolicyForce.IsNull() && !data.BgpBestpathSrPolicyForce.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/FORCE/force", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/bgp/bestpath/sr-policy/force", data.getPath()))
 	}
 	for i := range data.Neighbors {
 		keys := [...]string{"address"}
@@ -1670,10 +1670,10 @@ func (data *RouterBGP) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/shutdown", data.getPath(), keyString))
 		}
 		if !data.Neighbors[i].TimersKeepaliveZero.IsNull() && !data.Neighbors[i].TimersKeepaliveZero.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/zero", data.getPath(), keyString))
 		}
 		if !data.Neighbors[i].TimersHoldtimeZero.IsNull() && !data.Neighbors[i].TimersHoldtimeZero.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero", data.getPath(), keyString))
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/timers/holdtime", data.getPath(), keyString))
 		}
 		if !data.Neighbors[i].TtlSecurity.IsNull() && !data.Neighbors[i].TtlSecurity.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/neighbors/neighbor%v/ttl-security", data.getPath(), keyString))
@@ -1710,19 +1710,19 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/keepalive-interval", data.getPath()))
 	}
 	if !data.TimersBgpKeepaliveZero.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
 	if !data.TimersBgpKeepaliveZeroMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/zero", data.getPath()))
 	}
 	if !data.TimersBgpHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/holdtime", data.getPath()))
 	}
 	if !data.TimersBgpHoldtimeZero.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/holdtime", data.getPath()))
 	}
 	if !data.TimersBgpHoldtimeMinimumAcceptableHoldtime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timers/bgp/holdtime", data.getPath()))
 	}
 	if !data.BgpRouterId.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/router-id", data.getPath()))
@@ -1782,10 +1782,10 @@ func (data *RouterBGP) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/origin-as/allow/invalid", data.getPath()))
 	}
 	if !data.BgpBestpathSrPolicyPrefer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/PREFER/prefer", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/prefer", data.getPath()))
 	}
 	if !data.BgpBestpathSrPolicyForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/SR-POLICY/FORCE/force", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bgp/bestpath/sr-policy/force", data.getPath()))
 	}
 	for i := range data.Neighbors {
 		keys := [...]string{"address"}

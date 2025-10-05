@@ -28,8 +28,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/openconfig/gnmi/proto/gnmi"
-	"github.com/openconfig/gnmic/api"
-	"github.com/openconfig/gnmic/target"
+	"github.com/openconfig/gnmic/pkg/api"
+	target "github.com/openconfig/gnmic/pkg/api/target"
 )
 
 const (
@@ -97,10 +97,10 @@ func NewClient(reuseConnection bool, options ...interface{}) Client {
 	for _, option := range options {
 		switch v := option.(type) {
 		case time.Duration:
-			// First duration is connection timeout, second is gNMI timeout
+			// First duration sets connection timeout, second sets gNMI timeout
 			if client.ConnectTimeout == DefaultConnectTimeout {
 				client.ConnectTimeout = v // Set connection timeout
-			} else {
+			} else if client.GnmiTimeout == DefaultGnmiTimeout {
 				client.GnmiTimeout = v // Set gNMI timeout
 			}
 		case int:
@@ -109,27 +109,6 @@ func NewClient(reuseConnection bool, options ...interface{}) Client {
 	}
 
 	return client
-}
-
-// NewClientWithTimeouts creates a client with explicit timeout configuration
-func NewClientWithTimeouts(reuseConnection bool, connectTimeout, gnmiTimeout time.Duration, maxRetries ...int) Client {
-	devices := make(map[string]*Device)
-
-	retries := DefaultMaxRetries
-	if len(maxRetries) > 0 {
-		retries = maxRetries[0]
-	}
-
-	return Client{
-		Devices:            devices,
-		ReuseConnection:    reuseConnection,
-		MaxRetries:         retries,
-		BackoffMinDelay:    DefaultBackoffMinDelay,
-		BackoffMaxDelay:    DefaultBackoffMaxDelay,
-		BackoffDelayFactor: DefaultBackoffDelayFactor,
-		ConnectTimeout:     connectTimeout,
-		GnmiTimeout:        gnmiTimeout,
-	}
 }
 
 func (c *Client) AddTarget(ctx context.Context, device, host, username, password, certificate, key, caCertificate string, verifyCertificate, Tls bool) error {

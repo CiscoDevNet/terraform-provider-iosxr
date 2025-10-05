@@ -17,8 +17,8 @@ resource "iosxr_evpn_evi" "example" {
       assigned_number = 1
     }
   ]
-  bgp_route_policy_import     = "ROUTE_POLICY_1"
-  bgp_route_policy_export     = "ROUTE_POLICY_1"
+  bgp_route_policy_import     = "EVI_POLICY_1"
+  bgp_route_policy_export     = "EVI_POLICY_1"
   advertise_mac               = true
   unknown_unicast_suppression = true
   control_word_disable        = true

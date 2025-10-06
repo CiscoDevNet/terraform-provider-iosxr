@@ -41,8 +41,8 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_import_two_byte_as_format.0.assigned_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.ipv4_address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_target_export_ipv4_address_format.0.assigned_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_import", "ROUTE_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_export", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_import", "EVI_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "bgp_route_policy_export", "EVI_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "advertise_mac", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "unknown_unicast_suppression", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_evpn_evi.test", "control_word_disable", "true"))
@@ -66,10 +66,10 @@ func TestAccDataSourceIosxrEVPNEVI(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrEVPNEVIPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]"
 	attributes = {
-		"route-policy-name" = "ROUTE_POLICY_1"
-		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
+		"route-policy-name" = "EVI_POLICY_1"
+		"rpl-route-policy" = "route-policy EVI_POLICY_1\n  pass\nend-policy\n"
 	}
 }
 
@@ -102,8 +102,8 @@ func testAccDataSourceIosxrEVPNEVIConfig() string {
 	config += `		ipv4_address = "1.1.1.1"` + "\n"
 	config += `		assigned_number = 1` + "\n"
 	config += `	}]` + "\n"
-	config += `	bgp_route_policy_import = "ROUTE_POLICY_1"` + "\n"
-	config += `	bgp_route_policy_export = "ROUTE_POLICY_1"` + "\n"
+	config += `	bgp_route_policy_import = "EVI_POLICY_1"` + "\n"
+	config += `	bgp_route_policy_export = "EVI_POLICY_1"` + "\n"
 	config += `	advertise_mac = true` + "\n"
 	config += `	unknown_unicast_suppression = true` + "\n"
 	config += `	control_word_disable = true` + "\n"

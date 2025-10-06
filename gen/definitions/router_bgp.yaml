@@ -208,3 +208,5 @@ test_prerequisites:
           - attributes:
               - name: neighbor-group-name
                 value: GROUP1
+              - name: remote-as
+                value: 65002

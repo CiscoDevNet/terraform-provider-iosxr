@@ -114,10 +114,13 @@ attributes:
     delete_parent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count
+    delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
+    delete_parent: true
     example: 0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
     tf_name: ipv4_access_group_egress_acl
@@ -125,10 +128,13 @@ attributes:
     delete_parent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count
+    delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
+    delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
     optional: true
@@ -148,8 +154,10 @@ attributes:
     delete_parent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
+    delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
     tf_name: ipv6_access_group_egress_acl
@@ -157,8 +165,10 @@ attributes:
     delete_parent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
+    delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address

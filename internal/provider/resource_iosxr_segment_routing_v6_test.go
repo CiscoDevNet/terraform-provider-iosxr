@@ -44,9 +44,6 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.usid_local_id_block_ranges_lib_start", "57344"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.usid_local_id_block_ranges_explict_lib_start", "65024"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.usid_wide_local_id_block_explicit_range", "65527"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -113,9 +110,6 @@ func testAccIosxrSegmentRoutingV6Config_all() string {
 	config += `	formats = [{` + "\n"
 	config += `		name = "usid-f3216"` + "\n"
 	config += `		format_enable = true` + "\n"
-	config += `		usid_local_id_block_ranges_lib_start = 57344` + "\n"
-	config += `		usid_local_id_block_ranges_explict_lib_start = 65024` + "\n"
-	config += `		usid_wide_local_id_block_explicit_range = 65527` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

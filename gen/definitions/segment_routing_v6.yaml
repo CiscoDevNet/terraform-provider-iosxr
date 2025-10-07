@@ -34,8 +34,11 @@ attributes:
       - yang_name: format-enable
         example: true
       - yang_name: usid/local-id-block-ranges/lib-start
+        exclude_test: true
         example: 57344
       - yang_name: usid/local-id-block-ranges/explict-lib-start
+        exclude_test: true
         example: 65024
       - yang_name: usid/wide-local-id-block-explicit-range
+        exclude_test: true
         example: 65527

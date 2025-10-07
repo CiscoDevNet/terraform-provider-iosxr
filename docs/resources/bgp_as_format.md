@@ -14,6 +14,7 @@ This resource can manage the BGP AS Format configuration.
 
 ```terraform
 resource "iosxr_bgp_as_format" "example" {
+  as_format = "asplain"
 }
 ```
 

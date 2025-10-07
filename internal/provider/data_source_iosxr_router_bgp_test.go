@@ -101,6 +101,7 @@ resource "iosxr_gnmi" "PreReq0" {
 			items = [
 				{
 					"neighbor-group-name" = "GROUP1"
+					"remote-as" = "65002"
 				},
 			]
 		},

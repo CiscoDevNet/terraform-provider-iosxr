@@ -32,6 +32,7 @@ import (
 
 func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 	var checks []resource.TestCheckFunc
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bgp_as_format.test", "as_format", "asplain"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -55,6 +56,7 @@ func TestAccDataSourceIosxrBGPASFormat(t *testing.T) {
 func testAccDataSourceIosxrBGPASFormatConfig() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
+	config += `	as_format = "asplain"` + "\n"
 	config += `}` + "\n"
 
 	config += `

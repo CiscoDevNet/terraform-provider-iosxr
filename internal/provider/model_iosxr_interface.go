@@ -2126,25 +2126,25 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupIngressHardwareCount.IsNull() && data.Ipv4AccessGroupIngressHardwareCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupIngressCompress.IsNull() && data.Ipv4AccessGroupIngressCompress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupEgressAcl.IsNull() && data.Ipv4AccessGroupEgressAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupEgressHardwareCount.IsNull() && data.Ipv4AccessGroupEgressHardwareCount.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
 	if !state.Ipv4AccessGroupEgressCompress.IsNull() && data.Ipv4AccessGroupEgressCompress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
 	if !state.Ipv6VerifyUnicastSourceReachableViaType.IsNull() && data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", state.getPath()))
@@ -2159,19 +2159,19 @@ func (data *Interface) getDeletedItems(ctx context.Context, state Interface) []s
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupIngressCompress.IsNull() && data.Ipv6AccessGroupIngressCompress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupEgressAcl.IsNull() && data.Ipv6AccessGroupEgressAcl.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
 	if !state.Ipv6AccessGroupEgressCompress.IsNull() && data.Ipv6AccessGroupEgressCompress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", state.getPath()))
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", state.getPath()))
 	}
 	if !state.Ipv6LinkLocalAddress.IsNull() && data.Ipv6LinkLocalAddress.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", state.getPath()))
@@ -2565,22 +2565,22 @@ func (data *Interface) getEmptyLeafsDelete(ctx context.Context) []string {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/shutdown", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() && !data.Ipv4AccessGroupIngressHardwareCount.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupIngressInterfaceStatistics.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() && !data.Ipv4AccessGroupEgressHardwareCount.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv4AccessGroupEgressInterfaceStatistics.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupIngressInterfaceStatistics.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() && !data.Ipv6AccessGroupEgressInterfaceStatistics.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv6Autoconfig.IsNull() && !data.Ipv6Autoconfig.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig", data.getPath()))
@@ -2777,25 +2777,25 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressHardwareCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressInterfaceStatistics.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupIngressCompress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressHardwareCount.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressInterfaceStatistics.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv4AccessGroupEgressCompress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv6VerifyUnicastSourceReachableViaType.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via", data.getPath()))
@@ -2810,19 +2810,19 @@ func (data *Interface) getDeletePaths(ctx context.Context) []string {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupIngressInterfaceStatistics.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupIngressCompress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupEgressAcl.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupEgressInterfaceStatistics.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv6AccessGroupEgressCompress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress", data.getPath()))
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress", data.getPath()))
 	}
 	if !data.Ipv6LinkLocalAddress.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address", data.getPath()))

@@ -73,7 +73,9 @@ func TestAccIosxrGnmi(t *testing.T) {
 			{
 				Config: testAccIosxrGnmiConfig_yangEmpty(),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.redistribute/static", "<EMPTY>"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "id", "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "attributes.as-number", "65001"),
+					resource.TestCheckResourceAttr("iosxr_gnmi.test", "lists.0.items.0.redistribute/static", "<EMPTY>"),
 				),
 			},
 			{
@@ -149,11 +151,22 @@ func testAccIosxrGnmiConfig_leafList() string {
 func testAccIosxrGnmiConfig_yangEmpty() string {
 	return `
 	resource "iosxr_gnmi" "test" {
-		path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/address-families/address-family[af-name=ipv6-unicast]"
+		path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 		attributes = {
-			"af-name" = "ipv6-unicast"
-			"redistribute/static" = "<EMPTY>"
+			"as-number" = "65001"
 		}
+		lists = [
+			{
+				name = "address-families/address-family"
+				key = "af-name"
+				items = [
+					{
+						"af-name" = "ipv6-unicast"
+						"redistribute/static" = "<EMPTY>"
+					}
+				]
+			}
+		]
 	}
 	`
 }

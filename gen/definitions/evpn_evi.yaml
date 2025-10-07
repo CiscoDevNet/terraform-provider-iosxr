@@ -102,9 +102,9 @@ attributes:
         id: true
         example: 1
   - yang_name: bgp/route-policy/import
-    example: ROUTE_POLICY_1
+    example: EVI_POLICY_1
   - yang_name: bgp/route-policy/export
-    example: ROUTE_POLICY_1
+    example: EVI_POLICY_1
   - yang_name: advertise-mac
     example: true
   - yang_name: unknown-unicast-suppression
@@ -119,10 +119,10 @@ attributes:
     example: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=EVI_POLICY_1]
     attributes:
       - name: route-policy-name
-        value: ROUTE_POLICY_1
+        value: EVI_POLICY_1
       - name: rpl-route-policy
-        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+        value: "route-policy EVI_POLICY_1\\n  pass\\nend-policy\\n"
   - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

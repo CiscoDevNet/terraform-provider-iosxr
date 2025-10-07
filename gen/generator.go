@@ -288,6 +288,14 @@ func GetDeletePath(attribute YamlConfigAttribute) string {
 	return path
 }
 
+func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
+	reversed := make([]YamlConfigAttribute, len(attributes))
+	for i, v := range attributes {
+		reversed[len(attributes)-1-i] = v
+	}
+	return reversed
+}
+
 // Templating helper function to add two integers
 func Add(a, b int) int {
 	return a + b
@@ -340,6 +348,7 @@ var functions = template.FuncMap{
 	"removeLastPathElement": RemoveLastPathElement,
 	"getXPath":              GetXPath,
 	"getDeletePath":         GetDeletePath,
+	"reverseAttributes":     ReverseAttributes,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {

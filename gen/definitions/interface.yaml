@@ -107,19 +107,22 @@ attributes:
     test_tags: [XRV9K]
     optional: true
     delete_parent: true
-    example: false
+    example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
     tf_name: ipv4_access_group_ingress_acl1
     optional: true
     delete_parent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
+    test_tags: [XRV9K]
     delete_parent: true
     example: 0
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
@@ -128,35 +131,43 @@ attributes:
     delete_parent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
+    test_tags: [XRV9K]
     delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: any
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
-    example: false
+    example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
     tf_name: ipv6_access_group_ingress_acl1
     optional: true
     delete_parent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
+    test_tags: [XRV9K]
     delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
@@ -165,9 +176,11 @@ attributes:
     delete_parent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    test_tags: [XRV9K]
     delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
+    test_tags: [XRV9K]
     delete_parent: true
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address

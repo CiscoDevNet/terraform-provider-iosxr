@@ -92,22 +92,6 @@ func NewClient(reuseConnection bool, options ...interface{}) Client {
 		ConnectTimeout:     DefaultConnectTimeout, // Default 30 seconds
 		GnmiTimeout:        DefaultGnmiTimeout,    // Default 15 seconds
 	}
-
-	// Parse optional parameters
-	for _, option := range options {
-		switch v := option.(type) {
-		case time.Duration:
-			// First duration sets connection timeout, second sets gNMI timeout
-			if client.ConnectTimeout == DefaultConnectTimeout {
-				client.ConnectTimeout = v // Set connection timeout
-			} else if client.GnmiTimeout == DefaultGnmiTimeout {
-				client.GnmiTimeout = v // Set gNMI timeout
-			}
-		case int:
-			client.MaxRetries = v // Set max retries
-		}
-	}
-
 	return client
 }
 
@@ -183,7 +167,6 @@ func (c *Client) Set(ctx context.Context, device string, operations ...SetOperat
 			cancel() // Clean up timeout context immediately
 
 			if err != nil {
-				c.Devices[device].SetMutex.Unlock()
 				if ok := c.Backoff(ctx, attempts); !ok {
 					return nil, fmt.Errorf("Unable to create gNMI client: %w", err)
 				} else {

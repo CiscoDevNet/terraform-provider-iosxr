@@ -21,6 +21,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"slices"
 	"strconv"
@@ -47,6 +48,8 @@ type providerData struct {
 	Username          types.String         `tfsdk:"username"`
 	Password          types.String         `tfsdk:"password"`
 	Host              types.String         `tfsdk:"host"`
+	Protocol          types.String         `tfsdk:"protocol"`
+	Port              types.Int64          `tfsdk:"port"`
 	VerifyCertificate types.Bool           `tfsdk:"verify_certificate"`
 	Tls               types.Bool           `tfsdk:"tls"`
 	Certificate       types.String         `tfsdk:"certificate"`
@@ -58,9 +61,11 @@ type providerData struct {
 }
 
 type providerDataDevice struct {
-	Name    types.String `tfsdk:"name"`
-	Host    types.String `tfsdk:"host"`
-	Managed types.Bool   `tfsdk:"managed"`
+	Name     types.String `tfsdk:"name"`
+	Host     types.String `tfsdk:"host"`
+	Protocol types.String `tfsdk:"protocol"`
+	Port     types.Int64  `tfsdk:"port"`
+	Managed  types.Bool   `tfsdk:"managed"`
 }
 
 type IosxrProviderData struct {
@@ -91,6 +96,14 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"host": schema.StringAttribute{
 				MarkdownDescription: "IP or name of the Cisco IOS-XR device. Optionally a port can be added with `:12345`. The default port is `57400`. This can also be set as the IOSXR_HOST environment variable. If no `host` is provided, the `host` of the first device from the `devices` list is being used.",
+				Optional:            true,
+			},
+			"protocol": schema.StringAttribute{
+				MarkdownDescription: "Protocol to use for device communication. Valid values are `gnmi` and `netconf`. Defaults to `gnmi`. This can also be set as the IOSXR_PROTOCOL environment variable.",
+				Optional:            true,
+			},
+			"port": schema.Int64Attribute{
+				MarkdownDescription: "Port to connect to on the Cisco IOS-XR device. Defaults to `57400` for gNMI and `830` for NETCONF. This can also be set as the IOSXR_PORT environment variable.",
 				Optional:            true,
 			},
 			"verify_certificate": schema.BoolAttribute{
@@ -134,6 +147,14 @@ func (p *iosxrProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 						"host": schema.StringAttribute{
 							MarkdownDescription: "IP of the Cisco IOS-XR device.",
 							Required:            true,
+						},
+						"protocol": schema.StringAttribute{
+							MarkdownDescription: "Protocol to use for this device. Valid values are `gnmi` and `netconf`. If not specified, uses the provider-level protocol setting.",
+							Optional:            true,
+						},
+						"port": schema.Int64Attribute{
+							MarkdownDescription: "Port to connect to on this device. If not specified, uses the provider-level port setting or protocol defaults.",
+							Optional:            true,
 						},
 						"managed": schema.BoolAttribute{
 							MarkdownDescription: "Enable or disable device management. This can be used to temporarily skip a device due to maintenance for example. Defaults to `true`.",
@@ -234,6 +255,68 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 			"Host cannot be an empty string",
 		)
 		return
+	}
+
+	var protocol string
+	if config.Protocol.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as protocol",
+		)
+		return
+	}
+
+	if config.Protocol.IsNull() {
+		protocol = os.Getenv("IOSXR_PROTOCOL")
+		if protocol == "" {
+			protocol = "gnmi" // Default to gNMI
+		}
+	} else {
+		protocol = config.Protocol.ValueString()
+	}
+
+	// Validate protocol
+	if protocol != "gnmi" && protocol != "netconf" {
+		resp.Diagnostics.AddError(
+			"Invalid protocol",
+			"Protocol must be either 'gnmi' or 'netconf', got: "+protocol,
+		)
+		return
+	}
+
+	var port int64
+	if config.Port.IsUnknown() {
+		// Cannot connect to client with an unknown value
+		resp.Diagnostics.AddWarning(
+			"Unable to create client",
+			"Cannot use unknown value as port",
+		)
+		return
+	}
+
+	if config.Port.IsNull() {
+		portStr := os.Getenv("IOSXR_PORT")
+		if portStr == "" {
+			// Set default port based on protocol
+			if protocol == "netconf" {
+				port = 830
+			} else {
+				port = 57400 // gNMI default
+			}
+		} else {
+			var err error
+			port, err = strconv.ParseInt(portStr, 10, 64)
+			if err != nil {
+				resp.Diagnostics.AddError(
+					"Invalid port value",
+					"IOSXR_PORT must be a valid integer, got: "+portStr,
+				)
+				return
+			}
+		}
+	} else {
+		port = config.Port.ValueInt64()
 	}
 
 	var verifyCertificate bool
@@ -422,11 +505,27 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 	}
 
+	// Create unified client
 	client := client.NewClient(reuseConnection)
 
-	err := client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
+	// Add target based on protocol
+	var err error
+	if protocol == "netconf" {
+		// Add NETCONF target
+		err = client.AddNetconfTarget(ctx, "", host, username, password, int(port), !tls, !verifyCertificate)
+	} else {
+		// Add gNMI target (default)
+		// Adjust host to include port if not already specified
+		hostWithPort := host
+		if !strings.Contains(host, ":") {
+			hostWithPort = fmt.Sprintf("%s:%d", host, port)
+		}
+		err = client.AddTarget(ctx, "", hostWithPort, username, password, certificate, key, caCertificate, verifyCertificate, tls)
+	}
+
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to add target", err.Error())
+		return
 	}
 
 	// Build provider data structure with device management information
@@ -450,9 +549,41 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		providerData.Devices[deviceName] = &IosxrProviderDataDevice{Managed: managed}
 
 		if managed {
-			err := client.AddTarget(ctx, deviceName, device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
+			// Get device-specific protocol and port if specified, otherwise use defaults
+			deviceProtocol := protocol
+			devicePort := port
+
+			if !device.Protocol.IsNull() && !device.Protocol.IsUnknown() {
+				deviceProtocol = device.Protocol.ValueString()
+				// Validate device protocol
+				if deviceProtocol != "gnmi" && deviceProtocol != "netconf" {
+					resp.Diagnostics.AddError(
+						"Invalid device protocol",
+						fmt.Sprintf("Device '%s' protocol must be either 'gnmi' or 'netconf', got: %s", deviceName, deviceProtocol),
+					)
+					return
+				}
+			}
+
+			if !device.Port.IsNull() && !device.Port.IsUnknown() {
+				devicePort = device.Port.ValueInt64()
+			}
+
+			// Add device target based on its protocol
+			if deviceProtocol == "netconf" {
+				err = client.AddNetconfTarget(ctx, deviceName, device.Host.ValueString(), username, password, int(devicePort), !tls, !verifyCertificate)
+			} else {
+				// Add gNMI target
+				deviceHostWithPort := device.Host.ValueString()
+				if !strings.Contains(deviceHostWithPort, ":") {
+					deviceHostWithPort = fmt.Sprintf("%s:%d", deviceHostWithPort, devicePort)
+				}
+				err = client.AddTarget(ctx, deviceName, deviceHostWithPort, username, password, certificate, key, caCertificate, verifyCertificate, tls)
+			}
+
 			if err != nil {
-				resp.Diagnostics.AddError("Unable to add target", err.Error())
+				resp.Diagnostics.AddError("Unable to add device target", fmt.Sprintf("Device '%s': %s", deviceName, err.Error()))
+				return
 			}
 		}
 	}

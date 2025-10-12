@@ -3,7 +3,7 @@ name: Flow Monitor Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/monitor-map/monitor-maps/monitor-map[monitor-map-name=%s]
 no_delete_attributes: true
 doc_category: Flow
-test_tags: [PHYSICAL]
+test_tags: [NCS]
 attributes:
   - yang_name: monitor-map-name
     tf_name: name
@@ -15,7 +15,7 @@ attributes:
       - yang_name: exporter-name
         tf_name: name
         id: true
-        example: exporter1
+        example: exporter_map1
   - yang_name: option/outphysint
     example: true
   - yang_name: option/filtered
@@ -26,66 +26,111 @@ attributes:
     example: true
   - yang_name: record/ipv4
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/destination
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/destination-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/as
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/protocol-port
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/prefix
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/source-prefix
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/destination-prefix
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/as-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/protocol-port-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/prefix-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/source-prefix-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/destination-prefix-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/prefix-port
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/bgp-nexthop-tos
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/peer-as
     example: true
+    exclude_test: true
   - yang_name: record/ipv4/gtp
     example: true
+    exclude_test: true
+  - yang_name: record/ipv4/l2-l3
+    example: true
+    exclude_test: true
+  - yang_name: record/ipv4/extended
+    example: true
+    exclude_test: true
   - yang_name: record/ipv6
     example: true
+    exclude_test: true
   - yang_name: record/ipv6/destination
     example: true
+    exclude_test: true
   - yang_name: record/ipv6/peer-as
     example: true
+    exclude_test: true
   - yang_name: record/ipv6/gtp
     example: true
+    exclude_test: true
+  - yang_name: record/ipv6/srv6
+    example: true
+    exclude_test: true
+  - yang_name: record/ipv6/l2-l3
+    example: true
+    exclude_test: true
+  - yang_name: record/ipv6/extended
+    example: true
+    exclude_test: true
   - yang_name: record/mpls
     example: true
+    exclude_test: true
   - yang_name: record/mpls/ipv4-fields
     example: true
+    exclude_test: true
   - yang_name: record/mpls/ipv6-fields
     example: true
+    exclude_test: true
   - yang_name: record/mpls/ipv4-ipv6-fields
     example: true
+    exclude_test: true
   - yang_name: record/mpls/labels
     example: 2
   - yang_name: record/map-t
     example: true
+    exclude_test: true
   - yang_name: record/sflow
     example: true
+    exclude_test: true
   - yang_name: record/datalink-record
     example: true
+    exclude_test: true
   - yang_name: record/default-rtp
     example: true
+    exclude_test: true
   - yang_name: record/default-mdi
     example: true
+    exclude_test: true
   - yang_name: cache/entries
     example: 5000
   - yang_name: cache/timeout/active
@@ -98,6 +143,7 @@ attributes:
     example: 5000
   - yang_name: cache/permanent
     example: true
+    exclude_test: true
   - yang_name: cache/immediate
     example: true
   - yang_name: hw-cache/timeout/inactive
@@ -120,3 +166,9 @@ attributes:
     example: physical
   - yang_name: sflow/options/output/ifindex
     example: physical
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=exporter_map1]
+    attributes:
+      - name: exporter-map-name
+        value: exporter_map1

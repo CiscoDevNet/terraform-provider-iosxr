@@ -24,6 +24,8 @@ attributes:
       - yang_name: interface-name
         id: true
         example: GigabitEthernet0/0/0/1
+  - yang_name: capabilities/sac
+    example: true
   - yang_name: capabilities/sac/ipv4-disable
     example: true
   - yang_name: capabilities/sac/ipv6-disable
@@ -36,6 +38,8 @@ attributes:
     example: 10
   - yang_name: igp/sync/delay/on-proc-restart
     example: 100
+  - yang_name: mldp
+    example: true
   - yang_name: mldp/logging/notifications
     example: true
   - yang_name: mldp/address-families/address-family
@@ -53,7 +57,7 @@ attributes:
       - yang_name: forwarding/recursive
         example: true
       - yang_name: forwarding/recursive/route-policy
-        example: ROUTE_POLICY_1
+        example: LDP_POLICY_1
       - yang_name: recursive-fec/enable
         tf_name: recursive_fec
         example: true
@@ -61,9 +65,9 @@ attributes:
     example: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=LDP_POLICY_1]
     attributes:
       - name: route-policy-name
-        value: ROUTE_POLICY_1
+        value: LDP_POLICY_1
       - name: rpl-route-policy
-        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+        value: "route-policy LDP_POLICY_1\\n  pass\\nend-policy\\n"

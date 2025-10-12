@@ -14,30 +14,25 @@ attributes:
     tf_name: metric_style_narrow
     example: true
     exclude_test: true
-    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/NARROW/narrow/transition
     xpath: metric-style/narrow/transition
     tf_name: metric_style_narrow_transition
     example: true
     exclude_test: true
-    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide
     xpath: metric-style/wide
     tf_name: metric_style_wide
     example: true
     exclude_test: true
-    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide/transition
     xpath: metric-style/wide/transition
     tf_name: metric_style_wide_transition
     example: true
-    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/TRANSITION/transition
     xpath: metric-style/transition
     tf_name: metric_style_transition
     example: true
     exclude_test: true
-    exclude_example: false
   - yang_name: metric-style-levels/metric-style-level
     tf_name: metric_style_levels
     exclude_test: true
@@ -74,14 +69,12 @@ attributes:
     xpath: router-id/interface-name
     tf_name: router_id_interface_name
     optional: true
-    delete_parent: true
     example: GigabitEthernet0/0/0/1
     exclude_test: true
   - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
     xpath: router-id/ip-address
     tf_name: router_id_ip_address
     optional: true
-    delete_parent: true
     example: "192.168.1.1"
   - yang_name: default-information/originate
     example: true
@@ -184,29 +177,24 @@ attributes:
   - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
     xpath: mpls/traffic-eng/router-id/ipv4-address
     tf_name: mpls_traffic_eng_router_id_ipv4_address
-    delete_parent: true
     example: 1.2.3.4
   - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
     xpath: mpls/traffic-eng/router-id/interface-name
     tf_name: mpls_traffic_eng_router_id_interface_name
-    delete_parent: true
     exclude_test: true
     example: Loopback0
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
     xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
     tf_name: mpls_traffic_eng_level_1_2
-    delete_parent: true
     example: true
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
     xpath: mpls/traffic-eng/traffic-eng-level/level-one
     tf_name: mpls_traffic_eng_level_1
-    delete_parent: true
     example: false
     exclude_test: true
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
     xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
     tf_name: mpls_traffic_eng_level_2_only
-    delete_parent: true
     example: true
     exclude_test: true
   - yang_name: spf-interval/maximum-wait

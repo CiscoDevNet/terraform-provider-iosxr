@@ -8,8 +8,10 @@ attributes:
   - yang_name: router-id
     example: 1.2.3.4
   - yang_name: load-balancing/flow/src-dst-mac
+    test_tags: [NCS, XRV9K, XRD]
     example: false
   - yang_name: load-balancing/flow/src-dst-ip
+    test_tags: [NCS, XRV9K, XRD]
     example: true
   - yang_name: xconnect/groups/group
     tf_name: xconnect_groups

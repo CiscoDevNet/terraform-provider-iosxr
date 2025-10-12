@@ -5,7 +5,7 @@ no_delete_attributes: true
 doc_category: Route Policy
 attributes:
   - yang_name: set-name
-    example: TEST
+    example: TAG_SET_1
   - yang_name: rpl-tag-set
     description: "Configures a tag-set"
-    example: "tag-set TEST\\n  4297\\nend-set\\n"
+    example: "tag-set TAG_SET_1\\n  4297\\nend-set\\n"

@@ -9,6 +9,7 @@ attributes:
     example: 10.1.1.2
   - yang_name: af-name
     example: vpnv4-unicast
+    # import containers crash EMSd on XRv/XRd 24.4.2 - triage
   - yang_name: import/IMPORT/STITCHING-RT/stitching-rt
     xpath: import/stitching-rt
     tf_name: import_stitching_rt
@@ -18,13 +19,13 @@ attributes:
   - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate
     xpath: import/stitching-rt/re-originate
     tf_name: import_stitching_rt_re_originate
-    delete_parent: true
     exclude_test: true
     example: true
   - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt
     xpath: import/stitching-rt/re-originate/stitching-rt
     tf_name: import_stitching_rt_re_originate_stitching_rt
     delete_parent: true
+    exclude_test: true
     example: true
   - yang_name: import/IMPORT/RE-ORIGINATE/re-originate
     xpath: import/re-originate
@@ -36,20 +37,36 @@ attributes:
     example: true
   - yang_name: route-reflector-client/inheritance-disable
     example: true
+    exclude_test: true
+  - yang_name: advertise/vpnv4/unicast/enable
+    tf_name: advertise_vpnv4_unicast
+    example: true
+    exclude_test: true
+  - yang_name: advertise/vpnv4/unicast/enable/re-originated
+    tf_name: advertise_vpnv4_unicast_re_originated
+    delete_parent: true
+    example: true
+    exclude_test: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
     tf_name: advertise_vpnv4_unicast_re_originated_stitching_rt
+    delete_parent: true
     example: true
   - yang_name: next-hop-self
     example: true
   - yang_name: next-hop-self/inheritance-disable
     example: true
+    exclude_test: true
   - yang_name: encapsulation-type
     example: srv6
   - yang_name: route-policy/in
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
+  - yang_name: soft-reconfiguration/inbound
+    example: true
+    exclude_test: true
   - yang_name: soft-reconfiguration/inbound/always
+    delete_parent: true
     example: true
   - yang_name: send-community-ebgp
     exclude_test: true

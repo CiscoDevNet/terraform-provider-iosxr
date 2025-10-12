@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
 doc_category: VRF
 attributes:
   - yang_name: vrf-name
-    example: VRF3
+    example: VRF4
   - yang_name: description
     example: My VRF Description
   - yang_name: vpn/id
@@ -14,10 +14,10 @@ attributes:
     example: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
     tf_name: ipv4_unicast_import_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_IMPORT_POLICY_1
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv4_unicast_export_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv4/multicast
     tf_name: ipv4_multicast
     example: true
@@ -31,10 +31,10 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
     tf_name: ipv6_unicast_import_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_IMPORT_POLICY_1
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv6_unicast_export_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv6/multicast
     tf_name: ipv6_multicast
     example: true
@@ -241,9 +241,15 @@ attributes:
         example: "enable"
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]
     attributes:
       - name: route-policy-name
-        value: ROUTE_POLICY_1
+        value: VRF_IMPORT_POLICY_1
       - name: rpl-route-policy
-        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+        value: "route-policy VRF_IMPORT_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: VRF_EXPORT_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy VRF_EXPORT_POLICY_1\\n  pass\\nend-policy\\n"

@@ -10,7 +10,7 @@ attributes:
   - yang_name: area-id
     example: 0
   - yang_name: interface-name
-    example: GigabitEthernet0/0/0/1
+    example: GigabitEthernet0/0/0/2
   - yang_name: network/broadcast
     example: false
   - yang_name: network/non-broadcast
@@ -37,6 +37,7 @@ test_prerequisites:
     attributes:
       - name: vrf-name
         value: VRF1
+    dependencies: [0]
   - path: Cisco-IOS-XR-um-router-ospf-cfg:/router/ospf/processes/process[process-name=OSPF1]/vrfs/vrf[vrf-name=VRF1]/areas/area[area-id=0]
     attributes:
       - name: area-id

@@ -192,27 +192,27 @@ resource "iosxr_gnmi" "PreReq{{$index}}" {
 func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	config := `resource "iosxr_{{snakeCase $name}}" "test" {` + "\n"
 	{{- range  .Attributes}}
-	{{- if or .Reference .Id .Mandatory}}
+	{{- if or .Reference .Id .Mandatory .MinimumTestValue}}
 	{{- if eq .Type "List"}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 	{{- end}}
 	config += `	{{.TfName}} = [{` + "\n"
 		{{- range  .Attributes}}
-		{{- if or .Id .Mandatory}}
+		{{- if or .Id .Mandatory .MinimumTestValue}}
 		{{- if eq .Type "List"}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
 		{{- end}}
 	config += `		{{.TfName}} = [{` + "\n"
 			{{- range  .Attributes}}
-			{{- if or .Id .Mandatory}}
+			{{- if or .Id .Mandatory .MinimumTestValue}}
 			{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		config += `			{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 	}
 			{{- else}}
-	config += `			{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+	config += `			{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 			{{- end}}
 			{{- end}}
 			{{- end}}
@@ -223,10 +223,10 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 		{{- else}}
 		{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		config += `		{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 	}
 		{{- else}}
-	config += `		{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+	config += `		{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 		{{- end}}
 		{{- end}}
 		{{- end}}
@@ -238,10 +238,10 @@ func testAccIosxr{{camelCase .Name}}Config_minimum() string {
 	{{- else}}
 	{{- if len .TestTags}}
 	if {{range $i, $e := .TestTags}}{{if $i}} || {{end}}os.Getenv("{{$e}}") != ""{{end}} {
-		config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+		config += `	{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 	}
 	{{- else}}
-	config += `	{{.TfName}} = {{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}` + "\n"
+	config += `	{{.TfName}} = {{if .MinimumTestValue}}{{.MinimumTestValue}}{{else}}{{if eq .Type "String"}}"{{.Example}}"{{else if eq .Type "StringList"}}["{{.Example}}"]{{else if eq .Type "Int64List"}}[{{.Example}}]{{else}}{{.Example}}{{end}}{{end}}` + "\n"
 	{{- end}}
 	{{- end}}
 	{{- end}}

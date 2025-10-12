@@ -142,6 +142,7 @@ type YamlConfigAttribute struct {
 	DeleteGrandparent bool                  `yaml:"delete_grandparent"`
 	NoDelete          bool                  `yaml:"no_delete"`
 	TestTags          []string              `yaml:"test_tags"`
+	MinimumTestValue  string                `yaml:"minimum_test_value"`
 	Attributes        []YamlConfigAttribute `yaml:"attributes"`
 }
 

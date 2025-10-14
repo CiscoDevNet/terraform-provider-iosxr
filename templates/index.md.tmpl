@@ -21,6 +21,7 @@ All resources and data sources have been tested with the following releases.
 | Platform | Version |
 | -------- | ------- |
 | XRv 9000 | 24.4.2  |
+| NCS 5500 | 24.4.2  |
 
 ## Example Usage
 

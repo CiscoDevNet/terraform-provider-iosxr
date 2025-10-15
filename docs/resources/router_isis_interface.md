@@ -37,9 +37,9 @@ resource "iosxr_router_isis_interface" "example" {
   hello_password_hmac_md5_send_only = true
   hello_password_levels = [
     {
-      level_number                        = 1
-      level_hello_password_text_encrypted = "060506324F41584B564B0F49584B"
-      level_hello_password_text_send_only = true
+      level_number                  = 1
+      hello_password_text_encrypted = "060506324F41584B564B0F49584B"
+      hello_password_text_send_only = true
     }
   ]
   bfd_fast_detect_ipv4 = true
@@ -124,12 +124,12 @@ Required:
 
 Optional:
 
-- `level_hello_keychain_name` (String) Specifies a Key Chain name will follow
-- `level_hello_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `level_hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
-- `level_hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `level_hello_password_text_encrypted` (String) Specifies a password will follow
-- `level_hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_keychain_name` (String) Specifies a Key Chain name will follow
+- `hello_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_text_encrypted` (String) Specifies a password will follow
+- `hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
 
 
 <a id="nestedatt--priority_levels"></a>

@@ -78,12 +78,12 @@ Read-Only:
 
 Read-Only:
 
-- `level_hello_keychain_name` (String) Specifies a Key Chain name will follow
-- `level_hello_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `level_hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
-- `level_hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
-- `level_hello_password_text_encrypted` (String) Specifies a password will follow
-- `level_hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_keychain_name` (String) Specifies a Key Chain name will follow
+- `hello_keychain_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_hmac_md5_encrypted` (String) Specifies a password will follow
+- `hello_password_hmac_md5_send_only` (Boolean) Do not require authentication of incoming IIHs
+- `hello_password_text_encrypted` (String) Specifies a password will follow
+- `hello_password_text_send_only` (Boolean) Do not require authentication of incoming IIHs
 - `level_number` (Number) Set hello-password for one level only
 
 

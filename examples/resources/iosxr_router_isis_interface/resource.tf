@@ -22,9 +22,9 @@ resource "iosxr_router_isis_interface" "example" {
   hello_password_hmac_md5_send_only = true
   hello_password_levels = [
     {
-      level_number                        = 1
-      level_hello_password_text_encrypted = "060506324F41584B564B0F49584B"
-      level_hello_password_text_send_only = true
+      level_number                  = 1
+      hello_password_text_encrypted = "060506324F41584B564B0F49584B"
+      hello_password_text_send_only = true
     }
   ]
   bfd_fast_detect_ipv4 = true

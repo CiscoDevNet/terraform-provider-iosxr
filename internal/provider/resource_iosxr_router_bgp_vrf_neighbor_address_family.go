@@ -128,6 +128,10 @@ func (r *RouterBGPVRFNeighborAddressFamilyResource) Schema(ctx context.Context, 
 					stringvalidator.LengthBetween(1, 255),
 				},
 			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Originate default route to this neighbor").String,
+				Optional:            true,
+			},
 			"default_originate_route_policy": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Route policy to specify criteria to originate default").String,
 				Optional:            true,

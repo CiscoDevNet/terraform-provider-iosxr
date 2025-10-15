@@ -35,6 +35,8 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Read-Only
 
+- `advertise_vpnv4_unicast` (Boolean) Enable advertise vpnv4 unicast
+- `advertise_vpnv4_unicast_re_originated` (Boolean) Advertise re-orignated and local routes only
 - `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
@@ -58,4 +60,5 @@ data "iosxr_router_bgp_neighbor_address_family" "example" {
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `send_community_ebgp` (Boolean) Send community attribute to this external neighbor
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
+- `soft_reconfiguration_inbound` (Boolean) Allow inbound soft reconfiguration for this neighbor
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported

@@ -14,8 +14,8 @@ This resource can manage the Tag Set configuration.
 
 ```terraform
 resource "iosxr_tag_set" "example" {
-  set_name    = "TEST"
-  rpl_tag_set = "tag-set TEST\n  4297\nend-set\n"
+  set_name    = "TAG_SET_1"
+  rpl_tag_set = "tag-set TAG_SET_1\n  4297\nend-set\n"
 }
 ```
 

@@ -84,6 +84,7 @@ func iosxrCDPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 func testAccIosxrCDPConfig_minimum() string {
 	config := `resource "iosxr_cdp" "test" {` + "\n"
+	config += `	enable = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

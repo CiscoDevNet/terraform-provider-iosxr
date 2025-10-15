@@ -15,7 +15,7 @@ This data source can read the Router BGP VRF Neighbor Address Family configurati
 ```terraform
 data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   as_number = "65001"
-  vrf_name  = "VRF1"
+  vrf_name  = "VRF2"
   address   = "10.1.1.2"
   af_name   = "ipv4-unicast"
 }
@@ -37,6 +37,7 @@ data "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 ### Read-Only
 
+- `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `id` (String) The path of the retrieved object.

@@ -39,7 +39,7 @@ func TestAccIosxrRouterHSRPInterfaceIPv6GroupV2(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "name", "gp2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "mac_address", "00:01:00:02:00:02"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec", "100"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec2", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "timers_msec_holdtime", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "preempt_delay", "256"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "priority", "244"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_hsrp_interface_ipv6_group_v2.test", "bfd_fast_detect_peer_ipv6", "fe80::240:d0ff:fe48:4672"))
@@ -125,7 +125,7 @@ func testAccIosxrRouterHSRPInterfaceIPv6GroupV2Config_all() string {
 	config += `	name = "gp2"` + "\n"
 	config += `	mac_address = "00:01:00:02:00:02"` + "\n"
 	config += `	timers_msec = 100` + "\n"
-	config += `	timers_msec2 = 300` + "\n"
+	config += `	timers_msec_holdtime = 300` + "\n"
 	config += `	preempt_delay = 256` + "\n"
 	config += `	priority = 244` + "\n"
 	config += `	bfd_fast_detect_peer_ipv6 = "fe80::240:d0ff:fe48:4672"` + "\n"

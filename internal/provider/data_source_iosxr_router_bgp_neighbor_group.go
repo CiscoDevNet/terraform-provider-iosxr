@@ -167,16 +167,16 @@ func (d *RouterBGPNeighborGroupDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
+			"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
+				Computed:            true,
+			},
 			"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
 			"timers_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Holdtime",
-				Computed:            true,
-			},
-			"timers_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
 			"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{

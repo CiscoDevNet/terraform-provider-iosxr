@@ -161,6 +161,10 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
+			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
+				Optional:            true,
+			},
 			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
@@ -174,10 +178,6 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
 				},
-			},
-			"timers_bgp_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
-				Optional:            true,
 			},
 			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
@@ -298,11 +298,11 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 							MarkdownDescription: helpers.NewAttributeDescription("Do not prepend local AS to announcements from this neighbor").String,
 							Optional:            true,
 						},
-						"local_as_replace_as": schema.BoolAttribute{
+						"local_as_no_prepend_replace_as": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Prepend only local AS to announcements to this neighbor").String,
 							Optional:            true,
 						},
-						"local_as_dual_as": schema.BoolAttribute{
+						"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Dual-AS mode").String,
 							Optional:            true,
 						},
@@ -329,6 +329,10 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 							Optional:            true,
 						},
+						"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
+							Optional:            true,
+						},
 						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 							Optional:            true,
@@ -342,10 +346,6 @@ func (r *RouterBGPVRFResource) Schema(ctx context.Context, req resource.SchemaRe
 							Validators: []validator.Int64{
 								int64validator.Between(3, 65535),
 							},
-						},
-						"timers_holdtime_zero": schema.BoolAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
-							Optional:            true,
 						},
 						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,

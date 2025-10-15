@@ -94,6 +94,13 @@ func iosxrIPv6AccessListImportStateIdFunc(resourceName string) resource.ImportSt
 func testAccIosxrIPv6AccessListConfig_minimum() string {
 	config := `resource "iosxr_ipv6_access_list" "test" {` + "\n"
 	config += `	access_list_name = "TEST1"` + "\n"
+	config += `	sequences = [{` + "\n"
+	config += `		sequence_number = 22` + "\n"
+	config += `		permit_protocol = "tcp"` + "\n"
+	config += `		permit_source_address = "1::1"` + "\n"
+	config += `		permit_source_prefix_length = 64` + "\n"
+	config += `		permit_destination_host = "2::1"` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -46,12 +46,15 @@ type RouterBGPNeighborAddressFamily struct {
 	ImportReOriginate                            types.Bool   `tfsdk:"import_re_originate"`
 	RouteReflectorClient                         types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable       types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	AdvertiseVpnv4Unicast                        types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
+	AdvertiseVpnv4UnicastReOriginated            types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
 	AdvertiseVpnv4UnicastReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
 	NextHopSelf                                  types.Bool   `tfsdk:"next_hop_self"`
 	NextHopSelfInheritanceDisable                types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationType                            types.String `tfsdk:"encapsulation_type"`
 	RoutePolicyIn                                types.String `tfsdk:"route_policy_in"`
 	RoutePolicyOut                               types.String `tfsdk:"route_policy_out"`
+	SoftReconfigurationInbound                   types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
 	SoftReconfigurationInboundAlways             types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
 	SendCommunityEbgp                            types.Bool   `tfsdk:"send_community_ebgp"`
 	SendCommunityEbgpInheritanceDisable          types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
@@ -77,12 +80,15 @@ type RouterBGPNeighborAddressFamilyData struct {
 	ImportReOriginate                            types.Bool   `tfsdk:"import_re_originate"`
 	RouteReflectorClient                         types.Bool   `tfsdk:"route_reflector_client"`
 	RouteReflectorClientInheritanceDisable       types.Bool   `tfsdk:"route_reflector_client_inheritance_disable"`
+	AdvertiseVpnv4Unicast                        types.Bool   `tfsdk:"advertise_vpnv4_unicast"`
+	AdvertiseVpnv4UnicastReOriginated            types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated"`
 	AdvertiseVpnv4UnicastReOriginatedStitchingRt types.Bool   `tfsdk:"advertise_vpnv4_unicast_re_originated_stitching_rt"`
 	NextHopSelf                                  types.Bool   `tfsdk:"next_hop_self"`
 	NextHopSelfInheritanceDisable                types.Bool   `tfsdk:"next_hop_self_inheritance_disable"`
 	EncapsulationType                            types.String `tfsdk:"encapsulation_type"`
 	RoutePolicyIn                                types.String `tfsdk:"route_policy_in"`
 	RoutePolicyOut                               types.String `tfsdk:"route_policy_out"`
+	SoftReconfigurationInbound                   types.Bool   `tfsdk:"soft_reconfiguration_inbound"`
 	SoftReconfigurationInboundAlways             types.Bool   `tfsdk:"soft_reconfiguration_inbound_always"`
 	SendCommunityEbgp                            types.Bool   `tfsdk:"send_community_ebgp"`
 	SendCommunityEbgpInheritanceDisable          types.Bool   `tfsdk:"send_community_ebgp_inheritance_disable"`
@@ -147,6 +153,16 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "route-reflector-client.inheritance-disable", map[string]string{})
 		}
 	}
+	if !data.AdvertiseVpnv4Unicast.IsNull() && !data.AdvertiseVpnv4Unicast.IsUnknown() {
+		if data.AdvertiseVpnv4Unicast.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable", map[string]string{})
+		}
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() && !data.AdvertiseVpnv4UnicastReOriginated.IsUnknown() {
+		if data.AdvertiseVpnv4UnicastReOriginated.ValueBool() {
+			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable.re-originated", map[string]string{})
+		}
+	}
 	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsUnknown() {
 		if data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
 			body, _ = sjson.Set(body, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt", map[string]string{})
@@ -170,6 +186,11 @@ func (data RouterBGPNeighborAddressFamily) toBody(ctx context.Context) string {
 	}
 	if !data.RoutePolicyOut.IsNull() && !data.RoutePolicyOut.IsUnknown() {
 		body, _ = sjson.Set(body, "route-policy.out", data.RoutePolicyOut.ValueString())
+	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.IsUnknown() {
+		if data.SoftReconfigurationInbound.ValueBool() {
+			body, _ = sjson.Set(body, "soft-reconfiguration.inbound", map[string]string{})
+		}
 	}
 	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.IsUnknown() {
 		if data.SoftReconfigurationInboundAlways.ValueBool() {
@@ -280,6 +301,24 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 	} else {
 		data.RouteReflectorClientInheritanceDisable = types.BoolNull()
 	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); !data.AdvertiseVpnv4Unicast.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolNull()
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		if value.Exists() {
+			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+		} else {
+			data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+		}
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
 		if value.Exists() {
 			data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
@@ -321,6 +360,15 @@ func (data *RouterBGPNeighborAddressFamily) updateFromBody(ctx context.Context, 
 		data.RoutePolicyOut = types.StringValue(value.String())
 	} else {
 		data.RoutePolicyOut = types.StringNull()
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); !data.SoftReconfigurationInbound.IsNull() {
+		if value.Exists() {
+			data.SoftReconfigurationInbound = types.BoolValue(true)
+		} else {
+			data.SoftReconfigurationInbound = types.BoolValue(false)
+		}
+	} else {
+		data.SoftReconfigurationInbound = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); !data.SoftReconfigurationInboundAlways.IsNull() {
 		if value.Exists() {
@@ -442,6 +490,16 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 	} else {
 		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
 		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
 	} else {
@@ -465,6 +523,11 @@ func (data *RouterBGPNeighborAddressFamily) fromBody(ctx context.Context, res []
 	}
 	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
@@ -550,6 +613,16 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	} else {
 		data.RouteReflectorClientInheritanceDisable = types.BoolValue(false)
 	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable"); value.Exists() {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4Unicast = types.BoolValue(false)
+	}
+	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated"); value.Exists() {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(true)
+	} else {
+		data.AdvertiseVpnv4UnicastReOriginated = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "advertise.vpnv4.unicast.enable.re-originated.stitching-rt"); value.Exists() {
 		data.AdvertiseVpnv4UnicastReOriginatedStitchingRt = types.BoolValue(true)
 	} else {
@@ -573,6 +646,11 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 	}
 	if value := gjson.GetBytes(res, "route-policy.out"); value.Exists() {
 		data.RoutePolicyOut = types.StringValue(value.String())
+	}
+	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound"); value.Exists() {
+		data.SoftReconfigurationInbound = types.BoolValue(true)
+	} else {
+		data.SoftReconfigurationInbound = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "soft-reconfiguration.inbound.always"); value.Exists() {
 		data.SoftReconfigurationInboundAlways = types.BoolValue(true)
@@ -629,74 +707,83 @@ func (data *RouterBGPNeighborAddressFamilyData) fromBody(ctx context.Context, re
 
 func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context, state RouterBGPNeighborAddressFamily) []string {
 	deletedItems := make([]string, 0)
-	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
-	}
-	if !state.ImportStitchingRtReOriginate.IsNull() && data.ImportStitchingRtReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt", state.getPath()))
-	}
-	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
-	}
-	if !state.ImportReOriginate.IsNull() && data.ImportReOriginate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
-	}
-	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
-	}
-	if !state.RouteReflectorClientInheritanceDisable.IsNull() && data.RouteReflectorClientInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", state.getPath()))
-	}
-	if !state.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", state.getPath()))
-	}
-	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
-	}
-	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
-	}
-	if !state.EncapsulationType.IsNull() && data.EncapsulationType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation-type", state.getPath()))
-	}
-	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
-	}
-	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
-	}
-	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", state.getPath()))
-	}
-	if !state.SendCommunityEbgp.IsNull() && data.SendCommunityEbgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp", state.getPath()))
-	}
-	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
-	}
-	if !state.MaximumPrefixLimit.IsNull() && data.MaximumPrefixLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
-	}
-	if !state.MaximumPrefixThreshold.IsNull() && data.MaximumPrefixThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
-	}
-	if !state.MaximumPrefixRestart.IsNull() && data.MaximumPrefixRestart.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
-	}
-	if !state.MaximumPrefixDiscardExtraPaths.IsNull() && data.MaximumPrefixDiscardExtraPaths.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
-	}
-	if !state.MaximumPrefixWarningOnly.IsNull() && data.MaximumPrefixWarningOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
-	}
-	if !state.DefaultOriginate.IsNull() && data.DefaultOriginate.IsNull() {
+	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
 	if !state.DefaultOriginateRoutePolicy.IsNull() && data.DefaultOriginateRoutePolicy.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
 	}
-	if !state.DefaultOriginateInheritanceDisable.IsNull() && data.DefaultOriginateInheritanceDisable.IsNull() {
+	if !state.DefaultOriginate.IsNull() && data.DefaultOriginate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/default-originate", state.getPath()))
+	}
+	if !state.MaximumPrefixWarningOnly.IsNull() && data.MaximumPrefixWarningOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
+	}
+	if !state.MaximumPrefixDiscardExtraPaths.IsNull() && data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
+	}
+	if !state.MaximumPrefixRestart.IsNull() && data.MaximumPrefixRestart.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
+	}
+	if !state.MaximumPrefixThreshold.IsNull() && data.MaximumPrefixThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
+	}
+	if !state.MaximumPrefixLimit.IsNull() && data.MaximumPrefixLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/maximum-prefix", state.getPath()))
+	}
+	if !state.SendCommunityEbgpInheritanceDisable.IsNull() && data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", state.getPath()))
+	}
+	if !state.SendCommunityEbgp.IsNull() && data.SendCommunityEbgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/send-community-ebgp", state.getPath()))
+	}
+	if !state.SoftReconfigurationInboundAlways.IsNull() && data.SoftReconfigurationInboundAlways.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	}
+	if !state.SoftReconfigurationInbound.IsNull() && data.SoftReconfigurationInbound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/soft-reconfiguration/inbound", state.getPath()))
+	}
+	if !state.RoutePolicyOut.IsNull() && data.RoutePolicyOut.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/out", state.getPath()))
+	}
+	if !state.RoutePolicyIn.IsNull() && data.RoutePolicyIn.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-policy/in", state.getPath()))
+	}
+	if !state.EncapsulationType.IsNull() && data.EncapsulationType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation-type", state.getPath()))
+	}
+	if !state.NextHopSelfInheritanceDisable.IsNull() && data.NextHopSelfInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self/inheritance-disable", state.getPath()))
+	}
+	if !state.NextHopSelf.IsNull() && data.NextHopSelf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/next-hop-self", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4UnicastReOriginated.IsNull() && data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
+	}
+	if !state.AdvertiseVpnv4Unicast.IsNull() && data.AdvertiseVpnv4Unicast.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", state.getPath()))
+	}
+	if !state.RouteReflectorClientInheritanceDisable.IsNull() && data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", state.getPath()))
+	}
+	if !state.RouteReflectorClient.IsNull() && data.RouteReflectorClient.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/route-reflector-client", state.getPath()))
+	}
+	if !state.ImportReOriginate.IsNull() && data.ImportReOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
+	}
+	if !state.ImportStitchingRtReOriginateStitchingRt.IsNull() && data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
+	}
+	if !state.ImportStitchingRtReOriginate.IsNull() && data.ImportStitchingRtReOriginate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import/stitching-rt/re-originate", state.getPath()))
+	}
+	if !state.ImportStitchingRt.IsNull() && data.ImportStitchingRt.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/import", state.getPath()))
 	}
 	return deletedItems
 }
@@ -707,53 +794,62 @@ func (data *RouterBGPNeighborAddressFamily) getDeletedItems(ctx context.Context,
 
 func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginate.IsNull() && !data.ImportStitchingRtReOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
-	}
-	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
-	}
-	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
-	}
-	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
-	}
-	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", data.getPath()))
-	}
-	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
-	}
-	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
-	}
-	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
-	}
-	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
-	}
-	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
-	}
-	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginate.IsNull() && !data.DefaultOriginate.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
-	if !data.DefaultOriginateInheritanceDisable.IsNull() && !data.DefaultOriginateInheritanceDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/default-originate", data.getPath()))
+	if !data.MaximumPrefixWarningOnly.IsNull() && !data.MaximumPrefixWarningOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() && !data.MaximumPrefixDiscardExtraPaths.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() && !data.SendCommunityEbgpInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() && !data.SendCommunityEbgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() && !data.SoftReconfigurationInboundAlways.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SoftReconfigurationInbound.IsNull() && !data.SoftReconfigurationInbound.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() && !data.NextHopSelfInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelf.IsNull() && !data.NextHopSelf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() && !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() && !data.AdvertiseVpnv4UnicastReOriginated.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4Unicast.IsNull() && !data.AdvertiseVpnv4Unicast.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.RouteReflectorClientInheritanceDisable.IsNull() && !data.RouteReflectorClientInheritanceDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	}
+	if !data.RouteReflectorClient.IsNull() && !data.RouteReflectorClient.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	}
+	if !data.ImportReOriginate.IsNull() && !data.ImportReOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() && !data.ImportStitchingRtReOriginateStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginate.IsNull() && !data.ImportStitchingRtReOriginate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRt.IsNull() && !data.ImportStitchingRt.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -764,74 +860,83 @@ func (data *RouterBGPNeighborAddressFamily) getEmptyLeafsDelete(ctx context.Cont
 
 func (data *RouterBGPNeighborAddressFamily) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.ImportStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt", data.getPath()))
-	}
-	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
-	}
-	if !data.ImportReOriginate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
-	}
-	if !data.RouteReflectorClient.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
-	}
-	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
-	}
-	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated/stitching-rt", data.getPath()))
-	}
-	if !data.NextHopSelf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
-	}
-	if !data.NextHopSelfInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
-	}
-	if !data.EncapsulationType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation-type", data.getPath()))
-	}
-	if !data.RoutePolicyIn.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
-	}
-	if !data.RoutePolicyOut.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
-	}
-	if !data.SoftReconfigurationInboundAlways.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound/always", data.getPath()))
-	}
-	if !data.SendCommunityEbgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
-	}
-	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
-	}
-	if !data.MaximumPrefixLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.MaximumPrefixThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.MaximumPrefixRestart.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.MaximumPrefixDiscardExtraPaths.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.MaximumPrefixWarningOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
-	}
-	if !data.DefaultOriginate.IsNull() {
+	if !data.DefaultOriginateInheritanceDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
 	if !data.DefaultOriginateRoutePolicy.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
 	}
-	if !data.DefaultOriginateInheritanceDisable.IsNull() {
+	if !data.DefaultOriginate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/default-originate", data.getPath()))
+	}
+	if !data.MaximumPrefixWarningOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixDiscardExtraPaths.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixRestart.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.MaximumPrefixLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/maximum-prefix", data.getPath()))
+	}
+	if !data.SendCommunityEbgpInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp/inheritance-disable", data.getPath()))
+	}
+	if !data.SendCommunityEbgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/send-community-ebgp", data.getPath()))
+	}
+	if !data.SoftReconfigurationInboundAlways.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.SoftReconfigurationInbound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/soft-reconfiguration/inbound", data.getPath()))
+	}
+	if !data.RoutePolicyOut.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/out", data.getPath()))
+	}
+	if !data.RoutePolicyIn.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-policy/in", data.getPath()))
+	}
+	if !data.EncapsulationType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation-type", data.getPath()))
+	}
+	if !data.NextHopSelfInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self/inheritance-disable", data.getPath()))
+	}
+	if !data.NextHopSelf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/next-hop-self", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginatedStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable/re-originated", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4UnicastReOriginated.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.AdvertiseVpnv4Unicast.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise/vpnv4/unicast/enable", data.getPath()))
+	}
+	if !data.RouteReflectorClientInheritanceDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client/inheritance-disable", data.getPath()))
+	}
+	if !data.RouteReflectorClient.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/route-reflector-client", data.getPath()))
+	}
+	if !data.ImportReOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginateStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRtReOriginate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import/stitching-rt/re-originate", data.getPath()))
+	}
+	if !data.ImportStitchingRt.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/import", data.getPath()))
 	}
 	return deletePaths
 }

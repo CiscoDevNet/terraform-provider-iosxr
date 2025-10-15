@@ -15,6 +15,7 @@ This resource can manage the Telnet configuration.
 ```terraform
 resource "iosxr_telnet" "example" {
   ipv4_client_source_interface = "GigabitEthernet0/0/0/1"
+  ipv6_client_source_interface = "GigabitEthernet0/0/0/1"
   vrfs = [
     {
       vrf_name                = "ROI"

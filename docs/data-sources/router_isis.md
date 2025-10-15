@@ -32,6 +32,7 @@ data "iosxr_router_isis" "example" {
 ### Read-Only
 
 - `affinity_maps` (Attributes List) Affinity map configuration (see [below for nested schema](#nestedatt--affinity_maps))
+- `distribute_link_state` (Boolean) Distribute the link-state database to external services
 - `distribute_link_state_instance_id` (Number) Set distribution process instance identifier
 - `distribute_link_state_level` (Number) Set distribution for one level only
 - `distribute_link_state_throttle` (Number) Set throttle update in seconds

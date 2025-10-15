@@ -125,6 +125,9 @@ func testAccIosxrRouterStaticIPv6UnicastConfig_minimum() string {
 	config := `resource "iosxr_router_static_ipv6_unicast" "test" {` + "\n"
 	config += `	prefix_address = "1::"` + "\n"
 	config += `	prefix_length = 64` + "\n"
+	config += `	nexthop_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

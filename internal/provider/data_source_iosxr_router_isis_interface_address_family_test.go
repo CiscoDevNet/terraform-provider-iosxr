@@ -84,6 +84,7 @@ resource "iosxr_gnmi" "PreReq3" {
 	attributes = {
 		"interface-name" = "GigabitEthernet0/0/0/1"
 	}
+	depends_on = [iosxr_gnmi.PreReq2, ]
 }
 
 `

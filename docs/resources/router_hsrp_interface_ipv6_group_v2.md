@@ -19,7 +19,7 @@ resource "iosxr_router_hsrp_interface_ipv6_group_v2" "example" {
   name                           = "gp2"
   mac_address                    = "00:01:00:02:00:02"
   timers_msec                    = 100
-  timers_msec2                   = 300
+  timers_msec_holdtime           = 300
   preempt_delay                  = 256
   priority                       = 244
   bfd_fast_detect_peer_ipv6      = "fe80::240:d0ff:fe48:4672"
@@ -72,14 +72,14 @@ resource "iosxr_router_hsrp_interface_ipv6_group_v2" "example" {
   - Range: `0`-`3600`
 - `priority` (Number) Priority level
   - Range: `0`-`255`
-- `timers_hold_time` (Number) Hold time in seconds
-  - Range: `1`-`255`
-- `timers_hold_time2` (Number) Hold time in seconds
-  - Range: `1`-`255`
 - `timers_msec` (Number) Specify hellotime in milliseconds
   - Range: `100`-`3000`
-- `timers_msec2` (Number) Specify hold time in milliseconds
+- `timers_msec_holdtime` (Number) Specify hold time in milliseconds
   - Range: `100`-`3000`
+- `timers_seconds` (Number) Hold time in seconds
+  - Range: `1`-`255`
+- `timers_seconds_holdtime` (Number) Hold time in seconds
+  - Range: `1`-`255`
 - `track_interfaces` (Attributes List) Configure tracking (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object tracking (see [below for nested schema](#nestedatt--track_objects))
 

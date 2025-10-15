@@ -85,6 +85,10 @@ func iosxrSNMPServerViewImportStateIdFunc(resourceName string) resource.ImportSt
 func testAccIosxrSNMPServerViewConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_view" "test" {` + "\n"
 	config += `	view_name = "VIEW12"` + "\n"
+	config += `	mib_view_families = [{` + "\n"
+	config += `		name = "iso"` + "\n"
+	config += `		included = true` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -14,9 +14,8 @@ This resource can manage the Flow Exporter Map configuration.
 
 ```terraform
 resource "iosxr_flow_exporter_map" "example" {
-  name                                    = "TEST"
-  destination_ipv4_address                = "10.1.1.1"
-  destination_ipv6_address                = "1::1"
+  name                                    = "exporter_map1"
+  destination_ipv4_address                = "192.0.2.1"
   destination_vrf                         = "VRF1"
   source                                  = "GigabitEthernet0/0/0/1"
   dscp                                    = 62

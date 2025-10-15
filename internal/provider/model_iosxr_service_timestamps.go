@@ -454,47 +454,47 @@ func (data *ServiceTimestampsData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state ServiceTimestamps) []string {
 	deletedItems := make([]string, 0)
-	if !state.DebugDatetimeLocaltimeOnly.IsNull() && data.DebugDatetimeLocaltimeOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime-only", state.getPath()))
-	}
-	if !state.DebugDatetimeLocaltime.IsNull() && data.DebugDatetimeLocaltime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime", state.getPath()))
-	}
-	if !state.DebugDatetimeMsec.IsNull() && data.DebugDatetimeMsec.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/msec", state.getPath()))
-	}
-	if !state.DebugDatetimeShowTimezone.IsNull() && data.DebugDatetimeShowTimezone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/show-timezone", state.getPath()))
-	}
-	if !state.DebugDatetimeYear.IsNull() && data.DebugDatetimeYear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/year", state.getPath()))
-	}
-	if !state.DebugUptime.IsNull() && data.DebugUptime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/uptime", state.getPath()))
-	}
-	if !state.DebugDisable.IsNull() && data.DebugDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/disable", state.getPath()))
-	}
-	if !state.LogDatetimeLocaltimeOnly.IsNull() && data.LogDatetimeLocaltimeOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime-only", state.getPath()))
-	}
-	if !state.LogDatetimeLocaltime.IsNull() && data.LogDatetimeLocaltime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime", state.getPath()))
-	}
-	if !state.LogDatetimeMsec.IsNull() && data.LogDatetimeMsec.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/msec", state.getPath()))
-	}
-	if !state.LogDatetimeShowTimezone.IsNull() && data.LogDatetimeShowTimezone.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/show-timezone", state.getPath()))
-	}
-	if !state.LogDatetimeYear.IsNull() && data.LogDatetimeYear.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/year", state.getPath()))
+	if !state.LogDisable.IsNull() && data.LogDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/disable", state.getPath()))
 	}
 	if !state.LogUptime.IsNull() && data.LogUptime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/uptime", state.getPath()))
 	}
-	if !state.LogDisable.IsNull() && data.LogDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/disable", state.getPath()))
+	if !state.LogDatetimeYear.IsNull() && data.LogDatetimeYear.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/year", state.getPath()))
+	}
+	if !state.LogDatetimeShowTimezone.IsNull() && data.LogDatetimeShowTimezone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/show-timezone", state.getPath()))
+	}
+	if !state.LogDatetimeMsec.IsNull() && data.LogDatetimeMsec.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/msec", state.getPath()))
+	}
+	if !state.LogDatetimeLocaltime.IsNull() && data.LogDatetimeLocaltime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime", state.getPath()))
+	}
+	if !state.LogDatetimeLocaltimeOnly.IsNull() && data.LogDatetimeLocaltimeOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/datetime/localtime-only", state.getPath()))
+	}
+	if !state.DebugDisable.IsNull() && data.DebugDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/disable", state.getPath()))
+	}
+	if !state.DebugUptime.IsNull() && data.DebugUptime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/uptime", state.getPath()))
+	}
+	if !state.DebugDatetimeYear.IsNull() && data.DebugDatetimeYear.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/year", state.getPath()))
+	}
+	if !state.DebugDatetimeShowTimezone.IsNull() && data.DebugDatetimeShowTimezone.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/show-timezone", state.getPath()))
+	}
+	if !state.DebugDatetimeMsec.IsNull() && data.DebugDatetimeMsec.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/msec", state.getPath()))
+	}
+	if !state.DebugDatetimeLocaltime.IsNull() && data.DebugDatetimeLocaltime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime", state.getPath()))
+	}
+	if !state.DebugDatetimeLocaltimeOnly.IsNull() && data.DebugDatetimeLocaltimeOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/debug/datetime/localtime-only", state.getPath()))
 	}
 	return deletedItems
 }
@@ -505,47 +505,47 @@ func (data *ServiceTimestamps) getDeletedItems(ctx context.Context, state Servic
 
 func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/localtime-only", data.getPath()))
-	}
-	if !data.DebugDatetimeLocaltime.IsNull() && !data.DebugDatetimeLocaltime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/localtime", data.getPath()))
-	}
-	if !data.DebugDatetimeMsec.IsNull() && !data.DebugDatetimeMsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/msec", data.getPath()))
-	}
-	if !data.DebugDatetimeShowTimezone.IsNull() && !data.DebugDatetimeShowTimezone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/show-timezone", data.getPath()))
-	}
-	if !data.DebugDatetimeYear.IsNull() && !data.DebugDatetimeYear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/year", data.getPath()))
-	}
-	if !data.DebugUptime.IsNull() && !data.DebugUptime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/uptime", data.getPath()))
-	}
-	if !data.DebugDisable.IsNull() && !data.DebugDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/disable", data.getPath()))
-	}
-	if !data.LogDatetimeLocaltimeOnly.IsNull() && !data.LogDatetimeLocaltimeOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/localtime-only", data.getPath()))
-	}
-	if !data.LogDatetimeLocaltime.IsNull() && !data.LogDatetimeLocaltime.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/localtime", data.getPath()))
-	}
-	if !data.LogDatetimeMsec.IsNull() && !data.LogDatetimeMsec.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/msec", data.getPath()))
-	}
-	if !data.LogDatetimeShowTimezone.IsNull() && !data.LogDatetimeShowTimezone.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/show-timezone", data.getPath()))
-	}
-	if !data.LogDatetimeYear.IsNull() && !data.LogDatetimeYear.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/year", data.getPath()))
+	if !data.LogDisable.IsNull() && !data.LogDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/disable", data.getPath()))
 	}
 	if !data.LogUptime.IsNull() && !data.LogUptime.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/uptime", data.getPath()))
 	}
-	if !data.LogDisable.IsNull() && !data.LogDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/disable", data.getPath()))
+	if !data.LogDatetimeYear.IsNull() && !data.LogDatetimeYear.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/year", data.getPath()))
+	}
+	if !data.LogDatetimeShowTimezone.IsNull() && !data.LogDatetimeShowTimezone.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/show-timezone", data.getPath()))
+	}
+	if !data.LogDatetimeMsec.IsNull() && !data.LogDatetimeMsec.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/msec", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltime.IsNull() && !data.LogDatetimeLocaltime.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/localtime", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltimeOnly.IsNull() && !data.LogDatetimeLocaltimeOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/datetime/localtime-only", data.getPath()))
+	}
+	if !data.DebugDisable.IsNull() && !data.DebugDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/disable", data.getPath()))
+	}
+	if !data.DebugUptime.IsNull() && !data.DebugUptime.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/uptime", data.getPath()))
+	}
+	if !data.DebugDatetimeYear.IsNull() && !data.DebugDatetimeYear.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/year", data.getPath()))
+	}
+	if !data.DebugDatetimeShowTimezone.IsNull() && !data.DebugDatetimeShowTimezone.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/show-timezone", data.getPath()))
+	}
+	if !data.DebugDatetimeMsec.IsNull() && !data.DebugDatetimeMsec.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/msec", data.getPath()))
+	}
+	if !data.DebugDatetimeLocaltime.IsNull() && !data.DebugDatetimeLocaltime.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/localtime", data.getPath()))
+	}
+	if !data.DebugDatetimeLocaltimeOnly.IsNull() && !data.DebugDatetimeLocaltimeOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/debug/datetime/localtime-only", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -556,47 +556,47 @@ func (data *ServiceTimestamps) getEmptyLeafsDelete(ctx context.Context) []string
 
 func (data *ServiceTimestamps) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.DebugDatetimeLocaltimeOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime-only", data.getPath()))
-	}
-	if !data.DebugDatetimeLocaltime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime", data.getPath()))
-	}
-	if !data.DebugDatetimeMsec.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/msec", data.getPath()))
-	}
-	if !data.DebugDatetimeShowTimezone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/show-timezone", data.getPath()))
-	}
-	if !data.DebugDatetimeYear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/year", data.getPath()))
-	}
-	if !data.DebugUptime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/uptime", data.getPath()))
-	}
-	if !data.DebugDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/disable", data.getPath()))
-	}
-	if !data.LogDatetimeLocaltimeOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime-only", data.getPath()))
-	}
-	if !data.LogDatetimeLocaltime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime", data.getPath()))
-	}
-	if !data.LogDatetimeMsec.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/msec", data.getPath()))
-	}
-	if !data.LogDatetimeShowTimezone.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/show-timezone", data.getPath()))
-	}
-	if !data.LogDatetimeYear.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/year", data.getPath()))
+	if !data.LogDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/disable", data.getPath()))
 	}
 	if !data.LogUptime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/uptime", data.getPath()))
 	}
-	if !data.LogDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/disable", data.getPath()))
+	if !data.LogDatetimeYear.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/year", data.getPath()))
+	}
+	if !data.LogDatetimeShowTimezone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/show-timezone", data.getPath()))
+	}
+	if !data.LogDatetimeMsec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/msec", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime", data.getPath()))
+	}
+	if !data.LogDatetimeLocaltimeOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/datetime/localtime-only", data.getPath()))
+	}
+	if !data.DebugDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/disable", data.getPath()))
+	}
+	if !data.DebugUptime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/uptime", data.getPath()))
+	}
+	if !data.DebugDatetimeYear.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/year", data.getPath()))
+	}
+	if !data.DebugDatetimeShowTimezone.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/show-timezone", data.getPath()))
+	}
+	if !data.DebugDatetimeMsec.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/msec", data.getPath()))
+	}
+	if !data.DebugDatetimeLocaltime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime", data.getPath()))
+	}
+	if !data.DebugDatetimeLocaltimeOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/debug/datetime/localtime-only", data.getPath()))
 	}
 	return deletePaths
 }

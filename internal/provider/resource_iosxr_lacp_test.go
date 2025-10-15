@@ -81,6 +81,7 @@ func iosxrLACPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 
 func testAccIosxrLACPConfig_minimum() string {
 	config := `resource "iosxr_lacp" "test" {` + "\n"
+	config += `	mac = "00:11:00:11:00:11"` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -90,6 +90,7 @@ func iosxrIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 
 func testAccIosxrIPv6Config_minimum() string {
 	config := `resource "iosxr_ipv6" "test" {` + "\n"
+	config += `	hop_limit = 123` + "\n"
 	config += `}` + "\n"
 	return config
 }

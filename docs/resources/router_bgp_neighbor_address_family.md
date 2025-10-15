@@ -17,20 +17,23 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
   as_number                                          = "65001"
   address                                            = "10.1.1.2"
   af_name                                            = "vpnv4-unicast"
-  import_stitching_rt_re_originate_stitching_rt      = true
   route_reflector_client                             = true
   route_reflector_client_inheritance_disable         = true
+  advertise_vpnv4_unicast                            = true
+  advertise_vpnv4_unicast_re_originated              = true
   advertise_vpnv4_unicast_re_originated_stitching_rt = true
   next_hop_self                                      = true
   next_hop_self_inheritance_disable                  = true
   encapsulation_type                                 = "srv6"
   route_policy_in                                    = "ROUTE_POLICY_1"
   route_policy_out                                   = "ROUTE_POLICY_1"
+  soft_reconfiguration_inbound                       = true
   soft_reconfiguration_inbound_always                = true
   maximum_prefix_limit                               = 1248576
   maximum_prefix_threshold                           = 80
   maximum_prefix_warning_only                        = true
   default_originate                                  = true
+  default_originate_route_policy                     = "ROUTE_POLICY_1"
 }
 ```
 
@@ -50,6 +53,8 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 
 ### Optional
 
+- `advertise_vpnv4_unicast` (Boolean) Enable advertise vpnv4 unicast
+- `advertise_vpnv4_unicast_re_originated` (Boolean) Advertise re-orignated and local routes only
 - `advertise_vpnv4_unicast_re_originated_stitching_rt` (Boolean) Advertise re-originated and local routes with stitching Route-Targets
 - `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
@@ -75,6 +80,7 @@ resource "iosxr_router_bgp_neighbor_address_family" "example" {
 - `route_reflector_client_inheritance_disable` (Boolean) Prevent route-reflector-client from being inherited from the parent
 - `send_community_ebgp` (Boolean) Send community attribute to this external neighbor
 - `send_community_ebgp_inheritance_disable` (Boolean) Prevent send-community-ebgp from being inherited from the parent
+- `soft_reconfiguration_inbound` (Boolean) Allow inbound soft reconfiguration for this neighbor
 - `soft_reconfiguration_inbound_always` (Boolean) Always use soft reconfig, even if route refresh is supported
 
 ### Read-Only

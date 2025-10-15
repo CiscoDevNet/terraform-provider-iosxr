@@ -183,6 +183,10 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 					int64validator.Between(2, 128),
 				},
 			},
+			"maximum_paths_ibgp_unequal_cost": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths to have different BGP nexthop IGP metrics").String,
+				Optional:            true,
+			},
 			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Deterministic Multipath selection primarily on IGP metric order").String,
 				Optional:            true,

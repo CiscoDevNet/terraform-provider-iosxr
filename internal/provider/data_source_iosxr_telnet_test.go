@@ -32,11 +32,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrTelnet(t *testing.T) {
-	if os.Getenv("XRV9K") == "" {
-		t.Skip("skipping test, set environment variable XRV9K")
+	if os.Getenv("NCS") == "" && os.Getenv("XRV9K") == "" && os.Getenv("C8000") == "" {
+		t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "ipv4_client_source_interface", "GigabitEthernet0/0/0/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "ipv6_client_source_interface", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.vrf_name", "ROI"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv4_server_max_servers", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_telnet.test", "vrfs.0.ipv4_server_access_list", "ACCESS1"))
@@ -68,6 +69,7 @@ func testAccDataSourceIosxrTelnetConfig() string {
 	config := `resource "iosxr_telnet" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	ipv4_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `	ipv6_client_source_interface = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	vrfs = [{` + "\n"
 	config += `		vrf_name = "ROI"` + "\n"
 	config += `		ipv4_server_max_servers = 32` + "\n"

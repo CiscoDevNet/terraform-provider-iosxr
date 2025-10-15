@@ -16,17 +16,17 @@ This resource can manage the Domain configuration.
 resource "iosxr_domain" "example" {
   domains = [
     {
-      domain_name = "DOMAIN1"
+      domain_name = "example.com"
       order       = 0
     }
   ]
   lookup_disable          = true
   lookup_source_interface = "Loopback214"
-  name                    = "DOMAIN"
+  name                    = "cisco.com"
   ipv4_hosts = [
     {
-      host_name  = "HOST_NAME"
-      ip_address = ["10.0.0.0"]
+      host_name  = "HOST_NAME_IPV4"
+      ip_address = ["10.0.0.10"]
     }
   ]
   name_servers = [
@@ -41,7 +41,7 @@ resource "iosxr_domain" "example" {
       ipv6_address = ["10::10"]
     }
   ]
-  multicast             = "DOMAIN1_ACC"
+  multicast             = "multicast.cisco.com"
   default_flows_disable = true
 }
 ```

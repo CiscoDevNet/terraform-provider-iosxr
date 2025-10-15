@@ -313,6 +313,10 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
 				Optional:            true,
 			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Distribute the link-state database to external services").String,
+				Optional:            true,
+			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set distribution process instance identifier").AddIntegerRangeDescription(32, 4294967295).String,
 				Optional:            true,

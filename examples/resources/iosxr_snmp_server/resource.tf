@@ -15,7 +15,7 @@ resource "iosxr_snmp_server" "example" {
   traps_bridgemib                           = true
   traps_entity_state_operstatus             = true
   traps_entity_redundancy_all               = true
-  trap_source_both                          = "Loopback10"
+  trap_source                               = "Loopback10"
   traps_l2vpn_all                           = true
   traps_l2vpn_vc_up                         = true
   traps_l2vpn_vc_down                       = true

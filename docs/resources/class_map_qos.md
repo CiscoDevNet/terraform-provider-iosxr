@@ -34,6 +34,7 @@ resource "iosxr_class_map_qos" "example" {
 - `description` (String) Set description for this class-map
 - `device` (String) A device name from the provider configuration.
 - `match_any` (Boolean) Match any match criteria (default)
+  - Default value: `true`
 - `match_dscp` (List of String) DSCP value
 - `match_mpls_experimental_topmost` (List of Number) MPLS experimental label
 - `match_qos_group` (List of String) QoS Group Id

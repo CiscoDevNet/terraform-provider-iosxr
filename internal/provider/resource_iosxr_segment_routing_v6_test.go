@@ -42,16 +42,14 @@ func TestAccIosxrSegmentRoutingV6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrSegmentRoutingV6Config_minimum(),
+			Config: testAccIosxrSegmentRoutingV6PrerequisitesConfig + testAccIosxrSegmentRoutingV6Config_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrSegmentRoutingV6Config_all(),
+		Config: testAccIosxrSegmentRoutingV6PrerequisitesConfig + testAccIosxrSegmentRoutingV6Config_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -81,6 +79,15 @@ func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.Import
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrSegmentRoutingV6PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+	attributes = {
+		"enable" = "<NULL>"
+	}
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -88,6 +95,8 @@ func iosxrSegmentRoutingV6ImportStateIdFunc(resourceName string) resource.Import
 
 func testAccIosxrSegmentRoutingV6Config_minimum() string {
 	config := `resource "iosxr_segment_routing_v6" "test" {` + "\n"
+	config += `	enable = true` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -107,10 +116,7 @@ func testAccIosxrSegmentRoutingV6Config_all() string {
 	config += `		prefix = "fccc:0:214::"` + "\n"
 	config += `		prefix_length = 48` + "\n"
 	config += `		}]` + "\n"
-	config += `	formats = [{` + "\n"
-	config += `		name = "usid-f3216"` + "\n"
-	config += `		format_enable = true` + "\n"
-	config += `		}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

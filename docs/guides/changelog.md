@@ -9,6 +9,10 @@ description: |-
 
 ## 0.6.0 (IOS-XR Version 24.4.2 Compatibility)
 
+- BREAKING CHANGE: Rename 'timers_msec2' to 'timers_msec_holdtime', 'timers_hold_time' to 'timers_seconds', 'timers_hold_time2' to 'timers_seconds_holdtime' in 'iosxr_router_hsrp_interface_ipv4_group_v1' resource and data source
+- BREAKING CHANGE: Rename 'timers_msec2' to 'timers_msec_holdtime', 'timers_hold_time' to 'timers_seconds', 'timers_hold_time2' to 'timers_seconds_holdtime' in 'iosxr_router_hsrp_interface_ipv4_group_v2' resource and data source
+- BREAKING CHANGE: Rename 'timers_msec2' to 'timers_msec_holdtime', 'timers_hold_time' to 'timers_seconds', 'timers_hold_time2' to 'timers_seconds_holdtime' in 'iosxr_router_hsrp_interface_ipv6_group_v2' resource and data source
+- BREAKING CHANGE: Rename 'trap_source_both' to 'trap_source' in 'iosxr_snmp_server' resource and data source
 - BREAKING CHANGE: Rename 'address_family_ipv4_unicast' to 'ipv4_unicast' in 'iosxr_vrf' resource and data source
 - BREAKING CHANGE: Rename 'address_family_ipv4_unicast_import_route_policy' to 'ipv4_unicast_import_route_policy' in 'iosxr_vrf' resource and data source
 - BREAKING CHANGE: Rename 'address_family_ipv4_unicast_export_route_policy' to 'ipv4_unicast_export_route_policy' in 'iosxr_vrf' resource and data source

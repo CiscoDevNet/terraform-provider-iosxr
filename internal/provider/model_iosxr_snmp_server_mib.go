@@ -143,11 +143,11 @@ func (data *SNMPServerMIBData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServerMIB) []string {
 	deletedItems := make([]string, 0)
-	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
-	}
 	if !state.IfindexPersist.IsNull() && data.IfindexPersist.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", state.getPath()))
+	}
+	if !state.IfmibIfaliasLong.IsNull() && data.IfmibIfaliasLong.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", state.getPath()))
 	}
 	return deletedItems
 }
@@ -158,11 +158,11 @@ func (data *SNMPServerMIB) getDeletedItems(ctx context.Context, state SNMPServer
 
 func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
-	}
 	if !data.IfindexPersist.IsNull() && !data.IfindexPersist.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
+	}
+	if !data.IfmibIfaliasLong.IsNull() && !data.IfmibIfaliasLong.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -173,11 +173,11 @@ func (data *SNMPServerMIB) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *SNMPServerMIB) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.IfmibIfaliasLong.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
-	}
 	if !data.IfindexPersist.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist", data.getPath()))
+	}
+	if !data.IfmibIfaliasLong.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long", data.getPath()))
 	}
 	return deletePaths
 }

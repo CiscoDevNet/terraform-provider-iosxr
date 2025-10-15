@@ -44,9 +44,12 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "advertise_best_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_multipath", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_selective", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ebgp_route_policy", "MULTIPATH_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_multipath", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_unequal_cost", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_unequal_cost_deterministic", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_selective", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_ibgp_route_policy", "MULTIPATH_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "maximum_paths_unique_nexthop_check_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "nexthop_trigger_delay_critical", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "nexthop_trigger_delay_non_critical", "20"))
@@ -66,7 +69,6 @@ func TestAccIosxrRouterBGPAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.multipath", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_ospf.0.route_policy", "REDISTRIBUTE_POLICY"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.instance_name", "EIGRP1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.match_internal", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.match_internal_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_address_family.test", "redistribute_eigrp.0.multipath", "true"))
@@ -205,9 +207,12 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `	advertise_best_external = true` + "\n"
 	config += `	maximum_paths_ebgp_multipath = 10` + "\n"
 	config += `	maximum_paths_ebgp_selective = true` + "\n"
+	config += `	maximum_paths_ebgp_route_policy = "MULTIPATH_POLICY"` + "\n"
 	config += `	maximum_paths_ibgp_multipath = 10` + "\n"
+	config += `	maximum_paths_ibgp_unequal_cost = true` + "\n"
 	config += `	maximum_paths_ibgp_unequal_cost_deterministic = true` + "\n"
 	config += `	maximum_paths_ibgp_selective = true` + "\n"
+	config += `	maximum_paths_ibgp_route_policy = "MULTIPATH_POLICY"` + "\n"
 	config += `	maximum_paths_unique_nexthop_check_disable = true` + "\n"
 	config += `	nexthop_trigger_delay_critical = 10` + "\n"
 	config += `	nexthop_trigger_delay_non_critical = 20` + "\n"
@@ -234,7 +239,6 @@ func testAccIosxrRouterBGPAddressFamilyConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	redistribute_eigrp = [{` + "\n"
 	config += `		instance_name = "EIGRP1"` + "\n"
-	config += `		match_internal = true` + "\n"
 	config += `		match_internal_external = true` + "\n"
 	config += `		metric = 100` + "\n"
 	config += `		multipath = true` + "\n"

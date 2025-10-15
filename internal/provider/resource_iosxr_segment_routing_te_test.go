@@ -45,27 +45,31 @@ func TestAccIosxrSegmentRoutingTE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pcc_initiated_orphan", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers.0.pce_address", "66.66.66.6"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "pce_peers.0.precedence", "122"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_anycast_sid_inclusion", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_metric_type", "te"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.color", "266"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_name", "LOC11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_behavior", "ub6-insert-reduced"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.source_address", "fccc:0:213::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.source_address_type", "end-point-type-ipv6"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_value", "4444"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_type", "igp"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_protection_type", "protected-only"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_sid_algorithm", "128"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_name", "POLICY1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_name", "Locator11"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_behavior", "ub6-insert-reduced"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.source_address", "fccc:0:103::1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.source_address_type", "end-point-type-ipv6"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_color", "65534"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_type", "end-point-type-ipv6"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_address", "fccc:0:215::1"))
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_anycast_sid_inclusion", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.dynamic_metric_type", "te"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.color", "266"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_name", "LOC11"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_behavior", "ub6-insert-reduced"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.source_address", "fccc:0:213::1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.source_address_type", "end-point-type-ipv6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_value", "4444"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.effective_metric_type", "igp"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_protection_type", "protected-only"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "on_demand_colors.0.constraint_segments_sid_algorithm", "128"))
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_name", "POLICY1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_name", "Locator11"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_binding_sid_type", "srv6-dynamic"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.srv6_locator_behavior", "ub6-insert-reduced"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.source_address", "fccc:0:103::1"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.source_address_type", "end-point-type-ipv6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_color", "65534"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_type", "end-point-type-ipv6"))
+		checks = append(checks, resource.TestCheckResourceAttr("iosxr_segment_routing_te.test", "policies.0.policy_color_endpoint_address", "fccc:0:215::1"))
+	}
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -132,31 +136,35 @@ func testAccIosxrSegmentRoutingTEConfig_all() string {
 	config += `		pce_address = "66.66.66.6"` + "\n"
 	config += `		precedence = 122` + "\n"
 	config += `		}]` + "\n"
-	config += `	on_demand_colors = [{` + "\n"
-	config += `		dynamic_anycast_sid_inclusion = true` + "\n"
-	config += `		dynamic_metric_type = "te"` + "\n"
-	config += `		color = 266` + "\n"
-	config += `		srv6_locator_name = "LOC11"` + "\n"
-	config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-	config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-	config += `		source_address = "fccc:0:213::1"` + "\n"
-	config += `		source_address_type = "end-point-type-ipv6"` + "\n"
-	config += `		effective_metric_value = 4444` + "\n"
-	config += `		effective_metric_type = "igp"` + "\n"
-	config += `		constraint_segments_protection_type = "protected-only"` + "\n"
-	config += `		constraint_segments_sid_algorithm = 128` + "\n"
-	config += `		}]` + "\n"
-	config += `	policies = [{` + "\n"
-	config += `		policy_name = "POLICY1"` + "\n"
-	config += `		srv6_locator_name = "Locator11"` + "\n"
-	config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
-	config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
-	config += `		source_address = "fccc:0:103::1"` + "\n"
-	config += `		source_address_type = "end-point-type-ipv6"` + "\n"
-	config += `		policy_color_endpoint_color = 65534` + "\n"
-	config += `		policy_color_endpoint_type = "end-point-type-ipv6"` + "\n"
-	config += `		policy_color_endpoint_address = "fccc:0:215::1"` + "\n"
-	config += `		}]` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	on_demand_colors = [{` + "\n"
+		config += `		dynamic_anycast_sid_inclusion = true` + "\n"
+		config += `		dynamic_metric_type = "te"` + "\n"
+		config += `		color = 266` + "\n"
+		config += `		srv6_locator_name = "LOC11"` + "\n"
+		config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
+		config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
+		config += `		source_address = "fccc:0:213::1"` + "\n"
+		config += `		source_address_type = "end-point-type-ipv6"` + "\n"
+		config += `		effective_metric_value = 4444` + "\n"
+		config += `		effective_metric_type = "igp"` + "\n"
+		config += `		constraint_segments_protection_type = "protected-only"` + "\n"
+		config += `		constraint_segments_sid_algorithm = 128` + "\n"
+		config += `		}]` + "\n"
+	}
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	policies = [{` + "\n"
+		config += `		policy_name = "POLICY1"` + "\n"
+		config += `		srv6_locator_name = "Locator11"` + "\n"
+		config += `		srv6_locator_binding_sid_type = "srv6-dynamic"` + "\n"
+		config += `		srv6_locator_behavior = "ub6-insert-reduced"` + "\n"
+		config += `		source_address = "fccc:0:103::1"` + "\n"
+		config += `		source_address_type = "end-point-type-ipv6"` + "\n"
+		config += `		policy_color_endpoint_color = 65534` + "\n"
+		config += `		policy_color_endpoint_type = "end-point-type-ipv6"` + "\n"
+		config += `		policy_color_endpoint_address = "fccc:0:215::1"` + "\n"
+		config += `		}]` + "\n"
+	}
 	config += `}` + "\n"
 	return config
 }

@@ -28,18 +28,25 @@ resource "iosxr_router_isis" "example" {
       advertise_interlevel         = true
     }
   ]
-  nsr                               = true
-  nsf_lifetime                      = 10
-  nsf_interface_timer               = 5
-  nsf_interface_expires             = 2
-  log_adjacency_changes             = true
-  lsp_gen_interval_maximum_wait     = 5000
-  lsp_gen_interval_initial_wait     = 50
-  lsp_gen_interval_secondary_wait   = 200
-  lsp_refresh_interval              = 65000
-  max_lsp_lifetime                  = 65535
-  lsp_password_text_encrypted       = "060506324F41584B564B0F49584B"
-  distribute_link_state_instance_id = 32
+  nsr                                 = true
+  nsf_ietf                            = true
+  nsf_lifetime                        = 10
+  nsf_interface_timer                 = 5
+  nsf_interface_expires               = 2
+  log_adjacency_changes               = true
+  lsp_gen_interval_maximum_wait       = 5000
+  lsp_gen_interval_initial_wait       = 50
+  lsp_gen_interval_secondary_wait     = 200
+  lsp_refresh_interval                = 65000
+  max_lsp_lifetime                    = 65535
+  lsp_password_hmac_md5_encrypted     = "060506324F41584B564B0F49584B"
+  lsp_password_hmac_md5_send_only     = true
+  lsp_password_hmac_md5_snp_send_only = true
+  lsp_password_hmac_md5_enable_poi    = true
+  distribute_link_state               = true
+  distribute_link_state_instance_id   = 32
+  distribute_link_state_throttle      = 1
+  distribute_link_state_level         = 2
   affinity_maps = [
     {
       name         = "22"
@@ -89,6 +96,7 @@ resource "iosxr_router_isis" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `distribute_link_state` (Boolean) Distribute the link-state database to external services
 - `distribute_link_state_instance_id` (Number) Set distribution process instance identifier
   - Range: `32`-`4294967295`
 - `distribute_link_state_level` (Number) Set distribution for one level only

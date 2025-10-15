@@ -34,53 +34,22 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFlowMonitorMap(t *testing.T) {
-	if os.Getenv("PHYSICAL") == "" {
-		t.Skip("skipping test, set environment variable PHYSICAL")
+	if os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable NCS")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "name", "monitor_map1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "exporters.0.name", "exporter1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "exporters.0.name", "exporter_map1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_outphysint", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_filtered", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_bgpattr", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "option_outbundlemember", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_protocol_port", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_source_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination_prefix", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_as_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_protocol_port_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_prefix_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_source_prefix_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_destination_prefix_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_prefix_port", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_bgp_nexthop_tos", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_peer_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv4_gtp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_destination", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_peer_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_ipv6_gtp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv4_fields", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv6_fields", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_ipv4_ipv6_fields", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_mpls_labels", "2"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_map_t", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_sflow", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_datalink_record", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_default_rtp", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "record_default_mdi", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_entries", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_timeout_active", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_timeout_inactive", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_timeout_update", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_timeout_rate_limit", "5000"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_permanent", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "cache_immediate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "hw_cache_timeout_inactive", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_monitor_map.test", "sflow_options", "true"))
@@ -95,11 +64,11 @@ func TestAccIosxrFlowMonitorMap(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrFlowMonitorMapConfig_minimum(),
+			Config: testAccIosxrFlowMonitorMapPrerequisitesConfig + testAccIosxrFlowMonitorMapConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrFlowMonitorMapConfig_all(),
+		Config: testAccIosxrFlowMonitorMapPrerequisitesConfig + testAccIosxrFlowMonitorMapConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -131,6 +100,15 @@ func iosxrFlowMonitorMapImportStateIdFunc(resourceName string) resource.ImportSt
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrFlowMonitorMapPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=exporter_map1]"
+	attributes = {
+		"exporter-map-name" = "exporter_map1"
+	}
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -139,6 +117,7 @@ func iosxrFlowMonitorMapImportStateIdFunc(resourceName string) resource.ImportSt
 func testAccIosxrFlowMonitorMapConfig_minimum() string {
 	config := `resource "iosxr_flow_monitor_map" "test" {` + "\n"
 	config += `	name = "monitor_map1"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -151,49 +130,18 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config := `resource "iosxr_flow_monitor_map" "test" {` + "\n"
 	config += `	name = "monitor_map1"` + "\n"
 	config += `	exporters = [{` + "\n"
-	config += `		name = "exporter1"` + "\n"
+	config += `		name = "exporter_map1"` + "\n"
 	config += `		}]` + "\n"
 	config += `	option_outphysint = true` + "\n"
 	config += `	option_filtered = true` + "\n"
 	config += `	option_bgpattr = true` + "\n"
 	config += `	option_outbundlemember = true` + "\n"
-	config += `	record_ipv4 = true` + "\n"
-	config += `	record_ipv4_destination = true` + "\n"
-	config += `	record_ipv4_destination_tos = true` + "\n"
-	config += `	record_ipv4_as = true` + "\n"
-	config += `	record_ipv4_protocol_port = true` + "\n"
-	config += `	record_ipv4_prefix = true` + "\n"
-	config += `	record_ipv4_source_prefix = true` + "\n"
-	config += `	record_ipv4_destination_prefix = true` + "\n"
-	config += `	record_ipv4_as_tos = true` + "\n"
-	config += `	record_ipv4_protocol_port_tos = true` + "\n"
-	config += `	record_ipv4_prefix_tos = true` + "\n"
-	config += `	record_ipv4_source_prefix_tos = true` + "\n"
-	config += `	record_ipv4_destination_prefix_tos = true` + "\n"
-	config += `	record_ipv4_prefix_port = true` + "\n"
-	config += `	record_ipv4_bgp_nexthop_tos = true` + "\n"
-	config += `	record_ipv4_peer_as = true` + "\n"
-	config += `	record_ipv4_gtp = true` + "\n"
-	config += `	record_ipv6 = true` + "\n"
-	config += `	record_ipv6_destination = true` + "\n"
-	config += `	record_ipv6_peer_as = true` + "\n"
-	config += `	record_ipv6_gtp = true` + "\n"
-	config += `	record_mpls = true` + "\n"
-	config += `	record_mpls_ipv4_fields = true` + "\n"
-	config += `	record_mpls_ipv6_fields = true` + "\n"
-	config += `	record_mpls_ipv4_ipv6_fields = true` + "\n"
 	config += `	record_mpls_labels = 2` + "\n"
-	config += `	record_map_t = true` + "\n"
-	config += `	record_sflow = true` + "\n"
-	config += `	record_datalink_record = true` + "\n"
-	config += `	record_default_rtp = true` + "\n"
-	config += `	record_default_mdi = true` + "\n"
 	config += `	cache_entries = 5000` + "\n"
 	config += `	cache_timeout_active = 1` + "\n"
 	config += `	cache_timeout_inactive = 0` + "\n"
 	config += `	cache_timeout_update = 1` + "\n"
 	config += `	cache_timeout_rate_limit = 5000` + "\n"
-	config += `	cache_permanent = true` + "\n"
 	config += `	cache_immediate = true` + "\n"
 	config += `	hw_cache_timeout_inactive = 50` + "\n"
 	config += `	sflow_options = true` + "\n"
@@ -205,6 +153,7 @@ func testAccIosxrFlowMonitorMapConfig_all() string {
 	config += `	sflow_options_sample_header_size = 128` + "\n"
 	config += `	sflow_options_input_ifindex = "physical"` + "\n"
 	config += `	sflow_options_output_ifindex = "physical"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

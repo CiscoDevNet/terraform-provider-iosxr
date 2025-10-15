@@ -1,6 +1,11 @@
 resource "iosxr_router_vrrp_interface_ipv6" "example" {
-  interface_name               = "GigabitEthernet0/0/0/2"
-  vrrp_id                      = 124
+  interface_name = "GigabitEthernet0/0/0/2"
+  vrrp_id        = 124
+  global_addresses = [
+    {
+      address = "2001:db8::1"
+    }
+  ]
   address_linklocal_autoconfig = true
   priority                     = 250
   name                         = "TEST2"
@@ -11,7 +16,7 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
   accept_mode_disable          = true
   track_interfaces = [
     {
-      interface_name     = "GigabitEthernet0/0/0/5"
+      interface_name     = "GigabitEthernet0/0/0/4"
       priority_decrement = 12
     }
   ]

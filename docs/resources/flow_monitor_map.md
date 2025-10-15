@@ -17,50 +17,19 @@ resource "iosxr_flow_monitor_map" "example" {
   name = "monitor_map1"
   exporters = [
     {
-      name = "exporter1"
+      name = "exporter_map1"
     }
   ]
   option_outphysint                          = true
   option_filtered                            = true
   option_bgpattr                             = true
   option_outbundlemember                     = true
-  record_ipv4                                = true
-  record_ipv4_destination                    = true
-  record_ipv4_destination_tos                = true
-  record_ipv4_as                             = true
-  record_ipv4_protocol_port                  = true
-  record_ipv4_prefix                         = true
-  record_ipv4_source_prefix                  = true
-  record_ipv4_destination_prefix             = true
-  record_ipv4_as_tos                         = true
-  record_ipv4_protocol_port_tos              = true
-  record_ipv4_prefix_tos                     = true
-  record_ipv4_source_prefix_tos              = true
-  record_ipv4_destination_prefix_tos         = true
-  record_ipv4_prefix_port                    = true
-  record_ipv4_bgp_nexthop_tos                = true
-  record_ipv4_peer_as                        = true
-  record_ipv4_gtp                            = true
-  record_ipv6                                = true
-  record_ipv6_destination                    = true
-  record_ipv6_peer_as                        = true
-  record_ipv6_gtp                            = true
-  record_mpls                                = true
-  record_mpls_ipv4_fields                    = true
-  record_mpls_ipv6_fields                    = true
-  record_mpls_ipv4_ipv6_fields               = true
   record_mpls_labels                         = 2
-  record_map_t                               = true
-  record_sflow                               = true
-  record_datalink_record                     = true
-  record_default_rtp                         = true
-  record_default_mdi                         = true
   cache_entries                              = 5000
   cache_timeout_active                       = 1
   cache_timeout_inactive                     = 0
   cache_timeout_update                       = 1
   cache_timeout_rate_limit                   = 5000
-  cache_permanent                            = true
   cache_immediate                            = true
   hw_cache_timeout_inactive                  = 50
   sflow_options                              = true
@@ -115,7 +84,9 @@ resource "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_destination_prefix` (Boolean) Destination prefix based aggregation
 - `record_ipv4_destination_prefix_tos` (Boolean) Destination, prefix and tos based aggregation
 - `record_ipv4_destination_tos` (Boolean) IPv4 Destination Based NetFlow Accounting TOS
+- `record_ipv4_extended` (Boolean) IPv4 record with extended details
 - `record_ipv4_gtp` (Boolean) IPV4 gtp record format
+- `record_ipv4_l2_l3` (Boolean) IPv4 record with Layer2 details
 - `record_ipv4_peer_as` (Boolean) Record peer AS
 - `record_ipv4_prefix` (Boolean) Prefix based aggregation
 - `record_ipv4_prefix_port` (Boolean) Prefix port based aggregation
@@ -126,8 +97,11 @@ resource "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_source_prefix_tos` (Boolean) Source, Prefix and TOS based aggregation
 - `record_ipv6` (Boolean) IPv6 raw record format
 - `record_ipv6_destination` (Boolean) IPv6 Destination Based NetFlow Accounting
+- `record_ipv6_extended` (Boolean) IPv6 record with extended details
 - `record_ipv6_gtp` (Boolean) IPV6 gtp record format
+- `record_ipv6_l2_l3` (Boolean) IPv6 record with Layer2 details
 - `record_ipv6_peer_as` (Boolean) Record peer AS
+- `record_ipv6_srv6` (Boolean) SRv6 record format
 - `record_map_t` (Boolean) map-t translation based Netflow
 - `record_mpls` (Boolean) MPLS record format
 - `record_mpls_ipv4_fields` (Boolean) MPLS with IPv4 fields format

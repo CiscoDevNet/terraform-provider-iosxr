@@ -80,6 +80,7 @@ func iosxrHostnameImportStateIdFunc(resourceName string) resource.ImportStateIdF
 
 func testAccIosxrHostnameConfig_minimum() string {
 	config := `resource "iosxr_hostname" "test" {` + "\n"
+	config += `	system_network_name = "ROUTER-1"` + "\n"
 	config += `}` + "\n"
 	return config
 }

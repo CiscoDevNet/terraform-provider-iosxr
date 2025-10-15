@@ -103,15 +103,15 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Specify hellotime in milliseconds",
 				Computed:            true,
 			},
-			"timers_msec2": schema.Int64Attribute{
+			"timers_msec_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Specify hold time in milliseconds",
 				Computed:            true,
 			},
-			"timers_hold_time": schema.Int64Attribute{
+			"timers_seconds": schema.Int64Attribute{
 				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},
-			"timers_hold_time2": schema.Int64Attribute{
+			"timers_seconds_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},

@@ -46,6 +46,7 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_external", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "set_overload_bit_levels.0.advertise_interlevel", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsr", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_ietf", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_lifetime", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_interface_timer", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "nsf_interface_expires", "2"))
@@ -55,8 +56,14 @@ func TestAccIosxrRouterISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_gen_interval_secondary_wait", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_refresh_interval", "65000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "max_lsp_lifetime", "65535"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_hmac_md5_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_hmac_md5_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_hmac_md5_snp_send_only", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "lsp_password_hmac_md5_enable_poi", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "distribute_link_state", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "distribute_link_state_instance_id", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "distribute_link_state_throttle", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "distribute_link_state_level", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.name", "22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "affinity_maps.0.bit_position", "4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis.test", "flex_algos.0.number", "128"))
@@ -140,6 +147,7 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `		advertise_interlevel = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	nsr = true` + "\n"
+	config += `	nsf_ietf = true` + "\n"
 	config += `	nsf_lifetime = 10` + "\n"
 	config += `	nsf_interface_timer = 5` + "\n"
 	config += `	nsf_interface_expires = 2` + "\n"
@@ -149,8 +157,14 @@ func testAccIosxrRouterISISConfig_all() string {
 	config += `	lsp_gen_interval_secondary_wait = 200` + "\n"
 	config += `	lsp_refresh_interval = 65000` + "\n"
 	config += `	max_lsp_lifetime = 65535` + "\n"
-	config += `	lsp_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `	lsp_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `	lsp_password_hmac_md5_send_only = true` + "\n"
+	config += `	lsp_password_hmac_md5_snp_send_only = true` + "\n"
+	config += `	lsp_password_hmac_md5_enable_poi = true` + "\n"
+	config += `	distribute_link_state = true` + "\n"
 	config += `	distribute_link_state_instance_id = 32` + "\n"
+	config += `	distribute_link_state_throttle = 1` + "\n"
+	config += `	distribute_link_state_level = 2` + "\n"
 	config += `	affinity_maps = [{` + "\n"
 	config += `		name = "22"` + "\n"
 	config += `		bit_position = 4` + "\n"

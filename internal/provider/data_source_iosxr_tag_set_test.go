@@ -32,7 +32,7 @@ import (
 
 func TestAccDataSourceIosxrTagSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tag_set.test", "rpl_tag_set", "tag-set TEST\n  4297\nend-set\n"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_tag_set.test", "rpl_tag_set", "tag-set TAG_SET_1\n  4297\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -55,13 +55,13 @@ func TestAccDataSourceIosxrTagSet(t *testing.T) {
 
 func testAccDataSourceIosxrTagSetConfig() string {
 	config := `resource "iosxr_tag_set" "test" {` + "\n"
-	config += `	set_name = "TEST"` + "\n"
-	config += `	rpl_tag_set = "tag-set TEST\n  4297\nend-set\n"` + "\n"
+	config += `	set_name = "TAG_SET_1"` + "\n"
+	config += `	rpl_tag_set = "tag-set TAG_SET_1\n  4297\nend-set\n"` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_tag_set" "test" {
-			set_name = "TEST"
+			set_name = "TAG_SET_1"
 			depends_on = [iosxr_tag_set.test]
 		}
 	`

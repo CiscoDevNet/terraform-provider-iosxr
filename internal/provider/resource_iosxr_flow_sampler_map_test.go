@@ -34,8 +34,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFlowSamplerMap(t *testing.T) {
-	if os.Getenv("PHYSICAL") == "" {
-		t.Skip("skipping test, set environment variable PHYSICAL")
+	if os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable NCS")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_sampler_map.test", "name", "sampler_map1"))

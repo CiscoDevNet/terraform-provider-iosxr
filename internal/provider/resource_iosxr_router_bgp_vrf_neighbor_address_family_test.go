@@ -38,6 +38,8 @@ func TestAccIosxrRouterBGPVRFNeighborAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "af_name", "ipv4-unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_in", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "route_policy_out", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "default_originate_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "next_hop_self_inheritance_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf_neighbor_address_family.test", "soft_reconfiguration_inbound_always", "true"))
@@ -90,14 +92,22 @@ func iosxrRouterBGPVRFNeighborAddressFamilyImportStateIdFunc(resourceName string
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIosxrRouterBGPVRFNeighborAddressFamilyPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]"
 	attributes = {
-		"two-byte-as-number" = "1"
-		"asn2-index" = "1"
+		"vrf-name" = "VRF2"
 	}
 }
 
 resource "iosxr_gnmi" "PreReq1" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as"
+	attributes = {
+		"two-byte-as-number" = "65001"
+		"asn2-index" = "2"
+	}
+	depends_on = [iosxr_gnmi.PreReq0, ]
+}
+
+resource "iosxr_gnmi" "PreReq2" {
 	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]"
 	attributes = {
 		"as-number" = "65001"
@@ -115,11 +125,11 @@ resource "iosxr_gnmi" "PreReq1" {
 	]
 }
 
-resource "iosxr_gnmi" "PreReq2" {
-	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]"
+resource "iosxr_gnmi" "PreReq3" {
+	path = "Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]"
 	delete = false
 	attributes = {
-		"vrf-name" = "VRF1"
+		"vrf-name" = "VRF2"
 	}
 	lists = [
 		{
@@ -142,10 +152,10 @@ resource "iosxr_gnmi" "PreReq2" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]
+	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
 }
 
-resource "iosxr_gnmi" "PreReq3" {
+resource "iosxr_gnmi" "PreReq4" {
 	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
 		"route-policy-name" = "ROUTE_POLICY_1"
@@ -162,10 +172,10 @@ resource "iosxr_gnmi" "PreReq3" {
 func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -177,11 +187,13 @@ func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_minimum() string {
 func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf_neighbor_address_family" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	address = "10.1.1.2"` + "\n"
 	config += `	af_name = "ipv4-unicast"` + "\n"
 	config += `	route_policy_in = "ROUTE_POLICY_1"` + "\n"
 	config += `	route_policy_out = "ROUTE_POLICY_1"` + "\n"
+	config += `	default_originate = true` + "\n"
+	config += `	default_originate_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	next_hop_self = true` + "\n"
 	config += `	next_hop_self_inheritance_disable = true` + "\n"
 	config += `	soft_reconfiguration_inbound_always = true` + "\n"
@@ -190,7 +202,7 @@ func testAccIosxrRouterBGPVRFNeighborAddressFamilyConfig_all() string {
 	config += `	remove_private_as_inbound_entire_aspath = true` + "\n"
 	config += `	remove_private_as = true` + "\n"
 	config += `	remove_private_as_entire_aspath = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, iosxr_gnmi.PreReq3, iosxr_gnmi.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

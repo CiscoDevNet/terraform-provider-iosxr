@@ -36,18 +36,18 @@ import (
 func TestAccIosxrDomainVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "vrf_name", "TEST-VRF"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.domain_name", "DOMAIN11"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.domain_name", "example.com"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "domains.0.order", "12345"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "lookup_source_interface", "Loopback214"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "DNAME"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST-AGC"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name", "cisco.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST_NAME_IPV4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.address", "10.0.0.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "name_servers.0.order", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST-ACC"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "TESTACC"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_domain_vrf.test", "multicast", "multicast.cisco.com"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -95,6 +95,7 @@ func iosxrDomainVRFImportStateIdFunc(resourceName string) resource.ImportStateId
 func testAccIosxrDomainVRFConfig_minimum() string {
 	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
 	config += `	vrf_name = "TEST-VRF"` + "\n"
+	config += `	lookup_disable = true` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -107,25 +108,25 @@ func testAccIosxrDomainVRFConfig_all() string {
 	config := `resource "iosxr_domain_vrf" "test" {` + "\n"
 	config += `	vrf_name = "TEST-VRF"` + "\n"
 	config += `	domains = [{` + "\n"
-	config += `		domain_name = "DOMAIN11"` + "\n"
+	config += `		domain_name = "example.com"` + "\n"
 	config += `		order = 12345` + "\n"
 	config += `		}]` + "\n"
 	config += `	lookup_disable = true` + "\n"
 	config += `	lookup_source_interface = "Loopback214"` + "\n"
-	config += `	name = "DNAME"` + "\n"
+	config += `	name = "cisco.com"` + "\n"
 	config += `	ipv4_hosts = [{` + "\n"
-	config += `		host_name = "HOST-AGC"` + "\n"
-	config += `		ip_address = ["10.0.0.0"]` + "\n"
+	config += `		host_name = "HOST_NAME_IPV4"` + "\n"
+	config += `		ip_address = ["10.0.0.10"]` + "\n"
 	config += `		}]` + "\n"
 	config += `	name_servers = [{` + "\n"
 	config += `		address = "10.0.0.1"` + "\n"
 	config += `		order = 0` + "\n"
 	config += `		}]` + "\n"
 	config += `	ipv6_hosts = [{` + "\n"
-	config += `		host_name = "HOST-ACC"` + "\n"
+	config += `		host_name = "HOST_NAME_IPV6"` + "\n"
 	config += `		ipv6_address = ["10::10"]` + "\n"
 	config += `		}]` + "\n"
-	config += `	multicast = "TESTACC"` + "\n"
+	config += `	multicast = "multicast.cisco.com"` + "\n"
 	config += `}` + "\n"
 	return config
 }

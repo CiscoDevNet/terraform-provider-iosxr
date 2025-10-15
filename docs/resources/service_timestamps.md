@@ -19,13 +19,13 @@ resource "iosxr_service_timestamps" "example" {
   debug_datetime_show_timezone = true
   debug_datetime_year          = true
   debug_uptime                 = true
-  debug_disable                = true
+  debug_disable                = false
   log_datetime_localtime       = true
   log_datetime_msec            = true
   log_datetime_show_timezone   = true
   log_datetime_year            = true
   log_uptime                   = true
-  log_disable                  = true
+  log_disable                  = false
 }
 ```
 

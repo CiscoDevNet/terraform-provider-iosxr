@@ -16,13 +16,15 @@ resource "iosxr_router_isis_interface" "example" {
       priority     = 64
     }
   ]
-  point_to_point                = false
-  state                         = "passive"
-  hello_password_text_encrypted = "060506324F41584B564B0F49584B"
+  point_to_point                    = false
+  state                             = "passive"
+  hello_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"
+  hello_password_hmac_md5_send_only = true
   hello_password_levels = [
     {
-      level_number   = 1
-      text_encrypted = "060506324F41584B564B0F49584B"
+      level_number                        = 1
+      level_hello_password_text_encrypted = "060506324F41584B564B0F49584B"
+      level_hello_password_text_send_only = true
     }
   ]
   bfd_fast_detect_ipv4 = true

@@ -1,8 +1,14 @@
 resource "iosxr_router_isis_address_family" "example" {
-  process_id                             = "P1"
-  af_name                                = "ipv4"
-  saf_name                               = "unicast"
-  metric_style_wide_transition           = true
+  process_id                   = "P1"
+  af_name                      = "ipv4"
+  saf_name                     = "unicast"
+  metric_style_wide_transition = true
+  metric_style_levels = [
+    {
+      level_number    = 1
+      wide_transition = true
+    }
+  ]
   router_id_ip_address                   = "192.168.1.1"
   default_information_originate          = true
   fast_reroute_delay_interval            = 300
@@ -32,6 +38,7 @@ resource "iosxr_router_isis_address_family" "example" {
   fast_reroute_per_prefix_tiebreaker_node_protecting_index      = 40
   fast_reroute_per_prefix_tiebreaker_primary_path_index         = 50
   fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index        = 70
+  fast_reroute_per_link_priority_limit                          = "critical"
   fast_reroute_per_link_priority_limit_levels = [
     {
       level_number   = 1
@@ -39,6 +46,7 @@ resource "iosxr_router_isis_address_family" "example" {
     }
   ]
   fast_reroute_per_link_use_candidate_only = true
+  microloop_avoidance                      = true
   microloop_avoidance_protected            = true
   microloop_avoidance_rib_update_delay     = 5000
   advertise_passive_only                   = true

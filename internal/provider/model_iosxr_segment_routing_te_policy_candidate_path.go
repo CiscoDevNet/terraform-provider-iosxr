@@ -269,11 +269,11 @@ func (data *SegmentRoutingTEPolicyCandidatePath) getDeletedItems(ctx context.Con
 				found = false
 			}
 			if found {
-				if !state.PathInfos[i].Pcep.IsNull() && data.PathInfos[j].Pcep.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v/pcep", state.getPath(), keyString))
-				}
 				if !state.PathInfos[i].MetricType.IsNull() && data.PathInfos[j].MetricType.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v/metric/metric-type", state.getPath(), keyString))
+				}
+				if !state.PathInfos[i].Pcep.IsNull() && data.PathInfos[j].Pcep.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/path-infos/path-info%v/pcep", state.getPath(), keyString))
 				}
 				break
 			}

@@ -1,4 +1,4 @@
 resource "iosxr_banner" "example" {
   banner_type = "login"
-  line        = " Hello user !"
+  line        = "^C Hello World! ^C"
 }

@@ -30,7 +30,7 @@ resource "iosxr_snmp_server" "example" {
   traps_bridgemib                           = true
   traps_entity_state_operstatus             = true
   traps_entity_redundancy_all               = true
-  trap_source_both                          = "Loopback10"
+  trap_source                               = "Loopback10"
   traps_l2vpn_all                           = true
   traps_l2vpn_vc_up                         = true
   traps_l2vpn_vc_down                       = true
@@ -104,7 +104,7 @@ resource "iosxr_snmp_server" "example" {
 - `device` (String) A device name from the provider configuration.
 - `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
 - `location` (String) Text for mib Object sysLocation
-- `trap_source_both` (String) Assign an interface for the source address of all traps
+- `trap_source` (String) Assign an interface for the source address of all traps
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps

@@ -24,9 +24,12 @@ resource "iosxr_router_bgp_address_family" "example" {
   advertise_best_external                       = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_selective                  = true
+  maximum_paths_ebgp_route_policy               = "MULTIPATH_POLICY"
   maximum_paths_ibgp_multipath                  = 10
+  maximum_paths_ibgp_unequal_cost               = true
   maximum_paths_ibgp_unequal_cost_deterministic = true
   maximum_paths_ibgp_selective                  = true
+  maximum_paths_ibgp_route_policy               = "MULTIPATH_POLICY"
   maximum_paths_unique_nexthop_check_disable    = true
   nexthop_trigger_delay_critical                = 10
   nexthop_trigger_delay_non_critical            = 20
@@ -60,7 +63,6 @@ resource "iosxr_router_bgp_address_family" "example" {
   redistribute_eigrp = [
     {
       instance_name           = "EIGRP1"
-      match_internal          = true
       match_internal_external = true
       metric                  = 100
       multipath               = true
@@ -135,6 +137,7 @@ resource "iosxr_router_bgp_address_family" "example" {
   - Range: `2`-`1024`
 - `maximum_paths_ibgp_route_policy` (String) Route policy to specify ORF and inbound filter
 - `maximum_paths_ibgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_ibgp_unequal_cost` (Boolean) Allow multipaths to have different BGP nexthop IGP metrics
 - `maximum_paths_ibgp_unequal_cost_deterministic` (Boolean) Deterministic Multipath selection primarily on IGP metric order
 - `maximum_paths_unique_nexthop_check_disable` (Boolean) Disable multipath unique nexthop check
 - `networks` (Attributes List) Specify a network to announce via BGP (see [below for nested schema](#nestedatt--networks))

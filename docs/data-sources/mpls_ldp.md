@@ -27,6 +27,7 @@ data "iosxr_mpls_ldp" "example" {
 ### Read-Only
 
 - `address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--address_families))
+- `capabilities_sac` (Boolean) State Advertisement Control
 - `capabilities_sac_fec128_disable` (Boolean) Disable exchanging PW FEC128 label bindings
 - `capabilities_sac_fec129_disable` (Boolean) Disable exchanging PW FEC129 label bindings
 - `capabilities_sac_ipv4_disable` (Boolean) Disable exchanging IPv4 prefix label bindings
@@ -35,6 +36,7 @@ data "iosxr_mpls_ldp" "example" {
 - `igp_sync_delay_on_proc_restart` (Number) Global sync up delay to be used after process restart
 - `igp_sync_delay_on_session_up` (Number) Interface sync-up delay after session up
 - `interfaces` (Attributes List) Enable LDP on an interface and enter interface submode (see [below for nested schema](#nestedatt--interfaces))
+- `mldp` (Boolean) Configure mLDP parameters
 - `mldp_address_families` (Attributes List) Configure Address Family and its parameters (see [below for nested schema](#nestedatt--mldp_address_families))
 - `mldp_logging_notifications` (Boolean) MLDP logging notifications
 - `router_id` (String) Configure router Id

@@ -41,12 +41,14 @@ type MPLSLDP struct {
 	RouterId                     types.String                 `tfsdk:"router_id"`
 	AddressFamilies              []MPLSLDPAddressFamilies     `tfsdk:"address_families"`
 	Interfaces                   []MPLSLDPInterfaces          `tfsdk:"interfaces"`
+	CapabilitiesSac              types.Bool                   `tfsdk:"capabilities_sac"`
 	CapabilitiesSacIpv4Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv4_disable"`
 	CapabilitiesSacIpv6Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv6_disable"`
 	CapabilitiesSacFec128Disable types.Bool                   `tfsdk:"capabilities_sac_fec128_disable"`
 	CapabilitiesSacFec129Disable types.Bool                   `tfsdk:"capabilities_sac_fec129_disable"`
 	IgpSyncDelayOnSessionUp      types.Int64                  `tfsdk:"igp_sync_delay_on_session_up"`
 	IgpSyncDelayOnProcRestart    types.Int64                  `tfsdk:"igp_sync_delay_on_proc_restart"`
+	Mldp                         types.Bool                   `tfsdk:"mldp"`
 	MldpLoggingNotifications     types.Bool                   `tfsdk:"mldp_logging_notifications"`
 	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
 	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
@@ -58,12 +60,14 @@ type MPLSLDPData struct {
 	RouterId                     types.String                 `tfsdk:"router_id"`
 	AddressFamilies              []MPLSLDPAddressFamilies     `tfsdk:"address_families"`
 	Interfaces                   []MPLSLDPInterfaces          `tfsdk:"interfaces"`
+	CapabilitiesSac              types.Bool                   `tfsdk:"capabilities_sac"`
 	CapabilitiesSacIpv4Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv4_disable"`
 	CapabilitiesSacIpv6Disable   types.Bool                   `tfsdk:"capabilities_sac_ipv6_disable"`
 	CapabilitiesSacFec128Disable types.Bool                   `tfsdk:"capabilities_sac_fec128_disable"`
 	CapabilitiesSacFec129Disable types.Bool                   `tfsdk:"capabilities_sac_fec129_disable"`
 	IgpSyncDelayOnSessionUp      types.Int64                  `tfsdk:"igp_sync_delay_on_session_up"`
 	IgpSyncDelayOnProcRestart    types.Int64                  `tfsdk:"igp_sync_delay_on_proc_restart"`
+	Mldp                         types.Bool                   `tfsdk:"mldp"`
 	MldpLoggingNotifications     types.Bool                   `tfsdk:"mldp_logging_notifications"`
 	MldpAddressFamilies          []MPLSLDPMldpAddressFamilies `tfsdk:"mldp_address_families"`
 	SessionProtection            types.Bool                   `tfsdk:"session_protection"`
@@ -105,6 +109,11 @@ func (data MPLSLDP) toBody(ctx context.Context) string {
 	if !data.RouterId.IsNull() && !data.RouterId.IsUnknown() {
 		body, _ = sjson.Set(body, "router-id", data.RouterId.ValueString())
 	}
+	if !data.CapabilitiesSac.IsNull() && !data.CapabilitiesSac.IsUnknown() {
+		if data.CapabilitiesSac.ValueBool() {
+			body, _ = sjson.Set(body, "capabilities.sac", map[string]string{})
+		}
+	}
 	if !data.CapabilitiesSacIpv4Disable.IsNull() && !data.CapabilitiesSacIpv4Disable.IsUnknown() {
 		if data.CapabilitiesSacIpv4Disable.ValueBool() {
 			body, _ = sjson.Set(body, "capabilities.sac.ipv4-disable", map[string]string{})
@@ -130,6 +139,11 @@ func (data MPLSLDP) toBody(ctx context.Context) string {
 	}
 	if !data.IgpSyncDelayOnProcRestart.IsNull() && !data.IgpSyncDelayOnProcRestart.IsUnknown() {
 		body, _ = sjson.Set(body, "igp.sync.delay.on-proc-restart", strconv.FormatInt(data.IgpSyncDelayOnProcRestart.ValueInt64(), 10))
+	}
+	if !data.Mldp.IsNull() && !data.Mldp.IsUnknown() {
+		if data.Mldp.ValueBool() {
+			body, _ = sjson.Set(body, "mldp", map[string]string{})
+		}
 	}
 	if !data.MldpLoggingNotifications.IsNull() && !data.MldpLoggingNotifications.IsUnknown() {
 		if data.MldpLoggingNotifications.ValueBool() {
@@ -274,6 +288,15 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 			data.Interfaces[i].InterfaceName = types.StringNull()
 		}
 	}
+	if value := gjson.GetBytes(res, "capabilities.sac"); !data.CapabilitiesSac.IsNull() {
+		if value.Exists() {
+			data.CapabilitiesSac = types.BoolValue(true)
+		} else {
+			data.CapabilitiesSac = types.BoolValue(false)
+		}
+	} else {
+		data.CapabilitiesSac = types.BoolNull()
+	}
 	if value := gjson.GetBytes(res, "capabilities.sac.ipv4-disable"); !data.CapabilitiesSacIpv4Disable.IsNull() {
 		if value.Exists() {
 			data.CapabilitiesSacIpv4Disable = types.BoolValue(true)
@@ -319,6 +342,15 @@ func (data *MPLSLDP) updateFromBody(ctx context.Context, res []byte) {
 		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
 	} else {
 		data.IgpSyncDelayOnProcRestart = types.Int64Null()
+	}
+	if value := gjson.GetBytes(res, "mldp"); !data.Mldp.IsNull() {
+		if value.Exists() {
+			data.Mldp = types.BoolValue(true)
+		} else {
+			data.Mldp = types.BoolValue(false)
+		}
+	} else {
+		data.Mldp = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "mldp.logging.notifications"); !data.MldpLoggingNotifications.IsNull() {
 		if value.Exists() {
@@ -435,6 +467,11 @@ func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "capabilities.sac"); value.Exists() {
+		data.CapabilitiesSac = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSac = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "capabilities.sac.ipv4-disable"); value.Exists() {
 		data.CapabilitiesSacIpv4Disable = types.BoolValue(true)
 	} else {
@@ -460,6 +497,11 @@ func (data *MPLSLDP) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "igp.sync.delay.on-proc-restart"); value.Exists() {
 		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mldp"); value.Exists() {
+		data.Mldp = types.BoolValue(true)
+	} else {
+		data.Mldp = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "mldp.logging.notifications"); value.Exists() {
 		data.MldpLoggingNotifications = types.BoolValue(true)
@@ -538,6 +580,11 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 			return true
 		})
 	}
+	if value := gjson.GetBytes(res, "capabilities.sac"); value.Exists() {
+		data.CapabilitiesSac = types.BoolValue(true)
+	} else {
+		data.CapabilitiesSac = types.BoolValue(false)
+	}
 	if value := gjson.GetBytes(res, "capabilities.sac.ipv4-disable"); value.Exists() {
 		data.CapabilitiesSacIpv4Disable = types.BoolValue(true)
 	} else {
@@ -563,6 +610,11 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 	}
 	if value := gjson.GetBytes(res, "igp.sync.delay.on-proc-restart"); value.Exists() {
 		data.IgpSyncDelayOnProcRestart = types.Int64Value(value.Int())
+	}
+	if value := gjson.GetBytes(res, "mldp"); value.Exists() {
+		data.Mldp = types.BoolValue(true)
+	} else {
+		data.Mldp = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "mldp.logging.notifications"); value.Exists() {
 		data.MldpLoggingNotifications = types.BoolValue(true)
@@ -609,19 +661,19 @@ func (data *MPLSLDPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []string {
 	deletedItems := make([]string, 0)
-	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
+	if !state.SessionProtection.IsNull() && data.SessionProtection.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/protection", state.getPath()))
 	}
-	for i := range state.AddressFamilies {
+	for i := range state.MldpAddressFamilies {
 		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
+		stateKeyValues := [...]string{state.MldpAddressFamilies[i].Name.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.MldpAddressFamilies[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -629,24 +681,57 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 		}
 
 		found := false
-		for j := range data.AddressFamilies {
+		for j := range data.MldpAddressFamilies {
 			found = true
-			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
+			if state.MldpAddressFamilies[i].Name.ValueString() != data.MldpAddressFamilies[j].Name.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.AddressFamilies[i].LabelLocalAllocateForAccessList.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForAccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/access-list", state.getPath(), keyString))
+				if !state.MldpAddressFamilies[i].RecursiveFec.IsNull() && data.MldpAddressFamilies[j].RecursiveFec.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/recursive-fec/enable", state.getPath(), keyString))
 				}
-				if !state.AddressFamilies[i].LabelLocalAllocateForHostRoutes.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForHostRoutes.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/host-routes", state.getPath(), keyString))
+				if !state.MldpAddressFamilies[i].ForwardingRecursiveRoutePolicy.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursiveRoutePolicy.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive/route-policy", state.getPath(), keyString))
+				}
+				if !state.MldpAddressFamilies[i].ForwardingRecursive.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursive.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive", state.getPath(), keyString))
+				}
+				if !state.MldpAddressFamilies[i].MakeBeforeBreakDelay.IsNull() && data.MldpAddressFamilies[j].MakeBeforeBreakDelay.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/make-before-break/delay/forwarding-delay", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v", state.getPath(), keyString))
 		}
+	}
+	if !state.MldpLoggingNotifications.IsNull() && data.MldpLoggingNotifications.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/logging/notifications", state.getPath()))
+	}
+	if !state.Mldp.IsNull() && data.Mldp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp", state.getPath()))
+	}
+	if !state.IgpSyncDelayOnProcRestart.IsNull() && data.IgpSyncDelayOnProcRestart.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", state.getPath()))
+	}
+	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-session-up", state.getPath()))
+	}
+	if !state.CapabilitiesSacFec129Disable.IsNull() && data.CapabilitiesSacFec129Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec129-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacFec128Disable.IsNull() && data.CapabilitiesSacFec128Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec128-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacIpv6Disable.IsNull() && data.CapabilitiesSacIpv6Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSacIpv4Disable.IsNull() && data.CapabilitiesSacIpv4Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", state.getPath()))
+	}
+	if !state.CapabilitiesSac.IsNull() && data.CapabilitiesSac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac", state.getPath()))
 	}
 	for i := range state.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -678,37 +763,16 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
 		}
 	}
-	if !state.CapabilitiesSacIpv4Disable.IsNull() && data.CapabilitiesSacIpv4Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", state.getPath()))
-	}
-	if !state.CapabilitiesSacIpv6Disable.IsNull() && data.CapabilitiesSacIpv6Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", state.getPath()))
-	}
-	if !state.CapabilitiesSacFec128Disable.IsNull() && data.CapabilitiesSacFec128Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec128-disable", state.getPath()))
-	}
-	if !state.CapabilitiesSacFec129Disable.IsNull() && data.CapabilitiesSacFec129Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/capabilities/sac/fec129-disable", state.getPath()))
-	}
-	if !state.IgpSyncDelayOnSessionUp.IsNull() && data.IgpSyncDelayOnSessionUp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-session-up", state.getPath()))
-	}
-	if !state.IgpSyncDelayOnProcRestart.IsNull() && data.IgpSyncDelayOnProcRestart.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", state.getPath()))
-	}
-	if !state.MldpLoggingNotifications.IsNull() && data.MldpLoggingNotifications.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/logging/notifications", state.getPath()))
-	}
-	for i := range state.MldpAddressFamilies {
+	for i := range state.AddressFamilies {
 		keys := [...]string{"af-name"}
-		stateKeyValues := [...]string{state.MldpAddressFamilies[i].Name.ValueString()}
+		stateKeyValues := [...]string{state.AddressFamilies[i].AfName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.MldpAddressFamilies[i].Name.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.AddressFamilies[i].AfName.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -716,33 +780,27 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 		}
 
 		found := false
-		for j := range data.MldpAddressFamilies {
+		for j := range data.AddressFamilies {
 			found = true
-			if state.MldpAddressFamilies[i].Name.ValueString() != data.MldpAddressFamilies[j].Name.ValueString() {
+			if state.AddressFamilies[i].AfName.ValueString() != data.AddressFamilies[j].AfName.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.MldpAddressFamilies[i].MakeBeforeBreakDelay.IsNull() && data.MldpAddressFamilies[j].MakeBeforeBreakDelay.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/make-before-break/delay/forwarding-delay", state.getPath(), keyString))
+				if !state.AddressFamilies[i].LabelLocalAllocateForHostRoutes.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForHostRoutes.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/host-routes", state.getPath(), keyString))
 				}
-				if !state.MldpAddressFamilies[i].ForwardingRecursive.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursive.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive", state.getPath(), keyString))
-				}
-				if !state.MldpAddressFamilies[i].ForwardingRecursiveRoutePolicy.IsNull() && data.MldpAddressFamilies[j].ForwardingRecursiveRoutePolicy.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive/route-policy", state.getPath(), keyString))
-				}
-				if !state.MldpAddressFamilies[i].RecursiveFec.IsNull() && data.MldpAddressFamilies[j].RecursiveFec.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v/recursive-fec/enable", state.getPath(), keyString))
+				if !state.AddressFamilies[i].LabelLocalAllocateForAccessList.IsNull() && data.AddressFamilies[j].LabelLocalAllocateForAccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/access-list", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/mldp/address-families/address-family%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address-families/address-family%v", state.getPath(), keyString))
 		}
 	}
-	if !state.SessionProtection.IsNull() && data.SessionProtection.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/session/protection", state.getPath()))
+	if !state.RouterId.IsNull() && data.RouterId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/router-id", state.getPath()))
 	}
 	return deletedItems
 }
@@ -753,6 +811,52 @@ func (data *MPLSLDP) getDeletedItems(ctx context.Context, state MPLSLDP) []strin
 
 func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
+	if !data.SessionProtection.IsNull() && !data.SessionProtection.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session/protection", data.getPath()))
+	}
+	for i := range data.MldpAddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.MldpAddressFamilies[i].Name.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.MldpAddressFamilies[i].RecursiveFec.IsNull() && !data.MldpAddressFamilies[i].RecursiveFec.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/address-families/address-family%v/recursive-fec/enable", data.getPath(), keyString))
+		}
+		if !data.MldpAddressFamilies[i].ForwardingRecursive.IsNull() && !data.MldpAddressFamilies[i].ForwardingRecursive.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive", data.getPath(), keyString))
+		}
+	}
+	if !data.MldpLoggingNotifications.IsNull() && !data.MldpLoggingNotifications.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
+	}
+	if !data.Mldp.IsNull() && !data.Mldp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec129Disable.IsNull() && !data.CapabilitiesSacFec129Disable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec128Disable.IsNull() && !data.CapabilitiesSacFec128Disable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/fec128-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacIpv6Disable.IsNull() && !data.CapabilitiesSacIpv6Disable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacIpv4Disable.IsNull() && !data.CapabilitiesSacIpv4Disable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSac.IsNull() && !data.CapabilitiesSac.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac", data.getPath()))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
 	for i := range data.AddressFamilies {
 		keys := [...]string{"af-name"}
 		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
@@ -764,46 +868,6 @@ func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address-families/address-family%v/label/local/allocate/for/host-routes", data.getPath(), keyString))
 		}
 	}
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-	}
-	if !data.CapabilitiesSacIpv4Disable.IsNull() && !data.CapabilitiesSacIpv4Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacIpv6Disable.IsNull() && !data.CapabilitiesSacIpv6Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacFec128Disable.IsNull() && !data.CapabilitiesSacFec128Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/fec128-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacFec129Disable.IsNull() && !data.CapabilitiesSacFec129Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
-	}
-	if !data.MldpLoggingNotifications.IsNull() && !data.MldpLoggingNotifications.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
-	}
-	for i := range data.MldpAddressFamilies {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.MldpAddressFamilies[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.MldpAddressFamilies[i].ForwardingRecursive.IsNull() && !data.MldpAddressFamilies[i].ForwardingRecursive.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/address-families/address-family%v/forwarding/recursive", data.getPath(), keyString))
-		}
-		if !data.MldpAddressFamilies[i].RecursiveFec.IsNull() && !data.MldpAddressFamilies[i].RecursiveFec.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/mldp/address-families/address-family%v/recursive-fec/enable", data.getPath(), keyString))
-		}
-	}
-	if !data.SessionProtection.IsNull() && !data.SessionProtection.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/session/protection", data.getPath()))
-	}
 	return emptyLeafsDelete
 }
 
@@ -813,49 +877,8 @@ func (data *MPLSLDP) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *MPLSLDP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.RouterId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
-	}
-	for i := range data.AddressFamilies {
-		keys := [...]string{"af-name"}
-		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
-	}
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
-	}
-	if !data.CapabilitiesSacIpv4Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacIpv6Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacFec128Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec128-disable", data.getPath()))
-	}
-	if !data.CapabilitiesSacFec129Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
-	}
-	if !data.IgpSyncDelayOnSessionUp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-session-up", data.getPath()))
-	}
-	if !data.IgpSyncDelayOnProcRestart.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", data.getPath()))
-	}
-	if !data.MldpLoggingNotifications.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
+	if !data.SessionProtection.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/protection", data.getPath()))
 	}
 	for i := range data.MldpAddressFamilies {
 		keys := [...]string{"af-name"}
@@ -867,8 +890,55 @@ func (data *MPLSLDP) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/address-families/address-family%v", data.getPath(), keyString))
 	}
-	if !data.SessionProtection.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/session/protection", data.getPath()))
+	if !data.MldpLoggingNotifications.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp/logging/notifications", data.getPath()))
+	}
+	if !data.Mldp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mldp", data.getPath()))
+	}
+	if !data.IgpSyncDelayOnProcRestart.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-proc-restart", data.getPath()))
+	}
+	if !data.IgpSyncDelayOnSessionUp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/igp/sync/delay/on-session-up", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec129Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec129-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacFec128Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/fec128-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacIpv6Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv6-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSacIpv4Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac/ipv4-disable", data.getPath()))
+	}
+	if !data.CapabilitiesSac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/capabilities/sac", data.getPath()))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	}
+	for i := range data.AddressFamilies {
+		keys := [...]string{"af-name"}
+		keyValues := [...]string{data.AddressFamilies[i].AfName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address-families/address-family%v", data.getPath(), keyString))
+	}
+	if !data.RouterId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/router-id", data.getPath()))
 	}
 	return deletePaths
 }

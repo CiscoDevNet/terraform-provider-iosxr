@@ -40,12 +40,16 @@ func TestAccDataSourceIosxrRouterStaticIPv4Unicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interfaces.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.interface_name", "GigabitEthernet0/0/0/2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.address", "11.11.11.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.description", "interface-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.tag", "103"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.distance_metric", "144"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.permanent", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.track", "TRACK1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_interface_addresses.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.address", "100.0.2.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.description", "ip-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.tag", "104"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "nexthop_addresses.0.distance_metric", "155"))
@@ -60,12 +64,16 @@ func TestAccDataSourceIosxrRouterStaticIPv4Unicast(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interfaces.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.interface_name", "GigabitEthernet0/0/0/4"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.address", "11.11.11.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.description", "interface-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.tag", "103"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.distance_metric", "144"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.permanent", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.track", "TRACK1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_interface_addresses.0.metric", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.address", "100.0.2.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.bfd_fast_detect_minimum_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.bfd_fast_detect_multiplier", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.description", "ip-description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.tag", "104"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_router_static_ipv4_unicast.test", "vrfs.0.nexthop_addresses.0.distance_metric", "155"))
@@ -107,14 +115,18 @@ func testAccDataSourceIosxrRouterStaticIPv4UnicastConfig() string {
 	config += `	nexthop_interface_addresses = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `		address = "11.11.11.1"` + "\n"
+	config += `		bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `		bfd_fast_detect_multiplier = 3` + "\n"
 	config += `		description = "interface-description"` + "\n"
 	config += `		tag = 103` + "\n"
 	config += `		distance_metric = 144` + "\n"
-	config += `		permanent = true` + "\n"
+	config += `		track = "TRACK1"` + "\n"
 	config += `		metric = 10` + "\n"
 	config += `	}]` + "\n"
 	config += `	nexthop_addresses = [{` + "\n"
 	config += `		address = "100.0.2.0"` + "\n"
+	config += `		bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `		bfd_fast_detect_multiplier = 3` + "\n"
 	config += `		description = "ip-description"` + "\n"
 	config += `		tag = 104` + "\n"
 	config += `		distance_metric = 155` + "\n"
@@ -134,14 +146,18 @@ func testAccDataSourceIosxrRouterStaticIPv4UnicastConfig() string {
 	config += `		nexthop_interface_addresses = [{` + "\n"
 	config += `			interface_name = "GigabitEthernet0/0/0/4"` + "\n"
 	config += `			address = "11.11.11.1"` + "\n"
+	config += `			bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `			bfd_fast_detect_multiplier = 3` + "\n"
 	config += `			description = "interface-description"` + "\n"
 	config += `			tag = 103` + "\n"
 	config += `			distance_metric = 144` + "\n"
-	config += `			permanent = true` + "\n"
+	config += `			track = "TRACK1"` + "\n"
 	config += `			metric = 10` + "\n"
 	config += `		}]` + "\n"
 	config += `		nexthop_addresses = [{` + "\n"
 	config += `			address = "100.0.2.0"` + "\n"
+	config += `			bfd_fast_detect_minimum_interval = 100` + "\n"
+	config += `			bfd_fast_detect_multiplier = 3` + "\n"
 	config += `			description = "ip-description"` + "\n"
 	config += `			tag = 104` + "\n"
 	config += `			distance_metric = 155` + "\n"

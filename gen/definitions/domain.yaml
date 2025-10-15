@@ -9,25 +9,26 @@ attributes:
     attributes:
       - yang_name: domain-name
         id: true
-        example: DOMAIN1
+        example: example.com
       - yang_name: order
         id: true
         example: 0
   - yang_name: lookup/disable
+    minimum_test_value: true
     example: true
   - yang_name: lookup/source-interface
     example: Loopback214
   - yang_name: name
-    example: DOMAIN
+    example: "cisco.com"
   - yang_name: ipv4/hosts/host
     tf_name: ipv4_hosts
     type: List
     attributes:
       - yang_name: host-name
         id: true
-        example: HOST_NAME
+        example: HOST_NAME_IPV4
       - yang_name: ip-address
-        example: 10.0.0.0
+        example: 10.0.0.10
   - yang_name: name-servers/name-server
     tf_name: name_servers
     type: List
@@ -48,6 +49,6 @@ attributes:
       - yang_name: ipv6-address
         example: 10::10
   - yang_name: multicast
-    example: DOMAIN1_ACC
+    example: multicast.cisco.com
   - yang_name: default-flows/disable
     example: true

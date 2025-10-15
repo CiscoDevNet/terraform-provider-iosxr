@@ -10,18 +10,22 @@ attributes:
   - yang_name: interface-name
     example: GigabitEthernet0/0/0/1
   - yang_name: network/broadcast
+    exclude_example: true
     example: false
   - yang_name: network/non-broadcast
+    exclude_example: true
     example: false
   - yang_name: network/point-to-point
     example: true
   - yang_name: network/point-to-multipoint
+    exclude_example: true
     example: false
   - yang_name: cost
     example: 20
   - yang_name: priority
     example: 100
   - yang_name: passive/enable
+    exclude_example: true
     example: false
   - yang_name: passive/disable
     example: true

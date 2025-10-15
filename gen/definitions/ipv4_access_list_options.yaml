@@ -6,6 +6,7 @@ attributes:
   - yang_name: log-update/threshold
     example: 214748
   - yang_name: log-update/rate
+    minimum_test_value: 1000
     example: 1000
   - yang_name: icmp-off
     example: true

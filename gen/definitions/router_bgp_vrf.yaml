@@ -124,6 +124,7 @@ attributes:
       - yang_name: bfd/fast-detect/strict-mode
         example: false
       - yang_name: bfd/fast-detect/disable
+        exclude_example: true
         example: false
       - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
         xpath: local-as/inheritance-disable
@@ -140,13 +141,13 @@ attributes:
         xpath: local-as/as/no-prepend
         tf_name: local_as_no_prepend
         example: true
-        exclude_test: true
+        exclude_example: true
       - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as
         xpath: local-as/as/no-prepend/replace-as
         tf_name: local_as_no_prepend_replace_as
         delete_parent: true
-        exclude_test: true
         example: true
+        exclude_example: true
       - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as
         xpath: local-as/as/no-prepend/replace-as/dual-as
         tf_name: local_as_no_prepend_replace_as_dual_as

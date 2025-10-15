@@ -671,6 +671,7 @@ attributes:
         xpath: match/internal
         tf_name: match_internal
         description: "Redistribute EIGRP internal routes"
+        exclude_test: true
         example: true
       - yang_name: match/MATCH/INTERNAL/internal/external
         xpath: match/internal/external

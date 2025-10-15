@@ -13,6 +13,7 @@ attributes:
   - yang_name: server/session-limit
     example: 10
   - yang_name: server/v2
+    minimum_test_value: true
     example: true
   - yang_name: server/vrfs/vrf
     tf_name: server_vrfs

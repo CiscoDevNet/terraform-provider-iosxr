@@ -13,10 +13,12 @@ attributes:
   - yang_name: additional-paths/send
     example: true
   - yang_name: additional-paths/send/disable
+    exclude_example: true
     example: true
   - yang_name: additional-paths/receive
     example: true
   - yang_name: additional-paths/receive/disable
+    exclude_example: true
     example: true
   - yang_name: additional-paths/selection/SELECTION/ROUTE-POLICY/route-policy
     xpath: additional-paths/selection/route-policy
@@ -187,7 +189,6 @@ attributes:
       - yang_name: summary-only
         example: true
       - yang_name: route-policy
-        exclude_test: true
         example: ROUTE_POLICY_1
       - yang_name: description
         example: "Aggregate route description"
@@ -699,6 +700,7 @@ attributes:
         xpath: match/internal
         tf_name: match_internal
         description: "Redistribute EIGRP internal routes"
+        exclude_test: true
         example: true
       - yang_name: match/MATCH/INTERNAL/internal/external
         xpath: match/internal/external

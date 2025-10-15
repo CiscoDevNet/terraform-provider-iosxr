@@ -2,11 +2,12 @@
 name: BFD
 path: Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd
 doc_category: System
-skip_minimum_test: true
 attributes:
   - yang_name: echo/disable
-    example: true
+    exclude_example: true
+    example: false
   - yang_name: echo/latency/detect
+    minimum_test_value: true
     example: true
   - yang_name: echo/latency/detect/percentage
     delete_parent: true
@@ -46,7 +47,8 @@ attributes:
   - yang_name: dampening/extensions/down-monitoring
     example: true
   - yang_name: dampening/disable
-    example: true
+    exclude_example: true
+    example: false
   - yang_name: dampening/bundle-member/l3-only-mode
     example: true
   - yang_name: dampening/bundle-member/initial-wait
@@ -65,7 +67,8 @@ attributes:
         id: true
         example: GigabitEthernet0/0/0/0
       - yang_name: echo/disable
-        example: enable
+        exclude_example: true
+        example: disable
       - yang_name: echo/ipv4/source/ipv4-address
         tf_name: echo_ipv4_source
         example: 12.1.1.1
@@ -73,13 +76,14 @@ attributes:
         delete_parent: true
         example: true
       - yang_name: disable
-        example: true
+        exclude_example: true
+        example: false
       - yang_name: local-address
-        example: 33.33.31.1
+        example: 12.1.1.1
       - yang_name: tx-interval
-        example: 3200
+        example: 10000
       - yang_name: rx-interval
-        example: 4200
+        example: 30000
       - yang_name: multiplier
         example: 40
   - yang_name: ipv6/checksum/disable

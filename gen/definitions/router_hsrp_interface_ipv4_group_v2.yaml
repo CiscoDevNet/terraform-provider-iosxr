@@ -16,33 +16,32 @@ attributes:
   - yang_name: priority
     example: 133
   - yang_name: mac-address
-    example: 40.41.42
-    exclude_test: true
+    example: 00:01:00:02:00:02
   - yang_name: name
     example: NAME22
   - yang_name: preempt/delay
     example: 3100
   - yang_name: timers/msec
+    tf_name: timers_msec
     example: 100
     exclude_test: true
   - yang_name: timers/msec2
-    example: 234
+    tf_name: timers_msec_holdtime
+    example: 300
     exclude_test: true
   - yang_name: timers/hold-time
-    example: 22
-    exclude_test: true
+    tf_name: timers_seconds
+    example: 10
   - yang_name: timers/hold-time2
-    example: 234
-    exclude_test: true
+    tf_name: timers_seconds_holdtime
+    example: 30
   - yang_name: bfd/fast-detect/peer/ipv4
     example: 45.45.45.4
   - yang_name: bfd/fast-detect/peer/interface
-    example: GigabitEthernet0/0/0/9
-    exclude_test: true
+    example: GigabitEthernet0/0/0/1
   - yang_name: address/secondary-ipv4-addresses/secondary-ipv4-address
     tf_name: secondary_ipv4_addresses
     type: List
-    exclude_test: true
     attributes:
       - yang_name: address
         id: true

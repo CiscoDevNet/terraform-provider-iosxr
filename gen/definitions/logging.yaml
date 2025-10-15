@@ -6,6 +6,7 @@ attributes:
   - yang_name: ipv4/dscp
     example: cs6
   - yang_name: trap
+    minimum_test_value: '"informational"'
     example: informational
   - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/display-location
     example: true

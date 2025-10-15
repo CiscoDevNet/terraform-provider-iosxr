@@ -16,11 +16,12 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
+  - yang_name: default-originate
+    example: true
   - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
     tf_name: default_originate_route_policy
     xpath: default-originate/route-policy
     delete_parent: true
-    exclude_test: true
     example: ROUTE_POLICY_1
   - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
     tf_name: default_originate_inheritance_disable
@@ -48,6 +49,7 @@ attributes:
     example: true
   - yang_name: remove-private-as/remove-private-as-outbound
     tf_name: remove_private_as
+    exclude_example: true
     example: true
   - yang_name: remove-private-as/remove-private-as-outbound/entire-aspath
     tf_name: remove_private_as_entire_aspath

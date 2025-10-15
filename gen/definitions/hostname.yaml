@@ -5,4 +5,5 @@ no_delete: true
 doc_category: System
 attributes:
   - yang_name: system-network-name
+    minimum_test_value: '"ROUTER-1"'
     example: ROUTER-1

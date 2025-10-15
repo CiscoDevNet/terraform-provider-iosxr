@@ -68,7 +68,6 @@ attributes:
     exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/ignore
-    exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/multipath-relax
     example: true
@@ -86,8 +85,6 @@ attributes:
   - yang_name: bgp/bestpath/med/always
     example: true
     exclude_test: true
-  # - yang_name: bgp/bestpath/med/confed
-  #   example: true
   - yang_name: bgp/bestpath/med/missing-as-worst
     example: true
   - yang_name: bgp/bestpath/origin-as/use/validity
@@ -137,7 +134,7 @@ attributes:
       - yang_name: bfd/fast-detect/strict-mode
         example: false
       - yang_name: bfd/fast-detect/disable
-        exclude_test: true
+        exclude_example: true
         example: false
       - yang_name: password/encrypted
         type: String

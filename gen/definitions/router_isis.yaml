@@ -65,7 +65,6 @@ attributes:
     optional: true
     delete_parent: true
     example: true
-    exclude_test: true
   - yang_name: nsf/lifetime
     example: 10
   - yang_name: nsf/interface-timer
@@ -181,10 +180,8 @@ attributes:
     example: 32
   - yang_name: distribute/link-state/throttle
     example: 1
-    exclude_test: true
   - yang_name: distribute/link-state/level
     example: 2
-    exclude_test: true
   - yang_name: affinity-maps/affinity-map
     tf_name: affinity_maps
     type: List

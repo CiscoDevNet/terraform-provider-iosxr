@@ -58,6 +58,7 @@ attributes:
     example: false
   - yang_name: bfd/fast-detect/disable
     delete_parent: true
+    exclude_test: true
     example: false
   - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
     xpath: local-as/inheritance-disable

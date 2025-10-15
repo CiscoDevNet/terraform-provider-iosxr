@@ -4,4 +4,5 @@ path: Cisco-IOS-XR-um-mpls-te-cfg:/mpls
 doc_category: MPLS
 attributes:
   - yang_name: traffic-eng
+    minimum_test_value: true
     example: true

@@ -25,6 +25,7 @@ attributes:
         example: 255.255.0.0
       - yang_name: match-prefix-length/eq
         example: 12
+        exclude_test: true
       - yang_name: match-prefix-length/ge
         example: 22
       - yang_name: match-prefix-length/le

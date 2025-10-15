@@ -9,10 +9,12 @@ attributes:
     example: 64
   - yang_name: nexthop-interfaces/nexthop-interface
     tf_name: nexthop_interfaces
+    minimum_test_value: '["GigabitEthernet0/0/0/1"]'
     type: List
     attributes:
       - yang_name: interface-name
         id: true
+        minimum_test_value: '"GigabitEthernet0/0/0/1"'
         example: GigabitEthernet0/0/0/1
       - yang_name: description
         example: interface-description

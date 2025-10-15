@@ -93,6 +93,7 @@ attributes:
         xpath: metric-levels/metric-level/maximum
         tf_name: metric_maximum
         optional: true
+        exclude_test: true
         example: true
 
 test_prerequisites:

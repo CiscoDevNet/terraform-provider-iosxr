@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -32,7 +33,7 @@ import (
 
 func TestAccDataSourceIosxrBFD(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_latency_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_latency_detect_percentage", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_latency_detect_count", "10"))
@@ -40,27 +41,29 @@ func TestAccDataSourceIosxrBFD(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_ipv4_source", "10.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "echo_ipv4_bundle_per_member_minimum_interval", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "trap_singlehop_pre_mapped", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "multipath_locations.0.location_id", "0/0/CPU0"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "multihop_ttl_drop_threshold", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_initial_wait", "3600"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_secondary_wait", "3200"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_maximum_wait", "3100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_threshold", "60000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_extensions_down_monitoring", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_disable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_bundle_member_l3_only_mode", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_bundle_member_initial_wait", "5184"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_bundle_member_secondary_wait", "6184"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "dampening_bundle_member_maximum_wait", "7184"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "bundle_coexistence_bob_blb", "inherit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.interface_name", "GigabitEthernet0/0/0/0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.echo_disable", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.echo_disable", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.echo_ipv4_source", "12.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.ipv6_checksum_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.local_address", "33.33.31.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.tx_interval", "3200"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.rx_interval", "4200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.local_address", "12.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.tx_interval", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.rx_interval", "30000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "interfaces.0.multiplier", "40"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_bfd.test", "ipv6_checksum_disable", "true"))
 	resource.Test(t, resource.TestCase{
@@ -86,7 +89,7 @@ func TestAccDataSourceIosxrBFD(t *testing.T) {
 func testAccDataSourceIosxrBFDConfig() string {
 	config := `resource "iosxr_bfd" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	echo_disable = true` + "\n"
+	config += `	echo_disable = false` + "\n"
 	config += `	echo_latency_detect = true` + "\n"
 	config += `	echo_latency_detect_percentage = 200` + "\n"
 	config += `	echo_latency_detect_count = 10` + "\n"
@@ -94,16 +97,18 @@ func testAccDataSourceIosxrBFDConfig() string {
 	config += `	echo_ipv4_source = "10.1.1.1"` + "\n"
 	config += `	echo_ipv4_bundle_per_member_minimum_interval = 200` + "\n"
 	config += `	trap_singlehop_pre_mapped = true` + "\n"
-	config += `	multipath_locations = [{` + "\n"
-	config += `		location_id = "0/0/CPU0"` + "\n"
-	config += `	}]` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" || os.Getenv("XRV9K") != "" {
+		config += `	multipath_locations = [{` + "\n"
+		config += `		location_id = "0/0/CPU0"` + "\n"
+		config += `	}]` + "\n"
+	}
 	config += `	multihop_ttl_drop_threshold = 200` + "\n"
 	config += `	dampening_initial_wait = 3600` + "\n"
 	config += `	dampening_secondary_wait = 3200` + "\n"
 	config += `	dampening_maximum_wait = 3100` + "\n"
 	config += `	dampening_threshold = 60000` + "\n"
 	config += `	dampening_extensions_down_monitoring = true` + "\n"
-	config += `	dampening_disable = true` + "\n"
+	config += `	dampening_disable = false` + "\n"
 	config += `	dampening_bundle_member_l3_only_mode = true` + "\n"
 	config += `	dampening_bundle_member_initial_wait = 5184` + "\n"
 	config += `	dampening_bundle_member_secondary_wait = 6184` + "\n"
@@ -111,13 +116,13 @@ func testAccDataSourceIosxrBFDConfig() string {
 	config += `	bundle_coexistence_bob_blb = "inherit"` + "\n"
 	config += `	interfaces = [{` + "\n"
 	config += `		interface_name = "GigabitEthernet0/0/0/0"` + "\n"
-	config += `		echo_disable = "enable"` + "\n"
+	config += `		echo_disable = "disable"` + "\n"
 	config += `		echo_ipv4_source = "12.1.1.1"` + "\n"
 	config += `		ipv6_checksum_disable = true` + "\n"
-	config += `		disable = true` + "\n"
-	config += `		local_address = "33.33.31.1"` + "\n"
-	config += `		tx_interval = 3200` + "\n"
-	config += `		rx_interval = 4200` + "\n"
+	config += `		disable = false` + "\n"
+	config += `		local_address = "12.1.1.1"` + "\n"
+	config += `		tx_interval = 10000` + "\n"
+	config += `		rx_interval = 30000` + "\n"
 	config += `		multiplier = 40` + "\n"
 	config += `	}]` + "\n"
 	config += `	ipv6_checksum_disable = true` + "\n"

@@ -182,20 +182,20 @@ func (data *SegmentRoutingData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SegmentRouting) getDeletedItems(ctx context.Context, state SegmentRouting) []string {
 	deletedItems := make([]string, 0)
-	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
-	}
-	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
-	}
-	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
 	}
 	if !state.LocalBlockUpperBound.IsNull() && data.LocalBlockUpperBound.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
 	}
-	if !state.Enable.IsNull() && data.Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	if !state.LocalBlockLowerBound.IsNull() && data.LocalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/local-block", state.getPath()))
+	}
+	if !state.GlobalBlockUpperBound.IsNull() && data.GlobalBlockUpperBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
+	}
+	if !state.GlobalBlockLowerBound.IsNull() && data.GlobalBlockLowerBound.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/global-block", state.getPath()))
 	}
 	return deletedItems
 }
@@ -218,20 +218,20 @@ func (data *SegmentRouting) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *SegmentRouting) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.GlobalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
-	}
-	if !data.GlobalBlockUpperBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
-	}
-	if !data.LocalBlockLowerBound.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
 	}
 	if !data.LocalBlockUpperBound.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
 	}
-	if !data.Enable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
+	if !data.LocalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/local-block", data.getPath()))
+	}
+	if !data.GlobalBlockUpperBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
+	}
+	if !data.GlobalBlockLowerBound.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/global-block", data.getPath()))
 	}
 	return deletePaths
 }

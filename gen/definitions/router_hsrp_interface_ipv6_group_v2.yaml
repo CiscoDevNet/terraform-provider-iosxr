@@ -14,14 +14,18 @@ attributes:
   - yang_name: mac-address
     example: 00:01:00:02:00:02
   - yang_name: timers/hold-time
+    tf_name: timers_seconds
     example: 10
     exclude_test: true
   - yang_name: timers/hold-time2
-    example: 20
+    tf_name: timers_seconds_holdtime
+    example: 30
     exclude_test: true
   - yang_name: timers/msec
+    tf_name: timers_msec
     example: 100
   - yang_name: timers/msec2
+    tf_name: timers_msec_holdtime
     example: 300
   - yang_name: preempt/delay
     example: 256

@@ -4,6 +4,7 @@ path: Cisco-IOS-XR-um-lacp-cfg:/lacp/system
 doc_category: System
 attributes:
   - yang_name: mac
+    minimum_test_value: '"00:11:00:11:00:11"'
     example: 00:11:00:11:00:11
   - yang_name: priority
     example: 1

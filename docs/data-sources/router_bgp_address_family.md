@@ -61,6 +61,7 @@ data "iosxr_router_bgp_address_family" "example" {
 - `maximum_paths_ibgp_multipath` (Number) Number of paths (limit includes backup path)
 - `maximum_paths_ibgp_route_policy` (String) Route policy to specify ORF and inbound filter
 - `maximum_paths_ibgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_ibgp_unequal_cost` (Boolean) Allow multipaths to have different BGP nexthop IGP metrics
 - `maximum_paths_ibgp_unequal_cost_deterministic` (Boolean) Deterministic Multipath selection primarily on IGP metric order
 - `maximum_paths_unique_nexthop_check_disable` (Boolean) Disable multipath unique nexthop check
 - `networks` (Attributes List) Specify a network to announce via BGP (see [below for nested schema](#nestedatt--networks))

@@ -15,18 +15,19 @@ This resource can manage the Router BGP VRF Neighbor Address Family configuratio
 ```terraform
 resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
   as_number                               = "65001"
-  vrf_name                                = "VRF1"
+  vrf_name                                = "VRF2"
   address                                 = "10.1.1.2"
   af_name                                 = "ipv4-unicast"
   route_policy_in                         = "ROUTE_POLICY_1"
   route_policy_out                        = "ROUTE_POLICY_1"
+  default_originate                       = true
+  default_originate_route_policy          = "ROUTE_POLICY_1"
   next_hop_self                           = true
   next_hop_self_inheritance_disable       = true
   soft_reconfiguration_inbound_always     = true
   send_community_ebgp_inheritance_disable = true
   remove_private_as_inbound               = true
   remove_private_as_inbound_entire_aspath = true
-  remove_private_as                       = true
   remove_private_as_entire_aspath         = true
 }
 ```
@@ -44,6 +45,7 @@ resource "iosxr_router_bgp_vrf_neighbor_address_family" "example" {
 
 ### Optional
 
+- `default_originate` (Boolean) Originate default route to this neighbor
 - `default_originate_inheritance_disable` (Boolean) Prevent default-originate being inherited from a parent group
 - `default_originate_route_policy` (String) Route policy to specify criteria to originate default
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.

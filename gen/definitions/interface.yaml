@@ -25,6 +25,7 @@ attributes:
     example: true
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/input
     tf_name: service_policy_input
+    test_tags: [XRV9K]
     type: List
     attributes:
       - yang_name: service-policy-name
@@ -33,6 +34,7 @@ attributes:
         example: PMAP-IN
   - yang_name: Cisco-IOS-XR-um-if-service-policy-qos-cfg:service-policy/output
     tf_name: service_policy_output
+    test_tags: [XRV9K]
     type: List
     attributes:
       - yang_name: service-policy-name
@@ -69,7 +71,8 @@ attributes:
     example: false
     exclude_test: true
   - yang_name: shutdown
-    example: true
+    minimum_test_value: false
+    example: false
   - yang_name: mtu
     example: 9000
   - yang_name: bandwidth
@@ -77,6 +80,7 @@ attributes:
   - yang_name: description
     example: My Interface Description
   - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    minimum_test_value: 30
     example: 30
   - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
     example: VRF1
@@ -111,64 +115,73 @@ attributes:
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
     tf_name: ipv4_access_group_ingress_acl1
     optional: true
-    delete_parent: true
+    delete_grandparent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
+    delete_parent: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
-  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
     delete_parent: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
+    test_tags: [NCS, XRV9K]
     example: 0
+    delete_parent: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
     tf_name: ipv4_access_group_egress_acl
     optional: true
-    delete_parent: true
+    delete_grandparent: true
     example: ACL1
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
+    delete_parent: true
   - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
-  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
     delete_parent: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
+    test_tags: [NCS, XRV9K]
     example: 0
+    delete_parent: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/type
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: any
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-self-ping
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ipv6-cfg:verify/unicast/source/reachable-via/allow-default
+    test_tags: [XRV9K]
     optional: true
     delete_parent: true
     example: false
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
     tf_name: ipv6_access_group_ingress_acl1
     optional: true
-    delete_parent: true
+    delete_grandparent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/compress
-    delete_parent: true
+    test_tags: [NCS, XRV9K]
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
     tf_name: ipv6_access_group_egress_acl
     optional: true
-    delete_parent: true
+    delete_grandparent: true
     example: ACL2
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
-    delete_parent: true
+    test_tags: [XRV9K]
     example: true
   - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/compress
-    delete_parent: true
+    test_tags: [NCS, XRV9K]
     example: 0
   - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
     tf_name: ipv6_link_local_address
@@ -229,10 +242,12 @@ attributes:
     exclude_test: true
     example: active
   - yang_name: Cisco-IOS-XR-um-if-bundle-cfg:bundle/port-priority
+    exclude_example: true
     example: 100
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitors/ingress-monitor
     tf_name: flow_ipv4_ingress_monitors
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
+    exclude_test: true
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -240,7 +255,7 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/ingress-monitor-samplers/ingress-monitor-sampler
     tf_name: flow_ipv4_ingress_monitor_samplers
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -251,7 +266,8 @@ attributes:
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitors/egress-monitor
     tf_name: flow_ipv4_egress_monitors
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
+    exclude_test: true
     type: List
     attributes:
       - yang_name: monitor-map-name
@@ -259,8 +275,9 @@ attributes:
         example: MMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv4/monitor/egress-monitor-samplers/egress-monitor-sampler
     tf_name: flow_ipv4_egress_monitor_samplers
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
     type: List
+    exclude_test: true
     attributes:
       - yang_name: monitor-map-name
         id: true
@@ -270,39 +287,42 @@ attributes:
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitors/ingress-monitor
     tf_name: flow_ipv6_ingress_monitors
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
+    exclude_test: true
     type: List
     attributes:
       - yang_name: monitor-map-name
         id: true
-        example: MMAP1
+        example: MMAP2
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/ingress-monitor-samplers/ingress-monitor-sampler
     tf_name: flow_ipv6_ingress_monitor_samplers
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
     type: List
     attributes:
       - yang_name: monitor-map-name
         id: true
-        example: MMAP1
+        example: MMAP2
       - yang_name: sampler-map-name
         id: true
         example: SMAP1
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitors/egress-monitor
     tf_name: flow_ipv6_egress_monitors
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
     type: List
+    exclude_test: true
     attributes:
       - yang_name: monitor-map-name
         id: true
-        example: MMAP1
+        example: MMAP2
   - yang_name: Cisco-IOS-XR-um-flow-cfg:flow/ipv6/monitor/egress-monitor-samplers/egress-monitor-sampler
     tf_name: flow_ipv6_egress_monitor_samplers
-    test_tags: [PHYSICAL]
+    test_tags: [FLOW]
     type: List
+    exclude_test: true
     attributes:
       - yang_name: monitor-map-name
         id: true
-        example: MMAP1
+        example: MMAP2
       - yang_name: sampler-map-name
         id: true
         example: SMAP1

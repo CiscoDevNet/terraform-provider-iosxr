@@ -7,20 +7,22 @@ attributes:
     example: GigabitEthernet0/0/0/2
   - yang_name: vrrp-id
     example: 124
-  - yang_name: address/global/global-address/address
+  - yang_name: address/global/global-address
     tf_name: global_addresses
+    minimum_test_value: '["2001:db8::1"]'
     type: List
-    exclude_test: true
     attributes:
       - yang_name: address
         id: true
-        example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+        minimum_test_value: '"2001:db8::1"'
+        example: "2001:db8::1"
   - yang_name: address/linklocal/linklocal-address
     tf_name: address_linklocal
     example: 2::2
     exclude_test: true
   - yang_name: address/linklocal/autoconfig
     tf_name: address_linklocal_autoconfig
+    minimum_test_value: true
     example: true
   - yang_name: priority
     example: 250
@@ -47,7 +49,7 @@ attributes:
     attributes:
       - yang_name: interface-name
         id: true
-        example: GigabitEthernet0/0/0/5
+        example: GigabitEthernet0/0/0/4
       - yang_name: priority-decrement
         example: 12
   - yang_name: track/objects/object

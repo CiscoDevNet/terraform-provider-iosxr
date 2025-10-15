@@ -34,6 +34,7 @@ attributes:
   - yang_name: on-demand-colors/on-demand-color
     tf_name: on_demand_colors
     type: List
+    test_tags: [NCS, XRV9K]
     attributes:
       - yang_name: on-demand-color-dyn-mpls/on-demand-color-dyn-mpls-anycast
         tf_name: dynamic_anycast_sid_inclusion
@@ -76,6 +77,7 @@ attributes:
   - yang_name: policies/policy
     tf_name: policies
     type: List
+    test_tags: [NCS, XRV9K]
     attributes:
       - yang_name: policy-name
         id: true

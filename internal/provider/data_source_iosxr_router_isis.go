@@ -239,6 +239,10 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
+			"distribute_link_state": schema.BoolAttribute{
+				MarkdownDescription: "Distribute the link-state database to external services",
+				Computed:            true,
+			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
 				MarkdownDescription: "Set distribution process instance identifier",
 				Computed:            true,

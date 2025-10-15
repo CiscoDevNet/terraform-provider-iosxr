@@ -90,6 +90,7 @@ func iosxrSSHImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 func testAccIosxrSSHConfig_minimum() string {
 	config := `resource "iosxr_ssh" "test" {` + "\n"
+	config += `	server_v2 = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

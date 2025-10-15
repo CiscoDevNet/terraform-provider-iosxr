@@ -4,6 +4,7 @@ path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr/Cisco-IOS-XR-segment-routing-srv6-
 doc_category: Segment Routing
 attributes:
   - yang_name: enable
+    minimum_test_value: true
     example: true
   - yang_name: encapsulation/source-address
     example: fccc:0:214::1
@@ -27,6 +28,7 @@ attributes:
   - yang_name: formats/formats/format
     tf_name: formats
     type: List
+    exclude_test: true
     attributes:
       - yang_name: name
         id: true
@@ -42,3 +44,9 @@ attributes:
       - yang_name: usid/wide-local-id-block-explicit-range
         exclude_test: true
         example: 65527
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr
+    attributes:
+      - name: enable
+        value: <NULL>

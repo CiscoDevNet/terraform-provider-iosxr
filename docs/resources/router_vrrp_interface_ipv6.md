@@ -14,8 +14,13 @@ This resource can manage the Router VRRP Interface IPv6 configuration.
 
 ```terraform
 resource "iosxr_router_vrrp_interface_ipv6" "example" {
-  interface_name               = "GigabitEthernet0/0/0/2"
-  vrrp_id                      = 124
+  interface_name = "GigabitEthernet0/0/0/2"
+  vrrp_id        = 124
+  global_addresses = [
+    {
+      address = "2001:db8::1"
+    }
+  ]
   address_linklocal_autoconfig = true
   priority                     = 250
   name                         = "TEST2"
@@ -26,7 +31,7 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
   accept_mode_disable          = true
   track_interfaces = [
     {
-      interface_name     = "GigabitEthernet0/0/0/5"
+      interface_name     = "GigabitEthernet0/0/0/4"
       priority_decrement = 12
     }
   ]
@@ -58,7 +63,7 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
 - `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
-- `global_addresses` (String) Set Global VRRP IPv6 address
+- `global_addresses` (Attributes List) Global VRRP IPv6 address (see [below for nested schema](#nestedatt--global_addresses))
 - `name` (String) Configure VRRP Session name
 - `preempt_delay` (Number) Wait before preempting
   - Range: `1`-`3600`
@@ -76,6 +81,14 @@ resource "iosxr_router_vrrp_interface_ipv6" "example" {
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--global_addresses"></a>
+### Nested Schema for `global_addresses`
+
+Required:
+
+- `address` (String) Set Global VRRP IPv6 address
+
 
 <a id="nestedatt--track_interfaces"></a>
 ### Nested Schema for `track_interfaces`

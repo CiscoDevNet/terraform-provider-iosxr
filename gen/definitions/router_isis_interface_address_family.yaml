@@ -69,13 +69,11 @@ attributes:
     xpath: metric/default-metric
     tf_name: metric_default
     optional: true
-    delete_parent: true
     example: 500
   - yang_name: metric/METRIC/MAXIMUM/maximum
     xpath: metric/maximum
     tf_name: metric_maximum
     optional: true
-    delete_parent: true
     exclude_test: true
     example: true
   - yang_name: metric-levels/metric-level
@@ -90,13 +88,12 @@ attributes:
         xpath: metric-levels/metric-level/default-metric
         tf_name: metric_default
         optional: true
-        delete_parent: true
         example: 600
       - yang_name: METRIC/MAXIMUM/maximum
         xpath: metric-levels/metric-level/maximum
         tf_name: metric_maximum
         optional: true
-        delete_parent: true
+        exclude_test: true
         example: true
 
 test_prerequisites:
@@ -120,3 +117,4 @@ test_prerequisites:
     attributes:
       - name: interface-name
         value: GigabitEthernet0/0/0/1
+    dependencies: [2]

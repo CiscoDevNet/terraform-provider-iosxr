@@ -9,9 +9,12 @@ resource "iosxr_router_bgp_address_family" "example" {
   advertise_best_external                       = true
   maximum_paths_ebgp_multipath                  = 10
   maximum_paths_ebgp_selective                  = true
+  maximum_paths_ebgp_route_policy               = "MULTIPATH_POLICY"
   maximum_paths_ibgp_multipath                  = 10
+  maximum_paths_ibgp_unequal_cost               = true
   maximum_paths_ibgp_unequal_cost_deterministic = true
   maximum_paths_ibgp_selective                  = true
+  maximum_paths_ibgp_route_policy               = "MULTIPATH_POLICY"
   maximum_paths_unique_nexthop_check_disable    = true
   nexthop_trigger_delay_critical                = 10
   nexthop_trigger_delay_non_critical            = 20
@@ -45,7 +48,6 @@ resource "iosxr_router_bgp_address_family" "example" {
   redistribute_eigrp = [
     {
       instance_name           = "EIGRP1"
-      match_internal          = true
       match_internal_external = true
       metric                  = 100
       multipath               = true

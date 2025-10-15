@@ -57,9 +57,9 @@ data "iosxr_router_bgp_neighbor_group" "example" {
 - `remote_as` (String) Set remote AS
 - `timers_holdtime` (Number) Holdtime
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
 - `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 - `update_source` (String) Source of routing updates
 

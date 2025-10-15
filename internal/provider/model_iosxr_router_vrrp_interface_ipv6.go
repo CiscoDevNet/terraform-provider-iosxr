@@ -40,7 +40,7 @@ type RouterVRRPInterfaceIPv6 struct {
 	DeleteMode                     types.String                             `tfsdk:"delete_mode"`
 	InterfaceName                  types.String                             `tfsdk:"interface_name"`
 	VrrpId                         types.Int64                              `tfsdk:"vrrp_id"`
-	GlobalAddresses                types.String                             `tfsdk:"global_addresses"`
+	GlobalAddresses                []RouterVRRPInterfaceIPv6GlobalAddresses `tfsdk:"global_addresses"`
 	AddressLinklocal               types.String                             `tfsdk:"address_linklocal"`
 	AddressLinklocalAutoconfig     types.Bool                               `tfsdk:"address_linklocal_autoconfig"`
 	Priority                       types.Int64                              `tfsdk:"priority"`
@@ -61,7 +61,7 @@ type RouterVRRPInterfaceIPv6Data struct {
 	Id                             types.String                             `tfsdk:"id"`
 	InterfaceName                  types.String                             `tfsdk:"interface_name"`
 	VrrpId                         types.Int64                              `tfsdk:"vrrp_id"`
-	GlobalAddresses                types.String                             `tfsdk:"global_addresses"`
+	GlobalAddresses                []RouterVRRPInterfaceIPv6GlobalAddresses `tfsdk:"global_addresses"`
 	AddressLinklocal               types.String                             `tfsdk:"address_linklocal"`
 	AddressLinklocalAutoconfig     types.Bool                               `tfsdk:"address_linklocal_autoconfig"`
 	Priority                       types.Int64                              `tfsdk:"priority"`
@@ -75,6 +75,9 @@ type RouterVRRPInterfaceIPv6Data struct {
 	TrackInterfaces                []RouterVRRPInterfaceIPv6TrackInterfaces `tfsdk:"track_interfaces"`
 	TrackObjects                   []RouterVRRPInterfaceIPv6TrackObjects    `tfsdk:"track_objects"`
 	BfdFastDetectPeerIpv6          types.String                             `tfsdk:"bfd_fast_detect_peer_ipv6"`
+}
+type RouterVRRPInterfaceIPv6GlobalAddresses struct {
+	Address types.String `tfsdk:"address"`
 }
 type RouterVRRPInterfaceIPv6TrackInterfaces struct {
 	InterfaceName     types.String `tfsdk:"interface_name"`
@@ -105,9 +108,6 @@ func (data RouterVRRPInterfaceIPv6) toBody(ctx context.Context) string {
 	body := "{}"
 	if !data.VrrpId.IsNull() && !data.VrrpId.IsUnknown() {
 		body, _ = sjson.Set(body, "vrrp-id", strconv.FormatInt(data.VrrpId.ValueInt64(), 10))
-	}
-	if !data.GlobalAddresses.IsNull() && !data.GlobalAddresses.IsUnknown() {
-		body, _ = sjson.Set(body, "address.global.global-address.address", data.GlobalAddresses.ValueString())
 	}
 	if !data.AddressLinklocal.IsNull() && !data.AddressLinklocal.IsUnknown() {
 		body, _ = sjson.Set(body, "address.linklocal.linklocal-address", data.AddressLinklocal.ValueString())
@@ -150,6 +150,14 @@ func (data RouterVRRPInterfaceIPv6) toBody(ctx context.Context) string {
 	if !data.BfdFastDetectPeerIpv6.IsNull() && !data.BfdFastDetectPeerIpv6.IsUnknown() {
 		body, _ = sjson.Set(body, "bfd.fast-detect.peer.ipv6", data.BfdFastDetectPeerIpv6.ValueString())
 	}
+	if len(data.GlobalAddresses) > 0 {
+		body, _ = sjson.Set(body, "address.global.global-address", []interface{}{})
+		for index, item := range data.GlobalAddresses {
+			if !item.Address.IsNull() && !item.Address.IsUnknown() {
+				body, _ = sjson.Set(body, "address.global.global-address"+"."+strconv.Itoa(index)+"."+"address", item.Address.ValueString())
+			}
+		}
+	}
 	if len(data.TrackInterfaces) > 0 {
 		body, _ = sjson.Set(body, "track.interfaces.interface", []interface{}{})
 		for index, item := range data.TrackInterfaces {
@@ -180,10 +188,34 @@ func (data RouterVRRPInterfaceIPv6) toBody(ctx context.Context) string {
 // Section below is generated&owned by "gen/generator.go". //template:begin updateFromBody
 
 func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.global.global-address.address"); value.Exists() && !data.GlobalAddresses.IsNull() {
-		data.GlobalAddresses = types.StringValue(value.String())
-	} else {
-		data.GlobalAddresses = types.StringNull()
+	for i := range data.GlobalAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
+
+		var r gjson.Result
+		gjson.GetBytes(res, "address.global.global-address").ForEach(
+			func(_, v gjson.Result) bool {
+				found := false
+				for ik := range keys {
+					if v.Get(keys[ik]).String() == keyValues[ik] {
+						found = true
+						continue
+					}
+					found = false
+					break
+				}
+				if found {
+					r = v
+					return false
+				}
+				return true
+			},
+		)
+		if value := r.Get("address"); value.Exists() && !data.GlobalAddresses[i].Address.IsNull() {
+			data.GlobalAddresses[i].Address = types.StringValue(value.String())
+		} else {
+			data.GlobalAddresses[i].Address = types.StringNull()
+		}
 	}
 	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() && !data.AddressLinklocal.IsNull() {
 		data.AddressLinklocal = types.StringValue(value.String())
@@ -331,8 +363,16 @@ func (data *RouterVRRPInterfaceIPv6) updateFromBody(ctx context.Context, res []b
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBody
 
 func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.global.global-address.address"); value.Exists() {
-		data.GlobalAddresses = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "address.global.global-address"); value.Exists() {
+		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterVRRPInterfaceIPv6GlobalAddresses{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.GlobalAddresses = append(data.GlobalAddresses, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() {
 		data.AddressLinklocal = types.StringValue(value.String())
@@ -410,8 +450,16 @@ func (data *RouterVRRPInterfaceIPv6) fromBody(ctx context.Context, res []byte) {
 // Section below is generated&owned by "gen/generator.go". //template:begin fromBodyData
 
 func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res []byte) {
-	if value := gjson.GetBytes(res, "address.global.global-address.address"); value.Exists() {
-		data.GlobalAddresses = types.StringValue(value.String())
+	if value := gjson.GetBytes(res, "address.global.global-address"); value.Exists() {
+		data.GlobalAddresses = make([]RouterVRRPInterfaceIPv6GlobalAddresses, 0)
+		value.ForEach(func(k, v gjson.Result) bool {
+			item := RouterVRRPInterfaceIPv6GlobalAddresses{}
+			if cValue := v.Get("address"); cValue.Exists() {
+				item.Address = types.StringValue(cValue.String())
+			}
+			data.GlobalAddresses = append(data.GlobalAddresses, item)
+			return true
+		})
 	}
 	if value := gjson.GetBytes(res, "address.linklocal.linklocal-address"); value.Exists() {
 		data.AddressLinklocal = types.StringValue(value.String())
@@ -490,71 +538,8 @@ func (data *RouterVRRPInterfaceIPv6Data) fromBody(ctx context.Context, res []byt
 
 func (data *RouterVRRPInterfaceIPv6) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceIPv6) []string {
 	deletedItems := make([]string, 0)
-	if !state.GlobalAddresses.IsNull() && data.GlobalAddresses.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/global/global-address/address", state.getPath()))
-	}
-	if !state.AddressLinklocal.IsNull() && data.AddressLinklocal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/linklocal-address", state.getPath()))
-	}
-	if !state.AddressLinklocalAutoconfig.IsNull() && data.AddressLinklocalAutoconfig.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/autoconfig", state.getPath()))
-	}
-	if !state.Priority.IsNull() && data.Priority.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
-	}
-	if !state.Name.IsNull() && data.Name.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
-	}
-	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
-	}
-	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", state.getPath()))
-	}
-	if !state.TimerForce.IsNull() && data.TimerForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/force", state.getPath()))
-	}
-	if !state.PreemptDisable.IsNull() && data.PreemptDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/disable", state.getPath()))
-	}
-	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
-	}
-	if !state.AcceptModeDisable.IsNull() && data.AcceptModeDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-mode/disable", state.getPath()))
-	}
-	for i := range state.TrackInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.TrackInterfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.TrackInterfaces {
-			found = true
-			if state.TrackInterfaces[i].InterfaceName.ValueString() != data.TrackInterfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v/priority-decrement", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
-		}
+	if !state.BfdFastDetectPeerIpv6.IsNull() && data.BfdFastDetectPeerIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", state.getPath()))
 	}
 	for i := range state.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -589,8 +574,98 @@ func (data *RouterVRRPInterfaceIPv6) getDeletedItems(ctx context.Context, state 
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
 		}
 	}
-	if !state.BfdFastDetectPeerIpv6.IsNull() && data.BfdFastDetectPeerIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", state.getPath()))
+	for i := range state.TrackInterfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrackInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrackInterfaces {
+			found = true
+			if state.TrackInterfaces[i].InterfaceName.ValueString() != data.TrackInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v/priority-decrement", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
+		}
+	}
+	if !state.AcceptModeDisable.IsNull() && data.AcceptModeDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-mode/disable", state.getPath()))
+	}
+	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
+	}
+	if !state.PreemptDisable.IsNull() && data.PreemptDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/disable", state.getPath()))
+	}
+	if !state.TimerForce.IsNull() && data.TimerForce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/force", state.getPath()))
+	}
+	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", state.getPath()))
+	}
+	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.AddressLinklocalAutoconfig.IsNull() && data.AddressLinklocalAutoconfig.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/autoconfig", state.getPath()))
+	}
+	if !state.AddressLinklocal.IsNull() && data.AddressLinklocal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/linklocal/linklocal-address", state.getPath()))
+	}
+	for i := range state.GlobalAddresses {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.GlobalAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.GlobalAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.GlobalAddresses {
+			found = true
+			if state.GlobalAddresses[i].Address.ValueString() != data.GlobalAddresses[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/address/global/global-address%v", state.getPath(), keyString))
+		}
 	}
 	return deletedItems
 }
@@ -601,17 +676,13 @@ func (data *RouterVRRPInterfaceIPv6) getDeletedItems(ctx context.Context, state 
 
 func (data *RouterVRRPInterfaceIPv6) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.AddressLinklocalAutoconfig.IsNull() && !data.AddressLinklocalAutoconfig.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/linklocal/autoconfig", data.getPath()))
-	}
-	if !data.TimerForce.IsNull() && !data.TimerForce.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timer/force", data.getPath()))
-	}
-	if !data.PreemptDisable.IsNull() && !data.PreemptDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preempt/disable", data.getPath()))
-	}
-	if !data.AcceptModeDisable.IsNull() && !data.AcceptModeDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
+	for i := range data.TrackObjects {
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
 	}
 	for i := range data.TrackInterfaces {
 		keys := [...]string{"interface-name"}
@@ -621,9 +692,21 @@ func (data *RouterVRRPInterfaceIPv6) getEmptyLeafsDelete(ctx context.Context) []
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.TrackObjects {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
+	if !data.AcceptModeDisable.IsNull() && !data.AcceptModeDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
+	}
+	if !data.PreemptDisable.IsNull() && !data.PreemptDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preempt/disable", data.getPath()))
+	}
+	if !data.TimerForce.IsNull() && !data.TimerForce.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timer/force", data.getPath()))
+	}
+	if !data.AddressLinklocalAutoconfig.IsNull() && !data.AddressLinklocalAutoconfig.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/address/linklocal/autoconfig", data.getPath()))
+	}
+	for i := range data.GlobalAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -638,48 +721,8 @@ func (data *RouterVRRPInterfaceIPv6) getEmptyLeafsDelete(ctx context.Context) []
 
 func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.GlobalAddresses.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/global/global-address/address", data.getPath()))
-	}
-	if !data.AddressLinklocal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/linklocal/linklocal-address", data.getPath()))
-	}
-	if !data.AddressLinklocalAutoconfig.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/linklocal/autoconfig", data.getPath()))
-	}
-	if !data.Priority.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
-	}
-	if !data.Name.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
-	}
-	if !data.TimerAdvertisementSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
-	}
-	if !data.TimerAdvertisementMilliseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", data.getPath()))
-	}
-	if !data.TimerForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/force", data.getPath()))
-	}
-	if !data.PreemptDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/disable", data.getPath()))
-	}
-	if !data.PreemptDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/delay", data.getPath()))
-	}
-	if !data.AcceptModeDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
-	}
-	for i := range data.TrackInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface%v", data.getPath(), keyString))
+	if !data.BfdFastDetectPeerIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", data.getPath()))
 	}
 	for i := range data.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -691,8 +734,55 @@ func (data *RouterVRRPInterfaceIPv6) getDeletePaths(ctx context.Context) []strin
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/objects/object%v", data.getPath(), keyString))
 	}
-	if !data.BfdFastDetectPeerIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv6", data.getPath()))
+	for i := range data.TrackInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface%v", data.getPath(), keyString))
+	}
+	if !data.AcceptModeDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
+	}
+	if !data.PreemptDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/delay", data.getPath()))
+	}
+	if !data.PreemptDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/disable", data.getPath()))
+	}
+	if !data.TimerForce.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/force", data.getPath()))
+	}
+	if !data.TimerAdvertisementMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", data.getPath()))
+	}
+	if !data.TimerAdvertisementSeconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.AddressLinklocalAutoconfig.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/linklocal/autoconfig", data.getPath()))
+	}
+	if !data.AddressLinklocal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/linklocal/linklocal-address", data.getPath()))
+	}
+	for i := range data.GlobalAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.GlobalAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/global/global-address%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

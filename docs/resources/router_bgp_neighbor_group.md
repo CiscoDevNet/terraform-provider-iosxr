@@ -14,21 +14,21 @@ This resource can manage the Router BGP Neighbor Group configuration.
 
 ```terraform
 resource "iosxr_router_bgp_neighbor_group" "example" {
-  as_number                      = "65001"
-  name                           = "GROUP1"
-  remote_as                      = "65001"
-  description                    = "My Neighbor Group Description"
-  update_source                  = "Loopback0"
-  advertisement_interval_seconds = 10
-  bfd_minimum_interval           = 3
-  bfd_multiplier                 = 4
-  bfd_fast_detect                = true
-  bfd_fast_detect_strict_mode    = false
-  bfd_fast_detect_disable        = false
-  password                       = "12341C2713181F13253920"
-  password_inheritance_disable   = false
-  timers_keepalive_interval      = 10
-  timers_holdtime                = 20
+  as_number                                   = "65001"
+  name                                        = "GROUP1"
+  remote_as                                   = "65001"
+  description                                 = "My Neighbor Group Description"
+  update_source                               = "Loopback0"
+  advertisement_interval_seconds              = 10
+  bfd_minimum_interval                        = 3
+  bfd_multiplier                              = 4
+  bfd_fast_detect                             = true
+  bfd_fast_detect_strict_mode                 = false
+  password                                    = "12341C2713181F13253920"
+  password_inheritance_disable                = false
+  timers_keepalive_interval                   = 10
+  timers_holdtime                             = 30
+  timers_holdtime_minimum_acceptable_holdtime = 30
   address_families = [
     {
       af_name                                    = "ipv4-labeled-unicast"
@@ -87,10 +87,10 @@ resource "iosxr_router_bgp_neighbor_group" "example" {
   - Range: `3`-`65535`
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
 - `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `update_source` (String) Source of routing updates

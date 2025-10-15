@@ -226,23 +226,23 @@ func (data *ClassMapQoSData) fromBody(ctx context.Context, res []byte) {
 
 func (data *ClassMapQoS) getDeletedItems(ctx context.Context, state ClassMapQoS) []string {
 	deletedItems := make([]string, 0)
-	if !state.MatchAny.IsNull() && data.MatchAny.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/match-any", state.getPath()))
-	}
-	if !state.Description.IsNull() && data.Description.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
-	}
-	if !state.MatchDscp.IsNull() && data.MatchDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/dscp/value", state.getPath()))
-	}
-	if !state.MatchMplsExperimentalTopmost.IsNull() && data.MatchMplsExperimentalTopmost.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", state.getPath()))
+	if !state.MatchTrafficClass.IsNull() && data.MatchTrafficClass.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/traffic-class/id", state.getPath()))
 	}
 	if !state.MatchQosGroup.IsNull() && data.MatchQosGroup.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/qos-group/id", state.getPath()))
 	}
-	if !state.MatchTrafficClass.IsNull() && data.MatchTrafficClass.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/traffic-class/id", state.getPath()))
+	if !state.MatchMplsExperimentalTopmost.IsNull() && data.MatchMplsExperimentalTopmost.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", state.getPath()))
+	}
+	if !state.MatchDscp.IsNull() && data.MatchDscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match/dscp/value", state.getPath()))
+	}
+	if !state.Description.IsNull() && data.Description.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/description", state.getPath()))
+	}
+	if !state.MatchAny.IsNull() && data.MatchAny.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/match-any", state.getPath()))
 	}
 	return deletedItems
 }
@@ -265,23 +265,23 @@ func (data *ClassMapQoS) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *ClassMapQoS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.MatchAny.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match-any", data.getPath()))
-	}
-	if !data.Description.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
-	}
-	if !data.MatchDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/dscp/value", data.getPath()))
-	}
-	if !data.MatchMplsExperimentalTopmost.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", data.getPath()))
+	if !data.MatchTrafficClass.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/traffic-class/id", data.getPath()))
 	}
 	if !data.MatchQosGroup.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/qos-group/id", data.getPath()))
 	}
-	if !data.MatchTrafficClass.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/traffic-class/id", data.getPath()))
+	if !data.MatchMplsExperimentalTopmost.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/mpls/experimental/topmost/label", data.getPath()))
+	}
+	if !data.MatchDscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match/dscp/value", data.getPath()))
+	}
+	if !data.Description.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/description", data.getPath()))
+	}
+	if !data.MatchAny.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/match-any", data.getPath()))
 	}
 	return deletePaths
 }

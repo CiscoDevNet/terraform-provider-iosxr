@@ -65,7 +65,6 @@ attributes:
     optional: true
     delete_parent: true
     example: true
-    exclude_test: true
   - yang_name: nsf/lifetime
     example: 10
   - yang_name: nsf/interface-timer
@@ -102,19 +101,21 @@ attributes:
     xpath: lsp-password/lsp-password-option/text/password-options/encrypted
     tf_name: lsp_password_text_encrypted
     optional: true
+    delete_parent: true
     example: "060506324F41584B564B0F49584B"
+    exclude_test: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/send-only
     xpath: lsp-password/lsp-password-option/text/password-options/send-only
     tf_name: lsp_password_text_send_only
     optional: true
     delete_parent: true
-    exclude_test: true
     example: true
+    exclude_test: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/snp/send-only
     xpath: lsp-password/lsp-password-option/text/password-options/snp/send-only
     tf_name: lsp_password_text_snp_send_only
     optional: true
-    delete_parent: true
+    delete_grandparent: true
     exclude_test: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/TEXT/text/password-options/enable-poi
@@ -129,28 +130,24 @@ attributes:
     tf_name: lsp_password_hmac_md5_encrypted
     optional: true
     delete_parent: true
-    exclude_test: true
     example: "060506324F41584B564B0F49584B"
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/send-only
     xpath: lsp-password/lsp-password-option/hmac-md5/password-options/send-only
     tf_name: lsp_password_hmac_md5_send_only
     optional: true
     delete_parent: true
-    exclude_test: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/snp/send-only
     xpath: lsp-password/lsp-password-option/hmac-md5/password-options/snp/send-only
     tf_name: lsp_password_hmac_md5_snp_send_only
     optional: true
-    delete_parent: true
-    exclude_test: true
+    delete_grandparent: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/HMAC-MD5/hmac-md5/password-options/enable-poi
     xpath: lsp-password/lsp-password-option/hmac-md5/password-options/enable-poi
     tf_name: lsp_password_hmac_md5_enable_poi
     optional: true
     delete_parent: true
-    exclude_test: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/keychain-name
     xpath: lsp-password/lsp-password-option/keychain/keychain-name
@@ -163,31 +160,28 @@ attributes:
     xpath: lsp-password/lsp-password-option/keychain/send-only
     tf_name: lsp_password_keychain_send_only
     optional: true
-    delete_parent: true
     exclude_test: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/snp/send-only
     xpath: lsp-password/lsp-password-option/keychain/snp/send-only
     tf_name: lsp_password_keychain_snp_send_only
     optional: true
-    delete_parent: true
     exclude_test: true
     example: true
   - yang_name: lsp-password/lsp-password-option/LSP-PASSWORD-OPTION/KEYCHAIN/keychain/enable-poi
     xpath: lsp-password/lsp-password-option/keychain/enable-poi
     tf_name: lsp_password_keychain_enable_poi
     optional: true
-    delete_parent: true
     exclude_test: true
+    example: true
+  - yang_name: distribute/link-state
     example: true
   - yang_name: distribute/link-state/instance-id
     example: 32
   - yang_name: distribute/link-state/throttle
     example: 1
-    exclude_test: true
   - yang_name: distribute/link-state/level
     example: 2
-    exclude_test: true
   - yang_name: affinity-maps/affinity-map
     tf_name: affinity_maps
     type: List

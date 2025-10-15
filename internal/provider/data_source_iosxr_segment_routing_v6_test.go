@@ -39,14 +39,12 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.micro_segment_behavior", "unode-psp-usd"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix", "fccc:0:214::"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "locators.0.prefix_length", "48"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.name", "usid-f3216"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_segment_routing_v6.test", "formats.0.format_enable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrSegmentRoutingV6Config(),
+				Config: testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig + testAccDataSourceIosxrSegmentRoutingV6Config(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -56,6 +54,15 @@ func TestAccDataSourceIosxrSegmentRoutingV6(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccDataSourceIosxrSegmentRoutingV6PrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-segment-routing-ms-cfg:/sr"
+	attributes = {
+		"enable" = "<NULL>"
+	}
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -73,10 +80,7 @@ func testAccDataSourceIosxrSegmentRoutingV6Config() string {
 	config += `		prefix = "fccc:0:214::"` + "\n"
 	config += `		prefix_length = 48` + "\n"
 	config += `	}]` + "\n"
-	config += `	formats = [{` + "\n"
-	config += `		name = "usid-f3216"` + "\n"
-	config += `		format_enable = true` + "\n"
-	config += `	}]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

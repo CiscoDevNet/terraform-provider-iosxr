@@ -125,6 +125,9 @@ func testAccIosxrRouterStaticIPv4MulticastConfig_minimum() string {
 	config := `resource "iosxr_router_static_ipv4_multicast" "test" {` + "\n"
 	config += `	prefix_address = "100.0.1.0"` + "\n"
 	config += `	prefix_length = 24` + "\n"
+	config += `	nexthop_interfaces = [{` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
+	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

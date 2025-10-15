@@ -32,6 +32,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/booldefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
@@ -83,8 +84,10 @@ func (r *ClassMapQoSResource) Schema(ctx context.Context, req resource.SchemaReq
 				},
 			},
 			"match_any": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").String,
+				MarkdownDescription: helpers.NewAttributeDescription("Match any match criteria (default)").AddDefaultValueDescription("true").String,
 				Optional:            true,
+				Computed:            true,
+				Default:             booldefault.StaticBool(true),
 			},
 			"description": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set description for this class-map").String,

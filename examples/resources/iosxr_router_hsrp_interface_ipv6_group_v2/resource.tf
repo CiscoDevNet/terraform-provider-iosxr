@@ -4,7 +4,7 @@ resource "iosxr_router_hsrp_interface_ipv6_group_v2" "example" {
   name                           = "gp2"
   mac_address                    = "00:01:00:02:00:02"
   timers_msec                    = 100
-  timers_msec2                   = 300
+  timers_msec_holdtime           = 300
   preempt_delay                  = 256
   priority                       = 244
   bfd_fast_detect_peer_ipv6      = "fe80::240:d0ff:fe48:4672"

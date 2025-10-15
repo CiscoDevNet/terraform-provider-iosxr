@@ -15,6 +15,7 @@ attributes:
   - yang_name: encapsulation/mpls/transport-mode/passthrough
     example: false
   - yang_name: encapsulation/mpls/load-balancing/pw-label
+    test_tags: [NCS, XRV9K]
     example: true
   - yang_name: encapsulation/mpls/load-balancing/flow-label/transmit
     example: false

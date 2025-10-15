@@ -14,7 +14,7 @@ This data source can read the Flow Exporter Map configuration.
 
 ```terraform
 data "iosxr_flow_exporter_map" "example" {
-  name = "TEST"
+  name = "exporter_map1"
 }
 ```
 

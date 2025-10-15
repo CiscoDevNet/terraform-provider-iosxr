@@ -124,11 +124,11 @@ func (data *LACPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *LACP) getDeletedItems(ctx context.Context, state LACP) []string {
 	deletedItems := make([]string, 0)
-	if !state.Mac.IsNull() && data.Mac.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac", state.getPath()))
-	}
 	if !state.Priority.IsNull() && data.Priority.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.Mac.IsNull() && data.Mac.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac", state.getPath()))
 	}
 	return deletedItems
 }
@@ -148,11 +148,11 @@ func (data *LACP) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *LACP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Mac.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac", data.getPath()))
-	}
 	if !data.Priority.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.Mac.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac", data.getPath()))
 	}
 	return deletePaths
 }

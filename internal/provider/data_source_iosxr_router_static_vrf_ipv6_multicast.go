@@ -249,6 +249,14 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
 									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: "Hello interval",
+										Computed:            true,
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: "Detect multiplier",
+										Computed:            true,
+									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
@@ -271,14 +279,6 @@ func (d *RouterStaticVRFIPv6MulticastDataSource) Schema(ctx context.Context, req
 									},
 									"metric": schema.Int64Attribute{
 										MarkdownDescription: "Set metric for this route",
-										Computed:            true,
-									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: "Hello interval",
-										Computed:            true,
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: "Detect multiplier",
 										Computed:            true,
 									},
 								},

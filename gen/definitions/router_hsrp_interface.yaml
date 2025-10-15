@@ -5,6 +5,7 @@ doc_category: HSRP
 attributes:
   - yang_name: interface-name
     example: GigabitEthernet0/0/0/1
+    delete_parent: true
   - yang_name: hsrp/use-bia
     example: true
   - yang_name: hsrp/redirects/disable

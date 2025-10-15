@@ -13,23 +13,27 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
   ]
   nexthop_interface_addresses = [
     {
-      interface_name  = "GigabitEthernet0/0/0/2"
-      address         = "11.11.11.1"
-      description     = "interface-description"
-      tag             = 103
-      distance_metric = 144
-      permanent       = true
-      metric          = 10
+      interface_name                   = "GigabitEthernet0/0/0/2"
+      address                          = "11.11.11.1"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "interface-description"
+      tag                              = 103
+      distance_metric                  = 144
+      track                            = "TRACK1"
+      metric                           = 10
     }
   ]
   nexthop_addresses = [
     {
-      address         = "100.0.2.0"
-      description     = "ip-description"
-      tag             = 104
-      distance_metric = 155
-      track           = "TRACK1"
-      metric          = 10
+      address                          = "100.0.2.0"
+      bfd_fast_detect_minimum_interval = 100
+      bfd_fast_detect_multiplier       = 3
+      description                      = "ip-description"
+      tag                              = 104
+      distance_metric                  = 155
+      track                            = "TRACK1"
+      metric                           = 10
     }
   ]
   vrfs = [
@@ -47,23 +51,27 @@ resource "iosxr_router_static_ipv4_unicast" "example" {
       ]
       nexthop_interface_addresses = [
         {
-          interface_name  = "GigabitEthernet0/0/0/4"
-          address         = "11.11.11.1"
-          description     = "interface-description"
-          tag             = 103
-          distance_metric = 144
-          permanent       = true
-          metric          = 10
+          interface_name                   = "GigabitEthernet0/0/0/4"
+          address                          = "11.11.11.1"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "interface-description"
+          tag                              = 103
+          distance_metric                  = 144
+          track                            = "TRACK1"
+          metric                           = 10
         }
       ]
       nexthop_addresses = [
         {
-          address         = "100.0.2.0"
-          description     = "ip-description"
-          tag             = 104
-          distance_metric = 155
-          track           = "TRACK1"
-          metric          = 10
+          address                          = "100.0.2.0"
+          bfd_fast_detect_minimum_interval = 100
+          bfd_fast_detect_multiplier       = 3
+          description                      = "ip-description"
+          tag                              = 104
+          distance_metric                  = 155
+          track                            = "TRACK1"
+          metric                           = 10
         }
       ]
     }

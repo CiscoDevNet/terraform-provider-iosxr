@@ -16,8 +16,10 @@ attributes:
   - yang_name: mtu-ignore/enable
     example: true
   - yang_name: mtu-ignore/disable
+    exclude_example: true
     example: false
   - yang_name: passive/enable
+    exclude_example: true
     example: false
   - yang_name: passive/disable
     example: true
@@ -44,6 +46,7 @@ attributes:
   - yang_name: bfd/multiplier
     example: 3
   - yang_name: default-information/originate
+    exclude_example: true
     example: true
   - yang_name: default-information/originate/always
     example: true

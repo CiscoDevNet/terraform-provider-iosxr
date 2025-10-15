@@ -14,18 +14,26 @@ This resource can manage the Router BGP VRF Address Family configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf_address_family" "example" {
-  as_number                               = "65001"
-  vrf_name                                = "VRF1"
-  af_name                                 = "ipv4-unicast"
-  additional_paths_send                   = true
-  additional_paths_send_disable           = true
-  additional_paths_receive                = true
-  additional_paths_receive_disable        = true
-  additional_paths_selection_route_policy = "ADDITIONAL_PATHS_POLICY"
-  allocate_label_all                      = true
-  allocate_label_all_unlabeled_path       = true
-  advertise_best_external                 = true
-  segment_routing_srv6_locator            = "LocAlgo11"
+  as_number                                     = "65001"
+  vrf_name                                      = "VRF3"
+  af_name                                       = "ipv4-unicast"
+  additional_paths_send                         = true
+  additional_paths_receive                      = true
+  additional_paths_selection_route_policy       = "ADDITIONAL_PATHS_POLICY"
+  allocate_label_all                            = true
+  allocate_label_all_unlabeled_path             = true
+  advertise_best_external                       = true
+  maximum_paths_ebgp_multipath                  = 10
+  maximum_paths_ebgp_selective                  = true
+  maximum_paths_ebgp_route_policy               = "MULTIPATH_POLICY"
+  maximum_paths_ibgp_multipath                  = 10
+  maximum_paths_ibgp_unequal_cost               = true
+  maximum_paths_ibgp_unequal_cost_deterministic = true
+  maximum_paths_ibgp_selective                  = true
+  maximum_paths_ibgp_route_policy               = "MULTIPATH_POLICY"
+  label_mode_per_prefix                         = true
+  segment_routing_srv6_locator                  = "LocAlgo11"
+  segment_routing_srv6_alloc_mode_per_vrf       = true
   aggregate_addresses = [
     {
       address       = "10.0.0.0"
@@ -33,6 +41,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
       as_set        = true
       as_confed_set = false
       summary_only  = true
+      route_policy  = "ROUTE_POLICY_1"
       description   = "Aggregate route description"
       set_tag       = 100
     }
@@ -46,16 +55,16 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   ]
   redistribute_ospf = [
     {
-      router_tag   = "OSPF1"
-      metric       = 100
-      multipath    = true
-      route_policy = "REDISTRIBUTE_POLICY"
+      router_tag                              = "OSPF1"
+      match_internal_external_nssa_external_2 = true
+      metric                                  = 100
+      multipath                               = true
+      route_policy                            = "REDISTRIBUTE_POLICY"
     }
   ]
   redistribute_eigrp = [
     {
       instance_name           = "EIGRP1"
-      match_internal          = true
       match_internal_external = true
       metric                  = 100
       multipath               = true
@@ -133,6 +142,7 @@ resource "iosxr_router_bgp_vrf_address_family" "example" {
   - Range: `2`-`128`
 - `maximum_paths_ibgp_route_policy` (String) Route policy to specify ORF and inbound filter
 - `maximum_paths_ibgp_selective` (Boolean) Allow multipaths only from marked neighbors
+- `maximum_paths_ibgp_unequal_cost` (Boolean) Allow multipaths to have different BGP nexthop IGP metrics
 - `maximum_paths_ibgp_unequal_cost_deterministic` (Boolean) Deterministic Multipath selection primarily on IGP metric order
 - `maximum_paths_unique_nexthop_check_disable` (Boolean) Disable multipath unique nexthop check
 - `networks` (Attributes List) Specify a network to announce via BGP (see [below for nested schema](#nestedatt--networks))

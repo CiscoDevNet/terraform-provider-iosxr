@@ -229,26 +229,26 @@ func (data *RouterHSRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state RouterHSRPInterface) []string {
 	deletedItems := make([]string, 0)
-	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/use-bia", state.getPath()))
-	}
-	if !state.HsrpRedirectsDisable.IsNull() && data.HsrpRedirectsDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/redirects/disable", state.getPath()))
-	}
-	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/minimum", state.getPath()))
-	}
-	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/reload", state.getPath()))
-	}
-	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", state.getPath()))
+	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/mac-refresh", state.getPath()))
 	}
 	if !state.HsrpBfdMultiplier.IsNull() && data.HsrpBfdMultiplier.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/bfd/multiplier", state.getPath()))
 	}
-	if !state.HsrpMacRefresh.IsNull() && data.HsrpMacRefresh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/mac-refresh", state.getPath()))
+	if !state.HsrpBfdMinimumInterval.IsNull() && data.HsrpBfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.HsrpDelayReload.IsNull() && data.HsrpDelayReload.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/reload", state.getPath()))
+	}
+	if !state.HsrpDelayMinimum.IsNull() && data.HsrpDelayMinimum.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/delay/minimum", state.getPath()))
+	}
+	if !state.HsrpRedirectsDisable.IsNull() && data.HsrpRedirectsDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/redirects/disable", state.getPath()))
+	}
+	if !state.HsrpUseBia.IsNull() && data.HsrpUseBia.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hsrp/use-bia", state.getPath()))
 	}
 	return deletedItems
 }
@@ -259,11 +259,11 @@ func (data *RouterHSRPInterface) getDeletedItems(ctx context.Context, state Rout
 
 func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hsrp/use-bia", data.getPath()))
-	}
 	if !data.HsrpRedirectsDisable.IsNull() && !data.HsrpRedirectsDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hsrp/redirects/disable", data.getPath()))
+	}
+	if !data.HsrpUseBia.IsNull() && !data.HsrpUseBia.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/hsrp/use-bia", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -274,26 +274,26 @@ func (data *RouterHSRPInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 
 func (data *RouterHSRPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.HsrpUseBia.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/use-bia", data.getPath()))
-	}
-	if !data.HsrpRedirectsDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/redirects/disable", data.getPath()))
-	}
-	if !data.HsrpDelayMinimum.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/minimum", data.getPath()))
-	}
-	if !data.HsrpDelayReload.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/reload", data.getPath()))
-	}
-	if !data.HsrpBfdMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", data.getPath()))
+	if !data.HsrpMacRefresh.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/mac-refresh", data.getPath()))
 	}
 	if !data.HsrpBfdMultiplier.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/bfd/multiplier", data.getPath()))
 	}
-	if !data.HsrpMacRefresh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/mac-refresh", data.getPath()))
+	if !data.HsrpBfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.HsrpDelayReload.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/reload", data.getPath()))
+	}
+	if !data.HsrpDelayMinimum.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/delay/minimum", data.getPath()))
+	}
+	if !data.HsrpRedirectsDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/redirects/disable", data.getPath()))
+	}
+	if !data.HsrpUseBia.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hsrp/use-bia", data.getPath()))
 	}
 	return deletePaths
 }

@@ -14,37 +14,40 @@ This resource can manage the Router BGP VRF configuration.
 
 ```terraform
 resource "iosxr_router_bgp_vrf" "example" {
-  as_number                     = "65001"
-  vrf_name                      = "VRF2"
-  default_information_originate = true
-  default_metric                = 125
-  rd_auto                       = true
-  timers_bgp_keepalive_interval = 5
-  timers_bgp_holdtime           = 20
-  bgp_router_id                 = "22.22.22.22"
-  bfd_minimum_interval          = 10
-  bfd_multiplier                = 4
+  as_number                               = "65001"
+  vrf_name                                = "VRF1"
+  default_information_originate           = true
+  default_metric                          = 125
+  rd_auto                                 = true
+  timers_bgp_keepalive_interval           = 0
+  timers_bgp_keepalive_zero               = true
+  timers_bgp_keepalive_zero_holdtime_zero = true
+  bgp_router_id                           = "22.22.22.22"
+  bfd_minimum_interval                    = 10
+  bfd_multiplier                          = 4
   neighbors = [
     {
-      address                         = "10.1.1.2"
-      remote_as                       = "65002"
-      description                     = "My Neighbor Description"
-      use_neighbor_group              = "GROUP1"
-      advertisement_interval_seconds  = 10
-      ignore_connected_check          = true
-      ebgp_multihop_maximum_hop_count = 10
-      bfd_minimum_interval            = 10
-      bfd_multiplier                  = 4
-      bfd_fast_detect                 = true
-      bfd_fast_detect_strict_mode     = false
-      bfd_fast_detect_disable         = false
-      password                        = "12341C2713181F13253920"
-      password_inheritance_disable    = false
-      shutdown                        = false
-      timers_keepalive_interval       = 10
-      timers_holdtime                 = 20
-      update_source                   = "GigabitEthernet0/0/0/1"
-      ttl_security                    = false
+      address                                           = "10.1.1.2"
+      remote_as                                         = "65002"
+      description                                       = "My Neighbor Description"
+      use_neighbor_group                                = "GROUP1"
+      advertisement_interval_seconds                    = 10
+      ignore_connected_check                            = true
+      ebgp_multihop_maximum_hop_count                   = 10
+      bfd_minimum_interval                              = 10
+      bfd_multiplier                                    = 4
+      bfd_fast_detect                                   = true
+      bfd_fast_detect_strict_mode                       = false
+      local_as                                          = "10"
+      local_as_no_prepend_replace_as_dual_as            = true
+      password                                          = "12341C2713181F13253920"
+      password_inheritance_disable                      = false
+      shutdown                                          = false
+      timers_keepalive_interval                         = 0
+      timers_keepalive_zero                             = true
+      timers_keepalive_zero_minimum_acceptable_holdtime = 30
+      update_source                                     = "GigabitEthernet0/0/0/1"
+      ttl_security                                      = false
     }
   ]
 }
@@ -86,10 +89,10 @@ resource "iosxr_router_bgp_vrf" "example" {
   - Range: `3`-`65535`
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
-- `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
 - `timers_bgp_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 
@@ -122,10 +125,10 @@ Optional:
   - Range: `1`-`255`
 - `ignore_connected_check` (Boolean) Bypass the directly connected nexthop check for single-hop eBGP peering
 - `local_as` (String) AS number
-- `local_as_dual_as` (Boolean) Dual-AS mode
 - `local_as_inheritance_disable` (Boolean) Prevent local AS from being inherited from parent
 - `local_as_no_prepend` (Boolean) Do not prepend local AS to announcements from this neighbor
-- `local_as_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `local_as_no_prepend_replace_as` (Boolean) Prepend only local AS to announcements to this neighbor
+- `local_as_no_prepend_replace_as_dual_as` (Boolean) Dual-AS mode
 - `password` (String) Specifies an ENCRYPTED password will follow
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
 - `remote_as` (String) Set remote AS
@@ -134,10 +137,10 @@ Optional:
   - Range: `3`-`65535`
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
   - Range: `0`-`65535`
 - `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
   - Range: `3`-`65535`
 - `ttl_security` (Boolean) Enable EBGP TTL security

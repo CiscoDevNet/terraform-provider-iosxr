@@ -32,7 +32,7 @@ import (
 
 func TestAccDataSourceIosxrBanner(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", " Hello user !"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_banner.test", "line", "^C Hello World! ^C"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -56,7 +56,7 @@ func TestAccDataSourceIosxrBanner(t *testing.T) {
 func testAccDataSourceIosxrBannerConfig() string {
 	config := `resource "iosxr_banner" "test" {` + "\n"
 	config += `	banner_type = "login"` + "\n"
-	config += `	line = " Hello user !"` + "\n"
+	config += `	line = "^C Hello World! ^C"` + "\n"
 	config += `}` + "\n"
 
 	config += `

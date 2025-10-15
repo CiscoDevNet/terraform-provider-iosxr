@@ -4,7 +4,7 @@ path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=%s]
 doc_category: VRF
 attributes:
   - yang_name: vrf-name
-    example: VRF3
+    example: VRF4
   - yang_name: description
     example: My VRF Description
   - yang_name: vpn/id
@@ -14,10 +14,10 @@ attributes:
     example: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
     tf_name: ipv4_unicast_import_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_IMPORT_POLICY_1
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv4_unicast_export_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv4/multicast
     tf_name: ipv4_multicast
     example: true
@@ -31,10 +31,10 @@ attributes:
     example: true
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
     tf_name: ipv6_unicast_import_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_IMPORT_POLICY_1
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv6_unicast_export_route_policy
-    example: ROUTE_POLICY_1
+    example: VRF_EXPORT_POLICY_1
   - yang_name: address-family/ipv6/multicast
     tf_name: ipv6_multicast
     example: true
@@ -61,6 +61,7 @@ attributes:
     delete_parent: true
     optional: true
     example: 65001
+    exclude_example: true
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/FOUR-BYTE-AS/four-byte-as/asn4-index
     xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/four-byte-as/asn4-index
@@ -68,6 +69,7 @@ attributes:
     delete_parent: true
     optional: true
     example: 123
+    exclude_example: true
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/IPV4-ADDRESS/ipv4-address/address
     xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/address
@@ -75,6 +77,7 @@ attributes:
     delete_parent: true
     optional: true
     example: 1.2.3.4
+    exclude_example: true
     exclude_test: true
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/IPV4-ADDRESS/ipv4-address/ipv4address-index
     xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/ipv4-address/ipv4address-index
@@ -82,6 +85,7 @@ attributes:
     delete_parent: true
     optional: true
     example: 1
+    exclude_example: true
     exclude_test: true
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: ipv4_unicast_import_route_target_two_byte_as_format
@@ -99,6 +103,7 @@ attributes:
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: ipv4_unicast_import_route_target_four_byte_as_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: four-byte-as-number
         id: true
@@ -112,6 +117,7 @@ attributes:
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: ipv4_unicast_import_route_target_ip_address_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: ipv4-address
         id: true
@@ -138,6 +144,7 @@ attributes:
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: ipv4_unicast_export_route_target_four_byte_as_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: four-byte-as-number
         id: true
@@ -151,6 +158,7 @@ attributes:
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: ipv4_unicast_export_route_target_ip_address_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: ipv4-address
         id: true
@@ -177,6 +185,7 @@ attributes:
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: ipv6_unicast_import_route_target_four_byte_as_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: four-byte-as-number
         id: true
@@ -190,6 +199,7 @@ attributes:
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: ipv6_unicast_import_route_target_ip_address_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: ipv4-address
         id: true
@@ -216,6 +226,7 @@ attributes:
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
     tf_name: ipv6_unicast_export_route_target_four_byte_as_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: four-byte-as-number
         id: true
@@ -229,6 +240,7 @@ attributes:
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
     tf_name: ipv6_unicast_export_route_target_ip_address_format
     type: List
+    exclude_example: true
     attributes:
       - yang_name: ipv4-address
         id: true
@@ -241,9 +253,15 @@ attributes:
         example: "enable"
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]
     attributes:
       - name: route-policy-name
-        value: ROUTE_POLICY_1
+        value: VRF_IMPORT_POLICY_1
       - name: rpl-route-policy
-        value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+        value: "route-policy VRF_IMPORT_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]
+    attributes:
+      - name: route-policy-name
+        value: VRF_EXPORT_POLICY_1
+      - name: rpl-route-policy
+        value: "route-policy VRF_EXPORT_POLICY_1\\n  pass\\nend-policy\\n"

@@ -129,6 +129,10 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 					},
 				},
 			},
+			"capabilities_sac": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("State Advertisement Control").String,
+				Optional:            true,
+			},
 			"capabilities_sac_ipv4_disable": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Disable exchanging IPv4 prefix label bindings").String,
 				Optional:            true,
@@ -158,6 +162,10 @@ func (r *MPLSLDPResource) Schema(ctx context.Context, req resource.SchemaRequest
 				Validators: []validator.Int64{
 					int64validator.Between(60, 600),
 				},
+			},
+			"mldp": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Configure mLDP parameters").String,
+				Optional:            true,
 			},
 			"mldp_logging_notifications": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("MLDP logging notifications").String,

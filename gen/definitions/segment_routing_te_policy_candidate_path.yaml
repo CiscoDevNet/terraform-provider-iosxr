@@ -32,3 +32,4 @@ test_prerequisites:
     attributes:
       - name: policy-name
         value: POLICY1
+    dependencies: [0]

@@ -34,3 +34,6 @@ attributes:
   - yang_name: segment-routing/srv6/usid/allocation/wide-local-id-block
     tf_name: srv6_usid_allocation_wide_local_id_block
     example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/evpn

@@ -7,12 +7,15 @@ attributes:
     example: default
   - yang_name: host-ipv4-addresses/host-ipv4-address
     tf_name: host_ipv4_addresses
+    minimum_test_value: '["1.1.1.1"]'
     type: List
     attributes:
       - yang_name: ipv4-address
         id: true
+        minimum_test_value: '"1.1.1.1"'
         example: 1.1.1.1
       - yang_name: severity
+        minimum_test_value: '"info"'
         example: info
       - yang_name: port
         example: 514

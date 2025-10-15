@@ -10,3 +10,11 @@ attributes:
     tf_name: rpl
     description: "Configures a route policy"
     example: "route-policy ROUTE_POLICY_1\\n  if destination in PREFIX_SET_1 then\\n    set extcommunity rt (12345:1) additive\\n  endif\\n  pass\\nend-policy\\n"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]
+    attributes:
+      - name: set-name
+        value: PREFIX_SET_1
+      - name: rpl-prefix-set
+        value: "prefix-set PREFIX_SET_1\\n  10.1.1.0/26 ge 26,\\n  10.1.2.0/26 ge 26\\nend-set\\n"

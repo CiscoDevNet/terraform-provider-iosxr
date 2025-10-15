@@ -13,18 +13,25 @@ resource "iosxr_router_isis" "example" {
       advertise_interlevel         = true
     }
   ]
-  nsr                               = true
-  nsf_lifetime                      = 10
-  nsf_interface_timer               = 5
-  nsf_interface_expires             = 2
-  log_adjacency_changes             = true
-  lsp_gen_interval_maximum_wait     = 5000
-  lsp_gen_interval_initial_wait     = 50
-  lsp_gen_interval_secondary_wait   = 200
-  lsp_refresh_interval              = 65000
-  max_lsp_lifetime                  = 65535
-  lsp_password_text_encrypted       = "060506324F41584B564B0F49584B"
-  distribute_link_state_instance_id = 32
+  nsr                                 = true
+  nsf_ietf                            = true
+  nsf_lifetime                        = 10
+  nsf_interface_timer                 = 5
+  nsf_interface_expires               = 2
+  log_adjacency_changes               = true
+  lsp_gen_interval_maximum_wait       = 5000
+  lsp_gen_interval_initial_wait       = 50
+  lsp_gen_interval_secondary_wait     = 200
+  lsp_refresh_interval                = 65000
+  max_lsp_lifetime                    = 65535
+  lsp_password_hmac_md5_encrypted     = "060506324F41584B564B0F49584B"
+  lsp_password_hmac_md5_send_only     = true
+  lsp_password_hmac_md5_snp_send_only = true
+  lsp_password_hmac_md5_enable_poi    = true
+  distribute_link_state               = true
+  distribute_link_state_instance_id   = 32
+  distribute_link_state_throttle      = 1
+  distribute_link_state_level         = 2
   affinity_maps = [
     {
       name         = "22"

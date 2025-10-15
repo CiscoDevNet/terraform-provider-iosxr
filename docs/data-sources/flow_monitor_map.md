@@ -56,7 +56,9 @@ data "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_destination_prefix` (Boolean) Destination prefix based aggregation
 - `record_ipv4_destination_prefix_tos` (Boolean) Destination, prefix and tos based aggregation
 - `record_ipv4_destination_tos` (Boolean) IPv4 Destination Based NetFlow Accounting TOS
+- `record_ipv4_extended` (Boolean) IPv4 record with extended details
 - `record_ipv4_gtp` (Boolean) IPV4 gtp record format
+- `record_ipv4_l2_l3` (Boolean) IPv4 record with Layer2 details
 - `record_ipv4_peer_as` (Boolean) Record peer AS
 - `record_ipv4_prefix` (Boolean) Prefix based aggregation
 - `record_ipv4_prefix_port` (Boolean) Prefix port based aggregation
@@ -67,8 +69,11 @@ data "iosxr_flow_monitor_map" "example" {
 - `record_ipv4_source_prefix_tos` (Boolean) Source, Prefix and TOS based aggregation
 - `record_ipv6` (Boolean) IPv6 raw record format
 - `record_ipv6_destination` (Boolean) IPv6 Destination Based NetFlow Accounting
+- `record_ipv6_extended` (Boolean) IPv6 record with extended details
 - `record_ipv6_gtp` (Boolean) IPV6 gtp record format
+- `record_ipv6_l2_l3` (Boolean) IPv6 record with Layer2 details
 - `record_ipv6_peer_as` (Boolean) Record peer AS
+- `record_ipv6_srv6` (Boolean) SRv6 record format
 - `record_map_t` (Boolean) map-t translation based Netflow
 - `record_mpls` (Boolean) MPLS record format
 - `record_mpls_ipv4_fields` (Boolean) MPLS with IPv4 fields format

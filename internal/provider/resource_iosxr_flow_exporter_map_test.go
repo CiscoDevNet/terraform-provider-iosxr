@@ -34,13 +34,12 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFlowExporterMap(t *testing.T) {
-	if os.Getenv("PHYSICAL") == "" {
-		t.Skip("skipping test, set environment variable PHYSICAL")
+	if os.Getenv("NCS") == "" {
+		t.Skip("skipping test, set environment variable NCS")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv4_address", "10.1.1.1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv6_address", "1::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "name", "exporter_map1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_ipv4_address", "192.0.2.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "destination_vrf", "VRF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_flow_exporter_map.test", "dscp", "62"))
@@ -58,11 +57,11 @@ func TestAccIosxrFlowExporterMap(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrFlowExporterMapConfig_minimum(),
+			Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrFlowExporterMapConfig_all(),
+		Config: testAccIosxrFlowExporterMapPrerequisitesConfig + testAccIosxrFlowExporterMapConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -94,6 +93,15 @@ func iosxrFlowExporterMapImportStateIdFunc(resourceName string) resource.ImportS
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccIosxrFlowExporterMapPrerequisitesConfig = `
+resource "iosxr_gnmi" "PreReq0" {
+	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
+	attributes = {
+		"vrf-name" = "VRF1"
+	}
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
@@ -101,8 +109,9 @@ func iosxrFlowExporterMapImportStateIdFunc(resourceName string) resource.ImportS
 
 func testAccIosxrFlowExporterMapConfig_minimum() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
-	config += `	name = "TEST"` + "\n"
+	config += `	name = "exporter_map1"` + "\n"
 	config += `	version_export_format = "v9"` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -113,9 +122,8 @@ func testAccIosxrFlowExporterMapConfig_minimum() string {
 
 func testAccIosxrFlowExporterMapConfig_all() string {
 	config := `resource "iosxr_flow_exporter_map" "test" {` + "\n"
-	config += `	name = "TEST"` + "\n"
-	config += `	destination_ipv4_address = "10.1.1.1"` + "\n"
-	config += `	destination_ipv6_address = "1::1"` + "\n"
+	config += `	name = "exporter_map1"` + "\n"
+	config += `	destination_ipv4_address = "192.0.2.1"` + "\n"
 	config += `	destination_vrf = "VRF1"` + "\n"
 	config += `	source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	dscp = 62` + "\n"
@@ -130,6 +138,7 @@ func testAccIosxrFlowExporterMapConfig_all() string {
 	config += `	version_options_sampler_table_timeout = 4096` + "\n"
 	config += `	version_options_class_table_timeout = 255` + "\n"
 	config += `	version_options_vrf_table_timeout = 122` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

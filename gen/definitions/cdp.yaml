@@ -4,6 +4,7 @@ path: Cisco-IOS-XR-um-cdp-cfg:/cdp
 doc_category: System
 attributes:
   - yang_name: enable
+    minimum_test_value: true
     example: true
   - yang_name: holdtime
     example: 12

@@ -7,7 +7,7 @@ attributes:
     example: 65001
   - yang_name: vrf-name
     reference: true
-    example: VRF1
+    example: VRF2
   - yang_name: address
     example: 10.1.1.2
   - yang_name: af-name
@@ -16,11 +16,12 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
+  - yang_name: default-originate
+    example: true
   - yang_name: default-originate/DEFAULT-ORIGINATE/ROUTE-POLICY/route-policy
     tf_name: default_originate_route_policy
     xpath: default-originate/route-policy
     delete_parent: true
-    exclude_test: true
     example: ROUTE_POLICY_1
   - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
     tf_name: default_originate_inheritance_disable
@@ -48,6 +49,7 @@ attributes:
     example: true
   - yang_name: remove-private-as/remove-private-as-outbound
     tf_name: remove_private_as
+    exclude_example: true
     example: true
   - yang_name: remove-private-as/remove-private-as-outbound/entire-aspath
     tf_name: remove_private_as_entire_aspath
@@ -62,12 +64,17 @@ attributes:
     exclude_test: true
 
 test_prerequisites:
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]
+    attributes:
+      - name: vrf-name
+        value: VRF2
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF2]/Cisco-IOS-XR-um-router-bgp-cfg:rd/Cisco-IOS-XR-um-router-bgp-cfg:two-byte-as
     attributes:
       - name: two-byte-as-number
-        value: 1
+        value: 65001
       - name: asn2-index
-        value: 1
+        value: 2
+    dependencies: [0]
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]
     attributes:
       - name: as-number
@@ -79,11 +86,11 @@ test_prerequisites:
           - attributes:
               - name: af-name
                 value: vpnv4-unicast
-  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF1]
+  - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]
     no_delete: true
     attributes:
       - name: vrf-name
-        value: VRF1
+        value: VRF2
     lists:
       - name: address-families/address-family
         key: af-name
@@ -99,7 +106,7 @@ test_prerequisites:
                 value: 10.1.1.2
               - name: remote-as
                 value: 65002
-    dependencies: [0, 1]
+    dependencies: [0, 1, 2]
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
     attributes:
       - name: route-policy-name

@@ -57,14 +57,15 @@ data "iosxr_router_bgp" "example" {
 - `neighbors` (Attributes List) Specify a neighbor router (see [below for nested schema](#nestedatt--neighbors))
 - `nexthop_validation_color_extcomm_disable` (Boolean) Disable next-hop reachability validation for color-extcomm paths
 - `nexthop_validation_color_extcomm_sr_policy` (Boolean) Enable BGP next-hop reachability validation by SR Policy for color-extcomm paths
+- `nsr` (Boolean) Enable non-stop-routing support for all neighbors
 - `nsr_disable` (Boolean) Disable non-stop-routing support for all neighbors
 - `segment_routing_srv6_locator` (String) Specify locator
 - `segment_routing_srv6_usid_allocation_wide_local_id_block` (Boolean) Wide LIB allocation
 - `timers_bgp_holdtime` (Number) Holdtime
 - `timers_bgp_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_bgp_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_interval` (Number) Keepalive interval
 - `timers_bgp_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_bgp_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_bgp_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 
 <a id="nestedatt--neighbors"></a>
@@ -87,11 +88,11 @@ Read-Only:
 - `password_inheritance_disable` (Boolean) Prevent password from being inherited from parent
 - `remote_as` (String) Set remote AS
 - `shutdown` (Boolean) Administratively shut down this neighbor
+- `timers_holdtime` (Number) Holdtime
 - `timers_holdtime_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
-- `timers_holdtime_number` (Number) Holdtime
-- `timers_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_interval` (Number) Keepalive interval
 - `timers_keepalive_zero` (Boolean) Disable keepalives/hold time
+- `timers_keepalive_zero_holdtime_zero` (Boolean) Disable keepalives/hold time
 - `timers_keepalive_zero_minimum_acceptable_holdtime` (Number) Minimum acceptable holdtime from neighbor
 - `ttl_security` (Boolean) Enable EBGP TTL security
 - `update_source` (String) Source of routing updates

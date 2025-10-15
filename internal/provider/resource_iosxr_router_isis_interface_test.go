@@ -45,9 +45,11 @@ func TestAccIosxrRouterISISInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "priority_levels.0.priority", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "point_to_point", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "state", "passive"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_hmac_md5_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_hmac_md5_send_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_encrypted", "060506324F41584B564B0F49584B"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "hello_password_levels.0.hello_password_text_send_only", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv4", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_fast_detect_ipv6", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_interface.test", "bfd_minimum_interval", "50"))
@@ -136,10 +138,12 @@ func testAccIosxrRouterISISInterfaceConfig_all() string {
 	config += `		}]` + "\n"
 	config += `	point_to_point = false` + "\n"
 	config += `	state = "passive"` + "\n"
-	config += `	hello_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `	hello_password_hmac_md5_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `	hello_password_hmac_md5_send_only = true` + "\n"
 	config += `	hello_password_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
-	config += `		text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `		hello_password_text_encrypted = "060506324F41584B564B0F49584B"` + "\n"
+	config += `		hello_password_text_send_only = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	bfd_fast_detect_ipv4 = true` + "\n"
 	config += `	bfd_fast_detect_ipv6 = true` + "\n"

@@ -128,11 +128,11 @@ func (data *FlowSamplerMapData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FlowSamplerMap) getDeletedItems(ctx context.Context, state FlowSamplerMap) []string {
 	deletedItems := make([]string, 0)
-	if !state.Random.IsNull() && data.Random.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/random", state.getPath()))
-	}
 	if !state.OutOf.IsNull() && data.OutOf.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/out-of", state.getPath()))
+	}
+	if !state.Random.IsNull() && data.Random.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/random", state.getPath()))
 	}
 	return deletedItems
 }
@@ -152,11 +152,11 @@ func (data *FlowSamplerMap) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *FlowSamplerMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Random.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/random", data.getPath()))
-	}
 	if !data.OutOf.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/out-of", data.getPath()))
+	}
+	if !data.Random.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/random", data.getPath()))
 	}
 	return deletePaths
 }

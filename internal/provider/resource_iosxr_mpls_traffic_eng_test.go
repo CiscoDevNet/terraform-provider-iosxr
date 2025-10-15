@@ -80,6 +80,7 @@ func iosxrMPLSTrafficEngImportStateIdFunc(resourceName string) resource.ImportSt
 
 func testAccIosxrMPLSTrafficEngConfig_minimum() string {
 	config := `resource "iosxr_mpls_traffic_eng" "test" {` + "\n"
+	config += `	traffic_eng = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

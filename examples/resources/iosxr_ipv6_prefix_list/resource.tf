@@ -7,6 +7,7 @@ resource "iosxr_ipv6_prefix_list" "example" {
       prefix                 = "2001:db8::"
       mask                   = 32
       match_prefix_length_ge = 64
+      match_prefix_length_le = 128
     }
   ]
 }

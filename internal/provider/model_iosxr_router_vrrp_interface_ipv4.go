@@ -533,98 +533,8 @@ func (data *RouterVRRPInterfaceIPv4Data) fromBody(ctx context.Context, res []byt
 
 func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state RouterVRRPInterfaceIPv4) []string {
 	deletedItems := make([]string, 0)
-	if !state.Address.IsNull() && data.Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address", state.getPath()))
-	}
-	if !state.Priority.IsNull() && data.Priority.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
-	}
-	if !state.Name.IsNull() && data.Name.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
-	}
-	if !state.TextAuthentication.IsNull() && data.TextAuthentication.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/text-authentication", state.getPath()))
-	}
-	for i := range state.SecondaryAddresses {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.SecondaryAddresses[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.SecondaryAddresses[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.SecondaryAddresses {
-			found = true
-			if state.SecondaryAddresses[i].Address.ValueString() != data.SecondaryAddresses[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", state.getPath(), keyString))
-		}
-	}
-	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
-	}
-	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", state.getPath()))
-	}
-	if !state.TimerForce.IsNull() && data.TimerForce.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/force", state.getPath()))
-	}
-	if !state.PreemptDisable.IsNull() && data.PreemptDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/disable", state.getPath()))
-	}
-	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
-	}
-	if !state.AcceptModeDisable.IsNull() && data.AcceptModeDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-mode/disable", state.getPath()))
-	}
-	for i := range state.TrackInterfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.TrackInterfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.TrackInterfaces {
-			found = true
-			if state.TrackInterfaces[i].InterfaceName.ValueString() != data.TrackInterfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v/priority-decrement", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
-		}
+	if !state.BfdFastDetectPeerIpv4.IsNull() && data.BfdFastDetectPeerIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv4", state.getPath()))
 	}
 	for i := range state.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -659,8 +569,98 @@ func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state 
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/objects/object%v", state.getPath(), keyString))
 		}
 	}
-	if !state.BfdFastDetectPeerIpv4.IsNull() && data.BfdFastDetectPeerIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv4", state.getPath()))
+	for i := range state.TrackInterfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.TrackInterfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.TrackInterfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.TrackInterfaces {
+			found = true
+			if state.TrackInterfaces[i].InterfaceName.ValueString() != data.TrackInterfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.TrackInterfaces[i].PriorityDecrement.IsNull() && data.TrackInterfaces[j].PriorityDecrement.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v/priority-decrement", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/track/interfaces/interface%v", state.getPath(), keyString))
+		}
+	}
+	if !state.AcceptModeDisable.IsNull() && data.AcceptModeDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/accept-mode/disable", state.getPath()))
+	}
+	if !state.PreemptDelay.IsNull() && data.PreemptDelay.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/delay", state.getPath()))
+	}
+	if !state.PreemptDisable.IsNull() && data.PreemptDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/preempt/disable", state.getPath()))
+	}
+	if !state.TimerForce.IsNull() && data.TimerForce.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/force", state.getPath()))
+	}
+	if !state.TimerAdvertisementMilliseconds.IsNull() && data.TimerAdvertisementMilliseconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", state.getPath()))
+	}
+	if !state.TimerAdvertisementSeconds.IsNull() && data.TimerAdvertisementSeconds.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", state.getPath()))
+	}
+	for i := range state.SecondaryAddresses {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.SecondaryAddresses[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.SecondaryAddresses[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.SecondaryAddresses {
+			found = true
+			if state.SecondaryAddresses[i].Address.ValueString() != data.SecondaryAddresses[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", state.getPath(), keyString))
+		}
+	}
+	if !state.TextAuthentication.IsNull() && data.TextAuthentication.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/text-authentication", state.getPath()))
+	}
+	if !state.Name.IsNull() && data.Name.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/name", state.getPath()))
+	}
+	if !state.Priority.IsNull() && data.Priority.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/priority", state.getPath()))
+	}
+	if !state.Address.IsNull() && data.Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address", state.getPath()))
 	}
 	return deletedItems
 }
@@ -671,22 +671,13 @@ func (data *RouterVRRPInterfaceIPv4) getDeletedItems(ctx context.Context, state 
 
 func (data *RouterVRRPInterfaceIPv4) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.SecondaryAddresses {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SecondaryAddresses[i].Address.ValueString()}
+	for i := range data.TrackObjects {
+		keys := [...]string{"object-name"}
+		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-	}
-	if !data.TimerForce.IsNull() && !data.TimerForce.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timer/force", data.getPath()))
-	}
-	if !data.PreemptDisable.IsNull() && !data.PreemptDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preempt/disable", data.getPath()))
-	}
-	if !data.AcceptModeDisable.IsNull() && !data.AcceptModeDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
 	}
 	for i := range data.TrackInterfaces {
 		keys := [...]string{"interface-name"}
@@ -696,9 +687,18 @@ func (data *RouterVRRPInterfaceIPv4) getEmptyLeafsDelete(ctx context.Context) []
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	for i := range data.TrackObjects {
-		keys := [...]string{"object-name"}
-		keyValues := [...]string{data.TrackObjects[i].ObjectName.ValueString()}
+	if !data.AcceptModeDisable.IsNull() && !data.AcceptModeDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
+	}
+	if !data.PreemptDisable.IsNull() && !data.PreemptDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/preempt/disable", data.getPath()))
+	}
+	if !data.TimerForce.IsNull() && !data.TimerForce.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/timer/force", data.getPath()))
+	}
+	for i := range data.SecondaryAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SecondaryAddresses[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -713,55 +713,8 @@ func (data *RouterVRRPInterfaceIPv4) getEmptyLeafsDelete(ctx context.Context) []
 
 func (data *RouterVRRPInterfaceIPv4) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address", data.getPath()))
-	}
-	if !data.Priority.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
-	}
-	if !data.Name.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
-	}
-	if !data.TextAuthentication.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/text-authentication", data.getPath()))
-	}
-	for i := range data.SecondaryAddresses {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.SecondaryAddresses[i].Address.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", data.getPath(), keyString))
-	}
-	if !data.TimerAdvertisementSeconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
-	}
-	if !data.TimerAdvertisementMilliseconds.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", data.getPath()))
-	}
-	if !data.TimerForce.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/force", data.getPath()))
-	}
-	if !data.PreemptDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/disable", data.getPath()))
-	}
-	if !data.PreemptDelay.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/delay", data.getPath()))
-	}
-	if !data.AcceptModeDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
-	}
-	for i := range data.TrackInterfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface%v", data.getPath(), keyString))
+	if !data.BfdFastDetectPeerIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv4", data.getPath()))
 	}
 	for i := range data.TrackObjects {
 		keys := [...]string{"object-name"}
@@ -773,8 +726,55 @@ func (data *RouterVRRPInterfaceIPv4) getDeletePaths(ctx context.Context) []strin
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/objects/object%v", data.getPath(), keyString))
 	}
-	if !data.BfdFastDetectPeerIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/fast-detect/peer/ipv4", data.getPath()))
+	for i := range data.TrackInterfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.TrackInterfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/track/interfaces/interface%v", data.getPath(), keyString))
+	}
+	if !data.AcceptModeDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/accept-mode/disable", data.getPath()))
+	}
+	if !data.PreemptDelay.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/delay", data.getPath()))
+	}
+	if !data.PreemptDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/preempt/disable", data.getPath()))
+	}
+	if !data.TimerForce.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/force", data.getPath()))
+	}
+	if !data.TimerAdvertisementMilliseconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-milliseconds", data.getPath()))
+	}
+	if !data.TimerAdvertisementSeconds.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer/advertisement-time-in-seconds", data.getPath()))
+	}
+	for i := range data.SecondaryAddresses {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.SecondaryAddresses[i].Address.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/secondary-addresses/secondary-address%v", data.getPath(), keyString))
+	}
+	if !data.TextAuthentication.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/text-authentication", data.getPath()))
+	}
+	if !data.Name.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/name", data.getPath()))
+	}
+	if !data.Priority.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/priority", data.getPath()))
+	}
+	if !data.Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address", data.getPath()))
 	}
 	return deletePaths
 }

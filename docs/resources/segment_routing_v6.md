@@ -25,12 +25,6 @@ resource "iosxr_segment_routing_v6" "example" {
       prefix_length          = 48
     }
   ]
-  formats = [
-    {
-      name          = "usid-f3216"
-      format_enable = true
-    }
-  ]
 }
 ```
 

@@ -10,9 +10,11 @@ attributes:
   - yang_name: traps/unencrypted/unencrypted-string
     tf_name: unencrypted_strings
     type: List
+    minimum_test_value: '["COMMUNITY1"]'
     attributes:
       - yang_name: community-string
         id: true
+        minimum_test_value: '"COMMUNITY1"'
         example: COMMUNITY1
       - yang_name: udp-port
         default_value: default

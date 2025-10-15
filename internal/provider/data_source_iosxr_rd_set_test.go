@@ -32,7 +32,7 @@ import (
 
 func TestAccDataSourceIosxrRDSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_rd_set.test", "rpl", "rd-set set1\n  65001:1,\n  123456:1,\n  192.0.2.1:1,\n  match any\nend-set\n"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -56,7 +56,7 @@ func TestAccDataSourceIosxrRDSet(t *testing.T) {
 func testAccDataSourceIosxrRDSetConfig() string {
 	config := `resource "iosxr_rd_set" "test" {` + "\n"
 	config += `	set_name = "set1"` + "\n"
-	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
+	config += `	rpl = "rd-set set1\n  65001:1,\n  123456:1,\n  192.0.2.1:1,\n  match any\nend-set\n"` + "\n"
 	config += `}` + "\n"
 
 	config += `

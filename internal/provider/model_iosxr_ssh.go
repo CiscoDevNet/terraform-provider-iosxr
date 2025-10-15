@@ -287,21 +287,6 @@ func (data *SSHData) fromBody(ctx context.Context, res []byte) {
 
 func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 	deletedItems := make([]string, 0)
-	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/dscp", state.getPath()))
-	}
-	if !state.ServerLogging.IsNull() && data.ServerLogging.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/logging", state.getPath()))
-	}
-	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/rate-limit", state.getPath()))
-	}
-	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/session-limit", state.getPath()))
-	}
-	if !state.ServerV2.IsNull() && data.ServerV2.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/v2", state.getPath()))
-	}
 	for i := range state.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		stateKeyValues := [...]string{state.ServerVrfs[i].VrfName.ValueString()}
@@ -325,11 +310,11 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 				found = false
 			}
 			if found {
-				if !state.ServerVrfs[i].Ipv4AccessList.IsNull() && data.ServerVrfs[j].Ipv4AccessList.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v/ipv4/access-list", state.getPath(), keyString))
-				}
 				if !state.ServerVrfs[i].Ipv6AccessList.IsNull() && data.ServerVrfs[j].Ipv6AccessList.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v/ipv6/access-list", state.getPath(), keyString))
+				}
+				if !state.ServerVrfs[i].Ipv4AccessList.IsNull() && data.ServerVrfs[j].Ipv4AccessList.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v/ipv4/access-list", state.getPath(), keyString))
 				}
 				break
 			}
@@ -337,6 +322,21 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 		if !found {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/server/vrfs/vrf%v", state.getPath(), keyString))
 		}
+	}
+	if !state.ServerV2.IsNull() && data.ServerV2.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/v2", state.getPath()))
+	}
+	if !state.ServerSessionLimit.IsNull() && data.ServerSessionLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/session-limit", state.getPath()))
+	}
+	if !state.ServerRateLimit.IsNull() && data.ServerRateLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/rate-limit", state.getPath()))
+	}
+	if !state.ServerLogging.IsNull() && data.ServerLogging.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/logging", state.getPath()))
+	}
+	if !state.ServerDscp.IsNull() && data.ServerDscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/server/dscp", state.getPath()))
 	}
 	return deletedItems
 }
@@ -347,12 +347,6 @@ func (data *SSH) getDeletedItems(ctx context.Context, state SSH) []string {
 
 func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getPath()))
-	}
-	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getPath()))
-	}
 	for i := range data.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
@@ -360,6 +354,12 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	if !data.ServerV2.IsNull() && !data.ServerV2.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/v2", data.getPath()))
+	}
+	if !data.ServerLogging.IsNull() && !data.ServerLogging.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/server/logging", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -370,21 +370,6 @@ func (data *SSH) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *SSH) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.ServerDscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/dscp", data.getPath()))
-	}
-	if !data.ServerLogging.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/logging", data.getPath()))
-	}
-	if !data.ServerRateLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/rate-limit", data.getPath()))
-	}
-	if !data.ServerSessionLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/session-limit", data.getPath()))
-	}
-	if !data.ServerV2.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/v2", data.getPath()))
-	}
 	for i := range data.ServerVrfs {
 		keys := [...]string{"vrf-name"}
 		keyValues := [...]string{data.ServerVrfs[i].VrfName.ValueString()}
@@ -394,6 +379,21 @@ func (data *SSH) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/vrfs/vrf%v", data.getPath(), keyString))
+	}
+	if !data.ServerV2.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/v2", data.getPath()))
+	}
+	if !data.ServerSessionLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/session-limit", data.getPath()))
+	}
+	if !data.ServerRateLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/rate-limit", data.getPath()))
+	}
+	if !data.ServerLogging.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/logging", data.getPath()))
+	}
+	if !data.ServerDscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/server/dscp", data.getPath()))
 	}
 	return deletePaths
 }

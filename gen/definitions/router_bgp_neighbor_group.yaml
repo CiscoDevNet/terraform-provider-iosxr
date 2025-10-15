@@ -58,6 +58,7 @@ attributes:
     example: false
   - yang_name: bfd/fast-detect/disable
     delete_parent: true
+    exclude_test: true
     example: false
   - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
     xpath: local-as/inheritance-disable
@@ -70,7 +71,7 @@ attributes:
     tf_name: local_as
     delete_parent: true
     exclude_test: true
-    example: "65001"
+    example: "10"
   - yang_name: local-as/LOCAL-AS/AS/as/no-prepend
     xpath: local-as/as/no-prepend
     tf_name: local_as_no_prepend
@@ -104,12 +105,15 @@ attributes:
     example: false
     description: "Prevent password from being inherited from parent"
   - yang_name: timers/keepalive-interval
-    tf_name: timers_keepalive_interval
-    delete_parent: true
     example: 10
+  - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
+    xpath: timers/zero
+    tf_name: timers_keepalive_zero
+    example: true
+    exclude_test: true
   - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
     xpath: timers/zero/zero
-    tf_name: timers_keepalive_zero
+    tf_name: timers_keepalive_zero_holdtime_zero
     delete_parent: true
     exclude_test: true
     example: true
@@ -118,23 +122,16 @@ attributes:
     tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
     delete_parent: true
     exclude_test: true
-    example: 10
+    example: 30
   - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
     xpath: timers/holdtime/holdtime-number
     tf_name: timers_holdtime
     delete_parent: true
-    example: 20
-  - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
-    xpath: timers/holdtime/zero
-    tf_name: timers_holdtime_zero
-    delete_parent: true
-    exclude_test: true
-    example: true
+    example: 30
   - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/holdtime/minimum-acceptable-holdtime
     tf_name: timers_holdtime_minimum_acceptable_holdtime
     delete_parent: true
-    exclude_test: true
     example: 30
   - yang_name: address-families/address-family
     tf_name: address_families

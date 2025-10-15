@@ -9,7 +9,10 @@ attributes:
     example: true
   - yang_name: default-metric
     example: 125
+  - yang_name: nsr
+    example: true
   - yang_name: nsr/disable
+    delete_parent: true
     example: false
   - yang_name: bgp/redistribute-internal
     example: true
@@ -19,10 +22,15 @@ attributes:
     tf_name: segment_routing_srv6_usid_allocation_wide_local_id_block
     example: true
   - yang_name: timers/bgp/keepalive-interval
-    example: 5
+    example: 10
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero
+    xpath: timers/bgp/zero
+    tf_name: timers_bgp_keepalive_zero
+    exclude_test: true
+    example: true
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
     xpath: timers/bgp/zero/zero
-    tf_name: timers_bgp_keepalive_zero
+    tf_name: timers_bgp_keepalive_zero_holdtime_zero
     delete_parent: true
     exclude_test: true
     example: true
@@ -31,23 +39,16 @@ attributes:
     tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
     delete_parent: true
     exclude_test: true
-    example: 10
+    example: 30
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
     xpath: timers/bgp/holdtime/holdtime-number
     tf_name: timers_bgp_holdtime
     delete_parent: true
-    example: 20
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
-    xpath: timers/bgp/holdtime/zero
-    tf_name: timers_bgp_holdtime_zero
-    delete_parent: true
-    exclude_test: true
-    example: true
+    example: 30
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/bgp/holdtime/minimum-acceptable-holdtime
     tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
     delete_parent: true
-    exclude_test: true
     example: 30
   - yang_name: bgp/router-id
     example: 22.22.22.22
@@ -67,7 +68,6 @@ attributes:
     exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/ignore
-    exclude_test: true
     example: true
   - yang_name: bgp/bestpath/as-path/multipath-relax
     example: true
@@ -85,8 +85,6 @@ attributes:
   - yang_name: bgp/bestpath/med/always
     example: true
     exclude_test: true
-  # - yang_name: bgp/bestpath/med/confed
-  #   example: true
   - yang_name: bgp/bestpath/med/missing-as-worst
     example: true
   - yang_name: bgp/bestpath/origin-as/use/validity
@@ -117,11 +115,9 @@ attributes:
         example: GROUP1
       - yang_name: advertisement-interval/advertisement-interval-time-in-seconds
         tf_name: advertisement_interval_seconds
-        delete_parent: true
         example: 10
       - yang_name: advertisement-interval/advertisement-interval-time-in-milliseconds
         tf_name: advertisement_interval_milliseconds
-        delete_parent: true
         example: 500
         exclude_test: true
       - yang_name: ignore-connected-check
@@ -138,7 +134,7 @@ attributes:
       - yang_name: bfd/fast-detect/strict-mode
         example: false
       - yang_name: bfd/fast-detect/disable
-        exclude_test: true
+        exclude_example: true
         example: false
       - yang_name: password/encrypted
         type: String
@@ -159,12 +155,15 @@ attributes:
       - yang_name: shutdown
         example: false
       - yang_name: timers/keepalive-interval
-        tf_name: timers_keepalive_interval
-        delete_parent: true
         example: 10
+      - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
+        xpath: timers/zero
+        tf_name: timers_keepalive_zero
+        example: true
+        exclude_test: true
       - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
         xpath: timers/zero/zero
-        tf_name: timers_keepalive_zero
+        tf_name: timers_keepalive_zero_holdtime_zero
         delete_parent: true
         exclude_test: true
         example: true
@@ -173,23 +172,16 @@ attributes:
         tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
         delete_parent: true
         exclude_test: true
-        example: 10
+        example: 30
       - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
         xpath: timers/holdtime/holdtime-number
-        tf_name: timers_holdtime_number
+        tf_name: timers_holdtime
         delete_parent: true
-        example: 20
-      - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
-        xpath: timers/holdtime/zero
-        tf_name: timers_holdtime_zero
-        delete_parent: true
-        exclude_test: true
-        example: true
+        example: 30
       - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
         xpath: timers/holdtime/minimum-acceptable-holdtime
         tf_name: timers_holdtime_minimum_acceptable_holdtime
         delete_parent: true
-        exclude_test: true
         example: 30
       - yang_name: update-source
         example: GigabitEthernet0/0/0/1

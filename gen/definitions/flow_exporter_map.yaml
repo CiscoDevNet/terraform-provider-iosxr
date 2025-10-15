@@ -3,16 +3,17 @@ name: Flow Exporter Map
 path: Cisco-IOS-XR-um-flow-cfg:/flow/exporter-maps/exporter-map[exporter-map-name=%s]
 no_delete_attributes: true
 doc_category: Flow
-test_tags: [PHYSICAL]
+test_tags: [NCS]
 attributes:
   - yang_name: exporter-map-name
     tf_name: name
     id: true
-    example: TEST
+    example: exporter_map1
   - yang_name: destination/ipv4-address
-    example: 10.1.1.1
+    example: 192.0.2.1
   - yang_name: destination/ipv6-address
-    example: 1::1
+    example: 2001:db8::1
+    exclude_test: true
   - yang_name: destination/vrf
     example: VRF1
   - yang_name: source
@@ -41,3 +42,9 @@ attributes:
     example: 255
   - yang_name: version/options/vrf-table/timeout
     example: 122
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1

@@ -150,14 +150,14 @@ func (data *IPv4AccessListOptionsData) fromBody(ctx context.Context, res []byte)
 
 func (data *IPv4AccessListOptions) getDeletedItems(ctx context.Context, state IPv4AccessListOptions) []string {
 	deletedItems := make([]string, 0)
-	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/threshold", state.getPath()))
+	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
 	}
 	if !state.LogUpdateRate.IsNull() && data.LogUpdateRate.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/rate", state.getPath()))
 	}
-	if !state.IcmpOff.IsNull() && data.IcmpOff.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/icmp-off", state.getPath()))
+	if !state.LogUpdateThreshold.IsNull() && data.LogUpdateThreshold.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log-update/threshold", state.getPath()))
 	}
 	return deletedItems
 }
@@ -180,14 +180,14 @@ func (data *IPv4AccessListOptions) getEmptyLeafsDelete(ctx context.Context) []st
 
 func (data *IPv4AccessListOptions) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.LogUpdateThreshold.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/threshold", data.getPath()))
+	if !data.IcmpOff.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
 	}
 	if !data.LogUpdateRate.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/rate", data.getPath()))
 	}
-	if !data.IcmpOff.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/icmp-off", data.getPath()))
+	if !data.LogUpdateThreshold.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log-update/threshold", data.getPath()))
 	}
 	return deletePaths
 }

@@ -103,6 +103,10 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 					},
 				},
 			},
+			"capabilities_sac": schema.BoolAttribute{
+				MarkdownDescription: "State Advertisement Control",
+				Computed:            true,
+			},
 			"capabilities_sac_ipv4_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable exchanging IPv4 prefix label bindings",
 				Computed:            true,
@@ -125,6 +129,10 @@ func (d *MPLSLDPDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 			},
 			"igp_sync_delay_on_proc_restart": schema.Int64Attribute{
 				MarkdownDescription: "Global sync up delay to be used after process restart",
+				Computed:            true,
+			},
+			"mldp": schema.BoolAttribute{
+				MarkdownDescription: "Configure mLDP parameters",
 				Computed:            true,
 			},
 			"mldp_logging_notifications": schema.BoolAttribute{

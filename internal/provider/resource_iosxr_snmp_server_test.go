@@ -51,7 +51,7 @@ func TestAccIosxrSNMPServer(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_bridgemib", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_state_operstatus", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_entity_redundancy_all", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "trap_source_both", "Loopback10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "trap_source", "Loopback10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_all", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_up", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_snmp_server.test", "traps_l2vpn_vc_down", "true"))
@@ -142,6 +142,7 @@ func iosxrSNMPServerImportStateIdFunc(resourceName string) resource.ImportStateI
 
 func testAccIosxrSNMPServerConfig_minimum() string {
 	config := `resource "iosxr_snmp_server" "test" {` + "\n"
+	config += `	contact = "My contact"` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -168,7 +169,7 @@ func testAccIosxrSNMPServerConfig_all() string {
 	config += `	traps_bridgemib = true` + "\n"
 	config += `	traps_entity_state_operstatus = true` + "\n"
 	config += `	traps_entity_redundancy_all = true` + "\n"
-	config += `	trap_source_both = "Loopback10"` + "\n"
+	config += `	trap_source = "Loopback10"` + "\n"
 	config += `	traps_l2vpn_all = true` + "\n"
 	config += `	traps_l2vpn_vc_up = true` + "\n"
 	config += `	traps_l2vpn_vc_down = true` + "\n"

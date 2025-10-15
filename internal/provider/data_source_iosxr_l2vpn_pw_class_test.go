@@ -21,6 +21,7 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -36,7 +37,9 @@ func TestAccDataSourceIosxrL2VPNPWClass(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_ethernet", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_passthrough", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7", "true"))
@@ -77,7 +80,9 @@ func testAccDataSourceIosxrL2VPNPWClassConfig() string {
 	config += `	encapsulation_mpls_transport_mode_ethernet = true` + "\n"
 	config += `	encapsulation_mpls_transport_mode_vlan = false` + "\n"
 	config += `	encapsulation_mpls_transport_mode_passthrough = false` + "\n"
-	config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
+	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
+		config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
+	}
 	config += `	encapsulation_mpls_load_balancing_flow_label_both = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"

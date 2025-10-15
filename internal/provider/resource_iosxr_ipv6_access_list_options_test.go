@@ -81,6 +81,7 @@ func iosxrIPv6AccessListOptionsImportStateIdFunc(resourceName string) resource.I
 
 func testAccIosxrIPv6AccessListOptionsConfig_minimum() string {
 	config := `resource "iosxr_ipv6_access_list_options" "test" {` + "\n"
+	config += `	log_update_rate = 1000` + "\n"
 	config += `}` + "\n"
 	return config
 }

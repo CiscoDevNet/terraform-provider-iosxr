@@ -31,7 +31,7 @@ data "iosxr_snmp_server" "example" {
 - `groups` (Attributes List) Name of the group (see [below for nested schema](#nestedatt--groups))
 - `id` (String) The path of the retrieved object.
 - `location` (String) Text for mib Object sysLocation
-- `trap_source_both` (String) Assign an interface for the source address of all traps
+- `trap_source` (String) Assign an interface for the source address of all traps
 - `traps_bfd` (Boolean) Enable BFD traps
 - `traps_bgp_cbgp_two_enable` (Boolean) Enable CISCO-BGP4-MIB v2 traps
 - `traps_bgp_cbgp_two_updown` (Boolean) Enable CISCO-BGP4-MIB v2 up/down traps

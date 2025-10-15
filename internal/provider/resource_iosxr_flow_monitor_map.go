@@ -184,6 +184,14 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 				MarkdownDescription: helpers.NewAttributeDescription("IPV4 gtp record format").String,
 				Optional:            true,
 			},
+			"record_ipv4_l2_l3": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 record with Layer2 details").String,
+				Optional:            true,
+			},
+			"record_ipv4_extended": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv4 record with extended details").String,
+				Optional:            true,
+			},
 			"record_ipv6": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPv6 raw record format").String,
 				Optional:            true,
@@ -198,6 +206,18 @@ func (r *FlowMonitorMapResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"record_ipv6_gtp": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("IPV6 gtp record format").String,
+				Optional:            true,
+			},
+			"record_ipv6_srv6": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SRv6 record format").String,
+				Optional:            true,
+			},
+			"record_ipv6_l2_l3": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 record with Layer2 details").String,
+				Optional:            true,
+			},
+			"record_ipv6_extended": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("IPv6 record with extended details").String,
 				Optional:            true,
 			},
 			"record_mpls": schema.BoolAttribute{

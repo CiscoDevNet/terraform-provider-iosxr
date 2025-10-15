@@ -150,21 +150,21 @@ func (r *RouterHSRPInterfaceIPv4GroupV2Resource) Schema(ctx context.Context, req
 					int64validator.Between(100, 3000),
 				},
 			},
-			"timers_msec2": schema.Int64Attribute{
+			"timers_msec_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specify hold time in milliseconds").AddIntegerRangeDescription(100, 3000).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(100, 3000),
 				},
 			},
-			"timers_hold_time": schema.Int64Attribute{
+			"timers_seconds": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 255),
 				},
 			},
-			"timers_hold_time2": schema.Int64Attribute{
+			"timers_seconds_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Hold time in seconds").AddIntegerRangeDescription(1, 255).String,
 				Optional:            true,
 				Validators: []validator.Int64{

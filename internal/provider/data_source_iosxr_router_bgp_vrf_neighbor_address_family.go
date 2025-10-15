@@ -91,6 +91,10 @@ func (d *RouterBGPVRFNeighborAddressFamilyDataSource) Schema(ctx context.Context
 				MarkdownDescription: "Apply route policy to outbound routes",
 				Computed:            true,
 			},
+			"default_originate": schema.BoolAttribute{
+				MarkdownDescription: "Originate default route to this neighbor",
+				Computed:            true,
+			},
 			"default_originate_route_policy": schema.StringAttribute{
 				MarkdownDescription: "Route policy to specify criteria to originate default",
 				Computed:            true,

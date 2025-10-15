@@ -139,6 +139,10 @@ func (d *RouterBGPVRFAddressFamilyDataSource) Schema(ctx context.Context, req da
 				MarkdownDescription: "Number of paths (limit includes backup path)",
 				Computed:            true,
 			},
+			"maximum_paths_ibgp_unequal_cost": schema.BoolAttribute{
+				MarkdownDescription: "Allow multipaths to have different BGP nexthop IGP metrics",
+				Computed:            true,
+			},
 			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
 				MarkdownDescription: "Deterministic Multipath selection primarily on IGP metric order",
 				Computed:            true,

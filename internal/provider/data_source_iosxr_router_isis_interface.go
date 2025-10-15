@@ -163,7 +163,7 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 				MarkdownDescription: "Do not require authentication of incoming IIHs",
 				Computed:            true,
 			},
-			"hello_password_keychain": schema.StringAttribute{
+			"hello_password_keychain_name": schema.StringAttribute{
 				MarkdownDescription: "Specifies a Key Chain name will follow",
 				Computed:            true,
 			},
@@ -180,27 +180,27 @@ func (d *RouterISISInterfaceDataSource) Schema(ctx context.Context, req datasour
 							MarkdownDescription: "Set hello-password for one level only",
 							Computed:            true,
 						},
-						"text_encrypted": schema.StringAttribute{
+						"hello_password_text_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specifies a password will follow",
 							Computed:            true,
 						},
-						"text_send_only": schema.BoolAttribute{
+						"hello_password_text_send_only": schema.BoolAttribute{
 							MarkdownDescription: "Do not require authentication of incoming IIHs",
 							Computed:            true,
 						},
-						"hmac_md5_encrypted": schema.StringAttribute{
+						"hello_password_hmac_md5_encrypted": schema.StringAttribute{
 							MarkdownDescription: "Specifies a password will follow",
 							Computed:            true,
 						},
-						"hmac_md5_send_only": schema.BoolAttribute{
+						"hello_password_hmac_md5_send_only": schema.BoolAttribute{
 							MarkdownDescription: "Do not require authentication of incoming IIHs",
 							Computed:            true,
 						},
-						"keychain_name": schema.StringAttribute{
+						"hello_keychain_name": schema.StringAttribute{
 							MarkdownDescription: "Specifies a Key Chain name will follow",
 							Computed:            true,
 						},
-						"keychain_send_only": schema.BoolAttribute{
+						"hello_keychain_send_only": schema.BoolAttribute{
 							MarkdownDescription: "Do not require authentication of incoming IIHs",
 							Computed:            true,
 						},

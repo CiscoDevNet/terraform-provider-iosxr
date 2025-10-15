@@ -43,10 +43,10 @@ data "iosxr_router_hsrp_interface_ipv4_group_v2" "example" {
 - `preempt_delay` (Number) Wait before preempting
 - `priority` (Number) Priority level
 - `secondary_ipv4_addresses` (Attributes List) Set secondary hot standby IP address (see [below for nested schema](#nestedatt--secondary_ipv4_addresses))
-- `timers_hold_time` (Number) Hold time in seconds
-- `timers_hold_time2` (Number) Hold time in seconds
 - `timers_msec` (Number) Specify hellotime in milliseconds
-- `timers_msec2` (Number) Specify hold time in milliseconds
+- `timers_msec_holdtime` (Number) Specify hold time in milliseconds
+- `timers_seconds` (Number) Hold time in seconds
+- `timers_seconds_holdtime` (Number) Hold time in seconds
 - `track_interfaces` (Attributes List) Configure tracking (see [below for nested schema](#nestedatt--track_interfaces))
 - `track_objects` (Attributes List) Object tracking (see [below for nested schema](#nestedatt--track_objects))
 

@@ -1,4 +1,4 @@
-## 0.6.0 (IOS-XR Version 24.4.2 Compatibility)
+## 0.6.0
 
 - Major changes to existing datasources/resources for compatability with IOS-XR Version 24.4.2
 - BREAKING CHANGE: Rename `keychain_send_only` to `hello_keychain_send_only` in `iosxr_router_isis_interface` resource and data source

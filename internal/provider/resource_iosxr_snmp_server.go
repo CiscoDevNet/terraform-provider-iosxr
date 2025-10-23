@@ -149,7 +149,7 @@ func (r *SNMPServerResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable all CISCO-ENTITY-REDUNDANCY-MIB traps").String,
 				Optional:            true,
 			},
-			"trap_source_both": schema.StringAttribute{
+			"trap_source": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Assign an interface for the source address of all traps").String,
 				Optional:            true,
 				Validators: []validator.String{

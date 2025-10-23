@@ -131,7 +131,7 @@ func (d *SNMPServerDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable all CISCO-ENTITY-REDUNDANCY-MIB traps",
 				Computed:            true,
 			},
-			"trap_source_both": schema.StringAttribute{
+			"trap_source": schema.StringAttribute{
 				MarkdownDescription: "Assign an interface for the source address of all traps",
 				Computed:            true,
 			},

@@ -104,13 +104,13 @@ func (d *GnmiDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 	attributes := make(map[string]attr.Value)
 
 	if device.Managed {
-		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.Path.ValueString())
+		getResp, err := device.Client.Get(ctx, []string{config.Path.ValueString()})
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 			return
 		}
 
-		for attr, value := range gjson.ParseBytes(getResp.Notification[0].Update[0].Val.GetJsonIetfVal()).Map() {
+		for attr, value := range gjson.ParseBytes(getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()).Map() {
 			attributes[attr] = types.StringValue(value.String())
 		}
 	}

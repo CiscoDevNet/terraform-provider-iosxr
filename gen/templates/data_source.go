@@ -24,6 +24,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
@@ -32,7 +33,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/netascode/go-gnmi"
 )
 
 // End of section. //template:end imports
@@ -155,13 +156,29 @@ func (d *{{camelCase .Name}}DataSource) Read(ctx context.Context, req datasource
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", config.getPath()))
 
 	if device.Managed {
-		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
+		if !d.data.ReuseConnection {
+			defer device.Client.Disconnect()
+		}
+		getResp, err := device.Client.Get(ctx, []string{config.getPath()})
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		// Defensive bounds checking for response structure
+		if len(getResp.Notifications) == 0 {
+			resp.Diagnostics.AddError("Invalid gNMI response",
+				"Response contains no notifications")
+			return
+		}
+		if len(getResp.Notifications[0].Update) == 0 {
+			resp.Diagnostics.AddError("Invalid gNMI response",
+				"Response notification contains no updates")
+			return
+		}
+
+		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
+		config.fromBody(ctx, respBody)
 	}
 
 	config.Id = types.StringValue(config.getPath())

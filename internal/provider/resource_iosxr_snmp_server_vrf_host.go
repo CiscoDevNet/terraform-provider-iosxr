@@ -26,7 +26,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
@@ -38,6 +37,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-gnmi"
 )
 
 // End of section. //template:end imports
@@ -161,20 +161,23 @@ func (r *SNMPServerVRFHostResource) Create(ctx context.Context, req resource.Cre
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Create", plan.getPath()))
 
 	if device.Managed {
-		var ops []client.SetOperation
+		var ops []gnmi.SetOperation
 
 		// Create object
 		body := plan.toBody(ctx)
-		ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 		for _, i := range emptyLeafsDelete {
-			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+			ops = append(ops, gnmi.Delete(i))
 		}
 
-		_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), ops...)
+		if !r.data.ReuseConnection {
+			defer device.Client.Disconnect()
+		}
+		_, err := device.Client.Set(ctx, ops)
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
@@ -214,7 +217,10 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	if device.Managed {
-		getResp, err := r.data.Client.Get(ctx, state.Device.ValueString(), state.Id.ValueString())
+		if !r.data.ReuseConnection {
+			defer device.Client.Disconnect()
+		}
+		getResp, err := device.Client.Get(ctx, []string{state.Id.ValueString()})
 		if err != nil {
 			if strings.Contains(err.Error(), "Requested element(s) not found") {
 				resp.State.RemoveResource(ctx)
@@ -225,13 +231,25 @@ func (r *SNMPServerVRFHostResource) Read(ctx context.Context, req resource.ReadR
 			}
 		}
 
+		// Defensive bounds checking for response structure
+		if len(getResp.Notifications) == 0 {
+			resp.Diagnostics.AddError("Invalid gNMI response",
+				"Response contains no notifications")
+			return
+		}
+		if len(getResp.Notifications[0].Update) == 0 {
+			resp.Diagnostics.AddError("Invalid gNMI response",
+				"Response notification contains no updates")
+			return
+		}
+
 		imp, diags := helpers.IsFlagImporting(ctx, req)
 		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 			return
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp.Notifications[0].Update[0].Val.GetJsonIetfVal()
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {
@@ -277,27 +295,30 @@ func (r *SNMPServerVRFHostResource) Update(ctx context.Context, req resource.Upd
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
-		var ops []client.SetOperation
+		var ops []gnmi.SetOperation
 
 		// Update object
 		body := plan.toBody(ctx)
-		ops = append(ops, client.SetOperation{Path: plan.getPath(), Body: body, Operation: client.Update})
+		ops = append(ops, gnmi.Update(plan.getPath(), body))
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
 		tflog.Debug(ctx, fmt.Sprintf("Removed items to delete: %+v", deletedListItems))
 
 		for _, i := range deletedListItems {
-			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+			ops = append(ops, gnmi.Delete(i))
 		}
 
 		emptyLeafsDelete := plan.getEmptyLeafsDelete(ctx)
 		tflog.Debug(ctx, fmt.Sprintf("List of empty leafs to delete: %+v", emptyLeafsDelete))
 
 		for _, i := range emptyLeafsDelete {
-			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+			ops = append(ops, gnmi.Delete(i))
 		}
 
-		_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), ops...)
+		if !r.data.ReuseConnection {
+			defer device.Client.Disconnect()
+		}
+		_, err := device.Client.Set(ctx, ops)
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
@@ -333,7 +354,7 @@ func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.Del
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Delete", state.Id.ValueString()))
 
 	if device.Managed {
-		var ops []client.SetOperation
+		var ops []gnmi.SetOperation
 		deleteMode := "all"
 		if state.DeleteMode.ValueString() == "all" {
 			deleteMode = "all"
@@ -342,20 +363,25 @@ func (r *SNMPServerVRFHostResource) Delete(ctx context.Context, req resource.Del
 		}
 
 		if deleteMode == "all" {
-			ops = append(ops, client.SetOperation{Path: state.Id.ValueString(), Body: "", Operation: client.Delete})
+			ops = append(ops, gnmi.Delete(state.Id.ValueString()))
 		} else {
 			deletePaths := state.getDeletePaths(ctx)
 			tflog.Debug(ctx, fmt.Sprintf("Paths to delete: %+v", deletePaths))
 
 			for _, i := range deletePaths {
-				ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+				ops = append(ops, gnmi.Delete(i))
 			}
 		}
 
-		_, err := r.data.Client.Set(ctx, state.Device.ValueString(), ops...)
-		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
-			return
+		if len(ops) > 0 {
+			if !r.data.ReuseConnection {
+				defer device.Client.Disconnect()
+			}
+			_, err := device.Client.Set(ctx, ops)
+			if err != nil {
+				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
+				return
+			}
 		}
 	}
 

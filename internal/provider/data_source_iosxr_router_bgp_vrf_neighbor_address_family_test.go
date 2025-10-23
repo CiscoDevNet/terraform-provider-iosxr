@@ -92,6 +92,7 @@ resource "iosxr_gnmi" "PreReq2" {
 			]
 		},
 	]
+	depends_on = [iosxr_gnmi.PreReq1, ]
 }
 
 resource "iosxr_gnmi" "PreReq3" {
@@ -121,7 +122,7 @@ resource "iosxr_gnmi" "PreReq3" {
 			]
 		},
 	]
-	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, iosxr_gnmi.PreReq2, ]
+	depends_on = [iosxr_gnmi.PreReq2, ]
 }
 
 resource "iosxr_gnmi" "PreReq4" {

@@ -103,15 +103,15 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Specify hellotime in milliseconds",
 				Computed:            true,
 			},
-			"timers_msec_holdtime": schema.Int64Attribute{
+			"timers_msec2": schema.Int64Attribute{
 				MarkdownDescription: "Specify hold time in milliseconds",
 				Computed:            true,
 			},
-			"timers_seconds": schema.Int64Attribute{
+			"timers_hold_time": schema.Int64Attribute{
 				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},
-			"timers_seconds_holdtime": schema.Int64Attribute{
+			"timers_hold_time2": schema.Int64Attribute{
 				MarkdownDescription: "Hold time in seconds",
 				Computed:            true,
 			},
@@ -204,11 +204,11 @@ func (d *RouterHSRPInterfaceIPv4GroupV1DataSource) Read(ctx context.Context, req
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

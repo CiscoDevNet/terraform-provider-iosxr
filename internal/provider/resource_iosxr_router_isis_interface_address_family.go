@@ -357,7 +357,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Read(ctx context.Context, req
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -368,7 +368,7 @@ func (r *RouterISISInterfaceAddressFamilyResource) Read(ctx context.Context, req
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

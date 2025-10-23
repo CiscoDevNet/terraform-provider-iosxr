@@ -313,10 +313,6 @@ func (r *RouterISISResource) Schema(ctx context.Context, req resource.SchemaRequ
 				MarkdownDescription: helpers.NewAttributeDescription("Enable purge originator identification").String,
 				Optional:            true,
 			},
-			"distribute_link_state": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Distribute the link-state database to external services").String,
-				Optional:            true,
-			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Set distribution process instance identifier").AddIntegerRangeDescription(32, 4294967295).String,
 				Optional:            true,
@@ -555,7 +551,7 @@ func (r *RouterISISResource) Read(ctx context.Context, req resource.ReadRequest,
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -566,7 +562,7 @@ func (r *RouterISISResource) Read(ctx context.Context, req resource.ReadRequest,
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

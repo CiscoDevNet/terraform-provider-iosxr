@@ -127,14 +127,6 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				MarkdownDescription: helpers.NewAttributeDescription("Prevent route-reflector-client from being inherited from the parent").String,
 				Optional:            true,
 			},
-			"advertise_vpnv4_unicast": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Enable advertise vpnv4 unicast").String,
-				Optional:            true,
-			},
-			"advertise_vpnv4_unicast_re_originated": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-orignated and local routes only").String,
-				Optional:            true,
-			},
 			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Advertise re-originated and local routes with stitching Route-Targets").String,
 				Optional:            true,
@@ -167,10 +159,6 @@ func (r *RouterBGPNeighborAddressFamilyResource) Schema(ctx context.Context, req
 				Validators: []validator.String{
 					stringvalidator.LengthBetween(1, 255),
 				},
-			},
-			"soft_reconfiguration_inbound": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allow inbound soft reconfiguration for this neighbor").String,
-				Optional:            true,
 			},
 			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Always use soft reconfig, even if route refresh is supported").String,
@@ -322,7 +310,7 @@ func (r *RouterBGPNeighborAddressFamilyResource) Read(ctx context.Context, req r
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -333,7 +321,7 @@ func (r *RouterBGPNeighborAddressFamilyResource) Read(ctx context.Context, req r
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

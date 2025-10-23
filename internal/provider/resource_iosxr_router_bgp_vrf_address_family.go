@@ -183,10 +183,6 @@ func (r *RouterBGPVRFAddressFamilyResource) Schema(ctx context.Context, req reso
 					int64validator.Between(2, 128),
 				},
 			},
-			"maximum_paths_ibgp_unequal_cost": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths to have different BGP nexthop IGP metrics").String,
-				Optional:            true,
-			},
 			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Deterministic Multipath selection primarily on IGP metric order").String,
 				Optional:            true,
@@ -957,7 +953,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -968,7 +964,7 @@ func (r *RouterBGPVRFAddressFamilyResource) Read(ctx context.Context, req resour
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

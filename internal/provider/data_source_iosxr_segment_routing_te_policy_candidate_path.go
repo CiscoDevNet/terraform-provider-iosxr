@@ -140,11 +140,11 @@ func (d *SegmentRoutingTEPolicyCandidatePathDataSource) Read(ctx context.Context
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

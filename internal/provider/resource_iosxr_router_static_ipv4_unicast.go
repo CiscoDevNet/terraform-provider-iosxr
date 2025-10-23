@@ -178,20 +178,6 @@ func (r *RouterStaticIPv4UnicastResource) Schema(ctx context.Context, req resour
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 							},
 						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(3, 30000),
-							},
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 10),
-							},
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
 							Optional:            true,
@@ -246,20 +232,6 @@ func (r *RouterStaticIPv4UnicastResource) Schema(ctx context.Context, req resour
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 								stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
-							},
-						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(3, 30000),
-							},
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
-							Optional:            true,
-							Validators: []validator.Int64{
-								int64validator.Between(1, 10),
 							},
 						},
 						"description": schema.StringAttribute{
@@ -393,20 +365,6 @@ func (r *RouterStaticIPv4UnicastResource) Schema(ctx context.Context, req resour
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
 										},
 									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(3, 30000),
-										},
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 10),
-										},
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
 										Optional:            true,
@@ -461,20 +419,6 @@ func (r *RouterStaticIPv4UnicastResource) Schema(ctx context.Context, req resour
 										Validators: []validator.String{
 											stringvalidator.RegexMatches(regexp.MustCompile(`(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(%[\p{N}\p{L}]+)?`), ""),
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9\.]*`), ""),
-										},
-									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(3, 30000),
-										},
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 10),
 										},
 									},
 									"description": schema.StringAttribute{
@@ -617,7 +561,7 @@ func (r *RouterStaticIPv4UnicastResource) Read(ctx context.Context, req resource
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -628,7 +572,7 @@ func (r *RouterStaticIPv4UnicastResource) Read(ctx context.Context, req resource
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

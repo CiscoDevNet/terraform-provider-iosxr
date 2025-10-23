@@ -380,20 +380,6 @@ func (r *RouterStaticVRFIPv6MulticastResource) Schema(ctx context.Context, req r
 											stringvalidator.RegexMatches(regexp.MustCompile(`[0-9a-fA-F:\.]*`), ""),
 										},
 									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(3, 30000),
-										},
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
-										Optional:            true,
-										Validators: []validator.Int64{
-											int64validator.Between(1, 10),
-										},
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: helpers.NewAttributeDescription("description of the static route").String,
 										Optional:            true,
@@ -432,6 +418,20 @@ func (r *RouterStaticVRFIPv6MulticastResource) Schema(ctx context.Context, req r
 										Optional:            true,
 										Validators: []validator.Int64{
 											int64validator.Between(1, 16777214),
+										},
+									},
+									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hello interval").AddIntegerRangeDescription(3, 30000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(3, 30000),
+										},
+									},
+									"bfd_fast_detect_multiplier": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Detect multiplier").AddIntegerRangeDescription(1, 10).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 10),
 										},
 									},
 								},
@@ -591,7 +591,7 @@ func (r *RouterStaticVRFIPv6MulticastResource) Read(ctx context.Context, req res
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -602,7 +602,7 @@ func (r *RouterStaticVRFIPv6MulticastResource) Read(ctx context.Context, req res
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

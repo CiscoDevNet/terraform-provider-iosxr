@@ -228,7 +228,7 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 				MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 				Optional:            true,
 			},
-			"hello_password_keychain_name": schema.StringAttribute{
+			"hello_password_keychain": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 				Optional:            true,
 				Validators: []validator.String{
@@ -251,36 +251,36 @@ func (r *RouterISISInterfaceResource) Schema(ctx context.Context, req resource.S
 								int64validator.Between(1, 2),
 							},
 						},
-						"hello_password_text_encrypted": schema.StringAttribute{
+						"text_encrypted": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
 						},
-						"hello_password_text_send_only": schema.BoolAttribute{
+						"text_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 							Optional:            true,
 						},
-						"hello_password_hmac_md5_encrypted": schema.StringAttribute{
+						"hmac_md5_encrypted": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies a password will follow").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.RegexMatches(regexp.MustCompile(`(!.+)|([^!].+)`), ""),
 							},
 						},
-						"hello_password_hmac_md5_send_only": schema.BoolAttribute{
+						"hmac_md5_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 							Optional:            true,
 						},
-						"hello_keychain_name": schema.StringAttribute{
+						"keychain_name": schema.StringAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Specifies a Key Chain name will follow").String,
 							Optional:            true,
 							Validators: []validator.String{
 								stringvalidator.LengthBetween(1, 1024),
 							},
 						},
-						"hello_keychain_send_only": schema.BoolAttribute{
+						"keychain_send_only": schema.BoolAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Do not require authentication of incoming IIHs").String,
 							Optional:            true,
 						},
@@ -403,7 +403,7 @@ func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.Rea
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -414,7 +414,7 @@ func (r *RouterISISInterfaceResource) Read(ctx context.Context, req resource.Rea
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

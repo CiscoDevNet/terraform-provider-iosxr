@@ -239,10 +239,6 @@ func (d *RouterISISDataSource) Schema(ctx context.Context, req datasource.Schema
 				MarkdownDescription: "Enable purge originator identification",
 				Computed:            true,
 			},
-			"distribute_link_state": schema.BoolAttribute{
-				MarkdownDescription: "Distribute the link-state database to external services",
-				Computed:            true,
-			},
 			"distribute_link_state_instance_id": schema.Int64Attribute{
 				MarkdownDescription: "Set distribution process instance identifier",
 				Computed:            true,
@@ -384,11 +380,11 @@ func (d *RouterISISDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

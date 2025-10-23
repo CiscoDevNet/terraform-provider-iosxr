@@ -64,7 +64,6 @@ resource "iosxr_gnmi" "PreReq1" {
 	attributes = {
 		"policy-name" = "POLICY1"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 `

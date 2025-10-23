@@ -36,7 +36,7 @@ import (
 func TestAccIosxrRDSet(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "set_name", "set1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "rpl", "rd-set set1\n  65001:1,\n  123456:1,\n  192.0.2.1:1,\n  match any\nend-set\n"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_rd_set.test", "rpl", "rd-set set1\nend-set\n"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -84,7 +84,7 @@ func iosxrRDSetImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 func testAccIosxrRDSetConfig_minimum() string {
 	config := `resource "iosxr_rd_set" "test" {` + "\n"
 	config += `	set_name = "set1"` + "\n"
-	config += `	rpl = "rd-set set1\n  65001:1,\n  123456:1,\n  192.0.2.1:1,\n  match any\nend-set\n"` + "\n"
+	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -96,7 +96,7 @@ func testAccIosxrRDSetConfig_minimum() string {
 func testAccIosxrRDSetConfig_all() string {
 	config := `resource "iosxr_rd_set" "test" {` + "\n"
 	config += `	set_name = "set1"` + "\n"
-	config += `	rpl = "rd-set set1\n  65001:1,\n  123456:1,\n  192.0.2.1:1,\n  match any\nend-set\n"` + "\n"
+	config += `	rpl = "rd-set set1\nend-set\n"` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -124,14 +124,6 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 							MarkdownDescription: "Forwarding router's address",
 							Computed:            true,
 						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval",
-							Computed:            true,
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: "Detect multiplier",
-							Computed:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "description of the static route",
 							Computed:            true,
@@ -166,14 +158,6 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: "Forwarding router's address",
-							Computed:            true,
-						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval",
-							Computed:            true,
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: "Detect multiplier",
 							Computed:            true,
 						},
 						"description": schema.StringAttribute{
@@ -261,14 +245,6 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
 									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: "Hello interval",
-										Computed:            true,
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: "Detect multiplier",
-										Computed:            true,
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
@@ -303,14 +279,6 @@ func (d *RouterStaticIPv4UnicastDataSource) Schema(ctx context.Context, req data
 								Attributes: map[string]schema.Attribute{
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Forwarding router's address",
-										Computed:            true,
-									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: "Hello interval",
-										Computed:            true,
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: "Detect multiplier",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{
@@ -380,11 +348,11 @@ func (d *RouterStaticIPv4UnicastDataSource) Read(ctx context.Context, req dataso
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

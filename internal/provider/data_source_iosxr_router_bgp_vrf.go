@@ -119,16 +119,16 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time",
-				Computed:            true,
-			},
 			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
 			"timers_bgp_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Holdtime",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
 			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
@@ -216,11 +216,11 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Do not prepend local AS to announcements from this neighbor",
 							Computed:            true,
 						},
-						"local_as_no_prepend_replace_as": schema.BoolAttribute{
+						"local_as_replace_as": schema.BoolAttribute{
 							MarkdownDescription: "Prepend only local AS to announcements to this neighbor",
 							Computed:            true,
 						},
-						"local_as_no_prepend_replace_as_dual_as": schema.BoolAttribute{
+						"local_as_dual_as": schema.BoolAttribute{
 							MarkdownDescription: "Dual-AS mode",
 							Computed:            true,
 						},
@@ -244,16 +244,16 @@ func (d *RouterBGPVRFDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
-						"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-							MarkdownDescription: "Disable keepalives/hold time",
-							Computed:            true,
-						},
 						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
 						"timers_holdtime": schema.Int64Attribute{
 							MarkdownDescription: "Holdtime",
+							Computed:            true,
+						},
+						"timers_holdtime_zero": schema.BoolAttribute{
+							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
 						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
@@ -308,11 +308,11 @@ func (d *RouterBGPVRFDataSource) Read(ctx context.Context, req datasource.ReadRe
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

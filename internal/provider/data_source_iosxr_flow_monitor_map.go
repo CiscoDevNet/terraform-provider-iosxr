@@ -167,14 +167,6 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "IPV4 gtp record format",
 				Computed:            true,
 			},
-			"record_ipv4_l2_l3": schema.BoolAttribute{
-				MarkdownDescription: "IPv4 record with Layer2 details",
-				Computed:            true,
-			},
-			"record_ipv4_extended": schema.BoolAttribute{
-				MarkdownDescription: "IPv4 record with extended details",
-				Computed:            true,
-			},
 			"record_ipv6": schema.BoolAttribute{
 				MarkdownDescription: "IPv6 raw record format",
 				Computed:            true,
@@ -189,18 +181,6 @@ func (d *FlowMonitorMapDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"record_ipv6_gtp": schema.BoolAttribute{
 				MarkdownDescription: "IPV6 gtp record format",
-				Computed:            true,
-			},
-			"record_ipv6_srv6": schema.BoolAttribute{
-				MarkdownDescription: "SRv6 record format",
-				Computed:            true,
-			},
-			"record_ipv6_l2_l3": schema.BoolAttribute{
-				MarkdownDescription: "IPv6 record with Layer2 details",
-				Computed:            true,
-			},
-			"record_ipv6_extended": schema.BoolAttribute{
-				MarkdownDescription: "IPv6 record with extended details",
 				Computed:            true,
 			},
 			"record_mpls": schema.BoolAttribute{
@@ -348,11 +328,11 @@ func (d *FlowMonitorMapDataSource) Read(ctx context.Context, req datasource.Read
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

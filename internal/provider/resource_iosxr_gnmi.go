@@ -213,12 +213,12 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
 
-		diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		diags = state.fromBody(ctx, getResp)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return

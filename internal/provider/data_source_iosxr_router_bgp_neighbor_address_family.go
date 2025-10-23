@@ -103,14 +103,6 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 				MarkdownDescription: "Prevent route-reflector-client from being inherited from the parent",
 				Computed:            true,
 			},
-			"advertise_vpnv4_unicast": schema.BoolAttribute{
-				MarkdownDescription: "Enable advertise vpnv4 unicast",
-				Computed:            true,
-			},
-			"advertise_vpnv4_unicast_re_originated": schema.BoolAttribute{
-				MarkdownDescription: "Advertise re-orignated and local routes only",
-				Computed:            true,
-			},
 			"advertise_vpnv4_unicast_re_originated_stitching_rt": schema.BoolAttribute{
 				MarkdownDescription: "Advertise re-originated and local routes with stitching Route-Targets",
 				Computed:            true,
@@ -133,10 +125,6 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Schema(ctx context.Context, r
 			},
 			"route_policy_out": schema.StringAttribute{
 				MarkdownDescription: "Apply route policy to outbound routes",
-				Computed:            true,
-			},
-			"soft_reconfiguration_inbound": schema.BoolAttribute{
-				MarkdownDescription: "Allow inbound soft reconfiguration for this neighbor",
 				Computed:            true,
 			},
 			"soft_reconfiguration_inbound_always": schema.BoolAttribute{
@@ -220,11 +208,11 @@ func (d *RouterBGPNeighborAddressFamilyDataSource) Read(ctx context.Context, req
 	if device.Managed {
 		getResp, err := d.data.Client.Get(ctx, config.Device.ValueString(), config.getPath())
 		if err != nil {
-			resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+			resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

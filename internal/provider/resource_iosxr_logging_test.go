@@ -90,7 +90,6 @@ func iosxrLoggingImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 
 func testAccIosxrLoggingConfig_minimum() string {
 	config := `resource "iosxr_logging" "test" {` + "\n"
-	config += `	trap = "informational"` + "\n"
 	config += `}` + "\n"
 	return config
 }

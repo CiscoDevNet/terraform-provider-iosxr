@@ -99,7 +99,6 @@ func iosxrErrorDisableRecoveryImportStateIdFunc(resourceName string) resource.Im
 
 func testAccIosxrErrorDisableRecoveryConfig_minimum() string {
 	config := `resource "iosxr_error_disable_recovery" "test" {` + "\n"
-	config += `	link_oam_session_down_interval = 30` + "\n"
 	config += `}` + "\n"
 	return config
 }

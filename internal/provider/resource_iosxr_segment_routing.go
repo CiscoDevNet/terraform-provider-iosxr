@@ -81,28 +81,28 @@ func (r *SegmentRoutingResource) Schema(ctx context.Context, req resource.Schema
 			},
 			"global_block_lower_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRGB Lower Bound").AddIntegerRangeDescription(16000, 1048574).String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16000, 1048574),
 				},
 			},
 			"global_block_upper_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRGB Upper Bound").AddIntegerRangeDescription(16001, 1048575).String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16001, 1048575),
 				},
 			},
 			"local_block_lower_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRLB Lower Bound").AddIntegerRangeDescription(15000, 1048574).String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(15000, 1048574),
 				},
 			},
 			"local_block_upper_bound": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("SRLB Upper Bound").AddIntegerRangeDescription(15001, 1048575).String,
-				Optional:            true,
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(15001, 1048575),
 				},
@@ -205,7 +205,7 @@ func (r *SegmentRoutingResource) Read(ctx context.Context, req resource.ReadRequ
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -216,7 +216,7 @@ func (r *SegmentRoutingResource) Read(ctx context.Context, req resource.ReadRequ
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

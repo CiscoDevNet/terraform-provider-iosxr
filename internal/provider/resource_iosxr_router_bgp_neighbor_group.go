@@ -217,10 +217,6 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
 				Optional:            true,
 			},
-			"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
-				Optional:            true,
-			},
 			"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
 				Optional:            true,
@@ -234,6 +230,10 @@ func (r *RouterBGPNeighborGroupResource) Schema(ctx context.Context, req resourc
 				Validators: []validator.Int64{
 					int64validator.Between(3, 65535),
 				},
+			},
+			"timers_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Disable keepalives/hold time").String,
+				Optional:            true,
 			},
 			"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Minimum acceptable holdtime from neighbor").AddIntegerRangeDescription(3, 65535).String,
@@ -392,7 +392,7 @@ func (r *RouterBGPNeighborGroupResource) Read(ctx context.Context, req resource.
 				resp.State.RemoveResource(ctx)
 				return
 			} else {
-				resp.Diagnostics.AddError("Unable to apply gNMI Get operation", err.Error())
+				resp.Diagnostics.AddError("Unable to apply Get operation", err.Error())
 				return
 			}
 		}
@@ -403,7 +403,7 @@ func (r *RouterBGPNeighborGroupResource) Read(ctx context.Context, req resource.
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

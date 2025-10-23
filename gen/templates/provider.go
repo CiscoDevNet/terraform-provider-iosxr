@@ -20,6 +20,7 @@
 
 package provider
 
+// Section below is generated&owned by "gen/generator.go". //template:begin provider
 import (
 	"context"
 	"os"
@@ -27,13 +28,15 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-gnmi"
 )
 
 func New() provider.Provider {
@@ -66,11 +69,12 @@ type providerDataDevice struct {
 }
 
 type IosxrProviderData struct {
-	Client  *client.Client
 	Devices map[string]*IosxrProviderDataDevice
+	ReuseConnection bool
 }
 
 type IosxrProviderDataDevice struct {
+	Client *gnmi.Client
 	Managed bool
 }
 
@@ -424,21 +428,49 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		}
 	}
 
-	client := client.NewClient(reuseConnection)
+	data := IosxrProviderData{}
+	data.Devices = make(map[string]*IosxrProviderDataDevice)
 
-	err := client.AddTarget(ctx, "", host, username, password, certificate, key, caCertificate, verifyCertificate, tls)
-	if err != nil {
-		resp.Diagnostics.AddError("Unable to add target", err.Error())
+	// Create TflogAdapter for automatic Terraform logging integration
+	// Context is automatically propagated via go-gnmi's Logger interface
+	logger := helpers.NewTflogAdapter()
+
+	// Build options for go-gnmi client
+	opts := []func(*gnmi.Client){
+		gnmi.Username(username),
+		gnmi.Password(password),
+		gnmi.TLS(tls),
+		gnmi.VerifyCertificate(verifyCertificate),
+		gnmi.MaxRetries(3),
+		gnmi.WithLogger(logger),
 	}
 
-	// Build provider data structure with device management information
-	providerData := &IosxrProviderData{
-		Client:  &client,
-		Devices: make(map[string]*IosxrProviderDataDevice),
+	if certificate != "" {
+		opts = append(opts, gnmi.TLSCert(certificate))
+	}
+	if key != "" {
+		opts = append(opts, gnmi.TLSKey(key))
+	}
+	if caCertificate != "" {
+		opts = append(opts, gnmi.TLSCA(caCertificate))
 	}
 
-	// Add default device (empty string)
-	providerData.Devices[""] = &IosxrProviderDataDevice{Managed: true}
+	data.ReuseConnection = reuseConnection
+
+	// Create default client
+	var defaultClient *gnmi.Client
+	var err error
+	if host != "" {
+		defaultClient, err = gnmi.NewClient(host, opts...)
+		if err != nil {
+			resp.Diagnostics.AddError(
+				"Unable to create client",
+				"Unable to create gNMI client:\n\n"+err.Error(),
+			)
+			return
+		}
+	}
+	data.Devices[""] = &IosxrProviderDataDevice{Client: defaultClient, Managed: true}
 
 	// Add all devices with their managed status
 	for _, device := range config.Devices {
@@ -449,18 +481,23 @@ func (p *iosxrProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		} else {
 			managed = device.Managed.IsNull() || device.Managed.IsUnknown() || device.Managed.ValueBool()
 		}
-		providerData.Devices[deviceName] = &IosxrProviderDataDevice{Managed: managed}
 
+		var deviceClient *gnmi.Client
 		if managed {
-			err := client.AddTarget(ctx, deviceName, device.Host.ValueString(), username, password, certificate, key, caCertificate, verifyCertificate, tls)
+			deviceClient, err = gnmi.NewClient(device.Host.ValueString(), opts...)
 			if err != nil {
-				resp.Diagnostics.AddError("Unable to add target", err.Error())
+				resp.Diagnostics.AddError(
+					"Unable to create client",
+					"Unable to create gNMI client:\n\n"+err.Error(),
+				)
+				return
 			}
 		}
+		data.Devices[deviceName] = &IosxrProviderDataDevice{Client: deviceClient, Managed: managed}
 	}
 
-	resp.DataSourceData = providerData
-	resp.ResourceData = providerData
+	resp.DataSourceData = &data
+	resp.ResourceData = &data
 }
 
 func (p *iosxrProvider) Resources(ctx context.Context) []func() resource.Resource {
@@ -480,3 +517,5 @@ func (p *iosxrProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		{{- end}}
 	}
 }
+
+// End of section. //template:end provider

@@ -22,7 +22,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/client"
 	"github.com/CiscoDevNet/terraform-provider-iosxr/internal/provider/helpers"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -32,6 +31,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
+	"github.com/netascode/go-gnmi"
 )
 
 type resourceGnmiType struct{}
@@ -172,7 +172,7 @@ func (r *GnmiResource) Create(ctx context.Context, req resource.CreateRequest, r
 		if !plan.Attributes.IsNull() || len(plan.Lists) > 0 {
 			body := plan.toBody(ctx)
 
-			_, err := r.data.Client.Set(ctx, plan.Device.ValueString(), client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
+			_, err := device.Client.Set(ctx, []gnmi.SetOperation{gnmi.Update(plan.Path.ValueString(), body)})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 				return
@@ -207,7 +207,7 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Id.ValueString()))
 
 	if device.Managed {
-		getResp, err := r.data.Client.Get(ctx, state.Device.ValueString(), state.Path.ValueString())
+		getResp, err := device.Client.Get(ctx, []string{state.Path.ValueString()})
 		if err != nil {
 			if strings.Contains(err.Error(), "Requested element(s) not found") {
 				resp.State.RemoveResource(ctx)
@@ -218,7 +218,7 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 			}
 		}
 
-		diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		diags = state.fromBody(ctx, getResp.Notifications[0].Update[0].Val.GetJsonIetfVal())
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -257,21 +257,21 @@ func (r *GnmiResource) Update(ctx context.Context, req resource.UpdateRequest, r
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Update", plan.Id.ValueString()))
 
 	if device.Managed {
-		var ops []client.SetOperation
+		var ops []gnmi.SetOperation
 
 		if !plan.Attributes.IsUnknown() {
 			body := plan.toBody(ctx)
-			ops = append(ops, client.SetOperation{Path: plan.Path.ValueString(), Body: body, Operation: client.Update})
+			ops = append(ops, gnmi.Update(plan.Path.ValueString(), body))
 		}
 
 		deletedListItems := plan.getDeletedItems(ctx, state)
 		tflog.Debug(ctx, fmt.Sprintf("List items to delete: %+v", deletedListItems))
 
 		for _, i := range deletedListItems {
-			ops = append(ops, client.SetOperation{Path: i, Body: "", Operation: client.Delete})
+			ops = append(ops, gnmi.Delete(i))
 		}
 
-		_, err := r.data.Client.Set(ctx, state.Device.ValueString(), ops...)
+		_, err := device.Client.Set(ctx, ops)
 		if err != nil {
 			resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 			return
@@ -304,7 +304,7 @@ func (r *GnmiResource) Delete(ctx context.Context, req resource.DeleteRequest, r
 
 	if device.Managed {
 		if state.Delete.ValueBool() {
-			_, err := r.data.Client.Set(ctx, state.Device.ValueString(), client.SetOperation{Path: state.Path.ValueString(), Body: "", Operation: client.Delete})
+			_, err := device.Client.Set(ctx, []gnmi.SetOperation{gnmi.Delete(state.Path.ValueString())})
 			if err != nil {
 				resp.Diagnostics.AddError("Unable to apply gNMI Set operation", err.Error())
 				return

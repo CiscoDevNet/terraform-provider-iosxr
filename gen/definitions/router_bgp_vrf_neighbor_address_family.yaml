@@ -86,6 +86,7 @@ test_prerequisites:
           - attributes:
               - name: af-name
                 value: vpnv4-unicast
+    dependencies: [1]
   - path: Cisco-IOS-XR-um-router-bgp-cfg:/router/bgp/as[as-number=65001]/vrfs/vrf[vrf-name=VRF2]
     no_delete: true
     attributes:
@@ -106,7 +107,7 @@ test_prerequisites:
                 value: 10.1.1.2
               - name: remote-as
                 value: 65002
-    dependencies: [0, 1, 2]
+    dependencies: [2]
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
     attributes:
       - name: route-policy-name

@@ -179,6 +179,7 @@ resource "iosxr_gnmi" "PreReq3" {
 			]
 		},
 	]
+	depends_on = [iosxr_gnmi.PreReq2, ]
 }
 
 `

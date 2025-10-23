@@ -872,3 +872,4 @@ test_prerequisites:
           - attributes:
               - name: af-name
                 value: vpnv4-unicast
+    dependencies: [2]

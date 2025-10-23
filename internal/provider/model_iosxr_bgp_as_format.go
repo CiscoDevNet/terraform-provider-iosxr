@@ -61,7 +61,7 @@ func (data BGPASFormatData) getPath() string {
 func (data BGPASFormat) toBody(ctx context.Context) string {
 	body := ""
 	if !data.AsFormat.IsNull() && !data.AsFormat.IsUnknown() {
-		body = data.AsFormat.ValueString()
+		body = `"` + data.AsFormat.ValueString() + `"`
 	}
 	return body
 }

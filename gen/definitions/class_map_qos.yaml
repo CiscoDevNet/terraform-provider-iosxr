@@ -9,13 +9,11 @@ attributes:
     example: TEST
   - yang_name: match-any
     example: true
-    default_value: true
   - yang_name: description
     example: description1
   - yang_name: match/dscp/value
     tf_name: match_dscp
-    minimum_test_value: '["46"]'
-    example: "46"
+    example: 46
   - yang_name: match/mpls/experimental/topmost/label
     tf_name: match_mpls_experimental_topmost
     example: 5

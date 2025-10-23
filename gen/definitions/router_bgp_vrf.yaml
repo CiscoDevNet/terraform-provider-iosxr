@@ -7,7 +7,7 @@ attributes:
     example: 65001
   - yang_name: vrf-name
     reference: true
-    example: VRF1
+    example: VRF2
   - yang_name: default-information/originate
     example: true
   - yang_name: default-metric
@@ -54,34 +54,36 @@ attributes:
     example: 2
     exclude_test: true
   - yang_name: timers/bgp/keepalive-interval
-    example: 0
-  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero
-    xpath: timers/bgp/zero
-    tf_name: timers_bgp_keepalive_zero
-    example: true
+    example: 5
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
     xpath: timers/bgp/zero/zero
-    tf_name: timers_bgp_keepalive_zero_holdtime_zero
+    tf_name: timers_bgp_keepalive_zero
     delete_parent: true
+    exclude_test: true
     example: true
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/bgp/zero/minimum-acceptable-holdtime
     tf_name: timers_bgp_keepalive_zero_minimum_acceptable_holdtime
     delete_parent: true
     exclude_test: true
-    example: 30
+    example: 10
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
     xpath: timers/bgp/holdtime/holdtime-number
     tf_name: timers_bgp_holdtime
     delete_parent: true
-    example: 30
+    example: 20
+  - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
+    xpath: timers/bgp/holdtime/zero
+    tf_name: timers_bgp_holdtime_zero
+    delete_parent: true
     exclude_test: true
+    example: true
   - yang_name: timers/bgp/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
     xpath: timers/bgp/holdtime/minimum-acceptable-holdtime
     tf_name: timers_bgp_holdtime_minimum_acceptable_holdtime
     delete_parent: true
-    example: 30
     exclude_test: true
+    example: 30
   - yang_name: bgp/router-id
     example: 22.22.22.22
   - yang_name: bfd/minimum-interval
@@ -124,7 +126,6 @@ attributes:
       - yang_name: bfd/fast-detect/strict-mode
         example: false
       - yang_name: bfd/fast-detect/disable
-        exclude_example: true
         example: false
       - yang_name: local-as/LOCAL-AS/INHERITANCE-DISABLE/inheritance-disable
         xpath: local-as/inheritance-disable
@@ -136,22 +137,24 @@ attributes:
         xpath: local-as/as/as-number
         tf_name: local_as
         delete_parent: true
-        example: "10"
+        exclude_test: true
+        example: "65001"
       - yang_name: local-as/LOCAL-AS/AS/as/no-prepend
         xpath: local-as/as/no-prepend
         tf_name: local_as_no_prepend
         example: true
-        exclude_example: true
+        exclude_test: true
       - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as
         xpath: local-as/as/no-prepend/replace-as
-        tf_name: local_as_no_prepend_replace_as
+        tf_name: local_as_replace_as
         delete_parent: true
+        exclude_test: true
         example: true
-        exclude_example: true
       - yang_name: local-as/LOCAL-AS/AS/as/no-prepend/replace-as/dual-as
         xpath: local-as/as/no-prepend/replace-as/dual-as
-        tf_name: local_as_no_prepend_replace_as_dual_as
+        tf_name: local_as_dual_as
         delete_parent: true
+        exclude_test: true
         example: true
       - yang_name: password/encrypted
         type: String
@@ -171,14 +174,12 @@ attributes:
       - yang_name: shutdown
         example: false
       - yang_name: timers/keepalive-interval
-        example: 0
-      - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero
-        xpath: timers/zero
-        tf_name: timers_keepalive_zero
-        example: true
+        tf_name: timers_keepalive_interval
+        delete_parent: true
+        example: 10
       - yang_name: timers/KEEPALIVE-INTERVAL/ZERO/zero/KEEPALIVE-OPTIONS/ZERO/zero
         xpath: timers/zero/zero
-        tf_name: timers_keepalive_zero_holdtime_zero
+        tf_name: timers_keepalive_zero
         delete_parent: true
         exclude_test: true
         example: true
@@ -186,13 +187,19 @@ attributes:
         xpath: timers/zero/minimum-acceptable-holdtime
         tf_name: timers_keepalive_zero_minimum_acceptable_holdtime
         delete_parent: true
-        example: 30
+        exclude_test: true
+        example: 10
       - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/holdtime-number
         xpath: timers/holdtime/holdtime-number
         tf_name: timers_holdtime
         delete_parent: true
+        example: 20
+      - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/ZERO/zero
+        xpath: timers/holdtime/zero
+        tf_name: timers_holdtime_zero
+        delete_parent: true
         exclude_test: true
-        example: 30
+        example: true
       - yang_name: timers/KEEPALIVE-INTERVAL/HOLDTIME/holdtime/KEEPALIVE-OPTIONS/MINIMUM-ACCEPTABLE-HOLDTIME/minimum-acceptable-holdtime
         xpath: timers/holdtime/minimum-acceptable-holdtime
         tf_name: timers_holdtime_minimum_acceptable_holdtime
@@ -218,5 +225,3 @@ test_prerequisites:
           - attributes:
               - name: neighbor-group-name
                 value: GROUP1
-              - name: remote-as
-                value: 65001

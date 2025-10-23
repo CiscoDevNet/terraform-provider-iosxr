@@ -218,7 +218,7 @@ func (r *GnmiResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 			}
 		}
 
-		diags = state.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		diags = state.fromBody(ctx, getResp)
 		resp.Diagnostics.Append(diags...)
 		if resp.Diagnostics.HasError() {
 			return

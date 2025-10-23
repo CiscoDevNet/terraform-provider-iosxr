@@ -289,26 +289,26 @@ func (data *IPv6PrefixList) getDeletedItems(ctx context.Context, state IPv6Prefi
 				found = false
 			}
 			if found {
-				if !state.Sequences[i].MatchPrefixLengthLe.IsNull() && data.Sequences[j].MatchPrefixLengthLe.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/le", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].MatchPrefixLengthGe.IsNull() && data.Sequences[j].MatchPrefixLengthGe.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/ge", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].MatchPrefixLengthEq.IsNull() && data.Sequences[j].MatchPrefixLengthEq.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/eq", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/mask", state.getPath(), keyString))
-				}
-				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/prefix", state.getPath(), keyString))
+				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/remark", state.getPath(), keyString))
 				}
 				if !state.Sequences[i].Permission.IsNull() && data.Sequences[j].Permission.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/permission", state.getPath(), keyString))
 				}
-				if !state.Sequences[i].Remark.IsNull() && data.Sequences[j].Remark.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/remark", state.getPath(), keyString))
+				if !state.Sequences[i].Prefix.IsNull() && data.Sequences[j].Prefix.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/prefix", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].Mask.IsNull() && data.Sequences[j].Mask.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/mask", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthEq.IsNull() && data.Sequences[j].MatchPrefixLengthEq.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/eq", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthGe.IsNull() && data.Sequences[j].MatchPrefixLengthGe.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/ge", state.getPath(), keyString))
+				}
+				if !state.Sequences[i].MatchPrefixLengthLe.IsNull() && data.Sequences[j].MatchPrefixLengthLe.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/sequences/sequence%v/match-prefix-length/le", state.getPath(), keyString))
 				}
 				break
 			}

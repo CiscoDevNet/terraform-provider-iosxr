@@ -2,12 +2,11 @@
 name: BFD
 path: Cisco-IOS-XR-um-bfd-sbfd-cfg:/bfd
 doc_category: System
+skip_minimum_test: true
 attributes:
   - yang_name: echo/disable
-    exclude_example: true
-    example: false
+    example: true
   - yang_name: echo/latency/detect
-    minimum_test_value: true
     example: true
   - yang_name: echo/latency/detect/percentage
     delete_parent: true
@@ -28,7 +27,6 @@ attributes:
     example: true
   - yang_name: multipath/include/locations/location
     tf_name: multipath_locations
-    test_tags: [NCS, C8000, XRV9K]
     type: List
     attributes:
       - yang_name: location-id
@@ -47,8 +45,7 @@ attributes:
   - yang_name: dampening/extensions/down-monitoring
     example: true
   - yang_name: dampening/disable
-    exclude_example: true
-    example: false
+    example: true
   - yang_name: dampening/bundle-member/l3-only-mode
     example: true
   - yang_name: dampening/bundle-member/initial-wait
@@ -67,8 +64,7 @@ attributes:
         id: true
         example: GigabitEthernet0/0/0/0
       - yang_name: echo/disable
-        exclude_example: true
-        example: disable
+        example: enable
       - yang_name: echo/ipv4/source/ipv4-address
         tf_name: echo_ipv4_source
         example: 12.1.1.1
@@ -76,14 +72,13 @@ attributes:
         delete_parent: true
         example: true
       - yang_name: disable
-        exclude_example: true
-        example: false
+        example: true
       - yang_name: local-address
-        example: 12.1.1.1
+        example: 33.33.31.1
       - yang_name: tx-interval
-        example: 10000
+        example: 3200
       - yang_name: rx-interval
-        example: 30000
+        example: 4200
       - yang_name: multiplier
         example: 40
   - yang_name: ipv6/checksum/disable

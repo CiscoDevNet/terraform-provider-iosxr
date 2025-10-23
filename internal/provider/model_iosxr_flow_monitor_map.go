@@ -60,15 +60,10 @@ type FlowMonitorMap struct {
 	RecordIpv4BgpNexthopTos               types.Bool                `tfsdk:"record_ipv4_bgp_nexthop_tos"`
 	RecordIpv4PeerAs                      types.Bool                `tfsdk:"record_ipv4_peer_as"`
 	RecordIpv4Gtp                         types.Bool                `tfsdk:"record_ipv4_gtp"`
-	RecordIpv4L2L3                        types.Bool                `tfsdk:"record_ipv4_l2_l3"`
-	RecordIpv4Extended                    types.Bool                `tfsdk:"record_ipv4_extended"`
 	RecordIpv6                            types.Bool                `tfsdk:"record_ipv6"`
 	RecordIpv6Destination                 types.Bool                `tfsdk:"record_ipv6_destination"`
 	RecordIpv6PeerAs                      types.Bool                `tfsdk:"record_ipv6_peer_as"`
 	RecordIpv6Gtp                         types.Bool                `tfsdk:"record_ipv6_gtp"`
-	RecordIpv6Srv6                        types.Bool                `tfsdk:"record_ipv6_srv6"`
-	RecordIpv6L2L3                        types.Bool                `tfsdk:"record_ipv6_l2_l3"`
-	RecordIpv6Extended                    types.Bool                `tfsdk:"record_ipv6_extended"`
 	RecordMpls                            types.Bool                `tfsdk:"record_mpls"`
 	RecordMplsIpv4Fields                  types.Bool                `tfsdk:"record_mpls_ipv4_fields"`
 	RecordMplsIpv6Fields                  types.Bool                `tfsdk:"record_mpls_ipv6_fields"`
@@ -124,15 +119,10 @@ type FlowMonitorMapData struct {
 	RecordIpv4BgpNexthopTos               types.Bool                `tfsdk:"record_ipv4_bgp_nexthop_tos"`
 	RecordIpv4PeerAs                      types.Bool                `tfsdk:"record_ipv4_peer_as"`
 	RecordIpv4Gtp                         types.Bool                `tfsdk:"record_ipv4_gtp"`
-	RecordIpv4L2L3                        types.Bool                `tfsdk:"record_ipv4_l2_l3"`
-	RecordIpv4Extended                    types.Bool                `tfsdk:"record_ipv4_extended"`
 	RecordIpv6                            types.Bool                `tfsdk:"record_ipv6"`
 	RecordIpv6Destination                 types.Bool                `tfsdk:"record_ipv6_destination"`
 	RecordIpv6PeerAs                      types.Bool                `tfsdk:"record_ipv6_peer_as"`
 	RecordIpv6Gtp                         types.Bool                `tfsdk:"record_ipv6_gtp"`
-	RecordIpv6Srv6                        types.Bool                `tfsdk:"record_ipv6_srv6"`
-	RecordIpv6L2L3                        types.Bool                `tfsdk:"record_ipv6_l2_l3"`
-	RecordIpv6Extended                    types.Bool                `tfsdk:"record_ipv6_extended"`
 	RecordMpls                            types.Bool                `tfsdk:"record_mpls"`
 	RecordMplsIpv4Fields                  types.Bool                `tfsdk:"record_mpls_ipv4_fields"`
 	RecordMplsIpv6Fields                  types.Bool                `tfsdk:"record_mpls_ipv6_fields"`
@@ -291,16 +281,6 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 			body, _ = sjson.Set(body, "record.ipv4.gtp", map[string]string{})
 		}
 	}
-	if !data.RecordIpv4L2L3.IsNull() && !data.RecordIpv4L2L3.IsUnknown() {
-		if data.RecordIpv4L2L3.ValueBool() {
-			body, _ = sjson.Set(body, "record.ipv4.l2-l3", map[string]string{})
-		}
-	}
-	if !data.RecordIpv4Extended.IsNull() && !data.RecordIpv4Extended.IsUnknown() {
-		if data.RecordIpv4Extended.ValueBool() {
-			body, _ = sjson.Set(body, "record.ipv4.extended", map[string]string{})
-		}
-	}
 	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.IsUnknown() {
 		if data.RecordIpv6.ValueBool() {
 			body, _ = sjson.Set(body, "record.ipv6", map[string]string{})
@@ -319,21 +299,6 @@ func (data FlowMonitorMap) toBody(ctx context.Context) string {
 	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.IsUnknown() {
 		if data.RecordIpv6Gtp.ValueBool() {
 			body, _ = sjson.Set(body, "record.ipv6.gtp", map[string]string{})
-		}
-	}
-	if !data.RecordIpv6Srv6.IsNull() && !data.RecordIpv6Srv6.IsUnknown() {
-		if data.RecordIpv6Srv6.ValueBool() {
-			body, _ = sjson.Set(body, "record.ipv6.srv6", map[string]string{})
-		}
-	}
-	if !data.RecordIpv6L2L3.IsNull() && !data.RecordIpv6L2L3.IsUnknown() {
-		if data.RecordIpv6L2L3.ValueBool() {
-			body, _ = sjson.Set(body, "record.ipv6.l2-l3", map[string]string{})
-		}
-	}
-	if !data.RecordIpv6Extended.IsNull() && !data.RecordIpv6Extended.IsUnknown() {
-		if data.RecordIpv6Extended.ValueBool() {
-			body, _ = sjson.Set(body, "record.ipv6.extended", map[string]string{})
 		}
 	}
 	if !data.RecordMpls.IsNull() && !data.RecordMpls.IsUnknown() {
@@ -683,24 +648,6 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RecordIpv4Gtp = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.l2-l3"); !data.RecordIpv4L2L3.IsNull() {
-		if value.Exists() {
-			data.RecordIpv4L2L3 = types.BoolValue(true)
-		} else {
-			data.RecordIpv4L2L3 = types.BoolValue(false)
-		}
-	} else {
-		data.RecordIpv4L2L3 = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "record.ipv4.extended"); !data.RecordIpv4Extended.IsNull() {
-		if value.Exists() {
-			data.RecordIpv4Extended = types.BoolValue(true)
-		} else {
-			data.RecordIpv4Extended = types.BoolValue(false)
-		}
-	} else {
-		data.RecordIpv4Extended = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "record.ipv6"); !data.RecordIpv6.IsNull() {
 		if value.Exists() {
 			data.RecordIpv6 = types.BoolValue(true)
@@ -736,33 +683,6 @@ func (data *FlowMonitorMap) updateFromBody(ctx context.Context, res []byte) {
 		}
 	} else {
 		data.RecordIpv6Gtp = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.srv6"); !data.RecordIpv6Srv6.IsNull() {
-		if value.Exists() {
-			data.RecordIpv6Srv6 = types.BoolValue(true)
-		} else {
-			data.RecordIpv6Srv6 = types.BoolValue(false)
-		}
-	} else {
-		data.RecordIpv6Srv6 = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.l2-l3"); !data.RecordIpv6L2L3.IsNull() {
-		if value.Exists() {
-			data.RecordIpv6L2L3 = types.BoolValue(true)
-		} else {
-			data.RecordIpv6L2L3 = types.BoolValue(false)
-		}
-	} else {
-		data.RecordIpv6L2L3 = types.BoolNull()
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.extended"); !data.RecordIpv6Extended.IsNull() {
-		if value.Exists() {
-			data.RecordIpv6Extended = types.BoolValue(true)
-		} else {
-			data.RecordIpv6Extended = types.BoolValue(false)
-		}
-	} else {
-		data.RecordIpv6Extended = types.BoolNull()
 	}
 	if value := gjson.GetBytes(res, "record.mpls"); !data.RecordMpls.IsNull() {
 		if value.Exists() {
@@ -1086,16 +1006,6 @@ func (data *FlowMonitorMap) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RecordIpv4Gtp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.l2-l3"); value.Exists() {
-		data.RecordIpv4L2L3 = types.BoolValue(true)
-	} else {
-		data.RecordIpv4L2L3 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv4.extended"); value.Exists() {
-		data.RecordIpv4Extended = types.BoolValue(true)
-	} else {
-		data.RecordIpv4Extended = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "record.ipv6"); value.Exists() {
 		data.RecordIpv6 = types.BoolValue(true)
 	} else {
@@ -1115,21 +1025,6 @@ func (data *FlowMonitorMap) fromBody(ctx context.Context, res []byte) {
 		data.RecordIpv6Gtp = types.BoolValue(true)
 	} else {
 		data.RecordIpv6Gtp = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.srv6"); value.Exists() {
-		data.RecordIpv6Srv6 = types.BoolValue(true)
-	} else {
-		data.RecordIpv6Srv6 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.l2-l3"); value.Exists() {
-		data.RecordIpv6L2L3 = types.BoolValue(true)
-	} else {
-		data.RecordIpv6L2L3 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.extended"); value.Exists() {
-		data.RecordIpv6Extended = types.BoolValue(true)
-	} else {
-		data.RecordIpv6Extended = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "record.mpls"); value.Exists() {
 		data.RecordMpls = types.BoolValue(true)
@@ -1367,16 +1262,6 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.RecordIpv4Gtp = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "record.ipv4.l2-l3"); value.Exists() {
-		data.RecordIpv4L2L3 = types.BoolValue(true)
-	} else {
-		data.RecordIpv4L2L3 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv4.extended"); value.Exists() {
-		data.RecordIpv4Extended = types.BoolValue(true)
-	} else {
-		data.RecordIpv4Extended = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "record.ipv6"); value.Exists() {
 		data.RecordIpv6 = types.BoolValue(true)
 	} else {
@@ -1396,21 +1281,6 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 		data.RecordIpv6Gtp = types.BoolValue(true)
 	} else {
 		data.RecordIpv6Gtp = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.srv6"); value.Exists() {
-		data.RecordIpv6Srv6 = types.BoolValue(true)
-	} else {
-		data.RecordIpv6Srv6 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.l2-l3"); value.Exists() {
-		data.RecordIpv6L2L3 = types.BoolValue(true)
-	} else {
-		data.RecordIpv6L2L3 = types.BoolValue(false)
-	}
-	if value := gjson.GetBytes(res, "record.ipv6.extended"); value.Exists() {
-		data.RecordIpv6Extended = types.BoolValue(true)
-	} else {
-		data.RecordIpv6Extended = types.BoolValue(false)
 	}
 	if value := gjson.GetBytes(res, "record.mpls"); value.Exists() {
 		data.RecordMpls = types.BoolValue(true)
@@ -1533,177 +1403,6 @@ func (data *FlowMonitorMapData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonitorMap) []string {
 	deletedItems := make([]string, 0)
-	if !state.SflowOptionsOutputIfindex.IsNull() && data.SflowOptionsOutputIfindex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/output/ifindex", state.getPath()))
-	}
-	if !state.SflowOptionsInputIfindex.IsNull() && data.SflowOptionsInputIfindex.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/input/ifindex", state.getPath()))
-	}
-	if !state.SflowOptionsSampleHeaderSize.IsNull() && data.SflowOptionsSampleHeaderSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/sample-header/size", state.getPath()))
-	}
-	if !state.SflowOptionsIfCountersPollingInterval.IsNull() && data.SflowOptionsIfCountersPollingInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/if-counters/polling-interval", state.getPath()))
-	}
-	if !state.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", state.getPath()))
-	}
-	if !state.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", state.getPath()))
-	}
-	if !state.SflowOptionsExtendedGateway.IsNull() && data.SflowOptionsExtendedGateway.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-gateway", state.getPath()))
-	}
-	if !state.SflowOptionsExtendedRouter.IsNull() && data.SflowOptionsExtendedRouter.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-router", state.getPath()))
-	}
-	if !state.SflowOptions.IsNull() && data.SflowOptions.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options", state.getPath()))
-	}
-	if !state.HwCacheTimeoutInactive.IsNull() && data.HwCacheTimeoutInactive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hw-cache/timeout/inactive", state.getPath()))
-	}
-	if !state.CacheImmediate.IsNull() && data.CacheImmediate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/immediate", state.getPath()))
-	}
-	if !state.CachePermanent.IsNull() && data.CachePermanent.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/permanent", state.getPath()))
-	}
-	if !state.CacheTimeoutRateLimit.IsNull() && data.CacheTimeoutRateLimit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/rate-limit", state.getPath()))
-	}
-	if !state.CacheTimeoutUpdate.IsNull() && data.CacheTimeoutUpdate.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/update", state.getPath()))
-	}
-	if !state.CacheTimeoutInactive.IsNull() && data.CacheTimeoutInactive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/inactive", state.getPath()))
-	}
-	if !state.CacheTimeoutActive.IsNull() && data.CacheTimeoutActive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/active", state.getPath()))
-	}
-	if !state.CacheEntries.IsNull() && data.CacheEntries.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/entries", state.getPath()))
-	}
-	if !state.RecordDefaultMdi.IsNull() && data.RecordDefaultMdi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-mdi", state.getPath()))
-	}
-	if !state.RecordDefaultRtp.IsNull() && data.RecordDefaultRtp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-rtp", state.getPath()))
-	}
-	if !state.RecordDatalinkRecord.IsNull() && data.RecordDatalinkRecord.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/datalink-record", state.getPath()))
-	}
-	if !state.RecordSflow.IsNull() && data.RecordSflow.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/sflow", state.getPath()))
-	}
-	if !state.RecordMapT.IsNull() && data.RecordMapT.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/map-t", state.getPath()))
-	}
-	if !state.RecordMplsLabels.IsNull() && data.RecordMplsLabels.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/labels", state.getPath()))
-	}
-	if !state.RecordMplsIpv4Ipv6Fields.IsNull() && data.RecordMplsIpv4Ipv6Fields.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", state.getPath()))
-	}
-	if !state.RecordMplsIpv6Fields.IsNull() && data.RecordMplsIpv6Fields.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv6-fields", state.getPath()))
-	}
-	if !state.RecordMplsIpv4Fields.IsNull() && data.RecordMplsIpv4Fields.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-fields", state.getPath()))
-	}
-	if !state.RecordMpls.IsNull() && data.RecordMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls", state.getPath()))
-	}
-	if !state.RecordIpv6Extended.IsNull() && data.RecordIpv6Extended.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/extended", state.getPath()))
-	}
-	if !state.RecordIpv6L2L3.IsNull() && data.RecordIpv6L2L3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/l2-l3", state.getPath()))
-	}
-	if !state.RecordIpv6Srv6.IsNull() && data.RecordIpv6Srv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/srv6", state.getPath()))
-	}
-	if !state.RecordIpv6Gtp.IsNull() && data.RecordIpv6Gtp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/gtp", state.getPath()))
-	}
-	if !state.RecordIpv6PeerAs.IsNull() && data.RecordIpv6PeerAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/peer-as", state.getPath()))
-	}
-	if !state.RecordIpv6Destination.IsNull() && data.RecordIpv6Destination.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/destination", state.getPath()))
-	}
-	if !state.RecordIpv6.IsNull() && data.RecordIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6", state.getPath()))
-	}
-	if !state.RecordIpv4Extended.IsNull() && data.RecordIpv4Extended.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/extended", state.getPath()))
-	}
-	if !state.RecordIpv4L2L3.IsNull() && data.RecordIpv4L2L3.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/l2-l3", state.getPath()))
-	}
-	if !state.RecordIpv4Gtp.IsNull() && data.RecordIpv4Gtp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/gtp", state.getPath()))
-	}
-	if !state.RecordIpv4PeerAs.IsNull() && data.RecordIpv4PeerAs.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/peer-as", state.getPath()))
-	}
-	if !state.RecordIpv4BgpNexthopTos.IsNull() && data.RecordIpv4BgpNexthopTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", state.getPath()))
-	}
-	if !state.RecordIpv4PrefixPort.IsNull() && data.RecordIpv4PrefixPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-port", state.getPath()))
-	}
-	if !state.RecordIpv4DestinationPrefixTos.IsNull() && data.RecordIpv4DestinationPrefixTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", state.getPath()))
-	}
-	if !state.RecordIpv4SourcePrefixTos.IsNull() && data.RecordIpv4SourcePrefixTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", state.getPath()))
-	}
-	if !state.RecordIpv4PrefixTos.IsNull() && data.RecordIpv4PrefixTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-tos", state.getPath()))
-	}
-	if !state.RecordIpv4ProtocolPortTos.IsNull() && data.RecordIpv4ProtocolPortTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", state.getPath()))
-	}
-	if !state.RecordIpv4AsTos.IsNull() && data.RecordIpv4AsTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as-tos", state.getPath()))
-	}
-	if !state.RecordIpv4DestinationPrefix.IsNull() && data.RecordIpv4DestinationPrefix.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix", state.getPath()))
-	}
-	if !state.RecordIpv4SourcePrefix.IsNull() && data.RecordIpv4SourcePrefix.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix", state.getPath()))
-	}
-	if !state.RecordIpv4Prefix.IsNull() && data.RecordIpv4Prefix.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix", state.getPath()))
-	}
-	if !state.RecordIpv4ProtocolPort.IsNull() && data.RecordIpv4ProtocolPort.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port", state.getPath()))
-	}
-	if !state.RecordIpv4As.IsNull() && data.RecordIpv4As.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as", state.getPath()))
-	}
-	if !state.RecordIpv4DestinationTos.IsNull() && data.RecordIpv4DestinationTos.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-tos", state.getPath()))
-	}
-	if !state.RecordIpv4Destination.IsNull() && data.RecordIpv4Destination.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination", state.getPath()))
-	}
-	if !state.RecordIpv4.IsNull() && data.RecordIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4", state.getPath()))
-	}
-	if !state.OptionOutbundlemember.IsNull() && data.OptionOutbundlemember.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outbundlemember", state.getPath()))
-	}
-	if !state.OptionBgpattr.IsNull() && data.OptionBgpattr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/bgpattr", state.getPath()))
-	}
-	if !state.OptionFiltered.IsNull() && data.OptionFiltered.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/filtered", state.getPath()))
-	}
-	if !state.OptionOutphysint.IsNull() && data.OptionOutphysint.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outphysint", state.getPath()))
-	}
 	for i := range state.Exporters {
 		keys := [...]string{"exporter-name"}
 		stateKeyValues := [...]string{state.Exporters[i].Name.ValueString()}
@@ -1734,6 +1433,162 @@ func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonit
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/exporters/exporter%v", state.getPath(), keyString))
 		}
 	}
+	if !state.OptionOutphysint.IsNull() && data.OptionOutphysint.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outphysint", state.getPath()))
+	}
+	if !state.OptionFiltered.IsNull() && data.OptionFiltered.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/filtered", state.getPath()))
+	}
+	if !state.OptionBgpattr.IsNull() && data.OptionBgpattr.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/bgpattr", state.getPath()))
+	}
+	if !state.OptionOutbundlemember.IsNull() && data.OptionOutbundlemember.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/option/outbundlemember", state.getPath()))
+	}
+	if !state.RecordIpv4.IsNull() && data.RecordIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4", state.getPath()))
+	}
+	if !state.RecordIpv4Destination.IsNull() && data.RecordIpv4Destination.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationTos.IsNull() && data.RecordIpv4DestinationTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-tos", state.getPath()))
+	}
+	if !state.RecordIpv4As.IsNull() && data.RecordIpv4As.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as", state.getPath()))
+	}
+	if !state.RecordIpv4ProtocolPort.IsNull() && data.RecordIpv4ProtocolPort.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port", state.getPath()))
+	}
+	if !state.RecordIpv4Prefix.IsNull() && data.RecordIpv4Prefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix", state.getPath()))
+	}
+	if !state.RecordIpv4SourcePrefix.IsNull() && data.RecordIpv4SourcePrefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationPrefix.IsNull() && data.RecordIpv4DestinationPrefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix", state.getPath()))
+	}
+	if !state.RecordIpv4AsTos.IsNull() && data.RecordIpv4AsTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/as-tos", state.getPath()))
+	}
+	if !state.RecordIpv4ProtocolPortTos.IsNull() && data.RecordIpv4ProtocolPortTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PrefixTos.IsNull() && data.RecordIpv4PrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4SourcePrefixTos.IsNull() && data.RecordIpv4SourcePrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4DestinationPrefixTos.IsNull() && data.RecordIpv4DestinationPrefixTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PrefixPort.IsNull() && data.RecordIpv4PrefixPort.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/prefix-port", state.getPath()))
+	}
+	if !state.RecordIpv4BgpNexthopTos.IsNull() && data.RecordIpv4BgpNexthopTos.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", state.getPath()))
+	}
+	if !state.RecordIpv4PeerAs.IsNull() && data.RecordIpv4PeerAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/peer-as", state.getPath()))
+	}
+	if !state.RecordIpv4Gtp.IsNull() && data.RecordIpv4Gtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv4/gtp", state.getPath()))
+	}
+	if !state.RecordIpv6.IsNull() && data.RecordIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6", state.getPath()))
+	}
+	if !state.RecordIpv6Destination.IsNull() && data.RecordIpv6Destination.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/destination", state.getPath()))
+	}
+	if !state.RecordIpv6PeerAs.IsNull() && data.RecordIpv6PeerAs.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/peer-as", state.getPath()))
+	}
+	if !state.RecordIpv6Gtp.IsNull() && data.RecordIpv6Gtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/ipv6/gtp", state.getPath()))
+	}
+	if !state.RecordMpls.IsNull() && data.RecordMpls.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls", state.getPath()))
+	}
+	if !state.RecordMplsIpv4Fields.IsNull() && data.RecordMplsIpv4Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-fields", state.getPath()))
+	}
+	if !state.RecordMplsIpv6Fields.IsNull() && data.RecordMplsIpv6Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv6-fields", state.getPath()))
+	}
+	if !state.RecordMplsIpv4Ipv6Fields.IsNull() && data.RecordMplsIpv4Ipv6Fields.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", state.getPath()))
+	}
+	if !state.RecordMplsLabels.IsNull() && data.RecordMplsLabels.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/mpls/labels", state.getPath()))
+	}
+	if !state.RecordMapT.IsNull() && data.RecordMapT.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/map-t", state.getPath()))
+	}
+	if !state.RecordSflow.IsNull() && data.RecordSflow.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/sflow", state.getPath()))
+	}
+	if !state.RecordDatalinkRecord.IsNull() && data.RecordDatalinkRecord.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/datalink-record", state.getPath()))
+	}
+	if !state.RecordDefaultRtp.IsNull() && data.RecordDefaultRtp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-rtp", state.getPath()))
+	}
+	if !state.RecordDefaultMdi.IsNull() && data.RecordDefaultMdi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/record/default-mdi", state.getPath()))
+	}
+	if !state.CacheEntries.IsNull() && data.CacheEntries.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/entries", state.getPath()))
+	}
+	if !state.CacheTimeoutActive.IsNull() && data.CacheTimeoutActive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/active", state.getPath()))
+	}
+	if !state.CacheTimeoutInactive.IsNull() && data.CacheTimeoutInactive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/inactive", state.getPath()))
+	}
+	if !state.CacheTimeoutUpdate.IsNull() && data.CacheTimeoutUpdate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/update", state.getPath()))
+	}
+	if !state.CacheTimeoutRateLimit.IsNull() && data.CacheTimeoutRateLimit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/timeout/rate-limit", state.getPath()))
+	}
+	if !state.CachePermanent.IsNull() && data.CachePermanent.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/permanent", state.getPath()))
+	}
+	if !state.CacheImmediate.IsNull() && data.CacheImmediate.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/cache/immediate", state.getPath()))
+	}
+	if !state.HwCacheTimeoutInactive.IsNull() && data.HwCacheTimeoutInactive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hw-cache/timeout/inactive", state.getPath()))
+	}
+	if !state.SflowOptions.IsNull() && data.SflowOptions.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedRouter.IsNull() && data.SflowOptionsExtendedRouter.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-router", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedGateway.IsNull() && data.SflowOptionsExtendedGateway.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-gateway", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", state.getPath()))
+	}
+	if !state.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", state.getPath()))
+	}
+	if !state.SflowOptionsIfCountersPollingInterval.IsNull() && data.SflowOptionsIfCountersPollingInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/if-counters/polling-interval", state.getPath()))
+	}
+	if !state.SflowOptionsSampleHeaderSize.IsNull() && data.SflowOptionsSampleHeaderSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/sample-header/size", state.getPath()))
+	}
+	if !state.SflowOptionsInputIfindex.IsNull() && data.SflowOptionsInputIfindex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/input/ifindex", state.getPath()))
+	}
+	if !state.SflowOptionsOutputIfindex.IsNull() && data.SflowOptionsOutputIfindex.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/sflow/options/output/ifindex", state.getPath()))
+	}
 	return deletedItems
 }
 
@@ -1743,144 +1598,6 @@ func (data *FlowMonitorMap) getDeletedItems(ctx context.Context, state FlowMonit
 
 func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv6TunnelEgress.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv4TunnelEgress.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedGateway.IsNull() && !data.SflowOptionsExtendedGateway.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-gateway", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedRouter.IsNull() && !data.SflowOptionsExtendedRouter.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))
-	}
-	if !data.SflowOptions.IsNull() && !data.SflowOptions.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options", data.getPath()))
-	}
-	if !data.CacheImmediate.IsNull() && !data.CacheImmediate.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cache/immediate", data.getPath()))
-	}
-	if !data.CachePermanent.IsNull() && !data.CachePermanent.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cache/permanent", data.getPath()))
-	}
-	if !data.RecordDefaultMdi.IsNull() && !data.RecordDefaultMdi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/default-mdi", data.getPath()))
-	}
-	if !data.RecordDefaultRtp.IsNull() && !data.RecordDefaultRtp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/default-rtp", data.getPath()))
-	}
-	if !data.RecordDatalinkRecord.IsNull() && !data.RecordDatalinkRecord.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/datalink-record", data.getPath()))
-	}
-	if !data.RecordSflow.IsNull() && !data.RecordSflow.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/sflow", data.getPath()))
-	}
-	if !data.RecordMapT.IsNull() && !data.RecordMapT.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/map-t", data.getPath()))
-	}
-	if !data.RecordMplsIpv4Ipv6Fields.IsNull() && !data.RecordMplsIpv4Ipv6Fields.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", data.getPath()))
-	}
-	if !data.RecordMplsIpv6Fields.IsNull() && !data.RecordMplsIpv6Fields.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv6-fields", data.getPath()))
-	}
-	if !data.RecordMplsIpv4Fields.IsNull() && !data.RecordMplsIpv4Fields.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
-	}
-	if !data.RecordMpls.IsNull() && !data.RecordMpls.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls", data.getPath()))
-	}
-	if !data.RecordIpv6Extended.IsNull() && !data.RecordIpv6Extended.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/extended", data.getPath()))
-	}
-	if !data.RecordIpv6L2L3.IsNull() && !data.RecordIpv6L2L3.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/l2-l3", data.getPath()))
-	}
-	if !data.RecordIpv6Srv6.IsNull() && !data.RecordIpv6Srv6.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/srv6", data.getPath()))
-	}
-	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
-	}
-	if !data.RecordIpv6PeerAs.IsNull() && !data.RecordIpv6PeerAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/peer-as", data.getPath()))
-	}
-	if !data.RecordIpv6Destination.IsNull() && !data.RecordIpv6Destination.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
-	}
-	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6", data.getPath()))
-	}
-	if !data.RecordIpv4Extended.IsNull() && !data.RecordIpv4Extended.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/extended", data.getPath()))
-	}
-	if !data.RecordIpv4L2L3.IsNull() && !data.RecordIpv4L2L3.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/l2-l3", data.getPath()))
-	}
-	if !data.RecordIpv4Gtp.IsNull() && !data.RecordIpv4Gtp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
-	}
-	if !data.RecordIpv4PeerAs.IsNull() && !data.RecordIpv4PeerAs.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/peer-as", data.getPath()))
-	}
-	if !data.RecordIpv4BgpNexthopTos.IsNull() && !data.RecordIpv4BgpNexthopTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", data.getPath()))
-	}
-	if !data.RecordIpv4PrefixPort.IsNull() && !data.RecordIpv4PrefixPort.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix-port", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationPrefixTos.IsNull() && !data.RecordIpv4DestinationPrefixTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4SourcePrefixTos.IsNull() && !data.RecordIpv4SourcePrefixTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4PrefixTos.IsNull() && !data.RecordIpv4PrefixTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4ProtocolPortTos.IsNull() && !data.RecordIpv4ProtocolPortTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", data.getPath()))
-	}
-	if !data.RecordIpv4AsTos.IsNull() && !data.RecordIpv4AsTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/as-tos", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationPrefix.IsNull() && !data.RecordIpv4DestinationPrefix.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-prefix", data.getPath()))
-	}
-	if !data.RecordIpv4SourcePrefix.IsNull() && !data.RecordIpv4SourcePrefix.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/source-prefix", data.getPath()))
-	}
-	if !data.RecordIpv4Prefix.IsNull() && !data.RecordIpv4Prefix.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix", data.getPath()))
-	}
-	if !data.RecordIpv4ProtocolPort.IsNull() && !data.RecordIpv4ProtocolPort.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/protocol-port", data.getPath()))
-	}
-	if !data.RecordIpv4As.IsNull() && !data.RecordIpv4As.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/as", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationTos.IsNull() && !data.RecordIpv4DestinationTos.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-tos", data.getPath()))
-	}
-	if !data.RecordIpv4Destination.IsNull() && !data.RecordIpv4Destination.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
-	}
-	if !data.RecordIpv4.IsNull() && !data.RecordIpv4.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4", data.getPath()))
-	}
-	if !data.OptionOutbundlemember.IsNull() && !data.OptionOutbundlemember.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
-	}
-	if !data.OptionBgpattr.IsNull() && !data.OptionBgpattr.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/bgpattr", data.getPath()))
-	}
-	if !data.OptionFiltered.IsNull() && !data.OptionFiltered.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/filtered", data.getPath()))
-	}
-	if !data.OptionOutphysint.IsNull() && !data.OptionOutphysint.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/outphysint", data.getPath()))
-	}
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
 		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
@@ -1888,6 +1605,129 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
+	}
+	if !data.OptionOutphysint.IsNull() && !data.OptionOutphysint.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/outphysint", data.getPath()))
+	}
+	if !data.OptionFiltered.IsNull() && !data.OptionFiltered.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/filtered", data.getPath()))
+	}
+	if !data.OptionBgpattr.IsNull() && !data.OptionBgpattr.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/bgpattr", data.getPath()))
+	}
+	if !data.OptionOutbundlemember.IsNull() && !data.OptionOutbundlemember.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
+	}
+	if !data.RecordIpv4.IsNull() && !data.RecordIpv4.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4", data.getPath()))
+	}
+	if !data.RecordIpv4Destination.IsNull() && !data.RecordIpv4Destination.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationTos.IsNull() && !data.RecordIpv4DestinationTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-tos", data.getPath()))
+	}
+	if !data.RecordIpv4As.IsNull() && !data.RecordIpv4As.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/as", data.getPath()))
+	}
+	if !data.RecordIpv4ProtocolPort.IsNull() && !data.RecordIpv4ProtocolPort.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/protocol-port", data.getPath()))
+	}
+	if !data.RecordIpv4Prefix.IsNull() && !data.RecordIpv4Prefix.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix", data.getPath()))
+	}
+	if !data.RecordIpv4SourcePrefix.IsNull() && !data.RecordIpv4SourcePrefix.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/source-prefix", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationPrefix.IsNull() && !data.RecordIpv4DestinationPrefix.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-prefix", data.getPath()))
+	}
+	if !data.RecordIpv4AsTos.IsNull() && !data.RecordIpv4AsTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/as-tos", data.getPath()))
+	}
+	if !data.RecordIpv4ProtocolPortTos.IsNull() && !data.RecordIpv4ProtocolPortTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PrefixTos.IsNull() && !data.RecordIpv4PrefixTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4SourcePrefixTos.IsNull() && !data.RecordIpv4SourcePrefixTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationPrefixTos.IsNull() && !data.RecordIpv4DestinationPrefixTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PrefixPort.IsNull() && !data.RecordIpv4PrefixPort.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/prefix-port", data.getPath()))
+	}
+	if !data.RecordIpv4BgpNexthopTos.IsNull() && !data.RecordIpv4BgpNexthopTos.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PeerAs.IsNull() && !data.RecordIpv4PeerAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/peer-as", data.getPath()))
+	}
+	if !data.RecordIpv4Gtp.IsNull() && !data.RecordIpv4Gtp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
+	}
+	if !data.RecordIpv6.IsNull() && !data.RecordIpv6.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6", data.getPath()))
+	}
+	if !data.RecordIpv6Destination.IsNull() && !data.RecordIpv6Destination.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
+	}
+	if !data.RecordIpv6PeerAs.IsNull() && !data.RecordIpv6PeerAs.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/peer-as", data.getPath()))
+	}
+	if !data.RecordIpv6Gtp.IsNull() && !data.RecordIpv6Gtp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
+	}
+	if !data.RecordMpls.IsNull() && !data.RecordMpls.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls", data.getPath()))
+	}
+	if !data.RecordMplsIpv4Fields.IsNull() && !data.RecordMplsIpv4Fields.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
+	}
+	if !data.RecordMplsIpv6Fields.IsNull() && !data.RecordMplsIpv6Fields.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv6-fields", data.getPath()))
+	}
+	if !data.RecordMplsIpv4Ipv6Fields.IsNull() && !data.RecordMplsIpv4Ipv6Fields.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", data.getPath()))
+	}
+	if !data.RecordMapT.IsNull() && !data.RecordMapT.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/map-t", data.getPath()))
+	}
+	if !data.RecordSflow.IsNull() && !data.RecordSflow.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/sflow", data.getPath()))
+	}
+	if !data.RecordDatalinkRecord.IsNull() && !data.RecordDatalinkRecord.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/datalink-record", data.getPath()))
+	}
+	if !data.RecordDefaultRtp.IsNull() && !data.RecordDefaultRtp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/default-rtp", data.getPath()))
+	}
+	if !data.RecordDefaultMdi.IsNull() && !data.RecordDefaultMdi.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/record/default-mdi", data.getPath()))
+	}
+	if !data.CachePermanent.IsNull() && !data.CachePermanent.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cache/permanent", data.getPath()))
+	}
+	if !data.CacheImmediate.IsNull() && !data.CacheImmediate.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/cache/immediate", data.getPath()))
+	}
+	if !data.SflowOptions.IsNull() && !data.SflowOptions.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedRouter.IsNull() && !data.SflowOptionsExtendedRouter.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedGateway.IsNull() && !data.SflowOptionsExtendedGateway.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-gateway", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv4TunnelEgress.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() && !data.SflowOptionsExtendedIpv6TunnelEgress.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -1898,177 +1738,6 @@ func (data *FlowMonitorMap) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.SflowOptionsOutputIfindex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/output/ifindex", data.getPath()))
-	}
-	if !data.SflowOptionsInputIfindex.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/input/ifindex", data.getPath()))
-	}
-	if !data.SflowOptionsSampleHeaderSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/sample-header/size", data.getPath()))
-	}
-	if !data.SflowOptionsIfCountersPollingInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/if-counters/polling-interval", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedGateway.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-gateway", data.getPath()))
-	}
-	if !data.SflowOptionsExtendedRouter.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))
-	}
-	if !data.SflowOptions.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options", data.getPath()))
-	}
-	if !data.HwCacheTimeoutInactive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hw-cache/timeout/inactive", data.getPath()))
-	}
-	if !data.CacheImmediate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/immediate", data.getPath()))
-	}
-	if !data.CachePermanent.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/permanent", data.getPath()))
-	}
-	if !data.CacheTimeoutRateLimit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/rate-limit", data.getPath()))
-	}
-	if !data.CacheTimeoutUpdate.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/update", data.getPath()))
-	}
-	if !data.CacheTimeoutInactive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/inactive", data.getPath()))
-	}
-	if !data.CacheTimeoutActive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/active", data.getPath()))
-	}
-	if !data.CacheEntries.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/entries", data.getPath()))
-	}
-	if !data.RecordDefaultMdi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/default-mdi", data.getPath()))
-	}
-	if !data.RecordDefaultRtp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/default-rtp", data.getPath()))
-	}
-	if !data.RecordDatalinkRecord.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/datalink-record", data.getPath()))
-	}
-	if !data.RecordSflow.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/sflow", data.getPath()))
-	}
-	if !data.RecordMapT.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/map-t", data.getPath()))
-	}
-	if !data.RecordMplsLabels.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/labels", data.getPath()))
-	}
-	if !data.RecordMplsIpv4Ipv6Fields.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", data.getPath()))
-	}
-	if !data.RecordMplsIpv6Fields.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv6-fields", data.getPath()))
-	}
-	if !data.RecordMplsIpv4Fields.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
-	}
-	if !data.RecordMpls.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls", data.getPath()))
-	}
-	if !data.RecordIpv6Extended.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/extended", data.getPath()))
-	}
-	if !data.RecordIpv6L2L3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/l2-l3", data.getPath()))
-	}
-	if !data.RecordIpv6Srv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/srv6", data.getPath()))
-	}
-	if !data.RecordIpv6Gtp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
-	}
-	if !data.RecordIpv6PeerAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/peer-as", data.getPath()))
-	}
-	if !data.RecordIpv6Destination.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
-	}
-	if !data.RecordIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6", data.getPath()))
-	}
-	if !data.RecordIpv4Extended.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/extended", data.getPath()))
-	}
-	if !data.RecordIpv4L2L3.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/l2-l3", data.getPath()))
-	}
-	if !data.RecordIpv4Gtp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
-	}
-	if !data.RecordIpv4PeerAs.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/peer-as", data.getPath()))
-	}
-	if !data.RecordIpv4BgpNexthopTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", data.getPath()))
-	}
-	if !data.RecordIpv4PrefixPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix-port", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationPrefixTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4SourcePrefixTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4PrefixTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix-tos", data.getPath()))
-	}
-	if !data.RecordIpv4ProtocolPortTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", data.getPath()))
-	}
-	if !data.RecordIpv4AsTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/as-tos", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationPrefix.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-prefix", data.getPath()))
-	}
-	if !data.RecordIpv4SourcePrefix.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/source-prefix", data.getPath()))
-	}
-	if !data.RecordIpv4Prefix.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix", data.getPath()))
-	}
-	if !data.RecordIpv4ProtocolPort.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/protocol-port", data.getPath()))
-	}
-	if !data.RecordIpv4As.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/as", data.getPath()))
-	}
-	if !data.RecordIpv4DestinationTos.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-tos", data.getPath()))
-	}
-	if !data.RecordIpv4Destination.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
-	}
-	if !data.RecordIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4", data.getPath()))
-	}
-	if !data.OptionOutbundlemember.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
-	}
-	if !data.OptionBgpattr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/bgpattr", data.getPath()))
-	}
-	if !data.OptionFiltered.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/filtered", data.getPath()))
-	}
-	if !data.OptionOutphysint.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/outphysint", data.getPath()))
-	}
 	for i := range data.Exporters {
 		keys := [...]string{"exporter-name"}
 		keyValues := [...]string{data.Exporters[i].Name.ValueString()}
@@ -2078,6 +1747,162 @@ func (data *FlowMonitorMap) getDeletePaths(ctx context.Context) []string {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/exporters/exporter%v", data.getPath(), keyString))
+	}
+	if !data.OptionOutphysint.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/outphysint", data.getPath()))
+	}
+	if !data.OptionFiltered.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/filtered", data.getPath()))
+	}
+	if !data.OptionBgpattr.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/bgpattr", data.getPath()))
+	}
+	if !data.OptionOutbundlemember.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/option/outbundlemember", data.getPath()))
+	}
+	if !data.RecordIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4", data.getPath()))
+	}
+	if !data.RecordIpv4Destination.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-tos", data.getPath()))
+	}
+	if !data.RecordIpv4As.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/as", data.getPath()))
+	}
+	if !data.RecordIpv4ProtocolPort.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/protocol-port", data.getPath()))
+	}
+	if !data.RecordIpv4Prefix.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix", data.getPath()))
+	}
+	if !data.RecordIpv4SourcePrefix.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/source-prefix", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationPrefix.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-prefix", data.getPath()))
+	}
+	if !data.RecordIpv4AsTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/as-tos", data.getPath()))
+	}
+	if !data.RecordIpv4ProtocolPortTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/protocol-port-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PrefixTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4SourcePrefixTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/source-prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4DestinationPrefixTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/destination-prefix-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PrefixPort.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/prefix-port", data.getPath()))
+	}
+	if !data.RecordIpv4BgpNexthopTos.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/bgp-nexthop-tos", data.getPath()))
+	}
+	if !data.RecordIpv4PeerAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/peer-as", data.getPath()))
+	}
+	if !data.RecordIpv4Gtp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv4/gtp", data.getPath()))
+	}
+	if !data.RecordIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6", data.getPath()))
+	}
+	if !data.RecordIpv6Destination.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/destination", data.getPath()))
+	}
+	if !data.RecordIpv6PeerAs.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/peer-as", data.getPath()))
+	}
+	if !data.RecordIpv6Gtp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/ipv6/gtp", data.getPath()))
+	}
+	if !data.RecordMpls.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls", data.getPath()))
+	}
+	if !data.RecordMplsIpv4Fields.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv4-fields", data.getPath()))
+	}
+	if !data.RecordMplsIpv6Fields.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv6-fields", data.getPath()))
+	}
+	if !data.RecordMplsIpv4Ipv6Fields.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/ipv4-ipv6-fields", data.getPath()))
+	}
+	if !data.RecordMplsLabels.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/mpls/labels", data.getPath()))
+	}
+	if !data.RecordMapT.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/map-t", data.getPath()))
+	}
+	if !data.RecordSflow.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/sflow", data.getPath()))
+	}
+	if !data.RecordDatalinkRecord.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/datalink-record", data.getPath()))
+	}
+	if !data.RecordDefaultRtp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/default-rtp", data.getPath()))
+	}
+	if !data.RecordDefaultMdi.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/record/default-mdi", data.getPath()))
+	}
+	if !data.CacheEntries.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/entries", data.getPath()))
+	}
+	if !data.CacheTimeoutActive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/active", data.getPath()))
+	}
+	if !data.CacheTimeoutInactive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/inactive", data.getPath()))
+	}
+	if !data.CacheTimeoutUpdate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/update", data.getPath()))
+	}
+	if !data.CacheTimeoutRateLimit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/timeout/rate-limit", data.getPath()))
+	}
+	if !data.CachePermanent.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/permanent", data.getPath()))
+	}
+	if !data.CacheImmediate.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/cache/immediate", data.getPath()))
+	}
+	if !data.HwCacheTimeoutInactive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hw-cache/timeout/inactive", data.getPath()))
+	}
+	if !data.SflowOptions.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedRouter.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-router", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedGateway.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-gateway", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedIpv4TunnelEgress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-ipv4-tunnel-egress", data.getPath()))
+	}
+	if !data.SflowOptionsExtendedIpv6TunnelEgress.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/extended-ipv6-tunnel-egress", data.getPath()))
+	}
+	if !data.SflowOptionsIfCountersPollingInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/if-counters/polling-interval", data.getPath()))
+	}
+	if !data.SflowOptionsSampleHeaderSize.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/sample-header/size", data.getPath()))
+	}
+	if !data.SflowOptionsInputIfindex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/input/ifindex", data.getPath()))
+	}
+	if !data.SflowOptionsOutputIfindex.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/sflow/options/output/ifindex", data.getPath()))
 	}
 	return deletePaths
 }

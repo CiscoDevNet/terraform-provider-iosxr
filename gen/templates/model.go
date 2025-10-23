@@ -759,7 +759,7 @@ func (data *{{camelCase .Name}}Data) fromBody(ctx context.Context, res []byte) {
 
 func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{camelCase .Name}}) []string {
 	deletedItems := make([]string, 0)
-	{{- range reverseAttributes .Attributes}}
+	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
 	if !state.{{toGoName .TfName}}.IsNull() && data.{{toGoName .TfName}}.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/{{getDeletePath .}}", state.getPath()))
@@ -774,7 +774,7 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 		for ki := range keys {
 			keyString += "["+keys[ki]+"="+stateKeyValues[ki]+"]"
 		}
-
+		
 		emptyKeys := true
 		{{- range .Attributes}}
 		{{- if .Id}}
@@ -794,15 +794,15 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 			{{- if .Id}}
 			if state.{{$list}}[i].{{toGoName .TfName}}.Value{{.Type}}() != data.{{$list}}[j].{{toGoName .TfName}}.Value{{.Type}}() {
 				found = false
-			}
-		{{- end}}
-		{{- end}}
-		if found {
-			{{- range reverseAttributes .Attributes}}
-			{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
-			if !state.{{$list}}[i].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{toGoName .TfName}}.IsNull() {
-				deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$xpath}}%v/{{getDeletePath .}}", state.getPath(), keyString))
-			}
+			} 
+			{{- end}}
+			{{- end}}
+			if found {
+				{{- range .Attributes}}
+				{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
+				if !state.{{$list}}[i].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{toGoName .TfName}}.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$xpath}}%v/{{getDeletePath .}}", state.getPath(), keyString))
+				}
 				{{- else if or (eq .Type "List") (eq .Type "Set")}}
 				{{- $cxpath := getXPath .YangName .XPath}}
 				for ci := range state.{{$list}}[i].{{toGoName .TfName}} {
@@ -813,7 +813,7 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 					for cki := range ckeys {
 						ckeyString += "["+ckeys[cki]+"="+cstateKeyValues[cki]+"]"
 					}
-
+					
 					cemptyKeys := true
 					{{- range .Attributes}}
 					{{- if .Id}}
@@ -833,15 +833,15 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 						{{- if .Id}}
 						if state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.Value{{.Type}}() != data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.Value{{.Type}}() {
 							found = false
-						}
-					{{- end}}
-					{{- end}}
-					if found {
-						{{- range reverseAttributes .Attributes}}
-						{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
-						if !state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.IsNull() {
-							deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$xpath}}%v/{{$cxpath}}%v/{{getDeletePath .}}", state.getPath(), keyString, ckeyString))
-						}
+						} 
+						{{- end}}
+						{{- end}}
+						if found {
+							{{- range .Attributes}}
+							{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
+							if !state.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && data.{{$list}}[j].{{$clist}}[cj].{{toGoName .TfName}}.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/{{$xpath}}%v/{{$cxpath}}%v/{{getDeletePath .}}", state.getPath(), keyString, ckeyString))
+							}
 							{{- end}}
 							{{- end}}
 							break
@@ -871,7 +871,7 @@ func (data *{{camelCase .Name}}) getDeletedItems(ctx context.Context, state {{ca
 
 func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	{{- range reverseAttributes .Attributes}}
+	{{- range .Attributes}}
 	{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 	if !data.{{toGoName .TfName}}.IsNull() && !data.{{toGoName .TfName}}.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{getDeletePath .}}", data.getPath()))
@@ -887,7 +887,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 		for ki := range keys {
 			keyString += "["+keys[ki]+"="+keyValues[ki]+"]"
 		}
-		{{- range reverseAttributes .Attributes}}
+		{{- range .Attributes}}
 		{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 		if !data.{{$list}}[i].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{toGoName .TfName}}.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{$xpath}}%v/{{getDeletePath .}}", data.getPath(), keyString))
@@ -903,7 +903,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 			for cki := range ckeys {
 				ckeyString += "["+ckeys[cki]+"="+ckeyValues[cki]+"]"
 			}
-			{{- range reverseAttributes .Attributes}}
+			{{- range .Attributes}}
 			{{- if and (eq .Type "Bool") (ne .TypeYangBool "boolean")}}
 			if !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.IsNull() && !data.{{$list}}[i].{{$clist}}[ci].{{toGoName .TfName}}.ValueBool() {
 				emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/{{$xpath}}%v/{{$cxpath}}%v/{{getDeletePath .}}", data.getPath(), keyString, ckeyString))
@@ -925,7 +925,7 @@ func (data *{{camelCase .Name}}) getEmptyLeafsDelete(ctx context.Context) []stri
 
 func (data *{{camelCase .Name}}) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	{{- range reverseAttributes .Attributes}}
+	{{- range .Attributes}}
 	{{- if and (not .Reference) (not .Id) (ne .Type "List") (ne .Type "Set") (not .NoDelete)}}
 	if !data.{{toGoName .TfName}}.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/{{getDeletePath .}}", data.getPath()))

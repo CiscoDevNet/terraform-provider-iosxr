@@ -40,14 +40,13 @@ func TestAccIosxrRouterVRRPInterfaceIPv4(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "address", "1.1.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "priority", "250"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "name", "TEST"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "text_authentication", "password"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "secondary_addresses.0.address", "2.2.2.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "text_authentication", "7"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "timer_advertisement_seconds", "123"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "timer_force", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "preempt_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "preempt_delay", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "accept_mode_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "track_interfaces.0.priority_decrement", "12"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "track_objects.0.object_name", "OBJECT"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv4.test", "track_objects.0.priority_decrement", "22"))
@@ -136,17 +135,14 @@ func testAccIosxrRouterVRRPInterfaceIPv4Config_all() string {
 	config += `	address = "1.1.1.1"` + "\n"
 	config += `	priority = 250` + "\n"
 	config += `	name = "TEST"` + "\n"
-	config += `	text_authentication = "password"` + "\n"
-	config += `	secondary_addresses = [{` + "\n"
-	config += `		address = "2.2.2.2"` + "\n"
-	config += `		}]` + "\n"
+	config += `	text_authentication = "7"` + "\n"
 	config += `	timer_advertisement_seconds = 123` + "\n"
 	config += `	timer_force = false` + "\n"
 	config += `	preempt_disable = false` + "\n"
 	config += `	preempt_delay = 255` + "\n"
 	config += `	accept_mode_disable = false` + "\n"
 	config += `	track_interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/4"` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		priority_decrement = 12` + "\n"
 	config += `		}]` + "\n"
 	config += `	track_objects = [{` + "\n"

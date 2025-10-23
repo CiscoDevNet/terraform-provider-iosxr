@@ -434,44 +434,44 @@ func (data *L2VPNPWClassData) fromBody(ctx context.Context, res []byte) {
 
 func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClass) []string {
 	deletedItems := make([]string, 0)
-	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", state.getPath()))
-	}
-	if !state.EncapsulationMplsLoadBalancingPwLabel.IsNull() && data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", state.getPath()))
-	}
-	if !state.EncapsulationMplsTransportModePassthrough.IsNull() && data.EncapsulationMplsTransportModePassthrough.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", state.getPath()))
-	}
-	if !state.EncapsulationMplsTransportModeVlan.IsNull() && data.EncapsulationMplsTransportModeVlan.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", state.getPath()))
+	if !state.EncapsulationMpls.IsNull() && data.EncapsulationMpls.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls", state.getPath()))
 	}
 	if !state.EncapsulationMplsTransportModeEthernet.IsNull() && data.EncapsulationMplsTransportModeEthernet.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", state.getPath()))
 	}
-	if !state.EncapsulationMpls.IsNull() && data.EncapsulationMpls.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls", state.getPath()))
+	if !state.EncapsulationMplsTransportModeVlan.IsNull() && data.EncapsulationMplsTransportModeVlan.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", state.getPath()))
+	}
+	if !state.EncapsulationMplsTransportModePassthrough.IsNull() && data.EncapsulationMplsTransportModePassthrough.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingPwLabel.IsNull() && data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", state.getPath()))
+	}
+	if !state.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", state.getPath()))
 	}
 	return deletedItems
 }
@@ -482,44 +482,44 @@ func (data *L2VPNPWClass) getDeletedItems(ctx context.Context, state L2VPNPWClas
 
 func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBoth.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceive.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() && !data.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
-	}
-	if !data.EncapsulationMplsTransportModePassthrough.IsNull() && !data.EncapsulationMplsTransportModePassthrough.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
-	}
-	if !data.EncapsulationMplsTransportModeVlan.IsNull() && !data.EncapsulationMplsTransportModeVlan.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", data.getPath()))
+	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))
 	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() && !data.EncapsulationMplsTransportModeEthernet.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", data.getPath()))
 	}
-	if !data.EncapsulationMpls.IsNull() && !data.EncapsulationMpls.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))
+	if !data.EncapsulationMplsTransportModeVlan.IsNull() && !data.EncapsulationMplsTransportModeVlan.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", data.getPath()))
+	}
+	if !data.EncapsulationMplsTransportModePassthrough.IsNull() && !data.EncapsulationMplsTransportModePassthrough.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() && !data.EncapsulationMplsLoadBalancingPwLabel.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceive.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBoth.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() && !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -530,44 +530,44 @@ func (data *L2VPNPWClass) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *L2VPNPWClass) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", data.getPath()))
-	}
-	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
-	}
-	if !data.EncapsulationMplsTransportModePassthrough.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
-	}
-	if !data.EncapsulationMplsTransportModeVlan.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", data.getPath()))
+	if !data.EncapsulationMpls.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))
 	}
 	if !data.EncapsulationMplsTransportModeEthernet.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/ethernet", data.getPath()))
 	}
-	if !data.EncapsulationMpls.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls", data.getPath()))
+	if !data.EncapsulationMplsTransportModeVlan.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/vlan", data.getPath()))
+	}
+	if !data.EncapsulationMplsTransportModePassthrough.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/transport-mode/passthrough", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingPwLabel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/pw-label", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelTransmitStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/transmit/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelReceive.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelReceiveStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/receive/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelBoth.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelBothStatic.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/both/static", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7", data.getPath()))
+	}
+	if !data.EncapsulationMplsLoadBalancingFlowLabelCodeOne7Disable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/encapsulation/mpls/load-balancing/flow-label/code/one7/disable", data.getPath()))
 	}
 	return deletePaths
 }

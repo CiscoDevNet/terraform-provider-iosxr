@@ -34,8 +34,8 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrNTP(t *testing.T) {
-	if os.Getenv("NCS") == "" && os.Getenv("XRV9K") == "" && os.Getenv("C8000") == "" {
-		t.Skip("skipping test, set environment variable NCS or XRV9K or C8000")
+	if os.Getenv("XRV9K") == "" {
+		t.Skip("skipping test, set environment variable XRV9K")
 	}
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_ntp.test", "ipv4_precedence", "network"))
@@ -128,7 +128,6 @@ func iosxrNTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 func testAccIosxrNTPConfig_minimum() string {
 	config := `resource "iosxr_ntp" "test" {` + "\n"
-	config += `	ipv6_dscp = "af11"` + "\n"
 	config += `}` + "\n"
 	return config
 }

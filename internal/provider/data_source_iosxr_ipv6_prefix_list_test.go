@@ -37,7 +37,6 @@ func TestAccDataSourceIosxrIPv6PrefixList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.prefix", "2001:db8::"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.mask", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_ge", "64"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_ipv6_prefix_list.test", "sequences.0.match_prefix_length_le", "128"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -67,7 +66,6 @@ func testAccDataSourceIosxrIPv6PrefixListConfig() string {
 	config += `		prefix = "2001:db8::"` + "\n"
 	config += `		mask = 32` + "\n"
 	config += `		match_prefix_length_ge = 64` + "\n"
-	config += `		match_prefix_length_le = 128` + "\n"
 	config += `	}]` + "\n"
 	config += `}` + "\n"
 

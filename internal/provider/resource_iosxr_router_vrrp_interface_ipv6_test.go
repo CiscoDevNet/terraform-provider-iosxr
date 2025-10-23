@@ -36,7 +36,6 @@ import (
 func TestAccIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "vrrp_id", "124"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "global_addresses.0.address", "2001:db8::1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "address_linklocal_autoconfig", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "priority", "250"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "name", "TEST2"))
@@ -45,7 +44,7 @@ func TestAccIosxrRouterVRRPInterfaceIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "preempt_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "preempt_delay", "255"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "accept_mode_disable", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/4"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "track_interfaces.0.interface_name", "GigabitEthernet0/0/0/5"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "track_interfaces.0.priority_decrement", "12"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "track_objects.0.object_name", "OBJECT"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_vrrp_interface_ipv6.test", "track_objects.0.priority_decrement", "22"))
@@ -115,10 +114,6 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_minimum() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv6" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	vrrp_id = 124` + "\n"
-	config += `	global_addresses = [{` + "\n"
-	config += `		address = "2001:db8::1"` + "\n"
-	config += `		}]` + "\n"
-	config += `	address_linklocal_autoconfig = true` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -132,9 +127,6 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_all() string {
 	config := `resource "iosxr_router_vrrp_interface_ipv6" "test" {` + "\n"
 	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
 	config += `	vrrp_id = 124` + "\n"
-	config += `	global_addresses = [{` + "\n"
-	config += `		address = "2001:db8::1"` + "\n"
-	config += `		}]` + "\n"
 	config += `	address_linklocal_autoconfig = true` + "\n"
 	config += `	priority = 250` + "\n"
 	config += `	name = "TEST2"` + "\n"
@@ -144,7 +136,7 @@ func testAccIosxrRouterVRRPInterfaceIPv6Config_all() string {
 	config += `	preempt_delay = 255` + "\n"
 	config += `	accept_mode_disable = true` + "\n"
 	config += `	track_interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/4"` + "\n"
+	config += `		interface_name = "GigabitEthernet0/0/0/5"` + "\n"
 	config += `		priority_decrement = 12` + "\n"
 	config += `		}]` + "\n"
 	config += `	track_objects = [{` + "\n"

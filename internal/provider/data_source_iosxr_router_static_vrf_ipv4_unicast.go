@@ -128,14 +128,6 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Schema(ctx context.Context, req d
 							MarkdownDescription: "Forwarding router's address",
 							Computed:            true,
 						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval",
-							Computed:            true,
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: "Detect multiplier",
-							Computed:            true,
-						},
 						"description": schema.StringAttribute{
 							MarkdownDescription: "description of the static route",
 							Computed:            true,
@@ -160,6 +152,14 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Schema(ctx context.Context, req d
 							MarkdownDescription: "Set metric for this route",
 							Computed:            true,
 						},
+						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
+							MarkdownDescription: "Hello interval",
+							Computed:            true,
+						},
+						"bfd_fast_detect_multiplier": schema.Int64Attribute{
+							MarkdownDescription: "Detect multiplier",
+							Computed:            true,
+						},
 					},
 				},
 			},
@@ -170,14 +170,6 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Schema(ctx context.Context, req d
 					Attributes: map[string]schema.Attribute{
 						"address": schema.StringAttribute{
 							MarkdownDescription: "Forwarding router's address",
-							Computed:            true,
-						},
-						"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-							MarkdownDescription: "Hello interval",
-							Computed:            true,
-						},
-						"bfd_fast_detect_multiplier": schema.Int64Attribute{
-							MarkdownDescription: "Detect multiplier",
 							Computed:            true,
 						},
 						"description": schema.StringAttribute{
@@ -265,14 +257,6 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Schema(ctx context.Context, req d
 										MarkdownDescription: "Forwarding router's address",
 										Computed:            true,
 									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: "Hello interval",
-										Computed:            true,
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: "Detect multiplier",
-										Computed:            true,
-									},
 									"description": schema.StringAttribute{
 										MarkdownDescription: "description of the static route",
 										Computed:            true,
@@ -307,14 +291,6 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Schema(ctx context.Context, req d
 								Attributes: map[string]schema.Attribute{
 									"address": schema.StringAttribute{
 										MarkdownDescription: "Forwarding router's address",
-										Computed:            true,
-									},
-									"bfd_fast_detect_minimum_interval": schema.Int64Attribute{
-										MarkdownDescription: "Hello interval",
-										Computed:            true,
-									},
-									"bfd_fast_detect_multiplier": schema.Int64Attribute{
-										MarkdownDescription: "Detect multiplier",
 										Computed:            true,
 									},
 									"description": schema.StringAttribute{
@@ -388,7 +364,7 @@ func (d *RouterStaticVRFIPv4UnicastDataSource) Read(ctx context.Context, req dat
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

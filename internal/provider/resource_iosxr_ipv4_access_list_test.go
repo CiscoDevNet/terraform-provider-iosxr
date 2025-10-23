@@ -96,13 +96,6 @@ func iosxrIPv4AccessListImportStateIdFunc(resourceName string) resource.ImportSt
 func testAccIosxrIPv4AccessListConfig_minimum() string {
 	config := `resource "iosxr_ipv4_access_list" "test" {` + "\n"
 	config += `	access_list_name = "ACCESS1"` + "\n"
-	config += `	sequences = [{` + "\n"
-	config += `		sequence_number = 11` + "\n"
-	config += `		permit_protocol = "tcp"` + "\n"
-	config += `		permit_source_address = "18.0.0.0"` + "\n"
-	config += `		permit_source_wildcard_mask = "0.255.255.255"` + "\n"
-	config += `		permit_destination_host = "11.1.1.1"` + "\n"
-	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

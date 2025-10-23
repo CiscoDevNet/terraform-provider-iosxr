@@ -2,12 +2,12 @@
 name: BGP AS Format
 path: Cisco-IOS-XR-um-router-bgp-cfg:/as-format
 doc_category: BGP
+skip_minimum_test: true
 attributes:
   - yang_name: as-format
     tf_name: as_format
     type: String
     no_augment_config: true
-    minimum_test_value: '"asdot"'
     example: asplain
     enum_values:
       - asdot

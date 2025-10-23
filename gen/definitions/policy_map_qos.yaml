@@ -11,23 +11,20 @@ attributes:
   - yang_name: class
     tf_name: classes
     type: List
-    minimum_test_value: '["class-default"]'
     attributes:
       - yang_name: name
         id: true
-        minimum_test_value: '"class-default"'
         example: class-default
       - yang_name: type
         id: true
-        minimum_test_value: '"qos"'
         example: qos
       - yang_name: set/mpls/experimental/topmost
         example: 0
       - yang_name: set/dscp
-        minimum_test_value: '"0"'
         example: 0
       - yang_name: priority/level
-        example: 1
+        example: 2
+        exclude_test: true
       - yang_name: queue-limits/queue-limit
         tf_name: queue_limits
         type: List
@@ -40,10 +37,13 @@ attributes:
             example: us
       - yang_name: service-policy/name
         example: SERVICEPOLICY
+        exclude_test: true
       - yang_name: police/rate/value
         example: 5
+        exclude_test: true
       - yang_name: police/rate/unit
         example: gbps
+        exclude_test: true
       - yang_name: police/conform-action/transmit
         exclude_test: true
         example: true

@@ -46,11 +46,11 @@ func TestAccIosxrEVPN(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrEVPNPrerequisitesConfig + testAccIosxrEVPNConfig_minimum(),
+			Config: testAccIosxrEVPNConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrEVPNPrerequisitesConfig + testAccIosxrEVPNConfig_all(),
+		Config: testAccIosxrEVPNConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -80,14 +80,6 @@ func iosxrEVPNImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrEVPNPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -95,7 +87,6 @@ resource "iosxr_gnmi" "PreReq0" {
 
 func testAccIosxrEVPNConfig_minimum() string {
 	config := `resource "iosxr_evpn" "test" {` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -118,7 +109,6 @@ func testAccIosxrEVPNConfig_all() string {
 	config += `		usid_allocation_wide_local_id_block = true` + "\n"
 	config += `		}]` + "\n"
 	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

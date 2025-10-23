@@ -75,17 +75,9 @@ func (d *RouterVRRPInterfaceIPv6DataSource) Schema(ctx context.Context, req data
 				MarkdownDescription: "VRRP configuration",
 				Required:            true,
 			},
-			"global_addresses": schema.ListNestedAttribute{
-				MarkdownDescription: "Global VRRP IPv6 address",
+			"global_addresses": schema.StringAttribute{
+				MarkdownDescription: "Set Global VRRP IPv6 address",
 				Computed:            true,
-				NestedObject: schema.NestedAttributeObject{
-					Attributes: map[string]schema.Attribute{
-						"address": schema.StringAttribute{
-							MarkdownDescription: "Set Global VRRP IPv6 address",
-							Computed:            true,
-						},
-					},
-				},
 			},
 			"address_linklocal": schema.StringAttribute{
 				MarkdownDescription: "VRRP IPv6 linklocal address",
@@ -204,7 +196,7 @@ func (d *RouterVRRPInterfaceIPv6DataSource) Read(ctx context.Context, req dataso
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

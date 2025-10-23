@@ -87,7 +87,6 @@ func iosxrClassMapQoSImportStateIdFunc(resourceName string) resource.ImportState
 func testAccIosxrClassMapQoSConfig_minimum() string {
 	config := `resource "iosxr_class_map_qos" "test" {` + "\n"
 	config += `	class_map_name = "TEST"` + "\n"
-	config += `	match_dscp = ["46"]` + "\n"
 	config += `}` + "\n"
 	return config
 }

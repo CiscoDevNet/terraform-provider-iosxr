@@ -177,20 +177,20 @@ func (data *RouterVRRPInterfaceData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterVRRPInterface) getDeletedItems(ctx context.Context, state RouterVRRPInterface) []string {
 	deletedItems := make([]string, 0)
-	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
-	}
-	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
-	}
-	if !state.DelayReload.IsNull() && data.DelayReload.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/reload", state.getPath()))
+	if !state.MacRefresh.IsNull() && data.MacRefresh.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac-refresh", state.getPath()))
 	}
 	if !state.DelayMinimum.IsNull() && data.DelayMinimum.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/minimum", state.getPath()))
 	}
-	if !state.MacRefresh.IsNull() && data.MacRefresh.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/mac-refresh", state.getPath()))
+	if !state.DelayReload.IsNull() && data.DelayReload.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/delay/reload", state.getPath()))
+	}
+	if !state.BfdMinimumInterval.IsNull() && data.BfdMinimumInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/minimum-interval", state.getPath()))
+	}
+	if !state.BfdMultiplier.IsNull() && data.BfdMultiplier.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/bfd/multiplier", state.getPath()))
 	}
 	return deletedItems
 }
@@ -210,20 +210,20 @@ func (data *RouterVRRPInterface) getEmptyLeafsDelete(ctx context.Context) []stri
 
 func (data *RouterVRRPInterface) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.BfdMultiplier.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
-	}
-	if !data.BfdMinimumInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
-	}
-	if !data.DelayReload.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay/reload", data.getPath()))
+	if !data.MacRefresh.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac-refresh", data.getPath()))
 	}
 	if !data.DelayMinimum.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay/minimum", data.getPath()))
 	}
-	if !data.MacRefresh.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/mac-refresh", data.getPath()))
+	if !data.DelayReload.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/delay/reload", data.getPath()))
+	}
+	if !data.BfdMinimumInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/minimum-interval", data.getPath()))
+	}
+	if !data.BfdMultiplier.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/bfd/multiplier", data.getPath()))
 	}
 	return deletePaths
 }

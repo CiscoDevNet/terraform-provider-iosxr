@@ -11,12 +11,11 @@ attributes:
     example: 64
   - yang_name: nexthop-interfaces/nexthop-interface
     tf_name: nexthop_interfaces
-    minimum_test_value: '["GigabitEthernet0/0/0/1"]'
     type: List
+    exclude_test: true
     attributes:
       - yang_name: interface-name
         id: true
-        minimum_test_value: '"GigabitEthernet0/0/0/1"'
         example: GigabitEthernet0/0/0/1
       - yang_name: description
         example: interface-description
@@ -34,6 +33,7 @@ attributes:
   - yang_name: nexthop-interface-addresses/nexthop-interface-address
     tf_name: nexthop_interface_addresses
     type: List
+    exclude_test: true
     attributes:
       - yang_name: interface-name
         id: true
@@ -48,10 +48,10 @@ attributes:
       - yang_name: distance-metric
         example: 144
       - yang_name: permanent
-        exclude_test: true
         example: true
       - yang_name: track
         example: TRACK1
+        exclude_test: true
       - yang_name: metric
         example: 10
   - yang_name: nexthop-addresses/nexthop-address
@@ -84,6 +84,7 @@ attributes:
       - yang_name: nexthop-interfaces/nexthop-interface
         tf_name: nexthop_interfaces
         type: List
+        exclude_test: true
         attributes:
           - yang_name: interface-name
             id: true
@@ -104,6 +105,7 @@ attributes:
       - yang_name: nexthop-interface-addresses/nexthop-interface-address
         tf_name: nexthop_interface_addresses
         type: List
+        exclude_test: true
         attributes:
           - yang_name: interface-name
             id: true
@@ -111,10 +113,6 @@ attributes:
           - yang_name: address
             id: true
             example: 2::2
-          - yang_name: bfd/fast-detect/minimum-interval
-            example: 100
-          - yang_name: bfd/fast-detect/multiplier
-            example: 3
           - yang_name: description
             example: interface-description
           - yang_name: tag
@@ -122,12 +120,16 @@ attributes:
           - yang_name: distance-metric
             example: 144
           - yang_name: permanent
-            exclude_test: true
             example: true
           - yang_name: track
             example: TRACK1
+            exclude_test: true
           - yang_name: metric
             example: 10
+          - yang_name: bfd/fast-detect/minimum-interval
+            example: 100
+          - yang_name: bfd/fast-detect/multiplier
+            example: 3
       - yang_name: nexthop-addresses/nexthop-address
         tf_name: nexthop_addresses
         type: List

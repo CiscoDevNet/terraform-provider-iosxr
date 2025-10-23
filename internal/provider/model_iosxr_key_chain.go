@@ -444,53 +444,53 @@ func (data *KeyChain) getDeletedItems(ctx context.Context, state KeyChain) []str
 				found = false
 			}
 			if found {
-				if !state.Keys[i].SendLifetimeInfinite.IsNull() && data.Keys[j].SendLifetimeInfinite.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/year", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/month", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/day-of-month", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/second", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/minute", state.getPath(), keyString))
-				}
-				if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/hour", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/year", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/month", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/day-of-month", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/second", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/minute", state.getPath(), keyString))
-				}
-				if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/hour", state.getPath(), keyString))
+				if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password", state.getPath(), keyString))
 				}
 				if !state.Keys[i].CryptographicAlgorithm.IsNull() && data.Keys[j].CryptographicAlgorithm.IsNull() {
 					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/cryptographic-algorithm", state.getPath(), keyString))
 				}
-				if !state.Keys[i].KeyStringPassword.IsNull() && data.Keys[j].KeyStringPassword.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/key-string/password", state.getPath(), keyString))
+				if !state.Keys[i].AcceptLifetimeStartTimeHour.IsNull() && data.Keys[j].AcceptLifetimeStartTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMinute.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeSecond.IsNull() && data.Keys[j].AcceptLifetimeStartTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeMonth.IsNull() && data.Keys[j].AcceptLifetimeStartTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeStartTimeYear.IsNull() && data.Keys[j].AcceptLifetimeStartTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/start-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].AcceptLifetimeInfinite.IsNull() && data.Keys[j].AcceptLifetimeInfinite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeHour.IsNull() && data.Keys[j].SendLifetimeStartTimeHour.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/hour", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMinute.IsNull() && data.Keys[j].SendLifetimeStartTimeMinute.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/minute", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeSecond.IsNull() && data.Keys[j].SendLifetimeStartTimeSecond.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/second", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeDayOfMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeDayOfMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/day-of-month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeMonth.IsNull() && data.Keys[j].SendLifetimeStartTimeMonth.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/month", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeStartTimeYear.IsNull() && data.Keys[j].SendLifetimeStartTimeYear.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/start-time/year", state.getPath(), keyString))
+				}
+				if !state.Keys[i].SendLifetimeInfinite.IsNull() && data.Keys[j].SendLifetimeInfinite.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", state.getPath(), keyString))
 				}
 				break
 			}
@@ -515,11 +515,11 @@ func (data *KeyChain) getEmptyLeafsDelete(ctx context.Context) []string {
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", data.getPath(), keyString))
-		}
 		if !data.Keys[i].AcceptLifetimeInfinite.IsNull() && !data.Keys[i].AcceptLifetimeInfinite.ValueBool() {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/keys/key%v/accept-lifetime/infinite", data.getPath(), keyString))
+		}
+		if !data.Keys[i].SendLifetimeInfinite.IsNull() && !data.Keys[i].SendLifetimeInfinite.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/keys/key%v/send-lifetime/infinite", data.getPath(), keyString))
 		}
 	}
 	return emptyLeafsDelete

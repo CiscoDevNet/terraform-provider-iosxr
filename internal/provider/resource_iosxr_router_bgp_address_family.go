@@ -164,10 +164,6 @@ func (r *RouterBGPAddressFamilyResource) Schema(ctx context.Context, req resourc
 					int64validator.Between(2, 1024),
 				},
 			},
-			"maximum_paths_ibgp_unequal_cost": schema.BoolAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Allow multipaths to have different BGP nexthop IGP metrics").String,
-				Optional:            true,
-			},
 			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Deterministic Multipath selection primarily on IGP metric order").String,
 				Optional:            true,
@@ -932,7 +928,7 @@ func (r *RouterBGPAddressFamilyResource) Read(ctx context.Context, req resource.
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

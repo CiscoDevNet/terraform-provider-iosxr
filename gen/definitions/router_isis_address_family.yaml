@@ -14,27 +14,33 @@ attributes:
     tf_name: metric_style_narrow
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/NARROW/narrow/transition
     xpath: metric-style/narrow/transition
     tf_name: metric_style_narrow_transition
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide
     xpath: metric-style/wide
     tf_name: metric_style_wide
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/WIDE/wide/transition
     xpath: metric-style/wide/transition
     tf_name: metric_style_wide_transition
     example: true
+    exclude_example: false
   - yang_name: metric-style/METRIC-STYLE/TRANSITION/transition
     xpath: metric-style/transition
     tf_name: metric_style_transition
     example: true
     exclude_test: true
+    exclude_example: false
   - yang_name: metric-style-levels/metric-style-level
     tf_name: metric_style_levels
+    exclude_test: true
     type: List
     attributes:
       - yang_name: level-number
@@ -68,12 +74,14 @@ attributes:
     xpath: router-id/interface-name
     tf_name: router_id_interface_name
     optional: true
+    delete_parent: true
     example: GigabitEthernet0/0/0/1
     exclude_test: true
   - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
     xpath: router-id/ip-address
     tf_name: router_id_ip_address
     optional: true
+    delete_parent: true
     example: "192.168.1.1"
   - yang_name: default-information/originate
     example: true
@@ -141,6 +149,7 @@ attributes:
     example: 70
   - yang_name: fast-reroute/per-link/priority-limit
     example: "critical"
+    exclude_test: true
   - yang_name: fast-reroute/per-link/priority-limit-levels/priority-limit-level
     tf_name: fast_reroute_per_link_priority_limit_levels
     type: List
@@ -155,6 +164,7 @@ attributes:
   - yang_name: microloop/avoidance/enable
     tf_name: microloop_avoidance
     example: true
+    exclude_test: true
   - yang_name: microloop/avoidance/enable/protected
     tf_name: microloop_avoidance_protected
     optional: true
@@ -174,24 +184,29 @@ attributes:
   - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
     xpath: mpls/traffic-eng/router-id/ipv4-address
     tf_name: mpls_traffic_eng_router_id_ipv4_address
+    delete_parent: true
     example: 1.2.3.4
   - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
     xpath: mpls/traffic-eng/router-id/interface-name
     tf_name: mpls_traffic_eng_router_id_interface_name
+    delete_parent: true
     exclude_test: true
     example: Loopback0
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
     xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
     tf_name: mpls_traffic_eng_level_1_2
+    delete_parent: true
     example: true
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
     xpath: mpls/traffic-eng/traffic-eng-level/level-one
     tf_name: mpls_traffic_eng_level_1
+    delete_parent: true
     example: false
     exclude_test: true
   - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
     xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
     tf_name: mpls_traffic_eng_level_2_only
+    delete_parent: true
     example: true
     exclude_test: true
   - yang_name: spf-interval/maximum-wait
@@ -204,7 +219,7 @@ attributes:
     example: true
     exclude_test: true
   - yang_name: spf-interval/ietf/initial-wait
-    example: 55
+    example: 50
     exclude_test: true
   - yang_name: spf-interval/ietf/short-wait
     example: 200
@@ -235,7 +250,7 @@ attributes:
         example: true
         exclude_test: true
       - yang_name: ietf/initial-wait
-        example: 55
+        example: 50
         exclude_test: true
       - yang_name: ietf/short-wait
         example: 200
@@ -369,30 +384,40 @@ attributes:
       - yang_name: locator-string
         tf_name: locator_name
         id: true
+        exclude_test: true
         example: "AlgoLocator"
       - yang_name: level
+        exclude_test: true
         example: 1
       - yang_name: metric
+        exclude_test: true
         example: 10
       - yang_name: metric-levels/metric-level
         tf_name: metric_levels
         type: List
+        exclude_test: true
         attributes:
           - yang_name: level-number
             id: true
+            exclude_test: true
             example: 1
           - yang_name: metric
+            exclude_test: true
             example: 20
       - yang_name: tag
+        exclude_test: true
         example: 100
       - yang_name: tag-levels/tag-level
         tf_name: tag_levels
         type: List
+        exclude_test: true
         attributes:
           - yang_name: level-number
             id: true
+            exclude_test: true
             example: 1
           - yang_name: tag
+            exclude_test: true
             example: 200
 
 test_prerequisites:

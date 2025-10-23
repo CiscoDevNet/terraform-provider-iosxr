@@ -113,37 +113,35 @@ type YamlConfig struct {
 }
 
 type YamlConfigAttribute struct {
-	YangName          string                `yaml:"yang_name"`
-	YangScope         string                `yaml:"yang_scope"`
-	TfName            string                `yaml:"tf_name"`
-	XPath             string                `yaml:"xpath"`
-	Type              string                `yaml:"type"`
-	ReadRaw           bool                  `yaml:"read_raw"`
-	TypeYangBool      string                `yaml:"type_yang_bool"`
-	Id                bool                  `yaml:"id"`
-	Reference         bool                  `yaml:"reference"`
-	Mandatory         bool                  `yaml:"mandatory"`
-	Optional          bool                  `yaml:"optional"`
-	WriteOnly         bool                  `yaml:"write_only"`
-	ExcludeTest       bool                  `yaml:"exclude_test"`
-	ExcludeExample    bool                  `yaml:"exclude_example"`
-	Description       string                `yaml:"description"`
-	Example           string                `yaml:"example"`
-	EnumValues        []string              `yaml:"enum_values"`
-	MinInt            int64                 `yaml:"min_int"`
-	MaxInt            int64                 `yaml:"max_int"`
-	StringPatterns    []string              `yaml:"string_patterns"`
-	StringMinLength   int64                 `yaml:"string_min_length"`
-	StringMaxLength   int64                 `yaml:"string_max_length"`
-	DefaultValue      string                `yaml:"default_value"`
-	RequiresReplace   bool                  `yaml:"requires_replace"`
-	NoAugmentConfig   bool                  `yaml:"no_augment_config"`
-	DeleteParent      bool                  `yaml:"delete_parent"`
-	DeleteGrandparent bool                  `yaml:"delete_grandparent"`
-	NoDelete          bool                  `yaml:"no_delete"`
-	TestTags          []string              `yaml:"test_tags"`
-	MinimumTestValue  string                `yaml:"minimum_test_value"`
-	Attributes        []YamlConfigAttribute `yaml:"attributes"`
+	YangName        string                `yaml:"yang_name"`
+	YangScope       string                `yaml:"yang_scope"`
+	TfName          string                `yaml:"tf_name"`
+	XPath           string                `yaml:"xpath"`
+	Type            string                `yaml:"type"`
+	ReadRaw         bool                  `yaml:"read_raw"`
+	TypeYangBool    string                `yaml:"type_yang_bool"`
+	Id              bool                  `yaml:"id"`
+	Reference       bool                  `yaml:"reference"`
+	Mandatory       bool                  `yaml:"mandatory"`
+	Optional        bool                  `yaml:"optional"`
+	WriteOnly       bool                  `yaml:"write_only"`
+	ExcludeTest     bool                  `yaml:"exclude_test"`
+	ExcludeExample  bool                  `yaml:"exclude_example"`
+	Description     string                `yaml:"description"`
+	Example         string                `yaml:"example"`
+	EnumValues      []string              `yaml:"enum_values"`
+	MinInt          int64                 `yaml:"min_int"`
+	MaxInt          int64                 `yaml:"max_int"`
+	StringPatterns  []string              `yaml:"string_patterns"`
+	StringMinLength int64                 `yaml:"string_min_length"`
+	StringMaxLength int64                 `yaml:"string_max_length"`
+	DefaultValue    string                `yaml:"default_value"`
+	RequiresReplace bool                  `yaml:"requires_replace"`
+	NoAugmentConfig bool                  `yaml:"no_augment_config"`
+	DeleteParent    bool                  `yaml:"delete_parent"`
+	NoDelete        bool                  `yaml:"no_delete"`
+	TestTags        []string              `yaml:"test_tags"`
+	Attributes      []YamlConfigAttribute `yaml:"attributes"`
 }
 
 type YamlTest struct {
@@ -284,22 +282,10 @@ func GetXPath(yangPath, xPath string) string {
 
 func GetDeletePath(attribute YamlConfigAttribute) string {
 	path := GetXPath(attribute.YangName, attribute.XPath)
-	if attribute.DeleteGrandparent {
-		// Remove two levels: grandparent
-		return RemoveLastPathElement(RemoveLastPathElement(path))
-	}
 	if attribute.DeleteParent {
 		return RemoveLastPathElement(path)
 	}
 	return path
-}
-
-func ReverseAttributes(attributes []YamlConfigAttribute) []YamlConfigAttribute {
-	reversed := make([]YamlConfigAttribute, len(attributes))
-	for i, v := range attributes {
-		reversed[len(attributes)-1-i] = v
-	}
-	return reversed
 }
 
 // Templating helper function to add two integers
@@ -354,7 +340,6 @@ var functions = template.FuncMap{
 	"removeLastPathElement": RemoveLastPathElement,
 	"getXPath":              GetXPath,
 	"getDeletePath":         GetDeletePath,
-	"reverseAttributes":     ReverseAttributes,
 }
 
 func resolvePath(e *yang.Entry, path string) *yang.Entry {

@@ -304,7 +304,7 @@ func (d *RouterOSPFVRFDataSource) Read(ctx context.Context, req datasource.ReadR
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

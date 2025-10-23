@@ -39,9 +39,6 @@ func TestAccIosxrLLDP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "timer", "6"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "reinit", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "subinterfaces_enable", "true"))
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "management_enable", "true"))
-	}
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "priorityaddr_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "extended_show_width_enable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_lldp.test", "tlv_select_management_address_disable", "true"))
@@ -107,9 +104,6 @@ func testAccIosxrLLDPConfig_all() string {
 	config += `	timer = 6` + "\n"
 	config += `	reinit = 3` + "\n"
 	config += `	subinterfaces_enable = true` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("C8000") != "" {
-		config += `	management_enable = true` + "\n"
-	}
 	config += `	priorityaddr_enable = true` + "\n"
 	config += `	extended_show_width_enable = true` + "\n"
 	config += `	tlv_select_management_address_disable = true` + "\n"

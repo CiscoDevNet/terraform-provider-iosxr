@@ -40,9 +40,7 @@ func TestAccIosxrL2VPNPWClass(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_ethernet", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_vlan", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_transport_mode_passthrough", "false"))
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_pw_label", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_both_static", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_l2vpn_pw_class.test", "encapsulation_mpls_load_balancing_flow_label_code_one7", "true"))
@@ -118,9 +116,7 @@ func testAccIosxrL2VPNPWClassConfig_all() string {
 	config += `	encapsulation_mpls_transport_mode_ethernet = true` + "\n"
 	config += `	encapsulation_mpls_transport_mode_vlan = false` + "\n"
 	config += `	encapsulation_mpls_transport_mode_passthrough = false` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
-	}
+	config += `	encapsulation_mpls_load_balancing_pw_label = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_both = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_both_static = true` + "\n"
 	config += `	encapsulation_mpls_load_balancing_flow_label_code_one7 = true` + "\n"

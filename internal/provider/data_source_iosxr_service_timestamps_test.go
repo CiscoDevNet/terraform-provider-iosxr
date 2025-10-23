@@ -37,13 +37,13 @@ func TestAccDataSourceIosxrServiceTimestamps(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_show_timezone", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_datetime_year", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_uptime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "debug_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_localtime", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_msec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_show_timezone", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_datetime_year", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_uptime", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_service_timestamps.test", "log_disable", "true"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -71,13 +71,13 @@ func testAccDataSourceIosxrServiceTimestampsConfig() string {
 	config += `	debug_datetime_show_timezone = true` + "\n"
 	config += `	debug_datetime_year = true` + "\n"
 	config += `	debug_uptime = true` + "\n"
-	config += `	debug_disable = false` + "\n"
+	config += `	debug_disable = true` + "\n"
 	config += `	log_datetime_localtime = true` + "\n"
 	config += `	log_datetime_msec = true` + "\n"
 	config += `	log_datetime_show_timezone = true` + "\n"
 	config += `	log_datetime_year = true` + "\n"
 	config += `	log_uptime = true` + "\n"
-	config += `	log_disable = false` + "\n"
+	config += `	log_disable = true` + "\n"
 	config += `}` + "\n"
 
 	config += `

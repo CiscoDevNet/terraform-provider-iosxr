@@ -40,11 +40,11 @@ func TestAccIosxrRoutePolicy(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrRoutePolicyPrerequisitesConfig + testAccIosxrRoutePolicyConfig_minimum(),
+			Config: testAccIosxrRoutePolicyConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrRoutePolicyPrerequisitesConfig + testAccIosxrRoutePolicyConfig_all(),
+		Config: testAccIosxrRoutePolicyConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -76,16 +76,6 @@ func iosxrRoutePolicyImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrRoutePolicyPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/sets/prefix-sets/prefix-set[set-name=PREFIX_SET_1]"
-	attributes = {
-		"set-name" = "PREFIX_SET_1"
-		"rpl-prefix-set" = "prefix-set PREFIX_SET_1\n  10.1.1.0/26 ge 26,\n  10.1.2.0/26 ge 26\nend-set\n"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -95,7 +85,6 @@ func testAccIosxrRoutePolicyConfig_minimum() string {
 	config := `resource "iosxr_route_policy" "test" {` + "\n"
 	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
 	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -108,7 +97,6 @@ func testAccIosxrRoutePolicyConfig_all() string {
 	config := `resource "iosxr_route_policy" "test" {` + "\n"
 	config += `	route_policy_name = "ROUTE_POLICY_1"` + "\n"
 	config += `	rpl = "route-policy ROUTE_POLICY_1\n  if destination in PREFIX_SET_1 then\n    set extcommunity rt (12345:1) additive\n  endif\n  pass\nend-policy\n"` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

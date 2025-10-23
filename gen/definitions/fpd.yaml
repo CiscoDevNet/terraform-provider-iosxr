@@ -1,18 +1,14 @@
 ---
 name: FPD
 path: Cisco-IOS-XR-um-fpd-cfg:/fpd
-test_tags: [NCS]
+test_tags: [PHYSICAL]
 doc_category: System
 attributes:
   - yang_name: auto-upgrade/enable
-    minimum_test_value: true
-    example: true
+    example: false
   - yang_name: auto-upgrade/disable
     example: false
-    exclude_test: true
   - yang_name: auto-reload/enable
-    example: true
-    exclude_test: true
+    example: false
   - yang_name: auto-reload/disable
-    example: true
-    exclude_test: true
+    example: false

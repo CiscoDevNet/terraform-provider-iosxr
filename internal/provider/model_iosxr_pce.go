@@ -326,6 +326,51 @@ func (data *PCEData) fromBody(ctx context.Context, res []byte) {
 
 func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 	deletedItems := make([]string, 0)
+	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4", state.getPath()))
+	}
+	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv6", state.getPath()))
+	}
+	for i := range state.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.StateSyncIpv4s {
+			found = true
+			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
+		}
+	}
+	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
+	}
+	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
+	}
+	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
+	}
 	for i := range state.ApiUsers {
 		keys := [...]string{"user-name"}
 		stateKeyValues := [...]string{state.ApiUsers[i].UserName.ValueString()}
@@ -359,51 +404,6 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/api/users/user%v", state.getPath(), keyString))
 		}
 	}
-	if !state.ApiSiblingIpv4.IsNull() && data.ApiSiblingIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/sibling/ipv4", state.getPath()))
-	}
-	if !state.ApiAuthenticationDigest.IsNull() && data.ApiAuthenticationDigest.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/api/authentication/digest", state.getPath()))
-	}
-	if !state.PeerFilterIpv4AccessList.IsNull() && data.PeerFilterIpv4AccessList.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/peer-filter/ipv4/access-list", state.getPath()))
-	}
-	for i := range state.StateSyncIpv4s {
-		keys := [...]string{"address"}
-		stateKeyValues := [...]string{state.StateSyncIpv4s[i].Address.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.StateSyncIpv4s[i].Address.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.StateSyncIpv4s {
-			found = true
-			if state.StateSyncIpv4s[i].Address.ValueString() != data.StateSyncIpv4s[j].Address.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", state.getPath(), keyString))
-		}
-	}
-	if !state.AddressIpv6.IsNull() && data.AddressIpv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv6", state.getPath()))
-	}
-	if !state.AddressIpv4.IsNull() && data.AddressIpv4.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/address/ipv4", state.getPath()))
-	}
 	return deletedItems
 }
 
@@ -413,9 +413,9 @@ func (data *PCE) getDeletedItems(ctx context.Context, state PCE) []string {
 
 func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.ApiUsers {
-		keys := [...]string{"user-name"}
-		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+	for i := range data.StateSyncIpv4s {
+		keys := [...]string{"address"}
+		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -424,9 +424,9 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 	if !data.ApiAuthenticationDigest.IsNull() && !data.ApiAuthenticationDigest.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
 	}
-	for i := range data.StateSyncIpv4s {
-		keys := [...]string{"address"}
-		keyValues := [...]string{data.StateSyncIpv4s[i].Address.ValueString()}
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -441,24 +441,11 @@ func (data *PCE) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *PCE) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.ApiUsers {
-		keys := [...]string{"user-name"}
-		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyString))
+	if !data.AddressIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
 	}
-	if !data.ApiSiblingIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
-	}
-	if !data.ApiAuthenticationDigest.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
-	}
-	if !data.PeerFilterIpv4AccessList.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
+	if !data.AddressIpv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
 	}
 	for i := range data.StateSyncIpv4s {
 		keys := [...]string{"address"}
@@ -470,11 +457,24 @@ func (data *PCE) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/state-sync/ipv4s/ipv4%v", data.getPath(), keyString))
 	}
-	if !data.AddressIpv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv6", data.getPath()))
+	if !data.PeerFilterIpv4AccessList.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/peer-filter/ipv4/access-list", data.getPath()))
 	}
-	if !data.AddressIpv4.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/address/ipv4", data.getPath()))
+	if !data.ApiAuthenticationDigest.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/authentication/digest", data.getPath()))
+	}
+	if !data.ApiSiblingIpv4.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/sibling/ipv4", data.getPath()))
+	}
+	for i := range data.ApiUsers {
+		keys := [...]string{"user-name"}
+		keyValues := [...]string{data.ApiUsers[i].UserName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/api/users/user%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

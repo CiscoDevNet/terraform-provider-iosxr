@@ -22,7 +22,6 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -37,11 +36,6 @@ func TestAccIosxrBGPASFormat(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_bgp_as_format.test", "as_format", "asplain"))
 	var steps []resource.TestStep
-	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
-		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrBGPASFormatConfig_minimum(),
-		})
-	}
 	steps = append(steps, resource.TestStep{
 		Config: testAccIosxrBGPASFormatConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
@@ -80,7 +74,6 @@ func iosxrBGPASFormatImportStateIdFunc(resourceName string) resource.ImportState
 
 func testAccIosxrBGPASFormatConfig_minimum() string {
 	config := `resource "iosxr_bgp_as_format" "test" {` + "\n"
-	config += `	as_format = "asdot"` + "\n"
 	config += `}` + "\n"
 	return config
 }

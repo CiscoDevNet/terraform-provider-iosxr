@@ -35,13 +35,13 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "description", "My VRF Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "vpn_id", "1000:1000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_import_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_unicast_export_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_multicast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv4_flowspec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_policy", "VRF_IMPORT_POLICY_1"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_policy", "VRF_EXPORT_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_import_route_policy", "ROUTE_POLICY_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_unicast_export_route_policy", "ROUTE_POLICY_1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_multicast", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "ipv6_flowspec", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_vrf.test", "rd_two_byte_as_number", "65001"))
@@ -99,18 +99,10 @@ func TestAccDataSourceIosxrVRF(t *testing.T) {
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccDataSourceIosxrVRFPrerequisitesConfig = `
 resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]"
+	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]"
 	attributes = {
-		"route-policy-name" = "VRF_IMPORT_POLICY_1"
-		"rpl-route-policy" = "route-policy VRF_IMPORT_POLICY_1\n  pass\nend-policy\n"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_EXPORT_POLICY_1]"
-	attributes = {
-		"route-policy-name" = "VRF_EXPORT_POLICY_1"
-		"rpl-route-policy" = "route-policy VRF_EXPORT_POLICY_1\n  pass\nend-policy\n"
+		"route-policy-name" = "ROUTE_POLICY_1"
+		"rpl-route-policy" = "route-policy ROUTE_POLICY_1\n  pass\nend-policy\n"
 	}
 }
 
@@ -123,17 +115,17 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccDataSourceIosxrVRFConfig() string {
 	config := `resource "iosxr_vrf" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	vrf_name = "VRF4"` + "\n"
+	config += `	vrf_name = "VRF3"` + "\n"
 	config += `	description = "My VRF Description"` + "\n"
 	config += `	vpn_id = "1000:1000"` + "\n"
 	config += `	ipv4_unicast = true` + "\n"
-	config += `	ipv4_unicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
-	config += `	ipv4_unicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv4_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	ipv4_multicast = true` + "\n"
 	config += `	ipv4_flowspec = true` + "\n"
 	config += `	ipv6_unicast = true` + "\n"
-	config += `	ipv6_unicast_import_route_policy = "VRF_IMPORT_POLICY_1"` + "\n"
-	config += `	ipv6_unicast_export_route_policy = "VRF_EXPORT_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_import_route_policy = "ROUTE_POLICY_1"` + "\n"
+	config += `	ipv6_unicast_export_route_policy = "ROUTE_POLICY_1"` + "\n"
 	config += `	ipv6_multicast = true` + "\n"
 	config += `	ipv6_flowspec = true` + "\n"
 	config += `	rd_two_byte_as_number = "65001"` + "\n"
@@ -198,12 +190,12 @@ func testAccDataSourceIosxrVRFConfig() string {
 	config += `		ipv4_address_index = 1` + "\n"
 	config += `		stitching = "enable"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
+	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `
 		data "iosxr_vrf" "test" {
-			vrf_name = "VRF4"
+			vrf_name = "VRF3"
 			depends_on = [iosxr_vrf.test]
 		}
 	`

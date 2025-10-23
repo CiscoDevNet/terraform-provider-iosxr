@@ -41,10 +41,8 @@ attribute:
   requires_replace: bool(required=False)  # Set to true if the attribute update should force Terraform to destroy/recreate the entire resource
   no_augment_config: bool(required=False)  # Set to true if the attribute should not be augmented by the YANG models
   delete_parent: bool(required=False)  # Set to true if the attribute should delete the parent YANG element when the attribute is deleted
-  delete_grandparent: bool(required=False)  # Set to true if the attribute should delete the grandparent YANG element when the attribute is deleted
   no_delete: bool(required=False)  # Set to true if the attribute should not be deleted
   test_tags: list(str(), required=False)  # List of test tags, tests are only executed if an environment variable for each of these tags is configured
-  minimum_test_value: any(str(), int(), bool(), list(), required=False) # Value used for "minimum" resource acceptance test
   attributes: list(include('attribute'), required=False)  # List of attributes in case of a list
 
 test_prerequisite:

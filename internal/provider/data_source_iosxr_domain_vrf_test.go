@@ -32,18 +32,18 @@ import (
 
 func TestAccDataSourceIosxrDomainVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "domains.0.domain_name", "example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "domains.0.domain_name", "DOMAIN11"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "domains.0.order", "12345"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "lookup_disable", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "lookup_source_interface", "Loopback214"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name", "cisco.com"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST_NAME_IPV4"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name", "DNAME"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.host_name", "HOST-AGC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv4_hosts.0.ip_address.0", "10.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name_servers.0.address", "10.0.0.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "name_servers.0.order", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST_NAME_IPV6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv6_hosts.0.host_name", "HOST-ACC"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "ipv6_hosts.0.ipv6_address.0", "10::10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "multicast", "multicast.cisco.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_domain_vrf.test", "multicast", "TESTACC"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -69,25 +69,25 @@ func testAccDataSourceIosxrDomainVRFConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	vrf_name = "TEST-VRF"` + "\n"
 	config += `	domains = [{` + "\n"
-	config += `		domain_name = "example.com"` + "\n"
+	config += `		domain_name = "DOMAIN11"` + "\n"
 	config += `		order = 12345` + "\n"
 	config += `	}]` + "\n"
 	config += `	lookup_disable = true` + "\n"
 	config += `	lookup_source_interface = "Loopback214"` + "\n"
-	config += `	name = "cisco.com"` + "\n"
+	config += `	name = "DNAME"` + "\n"
 	config += `	ipv4_hosts = [{` + "\n"
-	config += `		host_name = "HOST_NAME_IPV4"` + "\n"
-	config += `		ip_address = ["10.0.0.10"]` + "\n"
+	config += `		host_name = "HOST-AGC"` + "\n"
+	config += `		ip_address = ["10.0.0.0"]` + "\n"
 	config += `	}]` + "\n"
 	config += `	name_servers = [{` + "\n"
 	config += `		address = "10.0.0.1"` + "\n"
 	config += `		order = 0` + "\n"
 	config += `	}]` + "\n"
 	config += `	ipv6_hosts = [{` + "\n"
-	config += `		host_name = "HOST_NAME_IPV6"` + "\n"
+	config += `		host_name = "HOST-ACC"` + "\n"
 	config += `		ipv6_address = ["10::10"]` + "\n"
 	config += `	}]` + "\n"
-	config += `	multicast = "multicast.cisco.com"` + "\n"
+	config += `	multicast = "TESTACC"` + "\n"
 	config += `}` + "\n"
 
 	config += `

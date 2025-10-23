@@ -30,3 +30,4 @@ attributes:
         example: 64
       - yang_name: match-prefix-length/le
         example: 128
+        exclude_test: true

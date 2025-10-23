@@ -202,20 +202,20 @@ func (data *CDPData) fromBody(ctx context.Context, res []byte) {
 
 func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 	deletedItems := make([]string, 0)
-	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
-	}
-	if !state.AdvertiseV1.IsNull() && data.AdvertiseV1.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise", state.getPath()))
-	}
-	if !state.Timer.IsNull() && data.Timer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
+	if !state.Enable.IsNull() && data.Enable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
 	}
 	if !state.Holdtime.IsNull() && data.Holdtime.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/holdtime", state.getPath()))
 	}
-	if !state.Enable.IsNull() && data.Enable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/enable", state.getPath()))
+	if !state.Timer.IsNull() && data.Timer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/timer", state.getPath()))
+	}
+	if !state.AdvertiseV1.IsNull() && data.AdvertiseV1.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/advertise", state.getPath()))
+	}
+	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
 	}
 	return deletedItems
 }
@@ -226,14 +226,14 @@ func (data *CDP) getDeletedItems(ctx context.Context, state CDP) []string {
 
 func (data *CDP) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
 	}
 	if !data.AdvertiseV1.IsNull() && !data.AdvertiseV1.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/advertise", data.getPath()))
 	}
-	if !data.Enable.IsNull() && !data.Enable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/enable", data.getPath()))
+	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -244,20 +244,20 @@ func (data *CDP) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *CDP) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.LogAdjacencyChanges.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
-	}
-	if !data.AdvertiseV1.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise", data.getPath()))
-	}
-	if !data.Timer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer", data.getPath()))
+	if !data.Enable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
 	}
 	if !data.Holdtime.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/holdtime", data.getPath()))
 	}
-	if !data.Enable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/enable", data.getPath()))
+	if !data.Timer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/timer", data.getPath()))
+	}
+	if !data.AdvertiseV1.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/advertise", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
 	}
 	return deletePaths
 }

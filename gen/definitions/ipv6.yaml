@@ -4,7 +4,6 @@ path: Cisco-IOS-XR-um-ipv6-cfg:/ipv6
 doc_category: System
 attributes:
   - yang_name: hop-limit
-    minimum_test_value: 123
     example: 123
   - yang_name: icmp/error-interval/interval-time
     tf_name: icmp_error_interval

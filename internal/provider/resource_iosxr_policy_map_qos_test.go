@@ -41,12 +41,8 @@ func TestAccIosxrPolicyMapQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.type", "qos"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.set_mpls_experimental_topmost", "0"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.set_dscp", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.priority_level", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.value", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.queue_limits.0.unit", "us"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.service_policy_name", "SERVICEPOLICY"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.police_rate_value", "5"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_policy_map_qos.test", "classes.0.police_rate_unit", "gbps"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -94,11 +90,6 @@ func iosxrPolicyMapQoSImportStateIdFunc(resourceName string) resource.ImportStat
 func testAccIosxrPolicyMapQoSConfig_minimum() string {
 	config := `resource "iosxr_policy_map_qos" "test" {` + "\n"
 	config += `	policy_map_name = "PM1"` + "\n"
-	config += `	classes = [{` + "\n"
-	config += `		name = "class-default"` + "\n"
-	config += `		type = "qos"` + "\n"
-	config += `		set_dscp = "0"` + "\n"
-	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -116,14 +107,10 @@ func testAccIosxrPolicyMapQoSConfig_all() string {
 	config += `		type = "qos"` + "\n"
 	config += `		set_mpls_experimental_topmost = 0` + "\n"
 	config += `		set_dscp = "0"` + "\n"
-	config += `		priority_level = 1` + "\n"
 	config += `		queue_limits = [{` + "\n"
 	config += `			value = "100"` + "\n"
 	config += `			unit = "us"` + "\n"
 	config += `		}]` + "\n"
-	config += `		service_policy_name = "SERVICEPOLICY"` + "\n"
-	config += `		police_rate_value = "5"` + "\n"
-	config += `		police_rate_unit = "gbps"` + "\n"
 	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config

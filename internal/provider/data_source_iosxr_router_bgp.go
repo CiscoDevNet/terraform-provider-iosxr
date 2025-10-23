@@ -79,10 +79,6 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "default redistributed metric",
 				Computed:            true,
 			},
-			"nsr": schema.BoolAttribute{
-				MarkdownDescription: "Enable non-stop-routing support for all neighbors",
-				Computed:            true,
-			},
 			"nsr_disable": schema.BoolAttribute{
 				MarkdownDescription: "Disable non-stop-routing support for all neighbors",
 				Computed:            true,
@@ -107,16 +103,16 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
-			"timers_bgp_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-				MarkdownDescription: "Disable keepalives/hold time",
-				Computed:            true,
-			},
 			"timers_bgp_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 				Computed:            true,
 			},
 			"timers_bgp_holdtime": schema.Int64Attribute{
 				MarkdownDescription: "Holdtime",
+				Computed:            true,
+			},
+			"timers_bgp_holdtime_zero": schema.BoolAttribute{
+				MarkdownDescription: "Disable keepalives/hold time",
 				Computed:            true,
 			},
 			"timers_bgp_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
@@ -284,16 +280,16 @@ func (d *RouterBGPDataSource) Schema(ctx context.Context, req datasource.SchemaR
 							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
-						"timers_keepalive_zero_holdtime_zero": schema.BoolAttribute{
-							MarkdownDescription: "Disable keepalives/hold time",
-							Computed:            true,
-						},
 						"timers_keepalive_zero_minimum_acceptable_holdtime": schema.Int64Attribute{
 							MarkdownDescription: "Minimum acceptable holdtime from neighbor",
 							Computed:            true,
 						},
-						"timers_holdtime": schema.Int64Attribute{
+						"timers_holdtime_number": schema.Int64Attribute{
 							MarkdownDescription: "Holdtime",
+							Computed:            true,
+						},
+						"timers_holdtime_zero": schema.BoolAttribute{
+							MarkdownDescription: "Disable keepalives/hold time",
 							Computed:            true,
 						},
 						"timers_holdtime_minimum_acceptable_holdtime": schema.Int64Attribute{
@@ -352,7 +348,7 @@ func (d *RouterBGPDataSource) Read(ctx context.Context, req datasource.ReadReque
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

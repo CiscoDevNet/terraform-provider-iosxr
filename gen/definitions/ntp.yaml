@@ -1,7 +1,7 @@
 ---
 name: NTP
 path: Cisco-IOS-XR-um-ntp-cfg:/ntp
-test_tags: [NCS, XRV9K, C8000]
+test_tags: [XRV9K]
 doc_category: System
 attributes:
   - yang_name: ipv4/dscp
@@ -10,7 +10,6 @@ attributes:
   - yang_name: ipv4/precedence
     example: network
   - yang_name: ipv6/dscp
-    minimum_test_value: '"af11"'
     example: af11
   - yang_name: ipv6/precedence
     exclude_test: true

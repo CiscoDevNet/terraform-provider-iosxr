@@ -34,11 +34,14 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
 
 func TestAccIosxrFPD(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
+	if os.Getenv("PHYSICAL") == "" {
+		t.Skip("skipping test, set environment variable PHYSICAL")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_upgrade_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_reload_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_fpd.test", "auto_reload_disable", "false"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -83,7 +86,6 @@ func iosxrFPDImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 
 func testAccIosxrFPDConfig_minimum() string {
 	config := `resource "iosxr_fpd" "test" {` + "\n"
-	config += `	auto_upgrade_enable = true` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -94,7 +96,10 @@ func testAccIosxrFPDConfig_minimum() string {
 
 func testAccIosxrFPDConfig_all() string {
 	config := `resource "iosxr_fpd" "test" {` + "\n"
-	config += `	auto_upgrade_enable = true` + "\n"
+	config += `	auto_upgrade_enable = false` + "\n"
+	config += `	auto_upgrade_disable = false` + "\n"
+	config += `	auto_reload_enable = false` + "\n"
+	config += `	auto_reload_disable = false` + "\n"
 	config += `}` + "\n"
 	return config
 }

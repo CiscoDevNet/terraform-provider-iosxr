@@ -362,53 +362,53 @@ func (data *FlowExporterMapData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FlowExporterMap) getDeletedItems(ctx context.Context, state FlowExporterMap) []string {
 	deletedItems := make([]string, 0)
-	if !state.VersionOptionsVrfTableTimeout.IsNull() && data.VersionOptionsVrfTableTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/vrf-table/timeout", state.getPath()))
-	}
-	if !state.VersionOptionsClassTableTimeout.IsNull() && data.VersionOptionsClassTableTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/class-table/timeout", state.getPath()))
-	}
-	if !state.VersionOptionsSamplerTableTimeout.IsNull() && data.VersionOptionsSamplerTableTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/sampler-table/timeout", state.getPath()))
-	}
-	if !state.VersionOptionsInterfaceTableTimeout.IsNull() && data.VersionOptionsInterfaceTableTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/interface-table/timeout", state.getPath()))
-	}
-	if !state.VersionTemplateTimeout.IsNull() && data.VersionTemplateTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/timeout", state.getPath()))
-	}
-	if !state.VersionTemplateOptionsTimeout.IsNull() && data.VersionTemplateOptionsTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/options/timeout", state.getPath()))
-	}
-	if !state.VersionTemplateDataTimeout.IsNull() && data.VersionTemplateDataTimeout.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/data/timeout", state.getPath()))
-	}
-	if !state.VersionExportFormat.IsNull() && data.VersionExportFormat.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/export-format", state.getPath()))
-	}
-	if !state.DfbitSet.IsNull() && data.DfbitSet.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
-	}
-	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
-	}
-	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-length", state.getPath()))
-	}
-	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
-	}
-	if !state.Source.IsNull() && data.Source.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source", state.getPath()))
-	}
-	if !state.DestinationVrf.IsNull() && data.DestinationVrf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/vrf", state.getPath()))
+	if !state.DestinationIpv4Address.IsNull() && data.DestinationIpv4Address.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/ipv4-address", state.getPath()))
 	}
 	if !state.DestinationIpv6Address.IsNull() && data.DestinationIpv6Address.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/ipv6-address", state.getPath()))
 	}
-	if !state.DestinationIpv4Address.IsNull() && data.DestinationIpv4Address.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/ipv4-address", state.getPath()))
+	if !state.DestinationVrf.IsNull() && data.DestinationVrf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/destination/vrf", state.getPath()))
+	}
+	if !state.Source.IsNull() && data.Source.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source", state.getPath()))
+	}
+	if !state.Dscp.IsNull() && data.Dscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dscp", state.getPath()))
+	}
+	if !state.PacketLength.IsNull() && data.PacketLength.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/packet-length", state.getPath()))
+	}
+	if !state.TransportUdp.IsNull() && data.TransportUdp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/transport/udp", state.getPath()))
+	}
+	if !state.DfbitSet.IsNull() && data.DfbitSet.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/dfbit/set", state.getPath()))
+	}
+	if !state.VersionExportFormat.IsNull() && data.VersionExportFormat.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/export-format", state.getPath()))
+	}
+	if !state.VersionTemplateDataTimeout.IsNull() && data.VersionTemplateDataTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/data/timeout", state.getPath()))
+	}
+	if !state.VersionTemplateOptionsTimeout.IsNull() && data.VersionTemplateOptionsTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/options/timeout", state.getPath()))
+	}
+	if !state.VersionTemplateTimeout.IsNull() && data.VersionTemplateTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/template/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsInterfaceTableTimeout.IsNull() && data.VersionOptionsInterfaceTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/interface-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsSamplerTableTimeout.IsNull() && data.VersionOptionsSamplerTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/sampler-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsClassTableTimeout.IsNull() && data.VersionOptionsClassTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/class-table/timeout", state.getPath()))
+	}
+	if !state.VersionOptionsVrfTableTimeout.IsNull() && data.VersionOptionsVrfTableTimeout.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/version/options/vrf-table/timeout", state.getPath()))
 	}
 	return deletedItems
 }
@@ -431,53 +431,53 @@ func (data *FlowExporterMap) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *FlowExporterMap) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.VersionOptionsVrfTableTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/vrf-table/timeout", data.getPath()))
-	}
-	if !data.VersionOptionsClassTableTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/class-table/timeout", data.getPath()))
-	}
-	if !data.VersionOptionsSamplerTableTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/sampler-table/timeout", data.getPath()))
-	}
-	if !data.VersionOptionsInterfaceTableTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/interface-table/timeout", data.getPath()))
-	}
-	if !data.VersionTemplateTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/timeout", data.getPath()))
-	}
-	if !data.VersionTemplateOptionsTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/options/timeout", data.getPath()))
-	}
-	if !data.VersionTemplateDataTimeout.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/data/timeout", data.getPath()))
-	}
-	if !data.VersionExportFormat.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/export-format", data.getPath()))
-	}
-	if !data.DfbitSet.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/dfbit/set", data.getPath()))
-	}
-	if !data.TransportUdp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
-	}
-	if !data.PacketLength.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-length", data.getPath()))
-	}
-	if !data.Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
-	}
-	if !data.Source.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source", data.getPath()))
-	}
-	if !data.DestinationVrf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/vrf", data.getPath()))
+	if !data.DestinationIpv4Address.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/ipv4-address", data.getPath()))
 	}
 	if !data.DestinationIpv6Address.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/ipv6-address", data.getPath()))
 	}
-	if !data.DestinationIpv4Address.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/ipv4-address", data.getPath()))
+	if !data.DestinationVrf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/destination/vrf", data.getPath()))
+	}
+	if !data.Source.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source", data.getPath()))
+	}
+	if !data.Dscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dscp", data.getPath()))
+	}
+	if !data.PacketLength.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/packet-length", data.getPath()))
+	}
+	if !data.TransportUdp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/transport/udp", data.getPath()))
+	}
+	if !data.DfbitSet.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/dfbit/set", data.getPath()))
+	}
+	if !data.VersionExportFormat.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/export-format", data.getPath()))
+	}
+	if !data.VersionTemplateDataTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/data/timeout", data.getPath()))
+	}
+	if !data.VersionTemplateOptionsTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/options/timeout", data.getPath()))
+	}
+	if !data.VersionTemplateTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/template/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsInterfaceTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/interface-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsSamplerTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/sampler-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsClassTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/class-table/timeout", data.getPath()))
+	}
+	if !data.VersionOptionsVrfTableTimeout.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/version/options/vrf-table/timeout", data.getPath()))
 	}
 	return deletePaths
 }

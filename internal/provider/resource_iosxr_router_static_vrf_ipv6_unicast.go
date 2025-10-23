@@ -602,7 +602,7 @@ func (r *RouterStaticVRFIPv6UnicastResource) Read(ctx context.Context, req resou
 		}
 
 		// After `terraform import` we switch to a full read.
-		respBody := getResp.Notification[0].Update[0].Val.GetJsonIetfVal()
+		respBody := getResp
 		if imp {
 			state.fromBody(ctx, respBody)
 		} else {

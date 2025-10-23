@@ -4,12 +4,11 @@ path: Cisco-IOS-XR-um-mpls-oam-cfg:/mpls
 doc_category: MPLS
 attributes:
   - yang_name: oam
-    minimum_test_value: true
     example: true
   - yang_name: oam/echo/disable-vendor-extension
-    example: true
+    example: false
   - yang_name: oam/echo/reply-mode/control-channel/allow-reverse-lsp
-    example: true
+    example: false
   - yang_name: oam/dpm/pps
     example: 10
   - yang_name: oam/dpm/interval

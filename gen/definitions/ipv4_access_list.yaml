@@ -8,18 +8,15 @@ attributes:
     example: ACCESS1
   - yang_name: sequences/sequence
     tf_name: sequences
-    minimum_test_value: '["11"]'
     type: List
     attributes:
       - yang_name: sequence-number
         id: true
-        minimum_test_value: 11
         example: 11
       - yang_name: remark
         example: remark for access list
         exclude_test: true
       - yang_name: permit/protocol
-        minimum_test_value: '"tcp"'
         example: tcp
       - yang_name: permit/eq
         example: 122
@@ -52,10 +49,8 @@ attributes:
         example: gre
         exclude_test: true
       - yang_name: permit/source/address
-        minimum_test_value: '"18.0.0.0"'
         example: 18.0.0.0
       - yang_name: permit/source/wildcard-mask
-        minimum_test_value: '"0.255.255.255"'
         example: 0.255.255.255
       - yang_name: permit/source/prefix-length
         example: 28
@@ -103,7 +98,6 @@ attributes:
         example: true
         exclude_test: true
       - yang_name: permit/destination/host
-        minimum_test_value: '"11.1.1.1"'
         example: 11.1.1.1
       - yang_name: permit/destination/net-group
         example: 64

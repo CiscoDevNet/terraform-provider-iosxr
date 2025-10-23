@@ -36,7 +36,7 @@ import (
 func TestAccIosxrBanner(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "banner_type", "login"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "line", "^C Hello World! ^C"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_banner.test", "line", " Hello user !"))
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
@@ -84,7 +84,7 @@ func iosxrBannerImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 func testAccIosxrBannerConfig_minimum() string {
 	config := `resource "iosxr_banner" "test" {` + "\n"
 	config += `	banner_type = "login"` + "\n"
-	config += `	line = "^C Hello World! ^C"` + "\n"
+	config += `	line = " Hello user !"` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -96,7 +96,7 @@ func testAccIosxrBannerConfig_minimum() string {
 func testAccIosxrBannerConfig_all() string {
 	config := `resource "iosxr_banner" "test" {` + "\n"
 	config += `	banner_type = "login"` + "\n"
-	config += `	line = "^C Hello World! ^C"` + "\n"
+	config += `	line = " Hello user !"` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -96,10 +96,6 @@ func testAccIosxrSNMPServerVRFHostConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_vrf_host" "test" {` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	address = "11.11.11.11"` + "\n"
-	config += `	unencrypted_strings = [{` + "\n"
-	config += `		community_string = "COMMUNITY1"` + "\n"
-	config += `		version_v3_security_level = "auth"` + "\n"
-	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

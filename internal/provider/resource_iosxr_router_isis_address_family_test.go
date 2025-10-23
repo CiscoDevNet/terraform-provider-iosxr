@@ -38,8 +38,6 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "af_name", "ipv4"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "saf_name", "unicast"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_wide_transition", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.level_number", "1"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "metric_style_levels.0.wide_transition", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "router_id_ip_address", "192.168.1.1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "default_information_originate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_delay_interval", "300"))
@@ -57,11 +55,9 @@ func TestAccIosxrRouterISISAddressFamily(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_tiebreaker_node_protecting_index", "40"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_tiebreaker_primary_path_index", "50"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index", "70"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit", "critical"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_levels.0.level_number", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_priority_limit_levels.0.priority_limit", "critical"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "fast_reroute_per_link_use_candidate_only", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_protected", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "microloop_avoidance_rib_update_delay", "5000"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_isis_address_family.test", "advertise_passive_only", "true"))
@@ -178,10 +174,6 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	config += `	af_name = "ipv4"` + "\n"
 	config += `	saf_name = "unicast"` + "\n"
 	config += `	metric_style_wide_transition = true` + "\n"
-	config += `	metric_style_levels = [{` + "\n"
-	config += `		level_number = 1` + "\n"
-	config += `		wide_transition = true` + "\n"
-	config += `		}]` + "\n"
 	config += `	router_id_ip_address = "192.168.1.1"` + "\n"
 	config += `	default_information_originate = true` + "\n"
 	config += `	fast_reroute_delay_interval = 300` + "\n"
@@ -205,13 +197,11 @@ func testAccIosxrRouterISISAddressFamilyConfig_all() string {
 	config += `	fast_reroute_per_prefix_tiebreaker_node_protecting_index = 40` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_primary_path_index = 50` + "\n"
 	config += `	fast_reroute_per_prefix_tiebreaker_srlg_disjoint_index = 70` + "\n"
-	config += `	fast_reroute_per_link_priority_limit = "critical"` + "\n"
 	config += `	fast_reroute_per_link_priority_limit_levels = [{` + "\n"
 	config += `		level_number = 1` + "\n"
 	config += `		priority_limit = "critical"` + "\n"
 	config += `		}]` + "\n"
 	config += `	fast_reroute_per_link_use_candidate_only = true` + "\n"
-	config += `	microloop_avoidance = true` + "\n"
 	config += `	microloop_avoidance_protected = true` + "\n"
 	config += `	microloop_avoidance_rib_update_delay = 5000` + "\n"
 	config += `	advertise_passive_only = true` + "\n"

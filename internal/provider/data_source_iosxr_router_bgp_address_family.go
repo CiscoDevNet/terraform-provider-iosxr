@@ -127,10 +127,6 @@ func (d *RouterBGPAddressFamilyDataSource) Schema(ctx context.Context, req datas
 				MarkdownDescription: "Number of paths (limit includes backup path)",
 				Computed:            true,
 			},
-			"maximum_paths_ibgp_unequal_cost": schema.BoolAttribute{
-				MarkdownDescription: "Allow multipaths to have different BGP nexthop IGP metrics",
-				Computed:            true,
-			},
 			"maximum_paths_ibgp_unequal_cost_deterministic": schema.BoolAttribute{
 				MarkdownDescription: "Deterministic Multipath selection primarily on IGP metric order",
 				Computed:            true,
@@ -740,7 +736,7 @@ func (d *RouterBGPAddressFamilyDataSource) Read(ctx context.Context, req datasou
 			return
 		}
 
-		config.fromBody(ctx, getResp.Notification[0].Update[0].Val.GetJsonIetfVal())
+		config.fromBody(ctx, getResp)
 	}
 
 	config.Id = types.StringValue(config.getPath())

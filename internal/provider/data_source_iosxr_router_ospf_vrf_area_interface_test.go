@@ -68,7 +68,6 @@ resource "iosxr_gnmi" "PreReq1" {
 	attributes = {
 		"vrf-name" = "VRF1"
 	}
-	depends_on = [iosxr_gnmi.PreReq0, ]
 }
 
 resource "iosxr_gnmi" "PreReq2" {
@@ -91,7 +90,7 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig() string {
 	config += `	process_name = "OSPF1"` + "\n"
 	config += `	vrf_name = "VRF1"` + "\n"
 	config += `	area_id = "0"` + "\n"
-	config += `	interface_name = "GigabitEthernet0/0/0/2"` + "\n"
+	config += `	interface_name = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `	network_broadcast = false` + "\n"
 	config += `	network_non_broadcast = false` + "\n"
 	config += `	network_point_to_point = true` + "\n"
@@ -108,7 +107,7 @@ func testAccDataSourceIosxrRouterOSPFVRFAreaInterfaceConfig() string {
 			process_name = "OSPF1"
 			vrf_name = "VRF1"
 			area_id = "0"
-			interface_name = "GigabitEthernet0/0/0/2"
+			interface_name = "GigabitEthernet0/0/0/1"
 			depends_on = [iosxr_router_ospf_vrf_area_interface.test]
 		}
 	`

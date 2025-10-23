@@ -110,9 +110,6 @@ func testAccIosxrRouterStaticVRFIPv6UnicastConfig_minimum() string {
 	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	prefix_address = "1::"` + "\n"
 	config += `	prefix_length = 64` + "\n"
-	config += `	nexthop_interfaces = [{` + "\n"
-	config += `		interface_name = "GigabitEthernet0/0/0/1"` + "\n"
-	config += `		}]` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

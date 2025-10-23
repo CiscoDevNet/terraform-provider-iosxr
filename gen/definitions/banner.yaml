@@ -7,4 +7,4 @@ attributes:
   - yang_name: banner-type
     example: login
   - yang_name: line
-    example: "^C Hello World! ^C"
+    example: " Hello user !"

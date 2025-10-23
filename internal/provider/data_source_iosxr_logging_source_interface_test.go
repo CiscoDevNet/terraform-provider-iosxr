@@ -38,7 +38,7 @@ func TestAccDataSourceIosxrLoggingSourceInterface(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrLoggingSourceInterfacePrerequisitesConfig + testAccDataSourceIosxrLoggingSourceInterfaceConfig(),
+				Config: testAccDataSourceIosxrLoggingSourceInterfaceConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -48,22 +48,6 @@ func TestAccDataSourceIosxrLoggingSourceInterface(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrLoggingSourceInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback0]"
-	attributes = {
-		"interface-name" = "Loopback0"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -75,7 +59,6 @@ func testAccDataSourceIosxrLoggingSourceInterfaceConfig() string {
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `	}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

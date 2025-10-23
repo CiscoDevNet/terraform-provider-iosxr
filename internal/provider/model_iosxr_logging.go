@@ -288,38 +288,38 @@ func (data *LoggingData) fromBody(ctx context.Context, res []byte) {
 
 func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []string {
 	deletedItems := make([]string, 0)
-	if !state.SuppressDuplicates.IsNull() && data.SuppressDuplicates.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
-	}
-	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostnameprefix", state.getPath()))
-	}
-	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/facility/level", state.getPath()))
-	}
-	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/level", state.getPath()))
-	}
-	if !state.BufferedLoggingBufferSize.IsNull() && data.BufferedLoggingBufferSize.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/logging-buffer-size", state.getPath()))
-	}
-	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor", state.getPath()))
-	}
-	if !state.Console.IsNull() && data.Console.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/console", state.getPath()))
-	}
-	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", state.getPath()))
-	}
-	if !state.EventsDisplayLocation.IsNull() && data.EventsDisplayLocation.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
+	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/dscp", state.getPath()))
 	}
 	if !state.Trap.IsNull() && data.Trap.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/trap", state.getPath()))
 	}
-	if !state.Ipv4Dscp.IsNull() && data.Ipv4Dscp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/ipv4/dscp", state.getPath()))
+	if !state.EventsDisplayLocation.IsNull() && data.EventsDisplayLocation.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", state.getPath()))
+	}
+	if !state.EventsLevel.IsNull() && data.EventsLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", state.getPath()))
+	}
+	if !state.Console.IsNull() && data.Console.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/console", state.getPath()))
+	}
+	if !state.Monitor.IsNull() && data.Monitor.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/monitor", state.getPath()))
+	}
+	if !state.BufferedLoggingBufferSize.IsNull() && data.BufferedLoggingBufferSize.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/logging-buffer-size", state.getPath()))
+	}
+	if !state.BufferedLevel.IsNull() && data.BufferedLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/buffered/level", state.getPath()))
+	}
+	if !state.FacilityLevel.IsNull() && data.FacilityLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/facility/level", state.getPath()))
+	}
+	if !state.Hostnameprefix.IsNull() && data.Hostnameprefix.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/hostnameprefix", state.getPath()))
+	}
+	if !state.SuppressDuplicates.IsNull() && data.SuppressDuplicates.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/suppress/duplicates", state.getPath()))
 	}
 	return deletedItems
 }
@@ -330,11 +330,11 @@ func (data *Logging) getDeletedItems(ctx context.Context, state Logging) []strin
 
 func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
-	}
 	if !data.EventsDisplayLocation.IsNull() && !data.EventsDisplayLocation.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+	}
+	if !data.SuppressDuplicates.IsNull() && !data.SuppressDuplicates.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -345,38 +345,38 @@ func (data *Logging) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *Logging) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.SuppressDuplicates.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
-	}
-	if !data.Hostnameprefix.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/hostnameprefix", data.getPath()))
-	}
-	if !data.FacilityLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/facility/level", data.getPath()))
-	}
-	if !data.BufferedLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/level", data.getPath()))
-	}
-	if !data.BufferedLoggingBufferSize.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/logging-buffer-size", data.getPath()))
-	}
-	if !data.Monitor.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor", data.getPath()))
-	}
-	if !data.Console.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/console", data.getPath()))
-	}
-	if !data.EventsLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.getPath()))
-	}
-	if !data.EventsDisplayLocation.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+	if !data.Ipv4Dscp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/dscp", data.getPath()))
 	}
 	if !data.Trap.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/trap", data.getPath()))
 	}
-	if !data.Ipv4Dscp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/ipv4/dscp", data.getPath()))
+	if !data.EventsDisplayLocation.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/display-location", data.getPath()))
+	}
+	if !data.EventsLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/Cisco-IOS-XR-um-logging-events-cfg:events/level", data.getPath()))
+	}
+	if !data.Console.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/console", data.getPath()))
+	}
+	if !data.Monitor.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/monitor", data.getPath()))
+	}
+	if !data.BufferedLoggingBufferSize.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/logging-buffer-size", data.getPath()))
+	}
+	if !data.BufferedLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/buffered/level", data.getPath()))
+	}
+	if !data.FacilityLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/facility/level", data.getPath()))
+	}
+	if !data.Hostnameprefix.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/hostnameprefix", data.getPath()))
+	}
+	if !data.SuppressDuplicates.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/suppress/duplicates", data.getPath()))
 	}
 	return deletePaths
 }

@@ -35,13 +35,12 @@ import (
 
 func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "vrf_name", "VRF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "vrf_name", "VRF2"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_information_originate", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "default_metric", "125"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "rd_auto", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_zero_holdtime_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_keepalive_interval", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "timers_bgp_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "bgp_router_id", "22.22.22.22"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "bfd_minimum_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "bfd_multiplier", "4"))
@@ -57,16 +56,11 @@ func TestAccIosxrRouterBGPVRF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_strict_mode", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.bfd_fast_detect_disable", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.local_as_no_prepend_replace_as_dual_as", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.password", "12341C2713181F13253920"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.password_inheritance_disable", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.shutdown", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_interval", "0"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_zero_minimum_acceptable_holdtime", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_keepalive_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.timers_holdtime", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.update_source", "GigabitEthernet0/0/0/1"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_router_bgp_vrf.test", "neighbors.0.ttl_security", "false"))
 	var steps []resource.TestStep
@@ -123,7 +117,6 @@ resource "iosxr_gnmi" "PreReq0" {
 			items = [
 				{
 					"neighbor-group-name" = "GROUP1"
-					"remote-as" = "65001"
 				},
 			]
 		},
@@ -139,7 +132,7 @@ resource "iosxr_gnmi" "PreReq0" {
 func testAccIosxrRouterBGPVRFConfig_minimum() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -152,13 +145,12 @@ func testAccIosxrRouterBGPVRFConfig_minimum() string {
 func testAccIosxrRouterBGPVRFConfig_all() string {
 	config := `resource "iosxr_router_bgp_vrf" "test" {` + "\n"
 	config += `	as_number = "65001"` + "\n"
-	config += `	vrf_name = "VRF1"` + "\n"
+	config += `	vrf_name = "VRF2"` + "\n"
 	config += `	default_information_originate = true` + "\n"
 	config += `	default_metric = 125` + "\n"
 	config += `	rd_auto = true` + "\n"
-	config += `	timers_bgp_keepalive_interval = 0` + "\n"
-	config += `	timers_bgp_keepalive_zero = true` + "\n"
-	config += `	timers_bgp_keepalive_zero_holdtime_zero = true` + "\n"
+	config += `	timers_bgp_keepalive_interval = 5` + "\n"
+	config += `	timers_bgp_holdtime = 20` + "\n"
 	config += `	bgp_router_id = "22.22.22.22"` + "\n"
 	config += `	bfd_minimum_interval = 10` + "\n"
 	config += `	bfd_multiplier = 4` + "\n"
@@ -175,16 +167,11 @@ func testAccIosxrRouterBGPVRFConfig_all() string {
 	config += `		bfd_fast_detect = true` + "\n"
 	config += `		bfd_fast_detect_strict_mode = false` + "\n"
 	config += `		bfd_fast_detect_disable = false` + "\n"
-	config += `		local_as = "10"` + "\n"
-	config += `		local_as_no_prepend = true` + "\n"
-	config += `		local_as_no_prepend_replace_as = true` + "\n"
-	config += `		local_as_no_prepend_replace_as_dual_as = true` + "\n"
 	config += `		password = "12341C2713181F13253920"` + "\n"
 	config += `		password_inheritance_disable = false` + "\n"
 	config += `		shutdown = false` + "\n"
-	config += `		timers_keepalive_interval = 0` + "\n"
-	config += `		timers_keepalive_zero = true` + "\n"
-	config += `		timers_keepalive_zero_minimum_acceptable_holdtime = 30` + "\n"
+	config += `		timers_keepalive_interval = 10` + "\n"
+	config += `		timers_holdtime = 20` + "\n"
 	config += `		update_source = "GigabitEthernet0/0/0/1"` + "\n"
 	config += `		ttl_security = false` + "\n"
 	config += `		}]` + "\n"

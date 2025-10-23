@@ -21,7 +21,6 @@ package provider
 
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
-	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -35,12 +34,8 @@ func TestAccDataSourceIosxrL2VPN(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "description", "My L2VPN Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "router_id", "1.2.3.4"))
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_mac", "false"))
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_ip", "true"))
-	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_mac", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "load_balancing_flow_src_dst_ip", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_l2vpn.test", "xconnect_groups.0.group_name", "P2P"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -67,12 +62,8 @@ func testAccDataSourceIosxrL2VPNConfig() string {
 	config += `	delete_mode = "attributes"` + "\n"
 	config += `	description = "My L2VPN Description"` + "\n"
 	config += `	router_id = "1.2.3.4"` + "\n"
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	load_balancing_flow_src_dst_mac = false` + "\n"
-	}
-	if os.Getenv("NCS") != "" || os.Getenv("XRV9K") != "" {
-		config += `	load_balancing_flow_src_dst_ip = true` + "\n"
-	}
+	config += `	load_balancing_flow_src_dst_mac = false` + "\n"
+	config += `	load_balancing_flow_src_dst_ip = true` + "\n"
 	config += `	xconnect_groups = [{` + "\n"
 	config += `		group_name = "P2P"` + "\n"
 	config += `	}]` + "\n"

@@ -40,11 +40,11 @@ func TestAccIosxrLoggingSourceInterface(t *testing.T) {
 	var steps []resource.TestStep
 	if os.Getenv("SKIP_MINIMUM_TEST") == "" {
 		steps = append(steps, resource.TestStep{
-			Config: testAccIosxrLoggingSourceInterfacePrerequisitesConfig + testAccIosxrLoggingSourceInterfaceConfig_minimum(),
+			Config: testAccIosxrLoggingSourceInterfaceConfig_minimum(),
 		})
 	}
 	steps = append(steps, resource.TestStep{
-		Config: testAccIosxrLoggingSourceInterfacePrerequisitesConfig + testAccIosxrLoggingSourceInterfaceConfig_all(),
+		Config: testAccIosxrLoggingSourceInterfaceConfig_all(),
 		Check:  resource.ComposeTestCheckFunc(checks...),
 	})
 	steps = append(steps, resource.TestStep{
@@ -76,22 +76,6 @@ func iosxrLoggingSourceInterfaceImportStateIdFunc(resourceName string) resource.
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccIosxrLoggingSourceInterfacePrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback0]"
-	attributes = {
-		"interface-name" = "Loopback0"
-	}
-}
-
-resource "iosxr_gnmi" "PreReq1" {
-	path = "Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]"
-	attributes = {
-		"vrf-name" = "VRF1"
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -100,10 +84,6 @@ resource "iosxr_gnmi" "PreReq1" {
 func testAccIosxrLoggingSourceInterfaceConfig_minimum() string {
 	config := `resource "iosxr_logging_source_interface" "test" {` + "\n"
 	config += `	name = "Loopback0"` + "\n"
-	config += `	vrfs = [{` + "\n"
-	config += `		name = "VRF1"` + "\n"
-	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -118,7 +98,6 @@ func testAccIosxrLoggingSourceInterfaceConfig_all() string {
 	config += `	vrfs = [{` + "\n"
 	config += `		name = "VRF1"` + "\n"
 	config += `		}]` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, iosxr_gnmi.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

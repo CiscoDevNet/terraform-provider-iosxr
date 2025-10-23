@@ -6,25 +6,12 @@ doc_category: Management
 attributes:
   - yang_name: source-interface-name
     tf_name: name
-    minimum_test_value: '"Loopback0"'
     example: Loopback0
   - yang_name: vrfs/vrf
     tf_name: vrfs
-    minimum_test_value: '["VRF1"]'
     type: List
     attributes:
       - yang_name: vrf-name
         tf_name: name
         id: true
-        minimum_test_value: '"VRF1"'
         example: VRF1
-
-test_prerequisites:
-  - path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=Loopback0]
-    attributes:
-      - name: interface-name
-        value: Loopback0
-  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
-    attributes:
-      - name: vrf-name
-        value: VRF1

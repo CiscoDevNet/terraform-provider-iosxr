@@ -18,13 +18,13 @@ attributes:
   - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate
     xpath: import/stitching-rt/re-originate
     tf_name: import_stitching_rt_re_originate
+    delete_parent: true
     exclude_test: true
     example: true
   - yang_name: import/IMPORT/STITCHING-RT/stitching-rt/re-originate/stitching-rt
     xpath: import/stitching-rt/re-originate/stitching-rt
     tf_name: import_stitching_rt_re_originate_stitching_rt
     delete_parent: true
-    exclude_test: true
     example: true
   - yang_name: import/IMPORT/RE-ORIGINATE/re-originate
     xpath: import/re-originate
@@ -36,16 +36,8 @@ attributes:
     example: true
   - yang_name: route-reflector-client/inheritance-disable
     example: true
-  - yang_name: advertise/vpnv4/unicast/enable
-    tf_name: advertise_vpnv4_unicast
-    example: true
-  - yang_name: advertise/vpnv4/unicast/enable/re-originated
-    tf_name: advertise_vpnv4_unicast_re_originated
-    delete_parent: true
-    example: true
   - yang_name: advertise/vpnv4/unicast/enable/re-originated/stitching-rt
     tf_name: advertise_vpnv4_unicast_re_originated_stitching_rt
-    delete_parent: true
     example: true
   - yang_name: next-hop-self
     example: true
@@ -57,10 +49,7 @@ attributes:
     example: ROUTE_POLICY_1
   - yang_name: route-policy/out
     example: ROUTE_POLICY_1
-  - yang_name: soft-reconfiguration/inbound
-    example: true
   - yang_name: soft-reconfiguration/inbound/always
-    delete_parent: true
     example: true
   - yang_name: send-community-ebgp
     exclude_test: true
@@ -94,6 +83,7 @@ attributes:
     tf_name: default_originate_route_policy
     xpath: default-originate/route-policy
     delete_parent: true
+    exclude_test: true
     example: ROUTE_POLICY_1
   - yang_name: default-originate/DEFAULT-ORIGINATE/INHERITANCE-DISABLE/inheritance-disable
     tf_name: default_originate_inheritance_disable

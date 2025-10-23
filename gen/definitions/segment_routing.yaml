@@ -4,21 +4,15 @@ path: Cisco-IOS-XR-segment-routing-ms-cfg:/sr
 doc_category: Segment Routing
 attributes:
   - yang_name: global-block/lower-bound
-    optional: true
     delete_parent: true
-    minimum_test_value: 16000
     example: 16000
   - yang_name: global-block/upper-bound
-    optional: true
     delete_parent: true
-    minimum_test_value: 29999
     example: 29999
   - yang_name: local-block/lower-bound
-    optional: true
     delete_parent: true
     example: 15000
   - yang_name: local-block/upper-bound
-    optional: true
     delete_parent: true
     example: 15999
   - yang_name: enable

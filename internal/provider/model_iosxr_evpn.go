@@ -354,8 +354,47 @@ func (data *EVPNData) fromBody(ctx context.Context, res []byte) {
 
 func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 	deletedItems := make([]string, 0)
-	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", state.getPath()))
+	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface", state.getPath()))
+	}
+	for i := range state.Interfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && data.Interfaces[j].EthernetSegmentEnable.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].EthernetSegmentEsiZero.IsNull() && data.Interfaces[j].EthernetSegmentEsiZero.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment/identifier/type/zero/esi", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v", state.getPath(), keyString))
+		}
+	}
+	if !state.Srv6.IsNull() && data.Srv6.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
 	}
 	for i := range state.Srv6Locators {
 		keys := [...]string{"locator-name"}
@@ -390,47 +429,8 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", state.getPath(), keyString))
 		}
 	}
-	if !state.Srv6.IsNull() && data.Srv6.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6", state.getPath()))
-	}
-	for i := range state.Interfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Interfaces {
-			found = true
-			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.Interfaces[i].EthernetSegmentEsiZero.IsNull() && data.Interfaces[j].EthernetSegmentEsiZero.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment/identifier/type/zero/esi", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].EthernetSegmentEnable.IsNull() && data.Interfaces[j].EthernetSegmentEnable.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/interface/interface%v", state.getPath(), keyString))
-		}
-	}
-	if !state.SourceInterface.IsNull() && data.SourceInterface.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/source/interface", state.getPath()))
+	if !state.Srv6UsidAllocationWideLocalIdBlock.IsNull() && data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", state.getPath()))
 	}
 	return deletedItems
 }
@@ -441,8 +441,19 @@ func (data *EVPN) getDeletedItems(ctx context.Context, state EVPN) []string {
 
 func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		if !data.Interfaces[i].EthernetSegmentEnable.IsNull() && !data.Interfaces[i].EthernetSegmentEnable.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", data.getPath(), keyString))
+		}
+	}
+	if !data.Srv6.IsNull() && !data.Srv6.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
 	}
 	for i := range data.Srv6Locators {
 		keys := [...]string{"locator-name"}
@@ -455,19 +466,8 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v/usid/allocation/wide-local-id-block", data.getPath(), keyString))
 		}
 	}
-	if !data.Srv6.IsNull() && !data.Srv6.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
-	}
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		if !data.Interfaces[i].EthernetSegmentEnable.IsNull() && !data.Interfaces[i].EthernetSegmentEnable.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interface/interface%v/ethernet-segment", data.getPath(), keyString))
-		}
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() && !data.Srv6UsidAllocationWideLocalIdBlock.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -478,21 +478,8 @@ func (data *EVPN) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *EVPN) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
-	}
-	for i := range data.Srv6Locators {
-		keys := [...]string{"locator-name"}
-		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
-	}
-	if !data.Srv6.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	if !data.SourceInterface.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface", data.getPath()))
 	}
 	for i := range data.Interfaces {
 		keys := [...]string{"interface-name"}
@@ -504,8 +491,21 @@ func (data *EVPN) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/interface/interface%v", data.getPath(), keyString))
 	}
-	if !data.SourceInterface.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/source/interface", data.getPath()))
+	if !data.Srv6.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6", data.getPath()))
+	}
+	for i := range data.Srv6Locators {
+		keys := [...]string{"locator-name"}
+		keyValues := [...]string{data.Srv6Locators[i].LocatorName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/locators/locator%v", data.getPath(), keyString))
+	}
+	if !data.Srv6UsidAllocationWideLocalIdBlock.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/segment-routing/srv6/usid/allocation/wide-local-id-block", data.getPath()))
 	}
 	return deletePaths
 }

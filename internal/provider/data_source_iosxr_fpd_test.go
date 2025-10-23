@@ -32,11 +32,14 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccDataSource
 
 func TestAccDataSourceIosxrFPD(t *testing.T) {
-	if os.Getenv("NCS") == "" {
-		t.Skip("skipping test, set environment variable NCS")
+	if os.Getenv("PHYSICAL") == "" {
+		t.Skip("skipping test, set environment variable PHYSICAL")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_upgrade_disable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_enable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.iosxr_fpd.test", "auto_reload_disable", "false"))
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
@@ -60,7 +63,10 @@ func TestAccDataSourceIosxrFPD(t *testing.T) {
 func testAccDataSourceIosxrFPDConfig() string {
 	config := `resource "iosxr_fpd" "test" {` + "\n"
 	config += `	delete_mode = "attributes"` + "\n"
-	config += `	auto_upgrade_enable = true` + "\n"
+	config += `	auto_upgrade_enable = false` + "\n"
+	config += `	auto_upgrade_disable = false` + "\n"
+	config += `	auto_reload_enable = false` + "\n"
+	config += `	auto_reload_disable = false` + "\n"
 	config += `}` + "\n"
 
 	config += `

@@ -195,17 +195,17 @@ func (data *FPDData) fromBody(ctx context.Context, res []byte) {
 
 func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
 	deletedItems := make([]string, 0)
-	if !state.AutoReloadDisable.IsNull() && data.AutoReloadDisable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/disable", state.getPath()))
-	}
-	if !state.AutoReloadEnable.IsNull() && data.AutoReloadEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/enable", state.getPath()))
+	if !state.AutoUpgradeEnable.IsNull() && data.AutoUpgradeEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/enable", state.getPath()))
 	}
 	if !state.AutoUpgradeDisable.IsNull() && data.AutoUpgradeDisable.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/disable", state.getPath()))
 	}
-	if !state.AutoUpgradeEnable.IsNull() && data.AutoUpgradeEnable.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-upgrade/enable", state.getPath()))
+	if !state.AutoReloadEnable.IsNull() && data.AutoReloadEnable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/enable", state.getPath()))
+	}
+	if !state.AutoReloadDisable.IsNull() && data.AutoReloadDisable.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/auto-reload/disable", state.getPath()))
 	}
 	return deletedItems
 }
@@ -216,17 +216,17 @@ func (data *FPD) getDeletedItems(ctx context.Context, state FPD) []string {
 
 func (data *FPD) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.AutoReloadDisable.IsNull() && !data.AutoReloadDisable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/disable", data.getPath()))
-	}
-	if !data.AutoReloadEnable.IsNull() && !data.AutoReloadEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/enable", data.getPath()))
+	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
 	}
 	if !data.AutoUpgradeDisable.IsNull() && !data.AutoUpgradeDisable.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/disable", data.getPath()))
 	}
-	if !data.AutoUpgradeEnable.IsNull() && !data.AutoUpgradeEnable.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
+	if !data.AutoReloadEnable.IsNull() && !data.AutoReloadEnable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/enable", data.getPath()))
+	}
+	if !data.AutoReloadDisable.IsNull() && !data.AutoReloadDisable.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/auto-reload/disable", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -237,17 +237,17 @@ func (data *FPD) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *FPD) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.AutoReloadDisable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-reload/disable", data.getPath()))
-	}
-	if !data.AutoReloadEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-reload/enable", data.getPath()))
+	if !data.AutoUpgradeEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
 	}
 	if !data.AutoUpgradeDisable.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-upgrade/disable", data.getPath()))
 	}
-	if !data.AutoUpgradeEnable.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-upgrade/enable", data.getPath()))
+	if !data.AutoReloadEnable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-reload/enable", data.getPath()))
+	}
+	if !data.AutoReloadDisable.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/auto-reload/disable", data.getPath()))
 	}
 	return deletePaths
 }

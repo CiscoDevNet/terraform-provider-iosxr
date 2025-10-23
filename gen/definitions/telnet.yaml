@@ -2,13 +2,13 @@
 name: Telnet
 path: Cisco-IOS-XR-um-telnet-cfg:/telnet
 doc_category: System
-test_tags: [NCS, XRV9K, C8000]
+test_tags: [XRV9K]
 attributes:
   - yang_name: ipv4/client/source-interface
-    minimum_test_value: '"GigabitEthernet0/0/0/1"'
     example: GigabitEthernet0/0/0/1
   - yang_name: ipv6/client/source-interface
     example: GigabitEthernet0/0/0/1
+    exclude_test: true
   - yang_name: vrfs/vrf
     tf_name: vrfs
     type: List

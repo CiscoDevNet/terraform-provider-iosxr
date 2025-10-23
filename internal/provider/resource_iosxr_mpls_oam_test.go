@@ -36,8 +36,8 @@ import (
 func TestAccIosxrMPLSOAM(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "true"))
-	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_disable_vendor_extension", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_echo_reply_mode_control_channel_allow_reverse_lsp", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_pps", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("iosxr_mpls_oam.test", "oam_dpm_interval", "60"))
 	var steps []resource.TestStep
@@ -84,7 +84,6 @@ func iosxrMPLSOAMImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 
 func testAccIosxrMPLSOAMConfig_minimum() string {
 	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
-	config += `	oam = true` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -96,8 +95,8 @@ func testAccIosxrMPLSOAMConfig_minimum() string {
 func testAccIosxrMPLSOAMConfig_all() string {
 	config := `resource "iosxr_mpls_oam" "test" {` + "\n"
 	config += `	oam = true` + "\n"
-	config += `	oam_echo_disable_vendor_extension = true` + "\n"
-	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = true` + "\n"
+	config += `	oam_echo_disable_vendor_extension = false` + "\n"
+	config += `	oam_echo_reply_mode_control_channel_allow_reverse_lsp = false` + "\n"
 	config += `	oam_dpm_pps = 10` + "\n"
 	config += `	oam_dpm_interval = 60` + "\n"
 	config += `}` + "\n"

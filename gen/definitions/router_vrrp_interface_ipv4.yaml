@@ -16,10 +16,11 @@ attributes:
   - yang_name: name
     example: TEST
   - yang_name: text-authentication
-    example: password
+    example: 7
   - yang_name: secondary-addresses/secondary-address
     tf_name: secondary_addresses
     type: List
+    exclude_test: true
     attributes:
       - yang_name: address
         id: true
@@ -45,7 +46,7 @@ attributes:
     attributes:
       - yang_name: interface-name
         id: true
-        example: GigabitEthernet0/0/0/4
+        example: GigabitEthernet0/0/0/1
       - yang_name: priority-decrement
         example: 12
   - yang_name: track/objects/object

@@ -45,7 +45,7 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccDataSourceIosxrEVPNPrerequisitesConfig + testAccDataSourceIosxrEVPNConfig(),
+				Config: testAccDataSourceIosxrEVPNConfig(),
 				Check:  resource.ComposeTestCheckFunc(checks...),
 			},
 		},
@@ -55,14 +55,6 @@ func TestAccDataSourceIosxrEVPN(t *testing.T) {
 // End of section. //template:end testAccDataSource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccDataSourceIosxrEVPNPrerequisitesConfig = `
-resource "iosxr_gnmi" "PreReq0" {
-	path = "Cisco-IOS-XR-um-l2vpn-cfg:/evpn"
-	attributes = {
-	}
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
@@ -83,7 +75,6 @@ func testAccDataSourceIosxrEVPNConfig() string {
 	config += `		usid_allocation_wide_local_id_block = true` + "\n"
 	config += `	}]` + "\n"
 	config += `	srv6_usid_allocation_wide_local_id_block = true` + "\n"
-	config += `	depends_on = [iosxr_gnmi.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 
 	config += `

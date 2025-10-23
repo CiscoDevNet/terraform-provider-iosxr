@@ -202,20 +202,20 @@ func (data *MPLSOAMData) fromBody(ctx context.Context, res []byte) {
 
 func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []string {
 	deletedItems := make([]string, 0)
-	if !state.OamDpmInterval.IsNull() && data.OamDpmInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/interval", state.getPath()))
-	}
-	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/pps", state.getPath()))
-	}
-	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
+	if !state.Oam.IsNull() && data.Oam.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam", state.getPath()))
 	}
 	if !state.OamEchoDisableVendorExtension.IsNull() && data.OamEchoDisableVendorExtension.IsNull() {
 		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", state.getPath()))
 	}
-	if !state.Oam.IsNull() && data.Oam.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam", state.getPath()))
+	if !state.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", state.getPath()))
+	}
+	if !state.OamDpmPps.IsNull() && data.OamDpmPps.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/pps", state.getPath()))
+	}
+	if !state.OamDpmInterval.IsNull() && data.OamDpmInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/oam/dpm/interval", state.getPath()))
 	}
 	return deletedItems
 }
@@ -226,14 +226,14 @@ func (data *MPLSOAM) getDeletedItems(ctx context.Context, state MPLSOAM) []strin
 
 func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+	if !data.Oam.IsNull() && !data.Oam.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam", data.getPath()))
 	}
 	if !data.OamEchoDisableVendorExtension.IsNull() && !data.OamEchoDisableVendorExtension.ValueBool() {
 		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getPath()))
 	}
-	if !data.Oam.IsNull() && !data.Oam.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam", data.getPath()))
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() && !data.OamEchoReplyModeControlChannelAllowReverseLsp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -244,20 +244,20 @@ func (data *MPLSOAM) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *MPLSOAM) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	if !data.OamDpmInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/interval", data.getPath()))
-	}
-	if !data.OamDpmPps.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/pps", data.getPath()))
-	}
-	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+	if !data.Oam.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam", data.getPath()))
 	}
 	if !data.OamEchoDisableVendorExtension.IsNull() {
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/disable-vendor-extension", data.getPath()))
 	}
-	if !data.Oam.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam", data.getPath()))
+	if !data.OamEchoReplyModeControlChannelAllowReverseLsp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/echo/reply-mode/control-channel/allow-reverse-lsp", data.getPath()))
+	}
+	if !data.OamDpmPps.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/pps", data.getPath()))
+	}
+	if !data.OamDpmInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/oam/dpm/interval", data.getPath()))
 	}
 	return deletePaths
 }

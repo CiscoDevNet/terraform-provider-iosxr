@@ -72,7 +72,6 @@ type RouterISIS struct {
 	LspPasswordKeychainSendOnly            types.Bool                       `tfsdk:"lsp_password_keychain_send_only"`
 	LspPasswordKeychainSnpSendOnly         types.Bool                       `tfsdk:"lsp_password_keychain_snp_send_only"`
 	LspPasswordKeychainEnablePoi           types.Bool                       `tfsdk:"lsp_password_keychain_enable_poi"`
-	DistributeLinkState                    types.Bool                       `tfsdk:"distribute_link_state"`
 	DistributeLinkStateInstanceId          types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
 	DistributeLinkStateThrottle            types.Int64                      `tfsdk:"distribute_link_state_throttle"`
 	DistributeLinkStateLevel               types.Int64                      `tfsdk:"distribute_link_state_level"`
@@ -119,7 +118,6 @@ type RouterISISData struct {
 	LspPasswordKeychainSendOnly            types.Bool                       `tfsdk:"lsp_password_keychain_send_only"`
 	LspPasswordKeychainSnpSendOnly         types.Bool                       `tfsdk:"lsp_password_keychain_snp_send_only"`
 	LspPasswordKeychainEnablePoi           types.Bool                       `tfsdk:"lsp_password_keychain_enable_poi"`
-	DistributeLinkState                    types.Bool                       `tfsdk:"distribute_link_state"`
 	DistributeLinkStateInstanceId          types.Int64                      `tfsdk:"distribute_link_state_instance_id"`
 	DistributeLinkStateThrottle            types.Int64                      `tfsdk:"distribute_link_state_throttle"`
 	DistributeLinkStateLevel               types.Int64                      `tfsdk:"distribute_link_state_level"`
@@ -310,11 +308,6 @@ func (data RouterISIS) toBody(ctx context.Context) string {
 	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.IsUnknown() {
 		if data.LspPasswordKeychainEnablePoi.ValueBool() {
 			body, _ = sjson.Set(body, "lsp-password.lsp-password-option.keychain.enable-poi", map[string]string{})
-		}
-	}
-	if !data.DistributeLinkState.IsNull() && !data.DistributeLinkState.IsUnknown() {
-		if data.DistributeLinkState.ValueBool() {
-			body, _ = sjson.Set(body, "distribute.link-state", map[string]string{})
 		}
 	}
 	if !data.DistributeLinkStateInstanceId.IsNull() && !data.DistributeLinkStateInstanceId.IsUnknown() {
@@ -757,15 +750,6 @@ func (data *RouterISIS) updateFromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LspPasswordKeychainEnablePoi = types.BoolNull()
 	}
-	if value := gjson.GetBytes(res, "distribute.link-state"); !data.DistributeLinkState.IsNull() {
-		if value.Exists() {
-			data.DistributeLinkState = types.BoolValue(true)
-		} else {
-			data.DistributeLinkState = types.BoolValue(false)
-		}
-	} else {
-		data.DistributeLinkState = types.BoolNull()
-	}
 	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() && !data.DistributeLinkStateInstanceId.IsNull() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	} else {
@@ -1151,11 +1135,6 @@ func (data *RouterISIS) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "distribute.link-state"); value.Exists() {
-		data.DistributeLinkState = types.BoolValue(true)
-	} else {
-		data.DistributeLinkState = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	}
@@ -1425,11 +1404,6 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 	} else {
 		data.LspPasswordKeychainEnablePoi = types.BoolValue(false)
 	}
-	if value := gjson.GetBytes(res, "distribute.link-state"); value.Exists() {
-		data.DistributeLinkState = types.BoolValue(true)
-	} else {
-		data.DistributeLinkState = types.BoolValue(false)
-	}
 	if value := gjson.GetBytes(res, "distribute.link-state.instance-id"); value.Exists() {
 		data.DistributeLinkStateInstanceId = types.Int64Value(value.Int())
 	}
@@ -1530,16 +1504,34 @@ func (data *RouterISISData) fromBody(ctx context.Context, res []byte) {
 
 func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) []string {
 	deletedItems := make([]string, 0)
-	for i := range state.Interfaces {
-		keys := [...]string{"interface-name"}
-		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+	if !state.IsType.IsNull() && data.IsType.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/is-type", state.getPath()))
+	}
+	if !state.SetOverloadBit.IsNull() && data.SetOverloadBit.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit", state.getPath()))
+	}
+	if !state.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", state.getPath()))
+	}
+	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup", state.getPath()))
+	}
+	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
+	}
+	if !state.SetOverloadBitAdvertiseInterlevel.IsNull() && data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", state.getPath()))
+	}
+	for i := range state.SetOverloadBitLevels {
+		keys := [...]string{"level-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+		if !reflect.ValueOf(state.SetOverloadBitLevels[i].LevelNumber.ValueInt64()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1547,210 +1539,69 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		}
 
 		found := false
-		for j := range data.Interfaces {
+		for j := range data.SetOverloadBitLevels {
 			found = true
-			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+			if state.SetOverloadBitLevels[i].LevelNumber.ValueInt64() != data.SetOverloadBitLevels[j].LevelNumber.ValueInt64() {
 				found = false
 			}
 			if found {
-				if !state.Interfaces[i].State.IsNull() && data.Interfaces[j].State.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/state", state.getPath(), keyString))
+				if !state.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeToAdvertise.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/time-to-advertise", state.getPath(), keyString))
 				}
-				if !state.Interfaces[i].PointToPoint.IsNull() && data.Interfaces[j].PointToPoint.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", state.getPath(), keyString))
+				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", state.getPath(), keyString))
 				}
-				for ci := range state.Interfaces[i].PriorityLevels {
-					ckeys := [...]string{"level-number"}
-					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64(), 10)}
-					ckeyString := ""
-					for cki := range ckeys {
-						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
-					}
-
-					cemptyKeys := true
-					if !reflect.ValueOf(state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64()).IsZero() {
-						cemptyKeys = false
-					}
-					if cemptyKeys {
-						continue
-					}
-
-					found := false
-					for cj := range data.Interfaces[j].PriorityLevels {
-						found = true
-						if state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64() != data.Interfaces[j].PriorityLevels[cj].LevelNumber.ValueInt64() {
-							found = false
-						}
-						if found {
-							if !state.Interfaces[i].PriorityLevels[ci].Priority.IsNull() && data.Interfaces[j].PriorityLevels[cj].Priority.IsNull() {
-								deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/priority-levels/priority-level%v/priority", state.getPath(), keyString, ckeyString))
-							}
-							break
-						}
-					}
-					if !found {
-						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/priority-levels/priority-level%v", state.getPath(), keyString, ckeyString))
-					}
+				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", state.getPath(), keyString))
 				}
-				if !state.Interfaces[i].HelloPadding.IsNull() && data.Interfaces[j].HelloPadding.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/hello-padding", state.getPath(), keyString))
-				}
-				if !state.Interfaces[i].CircuitType.IsNull() && data.Interfaces[j].CircuitType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/circuit-type", state.getPath(), keyString))
+				if !state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && data.SetOverloadBitLevels[j].AdvertiseInterlevel.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v", state.getPath(), keyString))
 		}
 	}
-	for i := range state.Nets {
-		keys := [...]string{"net-id"}
-		stateKeyValues := [...]string{state.Nets[i].NetId.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.Nets[i].NetId.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.Nets {
-			found = true
-			if state.Nets[i].NetId.ValueString() != data.Nets[j].NetId.ValueString() {
-				found = false
-			}
-			if found {
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
-		}
+	if !state.Nsr.IsNull() && data.Nsr.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
 	}
-	for i := range state.FlexAlgos {
-		keys := [...]string{"flex-algo-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].Number.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.FlexAlgos[i].Number.ValueInt64()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.FlexAlgos {
-			found = true
-			if state.FlexAlgos[i].Number.ValueInt64() != data.FlexAlgos[j].Number.ValueInt64() {
-				found = false
-			}
-			if found {
-				if !state.FlexAlgos[i].MetricType.IsNull() && data.FlexAlgos[j].MetricType.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/metric-type", state.getPath(), keyString))
-				}
-				if !state.FlexAlgos[i].AdvertiseDefinition.IsNull() && data.FlexAlgos[j].AdvertiseDefinition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/advertise-definition", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v", state.getPath(), keyString))
-		}
+	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
 	}
-	for i := range state.AffinityMaps {
-		keys := [...]string{"affinity-attribute-name"}
-		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
-		}
-
-		emptyKeys := true
-		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
-			emptyKeys = false
-		}
-		if emptyKeys {
-			continue
-		}
-
-		found := false
-		for j := range data.AffinityMaps {
-			found = true
-			if state.AffinityMaps[i].Name.ValueString() != data.AffinityMaps[j].Name.ValueString() {
-				found = false
-			}
-			if found {
-				if !state.AffinityMaps[i].BitPosition.IsNull() && data.AffinityMaps[j].BitPosition.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v/bit-position", state.getPath(), keyString))
-				}
-				break
-			}
-		}
-		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
-		}
+	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
 	}
-	if !state.DistributeLinkStateLevel.IsNull() && data.DistributeLinkStateLevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/level", state.getPath()))
+	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
 	}
-	if !state.DistributeLinkStateThrottle.IsNull() && data.DistributeLinkStateThrottle.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/throttle", state.getPath()))
+	if !state.NsfInterfaceTimer.IsNull() && data.NsfInterfaceTimer.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-timer", state.getPath()))
 	}
-	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
+	if !state.NsfInterfaceExpires.IsNull() && data.NsfInterfaceExpires.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-expires", state.getPath()))
 	}
-	if !state.DistributeLinkState.IsNull() && data.DistributeLinkState.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state", state.getPath()))
+	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
 	}
-	if !state.LspPasswordKeychainEnablePoi.IsNull() && data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", state.getPath()))
+	if !state.LspGenIntervalMaximumWait.IsNull() && data.LspGenIntervalMaximumWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", state.getPath()))
 	}
-	if !state.LspPasswordKeychainSnpSendOnly.IsNull() && data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", state.getPath()))
+	if !state.LspGenIntervalInitialWait.IsNull() && data.LspGenIntervalInitialWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", state.getPath()))
 	}
-	if !state.LspPasswordKeychainSendOnly.IsNull() && data.LspPasswordKeychainSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", state.getPath()))
+	if !state.LspGenIntervalSecondaryWait.IsNull() && data.LspGenIntervalSecondaryWait.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", state.getPath()))
 	}
-	if !state.LspPasswordKeychain.IsNull() && data.LspPasswordKeychain.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
+	if !state.LspRefreshInterval.IsNull() && data.LspRefreshInterval.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval", state.getPath()))
 	}
-	if !state.LspPasswordHmacMd5EnablePoi.IsNull() && data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
+	if !state.MaxLspLifetime.IsNull() && data.MaxLspLifetime.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime", state.getPath()))
 	}
-	if !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
-	}
-	if !state.LspPasswordHmacMd5SendOnly.IsNull() && data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
-	}
-	if !state.LspPasswordHmacMd5Encrypted.IsNull() && data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
-	}
-	if !state.LspPasswordTextEnablePoi.IsNull() && data.LspPasswordTextEnablePoi.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
-	}
-	if !state.LspPasswordTextSnpSendOnly.IsNull() && data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
-	}
-	if !state.LspPasswordTextSendOnly.IsNull() && data.LspPasswordTextSendOnly.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
-	}
-	if !state.LspPasswordTextEncrypted.IsNull() && data.LspPasswordTextEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
+	if !state.LspPasswordAcceptEncrypted.IsNull() && data.LspPasswordAcceptEncrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept/encrypted", state.getPath()))
 	}
 	for i := range state.LspPasswordLevels {
 		keys := [...]string{"level-number"}
@@ -1785,55 +1636,61 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 			deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", state.getPath(), keyString))
 		}
 	}
-	if !state.LspPasswordAcceptEncrypted.IsNull() && data.LspPasswordAcceptEncrypted.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/accept/encrypted", state.getPath()))
+	if !state.LspPasswordTextEncrypted.IsNull() && data.LspPasswordTextEncrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", state.getPath()))
 	}
-	if !state.MaxLspLifetime.IsNull() && data.MaxLspLifetime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/max-lsp-lifetime", state.getPath()))
+	if !state.LspPasswordTextSendOnly.IsNull() && data.LspPasswordTextSendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
 	}
-	if !state.LspRefreshInterval.IsNull() && data.LspRefreshInterval.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-refresh-interval", state.getPath()))
+	if !state.LspPasswordTextSnpSendOnly.IsNull() && data.LspPasswordTextSnpSendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", state.getPath()))
 	}
-	if !state.LspGenIntervalSecondaryWait.IsNull() && data.LspGenIntervalSecondaryWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", state.getPath()))
+	if !state.LspPasswordTextEnablePoi.IsNull() && data.LspPasswordTextEnablePoi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", state.getPath()))
 	}
-	if !state.LspGenIntervalInitialWait.IsNull() && data.LspGenIntervalInitialWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", state.getPath()))
+	if !state.LspPasswordHmacMd5Encrypted.IsNull() && data.LspPasswordHmacMd5Encrypted.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
-	if !state.LspGenIntervalMaximumWait.IsNull() && data.LspGenIntervalMaximumWait.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", state.getPath()))
+	if !state.LspPasswordHmacMd5SendOnly.IsNull() && data.LspPasswordHmacMd5SendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
-	if !state.LogAdjacencyChanges.IsNull() && data.LogAdjacencyChanges.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/log/adjacency/changes", state.getPath()))
+	if !state.LspPasswordHmacMd5SnpSendOnly.IsNull() && data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", state.getPath()))
 	}
-	if !state.NsfInterfaceExpires.IsNull() && data.NsfInterfaceExpires.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-expires", state.getPath()))
+	if !state.LspPasswordHmacMd5EnablePoi.IsNull() && data.LspPasswordHmacMd5EnablePoi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", state.getPath()))
 	}
-	if !state.NsfInterfaceTimer.IsNull() && data.NsfInterfaceTimer.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/interface-timer", state.getPath()))
+	if !state.LspPasswordKeychain.IsNull() && data.LspPasswordKeychain.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
-	if !state.NsfLifetime.IsNull() && data.NsfLifetime.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf/lifetime", state.getPath()))
+	if !state.LspPasswordKeychainSendOnly.IsNull() && data.LspPasswordKeychainSendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
-	if !state.NsfIetf.IsNull() && data.NsfIetf.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+	if !state.LspPasswordKeychainSnpSendOnly.IsNull() && data.LspPasswordKeychainSnpSendOnly.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", state.getPath()))
 	}
-	if !state.NsfCisco.IsNull() && data.NsfCisco.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsf", state.getPath()))
+	if !state.LspPasswordKeychainEnablePoi.IsNull() && data.LspPasswordKeychainEnablePoi.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", state.getPath()))
 	}
-	if !state.Nsr.IsNull() && data.Nsr.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/nsr", state.getPath()))
+	if !state.DistributeLinkStateInstanceId.IsNull() && data.DistributeLinkStateInstanceId.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/instance-id", state.getPath()))
 	}
-	for i := range state.SetOverloadBitLevels {
-		keys := [...]string{"level-number"}
-		stateKeyValues := [...]string{strconv.FormatInt(state.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
+	if !state.DistributeLinkStateThrottle.IsNull() && data.DistributeLinkStateThrottle.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/throttle", state.getPath()))
+	}
+	if !state.DistributeLinkStateLevel.IsNull() && data.DistributeLinkStateLevel.IsNull() {
+		deletedItems = append(deletedItems, fmt.Sprintf("%v/distribute/link-state/level", state.getPath()))
+	}
+	for i := range state.AffinityMaps {
+		keys := [...]string{"affinity-attribute-name"}
+		stateKeyValues := [...]string{state.AffinityMaps[i].Name.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
 		}
 
 		emptyKeys := true
-		if !reflect.ValueOf(state.SetOverloadBitLevels[i].LevelNumber.ValueInt64()).IsZero() {
+		if !reflect.ValueOf(state.AffinityMaps[i].Name.ValueString()).IsZero() {
 			emptyKeys = false
 		}
 		if emptyKeys {
@@ -1841,48 +1698,162 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 		}
 
 		found := false
-		for j := range data.SetOverloadBitLevels {
+		for j := range data.AffinityMaps {
 			found = true
-			if state.SetOverloadBitLevels[i].LevelNumber.ValueInt64() != data.SetOverloadBitLevels[j].LevelNumber.ValueInt64() {
+			if state.AffinityMaps[i].Name.ValueString() != data.AffinityMaps[j].Name.ValueString() {
 				found = false
 			}
 			if found {
-				if !state.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && data.SetOverloadBitLevels[j].AdvertiseInterlevel.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", state.getPath(), keyString))
-				}
-				if !state.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && data.SetOverloadBitLevels[j].AdvertiseExternal.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", state.getPath(), keyString))
-				}
-				if !state.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && data.SetOverloadBitLevels[j].OnStartupWaitForBgp.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", state.getPath(), keyString))
-				}
-				if !state.SetOverloadBitLevels[i].OnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitLevels[j].OnStartupTimeToAdvertise.IsNull() {
-					deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup/time-to-advertise", state.getPath(), keyString))
+				if !state.AffinityMaps[i].BitPosition.IsNull() && data.AffinityMaps[j].BitPosition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v/bit-position", state.getPath(), keyString))
 				}
 				break
 			}
 		}
 		if !found {
-			deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v", state.getPath(), keyString))
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/affinity-maps/affinity-map%v", state.getPath(), keyString))
 		}
 	}
-	if !state.SetOverloadBitAdvertiseInterlevel.IsNull() && data.SetOverloadBitAdvertiseInterlevel.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", state.getPath()))
+	for i := range state.FlexAlgos {
+		keys := [...]string{"flex-algo-number"}
+		stateKeyValues := [...]string{strconv.FormatInt(state.FlexAlgos[i].Number.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.FlexAlgos[i].Number.ValueInt64()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.FlexAlgos {
+			found = true
+			if state.FlexAlgos[i].Number.ValueInt64() != data.FlexAlgos[j].Number.ValueInt64() {
+				found = false
+			}
+			if found {
+				if !state.FlexAlgos[i].AdvertiseDefinition.IsNull() && data.FlexAlgos[j].AdvertiseDefinition.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/advertise-definition", state.getPath(), keyString))
+				}
+				if !state.FlexAlgos[i].MetricType.IsNull() && data.FlexAlgos[j].MetricType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v/metric-type", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/flex-algoes/flex-algo%v", state.getPath(), keyString))
+		}
 	}
-	if !state.SetOverloadBitAdvertiseExternal.IsNull() && data.SetOverloadBitAdvertiseExternal.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/advertise/external", state.getPath()))
+	for i := range state.Nets {
+		keys := [...]string{"net-id"}
+		stateKeyValues := [...]string{state.Nets[i].NetId.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Nets[i].NetId.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Nets {
+			found = true
+			if state.Nets[i].NetId.ValueString() != data.Nets[j].NetId.ValueString() {
+				found = false
+			}
+			if found {
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/nets/net%v", state.getPath(), keyString))
+		}
 	}
-	if !state.SetOverloadBitOnStartupWaitForBgp.IsNull() && data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup", state.getPath()))
-	}
-	if !state.SetOverloadBitOnStartupTimeToAdvertise.IsNull() && data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", state.getPath()))
-	}
-	if !state.SetOverloadBit.IsNull() && data.SetOverloadBit.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/set-overload-bit", state.getPath()))
-	}
-	if !state.IsType.IsNull() && data.IsType.IsNull() {
-		deletedItems = append(deletedItems, fmt.Sprintf("%v/is-type", state.getPath()))
+	for i := range state.Interfaces {
+		keys := [...]string{"interface-name"}
+		stateKeyValues := [...]string{state.Interfaces[i].InterfaceName.ValueString()}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + stateKeyValues[ki] + "]"
+		}
+
+		emptyKeys := true
+		if !reflect.ValueOf(state.Interfaces[i].InterfaceName.ValueString()).IsZero() {
+			emptyKeys = false
+		}
+		if emptyKeys {
+			continue
+		}
+
+		found := false
+		for j := range data.Interfaces {
+			found = true
+			if state.Interfaces[i].InterfaceName.ValueString() != data.Interfaces[j].InterfaceName.ValueString() {
+				found = false
+			}
+			if found {
+				if !state.Interfaces[i].CircuitType.IsNull() && data.Interfaces[j].CircuitType.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/circuit-type", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].HelloPadding.IsNull() && data.Interfaces[j].HelloPadding.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/hello-padding", state.getPath(), keyString))
+				}
+				for ci := range state.Interfaces[i].PriorityLevels {
+					ckeys := [...]string{"level-number"}
+					cstateKeyValues := [...]string{strconv.FormatInt(state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64(), 10)}
+					ckeyString := ""
+					for cki := range ckeys {
+						ckeyString += "[" + ckeys[cki] + "=" + cstateKeyValues[cki] + "]"
+					}
+
+					cemptyKeys := true
+					if !reflect.ValueOf(state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64()).IsZero() {
+						cemptyKeys = false
+					}
+					if cemptyKeys {
+						continue
+					}
+
+					found := false
+					for cj := range data.Interfaces[j].PriorityLevels {
+						found = true
+						if state.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64() != data.Interfaces[j].PriorityLevels[cj].LevelNumber.ValueInt64() {
+							found = false
+						}
+						if found {
+							if !state.Interfaces[i].PriorityLevels[ci].Priority.IsNull() && data.Interfaces[j].PriorityLevels[cj].Priority.IsNull() {
+								deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/priority-levels/priority-level%v/priority", state.getPath(), keyString, ckeyString))
+							}
+							break
+						}
+					}
+					if !found {
+						deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/priority-levels/priority-level%v", state.getPath(), keyString, ckeyString))
+					}
+				}
+				if !state.Interfaces[i].PointToPoint.IsNull() && data.Interfaces[j].PointToPoint.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", state.getPath(), keyString))
+				}
+				if !state.Interfaces[i].State.IsNull() && data.Interfaces[j].State.IsNull() {
+					deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v/state", state.getPath(), keyString))
+				}
+				break
+			}
+		}
+		if !found {
+			deletedItems = append(deletedItems, fmt.Sprintf("%v/interfaces/interface%v", state.getPath(), keyString))
+		}
 	}
 	return deletedItems
 }
@@ -1893,28 +1864,85 @@ func (data *RouterISIS) getDeletedItems(ctx context.Context, state RouterISIS) [
 
 func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 	emptyLeafsDelete := make([]string, 0)
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+	if !data.SetOverloadBit.IsNull() && !data.SetOverloadBit.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
+	}
+	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
+	}
+	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
+	}
+	for i := range data.SetOverloadBitLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-		if !data.Interfaces[i].PointToPoint.IsNull() && !data.Interfaces[i].PointToPoint.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", data.getPath(), keyString))
+		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", data.getPath(), keyString))
 		}
-		for ci := range data.Interfaces[i].PriorityLevels {
-			ckeys := [...]string{"level-number"}
-			ckeyValues := [...]string{strconv.FormatInt(data.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64(), 10)}
-			ckeyString := ""
-			for cki := range ckeys {
-				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
-			}
+		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", data.getPath(), keyString))
+		}
+		if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", data.getPath(), keyString))
 		}
 	}
-	for i := range data.Nets {
-		keys := [...]string{"net-id"}
-		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
+	if !data.Nsr.IsNull() && !data.Nsr.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getPath()))
+	}
+	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
+	}
+	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	}
+	for i := range data.LspPasswordLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+	}
+	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+	}
+	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", data.getPath()))
+	}
+	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+	}
+	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+	}
+	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", data.getPath()))
+	}
+	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.ValueBool() {
+		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+	}
+	for i := range data.AffinityMaps {
+		keys := [...]string{"affinity-attribute-name"}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
@@ -1931,92 +1959,32 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/flex-algoes/flex-algo%v/advertise-definition", data.getPath(), keyString))
 		}
 	}
-	for i := range data.AffinityMaps {
-		keys := [...]string{"affinity-attribute-name"}
-		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+	for i := range data.Nets {
+		keys := [...]string{"net-id"}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
 	}
-	if !data.DistributeLinkState.IsNull() && !data.DistributeLinkState.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/distribute/link-state", data.getPath()))
-	}
-	if !data.LspPasswordKeychainEnablePoi.IsNull() && !data.LspPasswordKeychainEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getPath()))
-	}
-	if !data.LspPasswordKeychainSnpSendOnly.IsNull() && !data.LspPasswordKeychainSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getPath()))
-	}
-	if !data.LspPasswordKeychainSendOnly.IsNull() && !data.LspPasswordKeychainSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5EnablePoi.IsNull() && !data.LspPasswordHmacMd5EnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() && !data.LspPasswordHmacMd5SnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5SendOnly.IsNull() && !data.LspPasswordHmacMd5SendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextEnablePoi.IsNull() && !data.LspPasswordTextEnablePoi.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextSnpSendOnly.IsNull() && !data.LspPasswordTextSnpSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextSendOnly.IsNull() && !data.LspPasswordTextSendOnly.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	for i := range data.LspPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
 		keyString := ""
 		for ki := range keys {
 			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
 		}
-	}
-	if !data.LogAdjacencyChanges.IsNull() && !data.LogAdjacencyChanges.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
-	}
-	if !data.NsfIetf.IsNull() && !data.NsfIetf.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
-	}
-	if !data.NsfCisco.IsNull() && !data.NsfCisco.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsf", data.getPath()))
-	}
-	if !data.Nsr.IsNull() && !data.Nsr.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/nsr", data.getPath()))
-	}
-	for i := range data.SetOverloadBitLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.SetOverloadBitLevels[i].LevelNumber.ValueInt64(), 10)}
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		for ci := range data.Interfaces[i].PriorityLevels {
+			ckeys := [...]string{"level-number"}
+			ckeyValues := [...]string{strconv.FormatInt(data.Interfaces[i].PriorityLevels[ci].LevelNumber.ValueInt64(), 10)}
+			ckeyString := ""
+			for cki := range ckeys {
+				ckeyString += "[" + ckeys[cki] + "=" + ckeyValues[cki] + "]"
+			}
 		}
-		if !data.SetOverloadBitLevels[i].AdvertiseInterlevel.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseInterlevel.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/interlevel", data.getPath(), keyString))
+		if !data.Interfaces[i].PointToPoint.IsNull() && !data.Interfaces[i].PointToPoint.ValueBool() {
+			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/interfaces/interface%v/point-to-point", data.getPath(), keyString))
 		}
-		if !data.SetOverloadBitLevels[i].AdvertiseExternal.IsNull() && !data.SetOverloadBitLevels[i].AdvertiseExternal.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/advertise/external", data.getPath(), keyString))
-		}
-		if !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.IsNull() && !data.SetOverloadBitLevels[i].OnStartupWaitForBgp.ValueBool() {
-			emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v/on-startup", data.getPath(), keyString))
-		}
-	}
-	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() && !data.SetOverloadBitAdvertiseInterlevel.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
-	}
-	if !data.SetOverloadBitAdvertiseExternal.IsNull() && !data.SetOverloadBitAdvertiseExternal.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
-	}
-	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() && !data.SetOverloadBitOnStartupWaitForBgp.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
-	}
-	if !data.SetOverloadBit.IsNull() && !data.SetOverloadBit.ValueBool() {
-		emptyLeafsDelete = append(emptyLeafsDelete, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
 	return emptyLeafsDelete
 }
@@ -2027,142 +1995,23 @@ func (data *RouterISIS) getEmptyLeafsDelete(ctx context.Context) []string {
 
 func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 	var deletePaths []string
-	for i := range data.Interfaces {
-		keys := [...]string{"interface-name"}
-		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
+	if !data.IsType.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/is-type", data.getPath()))
 	}
-	for i := range data.Nets {
-		keys := [...]string{"net-id"}
-		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nets/net%v", data.getPath(), keyString))
+	if !data.SetOverloadBit.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
 	}
-	for i := range data.FlexAlgos {
-		keys := [...]string{"flex-algo-number"}
-		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/flex-algoes/flex-algo%v", data.getPath(), keyString))
+	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", data.getPath()))
 	}
-	for i := range data.AffinityMaps {
-		keys := [...]string{"affinity-attribute-name"}
-		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity-maps/affinity-map%v", data.getPath(), keyString))
+	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
 	}
-	if !data.DistributeLinkStateLevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/level", data.getPath()))
+	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
 	}
-	if !data.DistributeLinkStateThrottle.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/throttle", data.getPath()))
-	}
-	if !data.DistributeLinkStateInstanceId.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))
-	}
-	if !data.DistributeLinkState.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state", data.getPath()))
-	}
-	if !data.LspPasswordKeychainEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/enable-poi", data.getPath()))
-	}
-	if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp/send-only", data.getPath()))
-	}
-	if !data.LspPasswordKeychainSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/send-only", data.getPath()))
-	}
-	if !data.LspPasswordKeychain.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5SendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordHmacMd5Encrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextEnablePoi.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextSnpSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextSendOnly.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	if !data.LspPasswordTextEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
-	}
-	for i := range data.LspPasswordLevels {
-		keys := [...]string{"level-number"}
-		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
-
-		keyString := ""
-		for ki := range keys {
-			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
-		}
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", data.getPath(), keyString))
-	}
-	if !data.LspPasswordAcceptEncrypted.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept/encrypted", data.getPath()))
-	}
-	if !data.MaxLspLifetime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-lsp-lifetime", data.getPath()))
-	}
-	if !data.LspRefreshInterval.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-refresh-interval", data.getPath()))
-	}
-	if !data.LspGenIntervalSecondaryWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", data.getPath()))
-	}
-	if !data.LspGenIntervalInitialWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", data.getPath()))
-	}
-	if !data.LspGenIntervalMaximumWait.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", data.getPath()))
-	}
-	if !data.LogAdjacencyChanges.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
-	}
-	if !data.NsfInterfaceExpires.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-expires", data.getPath()))
-	}
-	if !data.NsfInterfaceTimer.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-timer", data.getPath()))
-	}
-	if !data.NsfLifetime.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
-	}
-	if !data.NsfIetf.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
-	}
-	if !data.NsfCisco.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
-	}
-	if !data.Nsr.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
+	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
 	}
 	for i := range data.SetOverloadBitLevels {
 		keys := [...]string{"level-number"}
@@ -2174,23 +2023,139 @@ func (data *RouterISIS) getDeletePaths(ctx context.Context) []string {
 		}
 		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit-levels/set-overload-bit-level%v", data.getPath(), keyString))
 	}
-	if !data.SetOverloadBitAdvertiseInterlevel.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/interlevel", data.getPath()))
+	if !data.Nsr.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsr", data.getPath()))
 	}
-	if !data.SetOverloadBitAdvertiseExternal.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/advertise/external", data.getPath()))
+	if !data.NsfCisco.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
-	if !data.SetOverloadBitOnStartupWaitForBgp.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup", data.getPath()))
+	if !data.NsfIetf.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf", data.getPath()))
 	}
-	if !data.SetOverloadBitOnStartupTimeToAdvertise.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit/on-startup/time-to-advertise", data.getPath()))
+	if !data.NsfLifetime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/lifetime", data.getPath()))
 	}
-	if !data.SetOverloadBit.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/set-overload-bit", data.getPath()))
+	if !data.NsfInterfaceTimer.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-timer", data.getPath()))
 	}
-	if !data.IsType.IsNull() {
-		deletePaths = append(deletePaths, fmt.Sprintf("%v/is-type", data.getPath()))
+	if !data.NsfInterfaceExpires.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nsf/interface-expires", data.getPath()))
+	}
+	if !data.LogAdjacencyChanges.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/log/adjacency/changes", data.getPath()))
+	}
+	if !data.LspGenIntervalMaximumWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/maximum-wait", data.getPath()))
+	}
+	if !data.LspGenIntervalInitialWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/initial-wait", data.getPath()))
+	}
+	if !data.LspGenIntervalSecondaryWait.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-gen-interval/secondary-wait", data.getPath()))
+	}
+	if !data.LspRefreshInterval.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-refresh-interval", data.getPath()))
+	}
+	if !data.MaxLspLifetime.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/max-lsp-lifetime", data.getPath()))
+	}
+	if !data.LspPasswordAcceptEncrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept/encrypted", data.getPath()))
+	}
+	for i := range data.LspPasswordLevels {
+		keys := [...]string{"level-number"}
+		keyValues := [...]string{strconv.FormatInt(data.LspPasswordLevels[i].LevelNumber.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/accept-levels/accept-level%v", data.getPath(), keyString))
+	}
+	if !data.LspPasswordTextEncrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/encrypted", data.getPath()))
+	}
+	if !data.LspPasswordTextSendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+	}
+	if !data.LspPasswordTextSnpSendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options/snp", data.getPath()))
+	}
+	if !data.LspPasswordTextEnablePoi.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/text/password-options", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5Encrypted.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5SendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5SnpSendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options/snp", data.getPath()))
+	}
+	if !data.LspPasswordHmacMd5EnablePoi.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/hmac-md5/password-options", data.getPath()))
+	}
+	if !data.LspPasswordKeychain.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+	}
+	if !data.LspPasswordKeychainSendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+	}
+	if !data.LspPasswordKeychainSnpSendOnly.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain/snp", data.getPath()))
+	}
+	if !data.LspPasswordKeychainEnablePoi.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/lsp-password/lsp-password-option/keychain", data.getPath()))
+	}
+	if !data.DistributeLinkStateInstanceId.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/instance-id", data.getPath()))
+	}
+	if !data.DistributeLinkStateThrottle.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/throttle", data.getPath()))
+	}
+	if !data.DistributeLinkStateLevel.IsNull() {
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/distribute/link-state/level", data.getPath()))
+	}
+	for i := range data.AffinityMaps {
+		keys := [...]string{"affinity-attribute-name"}
+		keyValues := [...]string{data.AffinityMaps[i].Name.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/affinity-maps/affinity-map%v", data.getPath(), keyString))
+	}
+	for i := range data.FlexAlgos {
+		keys := [...]string{"flex-algo-number"}
+		keyValues := [...]string{strconv.FormatInt(data.FlexAlgos[i].Number.ValueInt64(), 10)}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/flex-algoes/flex-algo%v", data.getPath(), keyString))
+	}
+	for i := range data.Nets {
+		keys := [...]string{"net-id"}
+		keyValues := [...]string{data.Nets[i].NetId.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/nets/net%v", data.getPath(), keyString))
+	}
+	for i := range data.Interfaces {
+		keys := [...]string{"interface-name"}
+		keyValues := [...]string{data.Interfaces[i].InterfaceName.ValueString()}
+
+		keyString := ""
+		for ki := range keys {
+			keyString += "[" + keys[ki] + "=" + keyValues[ki] + "]"
+		}
+		deletePaths = append(deletePaths, fmt.Sprintf("%v/interfaces/interface%v", data.getPath(), keyString))
 	}
 	return deletePaths
 }

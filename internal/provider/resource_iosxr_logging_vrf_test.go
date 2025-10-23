@@ -91,10 +91,6 @@ func iosxrLoggingVRFImportStateIdFunc(resourceName string) resource.ImportStateI
 func testAccIosxrLoggingVRFConfig_minimum() string {
 	config := `resource "iosxr_logging_vrf" "test" {` + "\n"
 	config += `	vrf_name = "default"` + "\n"
-	config += `	host_ipv4_addresses = [{` + "\n"
-	config += `		ipv4_address = "1.1.1.1"` + "\n"
-	config += `		severity = "info"` + "\n"
-	config += `		}]` + "\n"
 	config += `}` + "\n"
 	return config
 }

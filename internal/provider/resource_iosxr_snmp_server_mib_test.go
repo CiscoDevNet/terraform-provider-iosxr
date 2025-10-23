@@ -81,7 +81,6 @@ func iosxrSNMPServerMIBImportStateIdFunc(resourceName string) resource.ImportSta
 
 func testAccIosxrSNMPServerMIBConfig_minimum() string {
 	config := `resource "iosxr_snmp_server_mib" "test" {` + "\n"
-	config += `	ifindex_persist = true` + "\n"
 	config += `}` + "\n"
 	return config
 }

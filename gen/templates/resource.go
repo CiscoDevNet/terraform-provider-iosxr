@@ -78,15 +78,15 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
-			"delete_mode": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.").AddStringEnumDescription("all", "attributes").String,
-				Optional:            true,
-				Validators: []validator.String{
-					stringvalidator.OneOf("all", "attributes"),
-				},
+		{{- if and (not .NoDelete) (not .NoDeleteAttributes)}}
+		"delete_mode": schema.StringAttribute{
+			MarkdownDescription: helpers.NewAttributeDescription("Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `{{if or .DefaultDeleteAttributes .NoDelete}}attributes{{else}}all{{end}}`.").AddStringEnumDescription("all", "attributes").String,
+			Optional:            true,
+			Validators: []validator.String{
+				stringvalidator.OneOf("all", "attributes"),
 			},
-			{{- end}}
+		},
+		{{- end}}
 			{{- range  .Attributes}}
 			"{{.TfName}}": schema.{{if eq .Type "List"}}ListNested{{else if eq .Type "Set"}}SetNested{{else if or (eq .Type "StringList") (eq .Type "Int64List")}}List{{else if or (eq .Type "StringSet") (eq .Type "Int64Set")}}Set{{else}}{{.Type}}{{end}}Attribute{
 				MarkdownDescription: helpers.NewAttributeDescription("{{.Description}}")

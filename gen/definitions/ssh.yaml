@@ -2,8 +2,11 @@
 name: SSH
 path: Cisco-IOS-XR-um-ssh-cfg:/ssh
 doc_category: System
+default_delete_attributes: true
 test_tags: [SSH]
 attributes:
+  - yang_name: timeout
+    example: 60
   - yang_name: server/dscp
     example: 48
   - yang_name: server/logging
@@ -15,6 +18,93 @@ attributes:
   - yang_name: server/v2
     minimum_test_value: true
     example: true
+  - yang_name: server/v1
+    example: true
+    exclude_test: true
+  - yang_name: server/disable/hmac/hmac-sha2-512
+    tf_name: server_disable_hmac_sha2_512
+    example: false
+  - yang_name: server/disable/hmac/hmac-sha1
+    tf_name: server_disable_hmac_sha1
+    example: true
+  - yang_name: server/disable/hmac/hmac-sha2-256
+    tf_name: server_disable_hmac_sha2_256
+    example: false
+  - yang_name: server/enable/cipher/aes-cbc
+    tf_name: server_enable_cipher_aes_cbc
+    example: true
+  - yang_name: server/enable/cipher/threedes-cbc
+    tf_name: server_enable_cipher_3des_cbc
+    example: true
+  - yang_name: server/capability/netconf-xml
+    tf_name: server_netconf_xml
+    example: true
+  - yang_name: server/rekey-time
+    example: 60
+  - yang_name: server/rekey-volume
+    example: 2048
+  - yang_name: server/tcp-window-scale
+    example: 7
+  - yang_name: server/max-auth-limit
+    example: 10
+  - yang_name: server/port
+    example: 5522
+  - yang_name: server/port-forwarding/local
+    tf_name: server_port_forwarding_local
+    example: true
+  - yang_name: server/algorithms/key-exchanges/key-exchange
+    tf_name: server_algorithms_key_exchanges
+    delete_parent: true
+    example: "ecdh-sha2-nistp521"
+  - yang_name: server/algorithms/host-key/ecdsa-nistp256
+    tf_name: server_algorithms_host_key_ecdsa_nistp256
+    example: true
+  - yang_name: server/algorithms/host-key/ecdsa-nistp384
+    tf_name: server_algorithms_host_key_ecdsa_nistp384
+    example: true
+  - yang_name: server/algorithms/host-key/ecdsa-nistp521
+    tf_name: server_algorithms_host_key_ecdsa_nistp521
+    example: true
+  - yang_name: server/algorithms/host-key/rsa
+    tf_name: server_algorithms_host_key_rsa
+    example: true
+  - yang_name: server/algorithms/host-key/dsa
+    tf_name: server_algorithms_host_key_dsa
+    example: true
+  - yang_name: server/algorithms/host-key/x509v3-ssh-rsa
+    tf_name: server_algorithms_host_key_x509v3_ssh_rsa
+    example: true
+  - yang_name: server/algorithms/host-key/ed25519
+    tf_name: server_algorithms_host_key_ed25519
+    example: true
+  - yang_name: server/algorithms/host-key/rsa-sha512
+    tf_name: server_algorithms_host_key_rsa_sha512
+    example: true
+  - yang_name: server/algorithms/host-key/rsa-sha256
+    tf_name: server_algorithms_host_key_rsa_sha256
+    example: true
+  - yang_name: server/algorithms/host-key/ssh-rsa
+    tf_name: server_algorithms_host_key_ssh_rsa
+    example: true
+  - yang_name: server/algorithms/ciphers/cipher
+    tf_name: server_algorithms_ciphers
+    delete_parent: true
+    example: "aes128-ctr"
+  - yang_name: server/usernames/username
+    tf_name: server_usernames
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: username-name
+        tf_name: username
+        id: true
+        example: cisco
+      - yang_name: keystring
+        example: >-
+          ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCv60WjxoM39LgPDbiW7ne3gu18q0NIVv0RE6rDLNal1quXZ6k5I9nV0WbPSqJLRm
+          4Q2aHEGQ3NG2dJ5ZZ3xYDOm5X9JtMSjLFCJhSHVnGz6w+s8zPKiLmBjBD4VmxBKGMj0C/4LlZJ1F3yJfPTCzDwIMAMF8fJBJ8PqF
+          KfvMTMqLkBfjB7xhXIx5N3jAZJdmxPkzdPPLnqLOKUjGKHRgmLWbynKZwRkjqvNJPQd3pf9Yb/HGqhWLvXc0z2xGlqODBhC3vL
+          g0tlSKFpSdcJqj6eZLmKQ5BLHhZkJHDVdKzKNw5r0dBbLqFzF7nHiJ3uD+fUgPNzKOc7vF/TzLmNDlWr
   - yang_name: server/vrfs/vrf
     tf_name: server_vrfs
     type: List
@@ -26,3 +116,59 @@ attributes:
         example: ACL1
       - yang_name: ipv6/access-list
         example: ACL2
+  - yang_name: server/netconf/port
+    example: 830
+  - yang_name: server/netconf/vrfs/vrf
+    tf_name: server_netconf_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: VRF2
+      - yang_name: ipv4/access-list
+        example: ACL1
+      - yang_name: ipv6/access-list
+        example: ACL2
+  - yang_name: client/knownhost
+    example: "harddisk:/ssh_known_hosts"
+    exclude_test: true
+  - yang_name: client/source-interface
+    example: Loopback100
+  - yang_name: client/vrf
+    example: MGMT
+  - yang_name: client/dscp
+    example: 16
+  - yang_name: client/rekey-time
+    example: 60
+  - yang_name: client/rekey-volume
+    example: 2048
+  - yang_name: client/tcp-window-scale
+    example: 7
+  - yang_name: client/v2
+    example: true
+  - yang_name: client/v1
+    example: true
+    exclude_test: true
+  - yang_name: client/disable/hmac/hmac-sha1
+    tf_name: client_disable_hmac_sha1
+    example: true
+  - yang_name: client/disable/hmac/hmac-sha2-512
+    tf_name: client_disable_hmac_sha2_512
+    example: false
+  - yang_name: client/disable/hmac/hmac-sha2-256
+    tf_name: client_disable_hmac_sha2_256
+    example: false
+  - yang_name: client/enable/cipher/aes-cbc
+    tf_name: client_enable_cipher_aes_cbc
+    example: true
+  - yang_name: client/enable/cipher/threedes-cbc
+    tf_name: client_enable_cipher_3des_cbc
+    example: true
+  - yang_name: client/algorithms/key-exchanges/key-exchange
+    tf_name: client_algorithms_key_exchanges
+    delete_parent: true
+    example: "ecdh-sha2-nistp521"
+  - yang_name: client/algorithms/ciphers/cipher
+    tf_name: client_algorithms_ciphers
+    delete_parent: true
+    example: "aes128-ctr"

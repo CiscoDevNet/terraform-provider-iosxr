@@ -67,6 +67,10 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "The path of the retrieved object.",
 				Computed:            true,
 			},
+			"timeout": schema.Int64Attribute{
+				MarkdownDescription: "Set timeout value for SSH",
+				Computed:            true,
+			},
 			"server_dscp": schema.Int64Attribute{
 				MarkdownDescription: "Cisco ssh server DSCP",
 				Computed:            true,
@@ -87,6 +91,124 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 				MarkdownDescription: "Cisco sshd protocol version 2 ",
 				Computed:            true,
 			},
+			"server_v1": schema.BoolAttribute{
+				MarkdownDescription: "Cisco sshd protocol version 1 ",
+				Computed:            true,
+			},
+			"server_disable_hmac_sha2_512": schema.BoolAttribute{
+				MarkdownDescription: "Disable sshd hmac-sha2-512-algorithm",
+				Computed:            true,
+			},
+			"server_disable_hmac_sha1": schema.BoolAttribute{
+				MarkdownDescription: "Disable sshd hmac-sha1-algorithm",
+				Computed:            true,
+			},
+			"server_disable_hmac_sha2_256": schema.BoolAttribute{
+				MarkdownDescription: "Disable sshd hmac-sha2-256-algorithm",
+				Computed:            true,
+			},
+			"server_enable_cipher_aes_cbc": schema.BoolAttribute{
+				MarkdownDescription: "Enable ssh server aes-cbc algorithms",
+				Computed:            true,
+			},
+			"server_enable_cipher_3des_cbc": schema.BoolAttribute{
+				MarkdownDescription: "Enable ssh server 3des-cbc algorithm",
+				Computed:            true,
+			},
+			"server_netconf_xml": schema.BoolAttribute{
+				MarkdownDescription: "Use Netconf XML stack",
+				Computed:            true,
+			},
+			"server_rekey_time": schema.Int64Attribute{
+				MarkdownDescription: "Configures time-based rekey (default 60 minutes)",
+				Computed:            true,
+			},
+			"server_rekey_volume": schema.Int64Attribute{
+				MarkdownDescription: "Configures volume-based rekey (default 1024MB)",
+				Computed:            true,
+			},
+			"server_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
+				Computed:            true,
+			},
+			"server_max_auth_limit": schema.Int64Attribute{
+				MarkdownDescription: "User Configurable max authentication attempts",
+				Computed:            true,
+			},
+			"server_port": schema.Int64Attribute{
+				MarkdownDescription: "User Configurable ssh port (Default 22)",
+				Computed:            true,
+			},
+			"server_port_forwarding_local": schema.BoolAttribute{
+				MarkdownDescription: "Enable local port forwarding for ssh server",
+				Computed:            true,
+			},
+			"server_algorithms_key_exchanges": schema.ListAttribute{
+				MarkdownDescription: "Key exchange algorithms",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp256": schema.BoolAttribute{
+				MarkdownDescription: "ecdsa-nistp256",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp384": schema.BoolAttribute{
+				MarkdownDescription: "ecdsa-nistp384",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_ecdsa_nistp521": schema.BoolAttribute{
+				MarkdownDescription: "ecdsa-nistp521",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_rsa": schema.BoolAttribute{
+				MarkdownDescription: "rsa",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_dsa": schema.BoolAttribute{
+				MarkdownDescription: "dsa",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_x509v3_ssh_rsa": schema.BoolAttribute{
+				MarkdownDescription: "x509v3-ssh-rsa",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_ed25519": schema.BoolAttribute{
+				MarkdownDescription: "ed25519",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_rsa_sha512": schema.BoolAttribute{
+				MarkdownDescription: "rsa-sha512",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_rsa_sha256": schema.BoolAttribute{
+				MarkdownDescription: "rsa-sha256",
+				Computed:            true,
+			},
+			"server_algorithms_host_key_ssh_rsa": schema.BoolAttribute{
+				MarkdownDescription: "ssh-rsa",
+				Computed:            true,
+			},
+			"server_algorithms_ciphers": schema.ListAttribute{
+				MarkdownDescription: "cipher algorithms",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"server_usernames": schema.ListNestedAttribute{
+				MarkdownDescription: "ssh user",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"username": schema.StringAttribute{
+							MarkdownDescription: "ssh user",
+							Computed:            true,
+						},
+						"keystring": schema.StringAttribute{
+							MarkdownDescription: "Enter public key in ssh format",
+							Computed:            true,
+						},
+					},
+				},
+			},
 			"server_vrfs": schema.ListNestedAttribute{
 				MarkdownDescription: "Cisco sshd VRF name",
 				Computed:            true,
@@ -106,6 +228,96 @@ func (d *SSHDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 						},
 					},
 				},
+			},
+			"server_netconf_port": schema.Int64Attribute{
+				MarkdownDescription: "Port to start ssh netconf subsystem service (Default 830)",
+				Computed:            true,
+			},
+			"server_netconf_vrfs": schema.ListNestedAttribute{
+				MarkdownDescription: "Cisco netconf VRF name",
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"vrf_name": schema.StringAttribute{
+							MarkdownDescription: "Cisco netconf VRF name",
+							Computed:            true,
+						},
+						"ipv4_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv4 access-list",
+							Computed:            true,
+						},
+						"ipv6_access_list": schema.StringAttribute{
+							MarkdownDescription: "Configure IPv6 access-list",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"client_knownhost": schema.StringAttribute{
+				MarkdownDescription: "Enable the host pubkey check by local database",
+				Computed:            true,
+			},
+			"client_source_interface": schema.StringAttribute{
+				MarkdownDescription: "Source interface for ssh client sessions",
+				Computed:            true,
+			},
+			"client_vrf": schema.StringAttribute{
+				MarkdownDescription: "Source interface VRF for ssh client sessions",
+				Computed:            true,
+			},
+			"client_dscp": schema.Int64Attribute{
+				MarkdownDescription: "DSCP value for ssh client sessions",
+				Computed:            true,
+			},
+			"client_rekey_time": schema.Int64Attribute{
+				MarkdownDescription: "Configures time-based rekey (default 60 minutes)",
+				Computed:            true,
+			},
+			"client_rekey_volume": schema.Int64Attribute{
+				MarkdownDescription: "Configures volume-based rekey (default 1024MB)",
+				Computed:            true,
+			},
+			"client_tcp_window_scale": schema.Int64Attribute{
+				MarkdownDescription: "Set tcp window-scale factor for High Latency links",
+				Computed:            true,
+			},
+			"client_v2": schema.BoolAttribute{
+				MarkdownDescription: "Set ssh client to use version 2 ",
+				Computed:            true,
+			},
+			"client_v1": schema.BoolAttribute{
+				MarkdownDescription: "Set ssh client to use version 1 ",
+				Computed:            true,
+			},
+			"client_disable_hmac_sha1": schema.BoolAttribute{
+				MarkdownDescription: "Disable sshd hmac-sha1-algorithm",
+				Computed:            true,
+			},
+			"client_disable_hmac_sha2_512": schema.BoolAttribute{
+				MarkdownDescription: "Disable ssh hmac-sha2-512-algorithm",
+				Computed:            true,
+			},
+			"client_disable_hmac_sha2_256": schema.BoolAttribute{
+				MarkdownDescription: "Disable ssh hmac-sha2-256-algorithm",
+				Computed:            true,
+			},
+			"client_enable_cipher_aes_cbc": schema.BoolAttribute{
+				MarkdownDescription: "Enable ssh client aes-cbc algorithms",
+				Computed:            true,
+			},
+			"client_enable_cipher_3des_cbc": schema.BoolAttribute{
+				MarkdownDescription: "Enable ssh client 3des-cbc algorithm",
+				Computed:            true,
+			},
+			"client_algorithms_key_exchanges": schema.ListAttribute{
+				MarkdownDescription: "Key exchange algorithms",
+				ElementType:         types.StringType,
+				Computed:            true,
+			},
+			"client_algorithms_ciphers": schema.ListAttribute{
+				MarkdownDescription: "Cipher algorithms",
+				ElementType:         types.StringType,
+				Computed:            true,
 			},
 		},
 	}

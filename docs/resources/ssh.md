@@ -14,11 +14,36 @@ This resource can manage the SSH configuration.
 
 ```terraform
 resource "iosxr_ssh" "example" {
-  server_dscp          = 48
-  server_logging       = true
-  server_rate_limit    = 60
-  server_session_limit = 10
-  server_v2            = true
+  timeout                                   = 60
+  server_dscp                               = 48
+  server_logging                            = true
+  server_rate_limit                         = 60
+  server_session_limit                      = 10
+  server_v2                                 = true
+  server_disable_hmac_sha2_512              = false
+  server_disable_hmac_sha1                  = true
+  server_disable_hmac_sha2_256              = false
+  server_enable_cipher_aes_cbc              = true
+  server_enable_cipher_3des_cbc             = true
+  server_netconf_xml                        = true
+  server_rekey_time                         = 60
+  server_rekey_volume                       = 2048
+  server_tcp_window_scale                   = 7
+  server_max_auth_limit                     = 10
+  server_port                               = 5522
+  server_port_forwarding_local              = true
+  server_algorithms_key_exchanges           = ["ecdh-sha2-nistp521"]
+  server_algorithms_host_key_ecdsa_nistp256 = true
+  server_algorithms_host_key_ecdsa_nistp384 = true
+  server_algorithms_host_key_ecdsa_nistp521 = true
+  server_algorithms_host_key_rsa            = true
+  server_algorithms_host_key_dsa            = true
+  server_algorithms_host_key_x509v3_ssh_rsa = true
+  server_algorithms_host_key_ed25519        = true
+  server_algorithms_host_key_rsa_sha512     = true
+  server_algorithms_host_key_rsa_sha256     = true
+  server_algorithms_host_key_ssh_rsa        = true
+  server_algorithms_ciphers                 = ["aes128-ctr"]
   server_vrfs = [
     {
       vrf_name         = "VRF1"
@@ -26,6 +51,28 @@ resource "iosxr_ssh" "example" {
       ipv6_access_list = "ACL2"
     }
   ]
+  server_netconf_port = 830
+  server_netconf_vrfs = [
+    {
+      vrf_name         = "VRF2"
+      ipv4_access_list = "ACL1"
+      ipv6_access_list = "ACL2"
+    }
+  ]
+  client_source_interface         = "Loopback100"
+  client_vrf                      = "MGMT"
+  client_dscp                     = 16
+  client_rekey_time               = 60
+  client_rekey_volume             = 2048
+  client_tcp_window_scale         = 7
+  client_v2                       = true
+  client_disable_hmac_sha1        = true
+  client_disable_hmac_sha2_512    = false
+  client_disable_hmac_sha2_256    = false
+  client_enable_cipher_aes_cbc    = true
+  client_enable_cipher_3des_cbc   = true
+  client_algorithms_key_exchanges = ["ecdh-sha2-nistp521"]
+  client_algorithms_ciphers       = ["aes128-ctr"]
 }
 ```
 
@@ -34,22 +81,103 @@ resource "iosxr_ssh" "example" {
 
 ### Optional
 
-- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `all`.
+- `client_algorithms_ciphers` (List of String) Cipher algorithms
+- `client_algorithms_key_exchanges` (List of String) Key exchange algorithms
+- `client_disable_hmac_sha1` (Boolean) Disable sshd hmac-sha1-algorithm
+- `client_disable_hmac_sha2_256` (Boolean) Disable ssh hmac-sha2-256-algorithm
+- `client_disable_hmac_sha2_512` (Boolean) Disable ssh hmac-sha2-512-algorithm
+- `client_dscp` (Number) DSCP value for ssh client sessions
+  - Range: `0`-`63`
+- `client_enable_cipher_3des_cbc` (Boolean) Enable ssh client 3des-cbc algorithm
+- `client_enable_cipher_aes_cbc` (Boolean) Enable ssh client aes-cbc algorithms
+- `client_knownhost` (String) Enable the host pubkey check by local database
+- `client_rekey_time` (Number) Configures time-based rekey (default 60 minutes)
+  - Range: `30`-`1440`
+- `client_rekey_volume` (Number) Configures volume-based rekey (default 1024MB)
+  - Range: `1024`-`4095`
+- `client_source_interface` (String) Source interface for ssh client sessions
+- `client_tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links
+  - Range: `1`-`14`
+- `client_v1` (Boolean) Set ssh client to use version 1
+- `client_v2` (Boolean) Set ssh client to use version 2
+- `client_vrf` (String) Source interface VRF for ssh client sessions
+- `delete_mode` (String) Configure behavior when deleting/destroying the resource. Either delete the entire object (YANG container) being managed, or only delete the individual resource attributes configured explicitly and leave everything else as-is. Default value is `attributes`.
   - Choices: `all`, `attributes`
 - `device` (String) A device name from the provider configuration.
+- `server_algorithms_ciphers` (List of String) cipher algorithms
+- `server_algorithms_host_key_dsa` (Boolean) dsa
+- `server_algorithms_host_key_ecdsa_nistp256` (Boolean) ecdsa-nistp256
+- `server_algorithms_host_key_ecdsa_nistp384` (Boolean) ecdsa-nistp384
+- `server_algorithms_host_key_ecdsa_nistp521` (Boolean) ecdsa-nistp521
+- `server_algorithms_host_key_ed25519` (Boolean) ed25519
+- `server_algorithms_host_key_rsa` (Boolean) rsa
+- `server_algorithms_host_key_rsa_sha256` (Boolean) rsa-sha256
+- `server_algorithms_host_key_rsa_sha512` (Boolean) rsa-sha512
+- `server_algorithms_host_key_ssh_rsa` (Boolean) ssh-rsa
+- `server_algorithms_host_key_x509v3_ssh_rsa` (Boolean) x509v3-ssh-rsa
+- `server_algorithms_key_exchanges` (List of String) Key exchange algorithms
+- `server_disable_hmac_sha1` (Boolean) Disable sshd hmac-sha1-algorithm
+- `server_disable_hmac_sha2_256` (Boolean) Disable sshd hmac-sha2-256-algorithm
+- `server_disable_hmac_sha2_512` (Boolean) Disable sshd hmac-sha2-512-algorithm
 - `server_dscp` (Number) Cisco ssh server DSCP
   - Range: `0`-`63`
+- `server_enable_cipher_3des_cbc` (Boolean) Enable ssh server 3des-cbc algorithm
+- `server_enable_cipher_aes_cbc` (Boolean) Enable ssh server aes-cbc algorithms
 - `server_logging` (Boolean) Enable ssh server logging
+- `server_max_auth_limit` (Number) User Configurable max authentication attempts
+  - Range: `3`-`20`
+- `server_netconf_port` (Number) Port to start ssh netconf subsystem service (Default 830)
+  - Range: `1`-`65535`
+- `server_netconf_vrfs` (Attributes List) Cisco netconf VRF name (see [below for nested schema](#nestedatt--server_netconf_vrfs))
+- `server_netconf_xml` (Boolean) Use Netconf XML stack
+- `server_port` (Number) User Configurable ssh port (Default 22)
+  - Range: `5520`-`5529`
+- `server_port_forwarding_local` (Boolean) Enable local port forwarding for ssh server
 - `server_rate_limit` (Number) Cisco sshd rate-limit of service requests
   - Range: `1`-`600`
+- `server_rekey_time` (Number) Configures time-based rekey (default 60 minutes)
+  - Range: `30`-`1440`
+- `server_rekey_volume` (Number) Configures volume-based rekey (default 1024MB)
+  - Range: `1024`-`4095`
 - `server_session_limit` (Number) Cisco sshd session-limit of service requests
   - Range: `1`-`150`
+- `server_tcp_window_scale` (Number) Set tcp window-scale factor for High Latency links
+  - Range: `1`-`14`
+- `server_usernames` (Attributes List) ssh user (see [below for nested schema](#nestedatt--server_usernames))
+- `server_v1` (Boolean) Cisco sshd protocol version 1
 - `server_v2` (Boolean) Cisco sshd protocol version 2
 - `server_vrfs` (Attributes List) Cisco sshd VRF name (see [below for nested schema](#nestedatt--server_vrfs))
+- `timeout` (Number) Set timeout value for SSH
+  - Range: `5`-`120`
 
 ### Read-Only
 
 - `id` (String) The path of the object.
+
+<a id="nestedatt--server_netconf_vrfs"></a>
+### Nested Schema for `server_netconf_vrfs`
+
+Required:
+
+- `vrf_name` (String) Cisco netconf VRF name
+
+Optional:
+
+- `ipv4_access_list` (String) Configure IPv4 access-list
+- `ipv6_access_list` (String) Configure IPv6 access-list
+
+
+<a id="nestedatt--server_usernames"></a>
+### Nested Schema for `server_usernames`
+
+Required:
+
+- `username` (String) ssh user
+
+Optional:
+
+- `keystring` (String) Enter public key in ssh format
+
 
 <a id="nestedatt--server_vrfs"></a>
 ### Nested Schema for `server_vrfs`

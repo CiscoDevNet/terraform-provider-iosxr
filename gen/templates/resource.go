@@ -113,6 +113,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 				{{- if len .DefaultValue}}
 				Computed:            true,
 				{{- end}}
+				{{- if .Sensitive}}
+				Sensitive:           true,
+				{{- end}}
 				{{- if len .EnumValues}}
 				Validators: []validator.String{
 					stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
@@ -172,6 +175,9 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 							{{- if len .DefaultValue}}
 							Computed:            true,
 							{{- end}}
+							{{- if .Sensitive}}
+							Sensitive:           true,
+							{{- end}}
 							{{- if len .EnumValues}}
 							Validators: []validator.String{
 								stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
@@ -220,14 +226,17 @@ func (r *{{camelCase .Name}}Resource) Schema(ctx context.Context, req resource.S
 										{{- end}}
 										{{- if or .Id .Mandatory}}
 										Required:            true,
-										{{- else}}
-										Optional:            true,
-										{{- end}}
-										{{- if len .DefaultValue}}
-										Computed:            true,
-										{{- end}}
-										{{- if len .EnumValues}}
-										Validators: []validator.String{
+									{{- else}}
+									Optional:            true,
+									{{- end}}
+									{{- if len .DefaultValue}}
+									Computed:            true,
+									{{- end}}
+									{{- if .Sensitive}}
+									Sensitive:           true,
+									{{- end}}
+									{{- if len .EnumValues}}
+									Validators: []validator.String{
 											stringvalidator.OneOf({{range .EnumValues}}"{{.}}", {{end}}),
 										},
 										{{- else if or (len .StringPatterns) (ne .StringMinLength 0) (ne .StringMaxLength 0) }}

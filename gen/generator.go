@@ -125,6 +125,7 @@ type YamlConfigAttribute struct {
 	Mandatory         bool                  `yaml:"mandatory"`
 	Optional          bool                  `yaml:"optional"`
 	WriteOnly         bool                  `yaml:"write_only"`
+	Sensitive         bool                  `yaml:"sensitive"`
 	ExcludeTest       bool                  `yaml:"exclude_test"`
 	ExcludeExample    bool                  `yaml:"exclude_example"`
 	Description       string                `yaml:"description"`
@@ -200,10 +201,17 @@ func ToGoName(s string) string {
 
 // Templating helper function to convert YANG name to GO name
 func ToJsonPath(yangPath, xPath string) string {
+	path := yangPath
 	if xPath != "" {
-		return strings.ReplaceAll(xPath, "/", ".")
+		path = xPath
 	}
-	return strings.ReplaceAll(yangPath, "/", ".")
+
+	// Split by /, escape dots in each segment, then join with .
+	parts := strings.Split(path, "/")
+	for i, part := range parts {
+		parts[i] = strings.ReplaceAll(part, ".", "\\\\.")
+	}
+	return strings.Join(parts, ".")
 }
 
 // Templating helper function to convert string to camel case

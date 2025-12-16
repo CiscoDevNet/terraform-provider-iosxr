@@ -1,0 +1,593 @@
+---
+name: IPSLA
+path: Cisco-IOS-XR-um-ipsla-cfg:/ipsla
+doc_category: System
+no_delete_attributes: true
+test_tags: [XRV9K, NCS, C8000]
+attributes:
+  - yang_name: low-memory
+    example: 100000
+  - yang_name: key-chain
+    example: "KEY_CHAIN"
+  - yang_name: operations/operation
+    tf_name: operations
+    type: List
+    minimum_test_value: '["1"]'
+    attributes:
+      - yang_name: operation-number
+        id: true
+        minimum_test_value: 1
+        example: 1
+      - yang_name: type/icmp/echo
+        tf_name: icmp_echo
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/echo/tag
+        tf_name: icmp_echo_tag
+        exclude_test: true
+        example: "ICMP_ECHO_TAG"
+      - yang_name: type/icmp/echo/frequency
+        tf_name: icmp_echo_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/icmp/echo/datasize/request/enter-request-datasize-in-byte
+        tf_name: icmp_echo_datasize_request
+        exclude_test: true
+        example: 64
+      - yang_name: type/icmp/echo/timeout
+        tf_name: icmp_echo_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/icmp/echo/source/address/ipv4-address
+        tf_name: icmp_echo_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/icmp/echo/source/address/ipv6-address
+        tf_name: icmp_echo_source_ipv6
+        exclude_test: true
+        example: "2001:db8::1"
+      - yang_name: type/icmp/echo/tos
+        tf_name: icmp_echo_tos
+        exclude_test: true
+        example: 0
+      - yang_name: type/icmp/echo/vrf
+        tf_name: icmp_echo_vrf
+        exclude_test: true
+        example: "VRF1"
+      - yang_name: type/icmp/echo/destination/address/ipv4-address
+        tf_name: icmp_echo_destination_ipv4
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/icmp/echo/destination/address/ipv6-address
+        tf_name: icmp_echo_destination_ipv6
+        exclude_test: true
+        example: "2001:db8::2"
+      - yang_name: type/icmp/echo/history/buckets
+        tf_name: icmp_echo_history_buckets
+        exclude_test: true
+        example: 15
+      - yang_name: type/icmp/echo/history/filter/all
+        tf_name: icmp_echo_history_filter_all
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/echo/history/filter/failures
+        tf_name: icmp_echo_history_filter_failures
+        exclude_test: true
+        example: false
+      - yang_name: type/icmp/echo/history/lives
+        tf_name: icmp_echo_history_lives
+        exclude_test: true
+        example: 1
+      - yang_name: type/icmp/echo/statistics/hourly/buckets
+        tf_name: icmp_echo_statistics_hourly_buckets
+        exclude_test: true
+        example: 2
+      - yang_name: type/icmp/echo/statistics/hourly/distribution/count
+        tf_name: icmp_echo_statistics_hourly_distribution_count
+        exclude_test: true
+        example: 1
+      - yang_name: type/icmp/echo/statistics/hourly/distribution/interval
+        tf_name: icmp_echo_statistics_hourly_distribution_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/icmp/echo/statistics/intervals/interval
+        tf_name: icmp_echo_statistics_intervals
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: interval-time
+            tf_name: interval
+            id: true
+            example: 300
+          - yang_name: buckets
+            example: 10
+
+      # ICMP Path Echo Operation Type
+      - yang_name: type/icmp/path-echo
+        tf_name: icmp_path_echo
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/path-echo/tag
+        tf_name: icmp_path_echo_tag
+        exclude_test: true
+        example: "ICMP_PATH_ECHO_TAG"
+      - yang_name: type/icmp/path-echo/frequency
+        tf_name: icmp_path_echo_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/icmp/path-echo/datasize/request/enter-request-datasize-in-byte
+        tf_name: icmp_path_echo_datasize_request
+        exclude_test: true
+        example: 64
+      - yang_name: type/icmp/path-echo/timeout
+        tf_name: icmp_path_echo_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/icmp/path-echo/source/address/ipv4-address
+        tf_name: icmp_path_echo_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/icmp/path-echo/tos
+        tf_name: icmp_path_echo_tos
+        exclude_test: true
+        example: 0
+      - yang_name: type/icmp/path-echo/destination/address/address
+        tf_name: icmp_path_echo_destination_ipv4
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/icmp/path-echo/history/buckets
+        tf_name: icmp_path_echo_history_buckets
+        exclude_test: true
+        example: 15
+      - yang_name: type/icmp/path-echo/history/filter/all
+        tf_name: icmp_path_echo_history_filter_all
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/path-echo/history/filter/failures
+        tf_name: icmp_path_echo_history_filter_failures
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/path-echo/history/lives
+        tf_name: icmp_path_echo_history_lives
+        exclude_test: true
+        example: 0
+      - yang_name: type/icmp/path-echo/history/samples
+        tf_name: icmp_path_echo_history_samples
+        exclude_test: true
+        example: 16
+      - yang_name: type/icmp/path-echo/statistics/hourly/buckets
+        tf_name: icmp_path_echo_statistics_hourly_buckets
+        exclude_test: true
+        example: 2
+      - yang_name: type/icmp/path-echo/statistics/hourly/distribution/count
+        tf_name: icmp_path_echo_statistics_hourly_distribution_count
+        exclude_test: true
+        example: 1
+      - yang_name: type/icmp/path-echo/statistics/hourly/distribution/interval
+        tf_name: icmp_path_echo_statistics_hourly_distribution_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/icmp/path-echo/statistics/hourly/maximum/hops
+        tf_name: icmp_path_echo_statistics_hourly_maximum_hops
+        exclude_test: true
+        example: 16
+      - yang_name: type/icmp/path-echo/statistics/hourly/maximum/paths
+        tf_name: icmp_path_echo_statistics_hourly_maximum_paths
+        exclude_test: true
+        example: 128
+
+      # ICMP Path Jitter Operation Type
+      - yang_name: type/icmp/path-jitter
+        tf_name: icmp_path_jitter
+        exclude_test: true
+        example: true
+      - yang_name: type/icmp/path-jitter/tag
+        tf_name: icmp_path_jitter_tag
+        exclude_test: true
+        example: "ICMP_PATH_JITTER_TAG"
+      - yang_name: type/icmp/path-jitter/frequency
+        tf_name: icmp_path_jitter_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/icmp/path-jitter/datasize/request/enter-request-datasize-in-byte
+        tf_name: icmp_path_jitter_datasize_request
+        exclude_test: true
+        example: 64
+      - yang_name: type/icmp/path-jitter/timeout
+        tf_name: icmp_path_jitter_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/icmp/path-jitter/source/address/ipv4-address
+        tf_name: icmp_path_jitter_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/icmp/path-jitter/packet/count
+        tf_name: icmp_path_jitter_packet_count
+        exclude_test: true
+        example: 10
+      - yang_name: type/icmp/path-jitter/packet/interval
+        tf_name: icmp_path_jitter_packet_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/icmp/path-jitter/tos
+        tf_name: icmp_path_jitter_tos
+        exclude_test: true
+        example: 0
+      - yang_name: type/icmp/path-jitter/destination/address/address
+        tf_name: icmp_path_jitter_destination_ipv4
+        exclude_test: true
+        example: "10.1.1.2"
+
+      # UDP Echo Operation Type
+      - yang_name: type/udp/echo
+        tf_name: udp_echo
+        minimum_test_value: true
+        example: true
+      - yang_name: type/udp/echo/tag
+        tf_name: udp_echo_tag
+        example: "UDP_ECHO_TAG"
+      - yang_name: type/udp/echo/frequency
+        tf_name: udp_echo_frequency
+        example: 60
+      - yang_name: type/udp/echo/datasize/request/enter-request-datasize-in-byte
+        tf_name: udp_echo_datasize_request
+        example: 64
+      - yang_name: type/udp/echo/timeout
+        tf_name: udp_echo_timeout
+        example: 5000
+      - yang_name: type/udp/echo/source/address/ipv4-address
+        tf_name: udp_echo_source_ipv4
+        minimum_test_value: '"10.1.1.1"'
+        example: "10.1.1.1"
+      - yang_name: type/udp/echo/source/port
+        tf_name: udp_echo_source_port
+        example: 1024
+      - yang_name: type/udp/echo/destination/address
+        tf_name: udp_echo_destination_ipv4
+        minimum_test_value: '"10.1.1.2"'
+        example: "10.1.1.2"
+      - yang_name: type/udp/echo/destination/port
+        tf_name: udp_echo_destination_port
+        example: 7
+      - yang_name: type/udp/echo/control/disable
+        tf_name: udp_echo_control_disable
+        example: false
+      - yang_name: type/udp/echo/verify-data
+        tf_name: udp_echo_verify_data
+        example: false
+      - yang_name: type/udp/echo/tos
+        tf_name: udp_echo_tos
+        example: 0
+      - yang_name: type/udp/echo/vrf
+        tf_name: udp_echo_vrf
+        example: "VRF1"
+      - yang_name: type/udp/echo/statistics/hourly/buckets
+        tf_name: udp_echo_statistics_hourly_buckets
+        example: 2
+      - yang_name: type/udp/echo/statistics/hourly/distribution/count
+        tf_name: udp_echo_statistics_hourly_distribution_count
+        example: 1
+      - yang_name: type/udp/echo/statistics/hourly/distribution/interval
+        tf_name: udp_echo_statistics_hourly_distribution_interval
+        example: 20
+      - yang_name: type/udp/echo/statistics/intervals/interval
+        tf_name: udp_echo_statistics_intervals
+        type: List
+        attributes:
+          - yang_name: interval-time
+            tf_name: interval
+            id: true
+            example: 300
+          - yang_name: buckets
+            example: 10
+      - yang_name: type/udp/echo/history/buckets
+        tf_name: udp_echo_history_buckets
+        example: 15
+      - yang_name: type/udp/echo/history/filter/all
+        tf_name: udp_echo_history_filter_all
+        example: true
+      - yang_name: type/udp/echo/history/filter/failures
+        tf_name: udp_echo_history_filter_failures
+        exclude_test: true
+        example: true
+      - yang_name: type/udp/echo/history/lives
+        tf_name: udp_echo_history_lives
+        example: 2
+
+      # UDP Jitter Operation Type
+      - yang_name: type/udp/jitter
+        tf_name: udp_jitter
+        exclude_test: true
+        example: true
+      - yang_name: type/udp/jitter/tag
+        tf_name: udp_jitter_tag
+        exclude_test: true
+        example: "UDP_JITTER_TAG"
+      - yang_name: type/udp/jitter/frequency
+        tf_name: udp_jitter_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/udp/jitter/datasize/request/enter-request-datasize-in-byte
+        tf_name: udp_jitter_datasize_request
+        exclude_test: true
+        example: 64
+      - yang_name: type/udp/jitter/timeout
+        tf_name: udp_jitter_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/udp/jitter/source/address/ipv4-address
+        tf_name: udp_jitter_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/udp/jitter/source/port
+        tf_name: udp_jitter_source_port
+        exclude_test: true
+        example: 1024
+      - yang_name: type/udp/jitter/destination/address
+        tf_name: udp_jitter_destination_ipv4
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/udp/jitter/destination/port
+        tf_name: udp_jitter_destination_port
+        exclude_test: true
+        example: 7
+      - yang_name: type/udp/jitter/packet/count
+        tf_name: udp_jitter_packet_count
+        exclude_test: true
+        example: 10
+      - yang_name: type/udp/jitter/packet/interval
+        tf_name: udp_jitter_packet_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/udp/jitter/tos
+        tf_name: udp_jitter_tos
+        exclude_test: true
+        example: 0
+      - yang_name: type/udp/jitter/vrf
+        tf_name: udp_jitter_vrf
+        exclude_test: true
+        example: "VRF1"
+      - yang_name: type/udp/jitter/control/disable
+        tf_name: udp_jitter_control_disable
+        exclude_test: true
+        example: false
+      - yang_name: type/udp/jitter/verify-data
+        tf_name: udp_jitter_verify_data
+        exclude_test: true
+        example: false
+      - yang_name: type/udp/jitter/statistics/hourly/buckets
+        tf_name: udp_jitter_statistics_hourly_buckets
+        exclude_test: true
+        example: 2
+      - yang_name: type/udp/jitter/statistics/hourly/distribution/count
+        tf_name: udp_jitter_statistics_hourly_distribution_count
+        exclude_test: true
+        example: 1
+      - yang_name: type/udp/jitter/statistics/hourly/distribution/interval
+        tf_name: udp_jitter_statistics_hourly_distribution_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/udp/jitter/statistics/intervals/interval
+        tf_name: udp_jitter_statistics_intervals
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: interval-time
+            tf_name: interval
+            id: true
+            example: 300
+          - yang_name: buckets
+            example: 10
+
+      # MPLS LSP Ping Operation Type
+      - yang_name: type/mpls/lsp/ping
+        tf_name: mpls_lsp_ping
+        exclude_test: true
+        example: true
+      - yang_name: type/mpls/lsp/ping/tag
+        tf_name: mpls_lsp_ping_tag
+        exclude_test: true
+        example: "MPLS_LSP_PING_TAG"
+      - yang_name: type/mpls/lsp/ping/frequency
+        tf_name: mpls_lsp_ping_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/mpls/lsp/ping/datasize/request/enter-request-datasize-in-byte
+        tf_name: mpls_lsp_ping_datasize_request
+        exclude_test: true
+        example: 100
+      - yang_name: type/mpls/lsp/ping/timeout
+        tf_name: mpls_lsp_ping_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/mpls/lsp/ping/source/address/ipv4-address
+        tf_name: mpls_lsp_ping_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/mpls/lsp/ping/target/ipv4/address
+        tf_name: mpls_lsp_ping_target_ipv4
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/mpls/lsp/ping/target/ipv4/mask
+        tf_name: mpls_lsp_ping_target_ipv4_mask
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "255.255.255.255"
+      - yang_name: type/mpls/lsp/ping/target/traffic-eng/tunnel
+        tf_name: mpls_lsp_ping_target_te_tunnel
+        exclude_test: true
+        example: "1"
+      - yang_name: type/mpls/lsp/ping/target/pseudowire/address
+        tf_name: mpls_lsp_ping_target_pseudowire_address
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/mpls/lsp/ping/target/pseudowire/virtual-circuit-id
+        tf_name: mpls_lsp_ping_target_pseudowire_vc_id
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "1000"
+      - yang_name: type/mpls/lsp/ping/statistics/hourly/buckets
+        tf_name: mpls_lsp_ping_statistics_hourly_buckets
+        exclude_test: true
+        example: 2
+      - yang_name: type/mpls/lsp/ping/statistics/hourly/distribution/count
+        tf_name: mpls_lsp_ping_statistics_hourly_distribution_count
+        exclude_test: true
+        example: 1
+      - yang_name: type/mpls/lsp/ping/statistics/hourly/distribution/interval
+        tf_name: mpls_lsp_ping_statistics_hourly_distribution_interval
+        exclude_test: true
+        example: 20
+      - yang_name: type/mpls/lsp/ping/statistics/intervals/interval
+        tf_name: mpls_lsp_ping_statistics_intervals
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: interval-time
+            tf_name: interval
+            id: true
+            example: 300
+          - yang_name: buckets
+            example: 10
+
+      # MPLS LSP Trace Operation Type
+      - yang_name: type/mpls/lsp/trace
+        tf_name: mpls_lsp_trace
+        exclude_test: true
+        example: true
+      - yang_name: type/mpls/lsp/trace/tag
+        tf_name: mpls_lsp_trace_tag
+        exclude_test: true
+        example: "MPLS_LSP_TRACE_TAG"
+      - yang_name: type/mpls/lsp/trace/frequency
+        tf_name: mpls_lsp_trace_frequency
+        exclude_test: true
+        example: 60
+      - yang_name: type/mpls/lsp/trace/timeout
+        tf_name: mpls_lsp_trace_timeout
+        exclude_test: true
+        example: 5000
+      - yang_name: type/mpls/lsp/trace/source/address/ipv4-address
+        tf_name: mpls_lsp_trace_source_ipv4
+        exclude_test: true
+        example: "10.1.1.1"
+      - yang_name: type/mpls/lsp/trace/target/ipv4/address
+        tf_name: mpls_lsp_trace_target_ipv4
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/mpls/lsp/trace/target/ipv4/mask
+        tf_name: mpls_lsp_trace_target_ipv4_mask
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "255.255.255.255"
+      - yang_name: type/mpls/lsp/trace/target/traffic-eng/tunnel
+        tf_name: mpls_lsp_trace_target_te_tunnel
+        exclude_test: true
+        example: 1000
+      - yang_name: type/mpls/lsp/trace/target/pseudowire/address
+        tf_name: mpls_lsp_trace_target_pseudowire_address
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: "10.1.1.2"
+      - yang_name: type/mpls/lsp/trace/target/pseudowire/virtual-circuit-id
+        tf_name: mpls_lsp_trace_target_pseudowire_vc_id
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 1000
+      - yang_name: type/mpls/lsp/trace/statistics/hourly/buckets
+        tf_name: mpls_lsp_trace_statistics_hourly_buckets
+        exclude_test: true
+        example: 2
+      - yang_name: type/mpls/lsp/trace/statistics/hourly/distribution/count
+        tf_name: mpls_lsp_trace_statistics_hourly_distribution_count
+        exclude_test: true
+        example: 1
+      - yang_name: type/mpls/lsp/trace/statistics/hourly/distribution/interval
+        tf_name: mpls_lsp_trace_statistics_hourly_distribution_interval
+        exclude_test: true
+        example: 20
+
+  # Schedule Container
+  - yang_name: schedule/operations/operation
+    tf_name: schedules
+    type: List
+    attributes:
+      - yang_name: operation-number
+        id: true
+        example: 1
+      - yang_name: life/forever
+        tf_name: life_forever
+        exclude_test: true
+        example: true
+      - yang_name: life/length-of-time
+        tf_name: life_time
+        example: 86200
+      - yang_name: start-time/time-and-date/hour
+        tf_name: start_hour
+        optional: true
+        delete_parent: true
+        example: 12
+      - yang_name: start-time/time-and-date/minute
+        tf_name: start_minute
+        optional: true
+        delete_parent: true
+        example: 0
+      - yang_name: start-time/time-and-date/second
+        tf_name: start_second
+        optional: true
+        delete_parent: true
+        example: 0
+      - yang_name: start-time/time-and-date/month
+        tf_name: start_month
+        delete_parent: true
+        example: january
+      - yang_name: start-time/time-and-date/day-of-month
+        tf_name: start_day_of_month
+        delete_parent: true
+        example: 15
+      - yang_name: start-time/time-and-date/year
+        tf_name: start_year
+        delete_parent: true
+        example: 2032
+      - yang_name: start-time/pending
+        tf_name: start_pending
+        example: false
+      - yang_name: start-time/after/time/hour
+        tf_name: start_after_hour
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 12
+      - yang_name: start-time/after/time/minute
+        tf_name: start_after_minute
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 10
+      - yang_name: start-time/after/time/second
+        tf_name: start_after_second
+        optional: true
+        delete_parent: true
+        exclude_test: true
+        example: 10
+      - yang_name: start-time/now
+        tf_name: start_now
+        exclude_test: true
+        example: true
+      - yang_name: recurring
+        tf_name: recurring
+        example: true
+      - yang_name: ageout
+        tf_name: ageout
+        example: 300

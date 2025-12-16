@@ -9,6 +9,204 @@ attributes:
     example: ipv4
   - yang_name: saf-name
     example: unicast
+  - yang_name: distance/global
+    tf_name: distance
+    example: 100
+  - yang_name: distance/ip-addresses/ip-address
+    tf_name: distance_sources
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: address
+        id: true
+        example: "192.168.1.1"
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 32
+      - yang_name: distance-number
+        tf_name: distance
+        example: 101
+      - yang_name: prefix-list-or-access-list-to
+        tf_name: route_filter
+        example: "ROUTE_POLICY_1"
+  - yang_name: distribute-list/prefix-list/prefix-list-string
+    tf_name: distribute_list_prefix_list_in
+    example: "PREFIX_LIST_1"
+  - yang_name: distribute-list/route-policy
+    tf_name: distribute_list_route_policy_in
+    exclude_test: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/connected
+    tf_name: redistribute_connected
+    example: true
+  - yang_name: redistribute/connected/redistribute-route-level
+    tf_name: redistribute_connected_level
+    delete_parent: true
+    example: "level-2"
+  - yang_name: redistribute/connected/metric
+    tf_name: redistribute_connected_metric
+    example: 100
+  - yang_name: redistribute/connected/route-policy
+    tf_name: redistribute_connected_route_policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/connected/metric-type
+    tf_name: redistribute_connected_metric_type
+    example: "internal"
+  - yang_name: redistribute/static
+    tf_name: redistribute_static
+    example: true
+  - yang_name: redistribute/static/redistribute-route-level
+    tf_name: redistribute_static_level
+    delete_parent: true
+    example: "level-2"
+  - yang_name: redistribute/static/metric
+    tf_name: redistribute_static_metric
+    example: 100
+  - yang_name: redistribute/static/route-policy
+    tf_name: redistribute_static_route_policy
+    example: "ROUTE_POLICY_1"
+  - yang_name: redistribute/static/metric-type
+    tf_name: redistribute_static_metric_type
+    example: "internal"
+  - yang_name: redistribute/isis-processes/isis-process
+    tf_name: redistribute_isis
+    description: "Redistribute ISIS routes"
+    type: List
+    attributes:
+      - yang_name: isis-string
+        tf_name: instance_id
+        id: true
+        example: "CORE"
+      - yang_name: redistribute-route-level
+        tf_name: level
+        example: "level-2"
+      - yang_name: metric
+        example: 10
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric-type
+        example: "internal"
+      - yang_name: down-flag-clear
+        example: true
+  - yang_name: redistribute/bgps/bgp
+    tf_name: redistribute_bgp
+    type: List
+    attributes:
+      - yang_name: as-number
+        tf_name: as_number
+        id: true
+        example: "65001"
+      - yang_name: redistribute-route-level
+        tf_name: level
+        example: "level-2"
+      - yang_name: metric
+        example: 100
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric-type
+        example: "internal"
+  - yang_name: redistribute/ospfs/ospf
+    tf_name: redistribute_ospf
+    type: List
+    attributes:
+      - yang_name: ospf-process-id
+        tf_name: instance_id
+        id: true
+        example: "OSPF1"
+      - yang_name: match/MATCH/INTERNAL/internal
+        xpath: match/internal
+        tf_name: match_internal
+        exclude_test: true
+        example: true
+      - yang_name: match/MATCH/EXTERNAL/external
+        xpath: match/external
+        tf_name: match_external
+        example: true
+      - yang_name: redistribute-route-level
+        tf_name: level
+        example: "level-2"
+      - yang_name: metric
+        example: 100
+      - yang_name: route-policy
+        example: "ROUTE_POLICY_1"
+      - yang_name: metric-type
+        example: "internal"
+  - yang_name: maximum-paths
+    tf_name: maximum_paths
+    example: 10
+  - yang_name: router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: router-id/interface-name
+    tf_name: router_id_interface_name
+    delete_parent: true
+    optional: true
+    example: GigabitEthernet0/0/0/1
+    exclude_test: true
+  - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
+    xpath: router-id/ip-address
+    tf_name: router_id_ip_address
+    delete_parent: true
+    optional: true
+    example: "192.168.1.1"
+  - yang_name: advertise/passive-only
+    example: true
+  - yang_name: advertise/link/attributes
+    example: true
+  - yang_name: microloop/avoidance/enable
+    tf_name: microloop_avoidance
+    example: true
+  - yang_name: microloop/avoidance/enable/protected
+    tf_name: microloop_avoidance_protected
+    optional: true
+    example: true
+  - yang_name: microloop/avoidance/enable/segment-routing/route-policy
+    tf_name: microloop_avoidance_segment_routing_route_policy
+    example: "ULOOP_POLICY"
+    exclude_test: true
+  - yang_name: microloop/avoidance/rib-update-delay
+    example: 5000
+  - yang_name: summary-prefix/ip-addresses/ip-address
+    tf_name: summary_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: address
+        id: true
+        example: "192.168.2.0"
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 24
+      - yang_name: tag
+        example: 100
+      - yang_name: level
+        example: 1
+      - yang_name: algorithm
+        example: 128
+      - yang_name: explicit
+        example: true
+      - yang_name: adv-unreachable
+        example: true
+      - yang_name: adv-unreachable/unreachable-component-tag/unreachable-component-tag-number
+        tf_name: unreachable_tag
+        example: 200
+      - yang_name: adv-unreachable/unreachable-component-tag/exclude
+        tf_name: unreachable_tag_exclude_prefixes
+        example: true
+      - yang_name: partition-repair
+        example: true
+  - yang_name: metric
+    tf_name: metric
+    example: 100
+  - yang_name: metric-levels/metric-level
+    tf_name: metric_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: metric
+        example: 100
   - yang_name: metric-style/METRIC-STYLE/NARROW/narrow
     xpath: metric-style/narrow
     tf_name: metric_style_narrow
@@ -64,136 +262,6 @@ attributes:
         tf_name: transition
         example: true
         exclude_test: true
-  - yang_name: router-id/ROUTER-ID/INTERFACE-NAME/interface-name
-    xpath: router-id/interface-name
-    tf_name: router_id_interface_name
-    optional: true
-    example: GigabitEthernet0/0/0/1
-    exclude_test: true
-  - yang_name: router-id/ROUTER-ID/IP-ADDRESS/ip-address
-    xpath: router-id/ip-address
-    tf_name: router_id_ip_address
-    optional: true
-    example: "192.168.1.1"
-  - yang_name: default-information/originate
-    example: true
-  - yang_name: fast-reroute/delay-interval
-    example: 300
-  - yang_name: fast-reroute/per-prefix/priority-limit
-    example: "critical"
-  - yang_name: fast-reroute/per-prefix/priority-limit-levels/priority-limit-level
-    tf_name: fast_reroute_per_prefix_priority_limit_levels
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-      - yang_name: priority-limit
-        example: "critical"
-  - yang_name: fast-reroute/per-prefix/use-candidate-only
-    example: true
-  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global
-    example: true
-  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level
-    tf_name: fast_reroute_per_prefix_srlg_protection_weighted_global_levels
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list
-    example: "PQ_FILTER"
-    exclude_test: true
-  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level
-    tf_name: fast_reroute_per_prefix_remote_lfa_prefix_list_levels
-    exclude_test: true
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-      - yang_name: prefix-list
-        example: "PQ_FILTER_L1"
-        exclude_test: true
-  - yang_name: fast-reroute/per-prefix/load-sharing/disable
-    example: true
-  - yang_name: fast-reroute/per-prefix/load-sharing/disable-levels/disable-level
-    tf_name: fast_reroute_per_prefix_load_sharing_disable_levels
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/index
-    example: 10
-  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
-    example: 20
-  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index
-    example: 30
-  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
-    example: 40
-  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/index
-    example: 50
-  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/index
-    example: 60
-    exclude_test: true
-  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
-    example: 70
-  - yang_name: fast-reroute/per-link/priority-limit
-    example: "critical"
-  - yang_name: fast-reroute/per-link/priority-limit-levels/priority-limit-level
-    tf_name: fast_reroute_per_link_priority_limit_levels
-    type: List
-    attributes:
-      - yang_name: level-number
-        id: true
-        example: 1
-      - yang_name: priority-limit
-        example: "critical"
-  - yang_name: fast-reroute/per-link/use-candidate-only
-    example: true
-  - yang_name: microloop/avoidance/enable
-    tf_name: microloop_avoidance
-    example: true
-  - yang_name: microloop/avoidance/enable/protected
-    tf_name: microloop_avoidance_protected
-    optional: true
-    example: true
-  - yang_name: microloop/avoidance/enable/segment-routing/route-policy
-    tf_name: microloop_avoidance_segment_routing_route_policy
-    example: "ULOOP_POLICY"
-    exclude_test: true
-  - yang_name: microloop/avoidance/rib-update-delay
-    example: 5000
-  - yang_name: advertise/passive-only
-    example: true
-  - yang_name: advertise/link/attributes
-    example: true
-  - yang_name: mpls/ldp/auto-config
-    example: false
-  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
-    xpath: mpls/traffic-eng/router-id/ipv4-address
-    tf_name: mpls_traffic_eng_router_id_ipv4_address
-    example: 1.2.3.4
-  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
-    xpath: mpls/traffic-eng/router-id/interface-name
-    tf_name: mpls_traffic_eng_router_id_interface_name
-    exclude_test: true
-    example: Loopback0
-  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
-    xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
-    tf_name: mpls_traffic_eng_level_1_2
-    example: true
-  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
-    xpath: mpls/traffic-eng/traffic-eng-level/level-one
-    tf_name: mpls_traffic_eng_level_1
-    example: false
-    exclude_test: true
-  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
-    xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
-    tf_name: mpls_traffic_eng_level_2_only
-    example: true
-    exclude_test: true
   - yang_name: spf-interval/maximum-wait
     example: 5000
   - yang_name: spf-interval/initial-wait
@@ -304,7 +372,7 @@ attributes:
         tf_name: tag
         example: 200
       - yang_name: PREFIX-PRIORITY-HIGH-LEVEL/PREFIXLIST-NAME/prefixlist-name
-        xpath: prefix_list_name
+        xpath: prefixlist-name
         tf_name: prefix_list_name
         example: "HIGH_L1"
         exclude_test: true
@@ -320,15 +388,10 @@ attributes:
         tf_name: tag
         example: 300
       - yang_name: PREFIX-PRIORITY-MEDIUM-LEVEL/PREFIXLIST-NAME/prefixlist-name
-        xpath: prefix_list_name
+        xpath: prefixlist-name
         tf_name: prefix_list_name
         example: "MEDIUM_L1"
         exclude_test: true
-  - yang_name: segment-routing/mpls/enable
-    example: true
-    exclude_test: true
-  - yang_name: segment-routing/mpls/sr-prefer
-    example: true
   - yang_name: maximum-redistributed-prefixes
     tf_name: maximum_redistributed_prefixes
     example: 100
@@ -341,25 +404,298 @@ attributes:
         example: 1
       - yang_name: maximum-redistributed-prefixes
         example: 1000
-  - yang_name: redistribute/isis-processes/isis-process
-    tf_name: redistribute_isis
-    description: "Redistribute ISIS routes"
+  - yang_name: propagate/levels/level
+    tf_name: propagate_levels
     type: List
     attributes:
-      - yang_name: isis-string
-        tf_name: instance_id
+      - yang_name: source-level
         id: true
-        example: "CORE"
-      - yang_name: redistribute-route-level
-        tf_name: level
-        example: "level-2"
-      - yang_name: metric
-        example: 10
+        example: 1
+      - yang_name: destination-level
+        id: true
+        example: 2
       - yang_name: route-policy
         example: "ROUTE_POLICY_1"
-      - yang_name: metric-type
-        example: "internal"
-      - yang_name: down-flag-clear
+  - yang_name: adjacency-check/disable
+    example: true
+  - yang_name: route/source/first-hop
+    example: true
+  - yang_name: attached-bit/receive/ignore
+    example: true
+  - yang_name: attached-bit/send
+    example: "always-set"
+  - yang_name: fast-reroute/delay-interval
+    example: 300
+  - yang_name: fast-reroute/per-prefix/priority-limit
+    example: "critical"
+  - yang_name: fast-reroute/per-prefix/priority-limit-levels/priority-limit-level
+    tf_name: fast_reroute_per_prefix_priority_limit_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority-limit
+        example: "critical"
+  - yang_name: fast-reroute/per-prefix/use-candidate-only
+    example: true
+  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global
+    example: true
+  - yang_name: fast-reroute/per-prefix/srlg-protection/weighted-global-levels/weighted-global-level
+    tf_name: fast_reroute_per_prefix_srlg_protection_weighted_global_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list
+    example: "PQ_FILTER"
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/remote-lfa/prefix-list-levels/prefix-list-level
+    tf_name: fast_reroute_per_prefix_remote_lfa_prefix_list_levels
+    exclude_test: true
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: prefix-list
+        example: "PQ_FILTER_L1"
+        exclude_test: true
+  - yang_name: fast-reroute/per-prefix/load-sharing/disable
+    example: true
+  - yang_name: fast-reroute/per-prefix/load-sharing/disable-levels/disable-level
+    tf_name: fast_reroute_per_prefix_load_sharing_disable_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-prefix/tiebreaker/downstream/index
+    example: 10
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lc-disjoint/index
+    example: 20
+  - yang_name: fast-reroute/per-prefix/tiebreaker/lowest-backup-metric/index
+    example: 30
+  - yang_name: fast-reroute/per-prefix/tiebreaker/node-protecting/index
+    example: 40
+  - yang_name: fast-reroute/per-prefix/tiebreaker/primary-path/index
+    example: 50
+  - yang_name: fast-reroute/per-prefix/tiebreaker/secondary-path/index
+    example: 60
+    exclude_test: true
+  - yang_name: fast-reroute/per-prefix/tiebreaker/srlg-disjoint/index
+    example: 70
+  - yang_name: fast-reroute/per-link/use-candidate-only
+    example: true
+  - yang_name: fast-reroute/per-link/use-candidate-only-levels/use-candidate-only-level
+    tf_name: fast_reroute_per_link_use_candidate_only_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+  - yang_name: fast-reroute/per-link/priority-limit
+    example: "critical"
+  - yang_name: fast-reroute/per-link/priority-limit-levels/priority-limit-level
+    tf_name: fast_reroute_per_link_priority_limit_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: priority-limit
+        example: "critical"
+  - yang_name: default-information/originate
+    example: true
+  - yang_name: default-information/originate/route-policy/text
+    tf_name: default_information_originate_route_policy
+    delete_parent: true
+    example: "ROUTE_POLICY_1"
+  - yang_name: segment-routing/bundle-member-adj-sid
+    tf_name: segment_routing_bundle_member_adj_sid
+    example: true
+  - yang_name: segment-routing/labeled-only
+    example: true
+  - yang_name: segment-routing/protected-adjacency-sid-delay
+    tf_name: segment_routing_protected_adjacency_sid_delay
+    example: 60
+  - yang_name: segment-routing/mpls/enable
+    example: true
+    exclude_test: true
+  - yang_name: segment-routing/mpls/sr-prefer
+    example: true
+  - yang_name: segment-routing/mpls/unlabeled/protection/PROTECTION/PREFIX-LIST/prefix-list
+    xpath: segment-routing/mpls/unlabeled/protection/prefix-list
+    tf_name: segment_routing_mpls_unlabeled_protection_prefix_list
+    exclude_test: true
+    example: PREFIX_LIST_1
+  - yang_name: segment-routing/mpls/unlabeled/protection/PROTECTION/ROUTE-POLICY/route-policy
+    xpath: segment-routing/mpls/unlabeled/protection/route-policy
+    tf_name: segment_routing_mpls_unlabeled_protection_route_policy
+    example: ROUTE_POLICY_1
+  - yang_name: segment-routing/mpls/unlabeled/protection/PROTECTION/DISABLE/disable
+    xpath: segment-routing/mpls/unlabeled/protection/disable
+    tf_name: segment_routing_mpls_unlabeled_protection_disable
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/mpls/prefix-sid-map/receive
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/mpls/prefix-sid-map/receive/disable
+    delete_parent: true
+    example: true
+  - yang_name: segment-routing/mpls/prefix-sid-map/advertise-local
+    exclude_test: true
+    example: true
+  - yang_name: segment-routing/mpls/prefix-sid-map/advertise-local/domain-wide
+    delete_parent: true
+    example: true
+  - yang_name: segment-routing/mpls/connected-prefix-sid-map
+    example: true
+  - yang_name: segment-routing/mpls/connected-prefix-sid-map/addresses/address
+    tf_name: segment_routing_mpls_connected_prefix_sid_map_addresses
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 10.1.1.1
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 32
+      - yang_name: ADDRESS/INDEX/index/index-id
+        xpath: index/index-id
+        tf_name: index_id
+        example: 400
+      - yang_name: ADDRESS/INDEX/index/interface
+        xpath: index/interface
+        tf_name: index_interface
+        example: GigabitEthernet0/0/0/3
+      - yang_name: ADDRESS/INDEX/index/php-disable
+        xpath: index/php-disable
+        tf_name: index_php_disable
+        example: true
+      - yang_name: ADDRESS/INDEX/index/explicit-null
+        xpath: index/explicit-null
+        tf_name: index_explicit_null
+        example: true
+      - yang_name: ADDRESS/ABSOLUTE/absolute/absolute-id
+        xpath: absolute/absolute-id
+        tf_name: absolute_id
+        exclude_test: true
+        example: 16400
+      - yang_name: ADDRESS/ABSOLUTE/absolute/interface
+        xpath: absolute/interface
+        tf_name: absolute_interface
+        exclude_test: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: ADDRESS/ABSOLUTE/absolute/php-disable
+        xpath: absolute/php-disable
+        tf_name: absolute_php_disable
+        exclude_test: true
+        example: true
+      - yang_name: ADDRESS/ABSOLUTE/absolute/explicit-null
+        xpath: absolute/explicit-null
+        tf_name: absolute_explicit_null
+        exclude_test: true
+        example: true
+  - yang_name: segment-routing/mpls/connected-prefix-sid-map/addresses/flex-algo-address
+    tf_name: segment_routing_mpls_connected_prefix_sid_map_flex_algo_addresses
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 10.1.1.2
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 32
+      - yang_name: flex-algo
+        id: true
+        example: 128
+      - yang_name: FLEX-ALGO-ADDRESS/INDEX/index/index-id
+        xpath: index/index-id
+        tf_name: index_id
+        example: 500
+      - yang_name: FLEX-ALGO-ADDRESS/INDEX/index/interface
+        xpath: index/interface
+        tf_name: index_interface
+        example: GigabitEthernet0/0/0/3
+      - yang_name: FLEX-ALGO-ADDRESS/INDEX/index/php-disable
+        xpath: index/php-disable
+        tf_name: index_php_disable
+        example: true
+      - yang_name: FLEX-ALGO-ADDRESS/INDEX/index/explicit-null
+        xpath: index/explicit-null
+        tf_name: index_explicit_null
+        example: true
+      - yang_name: FLEX-ALGO-ADDRESS/ABSOLUTE/absolute/absolute-id
+        xpath: absolute/absolute-id
+        tf_name: absolute_id
+        exclude_test: true
+        example: 16500
+      - yang_name: FLEX-ALGO-ADDRESS/ABSOLUTE/absolute/interface
+        xpath: absolute/interface
+        tf_name: absolute_interface
+        exclude_test: true
+        example: GigabitEthernet0/0/0/3
+      - yang_name: FLEX-ALGO-ADDRESS/ABSOLUTE/absolute/php-disable
+        xpath: absolute/php-disable
+        tf_name: absolute_php_disable
+        exclude_test: true
+        example: true
+      - yang_name: FLEX-ALGO-ADDRESS/ABSOLUTE/absolute/explicit-null
+        xpath: absolute/explicit-null
+        tf_name: absolute_explicit_null
+        exclude_test: true
+        example: true
+  - yang_name: segment-routing/mpls/connected-prefix-sid-map/addresses/strict-spf-address
+    tf_name: segment_routing_mpls_connected_prefix_sid_map_strict_spf_addresses
+    type: List
+    attributes:
+      - yang_name: ip-address
+        id: true
+        example: 10.1.1.3
+      - yang_name: address-prefix
+        tf_name: prefix
+        id: true
+        example: 32
+      - yang_name: STRICT-SPF-ADDRESS/INDEX/index/index-id
+        xpath: index/index-id
+        tf_name: index_id
+        example: 600
+      - yang_name: STRICT-SPF-ADDRESS/INDEX/index/interface
+        xpath: index/interface
+        tf_name: index_interface
+        example: GigabitEthernet0/0/0/3
+      - yang_name: STRICT-SPF-ADDRESS/INDEX/index/php-disable
+        xpath: index/php-disable
+        tf_name: index_php_disable
+        example: true
+      - yang_name: STRICT-SPF-ADDRESS/INDEX/index/explicit-null
+        xpath: index/explicit-null
+        tf_name: index_explicit_null
+        example: true
+      - yang_name: STRICT-SPF-ADDRESS/ABSOLUTE/absolute/absolute-id
+        xpath: absolute/absolute-id
+        tf_name: absolute_id
+        exclude_test: true
+        example: 16600
+      - yang_name: STRICT-SPF-ADDRESS/ABSOLUTE/absolute/interface
+        xpath: absolute/interface
+        tf_name: absolute_interface
+        exclude_test: true
+        example: GigabitEthernet0/0/0/3
+      - yang_name: STRICT-SPF-ADDRESS/ABSOLUTE/absolute/php-disable
+        xpath: absolute/php-disable
+        tf_name: absolute_php_disable
+        exclude_test: true
+        example: true
+      - yang_name: STRICT-SPF-ADDRESS/ABSOLUTE/absolute/explicit-null
+        xpath: absolute/explicit-null
+        tf_name: absolute_explicit_null
+        exclude_test: true
         example: true
   - yang_name: segment-routing/srv6/locators/locator
     tf_name: segment_routing_srv6_locators
@@ -394,6 +730,94 @@ attributes:
             example: 1
           - yang_name: tag
             example: 200
+  - yang_name: partition-detect
+    tf_name: partition_detect
+    example: true
+  - yang_name: partition-detect/tracks/track
+    tf_name: partition_detect_tracks
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: address
+        id: true
+        example: "192.168.3.1"
+      - yang_name: ipv4
+        delete_parent: true
+        example: true
+      - yang_name: ipv6
+        delete_parent: true
+        exclude_test: true
+        example: true
+  - yang_name: partition-detect/external-address-tracks/external-address-track
+    tf_name: partition_detect_external_address_tracks
+    type: List
+    attributes:
+      - yang_name: address
+        tf_name: address
+        id: true
+        example: "192.168.3.2"
+      - yang_name: external-address
+        example: "10.10.10.1"
+  - yang_name: mpls/ldp/auto-config
+    example: false
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/IPV4-ADDRESS/ipv4-address
+    xpath: mpls/traffic-eng/router-id/ipv4-address
+    tf_name: mpls_traffic_eng_router_id_ipv4_address
+    example: 1.2.3.4
+  - yang_name: mpls/traffic-eng/router-id/ROUTER-ID/INTERFACE-NAME/interface-name
+    xpath: mpls/traffic-eng/router-id/interface-name
+    tf_name: mpls_traffic_eng_router_id_interface_name
+    exclude_test: true
+    example: Loopback0
+  - yang_name: mpls/traffic-eng/igp-intact
+    example: true
+  - yang_name: mpls/traffic-eng/multicast-intact
+    example: true
+  - yang_name: mpls/traffic-eng/tunnel/restricted
+    example: true
+  - yang_name: mpls/traffic-eng/tunnel/preferred
+    example: true
+  - yang_name: mpls/traffic-eng/tunnel/metric
+    example: 100
+  - yang_name: mpls/traffic-eng/tunnel/anycast-prefer-igp-cost
+    example: true
+  - yang_name: mpls/traffic-eng/tunnel/metric-levels/metric-level
+    tf_name: mpls_traffic_eng_tunnel_metric_levels
+    type: List
+    attributes:
+      - yang_name: level-number
+        id: true
+        example: 1
+      - yang_name: metric
+        example: 100
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-TWO/level-one-two
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one-two
+    tf_name: mpls_traffic_eng_level_1_2
+    example: true
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE/level-one
+    xpath: mpls/traffic-eng/traffic-eng-level/level-one
+    tf_name: mpls_traffic_eng_level_1
+    example: false
+    exclude_test: true
+  - yang_name: mpls/traffic-eng/traffic-eng-level/TRAFFIC-ENG-LEVEL/LEVEL-ONE-ONLY/level-two-only
+    xpath: mpls/traffic-eng/traffic-eng-level/level-two-only
+    tf_name: mpls_traffic_eng_level_2_only
+    example: true
+    exclude_test: true
+  - yang_name: prefix-unreachable
+    example: true
+  - yang_name: prefix-unreachable/adv-maximum
+    tf_name: prefix_unreachable_adv_maximum
+    example: 60
+  - yang_name: prefix-unreachable/adv-lifetime
+    tf_name: prefix_unreachable_adv_lifetime
+    example: 120
+  - yang_name: prefix-unreachable/adv-metric
+    tf_name: prefix_unreachable_adv_metric
+    example: 4261412865
+  - yang_name: prefix-unreachable/rx-process-enable
+    tf_name: prefix_unreachable_rx_process_enable
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=ROUTE_POLICY_1]
@@ -402,7 +826,31 @@ test_prerequisites:
         value: ROUTE_POLICY_1
       - name: rpl-route-policy
         value: "route-policy ROUTE_POLICY_1\\n  pass\\nend-policy\\n"
+  - path: Cisco-IOS-XR-um-ipv4-prefix-list-cfg:/ipv4/prefix-lists/prefix-list[prefix-list-name=PREFIX_LIST_1]
+    attributes:
+      - name: prefix-list-name
+        value: PREFIX_LIST_1
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permission
+                value: permit
+              - name: prefix
+                value: 10.0.0.0
+              - name: mask
+                value: 255.0.0.0
+    dependencies: [0]
   - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]
     attributes:
       - name: process-id
         value: P1
+    dependencies: [1]
+  - path: Cisco-IOS-XR-um-router-isis-cfg:/router/isis/processes/process[process-id=P1]/address-families/address-family[af-name=ipv4][saf-name=unicast]
+    attributes:
+      - name: segment-routing/mpls/enable
+        value: <NULL>
+    dependencies: [2]

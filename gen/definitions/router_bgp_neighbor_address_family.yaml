@@ -71,10 +71,12 @@ attributes:
   - yang_name: maximum-prefix/maximum-prefix-number
     tf_name: maximum_prefix_limit
     delete_parent: true
+    optional: true
     example: 1248576
   - yang_name: maximum-prefix/threshold-value
     tf_name: maximum_prefix_threshold
     delete_parent: true
+    optional: true
     example: 80
   - yang_name: maximum-prefix/restart
     delete_parent: true

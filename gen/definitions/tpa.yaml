@@ -1,0 +1,90 @@
+---
+name: TPA
+path: Cisco-IOS-XR-um-tpa-cfg:/tpa
+doc_category: System
+default_delete_attributes: true
+test_tags: [TPA]
+attributes:
+  - yang_name: statistics/update-frequency
+    tf_name: statistics_update_frequency
+    minimum_test_value: 60
+    example: 60
+  - yang_name: statistics/disable
+    tf_name: statistics_disable
+    example: true
+    exclude_test: true
+  - yang_name: statistics/max-lpts-events
+    example: 10000000
+  - yang_name: statistics/max-intf-events
+    example: 10000000
+  - yang_name: logging/kim/file-max-size-kb
+    tf_name: logging_file_max_size_kb
+    example: 1024
+  - yang_name: logging/kim/rotation-max
+    tf_name: logging_rotation_max_files
+    example: 10
+  - yang_name: vrfs/vrf
+    tf_name: vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: default
+      - yang_name: address-family/ipv4/update-source/dataports/active-management
+        tf_name: ipv4_update_source_dataports_active_management
+        example: true
+        exclude_test: true
+      - yang_name: address-family/ipv4/update-source/dataports/interface
+        tf_name: ipv4_update_source_dataports
+        example: GigabitEthernet0/0/0/0
+      - yang_name: address-family/ipv4/default-route/mgmt
+        tf_name: ipv4_default_route_mgmt
+        example: true
+        exclude_test: true
+      - yang_name: address-family/ipv6/update-source/dataports/active-management
+        tf_name: ipv6_update_source_dataports_active_management
+        example: true
+        exclude_test: true
+      - yang_name: address-family/ipv6/update-source/dataports/interface
+        tf_name: ipv6_update_source_dataports
+        example: GigabitEthernet0/0/0/0
+      - yang_name: address-family/ipv6/default-route/mgmt
+        tf_name: ipv6_default_route_mgmt
+        example: true
+        exclude_test: true
+      - yang_name: address-family/ipv4/update-source/destinations/destination
+        tf_name: ipv4_update_source_destinations
+        type: List
+        attributes:
+          - yang_name: destination-interface
+            id: true
+            example: MgmtEth0/RP0/CPU0/0
+          - yang_name: source
+            tf_name: source_interface
+            example: GigabitEthernet0/0/0/0
+      - yang_name: address-family/ipv6/update-source/destinations/destination
+        tf_name: ipv6_update_source_destinations
+        type: List
+        attributes:
+          - yang_name: destination-interface
+            id: true
+            example: MgmtEth0/RP0/CPU0/0
+          - yang_name: source
+            tf_name: source_interface
+            example: GigabitEthernet0/0/0/0
+      - yang_name: east-wests/east-west
+        tf_name: east_west_interfaces
+        type: List
+        attributes:
+          - yang_name: east-west-interface
+            tf_name: interface_name
+            id: true
+            example: GigabitEthernet0/0/0/1
+          - yang_name: vrf
+            tf_name: referenced_vrf
+            example: default
+            description: "VRF name (must be the same as tpa vrf_name)"
+          - yang_name: interface
+            tf_name: referenced_interface
+            example: GigabitEthernet0/0/0/1
+            description: "Interface name (must be the same as east_west_interface)"

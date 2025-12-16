@@ -59,6 +59,8 @@ attributes:
     example: 7184
   - yang_name: bundle/coexistence/bob-blb
     example: inherit
+  - yang_name: ipv6/checksum/disable
+    example: true
   - yang_name: interfaces/interface
     tf_name: interfaces
     type: List
@@ -86,5 +88,3 @@ attributes:
         example: 30000
       - yang_name: multiplier
         example: 40
-  - yang_name: ipv6/checksum/disable
-    example: true

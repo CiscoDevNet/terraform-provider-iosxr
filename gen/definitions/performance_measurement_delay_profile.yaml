@@ -1,0 +1,351 @@
+---
+name: Performance Measurement Delay Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/delay-profile
+doc_category: System
+attributes:
+  - yang_name: interfaces/default
+    tf_name: interfaces_default
+    example: true
+  - yang_name: interfaces/default/probe/computation-interval
+    tf_name: interfaces_default_probe_computation_interval
+    minimum_test_value: '"60"'
+    example: 60
+  - yang_name: interfaces/default/probe/tx-interval
+    tf_name: interfaces_default_probe_tx_interval
+    example: 30000
+  - yang_name: interfaces/default/probe/protocol/pm-mpls
+    tf_name: interfaces_default_probe_protocol_pm_mpls
+    example: false
+    exclude_test: true
+  - yang_name: interfaces/default/probe/protocol/twamp-light
+    tf_name: interfaces_default_probe_protocol_twamp_light
+    example: true
+  - yang_name: interfaces/default/probe/tos/traffic-class
+    tf_name: interfaces_default_probe_tos_traffic_class
+    example: 5
+    exclude_test: true
+  - yang_name: interfaces/default/probe/tos/dscp
+    tf_name: interfaces_default_probe_tos_dscp
+    example: 48
+  - yang_name: interfaces/default/probe/measurement-mode/one-way
+    tf_name: interfaces_default_probe_measurement_mode_one_way
+    example: true
+  - yang_name: interfaces/default/probe/measurement-mode/two-way
+    tf_name: interfaces_default_probe_measurement_mode_two_way
+    example: false
+  - yang_name: interfaces/default/advertisement/periodic/disabled
+    tf_name: interfaces_default_advertisement_periodic_disabled
+    example: false
+  - yang_name: interfaces/default/advertisement/periodic/interval
+    tf_name: interfaces_default_advertisement_periodic_interval
+    example: 120
+  - yang_name: interfaces/default/advertisement/periodic/threshold
+    tf_name: interfaces_default_advertisement_periodic_threshold
+    example: 10
+  - yang_name: interfaces/default/advertisement/periodic/minimum-change
+    tf_name: interfaces_default_advertisement_periodic_minimum_change
+    example: 100
+  - yang_name: interfaces/default/advertisement/logging/delay-exceeded
+    tf_name: interfaces_default_advertisement_logging_delay_exceeded
+    example: true
+  - yang_name: interfaces/default/advertisement/accelerated
+    tf_name: interfaces_default_advertisement_accelerated
+    description: "Interface delay profile advertisement accelerated"
+    example: true
+  - yang_name: interfaces/default/advertisement/accelerated/threshold
+    tf_name: interfaces_default_advertisement_accelerated_threshold
+    example: 20
+  - yang_name: interfaces/default/advertisement/accelerated/minimum-change
+    tf_name: interfaces_default_advertisement_accelerated_minimum_change
+    example: 500
+  - yang_name: interfaces/default/advertisement/anomaly-loss/upper-bound
+    tf_name: interfaces_default_advertisement_anomaly_loss_upper_bound
+    example: 50
+  - yang_name: interfaces/default/advertisement/anomaly-loss/lower-bound
+    tf_name: interfaces_default_advertisement_anomaly_loss_lower_bound
+    example: 10
+  - yang_name: sr-policy/default
+    tf_name: sr_policy_default
+    example: true
+  - yang_name: sr-policy/default/probe/computation-interval
+    tf_name: sr_policy_default_probe_computation_interval
+    example: 120
+  - yang_name: sr-policy/default/probe/tx-interval
+    tf_name: sr_policy_default_probe_tx_interval
+    example: 30000
+  - yang_name: sr-policy/default/probe/static-delay
+    tf_name: sr_policy_default_probe_static_delay
+    example: 1000
+  - yang_name: sr-policy/default/probe/sweep/destination/ipv4
+    tf_name: sr_policy_default_probe_sweep_destination_ipv4
+    example: 127.0.0.1
+  - yang_name: sr-policy/default/probe/sweep/destination/range
+    tf_name: sr_policy_default_probe_sweep_destination_range
+    example: 10
+  - yang_name: sr-policy/default/probe/protocol/pm-mpls
+    tf_name: sr_policy_default_probe_protocol_pm_mpls
+    example: false
+    exclude_test: true
+  - yang_name: sr-policy/default/probe/protocol/twamp-light
+    tf_name: sr_policy_default_probe_protocol_twamp_light
+    example: true
+  - yang_name: sr-policy/default/probe/tos/traffic-class
+    tf_name: sr_policy_default_probe_tos_traffic_class
+    example: 5
+    exclude_test: true
+  - yang_name: sr-policy/default/probe/tos/dscp
+    tf_name: sr_policy_default_probe_tos_dscp
+    example: 48
+  - yang_name: sr-policy/default/probe/measurement-mode/one-way
+    tf_name: sr_policy_default_probe_measurement_mode_one_way
+    example: true
+  - yang_name: sr-policy/default/probe/measurement-mode/two-way
+    tf_name: sr_policy_default_probe_measurement_mode_two_way
+    example: false
+  - yang_name: sr-policy/default/probe/measurement-mode/loopback
+    tf_name: sr_policy_default_probe_measurement_mode_loopback
+    example: false
+  - yang_name: sr-policy/default/advertisement/logging/delay-exceeded
+    tf_name: sr_policy_default_advertisement_logging_delay_exceeded
+    example: true
+  - yang_name: sr-policy/default/advertisement/threshold-check/average-delay
+    tf_name: sr_policy_default_advertisement_threshold_check_average_delay
+    example: true
+  - yang_name: sr-policy/default/advertisement/threshold-check/minimum-delay
+    tf_name: sr_policy_default_advertisement_threshold_check_minimum_delay
+    example: false
+  - yang_name: sr-policy/default/advertisement/threshold-check/maximum-delay
+    tf_name: sr_policy_default_advertisement_threshold_check_maximum_delay
+    example: false
+  - yang_name: sr-policy/default/advertisement/periodic/disabled
+    tf_name: sr_policy_default_advertisement_periodic_disabled
+    example: false
+  - yang_name: sr-policy/default/advertisement/periodic/interval
+    tf_name: sr_policy_default_advertisement_periodic_interval
+    example: 120
+  - yang_name: sr-policy/default/advertisement/periodic/threshold
+    tf_name: sr_policy_default_advertisement_periodic_threshold
+    example: 10
+  - yang_name: sr-policy/default/advertisement/periodic/minimum-change
+    tf_name: sr_policy_default_advertisement_periodic_minimum_change
+    example: 100
+  - yang_name: sr-policy/default/advertisement/accelerated
+    tf_name: sr_policy_default_advertisement_accelerated
+    description: "SR Policy delay profile advertisement accelerated"
+    example: true
+  - yang_name: sr-policy/default/advertisement/accelerated/threshold
+    tf_name: sr_policy_default_advertisement_accelerated_threshold
+    example: 20
+  - yang_name: sr-policy/default/advertisement/accelerated/minimum-change
+    tf_name: sr_policy_default_advertisement_accelerated_minimum_change
+    example: 500
+  - yang_name: sr-policy/default/advertisement/anomaly-check/upper-bound
+    tf_name: sr_policy_default_advertisement_anomaly_check_upper_bound
+    example: 10000
+  - yang_name: sr-policy/default/advertisement/anomaly-check/lower-bound
+    tf_name: sr_policy_default_advertisement_anomaly_check_lower_bound
+    example: 100
+  - yang_name: sr-policy/default/advertisement/anomaly-loss/upper-bound
+    tf_name: sr_policy_default_advertisement_anomaly_loss_upper_bound
+    example: 50
+  - yang_name: sr-policy/default/advertisement/anomaly-loss/lower-bound
+    tf_name: sr_policy_default_advertisement_anomaly_loss_lower_bound
+    example: 10
+  - yang_name: endpoint/default
+    tf_name: endpoint_default
+    example: true
+  - yang_name: endpoint/default/probe/tx-interval
+    tf_name: endpoint_default_probe_tx_interval
+    example: 30000
+  - yang_name: endpoint/default/probe/computation-interval
+    tf_name: endpoint_default_probe_computation_interval
+    example: 60
+  - yang_name: endpoint/default/probe/flow-label/explicits
+    tf_name: endpoint_default_probe_flow_label_explicit
+    example: true
+    exclude_test: true
+  - yang_name: endpoint/default/probe/flow-label/explicits/explicit
+    tf_name: endpoint_default_probe_flow_label_explicit_list
+    exclude_example: true
+    exclude_test: true
+  - yang_name: endpoint/default/probe/flow-label/from
+    tf_name: endpoint_default_probe_flow_label_from
+    example: 100
+  - yang_name: endpoint/default/probe/flow-label/to
+    tf_name: endpoint_default_probe_flow_label_to
+    example: 500
+  - yang_name: endpoint/default/probe/flow-label/increment
+    tf_name: endpoint_default_probe_flow_label_increment
+    example: 50
+  - yang_name: endpoint/default/probe/sweep/destination/ipv4
+    tf_name: endpoint_default_probe_sweep_destination_ipv4
+    example: 127.0.0.1
+  - yang_name: endpoint/default/probe/sweep/destination/range
+    tf_name: endpoint_default_probe_sweep_destination_range
+    example: 10
+  - yang_name: endpoint/default/probe/measurement-mode/one-way
+    tf_name: endpoint_default_probe_measurement_mode_one_way
+    example: true
+  - yang_name: endpoint/default/probe/measurement-mode/two-way
+    tf_name: endpoint_default_probe_measurement_mode_two_way
+    example: false
+  - yang_name: endpoint/default/probe/measurement-mode/loopback
+    tf_name: endpoint_default_probe_measurement_mode_loopback
+    example: false
+  - yang_name: endpoint/default/probe/tos/dscp
+    tf_name: endpoint_default_probe_tos_dscp
+    example: 48
+  - yang_name: endpoint/default/advertisement/logging/delay-exceeded
+    tf_name: endpoint_default_advertisement_logging_delay_exceeded
+    example: true
+  - yang_name: endpoint/default/advertisement/threshold-check/average-delay
+    tf_name: endpoint_default_advertisement_threshold_check_average_delay
+    example: true
+  - yang_name: endpoint/default/advertisement/threshold-check/minimum-delay
+    tf_name: endpoint_default_advertisement_threshold_check_minimum_delay
+    example: false
+  - yang_name: endpoint/default/advertisement/threshold-check/maximum-delay
+    tf_name: endpoint_default_advertisement_threshold_check_maximum_delay
+    example: false
+  - yang_name: endpoint/default/advertisement/periodic/disabled
+    tf_name: endpoint_default_advertisement_periodic_disabled
+    example: false
+  - yang_name: endpoint/default/advertisement/periodic/interval
+    tf_name: endpoint_default_advertisement_periodic_interval
+    example: 120
+  - yang_name: endpoint/default/advertisement/periodic/threshold
+    tf_name: endpoint_default_advertisement_periodic_threshold
+    example: 10
+  - yang_name: endpoint/default/advertisement/periodic/minimum-change
+    tf_name: endpoint_default_advertisement_periodic_minimum_change
+    example: 100
+  - yang_name: endpoint/default/advertisement/accelerated
+    tf_name: endpoint_default_advertisement_accelerated
+    description: "Endpoint delay profile advertisement accelerated"
+    example: true
+  - yang_name: endpoint/default/advertisement/accelerated/threshold
+    tf_name: endpoint_default_advertisement_accelerated_threshold
+    example: 20
+  - yang_name: endpoint/default/advertisement/accelerated/minimum-change
+    tf_name: endpoint_default_advertisement_accelerated_minimum_change
+    example: 500
+  - yang_name: endpoint/default/advertisement/anomaly-check/upper-bound
+    tf_name: endpoint_default_advertisement_anomaly_check_upper_bound
+    example: 10000
+  - yang_name: endpoint/default/advertisement/anomaly-check/lower-bound
+    tf_name: endpoint_default_advertisement_anomaly_check_lower_bound
+    example: 100
+  - yang_name: endpoint/default/advertisement/anomaly-loss/upper-bound
+    tf_name: endpoint_default_advertisement_anomaly_loss_upper_bound
+    example: 50
+  - yang_name: names/name
+    tf_name: profiles
+    type: List
+    attributes:
+      - yang_name: profile-name
+        id: true
+        example: DELAY_PROFILE_1
+      - yang_name: probe/computation-interval
+        tf_name: probe_computation_interval
+        example: 60
+      - yang_name: probe/tx-interval
+        tf_name: probe_tx_interval
+        example: 30000
+      - yang_name: probe/static-delay
+        tf_name: probe_static_delay
+        example: 1000
+      - yang_name: probe/sweep/destination/ipv4
+        tf_name: probe_sweep_destination_ipv4
+        example: 127.0.0.1
+      - yang_name: probe/sweep/destination/range
+        tf_name: probe_sweep_destination_range
+        example: 10
+      - yang_name: probe/flow-label/explicits
+        tf_name: probe_flow_label_explicit
+        example: true
+        exclude_test: true
+      - yang_name: probe/flow-label/explicits/explicit
+        tf_name: probe_flow_label_explicit_list
+        exclude_example: true
+        exclude_test: true
+      - yang_name: probe/flow-label/from
+        tf_name: probe_flow_label_from
+        example: 100
+      - yang_name: probe/flow-label/to
+        tf_name: probe_flow_label_to
+        example: 500
+      - yang_name: probe/flow-label/increment
+        tf_name: probe_flow_label_increment
+        example: 50
+      - yang_name: probe/protocol/pm-mpls
+        tf_name: probe_protocol_pm_mpls
+        example: false
+        exclude_test: true
+      - yang_name: probe/protocol/twamp-light
+        tf_name: probe_protocol_twamp_light
+        example: true
+      - yang_name: probe/tos/traffic-class
+        tf_name: probe_tos_traffic_class
+        example: 5
+        exclude_test: true
+      - yang_name: probe/tos/dscp
+        tf_name: probe_tos_dscp
+        example: 48
+      - yang_name: probe/measurement-mode/one-way
+        tf_name: probe_measurement_mode_one_way
+        example: false
+      - yang_name: probe/measurement-mode/two-way
+        tf_name: probe_measurement_mode_two_way
+        example: true
+      - yang_name: probe/measurement-mode/loopback
+        tf_name: probe_measurement_mode_loopback
+        example: false
+      - yang_name: advertisement/logging/delay-exceeded
+        tf_name: advertise_logging_delay_exceeded
+        example: true
+      - yang_name: advertisement/threshold-check/average-delay
+        tf_name: advertise_threshold_check_average_delay
+        example: true
+      - yang_name: advertisement/threshold-check/minimum-delay
+        tf_name: advertise_threshold_check_minimum_delay
+        example: false
+      - yang_name: advertisement/threshold-check/maximum-delay
+        tf_name: advertise_threshold_check_maximum_delay
+        example: false
+      - yang_name: advertisement/periodic/disabled
+        tf_name: advertise_periodic_disabled
+        example: false
+      - yang_name: advertisement/periodic/interval
+        tf_name: advertise_periodic_interval
+        example: 120
+      - yang_name: advertisement/periodic/threshold
+        tf_name: advertise_periodic_threshold
+        example: 10
+      - yang_name: advertisement/periodic/minimum-change
+        tf_name: advertise_periodic_minimum_change
+        example: 100
+      - yang_name: advertisement/accelerated
+        tf_name: advertise_accelerated
+        description: "Delay profile advertisement accelerated"
+        example: true
+      - yang_name: advertisement/accelerated/threshold
+        tf_name: advertise_accelerated_threshold
+        example: 20
+      - yang_name: advertisement/accelerated/minimum-change
+        tf_name: advertise_accelerated_minimum_change
+        example: 500
+      - yang_name: advertisement/anomaly-check/upper-bound
+        tf_name: advertise_anomaly_check_upper_bound
+        example: 10000
+      - yang_name: advertisement/anomaly-check/lower-bound
+        tf_name: advertise_anomaly_check_lower_bound
+        example: 100
+      - yang_name: advertisement/anomaly-loss/upper-bound
+        tf_name: advertise_anomaly_loss_upper_bound
+        example: 50
+      - yang_name: advertisement/anomaly-loss/lower-bound
+        tf_name: advertise_anomaly_loss_lower_bound
+        example: 10
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement

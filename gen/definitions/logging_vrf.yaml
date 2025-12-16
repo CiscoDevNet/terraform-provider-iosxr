@@ -21,16 +21,26 @@ attributes:
         example: 514
       - yang_name: operator
         example: equals
+      - yang_name: facility
+        example: local0
+      - yang_name: ipv4-source-address
+        tf_name: ipv4_source_address
+        example: "1.1.1.2"
   - yang_name: host-ipv6-addresses/host-ipv6-address
     tf_name: host_ipv6_addresses
     type: List
     attributes:
       - yang_name: ipv6-address
         id: true
-        example: 2001::1
+        example: 2001:db8::1
       - yang_name: severity
         example: info
       - yang_name: port
         example: 514
       - yang_name: operator
         example: equals-or-higher
+      - yang_name: facility
+        example: local0
+      - yang_name: ipv6-source-address
+        tf_name: ipv6_source_address
+        example: "2001:db8::2"

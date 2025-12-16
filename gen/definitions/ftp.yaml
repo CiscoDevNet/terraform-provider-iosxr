@@ -1,0 +1,29 @@
+---
+name: FTP
+path: Cisco-IOS-XR-um-ftp-tftp-cfg:/ftp
+doc_category: System
+attributes:
+  - yang_name: client/vrfs/vrf
+    tf_name: client_vrfs
+    minimum_test_value: '["VRF1"]'
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        tf_name: vrf_name
+        id: true
+        minimum_test_value: '"VRF1"'
+        example: VRF1
+      - yang_name: passive
+        example: true
+      - yang_name: source-interface
+        example: Loopback0
+      - yang_name: anonymous-password
+        sensitive: true
+        example: mypassword
+      - yang_name: username
+        minimum_test_value: '"ftpuser"'
+        example: ftpuser
+      - yang_name: password/encrypted
+        tf_name: password
+        sensitive: true
+        example: myencryptedpassword

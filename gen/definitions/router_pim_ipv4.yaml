@@ -1,0 +1,478 @@
+---
+name: Router PIM IPv4
+path: Cisco-IOS-XR-um-router-pim-cfg:/router/pim/address-family/ipv4
+doc_category: PIM
+attributes:
+  - yang_name: rp-addresses/rp-address
+    tf_name: rp_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: access-list
+        example: "RP_ACL"
+      - yang_name: override
+        example: true
+  - yang_name: rp-addresses/bidir/rp-address
+    tf_name: rp_addresses_bidir
+    test_tags: [XRV9K, XRD, NCS]
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.2"
+      - yang_name: access-list
+        example: "BIDIR_ACL"
+      - yang_name: override
+        example: true
+  - yang_name: rp-static-deny
+    example: "DENY_ACL"
+  - yang_name: accept-register
+    example: "REGISTER_ACL"
+  - yang_name: suppress-data-registers
+    example: true
+  - yang_name: register-source
+    minimum_test_value: '"Loopback0"'
+    example: "Loopback0"
+  - yang_name: suppress-rpf-change-prunes
+    example: true
+  - yang_name: neighbor-filter
+    example: "NEIGHBOR_ACL"
+  - yang_name: convergence/rpf-conflict-join-delay
+    example: 5
+  - yang_name: convergence/link-down-prune-delay
+    example: 10
+  - yang_name: spt-threshold/infinity
+    example: true
+  - yang_name: spt-threshold/infinity/group-list
+    example: "SPT_GROUPS"
+  - yang_name: old-register-checksum
+    example: true
+  - yang_name: nsf/lifetime
+    example: 120
+  - yang_name: neighbor-check-on-send/enable
+    tf_name: neighbor_check_on_send
+    example: true
+  - yang_name: neighbor-check-on-recv/enable
+    tf_name: neighbor_check_on_recv
+    example: true
+  - yang_name: hello-interval
+    example: 30
+  - yang_name: mdt-hello-interval
+    example: 60
+  - yang_name: dr-priority
+    example: 100
+  - yang_name: join-prune-interval
+    example: 60
+  - yang_name: join-prune-mtu
+    example: 1500
+  - yang_name: propagation-delay
+    example: 500
+  - yang_name: override-interval
+    example: 2500
+  - yang_name: global/maximum/routes/maximum-routes
+    tf_name: global_maximum_routes
+    optional: true
+    delete_parent: true
+    example: 50000
+  - yang_name: global/maximum/routes/threshold
+    delete_parent: true
+    example: 40000
+  - yang_name: global/maximum/route-interfaces/maximum-route-interfaces
+    optional: true
+    tf_name: global_maximum_route_interfaces
+    delete_parent: true
+    example: 500000
+  - yang_name: global/maximum/route-interfaces/threshold
+    tf_name: global_maximum_route_interfaces_threshold
+    delete_parent: true
+    example: 400000
+  - yang_name: global/maximum/register-states/maximum-register-states
+    tf_name: global_maximum_register_states
+    optional: true
+    delete_parent: true
+    example: 30000
+  - yang_name: global/maximum/register-states/threshold
+    tf_name: global_maximum_register_states_threshold
+    delete_parent: true
+    example: 25000
+  - yang_name: global/maximum/packet-queue/high-priority
+    example: 1048576
+  - yang_name: global/maximum/packet-queue/low-priority
+    example: 524288
+  - yang_name: global/maximum/group-mappings/bsr/maximum-bsr
+    tf_name: global_maximum_group_mappings_bsr
+    optional: true
+    delete_parent: true
+    example: 5000
+  - yang_name: global/maximum/group-mappings/bsr/threshold
+    tf_name: global_maximum_group_mappings_bsr_threshold
+    delete_parent: true
+    example: 4000
+  - yang_name: global/maximum/group-mappings/autorp/maximum-autorp
+    tf_name: global_maximum_group_mappings_autorp
+    optional: true
+    delete_parent: true
+    example: 5000
+  - yang_name: global/maximum/group-mappings/autorp/threshold
+    tf_name: global_maximum_group_mappings_autorp_threshold
+    delete_parent: true
+    example: 4000
+  - yang_name: global/maximum/bsr/crp-cache/maximum-crp-cache
+    tf_name: global_maximum_bsr_crp_cache_maximum
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: global/maximum/bsr/crp-cache/threshold
+    tf_name: global_maximum_bsr_crp_cache_threshold
+    delete_parent: true
+    example: 800
+  - yang_name: maximum/routes/maximum-routes
+    tf_name: maximum_routes
+    optional: true
+    delete_parent: true
+    example: 50000
+  - yang_name: maximum/routes/threshold
+    delete_parent: true
+    example: 40000
+  - yang_name: maximum/route-interfaces/maximum-route-interfaces
+    optional: true
+    tf_name: maximum_route_interfaces
+    delete_parent: true
+    example: 500000
+  - yang_name: maximum/route-interfaces/threshold
+    tf_name: maximum_route_interfaces_threshold
+    delete_parent: true
+    example: 400000
+  - yang_name: maximum/register-states/maximum-register-states
+    tf_name: maximum_register_states
+    optional: true
+    delete_parent: true
+    example: 30000
+  - yang_name: maximum/register-states/threshold
+    tf_name: maximum_register_states_threshold
+    delete_parent: true
+    example: 25000
+  - yang_name: maximum/group-mappings/bsr/maximum-bsr
+    tf_name: maximum_group_mappings_bsr
+    optional: true
+    delete_parent: true
+    example: 5000
+  - yang_name: maximum/group-mappings/bsr/threshold
+    tf_name: maximum_group_mappings_bsr_threshold
+    delete_parent: true
+    example: 4000
+  - yang_name: maximum/group-mappings/autorp/maximum-autorp
+    tf_name: maximum_group_mappings_autorp
+    optional: true
+    delete_parent: true
+    example: 5000
+  - yang_name: maximum/group-mappings/autorp/threshold
+    tf_name: maximum_group_mappings_autorp_threshold
+    delete_parent: true
+    example: 4000
+  - yang_name: maximum/bsr/crp-cache/maximum-crp-cache
+    tf_name: maximum_bsr_crp_cache_maximum
+    optional: true
+    delete_parent: true
+    example: 1000
+  - yang_name: maximum/bsr/crp-cache/threshold
+    tf_name: maximum_bsr_crp_cache_threshold
+    delete_parent: true
+    example: 800
+  - yang_name: log/neighbor/changes
+    example: true
+  - yang_name: rpf-vector/allow-ebgp
+    delete_parent: true
+    example: true
+  - yang_name: rpf-vector/disable-ibgp
+    delete_parent: true
+    example: true
+  - yang_name: rpf-vector/use-standard-encoding
+    tf_name: rpf_vector_standard_encoding
+    delete_parent: true
+    example: true
+  - yang_name: rpf-vector-injects/inject
+    tf_name: rpf_vector_injects
+    type: List
+    attributes:
+      - yang_name: source-address
+        tf_name: source_address
+        id: true
+        example: "10.1.1.100"
+      - yang_name: masklen
+        tf_name: source_mask
+        id: true
+        example: 24
+      - yang_name: rpf-vector
+        tf_name: rpf_vectors
+        example: "10.1.1.1"
+  - yang_name: explicit-rpf-vector/injects/inject
+    tf_name: explicit_rpf_vector_injects
+    type: List
+    attributes:
+      - yang_name: source-address
+        tf_name: source_address
+        id: true
+        example: "10.2.1.100"
+      - yang_name: masklen
+        tf_name: source_mask
+        id: true
+        example: 24
+      - yang_name: rpf-vector
+        tf_name: rpf_vectors
+        example: "10.2.1.1"
+  - yang_name: rpf/topology/route-policy
+    example: "PIM_POLICY"
+  - yang_name: mdt/neighbor-filter
+    tf_name: mdt_neighbor_filter
+    example: "MDT_NEIGHBOR_ACL"
+  - yang_name: mdt/data/switchover-interval
+    example: 30
+  - yang_name: mdt/data/announce-interval
+    example: 60
+  # Error on read, DDTS to be filed
+  # - yang_name: mdt/data/max-aggregation
+  #   example: 1000
+  - yang_name: mdt/c-multicast-routing/type
+    tf_name: mdt_c_multicast_type
+    optional: true
+    delete_parent: true
+    example: "pim"
+  - yang_name: mdt/c-multicast-routing/announce-pim-join-tlv
+    tf_name: mdt_c_multicast_announce_pim_join_tlv
+    delete_parent: true
+    example: true
+  - yang_name: mdt/c-multicast-routing/shared-tree-prune
+    tf_name: mdt_c_multicast_shared_tree_prune
+    delete_parent: true
+    example: true
+  - yang_name: mdt/c-multicast-routing/suppress-shared-tree-join
+    tf_name: mdt_c_multicast_suppress_shared_tree_join
+    delete_parent: true
+    example: true
+  - yang_name: mdt/c-multicast-routing/suppress-pim-data-signaling
+    tf_name: mdt_c_multicast_suppress_pim_data_signaling
+    delete_parent: true
+    example: true
+  - yang_name: mdt/c-multicast-routing/mdt-hello/enable
+    tf_name: mdt_c_multicast_hello_enable
+    delete_parent: true
+    exclude_test: true
+    example: false
+  - yang_name: mdt/c-multicast-routing/shared-tree-prune-delay
+    tf_name: mdt_c_multicast_shared_tree_prune_delay
+    delete_parent: true
+    example: 3
+  - yang_name: mdt/c-multicast-routing/source-tree-prune-delay
+    tf_name: mdt_c_multicast_source_tree_prune_delay
+    delete_parent: true
+    example: 3
+  - yang_name: mdt/c-multicast-routing/migration/route-policy
+    tf_name: mdt_c_multicast_migration_route_policy
+    delete_grandparent: true
+    example: "PIM_POLICY"
+  - yang_name: allow-rp
+    example: true
+  - yang_name: allow-rp/rp-list
+    tf_name: allow_rp_list
+    example: "ALLOW_RP_ACL"
+  - yang_name: allow-rp/group-list
+    tf_name: allow_rp_group_list
+    example: "ALLOW_GROUP_ACL"
+  - yang_name: sg-expiry-timer/sg-expiry-timer-value
+    tf_name: sg_expiry_timer
+    optional: true
+    delete_parent: true
+    example: 180
+  - yang_name: sg-expiry-timer/sg-list
+    tf_name: sg_list
+    delete_parent: true
+    example: "SG_LIST"
+  - yang_name: ssm/range
+    tf_name: ssm_range
+    example: "SSM_RANGE"
+  - yang_name: ssm/disable
+    tf_name: ssm_disable
+    example: false
+    exclude_test: true
+  - yang_name: ssm/allow-override
+    tf_name: ssm_allow_override
+    example: true
+  - yang_name: rpf-redirect/route-policy
+    example: "PIM_POLICY"
+  - yang_name: multipath
+    # Device does not remove parent `multipath` container, DDTS to be filed
+    example: true
+    exclude_test: true
+  - yang_name: multipath/hash/source
+    # Device does not remove parent `multipath` container, DDTS to be filed
+    tf_name: multipath_hash_source
+    delete_parent: true
+    example: true
+    exclude_test: true
+  - yang_name: multipath/hash/source-nexthop
+    # Device does not remove parent `multipath` container, DDTS to be filed
+    tf_name: multipath_hash_source_nexthop
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: multipath/hash/source-group
+    # Device does not remove parent `multipath` container, DDTS to be filed
+    tf_name: multipath_hash_source_group
+    delete_parent: true
+    exclude_test: true
+    example: true
+  - yang_name: auto-rp/mapping-agent/interface-name
+    tf_name: auto_rp_mapping_agent_interface
+    optional: true
+    delete_parent: true
+    example: "Loopback0"
+  - yang_name: auto-rp/mapping-agent/scope
+    optional: true
+    delete_parent: true
+    example: 16
+  - yang_name: auto-rp/mapping-agent/interval
+    optional: true
+    delete_parent: true
+    example: 60
+  - yang_name: auto-rp/candidate-rps/candidate-rp
+    tf_name: auto_rp_candidate_rps
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "Loopback0"
+      - yang_name: scope
+        example: 16
+      - yang_name: group-list
+        example: "CANDIDATE_RP_ACL"
+      - yang_name: interval
+        example: 60
+      - yang_name: bidir/scope
+        tf_name: bidir_scope
+        test_tags: [XRV9K, XRD, NCS]
+        example: 16
+      - yang_name: bidir/group-list
+        tf_name: bidir_group_list
+        test_tags: [XRV9K, XRD, NCS]
+        example: "CANDIDATE_RP_ACL"
+      - yang_name: bidir/interval
+        tf_name: bidir_interval
+        test_tags: [XRV9K, XRD, NCS]
+        example: 60
+  - yang_name: auto-rp/listen/disable
+    example: true
+  - yang_name: auto-rp/relay/vrfs/vrf
+    tf_name: auto_rp_relay_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: "VRF1"
+      - yang_name: listen
+        example: true
+  - yang_name: bsr/candidate-bsr/address
+    tf_name: bsr_candidate_bsr_address
+    optional: true
+    delete_parent: true
+    example: "10.1.1.12"
+  - yang_name: bsr/candidate-bsr/hash-mask-len
+    optional: true
+    delete_parent: true
+    example: 30
+  - yang_name: bsr/candidate-bsr/priority
+    optional: true
+    delete_parent: true
+    example: 100
+  - yang_name: bsr/candidate-rps/candidate-rp
+    tf_name: bsr_candidate_rps
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.13"
+      - yang_name: group-list
+        example: "BSR_RP_ACL"
+      - yang_name: priority
+        example: 192
+      - yang_name: interval
+        example: 60
+      - yang_name: bidir/group-list
+        tf_name: bidir_group_list
+        test_tags: [XRV9K, XRD, NCS]
+        example: "BSR_RP_ACL"
+      - yang_name: bidir/priority
+        tf_name: bidir_priority
+        test_tags: [XRV9K, XRD, NCS]
+        example: 192
+      - yang_name: bidir/interval
+        tf_name: bidir_interval
+        test_tags: [XRV9K, XRD, NCS]
+        example: 60
+  - yang_name: bsr/relay/vrfs/vrf
+    tf_name: bsr_relay_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: "VRF1"
+      - yang_name: listen
+        example: true
+  - yang_name: interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: "GigabitEthernet0/0/0/1"
+      - yang_name: enable
+        example: true
+      - yang_name: disable
+        exclude_test: true
+        example: false
+      - yang_name: dr-priority
+        example: 100
+      - yang_name: hello-interval
+        example: 30
+      - yang_name: join-prune-interval
+        example: 60
+      - yang_name: join-prune-mtu
+        example: 1500
+      - yang_name: propagation-delay
+        example: 500
+      - yang_name: override-interval
+        example: 2500
+      - yang_name: neighbor-filter
+        example: "NEIGHBOR_ACL"
+      - yang_name: maximum/route-interfaces/maximum-route-interfaces
+        tf_name: maximum_route_interfaces
+        delete_parent: true
+        example: 10000
+      - yang_name: maximum/route-interfaces/threshold
+        delete_parent: true
+        example: 8000
+      - yang_name: maximum/route-interfaces/access-list
+        delete_parent: true
+        example: "INTF_MAX_ROUTES_ACL"
+      - yang_name: bfd/multiplier
+        example: 3
+      - yang_name: bfd/minimum-interval
+        example: 150
+      - yang_name: bfd/fast-detect
+        example: true
+      - yang_name: bsr-border
+        example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies
+    lists:
+      - name: route-policy
+        key: route-policy-name
+        items:
+          - attributes:
+              - name: route-policy-name
+                value: PIM_POLICY
+              - name: rpl-route-policy
+                value: "route-policy PIM_POLICY\\n  pass\\nend-policy\\n"

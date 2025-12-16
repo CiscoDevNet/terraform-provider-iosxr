@@ -1,0 +1,132 @@
+---
+name: Performance Measurement Liveness Profile
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/liveness-profile
+doc_category: System
+attributes:
+  - yang_name: sr-policy/default
+    tf_name: sr_policy_default
+    example: true
+  - yang_name: sr-policy/default/liveness-detection/multiplier
+    tf_name: sr_policy_default_liveness_detection_multiplier
+    example: 5
+  - yang_name: sr-policy/default/probe/tx-interval
+    tf_name: sr_policy_default_probe_tx_interval
+    example: 30000
+    minimum_test_value: '"30000"'
+  - yang_name: sr-policy/default/probe/flow-label/explicits
+    tf_name: sr_policy_default_probe_flow_label_explicit
+    example: true
+    exclude_test: true
+  - yang_name: sr-policy/default/probe/flow-label/explicits/explicit
+    tf_name: sr_policy_default_probe_flow_label_explicit_list
+    exclude_example: true
+    exclude_test: true
+  - yang_name: sr-policy/default/probe/flow-label/from
+    tf_name: sr_policy_default_probe_flow_label_from
+    example: 100
+  - yang_name: sr-policy/default/probe/flow-label/to
+    tf_name: sr_policy_default_probe_flow_label_to
+    example: 500
+  - yang_name: sr-policy/default/probe/flow-label/increment
+    tf_name: sr_policy_default_probe_flow_label_increment
+    example: 50
+  - yang_name: sr-policy/default/probe/sweep/destination/ipv4
+    tf_name: sr_policy_default_probe_sweep_destination_ipv4
+    example: 127.0.0.1
+  - yang_name: sr-policy/default/probe/sweep/destination/range
+    tf_name: sr_policy_default_probe_sweep_destination_range
+    example: 10
+  - yang_name: sr-policy/default/probe/tos/dscp
+    tf_name: sr_policy_default_probe_tos_dscp
+    example: 48
+  - yang_name: sr-policy/default/npu-offload
+    tf_name: sr_policy_default_npu_offload
+    example: true
+    exclude_test: true
+  - yang_name: endpoint/default
+    tf_name: endpoint_default
+    example: true
+  - yang_name: endpoint/default/probe/tx-interval
+    tf_name: endpoint_default_probe_tx_interval
+    example: 30000
+  - yang_name: endpoint/default/probe/flow-label/explicits
+    tf_name: endpoint_default_probe_flow_label_explicit
+    example: true
+    exclude_test: true
+  - yang_name: endpoint/default/probe/flow-label/explicits/explicit
+    tf_name: endpoint_default_probe_flow_label_explicit_list
+    exclude_example: true
+    exclude_test: true
+  - yang_name: endpoint/default/probe/flow-label/from
+    tf_name: endpoint_default_probe_flow_label_from
+    example: 100
+  - yang_name: endpoint/default/probe/flow-label/to
+    tf_name: endpoint_default_probe_flow_label_to
+    example: 500
+  - yang_name: endpoint/default/probe/flow-label/increment
+    tf_name: endpoint_default_probe_flow_label_increment
+    example: 50
+  - yang_name: endpoint/default/probe/sweep/destination/ipv4
+    tf_name: endpoint_default_probe_sweep_destination_ipv4
+    example: 127.0.0.1
+  - yang_name: endpoint/default/probe/sweep/destination/range
+    tf_name: endpoint_default_probe_sweep_destination_range
+    example: 10
+  - yang_name: endpoint/default/probe/tos/dscp
+    tf_name: endpoint_default_probe_tos_dscp
+    example: 48
+  - yang_name: endpoint/default/liveness-detection/multiplier
+    tf_name: endpoint_default_liveness_detection_multiplier
+    example: 5
+  - yang_name: endpoint/default/liveness-detection/logging/state-change
+    tf_name: endpoint_default_liveness_detection_logging_state_change
+    example: true
+  - yang_name: names/name
+    tf_name: profiles
+    type: List
+    attributes:
+      - yang_name: profile-name
+        id: true
+        example: LIVENESS_PROFILE_1
+      - yang_name: liveness-detection/multiplier
+        tf_name: liveness_detection_multiplier
+        example: 5
+      - yang_name: liveness-detection/logging/state-change
+        tf_name: liveness_detection_logging_state_change
+        example: true
+      - yang_name: probe/tx-interval
+        tf_name: probe_tx_interval
+        example: 30000
+      - yang_name: probe/flow-label/explicits
+        tf_name: probe_flow_label_explicit
+        example: true
+        exclude_test: true
+      - yang_name: probe/flow-label/explicits/explicit
+        tf_name: probe_flow_label_explicit_list
+        exclude_example: true
+        exclude_test: true
+      - yang_name: probe/flow-label/from
+        tf_name: probe_flow_label_from
+        example: 100
+      - yang_name: probe/flow-label/to
+        tf_name: probe_flow_label_to
+        example: 500
+      - yang_name: probe/flow-label/increment
+        tf_name: probe_flow_label_increment
+        example: 50
+      - yang_name: probe/sweep/destination/ipv4
+        tf_name: probe_sweep_destination_ipv4
+        example: 127.0.0.1
+      - yang_name: probe/sweep/destination/range
+        tf_name: probe_sweep_destination_range
+        example: 10
+      - yang_name: probe/tos/dscp
+        tf_name: probe_tos_dscp
+        example: 48
+      - yang_name: npu-offload
+        tf_name: npu_offload
+        example: true
+        exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement

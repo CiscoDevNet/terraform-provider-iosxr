@@ -1,0 +1,182 @@
+---
+name: L2VPN Xconnect Group
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=%s]
+doc_category: L2VPN
+attributes:
+  - yang_name: group-name
+    example: P2P
+  - yang_name: p2ps/p2p
+    tf_name: p2ps
+    type: List
+    attributes:
+      - yang_name: p2p-xconnect-name
+        id: true
+        example: XC
+      - yang_name: description
+        example: My P2P Description
+      - yang_name: interfaces/interface
+        tf_name: interfaces
+        type: List
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: Bundle-Ether11
+      - yang_name: interworking/ipv4
+        test_tags: [XRD, NCS]
+        example: true
+      - yang_name: interworking/ethernet
+        test_tags: [XRD, NCS]
+        example: true
+      - yang_name: backup/interface
+        tf_name: backup_interfaces
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: interface-name
+            id: true
+            example: GigabitEthernet0/0/0/2
+      - yang_name: neighbor/ipv4s/ipv4
+        tf_name: ipv4_neighbors
+        type: List
+        #exclude_test: true
+        attributes:
+          - yang_name: address
+            id: true
+            example: 1.1.1.1
+          - yang_name: pw-id
+            id: true
+            example: 1
+          - yang_name: pw-class
+            example: PW_CLASS_1
+          - yang_name: bandwidth
+            example: 1000000000
+          - yang_name: backup/neighbors/neighbor
+            tf_name: backup_neighbors
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: address
+                id: true
+                example: 1.1.1.2
+              - yang_name: pw-id
+                id: true
+                example: 2
+              - yang_name: pw-class
+                example: PW_CLASS_1
+              - yang_name: mpls/static/label/local
+                example: 1000
+              - yang_name: mpls/static/label/remote
+                example: 1001
+          - yang_name: mpls/static/label/local
+            example: 1002
+          - yang_name: mpls/static/label/remote
+            example: 1003
+          - yang_name: tag-impose/vlan
+            exclude_test: true
+            example: 100
+      - yang_name: neighbor/ipv6s/ipv6
+        tf_name: ipv6_neighbors
+        test_tags: [XRD]
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: address
+            id: true
+            example: 2001:db8:1::1
+          - yang_name: pw-id
+            id: true
+            example: 3
+          - yang_name: pw-class
+            example: PW_CLASS_2
+          - yang_name: backup/neighbors/neighbor
+            tf_name: backup_neighbors
+            type: List
+            exclude_test: true
+            attributes:
+              - yang_name: address
+                id: true
+                example: 1.2.3.6
+              - yang_name: pw-id
+                id: true
+                example: 4
+              - yang_name: pw-class
+                example: PW_CLASS_2
+              - yang_name: mpls/static/label/local
+                example: 2000
+              - yang_name: mpls/static/label/remote
+                example: 2001
+          - yang_name: mpls/static/label/local
+            example: 2002
+          - yang_name: mpls/static/label/remote
+            example: 2003
+          - yang_name: tag-impose/vlan
+            exclude_test: true
+            example: 200
+          - yang_name: source/ipv6-address
+            example: 2001:db8:1::3
+      - yang_name: neighbor/evpn/evi/targets/target
+        tf_name: evpn_target_neighbors
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 3000
+          - yang_name: remote-ac-id
+            id: true
+            example: 4000
+          - yang_name: source
+            id: true
+            example: 3001
+          - yang_name: pw-class
+            example: PW_CLASS_3
+      - yang_name: neighbor/evpn/evi/services/service
+        tf_name: evpn_service_neighbors
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 5000
+          - yang_name: service-id
+            id: true
+            example: 6000
+          - yang_name: pw-class
+            example: PW_CLASS_4
+      - yang_name: neighbor/evpn/evi/segment-routing-targets/target
+        tf_name: evpn_target_neighbors_segment_routing
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 7000
+          - yang_name: remote-ac-id
+            id: true
+            example: 8000
+          - yang_name: source
+            id: true
+            example: 7001
+          - yang_name: segment-routing/srv6/locator
+            example: LOC12
+      - yang_name: neighbor/evpn/evi/segment-routing-services/service
+        tf_name: evpn_service_neighbors_segment_routing
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: vpn-id
+            id: true
+            example: 9000
+          - yang_name: service-id
+            id: true
+            example: 10000
+          - yang_name: segment-routing/srv6/locator
+            example: LOC13
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/xconnect/groups/group[group-name=P2P]
+    attributes:
+      - name: group-name
+        value: P2P
+    dependencies: [0]

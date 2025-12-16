@@ -10,7 +10,20 @@ attributes:
     example: true
   - yang_name: oam/echo/reply-mode/control-channel/allow-reverse-lsp
     example: true
+  - yang_name: oam/echo/revision/one
+    exclude_test: true
+    example: true
+  - yang_name: oam/echo/revision/two
+    exclude_test: true
+    example: true
+  - yang_name: oam/echo/revision/three
+    exclude_test: true
+    example: true
+  - yang_name: oam/echo/revision/four
+    example: true
   - yang_name: oam/dpm/pps
     example: 10
   - yang_name: oam/dpm/interval
     example: 60
+  - yang_name: oam/dpm/downstream-ecmp-faults
+    example: true

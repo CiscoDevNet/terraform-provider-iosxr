@@ -1,0 +1,71 @@
+---
+name: Router MLD
+path: Cisco-IOS-XR-um-router-mld-cfg:/router/mld
+doc_category: MLD
+attributes:
+  - yang_name: nsf/lifetime
+    example: 300
+  - yang_name: robustness-variable
+    example: 5
+  - yang_name: maximum/groups
+    example: 50000
+  - yang_name: maximum/groups-per-interface/maximum-number
+    tf_name: maximum_groups_per_interface
+    optional: true
+    delete_parent: true
+    example: 25000
+  - yang_name: maximum/groups-per-interface/threshold
+    tf_name: maximum_groups_per_interface_threshold
+    delete_parent: true
+    example: 20000
+  - yang_name: maximum/groups-per-interface/access-list
+    tf_name: maximum_groups_per_interface_acl
+    delete_parent: true
+    example: "MLD_ACL"
+  - yang_name: version
+    minimum_test_value: '"2"'
+    example: 2
+  - yang_name: query-interval
+    example: 125
+  - yang_name: query-timeout
+    example: 255
+  - yang_name: query-max-response-time
+    example: 10
+  - yang_name: explicit-tracking
+    example: true
+  - yang_name: explicit-tracking/access-list
+    tf_name: explicit_tracking_acl
+    example: "MLD_ACL"
+  - yang_name: explicit-tracking/disable
+    tf_name: explicit_tracking_disable
+    exclude_test: true
+    example: true
+  - yang_name: access-group
+    example: "MLD_ACL"
+  - yang_name: ssm/map/statics/static
+    tf_name: ssm_map_statics
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::1"
+      - yang_name: access-list
+        example: "SSM_ACL"
+  - yang_name: ssm/map/query/dns
+    tf_name: ssm_map_query_dns
+    example: true
+  - yang_name: missed-packets/gen-query
+    tf_name: missed_packets_gen_query
+    example: 5000
+  - yang_name: missed-packets/grp-spec-query
+    tf_name: missed_packets_grp_spec_query
+    example: 5000
+  - yang_name: missed-packets/ssm-query
+    tf_name: missed_packets_ssm_query
+    example: 5000
+  - yang_name: missed-packets/member-report
+    tf_name: missed_packets_member_report
+    example: 5000
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-mld-cfg:/router/mld

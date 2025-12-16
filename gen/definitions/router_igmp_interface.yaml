@@ -1,0 +1,179 @@
+---
+name: Router IGMP Interface
+path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp/interfaces/interface[interface-name=%s]
+doc_category: IGMP
+attributes:
+  - yang_name: interface-name
+    example: "GigabitEthernet0/0/0/1"
+  - yang_name: version
+    example: 3
+  - yang_name: router/enable
+    tf_name: router_enable
+    minimum_test_value: true
+    example: true
+  - yang_name: router/disable
+    tf_name: router_disable
+    exclude_test: true
+    example: true
+  - yang_name: dvmrp-enable
+    example: true
+  - yang_name: query-interval
+    example: 125
+  - yang_name: query-timeout
+    example: 255
+  - yang_name: query-max-response-time
+    example: 10
+  - yang_name: explicit-tracking/enable
+    tf_name: explicit_tracking_enable
+    example: true
+  - yang_name: explicit-tracking/disable
+    tf_name: explicit_tracking_disable
+    exclude_test: true
+    example: true
+  - yang_name: explicit-tracking/access-list
+    tf_name: explicit_tracking_acl
+    example: "IGMP_ACL"
+  - yang_name: access-group
+    example: "IGMP_ACL"
+  - yang_name: maximum/groups-per-interface/maximum-number
+    tf_name: maximum_groups_per_interface
+    optional: true
+    delete_parent: true
+    example: 25000
+  - yang_name: maximum/groups-per-interface/threshold
+    tf_name: maximum_groups_per_interface_threshold
+    delete_parent: true
+    example: 20000
+  - yang_name: maximum/groups-per-interface/access-list
+    tf_name: maximum_groups_per_interface_acl
+    delete_parent: true
+    example: "IGMP_ACL"
+  - yang_name: static-groups/group-address
+    tf_name: static_groups
+    type: List
+    attributes:
+      - yang_name: group-address
+        id: true
+        example: "239.1.1.1"
+      - yang_name: group-address-only
+        tf_name: group_address_only
+        example: true
+      - yang_name: group-address-only/suppress-reports
+        tf_name: suppress_reports
+        example: true
+      - yang_name: group-address-inc-mask/inc-mask
+        tf_name: group_masks
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: group-mask-address
+            tf_name: group_inc_mask
+            id: true
+            example: "0.0.0.1"
+          - yang_name: group-address-count
+            tf_name: group_count
+            example: 10
+          - yang_name: suppress-reports
+            example: true
+      - yang_name: group-address-source-address/source-address
+        tf_name: source_addresses
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: source-address
+            tf_name: source_ip
+            id: true
+            example: "10.1.1.1"
+          - yang_name: suppress-reports
+            example: true
+      - yang_name: group-address-inc-mask-source-address/inc-mask
+        tf_name: group_masks_source_addresses
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: group-mask-address
+            tf_name: group_inc_mask
+            id: true
+            example: "0.0.0.1"
+          - yang_name: source-address
+            tf_name: source_ip
+            id: true
+            example: "10.1.1.1"
+          - yang_name: group-address-count
+            tf_name: group_count
+            example: 10
+          - yang_name: suppress-reports
+            example: true
+      # Device returns wrong container in reply, DDTS to be filed.
+      # - yang_name: group-address-source-address-inc-mask/inc-mask
+      #   tf_name: source_masks
+      #   type: List
+      #   exclude_test: true
+      #   attributes:
+      #     - yang_name: source-address
+      #       tf_name: source_ip
+      #       id: true
+      #       example: "10.1.1.1"
+      #     - yang_name: source-mask-address
+      #       tf_name: source_inc_mask
+      #       id: true
+      #       example: "0.0.0.1"
+      #     - yang_name: source-address-count
+      #       tf_name: source_count
+      #       example: 10
+      #     - yang_name: suppress-reports
+      #       example: true
+      # Device returns wrong container in reply, DDTS to be filed.
+      # - yang_name: group-inc-mask-source-inc-mask/inc-mask
+      #   tf_name: group_masks_source_masks
+      #   type: List
+      #   exclude_test: true
+      #   attributes:
+      #     - yang_name: group-mask-address
+      #       tf_name: group_inc_mask
+      #       id: true
+      #       example: "0.0.0.1"
+      #     - yang_name: source-address
+      #       tf_name: source_ip
+      #       id: true
+      #       example: "10.1.1.1"
+      #     - yang_name: source-mask-address
+      #       tf_name: source_inc_mask
+      #       id: true
+      #       example: "0.0.0.1"
+      #     - yang_name: group-address-count
+      #       tf_name: group_count
+      #       example: 10
+      #     - yang_name: source-address-count
+      #       tf_name: source_count
+      #       example: 10
+      #     - yang_name: suppress-reports
+      #       example: true
+  - yang_name: join-groups/join-group
+    tf_name: join_groups
+    type: List
+    attributes:
+      - yang_name: group-address
+        id: true
+        example: "239.1.1.100"
+      - yang_name: group-address-only
+        exclude_test: true
+        example: true
+      - yang_name: source-addresses
+        tf_name: source_addresses
+        type: List
+        attributes:
+          - yang_name: source-address
+            tf_name: source_ip
+            id: true
+            example: "10.1.1.1"
+          - yang_name: include
+            description: "Include only the following source address"
+            example: true
+          - yang_name: exclude
+            description: "Exclude only the following source address"
+            exclude_test: true
+            example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp

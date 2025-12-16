@@ -1,0 +1,267 @@
+---
+name: L2VPN Bridge Group Bridge Domain VFI
+path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=%s]/bridge-domains/bridge-domain[bridge-domain-name=%s]/vfis/vfi[vfi-name=%s]
+doc_category: L2VPN
+test_tags: [XRD, NCS, C8000]
+attributes:
+  - yang_name: group-name
+    tf_name: bridge_group_name
+    example: BG123
+  - yang_name: bridge-domain-name
+    example: BD123
+  - yang_name: vfi-name
+    id: true
+    example: VFI1
+  - yang_name: vpn-id
+    example: 100
+  - yang_name: shutdown
+    example: true
+  - yang_name: autodiscovery/bgp
+    example: true
+  - yang_name: autodiscovery/bgp/rd/auto
+    exclude_test: true
+    example: true
+  - yang_name: autodiscovery/bgp/rd/two-byte-as-number
+    tf_name: autodiscovery_bgp_rd_two_byte_as_number
+    exclude_test: true
+    example: 65000
+  - yang_name: autodiscovery/bgp/rd/two-byte-as-assigned-number
+    tf_name: autodiscovery_bgp_rd_two_byte_as_index
+    exclude_test: true
+    example: 1
+  - yang_name: autodiscovery/bgp/rd/four-byte-as-number
+    tf_name: autodiscovery_bgp_rd_four_byte_as_number
+    example: 65536
+  - yang_name: autodiscovery/bgp/rd/four-byte-as-assigned-number
+    tf_name: autodiscovery_bgp_rd_four_byte_as_index
+    example: 1
+  - yang_name: autodiscovery/bgp/rd/ipv4-address
+    tf_name: autodiscovery_bgp_rd_ipv4_address
+    exclude_test: true
+    example: 10.0.0.1
+  - yang_name: autodiscovery/bgp/rd/ipv4-address-assigned-number
+    tf_name: autodiscovery_bgp_rd_ipv4_address_index
+    exclude_test: true
+    example: 1
+  - yang_name: autodiscovery/bgp/route-target/import/two-byte-as-rts/two-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_import_two_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65000
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/import/four-byte-as-rts/four-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_import_four_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65536
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/import/ipv4-address-rts/ipv4-address-rt
+    tf_name: autodiscovery_bgp_route_target_import_ipv4_address_format
+    type: List
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 10.0.0.1
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/export/two-byte-as-rts/two-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_export_two_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65000
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/export/four-byte-as-rts/four-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_export_four_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65536
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/export/ipv4-address-rts/ipv4-address-rt
+    tf_name: autodiscovery_bgp_route_target_export_ipv4_address_format
+    type: List
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 10.0.0.1
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/two-byte-as-rts/two-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_two_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65000
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/four-byte-as-rts/four-byte-as-rt
+    tf_name: autodiscovery_bgp_route_target_four_byte_as_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 65536
+      - yang_name: assigned-number
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/route-target/ipv4-address-rts/ipv4-address-rt
+    tf_name: autodiscovery_bgp_route_target_ipv4_address_format
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 10.0.0.1
+      - yang_name: assigned-number
+        tf_name: index
+        id: true
+        example: 100
+  - yang_name: autodiscovery/bgp/control-word
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp
+    test_tags: [C8000]
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ve-id
+    test_tags: [C8000]
+    example: 100
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/ve-range
+    test_tags: [C8000]
+    example: 50
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/transmit
+    test_tags: [C8000]
+    exclude_test: true
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/receive
+    test_tags: [C8000]
+    exclude_test: true
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/both
+    test_tags: [C8000]
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/bgp/load-balancing/flow-label/static
+    test_tags: [C8000]
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp
+    test_tags: [NCS]
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-number
+    tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_two_byte_as_number
+    test_tags: [NCS]
+    exclude_test: true
+    example: 65000
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/two-byte-as-assigned-number
+    tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_two_byte_as_format
+    test_tags: [NCS]
+    exclude_test: true
+    example: 1
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address
+    tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_ipv4_address
+    test_tags: [NCS]
+    example: 10.0.0.1
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/ipv4-address-assigned-number
+    tf_name: autodiscovery_bgp_signaling_protocol_ldp_vpls_id_ipv4_address_index
+    test_tags: [NCS]
+    example: 1
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/transmit
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/receive
+    test_tags: [NCS]
+    exclude_test: true
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/both
+    test_tags: [NCS]
+    example: true
+  - yang_name: autodiscovery/bgp/signaling-protocol/ldp/vpls-id/load-balancing/flow-label/static
+    test_tags: [NCS]
+    example: true
+  - yang_name: autodiscovery/bgp/table-policy
+    exclude_test: true
+    example: BGP_TABLE_POLICY
+  - yang_name: autodiscovery/bgp/route-policy/export
+    exclude_test: true
+    example: ROUTE_POLICY_1
+  - yang_name: multicast/p2mp
+    example: true
+  - yang_name: multicast/p2mp/transport/rsvp-te
+    example: true
+  - yang_name: multicast/p2mp/transport/rsvp-te/attribute-set/p2mp-te
+    example: TE_ATTRIBUTE_SET_1
+  - yang_name: multicast/p2mp/signaling-protocol/bgp
+    example: true
+  - yang_name: neighbors/neighbor
+    tf_name: neighbors
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.1.1
+      - yang_name: pw-id
+        id: true
+        example: 1000
+      - yang_name: static-mac-addresses/static-mac-address
+        tf_name: static_mac_addresses
+        type: List
+        attributes:
+          - yang_name: mac-address
+            id: true
+            example: aa:bb:cc:dd:ee:01
+      - yang_name: mpls/static/label/local
+        example: 16001
+      - yang_name: mpls/static/label/remote
+        example: 17001
+      - yang_name: pw-class
+        example: PW_CLASS_1
+      - yang_name: dhcp/ipv4/snoop/profile
+        tf_name: dhcp_ipv4_snooping_profile
+        test_tags: [NCS]
+        example: DHCP_PROFILE
+      - yang_name: dhcp/ipv4/none
+        test_tags: [NCS]
+        exclude_test: true
+        example: true
+      - yang_name: igmp/snooping/profile
+        test_tags: [NCS]
+        example: IGMP_PROFILE
+      - yang_name: mld/snooping/profile
+        test_tags: [NCS]
+        example: MLD_PROFILE
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]
+    attributes:
+      - name: group-name
+        value: BG123
+    dependencies: [0]
+  - path: Cisco-IOS-XR-um-l2vpn-cfg:/l2vpn/bridge/groups/group[group-name=BG123]/bridge-domains/bridge-domain[bridge-domain-name=BD123]
+    attributes:
+      - name: bridge-domain-name
+        value: BD123
+    dependencies: [1]

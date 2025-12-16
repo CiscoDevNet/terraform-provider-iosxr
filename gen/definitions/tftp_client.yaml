@@ -1,0 +1,24 @@
+---
+name: TFTP Client
+path: Cisco-IOS-XR-um-ftp-tftp-cfg:/tftp-fs
+doc_category: System
+attributes:
+  - yang_name: client/vrfs/vrf
+    tf_name: client_vrfs
+    minimum_test_value: '["VRF1"]'
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        tf_name: vrf_name
+        id: true
+        minimum_test_value: '"VRF1"'
+        example: VRF1
+      - yang_name: source-interface
+        minimum_test_value: '"Loopback0"'
+        example: Loopback0
+      - yang_name: retries
+        example: 10
+      - yang_name: timeout
+        example: 30
+      - yang_name: dscp
+        example: default

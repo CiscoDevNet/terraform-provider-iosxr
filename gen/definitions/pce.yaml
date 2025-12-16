@@ -6,8 +6,7 @@ attributes:
   - yang_name: address/ipv4
     example: 77.77.77.1
   - yang_name: address/ipv6
-    example: 1050:0000:0000:0000:0005:0600:300c:326b
-    exclude_test: true
+    example: 2001:db8::1
   - yang_name: state-sync/ipv4s/ipv4
     tf_name: state_sync_ipv4s
     type: List
@@ -15,12 +14,344 @@ attributes:
       - yang_name: address
         id: true
         example: 100.100.100.11
-  - yang_name: peer-filter/ipv4/access-list
-    example: Accesslist1
+  - yang_name: state-sync/ipv6s/ipv6
+    tf_name: state_sync_ipv6s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001:db8::2
+  - yang_name: tcp-buffer/size
+    minimum_test_value: 256000
+    example: 256000
+  - yang_name: password/encrypted
+    sensitive: true
+    write_only: true
+    exclude_test: true
+    example: 00141215174C04140B
+  - yang_name: tcp-ao/key-chain-name
+    tf_name: tcp_ao_keychain_name
+    optional: true
+    delete_parent: true
+    example: KEY_CHAIN_1
+  - yang_name: tcp-ao/include-tcp-options
+    delete_parent: true
+    example: true
+  - yang_name: tcp-ao/accept-ao-mismatch-connection
+    delete_parent: true
+    example: true
+  - yang_name: disjoint-path/maximum-attempts
+    example: 5
+  - yang_name: disjoint-path/group-ids/group-id
+    tf_name: disjoint_path_group_ids
+    type: List
+    attributes:
+      - yang_name: group-id
+        id: true
+        example: 10
+        # link disjointness
+      - yang_name: type/link/enable
+        tf_name: link_disjoint
+        example: true
+      - yang_name: type/link/strict
+        tf_name: link_disjoint_strict
+        example: true
+      - yang_name: type/link/lsp/one/pcc/address-type
+        tf_name: link_disjoint_lsp_one_pcc_address_type
+        example: ipv4
+      - yang_name: type/link/lsp/one/pcc/ip-address
+        tf_name: link_disjoint_lsp_one_pcc_ip_address
+        example: 100.100.100.10
+      - yang_name: type/link/lsp/one/pcc/lsp-name
+        tf_name: link_disjoint_lsp_one_pcc_lsp_name
+        example: LSP_10
+      - yang_name: type/link/lsp/one/pcc/shortest-path
+        tf_name: link_disjoint_lsp_one_pcc_shortest_path
+        example: true
+      - yang_name: type/link/lsp/one/pcc/exclude-srlg
+        tf_name: link_disjoint_lsp_one_pcc_exclude_srlg
+        example: 10
+      - yang_name: type/link/lsp/two/pcc/address-type
+        tf_name: link_disjoint_lsp_two_pcc_address_type
+        example: ipv4
+      - yang_name: type/link/lsp/two/pcc/ip-address
+        tf_name: link_disjoint_lsp_two_pcc_ip_address
+        example: 100.100.100.11
+      - yang_name: type/link/lsp/two/pcc/lsp-name
+        tf_name: link_disjoint_lsp_two_pcc_lsp_name
+        example: LSP_11
+      - yang_name: type/link/lsp/two/pcc/exclude-srlg
+        tf_name: link_disjoint_lsp_two_pcc_exclude_srlg
+        example: 11
+      - yang_name: type/link/sub-ids/sub-id
+        tf_name: link_disjoint_sub_ids
+        type: List
+        attributes:
+          - yang_name: sub-id
+            id: true
+            example: 12
+          - yang_name: strict
+            example: true
+          - yang_name: lsp/one/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/one/pcc/ip-address
+            example: 100.100.100.12
+          - yang_name: lsp/one/pcc/lsp-name
+            example: LSP_12
+          - yang_name: lsp/one/pcc/shortest-path
+            example: true
+          - yang_name: lsp/one/pcc/exclude-srlg
+            example: 12
+          - yang_name: lsp/two/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/two/pcc/ip-address
+            example: 200.200.200.13
+          - yang_name: lsp/two/pcc/lsp-name
+            example: LSP_13
+          - yang_name: lsp/two/pcc/exclude-srlg
+            example: 13
+        # node disjointness
+      - yang_name: type/node/enable
+        tf_name: node_disjoint
+        example: true
+      - yang_name: type/node/strict
+        tf_name: node_disjoint_strict
+        example: true
+      - yang_name: type/node/lsp/one/pcc/address-type
+        tf_name: node_disjoint_lsp_one_pcc_address_type
+        example: ipv4
+      - yang_name: type/node/lsp/one/pcc/ip-address
+        tf_name: node_disjoint_lsp_one_pcc_ip_address
+        example: 100.100.100.14
+      - yang_name: type/node/lsp/one/pcc/lsp-name
+        tf_name: node_disjoint_lsp_one_pcc_lsp_name
+        example: LSP_14
+      - yang_name: type/node/lsp/one/pcc/shortest-path
+        tf_name: node_disjoint_lsp_one_pcc_shortest_path
+        example: true
+      - yang_name: type/node/lsp/one/pcc/exclude-srlg
+        tf_name: node_disjoint_lsp_one_pcc_exclude_srlg
+        example: 14
+      - yang_name: type/node/lsp/two/pcc/address-type
+        tf_name: node_disjoint_lsp_two_pcc_address_type
+        example: ipv4
+      - yang_name: type/node/lsp/two/pcc/ip-address
+        tf_name: node_disjoint_lsp_two_pcc_ip_address
+        example: 100.100.100.15
+      - yang_name: type/node/lsp/two/pcc/lsp-name
+        tf_name: node_disjoint_lsp_two_pcc_lsp_name
+        example: LSP_15
+      - yang_name: type/node/lsp/two/pcc/exclude-srlg
+        tf_name: node_disjoint_lsp_two_pcc_exclude_srlg
+        example: 15
+      - yang_name: type/node/sub-ids/sub-id
+        tf_name: node_disjoint_sub_ids
+        type: List
+        attributes:
+          - yang_name: sub-id
+            id: true
+            example: 16
+          - yang_name: strict
+            example: true
+          - yang_name: lsp/one/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/one/pcc/ip-address
+            example: 100.100.100.16
+          - yang_name: lsp/one/pcc/lsp-name
+            example: LSP_16
+          - yang_name: lsp/one/pcc/shortest-path
+            example: true
+          - yang_name: lsp/one/pcc/exclude-srlg
+            example: 16
+          - yang_name: lsp/two/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/two/pcc/ip-address
+            example: 100.100.100.17
+          - yang_name: lsp/two/pcc/lsp-name
+            example: LSP_17
+          - yang_name: lsp/two/pcc/exclude-srlg
+            example: 17
+        # srlg disjointness
+      - yang_name: type/srlg/enable
+        tf_name: srlg_disjoint
+        example: true
+      - yang_name: type/srlg/strict
+        tf_name: srlg_disjoint_strict
+        example: true
+      - yang_name: type/srlg/lsp/one/pcc/address-type
+        tf_name: srlg_disjoint_lsp_one_pcc_address_type
+        example: ipv4
+      - yang_name: type/srlg/lsp/one/pcc/ip-address
+        tf_name: srlg_disjoint_lsp_one_pcc_ip_address
+        example: 100.100.100.18
+      - yang_name: type/srlg/lsp/one/pcc/lsp-name
+        tf_name: srlg_disjoint_lsp_one_pcc_lsp_name
+        example: LSP_18
+      - yang_name: type/srlg/lsp/one/pcc/shortest-path
+        tf_name: srlg_disjoint_lsp_one_pcc_shortest_path
+        example: true
+      - yang_name: type/srlg/lsp/one/pcc/exclude-srlg
+        tf_name: srlg_disjoint_lsp_one_pcc_exclude_srlg
+        example: 18
+      - yang_name: type/srlg/lsp/two/pcc/address-type
+        tf_name: srlg_disjoint_lsp_two_pcc_address_type
+        example: ipv4
+      - yang_name: type/srlg/lsp/two/pcc/ip-address
+        tf_name: srlg_disjoint_lsp_two_pcc_ip_address
+        example: 100.100.100.19
+      - yang_name: type/srlg/lsp/two/pcc/lsp-name
+        tf_name: srlg_disjoint_lsp_two_pcc_lsp_name
+        example: LSP_19
+      - yang_name: type/srlg/lsp/two/pcc/exclude-srlg
+        tf_name: srlg_disjoint_lsp_two_pcc_exclude_srlg
+        example: 19
+      - yang_name: type/srlg/sub-ids/sub-id
+        tf_name: srlg_disjoint_sub_ids
+        type: List
+        attributes:
+          - yang_name: sub-id
+            id: true
+            example: 20
+          - yang_name: strict
+            example: true
+          - yang_name: lsp/one/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/one/pcc/ip-address
+            example: 100.100.100.20
+          - yang_name: lsp/one/pcc/lsp-name
+            example: LSP_20
+          - yang_name: lsp/one/pcc/shortest-path
+            example: true
+          - yang_name: lsp/one/pcc/exclude-srlg
+            example: 20
+          - yang_name: lsp/two/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/two/pcc/ip-address
+            example: 100.100.100.21
+          - yang_name: lsp/two/pcc/lsp-name
+            example: LSP_21
+          - yang_name: lsp/two/pcc/exclude-srlg
+            example: 21
+        # srlg-node disjointness
+      - yang_name: type/srlg-node/enable
+        tf_name: srlg_node_disjoint
+        example: true
+      - yang_name: type/srlg-node/strict
+        tf_name: srlg_node_disjoint_strict
+        example: true
+      - yang_name: type/srlg-node/lsp/one/pcc/address-type
+        tf_name: srlg_node_disjoint_lsp_one_pcc_address_type
+        example: ipv4
+      - yang_name: type/srlg-node/lsp/one/pcc/ip-address
+        tf_name: srlg_node_disjoint_lsp_one_pcc_ip_address
+        example: 100.100.100.22
+      - yang_name: type/srlg-node/lsp/one/pcc/lsp-name
+        tf_name: srlg_node_disjoint_lsp_one_pcc_lsp_name
+        example: LSP_22
+      - yang_name: type/srlg-node/lsp/one/pcc/shortest-path
+        tf_name: srlg_node_disjoint_lsp_one_pcc_shortest_path
+        example: true
+      - yang_name: type/srlg-node/lsp/one/pcc/exclude-srlg
+        tf_name: srlg_node_disjoint_lsp_one_pcc_exclude_srlg
+        example: 22
+      - yang_name: type/srlg-node/lsp/two/pcc/address-type
+        tf_name: srlg_node_disjoint_lsp_two_pcc_address_type
+        example: ipv4
+      - yang_name: type/srlg-node/lsp/two/pcc/ip-address
+        tf_name: srlg_node_disjoint_lsp_two_pcc_ip_address
+        example: 100.100.100.23
+      - yang_name: type/srlg-node/lsp/two/pcc/lsp-name
+        tf_name: srlg_node_disjoint_lsp_two_pcc_lsp_name
+        example: LSP_23
+      - yang_name: type/srlg-node/lsp/two/pcc/exclude-srlg
+        tf_name: srlg_node_disjoint_lsp_two_pcc_exclude_srlg
+        example: 23
+      - yang_name: type/srlg-node/sub-ids/sub-id
+        tf_name: srlg_node_disjoint_sub_ids
+        type: List
+        attributes:
+          - yang_name: sub-id
+            id: true
+            example: 24
+          - yang_name: strict
+            example: true
+          - yang_name: lsp/one/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/one/pcc/ip-address
+            example: 100.100.100.24
+          - yang_name: lsp/one/pcc/lsp-name
+            example: LSP_24
+          - yang_name: lsp/one/pcc/shortest-path
+            example: true
+          - yang_name: lsp/one/pcc/exclude-srlg
+            example: 24
+          - yang_name: lsp/two/pcc/address-type
+            example: ipv4
+          - yang_name: lsp/two/pcc/ip-address
+            example: 100.100.100.25
+          - yang_name: lsp/two/pcc/lsp-name
+            example: LSP_25
+          - yang_name: lsp/two/pcc/exclude-srlg
+            example: 25
+  - yang_name: peer/ipv4s/ipv4
+    tf_name: peer_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 200.200.200.10
+      - yang_name: password/encrypted
+        sensitive: true
+        write_only: true
+        example: 00071A150754
+        exclude_test: true
+      - yang_name: tcp-ao/key-chain-name
+        tf_name: tcp_ao_keychain_name
+        optional: true
+        delete_parent: true
+        example: KEY_CHAIN_1
+      - yang_name: tcp-ao/include-tcp-options
+        delete_parent: true
+        example: true
+      - yang_name: tcp-ao/accept-ao-mismatch-connection
+        delete_parent: true
+        example: true
+  - yang_name: peer/ipv6s/ipv6
+    tf_name: peer_ipv6s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 2001:db8::10
+      - yang_name: password/encrypted
+        sensitive: true
+        write_only: true
+        example: 00071A150754
+        exclude_test: true
+      - yang_name: tcp-ao/key-chain-name
+        tf_name: tcp_ao_keychain_name
+        optional: true
+        delete_parent: true
+        example: KEY_CHAIN_1
+      - yang_name: tcp-ao/include-tcp-options
+        delete_parent: true
+        example: true
+      - yang_name: tcp-ao/accept-ao-mismatch-connection
+        delete_parent: true
+        example: true
+  - yang_name: netconf/ssh/user
+    example: netconf-user
+  - yang_name: netconf/ssh/password/encrypted
+    tf_name: netconf_ssh_password_encrypted
+    sensitive: true
+    write_only: true
+    example: 00071A150754
   - yang_name: api/authentication/digest
     example: true
   - yang_name: api/sibling/ipv4
     example: 100.100.100.2
+  - yang_name: api/vrf
+    example: VRF1
   - yang_name: api/users/user
     tf_name: api_users
     type: List
@@ -29,4 +360,212 @@ attributes:
         id: true
         example: rest-user
       - yang_name: password/encrypted
+        sensitive: true
+        write_only: true
         example: 00141215174C04140B
+  - yang_name: api/ipv4/address
+    example: 100.100.100.3
+  - yang_name: api/ipv6/address
+    example: 2001:db8::1
+  - yang_name: timers/reoptimization
+    example: 600
+  - yang_name: timers/keepalive
+    example: 60
+  - yang_name: timers/minimum-peer-keepalive
+    example: 40
+  - yang_name: timers/peer-zombie
+    example: 120
+  - yang_name: timers/init-verify-restart
+    example: 80
+  - yang_name: timers/init-verify-switchover
+    example: 120
+  - yang_name: timers/init-verify-startup
+    example: 360
+  - yang_name: backoff/ratio
+    example: 10
+  - yang_name: backoff/difference
+    example: 10
+  - yang_name: backoff/threshold
+    example: 10
+  - yang_name: logging/no-path
+    example: true
+  - yang_name: logging/fallback
+    example: true
+  - yang_name: logging/pcep/pcerr-received
+    example: true
+  - yang_name: logging/pcep/api/send-queue-congestion/disable
+    example: true
+  - yang_name: logging/pcep/disjointness-status
+    example: true
+  - yang_name: segment-routing/strict-sid-only
+    example: true
+  - yang_name: segment-routing/traffic-eng/affinity/bit-map/affinity-colors/affinity-color
+    tf_name: srte_affinity_bitmaps
+    type: List
+    attributes:
+      - yang_name: affinity-color-name
+        id: true
+        example: COLOR_1
+      - yang_name: affinity-attribute-bit
+        tf_name: affinity_bit_position
+        example: 1
+  - yang_name: segment-routing/traffic-eng/segment-lists/segment-list
+    tf_name: srte_segment_lists
+    type: List
+    attributes:
+      - yang_name: segment-list-name
+        id: true
+        example: SEGMENT_LIST_1
+      - yang_name: indexes/index
+        tf_name: indexes
+        type: List
+        attributes:
+          - yang_name: index-number
+            id: true
+            example: 1
+          - yang_name: mpls/label
+            example: 16100
+          - yang_name: mpls/adjacency
+            exclude_test: true
+            example: 100.100.100.2
+  - yang_name: segment-routing/traffic-eng/cspf/anycast-sid-inclusion
+    tf_name: srte_cspf_anycast_sid_inclusion
+    example: true
+  - yang_name: segment-routing/traffic-eng/cspf/sr-native
+    tf_name: srte_cspf_sr_native
+    example: true
+  - yang_name: segment-routing/traffic-eng/cspf/sr-native/force
+    tf_name: srte_cspf_sr_native_force
+    example: true
+  - yang_name: segment-routing/traffic-eng/p2mp/endpoint-sets/endpoint-set
+    tf_name: srte_p2mp_endpoint_sets
+    type: List
+    attributes:
+      - yang_name: endpoint-set-name
+        id: true
+        example: ENDPOINT_SET_1
+      - yang_name: ipv4s/ipv4
+        tf_name: ipv4s
+        type: List
+        attributes:
+          - yang_name: address
+            id: true
+            example: 100.100.100.30
+  - yang_name: segment-routing/traffic-eng/p2mp/policies/policy
+    tf_name: srte_p2mp_policies
+    type: List
+    attributes:
+      - yang_name: policy-name
+        id: true
+        example: P2MP_POLICY_1
+      - yang_name: color
+        example: 100
+      - yang_name: endpoint-set
+        example: ENDPOINT_SET_1
+      - yang_name: source/ipv4
+        tf_name: source_ipv4
+        example: 100.100.100.1
+      - yang_name: shutdown
+        example: false
+      - yang_name: fast-reroute/lfa
+        tf_name: fast_reroute_lfa
+        example: true
+      - yang_name: treesid/mpls
+        tf_name: treesid_mpls
+        example: 24200
+      - yang_name: candidate-paths/constraints/affinity/include-any/affinity-colors/affinity-color
+        tf_name: candidate_paths_constraints_affinity_include_any_colors
+        type: List
+        attributes:
+          - yang_name: affinity-color-name
+            id: true
+            example: COLOR_1
+      - yang_name: candidate-paths/constraints/affinity/include-all/affinity-colors/affinity-color
+        tf_name: candidate_paths_constraints_affinity_include_all_colors
+        type: List
+        attributes:
+          - yang_name: affinity-color-name
+            id: true
+            example: COLOR_2
+      - yang_name: candidate-paths/constraints/affinity/exclude/affinity-colors/affinity-color
+        tf_name: candidate_paths_constraints_affinity_exclude_colors
+        type: List
+        attributes:
+          - yang_name: affinity-color-name
+            id: true
+            example: COLOR_3
+      - yang_name: candidate-paths/preferences/preference
+        tf_name: candidate_paths_preferences
+        type: List
+        attributes:
+          - yang_name: preference-id
+            id: true
+            example: 100
+          - yang_name: dynamic
+            example: true
+          - yang_name: dynamic/metric/type/te
+            tf_name: dynamic_metric_type_te
+            exclude_test: true
+            example: true
+          - yang_name: dynamic/metric/type/igp
+            tf_name: dynamic_metric_type_igp
+            exclude_test: true
+            example: true
+          - yang_name: dynamic/metric/type/latency
+            tf_name: dynamic_metric_type_latency
+            example: true
+          - yang_name: dynamic/metric/type/hopcount
+            tf_name: dynamic_metric_type_hopcount
+            exclude_test: true
+            example: true
+  - yang_name: segment-routing/traffic-eng/p2mp/timers/reoptimization
+    tf_name: srte_p2mp_timers_reoptimization
+    example: 300
+  - yang_name: segment-routing/traffic-eng/p2mp/timers/cleanup
+    tf_name: srte_p2mp_timers_cleanup
+    example: 60
+  - yang_name: segment-routing/traffic-eng/p2mp/label-range/min
+    tf_name: srte_p2mp_label_range_min
+    example: 16000
+  - yang_name: segment-routing/traffic-eng/p2mp/label-range/max
+    tf_name: srte_p2mp_label_range_max
+    example: 17000
+  - yang_name: segment-routing/traffic-eng/p2mp/multipath-disable
+    tf_name: srte_p2mp_multipath_disable
+    example: true
+  - yang_name: segment-routing/traffic-eng/p2mp/fast-reroute/lfa
+    tf_name: srte_p2mp_fast_reroute_lfa
+    example: true
+  - yang_name: segment-routing/traffic-eng/p2mp/frr-node-set/from/ipv4s/ipv4
+    tf_name: srte_p2mp_frr_node_set_from_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 100.100.100.31
+  - yang_name: segment-routing/traffic-eng/p2mp/frr-node-set/to/ipv4s/ipv4
+    tf_name: srte_p2mp_frr_node_set_to_ipv4s
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 100.100.100.32
+  - yang_name: peer-filter/ipv4/access-list
+    example: ACL_1
+  - yang_name: hierarchical/underlay/enable-all
+    example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-key-chain-cfg:/key/chains/chain[key-chain-name=KEY_CHAIN_1]
+    attributes:
+      - name: key-chain-name
+        value: KEY_CHAIN_1
+    lists:
+      - name: keys/key
+        key: key-name
+        items:
+          - attributes:
+              - name: key-name
+                value: 1
+              - name: key-string/password
+                value: 00071A150754

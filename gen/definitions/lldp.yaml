@@ -9,7 +9,37 @@ attributes:
     example: 6
   - yang_name: reinit
     example: 3
+  - yang_name: system-name
+    example: "Router1"
+  - yang_name: system-description
+    example: "Router1-Description"
+  - yang_name: chassis-id
+    example: "FOC22439P72"
+  - yang_name: chassis-id-type/chassis-component
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/interface-alias
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/port-component
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/mac-address
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/network-address
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/interface-name
+    example: true
+    exclude_test: true
+  - yang_name: chassis-id-type/local
+    example: true
   - yang_name: subinterfaces/enable
+    example: true
+  - yang_name: subinterfaces-tagged
+    tf_name: subinterfaces_tagged
+    test_tags: [NCS]
     example: true
   - yang_name: management/enable
     test_tags: [NCS, C8000]

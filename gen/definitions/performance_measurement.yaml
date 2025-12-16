@@ -1,0 +1,119 @@
+---
+name: Performance Measurement
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement
+doc_category: System
+attributes:
+  - yang_name: source-address/ipv4
+    tf_name: source_address_ipv4
+    example: 10.1.1.1
+  - yang_name: source-address/ipv6
+    tf_name: source_address_ipv6
+    example: 2001:db8::1
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/querier-dst-port
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_querier_dst_port
+    example: 862
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/querier-src-port
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_querier_src_port
+    example: 10000
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/ipv4/timestamp1/label
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_ipv4_timestamp1_label
+    example: 1000
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/ipv4/timestamp2/label
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_ipv4_timestamp2_label
+    example: 2000
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/ipv6/timestamp1/label
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_ipv6_timestamp1_label
+    example: 1500
+  - yang_name: protocol/twamp-light/measurement/delay/unauthenticated/ipv6/timestamp2/label
+    tf_name: protocol_twamp_light_measurement_delay_unauthenticated_ipv6_timestamp2_label
+    example: 2500
+  - yang_name: protocol/twamp-light/measurement/delay/responder/allow-querier/addresses/ipv4-prefixes/ipv4
+    tf_name: protocol_twamp_light_measurement_delay_responder_allow_querier_ipv4_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.0.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: protocol/twamp-light/measurement/delay/responder/allow-querier/addresses/ipv4-addresses/ipv4
+    tf_name: protocol_twamp_light_measurement_delay_responder_allow_querier_ipv4_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.1.1.100
+  - yang_name: protocol/twamp-light/measurement/delay/responder/allow-querier/addresses/ipv6-prefixes/ipv6
+    tf_name: protocol_twamp_light_measurement_delay_responder_allow_querier_ipv6_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: protocol/twamp-light/measurement/delay/responder/allow-querier/addresses/ipv6-addresses/ipv6
+    tf_name: protocol_twamp_light_measurement_delay_responder_allow_querier_ipv6_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::100"
+  - yang_name: protocol/twamp-light/measurement/delay/querier/allow-responder/addresses/ipv4-prefixess/ipv4
+    tf_name: protocol_twamp_light_measurement_delay_querier_allow_responder_ipv4_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.2.0.0
+      - yang_name: length
+        id: true
+        example: 24
+  - yang_name: protocol/twamp-light/measurement/delay/querier/allow-responder/addresses/ipv4-addresses/ipv4
+    tf_name: protocol_twamp_light_measurement_delay_querier_allow_responder_ipv4_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: 10.2.1.100
+  - yang_name: protocol/twamp-light/measurement/delay/querier/allow-responder/addresses/ipv6-prefixes/ipv6
+    tf_name: protocol_twamp_light_measurement_delay_querier_allow_responder_ipv6_prefixes
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:2::"
+      - yang_name: length
+        id: true
+        example: 64
+  - yang_name: protocol/twamp-light/measurement/delay/querier/allow-responder/addresses/ipv6-addresses/ipv6
+    tf_name: protocol_twamp_light_measurement_delay_querier_allow_responder_ipv6_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::100"
+  - yang_name: path-tracing
+    test_tags: [XRV9K, NCS, C8000]
+    example: true
+  - yang_name: path-tracing/timestamp/template/st0
+    tf_name: path_tracing_timestamp_template_st0
+    test_tags: [XRV9K]
+    example: true
+  - yang_name: path-tracing/timestamp/template/st1
+    tf_name: path_tracing_timestamp_template_st1
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true
+  - yang_name: path-tracing/timestamp/template/st2
+    tf_name: path_tracing_timestamp_template_st2
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true
+  - yang_name: path-tracing/timestamp/template/st3
+    tf_name: path_tracing_timestamp_template_st3
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true

@@ -7,23 +7,113 @@ attributes:
   - yang_name: class-map-name
     id: true
     example: TEST
+  - yang_name: match-all
+    exclude_test: true
+    example: true
   - yang_name: match-any
     example: true
     default_value: true
   - yang_name: description
     example: description1
+  - yang_name: match/cos/value
+    tf_name: match_cos
+    exclude_test: true
+    example: "5"
+  - yang_name: match/destination-address/ipv4/address-prefix
+    tf_name: match_destination_address_ipv4
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.0"
+      - yang_name: netmask
+        id: true
+        example: 24
+    # New
+  - yang_name: match/destination-address/ipv6/address-prefix
+    tf_name: match_destination_address_ipv6
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: prefix-length
+        id: true
+        example: 64
+  - yang_name: match/destination-address/mac
+    tf_name: match_destination_mac
+    exclude_test: true
+    example: "0011.2233.4455"
+  - yang_name: match/destination-port/port-number
+    tf_name: match_destination_port
+    exclude_test: true
+    example: 80
   - yang_name: match/dscp/value
     tf_name: match_dscp
     minimum_test_value: '["46"]'
     example: "46"
+  - yang_name: match/dscp-ipv4/value
+    tf_name: match_dscp_ipv4
+    example: "46"
+  - yang_name: match/dscp-ipv6/value
+    tf_name: match_dscp_ipv6
+    example: "46"
   - yang_name: match/mpls/experimental/topmost/label
     tf_name: match_mpls_experimental_topmost
     example: 5
+  - yang_name: match/precedence/value
+    tf_name: match_precedence
+    example: "5"
+  - yang_name: match/precedence-ipv4/value
+    tf_name: match_precedence_ipv4
+    example: "5"
+  - yang_name: match/precedence-ipv6/value
+    tf_name: match_precedence_ipv6
+    example: "5"
+  - yang_name: match/protocol/number
+    tf_name: match_protocol
+    exclude_test: true
+    example: 17
   - yang_name: match/qos-group/id
     tf_name: match_qos_group
     example: 1
+  - yang_name: match/source-address/ipv4/address-prefix
+    tf_name: match_source_address_ipv4
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.0"
+      - yang_name: netmask
+        id: true
+        example: 24
+  - yang_name: match/source-address/ipv6/address-prefix
+    tf_name: match_source_address_ipv6
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8:1:1::"
+      - yang_name: prefix-length
+        id: true
+        example: 64
+  - yang_name: match/source-address/mac
+    tf_name: match_source_mac
+    example: "0011.2233.4455"
+    exclude_test: true
+  - yang_name: match/source-port/number
+    tf_name: match_source_port
+    example: 80
     exclude_test: true
   - yang_name: match/traffic-class/id
     tf_name: match_traffic_class
     example: 1
+    exclude_test: true
+  - yang_name: match/vlan/vlan-id
+    tf_name: match_vlan
+    example: 10
     exclude_test: true

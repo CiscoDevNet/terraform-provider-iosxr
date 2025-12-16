@@ -3,8 +3,70 @@ name: SNMP Server MIB
 path: Cisco-IOS-XR-um-snmp-server-cfg:/snmp-server-mibs
 doc_category: Management
 attributes:
-  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long
+  - yang_name: Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/refresh/time
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/cache/service-policy/count
+    example: 100
+  - yang_name: Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/persist
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-cbqosmib-cfg:cbqosmib/member-stats
     example: true
   - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifindex/persist
     minimum_test_value: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:interfaces/interface
+    tf_name: interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+      - yang_name: notification/linkupdown/enable
+        example: true
+        exclude_test: true
+      - yang_name: notification/linkupdown/disable
+        example: true
+      - yang_name: index/persistence
+        example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:trap/link/ietf
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ifalias/long
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/stats/cache
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/ipsubscriber
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-ifmib-cfg:ifmib/internal/cache/max-duration
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-mibs-rfmib-cfg:rfmib/entphyindex
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mibs-sensormib-cfg:sensormib/cache
+    example: true
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/garbage-collect
+    example: 1800
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:mplstemib/cache/timers/refresh
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:mplsp2mpmib/cache/timer
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:frrmib/cache/timer
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextmib/cache/timer
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-mpls-te-cfg:cmplsteextstdmib/cache/timer
+    example: 300
+  - yang_name: Cisco-IOS-XR-um-snmp-server-mroutemib-cfg:mroutemib/send-all-vrf
+    example: true
+  - yang_name: Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/default
+    example: true
+  - yang_name: Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-age-out
+    example: 120
+  - yang_name: Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/global-size
+    example: 5000
+  - yang_name: Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/disable
+    example: true
+  - yang_name: Cisco-IOS-XR-um-snmp-server-notification-log-mib-cfg:notification-log-mib/size
+    example: 1000
+  - yang_name: Cisco-IOS-XR-um-traps-entity-cfg:entityindex/persist
     example: true

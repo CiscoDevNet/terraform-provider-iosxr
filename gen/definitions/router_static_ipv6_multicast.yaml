@@ -72,6 +72,26 @@ attributes:
         example: TRACK1
       - yang_name: metric
         example: 10
+  - yang_name: sr-policies/sr-policy
+    tf_name: sr_policies
+    type: List
+    attributes:
+      - yang_name: sr-policy-name
+        id: true
+        example: sr_te_policy_1
+      - yang_name: description
+        example: interface-description
+      - yang_name: tag
+        example: 103
+      - yang_name: distance-metric
+        example: 144
+      - yang_name: permanent
+        exclude_test: true
+        example: true
+      - yang_name: track
+        example: TRACK1
+      - yang_name: metric
+        example: 10
   - yang_name: vrfs/vrf
     tf_name: vrfs
     type: List
@@ -138,6 +158,26 @@ attributes:
           - yang_name: permanent
             example: true
             exclude_test: true
+          - yang_name: track
+            example: TRACK1
+          - yang_name: metric
+            example: 10
+      - yang_name: sr-policies/sr-policy
+        tf_name: sr_policies
+        type: List
+        attributes:
+          - yang_name: sr-policy-name
+            id: true
+            example: sr_te_policy_1
+          - yang_name: description
+            example: interface-description
+          - yang_name: tag
+            example: 103
+          - yang_name: distance-metric
+            example: 144
+          - yang_name: permanent
+            exclude_test: true
+            example: true
           - yang_name: track
             example: TRACK1
           - yang_name: metric

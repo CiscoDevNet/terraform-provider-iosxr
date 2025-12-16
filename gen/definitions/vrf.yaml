@@ -6,9 +6,15 @@ attributes:
   - yang_name: vrf-name
     example: VRF4
   - yang_name: description
+    minimum_test_value: '"My VRF Description"'
     example: My VRF Description
-  - yang_name: vpn/id
-    example: "1000:1000"
+  - yang_name: fallback-vrf
+    test_tags: [XRV9K, NCS, C8000]
+    example: VRF2
+  - yang_name: Cisco-IOS-XR-um-l2vpn-cfg:evpn-route-sync
+    tf_name: evpn_route_sync
+    example: 100
+    # ipv4 unicast
   - yang_name: address-family/ipv4/unicast
     tf_name: ipv4_unicast
     example: true
@@ -18,14 +24,107 @@ attributes:
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv4_unicast_export_route_policy
     example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn
+    tf_name: ipv4_unicast_import_from_bridge_domain_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn
+    tf_name: ipv4_unicast_import_from_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup
+    tf_name: ipv4_unicast_import_from_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external
+    tf_name: ipv4_unicast_import_from_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
+    tf_name: ipv4_unicast_import_from_default_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
+    tf_name: ipv4_unicast_import_from_default_vrf_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn
+    tf_name: ipv4_unicast_export_to_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup
+    tf_name: ipv4_unicast_export_to_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external
+    tf_name: ipv4_unicast_export_to_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy
+    tf_name: ipv4_unicast_export_to_default_vrf_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
+    tf_name: ipv4_unicast_export_to_default_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
+    tf_name: ipv4_unicast_max_prefix_limit
+    optional: true
+    delete_grandparent: true
+    example: 1000
+  - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/mid-thresh
+    tf_name: ipv4_unicast_max_prefix_threshold
+    delete_grandparent: true
+    example: 75
+    # ipv4 multicast
   - yang_name: address-family/ipv4/multicast
     tf_name: ipv4_multicast
     example: true
     exclude_example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
+    tf_name: ipv4_multicast_import_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
+    tf_name: ipv4_multicast_export_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn
+    tf_name: ipv4_multicast_import_from_bridge_domain_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn
+    tf_name: ipv4_multicast_import_from_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup
+    tf_name: ipv4_multicast_import_from_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external
+    tf_name: ipv4_multicast_import_from_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
+    tf_name: ipv4_multicast_import_from_default_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
+    tf_name: ipv4_multicast_import_from_default_vrf_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn
+    tf_name: ipv4_multicast_export_to_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup
+    tf_name: ipv4_multicast_export_to_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external
+    tf_name: ipv4_multicast_export_to_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy
+    tf_name: ipv4_multicast_export_to_default_vrf_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
+    tf_name: ipv4_multicast_export_to_default_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
+    tf_name: ipv4_multicast_max_prefix_limit
+    optional: true
+    delete_grandparent: true
+    example: 1000
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/mid-thresh
+    tf_name: ipv4_multicast_max_prefix_threshold
+    delete_grandparent: true
+    example: 75
+    # ipv4 flowspec
   - yang_name: address-family/ipv4/flowspec
     tf_name: ipv4_flowspec
     example: true
     exclude_example: true
+    # ipv6 unicast
   - yang_name: address-family/ipv6/unicast
     tf_name: ipv6_unicast
     example: true
@@ -35,14 +134,107 @@ attributes:
   - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
     tf_name: ipv6_unicast_export_route_policy
     example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn
+    tf_name: ipv6_unicast_import_from_bridge_domain_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn
+    tf_name: ipv6_unicast_import_from_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup
+    tf_name: ipv6_unicast_import_from_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external
+    tf_name: ipv6_unicast_import_from_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
+    tf_name: ipv6_unicast_import_from_default_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
+    tf_name: ipv6_unicast_import_from_default_vrf_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn
+    tf_name: ipv6_unicast_export_to_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup
+    tf_name: ipv6_unicast_export_to_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external
+    tf_name: ipv6_unicast_export_to_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy
+    tf_name: ipv6_unicast_export_to_default_vrf_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
+    tf_name: ipv6_unicast_export_to_default_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
+    tf_name: ipv6_unicast_max_prefix_limit
+    optional: true
+    delete_grandparent: true
+    example: 1000
+  - yang_name: address-family/ipv6/unicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/mid-thresh
+    tf_name: ipv6_unicast_max_prefix_threshold
+    delete_grandparent: true
+    example: 75
+    # ipv6 multicast
   - yang_name: address-family/ipv6/multicast
     tf_name: ipv6_multicast
     example: true
     exclude_example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-policy
+    tf_name: ipv6_multicast_import_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-policy
+    tf_name: ipv6_multicast_export_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/bridge-domain/advertise-as-vpn
+    tf_name: ipv6_multicast_import_from_bridge_domain_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/advertise-as-vpn
+    tf_name: ipv6_multicast_import_from_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/backup
+    tf_name: ipv6_multicast_import_from_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/vrf/allow/best-external
+    tf_name: ipv6_multicast_import_from_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/advertise-as-vpn
+    tf_name: ipv6_multicast_import_from_default_vrf_advertise_as_vpn
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/from/default-vrf/route-policy
+    tf_name: ipv6_multicast_import_from_default_vrf_route_policy
+    example: VRF_IMPORT_POLICY_1
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow-imported-vpn
+    tf_name: ipv6_multicast_export_to_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/backup
+    tf_name: ipv6_multicast_export_to_vrf_allow_backup
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/vrf/allow/best-external
+    tf_name: ipv6_multicast_export_to_vrf_allow_best_external
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/route-policy
+    tf_name: ipv6_multicast_export_to_default_vrf_route_policy
+    example: VRF_EXPORT_POLICY_1
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/to/default-vrf/allow-imported-vpn
+    tf_name: ipv6_multicast_export_to_default_vrf_allow_imported_vpn
+    example: true
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/prefix-limit
+    tf_name: ipv6_multicast_max_prefix_limit
+    optional: true
+    delete_grandparent: true
+    example: 1000
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-rib-cfg:maximum/prefix/mid-thresh
+    tf_name: ipv6_multicast_max_prefix_threshold
+    delete_grandparent: true
+    example: 75
+    # ipv6 flowspec
   - yang_name: address-family/ipv6/flowspec
     tf_name: ipv6_flowspec
     example: true
     exclude_example: true
+    # route-distinguisher
   - yang_name: Cisco-IOS-XR-um-router-bgp-cfg:rd/RD/TWO-BYTE-AS/two-byte-as/two-byte-as-number
     xpath: Cisco-IOS-XR-um-router-bgp-cfg:rd/two-byte-as/two-byte-as-number
     tf_name: rd_two_byte_as_number
@@ -87,6 +279,7 @@ attributes:
     example: 1
     exclude_example: true
     exclude_test: true
+    # route-target
   - yang_name: address-family/ipv4/unicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
     tf_name: ipv4_unicast_import_route_target_two_byte_as_format
     type: List
@@ -251,6 +444,174 @@ attributes:
       - yang_name: stitching
         id: true
         example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
+    tf_name: ipv4_multicast_import_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: asn2-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
+    tf_name: ipv4_multicast_import_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 100000
+      - yang_name: asn4-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
+    tf_name: ipv4_multicast_import_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: ipv4-address-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target
+    tf_name: ipv4_multicast_export_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: asn2-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
+    tf_name: ipv4_multicast_export_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 100000
+      - yang_name: asn4-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv4/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
+    tf_name: ipv4_multicast_export_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: ipv4-address-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/two-byte-as-route-targets/two-byte-as-route-target
+    tf_name: ipv6_multicast_import_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: asn2-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/four-byte-as-route-targets/four-byte-as-route-target
+    tf_name: ipv6_multicast_import_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 100000
+      - yang_name: asn4-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:import/route-target/ipv4-address-route-targets/ipv4-address-route-target
+    tf_name: ipv6_multicast_import_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: ipv4-address-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/two-byte-as-route-targets/two-byte-as-route-target
+    tf_name: ipv6_multicast_export_route_target_two_byte_as_format
+    type: List
+    attributes:
+      - yang_name: two-byte-as-number
+        id: true
+        example: 65001
+      - yang_name: asn2-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/four-byte-as-route-targets/four-byte-as-route-target
+    tf_name: ipv6_multicast_export_route_target_four_byte_as_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: four-byte-as-number
+        id: true
+        example: 100000
+      - yang_name: asn4-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: address-family/ipv6/multicast/Cisco-IOS-XR-um-router-bgp-cfg:export/route-target/ipv4-address-route-targets/ipv4-address-route-target
+    tf_name: ipv6_multicast_export_route_target_ip_address_format
+    type: List
+    exclude_example: true
+    attributes:
+      - yang_name: ipv4-address
+        id: true
+        example: 1.1.1.1
+      - yang_name: ipv4-address-index
+        id: true
+        example: 1
+      - yang_name: stitching
+        id: true
+        example: "enable"
+  - yang_name: vpn/id
+    example: "1000:1000"
+  - yang_name: remote-route-filtering/disable
+    example: true
 
 test_prerequisites:
   - path: Cisco-IOS-XR-um-route-policy-cfg:/routing-policy/route-policies/route-policy[route-policy-name=VRF_IMPORT_POLICY_1]

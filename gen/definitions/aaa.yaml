@@ -1,0 +1,233 @@
+---
+name: AAA
+path: Cisco-IOS-XR-um-aaa-cfg:/aaa
+doc_category: System
+default_delete_attributes: true
+test_tags: [AAA]
+attributes:
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/hosts/host
+    tf_name: tacacs_server_hosts
+    type: List
+    attributes:
+      - yang_name: ordering-index
+        id: true
+        exclude_example: true
+        example: 10
+      - yang_name: address
+        id: true
+        example: 9.0.1.68
+      - yang_name: port
+        id: true
+        example: 49
+      - yang_name: timeout
+        example: 10
+      - yang_name: holddown-time
+        example: 300
+      - yang_name: key/seven
+        tf_name: key_type_7
+        sensitive: true
+        write_only: true
+        example: 0235347225301B204F4F0A0A
+      - yang_name: key/six
+        tf_name: key_type_6
+        sensitive: true
+        write_only: true
+        exclude_test: true
+        example: type6password
+      - yang_name: single-connection
+        example: true
+      - yang_name: single-connection-idle-timeout
+        example: 1000
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/key/seven
+    tf_name: tacacs_server_key_type_7
+    sensitive: true
+    write_only: true
+    example: 0235347225301B204F4F0A0A
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/key/six
+    tf_name: tacacs_server_key_type_6
+    sensitive: true
+    write_only: true
+    exclude_test: true
+    example: 0235347225301B204F4F0A0A
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/timeout
+    tf_name: tacacs_server_timeout
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/holddown-time
+    tf_name: tacacs_server_holddown_time
+    example: 600
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/ipv4/dscp
+    tf_name: tacacs_server_ipv4_dscp
+    example: cs6
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs-server/ipv6/dscp
+    tf_name: tacacs_server_ipv6_dscp
+    example: cs6
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:group/server/tacacs/server-groups/server-group
+    tf_name: tacacs_server_groups
+    type: List
+    attributes:
+      - yang_name: server-group-name
+        tf_name: group_name
+        id: true
+        example: AAA
+      - yang_name: servers/server
+        tf_name: servers
+        type: List
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            id: true
+            exclude_example: true
+            example: 10
+          - yang_name: address
+            id: true
+            example: 9.0.1.68
+      - yang_name: vrf
+        example: VRF1
+      - yang_name: holddown-time
+        example: 300
+      - yang_name: server-privates/server-private
+        tf_name: server_privates
+        type: List
+        attributes:
+          - yang_name: ordering-index
+            tf_name: order
+            id: true
+            exclude_example: true
+            example: 10
+          - yang_name: address
+            id: true
+            example: 9.0.1.68
+          - yang_name: port
+            id: true
+            example: 49
+          - yang_name: key/seven
+            tf_name: key_type_7
+            sensitive: true
+            write_only: true
+            example: 0235347225301B204F4F0A0A
+          - yang_name: key/six
+            tf_name: key_type_6
+            sensitive: true
+            write_only: true
+            exclude_test: true
+            example: 0235347225301B204F4F0A0A
+          - yang_name: single-connection
+            example: true
+          - yang_name: single-connection-idle-timeout
+            example: 1000
+          - yang_name: timeout
+            example: 10
+          - yang_name: holddown-time
+            example: 300
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs/source-interface
+    tf_name: tacacs_source_interface
+    example: MgmtEth0/RP0/CPU0/0
+    minimum_test_value: '"MgmtEth0/RP0/CPU0/0"'
+  - yang_name: Cisco-IOS-XR-um-aaa-tacacs-server-cfg:tacacs/vrfs/vrf
+    tf_name: tacacs_vrfs
+    type: List
+    attributes:
+      - yang_name: vrf-name
+        id: true
+        example: VRF1
+      - yang_name: source-interface
+        example: MgmtEth0/RP0/CPU0/0
+  - yang_name: Cisco-IOS-XR-um-aaa-task-user-cfg:usernames/username
+    tf_name: usernames
+    type: List
+    attributes:
+      - yang_name: ordering-index
+        tf_name: order
+        id: true
+        exclude_example: true
+        example: 10
+      - yang_name: name
+        id: true
+        example: terraform-user
+      - yang_name: secret/eight
+        tf_name: secret_type_8
+        sensitive: true
+        write_only: true
+        example: "$8$$8$ir0jx0hkPjwq9x$jl8xAAF2VJRmXEt3Vb0usXZh3VPTLRAO4MVGDPthf8Q"
+        exclude_test: true
+      - yang_name: secret/nine
+        tf_name: secret_type_9
+        sensitive: true
+        write_only: true
+        example: "$9$$9$HOrww0qBDjnn9w$kWaupkPuoqhlBwefUoGqk6KuhX9hMk4gbXhYQHc/7FU"
+        exclude_test: true
+      - yang_name: secret/ten
+        tf_name: secret_type_10
+        sensitive: true
+        write_only: true
+        example: "$6$JX.ze16kjuwfCe1.$aAaA/Zc0/lI2C7VrT4PmeBh.tsQj1fKAR3q.Oqq214vrnCLjhezD9/asda5WB8tbO4wqKp3MsA5cv3B2uHJOj/"
+      - yang_name: login-history/enable
+        tf_name: login_history_enable
+        example: true
+      - yang_name: login-history/disable
+        tf_name: login_history_disable
+        exclude_test: true
+        example: true
+      - yang_name: policy
+        example: policy1
+        exclude_test: true
+      - yang_name: group/root-lr
+        tf_name: group_root_lr
+        example: true
+      - yang_name: group/netadmin
+        tf_name: group_netadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/sysadmin
+        tf_name: group_sysadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/serviceadmin
+        tf_name: group_serviceadmin
+        exclude_test: true
+        example: true
+      - yang_name: group/operator
+        tf_name: group_operator
+        exclude_test: true
+        example: true
+      - yang_name: group/cisco-support
+        tf_name: group_cisco_support
+        exclude_test: true
+        example: true
+      - yang_name: group/maintenance
+        tf_name: group_maintenance
+        exclude_test: true
+        example: true
+      - yang_name: group/provisioning
+        tf_name: group_provisioning
+        exclude_test: true
+        example: true
+      - yang_name: group/retrieve
+        tf_name: group_retrieve
+        exclude_test: true
+        example: true
+      - yang_name: group/read-only-tg
+        tf_name: group_read_only_tg
+        exclude_test: true
+        example: true
+      - yang_name: group/user-groups/user-group
+        tf_name: user_groups
+        type: List
+        exclude_test: true
+        attributes:
+          - yang_name: user-group-name
+            tf_name: group_name
+            id: true
+            example: customgroup
+      - yang_name: shell-type
+        example: bash
+        exclude_test: true
+      - yang_name: directory
+        example: /home/admin
+        exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1

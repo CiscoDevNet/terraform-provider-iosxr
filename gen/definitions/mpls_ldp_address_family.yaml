@@ -1,0 +1,135 @@
+---
+name: MPLS LDP Address Family
+path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/address-families/address-family[af-name=%s]
+doc_category: MPLS
+attributes:
+  - yang_name: af-name
+    id: true
+    reference: true
+    example: ipv4
+  - yang_name: discovery/transport-address/ipv4-address
+    tf_name: discovery_transport_address_ipv4
+    example: 192.168.1.1
+  - yang_name: discovery/transport-address/ipv6-address
+    tf_name: discovery_transport_address_ipv6
+    exclude_test: true
+    example: 2001:db8::1
+  - yang_name: discovery/targeted-hello/accept
+    example: true
+  - yang_name: discovery/targeted-hello/accept/from
+    example: ACL1
+  - yang_name: neighbor/ipv4-addresses/targeted
+    tf_name: neighbor_ipv4_targeted
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.2
+  - yang_name: neighbor/ipv6-addresses/targeted
+    tf_name: neighbor_ipv6_targeted
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 2001:db8::2
+  - yang_name: neighbor/sr-policies/sr-policy
+    tf_name: neighbor_sr_policies
+    type: List
+    attributes:
+      - yang_name: policy-name
+        id: true
+        example: sr_te_policy_1
+      - yang_name: targeted
+        example: true
+  - yang_name: traffic-eng/auto-tunnel/mesh/groups/group
+    tf_name: traffic_eng_auto_tunnel_mesh_groups
+    type: List
+    attributes:
+      - yang_name: group-id
+        id: true
+        example: 1
+  - yang_name: traffic-eng/auto-tunnel/mesh/groups/all
+    exclude_test: true
+    example: true
+  - yang_name: redistribute/bgp/as
+    tf_name: redistribute_bgp_as
+    example: 65001
+  - yang_name: redistribute/bgp/advertise-to
+    tf_name: redistribute_bgp_advertise_to
+    example: ACL1
+  - yang_name: label/local/allocate/for/access-list
+    exclude_test: true
+    example: ACL1
+  - yang_name: label/local/allocate/for/host-routes
+    example: true
+    type: Bool
+    type_yang_bool: presence
+  - yang_name: label/local/default-route
+    example: true
+  - yang_name: label/local/implicit-null-override/for
+    example: ACL1
+  - yang_name: label/local/advertise/explicit-null
+    example: true
+  - yang_name: label/local/advertise/explicit-null/for/access-list
+    tf_name: label_local_advertise_explicit_null_for_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: label/local/advertise/explicit-null/for/to/access-list
+    tf_name: label_local_advertise_explicit_null_for_acl_to_acl
+    optional: true
+    delete_grandparent: true
+    example: ACL2
+  - yang_name: label/local/advertise/explicit-null/to/access-list
+    tf_name: label_local_advertise_explicit_null_to_acl
+    optional: true
+    delete_parent: true
+    exclude_test: true
+    example: ACL1
+  - yang_name: label/local/advertise/to/neighbor
+    tf_name: label_local_advertise_to_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.1
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+  - yang_name: label/local/advertise/interfaces/interface
+    tf_name: label_local_advertise_interfaces
+    type: List
+    attributes:
+      - yang_name: interface-name
+        id: true
+        example: GigabitEthernet0/0/0/1
+  - yang_name: label/local/advertise/disable
+    example: true
+  - yang_name: label/local/advertise/for/access-lists
+    tf_name: label_local_advertise_for_access_lists
+    type: List
+    exclude_test: true
+    attributes:
+      - yang_name: access-list-name
+        id: true
+        example: ACL1
+      - yang_name: to
+        example: ACL2
+  - yang_name: label/remote/accept/from/neighbor
+    tf_name: label_remote_accept_from_neighbors
+    type: List
+    attributes:
+      - yang_name: neighbor-address
+        id: true
+        example: 192.168.1.2
+      - yang_name: label-space-id
+        id: true
+        example: 0
+      - yang_name: for
+        example: ACL1
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp

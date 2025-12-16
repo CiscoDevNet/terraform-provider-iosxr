@@ -16,6 +16,13 @@ attributes:
         id: true
         example: 1
       - yang_name: key-string/password
+        sensitive: true
+        write_only: true
+        exclude_test: true
+        example: 00071A150754
+      - yang_name: key-string/password6
+        sensitive: true
+        write_only: true
         example: 00071A150754
       - yang_name: cryptographic-algorithm
         example: hmac-md5

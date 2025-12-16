@@ -1,0 +1,45 @@
+---
+name: MPLS LDP Interface
+path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp/interfaces/interface[interface-name=%s]
+doc_category: MPLS
+attributes:
+  - yang_name: interface-name
+    id: true
+    reference: true
+    example: GigabitEthernet0/0/0/1
+  - yang_name: discovery/hello/holdtime
+    example: 30
+  - yang_name: discovery/hello/interval
+    example: 3
+  - yang_name: discovery/hello/dual-stack-tlv
+    example: ipv4
+  - yang_name: discovery/quick-start/disable
+    example: true
+  - yang_name: igp/sync/delay/on-session-up/interface-sync-up-delay
+    tf_name: igp_sync_delay_on_session_up
+    example: 20
+  - yang_name: igp/sync/delay/on-session-up/disable
+    example: true
+    exclude_test: true
+  - yang_name: address-families/address-family
+    tf_name: address_families
+    type: List
+    attributes:
+      - yang_name: af-name
+        id: true
+        example: ipv4
+      - yang_name: discovery/transport-address/interface
+        example: GigabitEthernet0/0/0/1
+        exclude_test: true
+      - yang_name: discovery/transport-address/ip-address
+        tf_name: discovery_transport_address_ip
+        example: 192.168.1.1
+      - yang_name: igp/auto-config/disable
+        tf_name: igp_auto_config_disable
+        example: true
+      - yang_name: mldp/disable
+        tf_name: mldp_disable
+        example: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-mpls-ldp-cfg:/mpls/ldp

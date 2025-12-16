@@ -92,6 +92,8 @@ attributes:
   - yang_name: password/encrypted
     type: String
     tf_name: password
+    sensitive: true
+    write_only: true
     no_augment_config: true
     optional: true
     example: 12341C2713181F13253920

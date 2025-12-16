@@ -16,7 +16,11 @@ attributes:
   - yang_name: name
     example: TEST
   - yang_name: text-authentication
+    sensitive: true
+    write_only: true
     example: password
+  - yang_name: unicast-peer
+    example: 1.1.1.2
   - yang_name: secondary-addresses/secondary-address
     tf_name: secondary_addresses
     type: List

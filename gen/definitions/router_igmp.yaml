@@ -1,0 +1,78 @@
+---
+name: Router IGMP
+path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp
+doc_category: IGMP
+attributes:
+  - yang_name: accounting/max-history
+    example: 30
+  - yang_name: nsf/lifetime
+    example: 300
+  - yang_name: dvmrp-enable
+    example: true
+  - yang_name: robustness-count
+    example: 5
+  - yang_name: maximum/groups
+    example: 50000
+  - yang_name: maximum/groups-per-interface/maximum-number
+    tf_name: maximum_groups_per_interface
+    optional: true
+    delete_parent: true
+    example: 25000
+  - yang_name: maximum/groups-per-interface/threshold
+    tf_name: maximum_groups_per_interface_threshold
+    delete_parent: true
+    example: 20000
+  - yang_name: maximum/groups-per-interface/access-list
+    tf_name: maximum_groups_per_interface_acl
+    delete_parent: true
+    example: "IGMP_ACL"
+  - yang_name: version
+    minimum_test_value: '"3"'
+    example: 3
+  - yang_name: query-interval
+    example: 125
+  - yang_name: query-timeout
+    example: 255
+  - yang_name: query-max-response-time
+    example: 10
+  - yang_name: explicit-tracking
+    example: true
+  - yang_name: explicit-tracking/access-list
+    tf_name: explicit_tracking_acl
+    example: "IGMP_ACL"
+  - yang_name: explicit-tracking/disable
+    tf_name: explicit_tracking_disable
+    exclude_test: true
+    example: true
+  - yang_name: access-group
+    example: "IGMP_ACL"
+  - yang_name: ssm/map/statics/static
+    tf_name: ssm_map_statics
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "10.1.1.1"
+      - yang_name: access-list
+        example: "SSM_ACL"
+  - yang_name: ssm/map/query/dns
+    tf_name: ssm_map_query_dns
+    example: true
+  - yang_name: missed-packets/gen-query
+    tf_name: missed_packets_gen_query
+    example: 5000
+  - yang_name: missed-packets/grp-spec-query
+    tf_name: missed_packets_grp_spec_query
+    example: 5000
+  - yang_name: missed-packets/ssm-query
+    tf_name: missed_packets_ssm_query
+    example: 5000
+  - yang_name: missed-packets/member-report
+    tf_name: missed_packets_member_report
+    example: 5000
+  - yang_name: traffic/profile
+    exclude_test: true
+    example: "IGMP_ROUTE_POLICY"
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-router-igmp-cfg:/router/igmp

@@ -3,26 +3,248 @@ name: Logging
 path: Cisco-IOS-XR-um-logging-cfg:/logging
 doc_category: Management
 attributes:
-  - yang_name: ipv4/dscp
-    example: cs6
+  - yang_name: console
+    example: disable
   - yang_name: trap
     minimum_test_value: '"informational"'
     example: informational
+  - yang_name: monitor
+    example: disable
+  - yang_name: console-logging/console-log-facility/console-facility-level
+    tf_name: console_facility
+    example: all
+  - yang_name: monitor-discriminator/match1
+    exclude_test: true
+    example: "MONITOR1"
+  - yang_name: monitor-discriminator/match2
+    exclude_test: true
+    example: "MONITOR2"
+  - yang_name: monitor-discriminator/match3
+    exclude_test: true
+    example: "MONITOR3"
+  - yang_name: monitor-discriminator/nomatch1
+    exclude_test: true
+    example: "MONITOR_NOMATCH1"
+  - yang_name: monitor-discriminator/nomatch2
+    exclude_test: true
+    example: "MONITOR_NOMATCH2"
+  - yang_name: monitor-discriminator/nomatch3
+    exclude_test: true
+    example: "MONITOR_NOMATCH3"
+  - yang_name: archive/device/disk0
+    tf_name: archive_disk0
+    example: true
+  - yang_name: archive/device/disk1
+    tf_name: archive_disk1
+    exclude_test: true
+    example: true
+  - yang_name: archive/device/harddisk
+    tf_name: archive_harddisk
+    exclude_test: true
+    example: true
+  - yang_name: archive/frequency/daily
+    tf_name: archive_frequency_daily
+    example: true
+  - yang_name: archive/frequency/weekly
+    tf_name: archive_frequency_weekly
+    exclude_test: true
+    example: true
+  - yang_name: archive/file-size
+    tf_name: archive_filesize
+    example: 100
+  - yang_name: archive/archive-size
+    tf_name: archive_size
+    example: 500
+  - yang_name: archive/archive-length
+    tf_name: archive_length
+    example: 4
+  - yang_name: archive/severity
+    tf_name: archive_severity
+    example: informational
+  - yang_name: archive/threshold
+    tf_name: archive_threshold
+    example: 80
+  - yang_name: ipv4/dscp
+    example: cs6
+  - yang_name: ipv4/precedence
+    exclude_test: true
+    example: routine
+  - yang_name: ipv6/dscp
+    example: ef
+  - yang_name: ipv6/precedence
+    exclude_test: true
+    example: routine
+  - yang_name: facility/level
+    example: local7
+  - yang_name: buffered/buffered-entries/count
+    tf_name: buffered_entries_count
+    example: 10000
+  - yang_name: buffered/logging-buffer-size
+    tf_name: buffered_size
+    example: 4000000
+  - yang_name: buffered/level
+    example: debugging
+  - yang_name: buffered/discriminator/match1
+    example: "BUFFERED1"
+  - yang_name: buffered/discriminator/match2
+    example: "BUFFERED2"
+  - yang_name: buffered/discriminator/match3
+    example: "BUFFERED3"
+  - yang_name: buffered/discriminator/nomatch1
+    example: "BUFFERED_NOMATCH1"
+  - yang_name: buffered/discriminator/nomatch2
+    example: "BUFFERED_NOMATCH2"
+  - yang_name: buffered/discriminator/nomatch3
+    example: "BUFFERED_NOMATCH3"
+  - yang_name: container/all
+    example: true
+  - yang_name: container/fetch-timestamp
+    example: true
+  - yang_name: files/file
+    tf_name: file
+    type: List
+    attributes:
+      - yang_name: file-name
+        id: true
+        example: "logfile1"
+      - yang_name: path
+        optional: true
+        delete_parent: true
+        example: "/disk0:"
+      - yang_name: maxfilesize
+        optional: true
+        delete_parent: true
+        example: 1024
+      - yang_name: severity
+        optional: true
+        delete_parent: true
+        example: info
+      - yang_name: local-accounting/send-to-remote/facility/level
+        tf_name: local_accounting_send_to_remote_facility_level
+        example: local0
+      - yang_name: discriminator/match1
+        tf_name: discriminator_match1
+        example: "MATCH1"
+      - yang_name: discriminator/match2
+        tf_name: discriminator_match2
+        example: "MATCH2"
+      - yang_name: discriminator/match3
+        tf_name: discriminator_match3
+        example: "MATCH3"
+      - yang_name: discriminator/nomatch1
+        tf_name: discriminator_nomatch1
+        example: "NOMATCH1"
+      - yang_name: discriminator/nomatch2
+        tf_name: discriminator_nomatch2
+        example: "NOMATCH2"
+      - yang_name: discriminator/nomatch3
+        tf_name: discriminator_nomatch3
+        example: "NOMATCH3"
+  - yang_name: history
+    example: emergencies
+  - yang_name: history-size
+    example: 500
+  - yang_name: hostnameprefix
+    example: HOSTNAME01
+  - yang_name: localfilesize
+    example: 1000
+  - yang_name: suppress/duplicates
+    example: true
+  - yang_name: format/rfc5424
+    example: true
+  - yang_name: format/bsd
+    exclude_test: true
+    example: true
+  - yang_name: yang
+    example: emergencies
+  - yang_name: Cisco-IOS-XR-um-logging-correlator-cfg:suppress/rules/rule
+    tf_name: suppress_rules
+    type: List
+    no_augment_config: true
+    description: "Configure a specified suppression rule"
+    attributes:
+      - yang_name: rule-name
+        tf_name: rule_name
+        id: true
+        no_augment_config: true
+        type: String
+        description: "Rule name"
+        example: RULE1
+      - yang_name: alarms/alarm
+        tf_name: alarms
+        type: List
+        no_augment_config: true
+        description: "Specify alarm: Category/Group/Code combos"
+        attributes:
+          - yang_name: message-category
+            tf_name: message_category
+            id: true
+            no_augment_config: true
+            type: String
+            description: "Message category of the suppressed message"
+            example: SECURITY
+          - yang_name: group-name
+            tf_name: group_name
+            id: true
+            no_augment_config: true
+            type: String
+            description: "Group name of suppressed message"
+            example: SSHD
+          - yang_name: message-code
+            tf_name: message_code
+            id: true
+            no_augment_config: true
+            type: String
+            description: "Message code of suppressed message"
+            example: INFO
+      - yang_name: all-alarms
+        tf_name: all_alarms
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        description: "Specify all alarms"
+        example: true
+        exclude_test: true
+      - yang_name: apply/all-of-router
+        tf_name: apply_all_of_router
+        type: Bool
+        type_yang_bool: presence
+        no_augment_config: true
+        description: "Apply the rule to all of the router"
+        example: true
+      - yang_name: apply/source/locations/location
+        tf_name: apply_source_locations
+        type: List
+        no_augment_config: true
+        description: "Apply the rule to specified location"
+        exclude_test: true
+        attributes:
+          - yang_name: location-name
+            tf_name: location_name
+            type: String
+            id: true
+            no_augment_config: true
+            description: "Location name"
+            example: 0/RP0/CPU0
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/buffer-size
+    example: 10000
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/filter/match
+    tf_name: filter_matches
+    type: List
+    attributes:
+      - yang_name: match-string
+        tf_name: match
+        id: true
+        example: "MATCH1"
   - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/display-location
     example: true
   - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/level
     example: informational
-  - yang_name: console
-    example: disable
-  - yang_name: monitor
-    example: disable
-  - yang_name: buffered/logging-buffer-size
-    example: 4000000
-  - yang_name: buffered/level
-    example: debugging
-  - yang_name: facility/level
-    example: local7
-  - yang_name: hostnameprefix
-    example: HOSTNAME01
-  - yang_name: suppress/duplicates
-    example: true
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/threshold
+    example: 80
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression
+    exclude_test: true
+    example: enable
+  - yang_name: Cisco-IOS-XR-um-logging-events-cfg:events/precfg-suppression-timeout
+    exclude_test: true
+    example: 15

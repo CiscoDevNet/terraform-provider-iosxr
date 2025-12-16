@@ -1,0 +1,57 @@
+---
+name: Performance Measurement Interface
+path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement/interfaces/interface[interface-name=%s]
+doc_category: System
+attributes:
+  - yang_name: interface-name
+    example: GigabitEthernet0/0/0/1
+  - yang_name: delay-measurement
+    example: true
+  - yang_name: delay-measurement/fallback
+    delete_parent: true
+    example: false
+    exclude_test: true
+  - yang_name: delay-measurement/advertise-delay
+    delete_parent: true
+    example: 1000
+  - yang_name: delay-measurement/delay-profile/name
+    tf_name: delay_measurement_profile_name
+    example: DELAY_PROFILE_1
+  - yang_name: delay-measurement/static-delay
+    example: 1000000
+  - yang_name: next-hop/ipv4
+    tf_name: next_hop_ipv4
+    example: 10.0.0.1
+  - yang_name: next-hop/ipv6
+    tf_name: next_hop_ipv6
+    example: 2001:db8::1
+    exclude_test: true
+  - yang_name: path-tracing
+    description: "Enable path-tracing"
+    test_tags: [XRV9K, NCS, C8000]
+    example: true
+  - yang_name: path-tracing/interface-id
+    test_tags: [XRV9K, NCS, C8000]
+    example: 100
+  - yang_name: path-tracing/timestamp/template/st0
+    tf_name: path_tracing_timestamp_template_st0
+    test_tags: [XRV9K]
+    example: true
+  - yang_name: path-tracing/timestamp/template/st1
+    tf_name: path_tracing_timestamp_template_st1
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true
+  - yang_name: path-tracing/timestamp/template/st2
+    tf_name: path_tracing_timestamp_template_st2
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true
+  - yang_name: path-tracing/timestamp/template/st3
+    tf_name: path_tracing_timestamp_template_st3
+    test_tags: [XRV9K]
+    example: false
+    exclude_test: true
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-performance-measurement-cfg:/performance-measurement

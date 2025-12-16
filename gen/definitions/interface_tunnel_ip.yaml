@@ -1,0 +1,250 @@
+---
+name: Interface Tunnel IP
+path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=%s%s]
+augment_path: Cisco-IOS-XR-um-interface-cfg:/interfaces/interface[interface-name=tunnel-ip%s]
+doc_category: Interface
+no_delete_attributes: true
+test_tags: [XRV9K, NCS, C8000]
+attributes:
+  - tf_name: type
+    description: Interface type
+    type: String
+    reference: true
+    no_augment_config: true
+    enum_values:
+      - tunnel-ip
+    example: tunnel-ip
+  - tf_name: name
+    description: tunnel-ip interface ID
+    type: String
+    id: true
+    no_augment_config: true
+    string_patterns:
+      - '^[0-9]+$'
+    example: "100"
+  - yang_name: shutdown
+    minimum_test_value: false
+    example: false
+  - yang_name: mtu
+    example: 1400
+  - yang_name: logging/events/link-status
+    tf_name: logging_events_link_status
+    example: true
+  - yang_name: bandwidth
+    example: 100000
+  - yang_name: description
+    example: My Interface Description
+  - yang_name: Cisco-IOS-XR-um-statistics-cfg:load-interval
+    minimum_test_value: 30
+    example: 30
+  - yang_name: Cisco-IOS-XR-um-if-vrf-cfg:vrf
+    example: VRF1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/address
+    tf_name: ipv4_address
+    optional: true
+    delete_parent: true
+    example: "192.168.1.1"
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/address/netmask
+    tf_name: ipv4_netmask
+    optional: true
+    delete_parent: true
+    example: "255.255.255.0"
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/unnumbered
+    tf_name: unnumbered
+    exclude_test: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
+    tf_name: ipv4_access_group_ingress_acl1
+    test_tags: [XRV9K]
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/hardware-count
+    test_tags: [XRV9K]
+    example: true
+    delete_parent: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    test_tags: [XRV9K]
+    example: true
+    delete_parent: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
+    tf_name: ipv4_access_group_egress_acl
+    test_tags: [XRV9K]
+    optional: true
+    delete_grandparent: true
+    example: ACL1
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/hardware-count
+    test_tags: [XRV9K]
+    example: true
+    delete_parent: true
+  - yang_name: ipv4/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    test_tags: [XRV9K]
+    example: true
+    delete_parent: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/access-list-name-1/name
+    tf_name: ipv6_access_group_ingress_acl1
+    test_tags: [XRV9K]
+    optional: true
+    delete_grandparent: true
+    example: ACL2
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/ingress/interface-statistics
+    test_tags: [XRV9K]
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/access-list-name/name
+    tf_name: ipv6_access_group_egress_acl
+    test_tags: [XRV9K]
+    optional: true
+    delete_grandparent: true
+    example: ACL2
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-access-group-cfg:access-group/egress/interface-statistics
+    test_tags: [XRV9K]
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/address
+    tf_name: ipv6_link_local_address
+    optional: true
+    delete_parent: true
+    example: "fe80::1"
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/link-local-address/zone
+    tf_name: ipv6_link_local_zone
+    optional: true
+    delete_parent: true
+    example: "0"
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/autoconfig
+    tf_name: ipv6_autoconfig
+    example: false
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:enable
+    tf_name: ipv6_enable
+    example: true
+  - yang_name: ipv6/Cisco-IOS-XR-um-if-ip-address-cfg:addresses/ipv6-address
+    tf_name: ipv6_addresses
+    type: List
+    attributes:
+      - yang_name: address
+        id: true
+        example: "2001:db8::1"
+      - yang_name: prefix-length
+        example: 64
+      - yang_name: zone
+        default_value: "0"
+        example: "0"
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/source/interface-name
+    tf_name: tunnel_source_interface
+    exclude_test: true
+    example: Loopback0
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/source/ipv4-address
+    tf_name: tunnel_source_ipv4
+    minimum_test_value: '"192.168.1.1"'
+    example: 192.168.1.1
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/source/ipv6-address
+    tf_name: tunnel_source_ipv6
+    exclude_test: true
+    example: 2001:db8::1
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/destination/ipv4-address
+    tf_name: tunnel_destination_ipv4
+    minimum_test_value: '"192.168.1.2"'
+    example: 192.168.1.2
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/destination/ipv6-address
+    tf_name: tunnel_destination_ipv6
+    exclude_test: true
+    example: 2001:db8::2
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/destination/prefix-list
+    tf_name: tunnel_destination_prefix_list
+    exclude_test: true
+    example: LIST1
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/destination/ipv4-address
+    tf_name: tunnel_bfd_destination_ipv4
+    example: 192.168.1.2
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/destination/ipv6-address
+    tf_name: tunnel_bfd_destination_ipv6
+    exclude_test: true
+    example: 2001:db8::2
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/period
+    tf_name: tunnel_bfd_period
+    example: 20
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/retry
+    tf_name: tunnel_bfd_retry
+    example: 3
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/minimum-interval
+    tf_name: tunnel_bfd_minimum_interval
+    example: 1000
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/bfd/multiplier
+    tf_name: tunnel_bfd_multiplier
+    example: 3
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/mode/gre/ipv4
+    tf_name: tunnel_mode_gre_ipv4
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/mode/gre/ipv6
+    tf_name: tunnel_mode_gre_ipv6
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/mode/ipv4
+    tf_name: tunnel_mode_ipv4
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/mode/ipv6
+    tf_name: tunnel_mode_ipv6
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/tos
+    tf_name: tunnel_tos
+    example: 5
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/ttl/ttl-value
+    tf_name: tunnel_ttl_value
+    example: 10
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/ttl/disable
+    tf_name: tunnel_ttl_disable
+    exclude_test: true
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/dfbit/disable
+    tf_name: tunnel_df_disable
+    example: true
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/key/key-value
+    test_tags: [XRV9K]
+    tf_name: tunnel_key
+    example: 100
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:tunnel/vrf
+    tf_name: tunnel_vrf
+    example: VRF1
+  - yang_name: Cisco-IOS-XR-um-if-tunnel-cfg:keepalive/keepalive-period
+    tf_name: keepalive_period
+    exclude_test: true
+    example: 30
+
+test_prerequisites:
+  - path: Cisco-IOS-XR-um-vrf-cfg:/vrfs/vrf[vrf-name=VRF1]
+    attributes:
+      - name: vrf-name
+        value: VRF1
+  - path: Cisco-IOS-XR-um-ipv4-access-list-cfg:/ipv4/access-lists/access-list[access-list-name=ACL1]
+    attributes:
+      - name: access-list-name
+        value: ACL1
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv4
+              - name: permit/source/host
+                value: 10.1.1.1
+              - name: permit/destination/host
+                value: 10.1.1.2
+  - path: Cisco-IOS-XR-um-ipv6-access-list-cfg:/ipv6/access-lists/access-list[access-list-name=ACL2]
+    attributes:
+      - name: access-list-name
+        value: ACL2
+    lists:
+      - name: sequences/sequence
+        key: sequence-number
+        items:
+          - attributes:
+              - name: sequence-number
+                value: 10
+              - name: permit/protocol
+                value: ipv6
+              - name: permit/source/host
+                value: 2001::1
+              - name: permit/destination/host
+                value: 2001::2
